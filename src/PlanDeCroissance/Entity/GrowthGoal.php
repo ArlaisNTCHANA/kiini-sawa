@@ -25,7 +25,7 @@ class GrowthGoal
     private ?int $id = null;
 
     #[ORM\ManyToOne(inversedBy: 'growthGoals')]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(nullable: false, onDelete: 'CASCADE')]
     private ?PlanDeCroissance $planDeCroissance = null;
 
     #[ORM\Column(length: 255)]

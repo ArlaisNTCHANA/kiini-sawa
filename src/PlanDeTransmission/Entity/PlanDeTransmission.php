@@ -17,7 +17,7 @@ class PlanDeTransmission
     private ?int $id = null;
 
     #[ORM\OneToOne(inversedBy: 'planDeTransmission', cascade: ['persist', 'remove'])]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(nullable: false, onDelete: 'CASCADE')]
     private ?User $user = null;
 
     /**

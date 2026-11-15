@@ -1,0 +1,51 @@
+{% extends 'legal/_layout.html.twig' %}
+{% block content %}
+<p>KIINI SAWA vous aide à formuler votre raison d'être, vos valeurs, vos plans et à tenir un journal personnel. Ces informations sont intimes : nous les traitons avec le plus grand soin, nous ne les vendons pas et nous ne les utilisons jamais à des fins publicitaires.</p>
+
+<h2>Responsable du traitement</h2>
+<p><span class="todo">[À COMPLÉTER : raison sociale, adresse]</span>. Contact pour toute question sur vos données : <span class="todo">[À COMPLÉTER : email dédié, ex. confidentialite@…]</span>.</p>
+
+<h2>Données traitées, finalités et bases légales</h2>
+<table>
+    <tr><th>Données</th><th>Finalité</th><th>Base légale</th></tr>
+    <tr><td>Email, mot de passe (chiffré), prénom</td><td>Créer et sécuriser votre compte</td><td>Exécution du contrat</td></tr>
+    <tr><td>Profil (nom, ville, profession…), facultatif</td><td>Personnaliser votre espace</td><td>Exécution du contrat</td></tr>
+    <tr><td>Plans, objectifs, rituels, planner, journal, résultats de tests de personnalité</td><td>Fournir le service d'accompagnement</td><td>Exécution du contrat</td></tr>
+    <tr><td>Réflexions pouvant révéler vos convictions religieuses ou spirituelles</td><td>Fournir le service, dont l'approche est d'inspiration chrétienne</td><td>Votre consentement explicite, donné à l'inscription (art. 9.2.a du RGPD), retirable à tout moment en supprimant votre compte</td></tr>
+    <tr><td>Données partagées avec un partenaire que vous choisissez</td><td>Redevabilité et encouragement mutuel</td><td>Votre action volontaire de partage</td></tr>
+    <tr><td>Données de facturation (offre payante)</td><td>Encaisser l'abonnement, obligations comptables</td><td>Exécution du contrat, obligation légale</td></tr>
+    <tr><td>Journaux techniques (adresse IP, date de connexion)</td><td>Sécurité, prévention des abus</td><td>Intérêt légitime</td></tr>
+</table>
+
+<h2>Destinataires</h2>
+<p>Vos données ne sont accessibles qu'à vous, aux personnes avec qui vous choisissez de les partager, et à nos prestataires techniques, tenus par contrat à la confidentialité :</p>
+<ul>
+    <li>hébergement : <span class="todo">[À COMPLÉTER]</span> (Union européenne) ;</li>
+    <li>envoi des emails : <span class="todo">[À COMPLÉTER]</span> ;</li>
+    <li>paiement : Stripe (offre payante uniquement ; nous ne voyons jamais votre numéro de carte).</li>
+</ul>
+<p>L'équipe KIINI SAWA n'accède pas au contenu de votre journal, sauf demande de votre part (assistance) ou obligation légale.</p>
+
+<h2>Durées de conservation</h2>
+<ul>
+    <li>Données du compte : tant que votre compte existe. Vous pouvez le supprimer à tout moment depuis votre profil : la suppression est immédiate et définitive.</li>
+    <li>Compte inactif depuis 3 ans : supprimé après un email de prévenance <span class="todo">[À CONFIRMER : traitement automatique à mettre en place]</span>.</li>
+    <li>Factures : 10 ans (obligation comptable).</li>
+    <li>Journaux techniques : 12 mois.</li>
+</ul>
+
+<h2>Vos droits</h2>
+<p>Vous disposez des droits d'accès, de rectification, d'effacement, de limitation, d'opposition et de portabilité. Depuis votre <strong>profil</strong>, vous pouvez directement :</p>
+<ul>
+    <li>télécharger l'ensemble de vos données (format JSON) ;</li>
+    <li>modifier vos informations ;</li>
+    <li>supprimer votre compte et toutes vos données.</li>
+</ul>
+<p>Pour toute autre demande, écrivez à l'adresse indiquée plus haut. Vous pouvez aussi introduire une réclamation auprès de la CNIL (cnil.fr).</p>
+
+<h2>Cookies</h2>
+<p>KIINI SAWA n'utilise que des cookies strictement nécessaires : la session de connexion et, si vous cochez « Se souvenir de moi », un cookie de connexion persistante (7 jours). Aucun cookie publicitaire ni de mesure d'audience tiers : aucun consentement n'est donc requis.</p>
+
+<h2>Sécurité</h2>
+<p>Connexion chiffrée (HTTPS), mots de passe chiffrés de manière irréversible, limitation des tentatives de connexion, cloisonnement strict des données entre utilisateurs.</p>
+{% endblock %}

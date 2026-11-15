@@ -21,7 +21,7 @@ class HygieneDomain
     private ?int $id = null;
 
     #[ORM\ManyToOne(inversedBy: 'hygieneDomains')]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(nullable: false, onDelete: 'CASCADE')]
     private ?PlanDHygiene $planDHygiene = null;
 
     #[ORM\Column(length: 255)]

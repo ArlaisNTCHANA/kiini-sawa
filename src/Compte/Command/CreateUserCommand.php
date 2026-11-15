@@ -63,6 +63,8 @@ class CreateUserCommand extends Command
         $user = new User();
         $user->setEmail($email);
         $user->setRoles($input->getOption('admin') ? ['ROLE_ADMIN'] : []);
+        // Compte créé par un administrateur : pas de vérification d'email
+        $user->setIsVerified(true);
 
         // Hash the password
         $hashedPassword = $this->passwordHasher->hashPassword($user, $password);

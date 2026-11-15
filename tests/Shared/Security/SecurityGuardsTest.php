@@ -20,14 +20,21 @@ class SecurityGuardsTest extends WebTestCase
         return $client;
     }
 
-    public function testEveryPageRequiresAuthenticationExceptLogin(): void
+    /** Pages volontairement publiques : toute nouvelle entrée doit être justifiée. */
+    private const PUBLIC_ROUTES = [
+        'app_login', 'app_logout',
+        'app_register', 'app_forgot_password', 'app_reset_password', 'app_reset_password_form',
+        'app_legal',
+    ];
+
+    public function testEveryPageRequiresAuthenticationExceptPublicOnes(): void
     {
         $client = static::createClient();
         $routes = static::getContainer()->get('router')->getRouteCollection();
         $checked = 0;
 
         foreach ($routes as $name => $route) {
-            if (str_starts_with($name, '_') || \in_array($name, ['app_login', 'app_logout'], true)) {
+            if (str_starts_with($name, '_') || \in_array($name, self::PUBLIC_ROUTES, true)) {
                 continue;
             }
             $methods = $route->getMethods() ?: ['GET'];
@@ -49,12 +56,13 @@ class SecurityGuardsTest extends WebTestCase
         $this->assertGreaterThan(40, $checked);
     }
 
-    public function testLoginPageIsPublic(): void
+    public function testPublicPagesAreReachableAnonymously(): void
     {
         $client = static::createClient();
-        $client->request('GET', '/login');
-
-        $this->assertResponseIsSuccessful();
+        foreach (['/login', '/inscription', '/mot-de-passe/oublie', '/mot-de-passe/reinitialiser', '/mentions-legales', '/confidentialite', '/cgu', '/cgv'] as $uri) {
+            $client->request('GET', $uri);
+            $this->assertResponseIsSuccessful("$uri doit être accessible sans connexion");
+        }
     }
 
     public function testCrossSitePostIsRejected(): void

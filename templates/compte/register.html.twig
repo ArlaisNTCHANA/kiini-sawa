@@ -1,0 +1,52 @@
+{% extends 'compte/_auth_layout.html.twig' %}
+
+{% block title %}KIINI SAWA — Créer un compte{% endblock %}
+
+{% block content %}
+    <p class="auth-text">Bâtissez une vie alignée sur ce qui compte vraiment. Gratuit, sans carte bancaire.</p>
+
+    <form method="post" novalidate>
+        {% for message in errors.global ?? [] %}<div class="alert">{{ message }}</div>{% endfor %}
+
+        <div class="form-group">
+            <label for="firstName">Prénom</label>
+            <input type="text" name="firstName" id="firstName" value="{{ data.firstName ?? '' }}" autocomplete="given-name" required maxlength="100" autofocus>
+            {% if errors.firstName is defined %}<span class="form-error">{{ errors.firstName }}</span>{% endif %}
+        </div>
+
+        <div class="form-group">
+            <label for="email">Adresse email</label>
+            <input type="email" name="email" id="email" value="{{ data.email ?? '' }}" autocomplete="email" required maxlength="180" placeholder="vous@exemple.com">
+            {% if errors.email is defined %}<span class="form-error">{{ errors.email }}</span>{% endif %}
+        </div>
+
+        <div class="form-group">
+            <label for="password">Mot de passe</label>
+            <input type="password" name="password" id="password" autocomplete="new-password" required minlength="10" maxlength="4096">
+            {% if errors.password is defined %}<span class="form-error">{{ errors.password }}</span>{% else %}<span class="form-hint">10 caractères minimum. Une phrase courte est idéale.</span>{% endif %}
+        </div>
+
+        {# Champ piège pour les robots : invisible pour les humains #}
+        <div class="hp-field" aria-hidden="true">
+            <label for="website">Ne pas remplir</label>
+            <input type="text" name="website" id="website" tabindex="-1" autocomplete="off">
+        </div>
+
+        <div class="checkbox-container" style="align-items: flex-start;">
+            <input type="checkbox" name="acceptTerms" id="acceptTerms" value="1" {{ (data.acceptTerms ?? false) ? 'checked' }} required style="margin-top: .2rem;">
+            <label for="acceptTerms" style="cursor: pointer; text-transform: none; letter-spacing: 0; font-weight: 400; font-size: .85rem;">
+                J'accepte les <a href="{{ path('app_legal', {page: 'cgu'}) }}" target="_blank">conditions d'utilisation</a>
+                et la <a href="{{ path('app_legal', {page: 'confidentialite'}) }}" target="_blank">politique de confidentialité</a>,
+                y compris le traitement des réflexions personnelles et spirituelles que je confie à KIINI SAWA.
+            </label>
+        </div>
+        {% if errors.acceptTerms is defined %}<span class="form-error">{{ errors.acceptTerms }}</span>{% endif %}
+
+        <input type="hidden" name="_csrf_token" value="{{ csrf_token('register') }}">
+        <button type="submit">Créer mon compte</button>
+    </form>
+
+    <div class="auth-links">
+        <span>Déjà inscrit ? <a href="{{ path('app_login') }}">Se connecter</a></span>
+    </div>
+{% endblock %}

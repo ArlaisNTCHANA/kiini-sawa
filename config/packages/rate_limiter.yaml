@@ -1,0 +1,24 @@
+# Limites anti-abus des formulaires publics (par adresse IP).
+framework:
+    rate_limiter:
+        registration:
+            policy: sliding_window
+            limit: 5
+            interval: '1 hour'
+        password_reset:
+            policy: sliding_window
+            limit: 5
+            interval: '1 hour'
+
+# Les tests enchaînent les inscriptions depuis la même adresse : limites relevées
+when@test:
+    framework:
+        rate_limiter:
+            registration:
+                policy: sliding_window
+                limit: 10000
+                interval: '1 hour'
+            password_reset:
+                policy: sliding_window
+                limit: 10000
+                interval: '1 hour'

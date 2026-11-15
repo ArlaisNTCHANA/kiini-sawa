@@ -18,7 +18,7 @@ class DailyLog
     private ?int $id = null;
 
     #[ORM\ManyToOne(inversedBy: 'dailyLogs')]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(nullable: false, onDelete: 'CASCADE')]
     private ?PlanDHygiene $planDHygiene = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]

@@ -2407,6 +2407,13 @@ graph TD
         if (typeof lucide !== 'undefined') {
             lucide.createIcons();
         }
+
+        // Ouverture directe d'un onglet via l'URL (ex. /life-plan?onglet=analysis après l'onboarding).
+        // Paramètre plutôt qu'ancre : Turbo perd l'ancre lors d'une redirection après formulaire.
+        const hashTab = new URLSearchParams(window.location.search).get('onglet') || window.location.hash.replace('#tab-', '');
+        if (/^[a-z]+$/.test(hashTab)) {
+            document.querySelector(`.tab-btn[data-tab="${hashTab}"], .tab-trigger[data-tab="${hashTab}"]`)?.click();
+        }
     }
 
     function initMermaid() {

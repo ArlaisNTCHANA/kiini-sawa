@@ -69,8 +69,20 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(options: ['default' => false])]
     private ?bool $isOnboardingCompleted = false;
 
+    /** L'utilisateur a prouvé qu'il possède son adresse email (code à 6 chiffres). */
+    #[ORM\Column(options: ['default' => false])]
+    private bool $isVerified = false;
+
+    #[ORM\Column(nullable: true)]
+    private ?\DateTimeImmutable $createdAt = null;
+
+    /** Date d'acceptation des CGU et de la politique de confidentialité (preuve du consentement). */
+    #[ORM\Column(nullable: true)]
+    private ?\DateTimeImmutable $termsAcceptedAt = null;
+
     public function __construct()
     {
+        $this->createdAt = new \DateTimeImmutable();
         $this->habits = new ArrayCollection();
         $this->profileTests = new ArrayCollection();
         $this->connections = new ArrayCollection();
@@ -1427,6 +1439,43 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->isOnboardingCompleted = $isOnboardingCompleted;
 
         return $this;
+    }
+
+    public function isVerified(): bool
+    {
+        return $this->isVerified;
+    }
+
+    public function setIsVerified(bool $isVerified): static
+    {
+        $this->isVerified = $isVerified;
+
+        return $this;
+    }
+
+    public function getCreatedAt(): ?\DateTimeImmutable
+    {
+        return $this->createdAt;
+    }
+
+    public function getTermsAcceptedAt(): ?\DateTimeImmutable
+    {
+        return $this->termsAcceptedAt;
+    }
+
+    public function setTermsAcceptedAt(?\DateTimeImmutable $termsAcceptedAt): static
+    {
+        $this->termsAcceptedAt = $termsAcceptedAt;
+
+        return $this;
+    }
+
+    /** Prénom affiché, ou la partie avant @ de l'email. */
+    public function getDisplayName(): string
+    {
+        $firstName = $this->getUserProfile()?->getFirstName();
+
+        return $firstName ?: explode('@', (string) $this->email)[0];
     }
 
     /**

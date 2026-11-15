@@ -16,7 +16,7 @@ class TransmissionAction
     private ?int $id = null;
 
     #[ORM\ManyToOne(inversedBy: 'transmissionActions')]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(nullable: false, onDelete: 'CASCADE')]
     private ?LegacyGoal $legacyGoal = null;
 
     #[ORM\Column(length: 255)]

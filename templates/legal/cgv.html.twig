@@ -1,0 +1,32 @@
+{% extends 'legal/_layout.html.twig' %}
+{% block content %}
+<h2>1. Champ d'application</h2>
+<p>Les présentes conditions s'appliquent à la souscription de l'offre payante de KIINI SAWA par un consommateur. Les offres pour les organisations (églises, associations, entreprises) font l'objet d'un contrat distinct.</p>
+
+<h2>2. Offres et prix</h2>
+<table>
+    <tr><th>Offre</th><th>Prix TTC</th><th>Contenu</th></tr>
+    <tr><td>Gratuite</td><td>0 €</td><td>Plan de Vie, rituels, planner, journal, dans les limites indiquées dans l'application</td></tr>
+    <tr><td>PRO mensuelle</td><td>9,99 € / mois</td><td>Toutes les fonctionnalités, sans limite</td></tr>
+    <tr><td>PRO annuelle</td><td>79,99 € / an</td><td>Toutes les fonctionnalités, sans limite</td></tr>
+</table>
+<p>Le détail des fonctionnalités de chaque offre est présenté sur la page d'abonnement au moment de la souscription. Les prix peuvent évoluer ; tout changement s'applique au renouvellement suivant, après information par email au moins 30 jours à l'avance.</p>
+
+<h2>3. Souscription et paiement</h2>
+<p>Le paiement s'effectue par carte bancaire via notre prestataire Stripe. L'abonnement est payable d'avance et se renouvelle automatiquement à la fin de chaque période, sauf résiliation.</p>
+
+<h2>4. Droit de rétractation</h2>
+<p>Vous disposez de 14 jours à compter de la souscription pour vous rétracter et être remboursé, sans justification. Si vous demandez à accéder immédiatement aux fonctionnalités PRO, vous reconnaissez qu'en cas de rétractation, un montant proportionnel à la période déjà utilisée pourra être retenu.</p>
+
+<h2>5. Résiliation</h2>
+<p>Vous pouvez résilier à tout moment depuis votre profil, en quelques clics. La résiliation prend effet à la fin de la période en cours ; vous conservez l'accès PRO jusque-là. Votre compte repasse ensuite à l'offre gratuite, sans perte de données.</p>
+
+<h2>6. Factures</h2>
+<p>Une facture est disponible pour chaque paiement depuis votre espace.</p>
+
+<h2>7. Réclamations et médiation</h2>
+<p>Pour toute réclamation : <span class="todo">[À COMPLÉTER : email de contact]</span>. À défaut d'accord, vous pouvez saisir gratuitement le médiateur de la consommation : <span class="todo">[À COMPLÉTER]</span>, ou la plateforme européenne de règlement des litiges en ligne.</p>
+
+<h2>8. Vendeur</h2>
+<p>Voir les <a href="{{ path('app_legal', {page: 'mentions-legales'}) }}">mentions légales</a>.</p>
+{% endblock %}

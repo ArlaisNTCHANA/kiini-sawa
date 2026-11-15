@@ -15,7 +15,7 @@ class Vision
     private ?int $id = null;
 
     #[ORM\OneToOne(inversedBy: 'vision', cascade: ['persist', 'remove'])]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(nullable: false, onDelete: 'CASCADE')]
     private ?PlanDeVie $planDeVie = null;
 
     #[ORM\Column(type: Types::TEXT)]

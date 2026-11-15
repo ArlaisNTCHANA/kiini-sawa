@@ -24,3 +24,17 @@ framework:
 
             # Route your messages to the transports
             # 'App\Message\YourMessage': async
+
+# En local, les emails partent tout de suite (visibles dans le profiler, onglet « Emails ») ;
+# en test, ils restent en mémoire pour que les tests puissent les lire.
+when@dev:
+    framework:
+        messenger:
+            transports:
+                async: 'sync://'
+
+when@test:
+    framework:
+        messenger:
+            transports:
+                async: 'in-memory://'

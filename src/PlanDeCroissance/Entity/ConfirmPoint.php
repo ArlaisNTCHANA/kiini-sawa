@@ -19,7 +19,7 @@ class ConfirmPoint
     private ?int $id = null;
 
     #[ORM\ManyToOne(inversedBy: 'confirmPoints')]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(nullable: false, onDelete: 'CASCADE')]
     private ?PlanDeCroissance $planDeCroissance = null;
 
     #[ORM\Column(type: Types::TEXT)]

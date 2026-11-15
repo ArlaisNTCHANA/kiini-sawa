@@ -1,0 +1,21 @@
+{% extends 'legal/_layout.html.twig' %}
+{% block content %}
+<h2>Éditeur du service</h2>
+<p>
+    KIINI SAWA est édité par <span class="todo">[À COMPLÉTER : raison sociale et forme juridique]</span>,
+    au capital de <span class="todo">[À COMPLÉTER]</span>, immatriculée sous le numéro <span class="todo">[À COMPLÉTER : SIREN/RCS]</span>,
+    dont le siège est situé <span class="todo">[À COMPLÉTER : adresse]</span>.<br>
+    Numéro de TVA intracommunautaire : <span class="todo">[À COMPLÉTER]</span>.<br>
+    Directeur ou directrice de la publication : <span class="todo">[À COMPLÉTER]</span>.<br>
+    Contact : <span class="todo">[À COMPLÉTER : adresse email de contact]</span>.
+</p>
+
+<h2>Hébergement</h2>
+<p>Le service est hébergé par <span class="todo">[À COMPLÉTER : nom, adresse et téléphone de l'hébergeur]</span>. Les données sont stockées dans l'Union européenne <span class="todo">[À CONFIRMER selon l'hébergeur choisi]</span>.</p>
+
+<h2>Propriété intellectuelle</h2>
+<p>La marque KIINI SAWA, les textes, la méthode, les illustrations et le logiciel sont protégés. Toute reproduction sans autorisation écrite est interdite. Les contenus que vous saisissez restent votre propriété (voir les <a href="{{ path('app_legal', {page: 'cgu'}) }}">CGU</a>).</p>
+
+<h2>Données personnelles</h2>
+<p>Voir la <a href="{{ path('app_legal', {page: 'confidentialite'}) }}">politique de confidentialité</a>.</p>
+{% endblock %}

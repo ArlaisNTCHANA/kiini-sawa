@@ -247,11 +247,12 @@ Les estimations sont des jours de développement pour une personne. Les phases 0
 
 ### Phase 2 — Entrée dans l'application et conformité (6–8 j)
 
-- [ ] Inscription, vérification de l'email (code à 6 chiffres), mot de passe oublié.
-- [ ] Page Profil (corrige le lien mort), changement de mot de passe et d'email.
-- [ ] RGPD : export des données, suppression du compte, consentement.
-- [ ] Pages CGU, CGV, confidentialité, mentions légales.
-- [ ] Onboarding court en 3 minutes, qui aboutit au premier score de cohérence (§3.3).
+- [x] Inscription, vérification de l'email (code à 6 chiffres), mot de passe oublié.
+- [x] Page Profil (corrige le lien mort), changement de mot de passe et d'email.
+- [x] RGPD : export des données, suppression du compte, consentement.
+- [x] Pages CGU, CGV, confidentialité, mentions légales : **versions de travail**, passages `[À COMPLÉTER]` (société, hébergeur, médiateur) et relecture par un juriste avant la mise en ligne.
+- [x] Onboarding court en 3 minutes, qui aboutit au premier score de cohérence (§3.3) : 40/100 avec deux actions proposées.
+- [ ] Avant la mise en ligne : choisir le fournisseur d'emails (`MAILER_DSN`, `MAILER_FROM`), lancer un worker Messenger, auto-héberger les Google Fonts, mettre en place la suppression des comptes inactifs annoncée dans la politique de confidentialité.
 
 ### Phase 3 — Un cœur cohérent (10–14 j)
 

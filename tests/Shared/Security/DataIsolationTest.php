@@ -31,7 +31,8 @@ class DataIsolationTest extends WebTestCase
         $this->intruder = (new User())
             ->setEmail('intrus-'.uniqid().'@exemple.org')
             ->setPassword('non-utilise')
-            ->setRoles([]);
+            ->setRoles([])
+            ->setIsVerified(true);
         $this->em->persist($this->intruder);
         $this->em->flush();
     }

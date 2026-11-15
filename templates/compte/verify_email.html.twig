@@ -1,0 +1,25 @@
+{% extends 'compte/_auth_layout.html.twig' %}
+
+{% block title %}KIINI SAWA — Vérifiez votre email{% endblock %}
+
+{% block content %}
+    <h1 class="auth-title">Vérifiez votre email</h1>
+    <p class="auth-text">Un code à 6 chiffres a été envoyé à <strong>{{ email }}</strong>. Il est valable 15 minutes.</p>
+
+    <form method="post" action="{{ path('app_verify_email') }}">
+        <div class="form-group">
+            <label for="code">Code de vérification</label>
+            <input type="text" name="code" id="code" class="code-input" inputmode="numeric" pattern="[0-9 ]*" maxlength="7" autocomplete="one-time-code" required autofocus>
+        </div>
+        <input type="hidden" name="_csrf_token" value="{{ csrf_token('verify_email') }}">
+        <button type="submit">Valider</button>
+    </form>
+
+    <div class="auth-links">
+        <form method="post" action="{{ path('app_verify_email_resend') }}" style="display: block;">
+            <input type="hidden" name="_csrf_token" value="{{ csrf_token('verify_email_resend') }}">
+            <button type="submit" class="link-button">Renvoyer un code</button>
+        </form>
+        <a href="{{ path('app_logout') }}">Utiliser une autre adresse (se déconnecter)</a>
+    </div>
+{% endblock %}

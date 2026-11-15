@@ -21,7 +21,7 @@ class LegacyGoal
     private ?int $id = null;
 
     #[ORM\ManyToOne(inversedBy: 'legacyGoals')]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(nullable: false, onDelete: 'CASCADE')]
     private ?PlanDeTransmission $planDeTransmission = null;
 
     #[ORM\Column(length: 255)]

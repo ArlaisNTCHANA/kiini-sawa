@@ -1,0 +1,146 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Mon Profil{% endblock %}
+
+{% block body %}
+<style>
+    .profile-wrap { max-width: 760px; margin: 0 auto; padding: 2.5rem 1.25rem 8rem; }
+    .profile-wrap h1 { font-family: var(--font-serif); color: var(--primary); font-size: 2rem; margin-bottom: .25rem; }
+    .profile-intro { color: var(--fg-muted); margin-bottom: 2rem; }
+    .p-card { background: var(--card-bg); border-radius: var(--r-lg); box-shadow: var(--card-shadow); padding: 1.75rem; margin-bottom: 1.5rem; }
+    .p-card h2 { font-family: var(--font-serif); font-size: 1.3rem; color: var(--fg); margin-bottom: .25rem; display: flex; align-items: center; gap: .5rem; }
+    .p-card .p-sub { color: var(--fg-muted); font-size: .875rem; margin-bottom: 1.25rem; }
+    .p-grid { display: grid; grid-template-columns: 1fr; gap: 1rem; }
+    @media (min-width: 640px) { .p-grid { grid-template-columns: 1fr 1fr; } }
+    .p-field { display: flex; flex-direction: column; gap: .35rem; }
+    .p-field.full { grid-column: 1 / -1; }
+    .p-field label { font-size: .75rem; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; color: var(--fg-muted); }
+    .p-field input, .p-field textarea { padding: .7rem .9rem; border: 1.5px solid #E2E8F0; border-radius: var(--r-md); font: inherit; font-size: .95rem; background: #fff; color: var(--fg); }
+    .p-field input:focus, .p-field textarea:focus { outline: none; border-color: var(--primary-light); box-shadow: 0 0 0 3px var(--primary-glow); }
+    .p-hint { font-size: .75rem; color: var(--fg-muted); }
+    .p-actions { margin-top: 1.25rem; display: flex; gap: .75rem; flex-wrap: wrap; align-items: center; }
+    .p-btn { display: inline-flex; align-items: center; gap: .4rem; padding: .7rem 1.25rem; border-radius: var(--r-md); border: none; font: inherit; font-weight: 600; font-size: .9rem; cursor: pointer; text-decoration: none; background: var(--primary); color: #fff; }
+    .p-btn:hover { background: var(--primary-dark); }
+    .p-btn.secondary { background: var(--bg-alt); color: var(--fg); }
+    .p-btn.secondary:hover { background: #E2E8F0; }
+    .p-btn.danger { background: var(--danger); }
+    .p-btn.danger:hover { background: #DC2626; }
+    .p-btn.link { background: none; color: var(--fg-muted); padding: .7rem .25rem; }
+    .p-sep { height: 1px; background: #F1F5F9; margin: 1.5rem 0; }
+    .p-current { font-size: .95rem; margin-bottom: 1rem; }
+    .p-pending { background: #F0FDFA; border: 1px solid #99F6E4; border-radius: var(--r-md); padding: 1rem; margin-bottom: 1rem; }
+    .p-danger-zone { border: 1.5px solid #FECACA; }
+    .p-danger-zone h2 { color: #991B1B; }
+    .p-legal { font-size: .8rem; color: var(--fg-muted); text-align: center; }
+    .p-legal a { color: var(--fg-muted); margin: 0 .4rem; }
+</style>
+
+<div class="profile-wrap" x-data="{ deleteOpen: false }">
+    <h1>Mon Profil</h1>
+    <p class="profile-intro">{{ app.user.email }}{% if app.user.createdAt %} · membre depuis {{ app.user.createdAt|format_date(pattern: 'MMMM y', locale: 'fr') }}{% endif %}</p>
+
+    {# ── Informations ───────────────────────────────────────── #}
+    <section class="p-card" id="informations">
+        <h2><i data-lucide="user" style="width:20px;height:20px;"></i> Mes informations</h2>
+        <p class="p-sub">Seul votre prénom est visible par les partenaires que vous invitez.</p>
+        <form method="post" action="{{ path('app_profile_info') }}">
+            <div class="p-grid">
+                <div class="p-field"><label for="firstName">Prénom</label><input id="firstName" name="firstName" maxlength="100" value="{{ profile.firstName ?? '' }}" autocomplete="given-name"></div>
+                <div class="p-field"><label for="lastName">Nom</label><input id="lastName" name="lastName" maxlength="100" value="{{ profile.lastName ?? '' }}" autocomplete="family-name"></div>
+                <div class="p-field"><label for="city">Ville</label><input id="city" name="city" maxlength="100" value="{{ profile.city ?? '' }}" autocomplete="address-level2"></div>
+                <div class="p-field"><label for="country">Pays</label><input id="country" name="country" maxlength="100" value="{{ profile.country ?? '' }}" autocomplete="country-name"></div>
+                <div class="p-field full"><label for="profession">Profession</label><input id="profession" name="profession" maxlength="150" value="{{ profile.profession ?? '' }}" autocomplete="organization-title"></div>
+                <div class="p-field full"><label for="bio">En quelques mots</label><textarea id="bio" name="bio" rows="3" maxlength="2000">{{ profile.bio ?? '' }}</textarea></div>
+            </div>
+            <input type="hidden" name="_csrf_token" value="{{ csrf_token('profile_info') }}">
+            <div class="p-actions"><button type="submit" class="p-btn">Enregistrer</button></div>
+        </form>
+    </section>
+
+    {# ── Sécurité : email et mot de passe ───────────────────── #}
+    <section class="p-card" id="securite">
+        <h2><i data-lucide="shield-check" style="width:20px;height:20px;"></i> Connexion et sécurité</h2>
+        <p class="p-sub">Votre adresse email sert à vous connecter et à recevoir les codes de vérification.</p>
+
+        <p class="p-current">Adresse actuelle : <strong>{{ app.user.email }}</strong></p>
+
+        {% if pendingEmail %}
+            <div class="p-pending">
+                <p style="margin-bottom:.75rem;">Un code a été envoyé à <strong>{{ pendingEmail }}</strong>. Saisissez-le pour confirmer le changement.</p>
+                <form method="post" action="{{ path('app_profile_email_confirm') }}" class="p-actions" style="margin-top:0;">
+                    <input name="code" inputmode="numeric" maxlength="7" autocomplete="one-time-code" placeholder="123456" required aria-label="Code reçu"
+                           style="padding:.65rem .9rem;border:1.5px solid #E2E8F0;border-radius:var(--r-md);font-size:1.1rem;letter-spacing:.3rem;width:9rem;text-align:center;">
+                    <input type="hidden" name="_csrf_token" value="{{ csrf_token('profile_email_confirm') }}">
+                    <button type="submit" class="p-btn">Confirmer</button>
+                </form>
+                <form method="post" action="{{ path('app_profile_email_cancel') }}" style="margin-top:.5rem;">
+                    <input type="hidden" name="_csrf_token" value="{{ csrf_token('profile_email_cancel') }}">
+                    <button type="submit" class="p-btn link">Annuler le changement</button>
+                </form>
+            </div>
+        {% endif %}
+
+        <details>
+            <summary style="cursor:pointer;font-weight:600;color:var(--primary);">Changer d'adresse email</summary>
+            <form method="post" action="{{ path('app_profile_email') }}" style="margin-top:1rem;">
+                <div class="p-grid">
+                    <div class="p-field"><label for="newEmail">Nouvelle adresse</label><input type="email" id="newEmail" name="newEmail" maxlength="180" required autocomplete="email"></div>
+                    <div class="p-field"><label for="emailPassword">Mot de passe actuel</label><input type="password" id="emailPassword" name="currentPassword" required autocomplete="current-password"></div>
+                </div>
+                <input type="hidden" name="_csrf_token" value="{{ csrf_token('profile_email') }}">
+                <div class="p-actions"><button type="submit" class="p-btn secondary">Recevoir un code</button></div>
+            </form>
+        </details>
+
+        <div class="p-sep"></div>
+
+        <details>
+            <summary style="cursor:pointer;font-weight:600;color:var(--primary);">Changer de mot de passe</summary>
+            <form method="post" action="{{ path('app_profile_password') }}" style="margin-top:1rem;">
+                <div class="p-grid">
+                    <div class="p-field"><label for="currentPassword">Mot de passe actuel</label><input type="password" id="currentPassword" name="currentPassword" required autocomplete="current-password"></div>
+                    <div class="p-field"><label for="newPassword">Nouveau mot de passe</label><input type="password" id="newPassword" name="newPassword" required minlength="{{ minPasswordLength }}" autocomplete="new-password"><span class="p-hint">{{ minPasswordLength }} caractères minimum.</span></div>
+                </div>
+                <input type="hidden" name="_csrf_token" value="{{ csrf_token('profile_password') }}">
+                <div class="p-actions"><button type="submit" class="p-btn secondary">Modifier le mot de passe</button></div>
+            </form>
+        </details>
+    </section>
+
+    {# ── Données personnelles (RGPD) ────────────────────────── #}
+    <section class="p-card" id="donnees">
+        <h2><i data-lucide="database" style="width:20px;height:20px;"></i> Mes données</h2>
+        <p class="p-sub">
+            Vos plans, votre journal et vos réflexions vous appartiennent.
+            Consentement donné le {{ app.user.termsAcceptedAt ? app.user.termsAcceptedAt|format_date(pattern: 'd MMMM y', locale: 'fr') : '— (compte créé avant la mise en place des conditions)' }}.
+        </p>
+        <div class="p-actions" style="margin-top:0;">
+            <a href="{{ path('app_profile_export') }}" class="p-btn secondary"><i data-lucide="download" style="width:16px;height:16px;"></i> Télécharger toutes mes données</a>
+            <a href="{{ path('app_legal', {page: 'confidentialite'}) }}" class="p-btn link">Comment mes données sont protégées</a>
+        </div>
+    </section>
+
+    <section class="p-card p-danger-zone">
+        <h2><i data-lucide="trash-2" style="width:20px;height:20px;"></i> Supprimer mon compte</h2>
+        <p class="p-sub">La suppression est immédiate et définitive : plans, journal, rituels, tests et échanges avec vos partenaires seront effacés. Pensez à télécharger vos données avant.</p>
+        <button type="button" class="p-btn secondary" x-show="!deleteOpen" @click="deleteOpen = true">Je veux supprimer mon compte</button>
+        <form method="post" action="{{ path('app_profile_delete') }}" x-show="deleteOpen" x-cloak>
+            <div class="p-grid">
+                <div class="p-field"><label for="confirmation">Tapez SUPPRIMER</label><input id="confirmation" name="confirmation" required autocomplete="off"></div>
+                <div class="p-field"><label for="deletePassword">Mot de passe</label><input type="password" id="deletePassword" name="currentPassword" required autocomplete="current-password"></div>
+            </div>
+            <input type="hidden" name="_csrf_token" value="{{ csrf_token('profile_delete') }}">
+            <div class="p-actions">
+                <button type="submit" class="p-btn danger">Supprimer définitivement</button>
+                <button type="button" class="p-btn link" @click="deleteOpen = false">Annuler</button>
+            </div>
+        </form>
+    </section>
+
+    <p class="p-legal">
+        {% for slug, label in {'mentions-legales': 'Mentions légales', 'confidentialite': 'Confidentialité', 'cgu': 'CGU', 'cgv': 'CGV'} %}
+            <a href="{{ path('app_legal', {page: slug}) }}">{{ label }}</a>
+        {% endfor %}
+    </p>
+</div>
+{% endblock %}

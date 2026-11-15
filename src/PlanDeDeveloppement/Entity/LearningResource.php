@@ -16,7 +16,7 @@ class LearningResource
     private ?int $id = null;
 
     #[ORM\ManyToOne(inversedBy: 'learningResources')]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(nullable: false, onDelete: 'CASCADE')]
     private ?SkillGoal $skillGoal = null;
 
     #[ORM\Column(length: 255)]

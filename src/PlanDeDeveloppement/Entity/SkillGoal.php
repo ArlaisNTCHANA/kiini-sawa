@@ -22,7 +22,7 @@ class SkillGoal
     private ?int $id = null;
 
     #[ORM\ManyToOne(inversedBy: 'skillGoals')]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(nullable: false, onDelete: 'CASCADE')]
     private ?PlanDeDeveloppementPersonnel $planDeDeveloppementPersonnel = null;
 
     #[ORM\Column(length: 255)]

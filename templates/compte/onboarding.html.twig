@@ -1,159 +1,135 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Bienvenue — KIINI SAWA{% endblock %}
-
-{% block stylesheets %}
-    <style>
-        .onboarding-body {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            min-height: calc(100vh - 72px);
-            position: relative;
-            overflow: hidden;
-            background: linear-gradient(135deg, #022c22 0%, #0f766e 50%, #014751 100%);
-            margin: 0;
-            padding: 2rem;
-        }
-
-        /* Ambient Glows */
-        .glow-1 {
-            position: absolute;
-            top: -10%; left: -10%;
-            width: 50vw; height: 50vh;
-            background: radial-gradient(circle, rgba(45, 212, 191, 0.2) 0%, transparent 70%);
-            filter: blur(60px);
-            pointer-events: none;
-        }
-        .glow-2 {
-            position: absolute;
-            bottom: -10%; right: -10%;
-            width: 60vw; height: 60vh;
-            background: radial-gradient(circle, rgba(245, 158, 11, 0.15) 0%, transparent 70%);
-            filter: blur(80px);
-            pointer-events: none;
-        }
-
-        /* Dot Grid */
-        .dots {
-            position: absolute;
-            inset: 0;
-            opacity: 0.15;
-            background-image: radial-gradient(circle, rgba(255, 255, 255, 0.15) 1.5px, transparent 1.5px);
-            background-size: 24px 24px;
-            pointer-events: none;
-        }
-
-        .onboarding-card {
-            width: 100%;
-            max-width: 460px;
-            padding: 3.5rem 2.5rem;
-            background-color: rgba(255, 255, 255, 0.07);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 28px;
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.35), 0 0 0 1px rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(24px);
-            -webkit-backdrop-filter: blur(24px);
-            text-align: center;
-            position: relative;
-            z-index: 10;
-            animation: fadeIn 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .welcome-emoji {
-            width: 4.5rem;
-            height: 4.5rem;
-            border-radius: 1.25rem;
-            background: rgba(255, 255, 255, 0.1);
-            border: 1px solid rgba(255, 255, 255, 0.15);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 2.25rem;
-            margin: 0 auto 2rem;
-            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
-        }
-
-        .title {
-            font-family: 'Playfair Display', Georgia, serif;
-            font-weight: 700;
-            font-size: 2.1rem;
-            color: #ffffff;
-            margin-bottom: 1rem;
-            line-height: 1.25;
-        }
-
-        .description {
-            font-size: 0.95rem;
-            color: #cbd5e1;
-            margin-bottom: 2.5rem;
-            line-height: 1.7;
-        }
-
-        .btn-start {
-            width: 100%;
-            padding: 1.1rem;
-            background: linear-gradient(135deg, #2dd4bf 0%, #0d9488 100%);
-            border: none;
-            border-radius: 14px;
-            color: #ffffff;
-            font-family: inherit;
-            font-weight: 700;
-            font-size: 1rem;
-            cursor: pointer;
-            transition: all 0.25s ease;
-            box-shadow: 0 8px 24px rgba(13, 148, 136, 0.35);
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-        }
-
-        .btn-start:hover {
-            opacity: 0.95;
-            box-shadow: 0 10px 28px rgba(13, 148, 136, 0.55);
-            transform: translateY(-1.5px);
-        }
-
-        .btn-start:active {
-            transform: translateY(0);
-        }
-
-        .footer-note {
-            margin-top: 1.75rem;
-            font-size: 0.8rem;
-            color: #94a3b8;
-        }
-    </style>
-{% endblock %}
+{% block title %}Bienvenue{% endblock %}
 
 {% block body %}
-<div class="onboarding-body">
-    <div class="glow-1"></div>
-    <div class="glow-2"></div>
-    <div class="dots"></div>
+<style>
+    .ob-body { display: flex; align-items: flex-start; justify-content: center; min-height: calc(100vh - 72px); padding: 2.5rem 1rem 8rem;
+               background: linear-gradient(135deg, #022c22 0%, #0f766e 50%, #014751 100%); position: relative; overflow: hidden; }
+    .ob-glow { position: absolute; top: -10%; left: -10%; width: 50vw; height: 50vh; background: radial-gradient(circle, rgba(45,212,191,.2) 0%, transparent 70%); filter: blur(60px); pointer-events: none; }
+    .ob-card { width: 100%; max-width: 560px; padding: 2.5rem 2rem; background: rgba(255,255,255,.07); border: 1px solid rgba(255,255,255,.1);
+               border-radius: 28px; box-shadow: 0 25px 50px -12px rgba(0,0,0,.35); backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px);
+               color: #cbd5e1; position: relative; z-index: 1; }
+    .ob-progress { display: flex; gap: .4rem; margin-bottom: 2rem; }
+    .ob-progress span { flex: 1; height: 4px; border-radius: 4px; background: rgba(255,255,255,.12); transition: background .3s; }
+    .ob-progress span.on { background: #2dd4bf; }
+    .ob-step-label { font-size: .75rem; font-weight: 700; letter-spacing: .15em; text-transform: uppercase; color: #2dd4bf; margin-bottom: .5rem; }
+    .ob-card h1 { font-family: var(--font-serif); color: #fff; font-size: 1.75rem; line-height: 1.25; margin-bottom: .75rem; }
+    .ob-text { font-size: .95rem; line-height: 1.6; margin-bottom: 1.5rem; }
+    .ob-card input[type=text], .ob-card input[type=date], .ob-card textarea {
+        width: 100%; padding: .9rem 1.1rem; background: rgba(0,0,0,.25); border: 1.5px solid rgba(255,255,255,.08); border-radius: 12px;
+        color: #f8fafc; font: inherit; font-size: 1rem; color-scheme: dark; }
+    .ob-card input:focus, .ob-card textarea:focus { outline: none; border-color: #2dd4bf; box-shadow: 0 0 0 4px rgba(45,212,191,.15); }
+    .ob-card textarea { min-height: 7rem; resize: vertical; line-height: 1.5; }
+    .ob-examples { font-size: .8rem; color: #94a3b8; margin-top: .6rem; line-height: 1.5; font-style: italic; }
+    .ob-values { display: grid; gap: .6rem; }
+    .ob-chips { display: flex; flex-wrap: wrap; gap: .4rem; margin-top: 1rem; }
+    .ob-chip { padding: .4rem .85rem; border-radius: 999px; border: 1px solid rgba(255,255,255,.15); background: transparent; color: #e2e8f0; font: inherit; font-size: .825rem; cursor: pointer; }
+    .ob-chip:hover { border-color: #2dd4bf; color: #2dd4bf; }
+    .ob-cats { display: grid; grid-template-columns: repeat(4, 1fr); gap: .5rem; margin: 1rem 0; }
+    .ob-cats label { text-align: center; padding: .65rem .25rem; border-radius: 12px; border: 1.5px solid rgba(255,255,255,.1); cursor: pointer; font-weight: 600; font-size: .9rem; color: #e2e8f0; }
+    .ob-cats input { position: absolute; opacity: 0; pointer-events: none; }
+    .ob-cats label:has(input:checked) { border-color: #2dd4bf; background: rgba(45,212,191,.12); color: #fff; }
+    .ob-field-label { display: block; font-size: .75rem; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; color: #94a3b8; margin: 1rem 0 .4rem; }
+    .ob-error { color: #fca5a5; font-size: .85rem; margin-top: .5rem; }
+    .ob-nav { display: flex; justify-content: space-between; align-items: center; margin-top: 2rem; gap: 1rem; }
+    .ob-btn { padding: .9rem 1.5rem; border-radius: 12px; border: none; font: inherit; font-weight: 700; cursor: pointer; background: linear-gradient(135deg, #2dd4bf 0%, #0d9488 100%); color: #fff; box-shadow: 0 4px 14px rgba(13,148,136,.3); }
+    .ob-btn:disabled { opacity: .45; cursor: not-allowed; }
+    .ob-link { background: none; border: none; color: #94a3b8; font: inherit; font-size: .875rem; cursor: pointer; padding: .5rem 0; }
+    .ob-link:hover { color: #fff; }
+</style>
 
-    <div class="onboarding-card">
-        <div class="welcome-emoji">👋</div>
-        
-        <h1 class="title">Bienvenue sur KIINI SAWA</h1>
-        
-        <p class="description">
-            Nous sommes ravis de vous compter parmi nous. Votre sanctuaire personnel est prêt à vous accompagner dans votre croissance, vos stratégies et vos rituels.
-        </p>
+{# Si le serveur renvoie une erreur, on rouvre l'étape concernée #}
+{% set firstErrorStep = errors.firstName is defined ? 1 : (errors.purpose is defined ? 2 : (errors.values is defined ? 3 : (errors|length > 0 ? 4 : 1))) %}
 
-        <form action="{{ path('app_onboarding') }}" method="POST">
-            <button type="submit" class="btn-start">
-                Commencer l'aventure
-            </button>
-        </form>
+<div class="ob-body">
+    <div class="ob-glow"></div>
+    <form method="post" class="ob-card"
+          x-data="{
+              step: {{ firstErrorStep }},
+              firstName: {{ data.firstName|json_encode }},
+              purpose: {{ data.purpose|json_encode }},
+              values: {{ data.values|json_encode }},
+              goalTitle: {{ data.goalTitle|json_encode }},
+              addValue(v) { const i = this.values.findIndex(x => !x.trim()); if (i >= 0 && !this.values.some(x => x.toLowerCase() === v.toLowerCase())) this.values[i] = v; },
+              valid() {
+                  if (this.step === 1) return this.firstName.trim().length > 0;
+                  if (this.step === 2) return this.purpose.trim().length >= 10;
+                  if (this.step === 3) { const v = this.values.map(x => x.trim().toLowerCase()).filter(Boolean); return v.length === 3 && new Set(v).size === 3; }
+                  return this.goalTitle.trim().length >= 3;
+              }
+          }"
+          @keydown.enter="if ($event.target.tagName !== 'TEXTAREA' && step < 4) { $event.preventDefault(); if (valid()) step++; }">
 
-        <p class="footer-note">
-            En continuant, vous accéderez à votre espace personnel.
-        </p>
-    </div>
+        <div class="ob-progress" aria-hidden="true">
+            <template x-for="i in 4"><span :class="i <= step ? 'on' : ''"></span></template>
+        </div>
+
+        {# Étape 1 — Prénom #}
+        <div x-show="step === 1">
+            <p class="ob-step-label">Étape 1 sur 4 · Bienvenue</p>
+            <h1>Bâtissons ensemble une vie alignée sur ce qui compte vraiment.</h1>
+            <p class="ob-text">En 3 minutes, vous allez poser les fondations de votre Plan de Vie. Vous pourrez tout approfondir ensuite. Comment souhaitez-vous qu'on vous appelle ?</p>
+            <input type="text" name="firstName" x-model="firstName" maxlength="100" autocomplete="given-name" placeholder="Votre prénom" aria-label="Prénom">
+            {% if errors.firstName is defined %}<p class="ob-error">{{ errors.firstName }}</p>{% endif %}
+        </div>
+
+        {# Étape 2 — Raison d'être #}
+        <div x-show="step === 2" x-cloak>
+            <p class="ob-step-label">Étape 2 sur 4 · Raison d'être</p>
+            <h1>Pourquoi êtes-vous là, <span x-text="firstName"></span> ?</h1>
+            <p class="ob-text">En une ou deux phrases, ce pour quoi vous voulez que votre vie compte. Pas besoin que ce soit parfait : vous l'affinerez.</p>
+            <textarea name="purpose" x-model="purpose" maxlength="1000" aria-label="Raison d'être"></textarea>
+            <p class="ob-examples">Exemples : « Aider les jeunes de ma ville à révéler leurs talents. » · « Bâtir une famille unie et servir mon église avec mes dons d'enseignement. »</p>
+            {% if errors.purpose is defined %}<p class="ob-error">{{ errors.purpose }}</p>{% endif %}
+        </div>
+
+        {# Étape 3 — Valeurs #}
+        <div x-show="step === 3" x-cloak>
+            <p class="ob-step-label">Étape 3 sur 4 · Valeurs</p>
+            <h1>Quelles sont vos 3 valeurs non négociables ?</h1>
+            <p class="ob-text">Ce qui guide vos décisions, même quand c'est difficile.</p>
+            <div class="ob-values">
+                <template x-for="(v, i) in values" :key="i">
+                    <input type="text" name="values[]" x-model="values[i]" maxlength="255" :placeholder="'Valeur ' + (i + 1)" :aria-label="'Valeur ' + (i + 1)">
+                </template>
+            </div>
+            <div class="ob-chips">
+                {% for s in suggestions %}
+                    <button type="button" class="ob-chip" @click="addValue({{ s|json_encode }})">{{ s }}</button>
+                {% endfor %}
+            </div>
+            {% if errors.values is defined %}<p class="ob-error">{{ errors.values }}</p>{% endif %}
+        </div>
+
+        {# Étape 4 — Premier objectif #}
+        <div x-show="step === 4" x-cloak>
+            <p class="ob-step-label">Étape 4 sur 4 · Premier objectif</p>
+            <h1>Un objectif qui découle de votre raison d'être.</h1>
+            <p class="ob-text">Quelque chose de concret que vous voulez voir se réaliser.</p>
+            <input type="text" name="goalTitle" x-model="goalTitle" maxlength="255" placeholder="Ex. : Lancer un atelier d'orientation pour 20 jeunes" aria-label="Objectif">
+            {% if errors.goalTitle is defined %}<p class="ob-error">{{ errors.goalTitle }}</p>{% endif %}
+
+            <span class="ob-field-label">C'est un objectif pour…</span>
+            <div class="ob-cats">
+                {% for key, label in categories %}
+                    <label><input type="radio" name="goalCategory" value="{{ key }}" {{ data.goalCategory == key ? 'checked' }}>{{ label }}</label>
+                {% endfor %}
+            </div>
+
+            <label class="ob-field-label" for="goalDeadline">Échéance</label>
+            <input type="date" id="goalDeadline" name="goalDeadline" value="{{ data.goalDeadline }}" min="{{ 'tomorrow'|date('Y-m-d') }}">
+            {% if errors.goalDeadline is defined %}<p class="ob-error">{{ errors.goalDeadline }}</p>{% endif %}
+        </div>
+
+        <input type="hidden" name="_csrf_token" value="{{ csrf_token('onboarding') }}">
+
+        <div class="ob-nav">
+            <button type="button" class="ob-link" x-show="step > 1" @click="step--">← Retour</button>
+            <button type="submit" class="ob-link" name="skip" value="1" formnovalidate x-show="step === 1">Plus tard</button>
+            <button type="button" class="ob-btn" x-show="step < 4" :disabled="!valid()" @click="step++">Continuer</button>
+            <button type="submit" class="ob-btn" x-show="step === 4" x-cloak :disabled="!valid()">Voir mon Plan de Vie</button>
+        </div>
+    </form>
 </div>
 {% endblock %}

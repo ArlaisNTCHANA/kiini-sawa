@@ -1,0 +1,7 @@
+{% extends 'compte/email/_layout.html.twig' %}
+{% block content %}
+  <p>Bonjour {{ name }},</p>
+  <p>Quelqu'un (peut-être vous) a essayé de créer un compte KIINI SAWA avec cette adresse, qui en possède déjà un.</p>
+  <p>Vous pouvez <a href="{{ loginUrl }}" style="color:#0f766e;">vous connecter</a> ou, si vous avez oublié votre mot de passe, <a href="{{ resetUrl }}" style="color:#0f766e;">le réinitialiser</a>.</p>
+  <p>Si vous n'êtes pas à l'origine de cette demande, ignorez cet email : votre compte n'a pas été modifié.</p>
+{% endblock %}

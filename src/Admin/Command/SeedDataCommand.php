@@ -72,6 +72,7 @@ class SeedDataCommand extends Command
             $user = new User();
             $user->setEmail($email);
             $user->setRoles(['ROLE_ADMIN']);
+            $user->setIsVerified(true);
 
             // Hash the password
             $hashedPassword = $this->passwordHasher->hashPassword($user, $password);

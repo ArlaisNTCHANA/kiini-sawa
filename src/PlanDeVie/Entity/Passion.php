@@ -15,7 +15,7 @@ class Passion
     private ?int $id = null;
 
     #[ORM\ManyToOne(inversedBy: 'passions')]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(nullable: false, onDelete: 'CASCADE')]
     private ?PlanDeVie $planDeVie = null;
 
     #[ORM\Column(length: 255)]

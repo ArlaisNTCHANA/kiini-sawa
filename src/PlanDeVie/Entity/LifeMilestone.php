@@ -15,7 +15,7 @@ class LifeMilestone
     private ?int $id = null;
 
     #[ORM\ManyToOne(inversedBy: 'milestones')]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(nullable: false, onDelete: 'CASCADE')]
     private ?LifeGoal $lifeGoal = null;
 
     #[ORM\Column(length: 255)]
