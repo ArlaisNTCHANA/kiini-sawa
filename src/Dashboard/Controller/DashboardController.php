@@ -4,6 +4,7 @@ namespace App\Dashboard\Controller;
 
 use App\Rituels\Entity\Habit;
 use App\Compte\Entity\User;
+use App\Dashboard\Service\DashboardData;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -18,7 +19,7 @@ class DashboardController extends AbstractController
     }
 
     #[Route('/dashboard', name: 'app_dashboard')]
-    public function index(EntityManagerInterface $entityManager): Response
+    public function index(EntityManagerInterface $entityManager, DashboardData $dashboard): Response
     {
         /** @var User $user */
         $user = $this->getUser();
@@ -31,17 +32,13 @@ class DashboardController extends AbstractController
             return $this->redirectToRoute('app_onboarding');
         }
 
-        // Dummy quote
-        $quote = [
-            'content' => 'Le succès n\'est pas final, l\'échec n\'est pas fatal : c\'est le courage de continuer qui compte.',
-            'author' => 'Winston Churchill'
-        ];
-
         $habits = $entityManager->getRepository(Habit::class)->findByWithAllRelations($user);
 
         return $this->render('dashboard/index.html.twig', [
             'user' => $user,
-            'quote' => $quote,
+            'quote' => $dashboard->quote(),
+            'stats' => $dashboard->stats($habits),
+            'deadlines' => $dashboard->upcomingDeadlines($user),
             'habits' => $habits,
             'growthGoal' => $user->getPlanDeCroissance(),
             'planDeVie' => $user->getPlanDeVie(),

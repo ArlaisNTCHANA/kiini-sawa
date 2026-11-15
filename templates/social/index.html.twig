@@ -176,12 +176,8 @@
             <i data-lucide="search" class="w-4 h-4"></i>
             <span>Exploration</span>
         </button>
-        <button @click="activeTab = 'CHALLENGES'"
-                class="social-tab"
-                :class="activeTab === 'CHALLENGES' ? 'active' : ''">
-            <i data-lucide="trophy" class="w-4 h-4"></i>
-            <span>Défis</span>
-        </button>
+        {# Onglet « Défis » masqué tant que la fonctionnalité n'existe pas (impasse, voir docs/plan-v1.md §3.4).
+           Le contenu de l'onglet est conservé plus bas pour sa réactivation. #}
     </nav>
 
     <!-- Main Content -->
@@ -538,23 +534,8 @@
                          <input type="checkbox" x-model="editingPermissions.growthPlan" class="w-4 h-4 accent-teal-700" />
                      </label>
 
-                     <!-- Habits -->
-                     <label class="flex items-center justify-between p-3 bg-slate-50 hover:bg-slate-100/50 border border-slate-200/60 rounded-xl cursor-pointer transition-colors">
-                         <div class="space-y-0.5">
-                             <span class="text-xs font-bold text-slate-700">Habitudes</span>
-                             <p class="text-[9px] text-slate-400">Visualiser mon taux de régularité</p>
-                         </div>
-                         <input type="checkbox" x-model="editingPermissions.habits" class="w-4 h-4 accent-teal-700" />
-                     </label>
+                     {# « Habitudes » et « Bilans » masqués : ces partages ne sont pas encore affichés chez le partenaire (impasse §3.4). #}
 
-                     <!-- Reviews & Bilans -->
-                     <label class="flex items-center justify-between p-3 bg-slate-50 hover:bg-slate-100/50 border border-slate-200/60 rounded-xl cursor-pointer transition-colors">
-                         <div class="space-y-0.5">
-                             <span class="text-xs font-bold text-slate-700">Bilans & Rétrospectives</span>
-                             <p class="text-[9px] text-slate-400">Historique des scores de sentiment</p>
-                         </div>
-                         <input type="checkbox" x-model="editingPermissions.bilan" class="w-4 h-4 accent-teal-700" />
-                     </label>
                  </div>
              </div>
 

@@ -1,0 +1,67 @@
+{% extends 'admin/layout.html.twig' %}
+
+{% block title %}Citations du jour{% endblock %}
+{% block page_title %}Citations du jour{% endblock %}
+
+{% block content %}
+{% for label, messages in app.flashes %}
+    {% for message in messages %}
+        <div style="padding: 12px 16px; border-radius: var(--radius-sm); margin-bottom: 16px; font-size: 14px; {{ label == 'success' ? 'background: rgba(16,185,129,.1); color: #34d399;' : 'background: rgba(239,68,68,.1); color: #f87171;' }}">{{ message }}</div>
+    {% endfor %}
+{% endfor %}
+
+<div class="ks-card" style="margin-bottom: 24px;">
+    <h2 style="font-size: 16px; font-weight: 700; margin-bottom: 8px;">Aujourd'hui sur l'accueil</h2>
+    {% if today %}
+        <p style="font-style: italic;">« {{ today.content }} »</p>
+        <p style="font-size: 13px; color: var(--text-secondary); margin-top: 4px;">{{ today.author }}</p>
+    {% else %}
+        <p style="color: var(--text-secondary);">Aucune citation active : l'accueil affiche le texte par défaut. Lancez <code>php bin/console app:quotes:seed</code> pour ajouter les versets proposés.</p>
+    {% endif %}
+</div>
+
+<div class="ks-card" style="margin-bottom: 24px;">
+    <h2 style="font-size: 16px; font-weight: 700; margin-bottom: 16px;">Ajouter une citation</h2>
+    <form method="post" action="{{ path('admin_quotes_add') }}" style="display: grid; gap: 12px;">
+        <textarea name="content" rows="3" required placeholder="Texte" style="padding: 10px; border-radius: 8px; background: rgba(0,0,0,.2); color: inherit; border: 1px solid rgba(255,255,255,.1);"></textarea>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px;">
+            <input name="author" placeholder="Auteur ou référence (ex. Psaume 23:1 (LSG))" style="padding: 10px; border-radius: 8px; background: rgba(0,0,0,.2); color: inherit; border: 1px solid rgba(255,255,255,.1);">
+            <input name="category" placeholder="Catégorie (VERSET, MOTIVATION…)" style="padding: 10px; border-radius: 8px; background: rgba(0,0,0,.2); color: inherit; border: 1px solid rgba(255,255,255,.1);">
+            <label style="font-size: 13px; color: var(--text-secondary);">Date d'affichage (facultatif)
+                <input type="date" name="displayDate" style="display: block; width: 100%; padding: 8px; border-radius: 8px; background: rgba(0,0,0,.2); color: inherit; border: 1px solid rgba(255,255,255,.1);">
+            </label>
+        </div>
+        <input type="hidden" name="_csrf_token" value="{{ csrf_token('admin_quote') }}">
+        <div><button type="submit" class="ks-btn ks-btn--primary">Ajouter</button></div>
+    </form>
+</div>
+
+<div class="ks-card">
+    <h2 style="font-size: 16px; font-weight: 700; margin-bottom: 16px;">Toutes les citations ({{ quotes|length }})</h2>
+    <table style="width: 100%; border-collapse: collapse; font-size: 14px;">
+        <thead><tr style="text-align: left; color: var(--text-secondary);"><th style="padding: 8px;">Citation</th><th style="padding: 8px;">Date</th><th style="padding: 8px;">État</th><th></th></tr></thead>
+        <tbody>
+        {% for q in quotes %}
+            <tr style="border-top: 1px solid rgba(255,255,255,.06); {{ not q.active ? 'opacity: .5;' }}">
+                <td style="padding: 8px;">« {{ q.content }} »<br><small style="color: var(--text-secondary);">{{ q.author }}</small></td>
+                <td style="padding: 8px; white-space: nowrap;">{{ q.displayDate ? q.displayDate|date('d/m/Y') : 'Rotation' }}</td>
+                <td style="padding: 8px;">{{ q.active ? 'Active' : 'Masquée' }}</td>
+                <td style="padding: 8px; white-space: nowrap;">
+                    <form method="post" action="{{ path('admin_quotes_toggle', {id: q.id}) }}" style="display: inline;"><input type="hidden" name="_csrf_token" value="{{ csrf_token('admin_quote') }}"><button class="ks-btn" type="submit">{{ q.active ? 'Masquer' : 'Activer' }}</button></form>
+                    <form method="post" action="{{ path('admin_quotes_delete', {id: q.id}) }}" style="display: inline;" onsubmit="return confirm('Supprimer cette citation ?')"><input type="hidden" name="_csrf_token" value="{{ csrf_token('admin_quote') }}"><button class="ks-btn" type="submit">Supprimer</button></form>
+                </td>
+            </tr>
+        {% else %}
+            <tr><td colspan="4" style="padding: 16px; color: var(--text-secondary);">Aucune citation.</td></tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}
+
+{% block stylesheets %}
+<style>
+    .ks-btn { display: inline-flex; align-items: center; gap: 6px; padding: 6px 12px; border-radius: var(--radius-sm); font-size: 13px; font-weight: 600; cursor: pointer; border: 1px solid rgba(255,255,255,.12); background: transparent; color: inherit; }
+    .ks-btn--primary { background: var(--accent-gradient); color: #fff; border-color: transparent; padding: 10px 20px; }
+</style>
+{% endblock %}

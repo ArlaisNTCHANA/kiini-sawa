@@ -344,45 +344,13 @@
                     <i data-lucide="layout-dashboard"></i>
                     <span>Tableau de bord</span>
                 </a>
-                <a href="#" class="ks-sidebar__link" id="nav-users">
-                    <i data-lucide="users"></i>
-                    <span>Utilisateurs</span>
-                </a>
 
-                <div class="ks-sidebar__label">Plans</div>
-                <a href="{{ path('admin_plan_de_vie') }}" class="ks-sidebar__link {{ app.request.attributes.get('_route') starts with 'admin_plan_de_vie' ? 'active' }}" id="nav-plan-vie">
-                    <i data-lucide="compass"></i>
-                    <span>Plan de Vie</span>
-                </a>
-                <a href="#" class="ks-sidebar__link" id="nav-plan-croissance">
-                    <i data-lucide="trending-up"></i>
-                    <span>Croissance</span>
-                </a>
-                <a href="#" class="ks-sidebar__link" id="nav-plan-pdp">
-                    <i data-lucide="graduation-cap"></i>
-                    <span>Développement</span>
-                </a>
-                <a href="#" class="ks-sidebar__link" id="nav-plan-hygiene">
-                    <i data-lucide="heart-pulse"></i>
-                    <span>Hygiène</span>
-                </a>
-                <a href="#" class="ks-sidebar__link" id="nav-plan-transmission">
-                    <i data-lucide="share-2"></i>
-                    <span>Transmission</span>
-                </a>
+                
 
-                <div class="ks-sidebar__label">Modules</div>
-                <a href="#" class="ks-sidebar__link" id="nav-habits">
-                    <i data-lucide="repeat"></i>
-                    <span>Habitudes</span>
-                </a>
-                <a href="#" class="ks-sidebar__link" id="nav-journal">
-                    <i data-lucide="book-open"></i>
-                    <span>Journal</span>
-                </a>
-                <a href="#" class="ks-sidebar__link" id="nav-challenges">
-                    <i data-lucide="trophy"></i>
-                    <span>Défis</span>
+                <div class="ks-sidebar__label">Contenu</div>
+                <a href="{{ path('admin_quotes') }}" class="ks-sidebar__link {{ app.request.attributes.get('_route') starts with 'admin_quotes' ? 'active' }}" id="nav-quotes">
+                    <i data-lucide="quote"></i>
+                    <span>Citations</span>
                 </a>
                 <a href="{{ path('admin_personality_dashboard') }}" class="ks-sidebar__link {{ app.request.attributes.get('_route') starts with 'admin_personality' ? 'active' }}" id="nav-tests">
                     <i data-lucide="brain"></i>
