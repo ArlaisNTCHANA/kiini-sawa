@@ -13,13 +13,8 @@ doctrine:
         identity_generation_preferences:
             Doctrine\DBAL\Platforms\PostgreSQLPlatform: identity
         auto_mapping: true
-        mappings:
-            App:
-                type: attribute
-                is_bundle: false
-                dir: '%kernel.project_dir%/src/Entity'
-                prefix: 'App\Entity'
-                alias: App
+        # Les mappings des entités sont déclarés automatiquement par module
+        # dans config/packages/doctrine_modules.php (src/<Module>/Entity).
 
 when@test:
     doctrine:
