@@ -1,0 +1,9 @@
+{# Encart « Comprendre cette étape » (fonction Twig book_panel) #}
+<details class="book-panel" {{ open ? 'open' }} style="margin: 0 0 1.25rem; background: #FFFBEB; border: 1px solid #FDE68A; border-radius: 14px; padding: .85rem 1.1rem; font-size: .9rem; color: #78350F;">
+    <summary style="cursor: pointer; font-weight: 700; display: flex; align-items: center; gap: .5rem; list-style: none;">
+        <span aria-hidden="true">📖</span> Comprendre cette étape
+        <span style="font-weight: 500; color: #92400E; opacity: .8;">· {{ chapter.title }}</span>
+    </summary>
+    <p style="margin: .6rem 0 .5rem; line-height: 1.6;">{{ chapter.excerpt }}</p>
+    <a href="{{ path('app_methode_chapter', {slug: chapter.slug}) }}" target="_blank" rel="noopener" style="color: #B45309; font-weight: 700; text-decoration: none;">Lire le chapitre ({{ chapter.minutes }} min) →</a>
+</details>

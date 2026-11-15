@@ -433,6 +433,7 @@
                             { label: 'Mon Profil',      icon: 'user',          href: path('app_profile'),                desc: 'Compte & données' },
                             { label: 'Mes Découvertes', icon: 'sparkles',      href: path('app_personality_index'),      desc: 'Tests & valeurs' },
                             { label: 'Calendrier',      icon: 'calendar',      href: path('app_planner'), desc: 'Planning' },
+                            { label: 'La Méthode',      icon: 'book-open',     href: path('app_methode_index'), desc: 'Les chapitres du livre' },
                         ] %}
                         {% for it in ddItems1 %}
                         <a href="{{ it.href }}" @click="userOpen = false" class="dd-item">

@@ -710,6 +710,7 @@
     {# ──────────────────────────────────────────────────────────────────────
        HUB VIEW (Active Plan is Null)
        ────────────────────────────────────────────────────────────────────── #}
+    {{ book_panel('strategies') }}
     <div x-show="activePlan === null" x-transition:enter="transition ease-out duration-300">
         <header class="strat-header">
             <div class="strat-header-icon">

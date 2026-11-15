@@ -1,0 +1,51 @@
+{% extends 'plan_de_vie/pdf/_layout.html.twig' %}
+{% block content %}
+    <h2>But de Dieu pour ma vie</h2>
+    {% if planDeVie and planDeVie.purpose and planDeVie.purpose.statement %}
+        <div class="quote">{{ planDeVie.purpose.statement|nl2br }}</div>
+    {% else %}<p class="empty">Non défini.</p>{% endif %}
+
+    <h2>Ma vision</h2>
+    {% if planDeVie and planDeVie.vision and planDeVie.vision.content %}
+        <p>{{ planDeVie.vision.content|nl2br }}</p>
+        {% if planDeVie.vision.horizon %}<p class="muted">Horizon : {{ planDeVie.vision.horizon }}</p>{% endif %}
+    {% else %}<p class="empty">Non définie.</p>{% endif %}
+
+    <h2>Balance interne</h2>
+    <table>
+        <tr><th style="width: 33%;">Valeurs vécues</th><th style="width: 33%;">Valeurs déclarées</th><th>Contre-valeurs</th></tr>
+        <tr>
+            <td>{% for v in valuesReal %}<span class="tag">{{ v.name }}</span>{% else %}<span class="empty">—</span>{% endfor %}</td>
+            <td>{% for v in valuesDeclared %}<span class="tag">{{ v.name }}</span>{% else %}<span class="empty">—</span>{% endfor %}</td>
+            <td>{% for v in valuesCounter %}<span class="tag">{{ v.name }}</span>{% else %}<span class="empty">—</span>{% endfor %}</td>
+        </tr>
+    </table>
+    {% set convictions = convictionsDeep|merge(convictionsMedium)|merge(convictionsLight) %}
+    <h3>Convictions</h3>
+    {% if convictions|length %}<ul>{% for c in convictions %}<li>{{ c.text }}</li>{% endfor %}</ul>{% else %}<p class="empty">Aucune.</p>{% endif %}
+    <h3>Croyances limitantes à surmonter</h3>
+    {% if limitingBeliefs|length %}<ul>{% for c in limitingBeliefs %}<li>{{ c.text }}</li>{% endfor %}</ul>{% else %}<p class="empty">Aucune.</p>{% endif %}
+
+    <h2>Passions, dons et talents</h2>
+    <h3>Passions</h3>
+    <p>{% for p in (planDeVie ? planDeVie.passions : []) %}<span class="tag">{{ p.name }}</span>{% else %}<span class="empty">Aucune.</span>{% endfor %}</p>
+    <h3>Dons et talents</h3>
+    <p>{% for t in talents %}<span class="tag">{{ t.text }}</span>{% else %}<span class="empty">Aucun.</span>{% endfor %}</p>
+    {% set done = latestTests|filter(t => t.completed) %}
+    {% if done|length %}
+        <h3>Profil</h3>
+        <p>{% for t in done %}<span class="tag">{{ t.meta.name }} : {{ t.result }}</span>{% endfor %}</p>
+    {% endif %}
+
+    <h2>Mes objectifs spécifiques</h2>
+    {% for cat, label in {BE: 'Être', DO: 'Faire', HAVE: 'Avoir', GIVE: 'Donner'} %}
+        <h3>{{ label }}</h3>
+        {% if lifeGoals[cat]|length %}
+            <table>
+                {% for g in lifeGoals[cat] %}
+                    <tr><td>{{ g.title }}</td><td style="width: 28mm;" class="muted">{{ g.deadline ? g.deadline|format_date(pattern: 'MMM y', locale: 'fr') : '—' }}</td><td style="width: 14mm;" class="muted">{{ g.progress }} %</td></tr>
+                {% endfor %}
+            </table>
+        {% else %}<p class="empty">Aucun.</p>{% endif %}
+    {% endfor %}
+{% endblock %}

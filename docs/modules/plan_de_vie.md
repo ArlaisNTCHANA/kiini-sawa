@@ -4,7 +4,14 @@
 
 ## Rôle
 
-Plan de Vie : raison d'être, vision, valeurs, passions, balance interne, objectifs de vie et jalons. Héberge aussi pour l'instant le wizard global et le hub des stratégies (contrôleur à découper au lot 3).
+Plan de Vie : raison d'être, vision, valeurs, passions, balance interne, objectifs de vie et jalons.
+Héberge aussi ce qui est commun aux 5 plans :
+
+- `PlanCatalog` : nom, route et gabarit de chaque plan (lexique de la charte §1bis) ;
+- `PlanDataProvider` : données des pages, visualisations, emails et de l'assistant ;
+- `LifePlanWizardSaver` : enregistrement **incrémental** de l'assistant (`/plan-de-vie/assistant`). Chaque ligne envoyée porte l'identifiant de l'élément (`<champ>_ids[]` ou `<champ>_id[i]`) : l'élément est mis à jour, pas recréé, et ses liens sont conservés. Chaque clic sur « Suivant » enregistre l'étape (requête `autosave`) ;
+- `AbstractPlanController` : visualisation, envoi par email, PDF, hub ouvert sur un plan. Chaque plan a son contrôleur dans son module ;
+- `PlanPdfRenderer` : export PDF (Dompdf) du Plan de Vie et du Plan de Croissance.
 
 ## Emplacements
 
@@ -16,7 +23,7 @@ Plan de Vie : raison d'être, vision, valeurs, passions, balance interne, object
 
 ## Controller
 
-`PlanDeVieController`, `UserPlanController`
+`PlanDeVieController` (+ `Admin/PlanDeVieController`), `StrategiesController`, `WizardController`, `AbstractPlanController`
 
 ## Entity
 

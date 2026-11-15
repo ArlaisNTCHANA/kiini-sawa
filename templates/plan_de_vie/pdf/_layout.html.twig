@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<title>{{ title }}</title>
+<style>
+    @page { margin: 22mm 18mm 20mm; }
+    body { font-family: 'DejaVu Sans', sans-serif; font-size: 10pt; color: #1e293b; line-height: 1.5; }
+    .footer { position: fixed; bottom: -12mm; left: 0; right: 0; font-size: 7.5pt; color: #94a3b8; border-top: 0.5pt solid #e2e8f0; padding-top: 2mm; }
+    .cover { border-bottom: 2pt solid #0f766e; padding-bottom: 6mm; margin-bottom: 8mm; }
+    .brand { color: #0f766e; font-size: 9pt; font-weight: bold; letter-spacing: 2pt; }
+    h1 { font-family: 'DejaVu Serif', serif; color: #0f766e; font-size: 22pt; margin: 2mm 0 1mm; }
+    .meta { color: #64748b; font-size: 9pt; }
+    h2 { font-family: 'DejaVu Serif', serif; color: #0f766e; font-size: 13pt; margin: 7mm 0 2.5mm; border-bottom: 0.5pt solid #ccfbf1; padding-bottom: 1mm; }
+    h3 { font-size: 10.5pt; margin: 3mm 0 1mm; color: #0f172a; }
+    .quote { background: #f0fdfa; border-left: 2.5pt solid #0f766e; padding: 3mm 4mm; font-style: italic; font-family: 'DejaVu Serif', serif; font-size: 11pt; }
+    .muted { color: #64748b; }
+    .empty { color: #94a3b8; font-style: italic; }
+    table { width: 100%; border-collapse: collapse; margin: 1mm 0 2mm; }
+    td, th { vertical-align: top; padding: 1.5mm 2mm; border-bottom: 0.4pt solid #e2e8f0; text-align: left; }
+    th { font-size: 8pt; color: #64748b; text-transform: uppercase; letter-spacing: 0.5pt; }
+    .tag { display: inline-block; background: #f1f5f9; border-radius: 3pt; padding: 0.5mm 2mm; font-size: 8pt; margin: 0 1mm 1mm 0; }
+    .card { border: 0.5pt solid #e2e8f0; border-radius: 4pt; padding: 3mm 4mm; margin-bottom: 3mm; page-break-inside: avoid; }
+    ul { margin: 1mm 0 2mm; padding-left: 5mm; }
+    li { margin-bottom: 0.8mm; }
+</style>
+</head>
+<body>
+    <div class="footer">{{ title }} · {{ name }} · édité le {{ 'now'|format_date(pattern: 'd MMMM y', locale: 'fr') }} avec KIINI SAWA</div>
+    <div class="cover">
+        <div class="brand">KIINI SAWA</div>
+        <h1>{{ title }}</h1>
+        <div class="meta">{{ name }}</div>
+    </div>
+    {% block content %}{% endblock %}
+</body>
+</html>

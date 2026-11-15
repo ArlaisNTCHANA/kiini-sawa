@@ -256,14 +256,15 @@ Les estimations sont des jours de développement pour une personne. Les phases 0
 
 ### Phase 3 — Un cœur cohérent (10–14 j)
 
-- [ ] Appliquer le lexique et l'architecture des plans décidés en phase 0 (menus, titres, URL, templates).
-- [ ] Wizard : mise à jour incrémentale, sans effacer puis recréer ; sauvegarde par étape ; validation des saisies.
-- [ ] Découper `UserPlanController` : chaque plan a sa page et son contrôleur dans son module.
-- [ ] Revue hebdomadaire étendue à tous les plans et au journal, comme dans l'ancienne version.
-- [ ] Dashboard réel : citation du jour (entité `Quote` et admin), raison d'être affichée, prochaines échéances.
-- [ ] Supprimer les impasses (§3.4) : masquer Défis et les options de partage non effectives.
-- [ ] Encart « Comprendre cette étape » relié aux chapitres du livre (§3.6).
-- [ ] Export PDF du Plan de Vie et du Plan de Croissance.
+- [x] Appliquer le lexique et l'architecture des plans décidés en phase 0 (menus, titres, URL, templates). Relation & Réseau rattaché à la Croissance ; le Plan de Transmission affiche les projets de legs (ils n'apparaissaient nulle part).
+- [x] Wizard : mise à jour incrémentale, sans effacer puis recréer ; sauvegarde par étape. Validation : titres et statuts contrôlés, liens limités aux objectifs de l'utilisateur.
+- [x] Découper `UserPlanController` : chaque plan a sa page et son contrôleur dans son module.
+- [x] Revue hebdomadaire étendue à tous les plans, aux rituels et au journal (`/bilan/revue-hebdomadaire`).
+- [x] Dashboard réel : citation du jour (entité `Quote`, 22 versets LSG 1910, admin `/admin/citations`), raison d'être affichée, prochaines échéances.
+- [x] Supprimer les impasses (§3.4) : Défis, partages non effectifs, liens morts de l'admin.
+- [x] Encart « Comprendre cette étape » relié aux chapitres du livre (§3.6), module Méthode `/methode`.
+- [x] Export PDF du Plan de Vie et du Plan de Croissance.
+- [ ] Reste : déplacer le calcul du score de cohérence de Twig vers un service PHP (aujourd'hui dupliqué entre Plan de Vie et hub) ; rappel hebdomadaire par email (phase 4).
 
 ### Phase 4 — Rétention (5–7 j)
 

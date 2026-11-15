@@ -8,21 +8,22 @@ Le code de KIINI SAWA est rangé **par module métier**. Chaque module regroupe 
 |---|---|---|---|---|
 | [Abonnement](modules/abonnement.md) | Abonnements et transactions (Stripe à venir) | 2 | 0 | Non |
 | [Admin](modules/admin.md) | Back-office | 2 | 3 | Partielle |
-| [Bilan](modules/bilan.md) | Bilans et revues (scores de croissance, revue mensuelle, check-ins) | 2 | 2 | Partielle |
+| [Bilan](modules/bilan.md) | Bilans et revues : revue hebdomadaire sur les 4 plans, scores de croissance, revue mensuelle | 3 | 3 | Oui |
 | [Coaching](modules/coaching.md) | Mentorat | 4 | 0 | Non |
-| [Compte](modules/compte.md) | Identité et accès | 3 | 3 | Partielle |
-| [Dashboard](modules/dashboard.md) | Tableau de bord d'accueil et citations | 1 | 2 | Oui |
+| [Compte](modules/compte.md) | Identité et accès : inscription, vérification email, profil, RGPD, onboarding, pages légales | 4 | 18 | Oui |
+| [Dashboard](modules/dashboard.md) | Accueil (citation du jour, raison d'être, échéances) et administration des citations | 1 | 6 | Oui |
 | [Defis](modules/defis.md) | Défis collectifs | 5 | 0 | Partielle |
 | [Feedback](modules/feedback.md) | Feedback 360°, questionnaires et retours sur l'application | 5 | 0 | Non |
 | [Journal](modules/journal.md) | Journal de réflexion et collections | 2 | 6 | Oui |
 | [Listes](modules/listes.md) | Listes personnelles (UserList / ListItem) | 2 | 0 | Non |
+| [Methode](modules/methode.md) | La méthode : chapitres du livre et encarts « Comprendre cette étape » | 0 | 2 | Oui |
 | [Notification](modules/notification.md) | Notifications, préférences, modèles d'email | 3 | 0 | Non |
 | [Personnalite](modules/personnalite.md) | Tests de personnalité (DISC, MBTI, Ennéagramme, Big 5…), calcul des scores et administration du référentiel | 4 | 11 | Oui |
-| [PlanDHygiene](modules/plan_d_hygiene.md) | Plan d'Hygiène (Discipline) | 3 | 0 | Partielle |
-| [PlanDeCroissance](modules/plan_de_croissance.md) | Plan de Croissance | 7 | 0 | Partielle |
-| [PlanDeDeveloppement](modules/plan_de_developpement.md) | Plan de Développement Personnel | 4 | 0 | Partielle |
-| [PlanDeTransmission](modules/plan_de_transmission.md) | Plan de Transmission (Contribution) | 4 | 0 | Partielle |
-| [PlanDeVie](modules/plan_de_vie.md) | Plan de Vie | 10 | 34 | Oui |
+| [PlanDHygiene](modules/plan_d_hygiene.md) | Plan d'Hygiène de Vie | 3 | 3 | Oui |
+| [PlanDeCroissance](modules/plan_de_croissance.md) | Plan de Croissance : Caractère & Conviction, Relation & Réseau, principes, export PDF | 7 | 6 | Oui |
+| [PlanDeDeveloppement](modules/plan_de_developpement.md) | Plan de Développement : Compétence & Connaissance | 4 | 3 | Oui |
+| [PlanDeTransmission](modules/plan_de_transmission.md) | Plan de Transmission : projets de legs | 4 | 3 | Oui |
+| [PlanDeVie](modules/plan_de_vie.md) | Plan de Vie, assistant des plans, hub des stratégies, export PDF | 10 | 23 | Oui |
 | [Planner](modules/planner.md) | Agenda | 1 | 8 | Oui |
 | [Rituels](modules/rituels.md) | Habitudes et suivi quotidien (logs, ancrage) | 2 | 4 | Oui |
 | [Shared](modules/shared.md) | Code transverse | 0 | 0 | — |

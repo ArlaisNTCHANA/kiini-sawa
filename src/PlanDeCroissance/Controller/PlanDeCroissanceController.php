@@ -3,6 +3,7 @@
 namespace App\PlanDeCroissance\Controller;
 
 use App\PlanDeVie\Controller\AbstractPlanController;
+use App\PlanDeVie\Service\PlanPdfRenderer;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -23,6 +24,12 @@ class PlanDeCroissanceController extends AbstractPlanController
     public function visualize(): Response
     {
         return $this->renderVisualization('CROISSANCE');
+    }
+
+    #[Route('/pdf', name: '_pdf', methods: ['GET'])]
+    public function pdf(PlanPdfRenderer $renderer): Response
+    {
+        return $this->downloadPdf($renderer, 'CROISSANCE');
     }
 
     #[Route('/email', name: '_email', methods: ['POST'])]

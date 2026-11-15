@@ -1,0 +1,30 @@
+{% extends 'plan_de_vie/pdf/_layout.html.twig' %}
+{% macro goal_card(gg) %}
+    {% set status = {build: 'À construire', consolidate: 'À consolider', leverage: 'À mettre à profit', absence: 'Absence assumée'} %}
+    <div class="card">
+        <h3 style="margin-top: 0;">{{ gg.title }}</h3>
+        <p class="muted" style="margin: 0 0 1mm;">{{ status[gg.subtype] ?? 'À construire' }} · avancement {{ gg.progress }} %{% if gg.deadline %} · échéance {{ gg.deadline|format_date(pattern: 'MMM y', locale: 'fr') }}{% endif %}</p>
+        {% if gg.strategy %}<p style="margin: 1mm 0;"><strong>Stratégie :</strong> {{ gg.strategy }}</p>{% endif %}
+        {% if gg.supportedLifeGoals|length %}<p style="margin: 1mm 0;"><strong>Soutient :</strong> {% for lg in gg.supportedLifeGoals %}{{ lg.title }}{{ not loop.last ? ' · ' }}{% endfor %}</p>{% endif %}
+        {% if gg.habits|length %}<p style="margin: 1mm 0;"><strong>Rituels :</strong> {% for h in gg.habits %}<span class="tag">{{ h.title }}</span>{% endfor %}</p>{% endif %}
+        {% if gg.actions|length %}<p style="margin: 1mm 0 0;"><strong>Actions :</strong></p><ul>{% for a in gg.actions %}<li>{{ a.title }}{% if a.deadline %} <span class="muted">({{ a.deadline|date('d/m/Y') }})</span>{% endif %}</li>{% endfor %}</ul>{% endif %}
+    </div>
+{% endmacro %}
+{% block content %}
+    <h2>Intention</h2>
+    {% if planDeVie and planDeVie.purpose and planDeVie.purpose.statement %}
+        <div class="quote">{{ planDeVie.purpose.statement|nl2br }}</div>
+    {% else %}<p class="empty">Raison d'être non définie.</p>{% endif %}
+    <p class="muted">Ce que je vais DEVENIR (BE) : mon caractère, mes convictions et mes relations au service de ma raison d'être.</p>
+
+    <h2>Caractère &amp; Conviction</h2>
+    {% for gg in growthGoals.CHARACTER %}{{ _self.goal_card(gg) }}{% else %}<p class="empty">Aucun axe défini.</p>{% endfor %}
+
+    <h2>Relation &amp; Réseau</h2>
+    {% for gg in growthGoals.RELATION %}{{ _self.goal_card(gg) }}{% else %}<p class="empty">Aucun axe défini.</p>{% endfor %}
+
+    <h2>Lois &amp; principes</h2>
+    {% for pr in growthPrinciples.CROISSANCE %}
+        <p style="margin: 0 0 2mm;"><strong>{{ pr.title }}</strong>{% if pr.description %} — {{ pr.description }}{% endif %}</p>
+    {% else %}<p class="empty">Aucun principe défini.</p>{% endfor %}
+{% endblock %}

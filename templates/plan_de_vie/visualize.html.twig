@@ -947,9 +947,13 @@
             <i data-lucide="arrow-left" style="width: 16px; height: 16px;"></i>
             Retour
         </a>
-        <button onclick="window.print()" class="btn-toolbar btn-toolbar-primary">
+        <a href="{{ path('app_plan_de_vie_pdf') }}" class="btn-toolbar btn-toolbar-primary" style="text-decoration: none;" data-turbo="false">
+            <i data-lucide="file-down" style="width: 16px; height: 16px;"></i>
+            Télécharger le PDF
+        </a>
+        <button onclick="window.print()" class="btn-toolbar btn-toolbar-secondary">
             <i data-lucide="printer" style="width: 16px; height: 16px;"></i>
-            Imprimer / PDF
+            Imprimer
         </button>
         <button id="visualize-send-email" class="btn-toolbar btn-toolbar-secondary">
             <i data-lucide="mail" style="width: 16px; height: 16px;"></i>

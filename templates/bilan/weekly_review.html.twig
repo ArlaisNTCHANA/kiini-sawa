@@ -44,6 +44,8 @@
         {% if review %}<br><strong>Revue déjà faite le {{ review.completedAt|format_date(pattern: 'EEEE d MMMM', locale: 'fr') }}</strong> : vous pouvez la compléter.{% endif %}
     </p>
 
+    {{ book_panel('revue') }}
+
     <form method="post">
         {# 1. Rétrospective #}
         <section class="wr-card">

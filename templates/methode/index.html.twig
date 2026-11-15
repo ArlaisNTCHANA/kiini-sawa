@@ -1,0 +1,21 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}La méthode{% endblock %}
+
+{% block body %}
+<div style="max-width: 820px; margin: 0 auto; padding: 2.5rem 1.25rem 8rem;">
+    <h1 style="font-family: var(--font-serif); color: var(--primary); font-size: 2rem;">La méthode KIINI SAWA</h1>
+    <p style="color: var(--fg-muted); margin: .35rem 0 2rem;">Les chapitres du livre, pour comprendre le sens de chaque étape de vos plans.</p>
+    <div style="display: flex; flex-direction: column; gap: .75rem;">
+        {% for c in chapters %}
+            <a href="{{ path('app_methode_chapter', {slug: c.slug}) }}" style="display: block; text-decoration: none; background: var(--card-bg); border-radius: var(--r-lg); box-shadow: var(--card-shadow); padding: 1.1rem 1.35rem;">
+                <div style="display: flex; justify-content: space-between; gap: 1rem; align-items: baseline;">
+                    <h2 style="font-family: var(--font-serif); font-size: 1.15rem; color: var(--fg);">{{ c.title }}</h2>
+                    <span style="flex-shrink: 0; font-size: .75rem; color: var(--fg-muted);">{{ c.minutes }} min</span>
+                </div>
+                <p style="color: var(--fg-muted); font-size: .9rem; margin-top: .3rem; line-height: 1.5;">{{ c.excerpt }}</p>
+            </a>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

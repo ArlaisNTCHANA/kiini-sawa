@@ -6,6 +6,8 @@ use App\Compte\Entity\User;
 use App\PlanDeVie\Service\PlanCatalog;
 use App\PlanDeVie\Service\PlanDataProvider;
 use App\PlanDeVie\Service\PlanMailer;
+use App\PlanDeVie\Service\PlanPdfRenderer;
+use Symfony\Component\HttpFoundation\HeaderUtils;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
@@ -50,6 +52,15 @@ abstract class AbstractPlanController extends AbstractController
         $data['variant'] = 'WEB';
 
         return $this->render(PlanCatalog::PLANS[$planKey]['template'], $data);
+    }
+
+    protected function downloadPdf(PlanPdfRenderer $renderer, string $planKey): Response
+    {
+        return new Response($renderer->render($this->user(), $planKey), 200, [
+            'Content-Type' => 'application/pdf',
+            'Content-Disposition' => HeaderUtils::makeDisposition(HeaderUtils::DISPOSITION_ATTACHMENT, PlanPdfRenderer::filename($planKey)),
+            'Cache-Control' => 'no-store',
+        ]);
     }
 
     protected function sendByEmail(string $planKey): JsonResponse
