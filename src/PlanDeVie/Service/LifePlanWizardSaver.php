@@ -378,7 +378,11 @@ final class LifePlanWizardSaver
 
     private function planDeVie(User $user): PlanDeVie
     {
-        return $user->getPlanDeVie() ?? $this->persistNew((new PlanDeVie())->setUser($user));
+        if (null === $user->getPlanDeVie()) {
+            $user->setPlanDeVie($this->persistNew(new PlanDeVie()));
+        }
+
+        return $user->getPlanDeVie();
     }
 
     private function planDeCroissance(User $user): PlanDeCroissance

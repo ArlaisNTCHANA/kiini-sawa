@@ -17,6 +17,12 @@ enum NotificationType: string
     case HABIT_REMINDER = 'HABIT_REMINDER';
     case GOAL_DEADLINE = 'GOAL_DEADLINE';
     case PARTNER_INACTIVE = 'PARTNER_INACTIVE';
+    // Abonnement (phase 5) : messages de service, toujours envoyés
+    case PAYMENT_DECLARED = 'PAYMENT_DECLARED';
+    case PAYMENT_VALIDATED = 'PAYMENT_VALIDATED';
+    case PAYMENT_REJECTED = 'PAYMENT_REJECTED';
+    case TRIAL_ENDING = 'TRIAL_ENDING';
+    case SUBSCRIPTION_ENDING = 'SUBSCRIPTION_ENDING';
 
     /** Icône Lucide affichée dans le centre de notifications. */
     public function icon(): string
@@ -29,6 +35,14 @@ enum NotificationType: string
             self::WEEKLY_REVIEW_REMINDER, self::MONTHLY_REVIEW_REMINDER => 'calendar-check',
             self::HABIT_REMINDER => 'repeat',
             self::GOAL_DEADLINE => 'flag',
+            self::PAYMENT_DECLARED, self::PAYMENT_VALIDATED, self::PAYMENT_REJECTED => 'credit-card',
+            self::TRIAL_ENDING, self::SUBSCRIPTION_ENDING => 'hourglass',
         };
+    }
+
+    /** Messages de service (paiement, fin d'essai) : envoyés quelles que soient les préférences. */
+    public function isTransactional(): bool
+    {
+        return \in_array($this, [self::PAYMENT_DECLARED, self::PAYMENT_VALIDATED, self::PAYMENT_REJECTED, self::TRIAL_ENDING, self::SUBSCRIPTION_ENDING], true);
     }
 }

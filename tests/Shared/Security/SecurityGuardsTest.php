@@ -22,6 +22,7 @@ class SecurityGuardsTest extends WebTestCase
 
     /** Pages volontairement publiques : toute nouvelle entrée doit être justifiée. */
     private const PUBLIC_ROUTES = [
+        'app_home', // page de présentation publique
         'app_login', 'app_logout',
         'app_register', 'app_forgot_password', 'app_reset_password', 'app_reset_password_form',
         'app_legal',
@@ -65,7 +66,7 @@ class SecurityGuardsTest extends WebTestCase
     public function testPublicPagesAreReachableAnonymously(): void
     {
         $client = static::createClient();
-        foreach (['/login', '/inscription', '/mot-de-passe/oublie', '/mot-de-passe/reinitialiser', '/mentions-legales', '/confidentialite', '/cgu', '/cgv'] as $uri) {
+        foreach (['/', '/login', '/inscription', '/mot-de-passe/oublie', '/mot-de-passe/reinitialiser', '/mentions-legales', '/confidentialite', '/cgu', '/cgv'] as $uri) {
             $client->request('GET', $uri);
             $this->assertResponseIsSuccessful("$uri doit être accessible sans connexion");
         }

@@ -724,14 +724,14 @@
 
         <div class="plans-grid">
             {# 1. Plan de Croissance #}
-            <div @click="activePlan = 'CROISSANCE'; activeTab = 'INTENTION'" class="plan-hub-card">
+            <div @click="{% if 'CROISSANCE' in (lockedPlans ?? []) %}window.location.href = '{{ path('app_subscription', {fonction: 'croissance'}) }}'{% else %}activePlan = 'CROISSANCE'; activeTab = 'INTENTION'{% endif %}" class="plan-hub-card">
                 <div class="plan-card-decor bg-gradient-to-br from-amber-400 to-orange-500"></div>
                 <div class="plan-card-icon" style="background: #FFFBEB; color: #D97706;">
                     <i data-lucide="zap" style="width: 22px; height: 22px;"></i>
                 </div>
                 <div>
                     <div class="plan-card-subtitle">L'Évolution (BE)</div>
-                    <h2 class="plan-card-title">Croissance</h2>
+                    <h2 class="plan-card-title">Croissance</h2>{% if 'CROISSANCE' in (lockedPlans ?? []) %}<span style="display:inline-block;margin-top:.25rem;font-size:.68rem;font-weight:800;letter-spacing:.06em;padding:.15rem .5rem;border-radius:999px;background:#FEF3C7;color:#92400E;">🔒 PRO</span>{% endif %}
                     <p class="plan-card-desc">Caractère & Conviction, Relation & Réseau, Valeurs d'alignement.</p>
                 </div>
                 <div class="plan-card-footer">
@@ -746,14 +746,14 @@
             </div>
 
             {# 2. Plan de Développement #}
-            <div @click="activePlan = 'DEVELOPPEMENT'; activeTab = 'INTENTION'" class="plan-hub-card">
+            <div @click="{% if 'DEVELOPPEMENT' in (lockedPlans ?? []) %}window.location.href = '{{ path('app_subscription', {fonction: 'developpement'}) }}'{% else %}activePlan = 'DEVELOPPEMENT'; activeTab = 'INTENTION'{% endif %}" class="plan-hub-card">
                 <div class="plan-card-decor bg-gradient-to-br from-blue-400 to-indigo-600"></div>
                 <div class="plan-card-icon" style="background: #EFF6FF; color: #2563EB;">
                     <i data-lucide="graduation-cap" style="width: 22px; height: 22px;"></i>
                 </div>
                 <div>
                     <div class="plan-card-subtitle">L'Exécution (DO)</div>
-                    <h2 class="plan-card-title">Développement</h2>
+                    <h2 class="plan-card-title">Développement</h2>{% if 'DEVELOPPEMENT' in (lockedPlans ?? []) %}<span style="display:inline-block;margin-top:.25rem;font-size:.68rem;font-weight:800;letter-spacing:.06em;padding:.15rem .5rem;border-radius:999px;background:#FEF3C7;color:#92400E;">🔒 PRO</span>{% endif %}
                     <p class="plan-card-desc">Compétences à acquérir, Formations & Livres d'étude.</p>
                 </div>
                 <div class="plan-card-footer">
@@ -768,14 +768,14 @@
             </div>
 
             {# 3. Plan de Transmission #}
-            <div @click="activePlan = 'TRANSMISSION'; activeTab = 'INTENTION'" class="plan-hub-card">
+            <div @click="{% if 'TRANSMISSION' in (lockedPlans ?? []) %}window.location.href = '{{ path('app_subscription', {fonction: 'transmission'}) }}'{% else %}activePlan = 'TRANSMISSION'; activeTab = 'INTENTION'{% endif %}" class="plan-hub-card">
                 <div class="plan-card-decor bg-gradient-to-br from-pink-400 to-rose-600"></div>
                 <div class="plan-card-icon" style="background: #FDF2F8; color: #DB2777;">
                     <i data-lucide="heart" style="width: 22px; height: 22px;"></i>
                 </div>
                 <div>
                     <div class="plan-card-subtitle">L'Impact (GIVE)</div>
-                    <h2 class="plan-card-title">Transmission</h2>
+                    <h2 class="plan-card-title">Transmission</h2>{% if 'TRANSMISSION' in (lockedPlans ?? []) %}<span style="display:inline-block;margin-top:.25rem;font-size:.68rem;font-weight:800;letter-spacing:.06em;padding:.15rem .5rem;border-radius:999px;background:#FEF3C7;color:#92400E;">🔒 PRO</span>{% endif %}
                     <p class="plan-card-desc">Projets de legs, Mentorat & Service.</p>
                 </div>
                 <div class="plan-card-footer">
@@ -790,14 +790,14 @@
             </div>
 
             {# 4. Plan d'Hygiène #}
-            <div @click="activePlan = 'HYGIENE'; activeTab = 'INTENTION'" class="plan-hub-card">
+            <div @click="{% if 'HYGIENE' in (lockedPlans ?? []) %}window.location.href = '{{ path('app_subscription', {fonction: 'hygiene'}) }}'{% else %}activePlan = 'HYGIENE'; activeTab = 'INTENTION'{% endif %}" class="plan-hub-card">
                 <div class="plan-card-decor bg-gradient-to-br from-emerald-400 to-teal-600"></div>
                 <div class="plan-card-icon" style="background: #ECFDF5; color: #059669;">
                     <i data-lucide="shield" style="width: 22px; height: 22px;"></i>
                 </div>
                 <div>
                     <div class="plan-card-subtitle">Le Système</div>
-                    <h2 class="plan-card-title">Hygiène de Vie</h2>
+                    <h2 class="plan-card-title">Hygiène de Vie</h2>{% if 'HYGIENE' in (lockedPlans ?? []) %}<span style="display:inline-block;margin-top:.25rem;font-size:.68rem;font-weight:800;letter-spacing:.06em;padding:.15rem .5rem;border-radius:999px;background:#FEF3C7;color:#92400E;">🔒 PRO</span>{% endif %}
                     <p class="plan-card-desc">Sommeil, Nutrition, Sport, Méditation & Environnement.</p>
                 </div>
                 <div class="plan-card-footer">

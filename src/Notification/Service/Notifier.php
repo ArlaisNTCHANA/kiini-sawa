@@ -42,12 +42,19 @@ final class Notifier
     public function notify(User $user, NotificationType $type, string $title, string $message, ?string $actionUrl = null, ?string $key = null): bool
     {
         $prefs = $this->preferences($user);
-        if (!$this->wants($prefs, $type) || (null !== $key && $this->notifications->existsWithKey($user, $type, $key))) {
+        if (null !== $key && $this->notifications->existsWithKey($user, $type, $key)) {
             return false;
         }
-
-        $inApp = $prefs->isEnableInApp();
-        $byEmail = \in_array($type, self::REMINDERS, true) ? $prefs->isEnableEmailDigest() : $prefs->isEnableEmailInstant();
+        if ($type->isTransactional()) {
+            $inApp = true;
+            $byEmail = true;
+        } else {
+            if (!$this->wants($prefs, $type)) {
+                return false;
+            }
+            $inApp = $prefs->isEnableInApp();
+            $byEmail = \in_array($type, self::REMINDERS, true) ? $prefs->isEnableEmailDigest() : $prefs->isEnableEmailInstant();
+        }
         if (!$inApp && !$byEmail) {
             return false;
         }
@@ -91,6 +98,7 @@ final class Notifier
             NotificationType::HABIT_REMINDER => $p->isNotifyHabitReminder(),
             NotificationType::GOAL_DEADLINE => $p->isNotifyGoalDeadline(),
             NotificationType::PARTNER_INACTIVE => $p->isNotifyPartnerInactive(),
+            default => true,
         };
     }
 }

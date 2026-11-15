@@ -347,6 +347,16 @@
 
                 
 
+                <div class="ks-sidebar__label">Abonnements</div>
+                <a href="{{ path('admin_payments') }}" class="ks-sidebar__link {{ app.request.attributes.get('_route') starts with 'admin_payments' ? 'active' }}" id="nav-payments">
+                    <i data-lucide="credit-card"></i>
+                    <span>Paiements</span>
+                </a>
+                <a href="{{ path('admin_users') }}" class="ks-sidebar__link {{ app.request.attributes.get('_route') starts with 'admin_users' ? 'active' }}" id="nav-users">
+                    <i data-lucide="users"></i>
+                    <span>Utilisateurs</span>
+                </a>
+
                 <div class="ks-sidebar__label">Contenu</div>
                 <a href="{{ path('admin_quotes') }}" class="ks-sidebar__link {{ app.request.attributes.get('_route') starts with 'admin_quotes' ? 'active' }}" id="nav-quotes">
                     <i data-lucide="quote"></i>

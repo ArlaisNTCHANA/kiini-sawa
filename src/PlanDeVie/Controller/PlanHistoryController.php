@@ -17,6 +17,7 @@ class PlanHistoryController extends AbstractPlanController
     #[Route('', name: '', methods: ['GET'])]
     public function index(): Response
     {
+        $this->entitlements->require($this->user(), 'plan_history');
         $versions = $this->user()->getPlanHistories()->toArray();
         usort($versions, fn ($a, $b) => $b->getCreatedAt() <=> $a->getCreatedAt());
 
@@ -26,6 +27,7 @@ class PlanHistoryController extends AbstractPlanController
     #[Route('/enregistrer', name: '_save', methods: ['POST'])]
     public function save(Request $request, PlanSnapshotService $snapshots): Response
     {
+        $this->entitlements->require($this->user(), 'plan_history');
         if ($this->isCsrfTokenValid('plan_history', $request->request->getString('_csrf_token'))) {
             $label = trim($request->request->getString('title'));
             $snapshots->snapshot($this->user(), $label ?: 'Version du '.date('d/m/Y'));
@@ -38,6 +40,7 @@ class PlanHistoryController extends AbstractPlanController
     #[Route('/{id}', name: '_show', requirements: ['id' => '\d+'], methods: ['GET'])]
     public function show(PlanHistory $version): Response
     {
+        $this->entitlements->require($this->user(), 'plan_history');
         if ($version->getUser() !== $this->user()) {
             throw $this->createNotFoundException();
         }

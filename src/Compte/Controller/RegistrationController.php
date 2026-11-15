@@ -2,6 +2,7 @@
 
 namespace App\Compte\Controller;
 
+use App\Abonnement\Service\Entitlements;
 use App\Compte\Entity\AccountToken;
 use App\Compte\Entity\User;
 use App\Compte\Entity\UserProfile;
@@ -46,6 +47,7 @@ class RegistrationController extends AbstractController
         PasswordPolicy $passwordPolicy,
         ValidatorInterface $validator,
         Security $security,
+        Entitlements $entitlements,
         #[Autowire(service: 'limiter.registration')] RateLimiterFactoryInterface $registrationLimiter,
     ): Response {
         if ($this->getUser()) {
@@ -105,6 +107,7 @@ class RegistrationController extends AbstractController
                 $user->setPassword($hasher->hashPassword($user, $password));
                 $user->setUserProfile((new UserProfile())->setFirstName($data['firstName']));
                 $em->persist($user);
+                $entitlements->startTrial($user);
                 $em->flush();
 
                 $this->mailer->sendVerificationCode($user, $this->tokens->createCode($user, AccountToken::VERIFY_EMAIL));

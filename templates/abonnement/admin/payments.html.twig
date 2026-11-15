@@ -1,0 +1,84 @@
+{% extends 'admin/layout.html.twig' %}
+
+{% block title %}Paiements{% endblock %}
+{% block page_title %}Paiements et revenus{% endblock %}
+
+{% block stylesheets %}
+<style>
+    .k-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 16px; margin-bottom: 24px; }
+    .k-stat { font-size: 26px; font-weight: 800; }
+    .k-label { font-size: 12px; color: var(--text-secondary); }
+    .k-table { width: 100%; border-collapse: collapse; font-size: 14px; }
+    .k-table th, .k-table td { padding: 10px 8px; border-top: 1px solid rgba(255,255,255,.06); text-align: left; vertical-align: top; }
+    .k-btn { display: inline-flex; padding: 6px 12px; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer; border: 1px solid rgba(255,255,255,.15); background: transparent; color: inherit; }
+    .k-btn--ok { background: #059669; border-color: #059669; color: #fff; }
+    .k-input { padding: 6px 10px; border-radius: 8px; background: rgba(0,0,0,.2); color: inherit; border: 1px solid rgba(255,255,255,.12); font-size: 13px; }
+</style>
+{% endblock %}
+
+{% block content %}
+{% for label, messages in app.flashes %}{% for m in messages %}<div style="padding: 12px 16px; border-radius: 8px; margin-bottom: 16px; {{ label == 'success' ? 'background: rgba(16,185,129,.1); color: #34d399;' : 'background: rgba(239,68,68,.1); color: #f87171;' }}">{{ m }}</div>{% endfor %}{% endfor %}
+
+<div class="k-grid">
+    <div class="ks-card"><div class="k-stat">{{ pending|length }}</div><div class="k-label">paiement(s) à vérifier</div></div>
+    <div class="ks-card"><div class="k-stat">{{ proCount }}</div><div class="k-label">abonnés PRO payants actifs</div></div>
+    <div class="ks-card"><div class="k-stat">{{ trialCount }}</div><div class="k-label">essais en cours</div></div>
+    <div class="ks-card"><div class="k-stat">{{ userCount }}</div><div class="k-label">comptes</div></div>
+    <div class="ks-card"><div class="k-stat" style="font-size: 18px;">{% for cur, total in totals %}{{ total|money(cur) }}<br>{% else %}—{% endfor %}</div><div class="k-label">encaissé depuis le début</div></div>
+</div>
+
+<div class="ks-card" style="margin-bottom: 24px;">
+    <h2 style="font-size: 16px; font-weight: 700; margin-bottom: 4px;">À vérifier</h2>
+    <p class="k-label" style="margin-bottom: 12px;">Vérifiez la réception sur votre compte bancaire ou Mobile Money avant de valider. La validation active PRO et envoie le reçu au client.</p>
+    <table class="k-table">
+        {% for t in pending %}
+            <tr>
+                <td><strong>{{ t.subscription.user.displayName }}</strong><br><span class="k-label">{{ t.subscription.user.email }}</span></td>
+                <td><strong>{{ t.amount|money(t.currency) }}</strong><br><span class="k-label">{{ t.description }}</span></td>
+                <td>{{ t.methodLabel }}<br><span class="k-label">réf. <strong>{{ t.reference ?: '—' }}</strong>{{ t.paidAt ? ' · payé le ' ~ t.paidAt|date('d/m/Y') }}</span></td>
+                <td style="white-space: nowrap;">
+                    <form method="post" action="{{ path('admin_payments_validate', {id: t.id}) }}" style="margin-bottom: 6px;">
+                        <input type="hidden" name="_csrf_token" value="{{ csrf_token('admin_payment') }}">
+                        <button class="k-btn k-btn--ok" type="submit">✓ Reçu, valider</button>
+                    </form>
+                    <form method="post" action="{{ path('admin_payments_reject', {id: t.id}) }}" style="display: flex; gap: 6px;">
+                        <input class="k-input" name="reason" placeholder="Motif du refus" required>
+                        <input type="hidden" name="_csrf_token" value="{{ csrf_token('admin_payment') }}">
+                        <button class="k-btn" type="submit">Refuser</button>
+                    </form>
+                </td>
+            </tr>
+        {% else %}
+            <tr><td class="k-label">Aucun paiement en attente.</td></tr>
+        {% endfor %}
+    </table>
+</div>
+
+<div class="ks-card" style="margin-bottom: 24px;">
+    <h2 style="font-size: 16px; font-weight: 700; margin-bottom: 12px;">Revenus par mois</h2>
+    <table class="k-table">
+        <tr><th>Mois</th><th>Devise</th><th>Paiements</th><th>Total</th></tr>
+        {% for r in revenue %}
+            <tr><td>{{ r.month }}</td><td>{{ r.currency }}</td><td>{{ r.count }}</td><td><strong>{{ r.total|money(r.currency) }}</strong></td></tr>
+        {% else %}
+            <tr><td class="k-label" colspan="4">Pas encore de revenus.</td></tr>
+        {% endfor %}
+    </table>
+</div>
+
+<div class="ks-card">
+    <h2 style="font-size: 16px; font-weight: 700; margin-bottom: 12px;">Derniers paiements traités</h2>
+    <table class="k-table">
+        {% for t in processed %}
+            <tr>
+                <td>{{ t.processedAt ? t.processedAt|date('d/m/Y') }}</td>
+                <td>{{ t.subscription.user.email }}</td>
+                <td>{{ t.method == 'GIFT' ? 'Offert' : t.amount|money(t.currency) }} · {{ t.methodLabel }}</td>
+                <td>{% if t.status == 'VALIDATED' %}<span style="color: #34d399;">Validé</span>{% if t.receiptNumber %} · <a href="{{ path('app_subscription_receipt', {id: t.id}) }}" data-turbo="false" style="color: inherit;">{{ t.receiptNumber }}</a>{% endif %}{% else %}<span style="color: #f87171;">Refusé</span> · {{ t.adminNote }}{% endif %}</td>
+            </tr>
+        {% else %}
+            <tr><td class="k-label">Aucun.</td></tr>
+        {% endfor %}
+    </table>
+</div>
+{% endblock %}

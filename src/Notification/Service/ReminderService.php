@@ -32,7 +32,7 @@ final class ReminderService
     /** @return array<string, int> nombre de rappels envoyés par type */
     public function sendAll(\DateTimeImmutable $today): array
     {
-        $sent = array_fill_keys(['revue hebdomadaire', 'revue mensuelle', 'rituels', 'échéances', 'partenaires'], 0);
+        $sent = array_fill_keys(['revue hebdomadaire', 'revue mensuelle', 'rituels', 'échéances', 'partenaires', 'fin d\'essai ou d\'abonnement'], 0);
         $users = $this->em->getRepository(User::class)->findBy(['isVerified' => true]);
         foreach ($users as $user) {
             $sent['revue hebdomadaire'] += (int) $this->weeklyReview($user, $today);
@@ -40,6 +40,7 @@ final class ReminderService
             $sent['rituels'] += (int) $this->habits($user, $today);
             $sent['échéances'] += $this->deadlines($user, $today);
             $sent['partenaires'] += $this->partners($user, $today);
+            $sent['fin d\'essai ou d\'abonnement'] += (int) $this->subscriptionEnding($user, $today);
         }
 
         return $sent;
@@ -154,6 +155,35 @@ final class ReminderService
         }
 
         return $sent;
+    }
+
+    /**
+     * Fin d'essai (3 jours avant) ou de période payée (7 jours avant) : les paiements manuels
+     * ne se renouvellent pas, ce rappel est donc essentiel pour garder les abonnés.
+     */
+    public function subscriptionEnding(User $user, \DateTimeImmutable $today): bool
+    {
+        $sub = $user->getSubscription();
+        if (null === $sub || \in_array('ROLE_ADMIN', $user->getRoles(), true)) {
+            return false;
+        }
+        $isTrial = \App\Abonnement\Enum\SubscriptionStatus::TRIAL === $sub->getStatus();
+        $end = $isTrial ? $sub->getTrialEndAt() : $sub->getCurrentPeriodEnd();
+        if (null === $end || \App\Abonnement\Enum\SubscriptionTier::FREE === $sub->getTier()) {
+            return false;
+        }
+        $daysLeft = (int) $today->setTime(0, 0)->diff(\DateTimeImmutable::createFromInterface($end)->setTime(0, 0))->format('%r%a');
+        if ($daysLeft !== ($isTrial ? 3 : 7)) {
+            return false;
+        }
+
+        return $isTrial
+            ? $this->notifier->notify($user, NotificationType::TRIAL_ENDING, 'Votre essai PRO se termine dans 3 jours',
+                'Le '.$end->format('d/m/Y').', vos plans de Croissance, Développement, Transmission et Hygiène passeront en lecture limitée. Gardez tout en choisissant une formule PRO, à partir de quelques centimes par jour.',
+                '/abonnement', 'essai '.$end->format('Y-m-d'))
+            : $this->notifier->notify($user, NotificationType::SUBSCRIPTION_ENDING, 'Votre abonnement PRO se termine dans 7 jours',
+                'Votre accès PRO se termine le '.$end->format('d/m/Y').'. Pour continuer sans interruption, renouvelez dès maintenant : les jours restants sont conservés.',
+                '/abonnement', 'fin '.$end->format('Y-m-d'));
     }
 
     private function monthName(\DateTimeImmutable $date): string

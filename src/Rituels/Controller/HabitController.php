@@ -2,6 +2,8 @@
 
 namespace App\Rituels\Controller;
 
+use App\Abonnement\Service\Entitlements;
+
 use App\Rituels\Entity\Habit;
 use App\Rituels\Entity\HabitLog;
 use App\Rituels\Form\HabitType;
@@ -16,7 +18,7 @@ use Symfony\Component\Routing\Attribute\Route;
 class HabitController extends AbstractController
 {
     #[Route('/mes-plans/rituels', name: 'app_user_habits')]
-    public function rituels(Request $request, EntityManagerInterface $em): Response
+    public function rituels(Request $request, EntityManagerInterface $em, Entitlements $entitlements): Response
     {
         $user = $this->getUser();
         if (!$user) {
@@ -30,6 +32,7 @@ class HabitController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $entitlements->requireBelowLimit($user, 'habits', $user->getHabits()->count() - 1, 'Limite de rituels de l\'offre gratuite atteinte.');
             $em->persist($habit);
             $em->flush();
 

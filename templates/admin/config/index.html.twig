@@ -50,6 +50,29 @@
                 </div>
             </div>
 
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                {% for f in ['proMonthlyPriceXaf', 'proYearlyPriceXaf', 'maxHabitsFree', 'maxConnectionsFree'] %}
+                    <div class="form-group">{{ form_label(form[f], null, {'label_attr': {'style': 'display: block; font-size: 12px; font-weight: 600; color: var(--text-secondary); margin-bottom: 8px;'}}) }}{{ form_widget(form[f], {'attr': {'class': 'form-control'}}) }}</div>
+                {% endfor %}
+            </div>
+
+            <h3 style="font-size: 15px; font-weight: 700; margin-top: 10px;">Paiements manuels</h3>
+            {% for f in ['bankTransferInstructions', 'mobileMoneyInstructions', 'paymentNotificationEmail'] %}
+                <div class="form-group">
+                    {{ form_label(form[f], null, {'label_attr': {'style': 'display: block; font-size: 12px; font-weight: 600; color: var(--text-secondary); margin-bottom: 8px;'}}) }}
+                    {{ form_widget(form[f], {'attr': {'class': 'form-control', 'style': 'width: 100%;'}}) }}
+                    <div style="font-size: 11px; color: var(--text-muted); margin-top: 4px;">{{ form_help(form[f]) }}</div>
+                </div>
+            {% endfor %}
+
+            <h3 style="font-size: 15px; font-weight: 700; margin-top: 10px;">Accessible gratuitement</h3>
+            <p style="font-size: 12px; color: var(--text-muted); margin-top: -12px;">Décoché = réservé à PRO. Le Plan de Vie, les rituels, le journal, le planner et la revue de la semaine restent toujours gratuits.</p>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px 20px;">
+                {% for f in ['enableGrowthFree', 'enableDevelopmentFree', 'enableTransmissionFree', 'enableHygieneFree', 'enableMapFree', 'enablePrintFree', 'enableMonthlyReviewsFree', 'enablePlanHistoryFree', 'enableCoherenceAnalysisFree', 'enableDiscoveryFree'] %}
+                    <label style="display: flex; gap: 8px; align-items: center; font-size: 14px;">{{ form_widget(form[f]) }} {{ form[f].vars.label }}</label>
+                {% endfor %}
+            </div>
+
             <div style="display: flex; justify-content: flex-end; margin-top: 10px;">
                 <button type="submit" class="ks-btn ks-btn--primary">
                     <i data-lucide="save"></i> Enregistrer les modifications

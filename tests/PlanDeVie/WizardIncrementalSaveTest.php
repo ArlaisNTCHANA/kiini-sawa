@@ -26,7 +26,7 @@ class WizardIncrementalSaveTest extends WebTestCase
     protected function setUp(): void
     {
         $this->client = static::createClient();
-        $this->user = $this->createUser();
+        $this->user = $this->createUser(pro: true);
         $this->client->loginUser($this->user);
     }
 
@@ -101,7 +101,7 @@ class WizardIncrementalSaveTest extends WebTestCase
 
     public function testCannotLinkAnotherUsersGoal(): void
     {
-        $other = $this->createUser();
+        $other = $this->createUser(pro: true);
         $this->client->loginUser($other);
         $this->post('step=7&single=1', ['life_goals_do' => ['Objectif privé de quelqu\'un d\'autre']]);
         $foreignGoalId = $this->findUser($other->getEmail())->getPlanDeVie()->getLifeGoals()->first()->getId();

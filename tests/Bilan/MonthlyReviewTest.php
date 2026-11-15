@@ -23,7 +23,7 @@ class MonthlyReviewTest extends WebTestCase
     public function testMonthlyReviewSavesAndSnapshotsPlans(): void
     {
         $client = static::createClient();
-        $user = $this->createUser();
+        $user = $this->createUser(pro: true);
         $client->loginUser($user);
         $client->request('POST', '/plan-de-vie/assistant?step=1&single=1', ['purpose_statement' => 'Bâtir des ponts entre les générations.']);
 
@@ -47,7 +47,7 @@ class MonthlyReviewTest extends WebTestCase
         $this->assertSelectorTextContains('main', 'Bâtir des ponts entre les générations.');
 
         // Un autre utilisateur ne peut pas la lire
-        $client->loginUser($this->createUser());
+        $client->loginUser($this->createUser(pro: true));
         $client->request('GET', '/plan-de-vie/historique/'.$versions[0]->getId());
         $this->assertResponseStatusCodeSame(404);
     }
@@ -55,7 +55,7 @@ class MonthlyReviewTest extends WebTestCase
     public function testManualVersion(): void
     {
         $client = static::createClient();
-        $user = $this->createUser();
+        $user = $this->createUser(pro: true);
         $client->loginUser($user);
         $crawler = $client->request('GET', '/plan-de-vie/historique');
         $client->submit($crawler->selectButton('Enregistrer une version')->form(), ['title' => 'Avant ma reconversion']);

@@ -275,11 +275,12 @@ Les estimations sont des jours de développement pour une personne. Les phases 0
 
 ### Phase 5 — Monétisation (6–8 j)
 
-- [ ] Offres FREE / PRO avec limites et interrupteurs configurables, en reprenant le modèle de l'ancienne version.
-- [ ] Stripe Checkout, portail client, webhooks, essai de 14 jours, factures.
-- [ ] Page Upgrade et invitations contextuelles à passer PRO.
-- [ ] Admin : utilisateurs (recherche, édition, offre), revenus, citations, modèles d'email.
-- [ ] Landing page publique avec les prix.
+- [x] Offres FREE / PRO avec limites et interrupteurs configurables (modèle de l'ancienne version), prix en euros et en francs CFA.
+- [x] Essai de 14 jours à l'inscription ; paiements manuels (virement, Mobile Money, espèces) déclarés par le client et validés dans l'admin ; reçus PDF ; rappels de fin d'essai et de fin d'abonnement.
+- [ ] Paiement en ligne (Stripe pour la carte en euros, agrégateur africain pour le Mobile Money) : **dès que la société est immatriculée** (voir docs/modules/abonnement.md).
+- [x] Page Abonnement / « Passer à PRO » et invitations contextuelles (plans verrouillés, carte, PDF, limites).
+- [x] Admin : utilisateurs (recherche, offre, PRO offert), paiements et revenus, citations. Modèles d'email : plus tard.
+- [x] Landing page publique avec les prix (`/`).
 
 **→ Bêta payante possible ici : environ 32 à 44 jours depuis le début.**
 

@@ -2,6 +2,7 @@
 
 namespace App\Bilan\Controller;
 
+use App\Abonnement\Service\Entitlements;
 use App\Bilan\Entity\MonthlyReview;
 use App\Bilan\Entity\WeeklyReview;
 use App\Compte\Entity\User;
@@ -28,10 +29,11 @@ class MonthlyReviewController extends AbstractController
     ];
 
     #[Route('/bilan/revue-mensuelle', name: 'app_monthly_review', methods: ['GET', 'POST'])]
-    public function index(Request $request, EntityManagerInterface $em, PlanSnapshotService $snapshots): Response
+    public function index(Request $request, EntityManagerInterface $em, PlanSnapshotService $snapshots, Entitlements $entitlements): Response
     {
         /** @var User $user */
         $user = $this->getUser();
+        $entitlements->require($user, 'monthly_review');
         $month = self::reviewedMonth(new \DateTimeImmutable('today'));
         $repo = $em->getRepository(MonthlyReview::class);
         $review = $repo->findOneBy(['user' => $user, 'month' => \DateTime::createFromImmutable($month)]);

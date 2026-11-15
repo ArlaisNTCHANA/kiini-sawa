@@ -1,0 +1,171 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Mon abonnement{% endblock %}
+
+{% block body %}
+<style>
+    .ab-wrap { max-width: 900px; margin: 0 auto; padding: 2.5rem 1.25rem 8rem; }
+    .ab-wrap h1 { font-family: var(--font-serif); color: var(--primary); font-size: 2rem; }
+    .ab-card { background: var(--card-bg); border-radius: var(--r-lg); box-shadow: var(--card-shadow); padding: 1.5rem; margin-bottom: 1.25rem; }
+    .ab-card h2 { font-family: var(--font-serif); font-size: 1.3rem; margin-bottom: .75rem; }
+    .ab-status { display: flex; align-items: center; gap: .75rem; flex-wrap: wrap; }
+    .ab-badge { padding: .3rem .8rem; border-radius: 999px; font-size: .78rem; font-weight: 800; letter-spacing: .05em; }
+    .ab-toggle { display: inline-flex; background: var(--bg-alt); border-radius: 999px; padding: .25rem; gap: .25rem; }
+    .ab-toggle button { border: none; background: transparent; padding: .45rem 1rem; border-radius: 999px; font: inherit; font-weight: 600; font-size: .85rem; cursor: pointer; color: var(--fg-light); }
+    .ab-toggle button.on { background: #fff; color: var(--primary); box-shadow: 0 1px 3px rgba(0,0,0,.08); }
+    .ab-plans { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1rem; margin-top: 1.25rem; }
+    .ab-plan { border: 2px solid #E2E8F0; border-radius: var(--r-lg); padding: 1.25rem; cursor: pointer; position: relative; }
+    .ab-plan.on { border-color: var(--primary); background: #F0FDFA; }
+    .ab-price { font-family: var(--font-serif); font-size: 1.9rem; color: var(--fg); margin: .25rem 0; }
+    .ab-save { position: absolute; top: -.7rem; right: 1rem; background: var(--accent); color: #fff; font-size: .7rem; font-weight: 800; padding: .2rem .6rem; border-radius: 999px; }
+    .ab-table { width: 100%; border-collapse: collapse; font-size: .9rem; }
+    .ab-table td, .ab-table th { padding: .55rem .4rem; border-bottom: 1px solid #F1F5F9; text-align: left; }
+    .ab-table th:not(:first-child), .ab-table td:not(:first-child) { text-align: center; width: 90px; }
+    .ab-field { display: flex; flex-direction: column; gap: .3rem; margin-bottom: .9rem; }
+    .ab-field label { font-size: .72rem; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; color: var(--fg-muted); }
+    .ab-field input, .ab-field select, .ab-field textarea { padding: .65rem .85rem; border: 1.5px solid #E2E8F0; border-radius: var(--r-md); font: inherit; background: #fff; }
+    .ab-instructions { white-space: pre-line; background: #F8FAFC; border: 1px dashed #CBD5E1; border-radius: var(--r-md); padding: 1rem; font-size: .92rem; line-height: 1.6; margin-bottom: 1rem; }
+    .ab-btn { padding: .85rem 1.5rem; border: none; border-radius: var(--r-md); background: var(--primary); color: #fff; font: inherit; font-weight: 700; cursor: pointer; }
+</style>
+
+{% set methods = [] %}
+{% if bankInstructions %}{% set methods = methods|merge([{key: 'BANK_TRANSFER', label: 'Virement bancaire', icon: 'landmark', text: bankInstructions}]) %}{% endif %}
+{% if mobileMoneyInstructions %}{% set methods = methods|merge([{key: 'MOBILE_MONEY', label: 'Mobile Money', icon: 'smartphone', text: mobileMoneyInstructions}]) %}{% endif %}
+
+<div class="ab-wrap" x-data="{ currency: '{{ defaultCurrency in ['EUR', 'XAF'] ? defaultCurrency : 'EUR' }}', period: 'YEARLY', method: '{{ methods|length ? methods[0].key : '' }}' }">
+    <h1>Mon abonnement</h1>
+
+    {% if limitReached %}
+        <div class="ab-card" style="background: linear-gradient(135deg, #F0FDFA, #FFFBEB); border: 1px solid #99F6E4;">
+            <p style="font-weight: 700; color: var(--primary);">{{ limitReached }}</p>
+            <p style="color: var(--fg-light); margin-top: .35rem;">Passez à PRO pour continuer sans limite.</p>
+        </div>
+    {% endif %}
+    {% if feature %}
+        <div class="ab-card" style="background: linear-gradient(135deg, #F0FDFA, #FFFBEB); border: 1px solid #99F6E4;">
+            <p style="font-weight: 700; color: var(--primary); display: flex; gap: .5rem; align-items: center;"><i data-lucide="lock" style="width: 18px; height: 18px;"></i> « {{ feature }} » fait partie de KIINI SAWA PRO.</p>
+            <p style="color: var(--fg-light); margin-top: .35rem;">Passez à PRO pour bâtir vos quatre plans stratégiques, voir votre carte, exporter en PDF et suivre votre évolution dans le temps.</p>
+        </div>
+    {% endif %}
+
+    <div class="ab-card ab-status">
+        {% if isTrialing %}
+            <span class="ab-badge" style="background: #FEF3C7; color: #92400E;">ESSAI PRO</span>
+            <span>Votre essai gratuit se termine le <strong>{{ proUntil|format_date(pattern: 'd MMMM y', locale: 'fr') }}</strong>. Choisissez une formule pour garder tous vos plans actifs.</span>
+        {% elseif isPro %}
+            <span class="ab-badge" style="background: var(--primary); color: #fff;">PRO</span>
+            <span>{% if proUntil %}Actif jusqu'au <strong>{{ proUntil|format_date(pattern: 'd MMMM y', locale: 'fr') }}</strong>. Vous pouvez prolonger à tout moment : les jours restants sont conservés.{% else %}Accès complet (administrateur).{% endif %}</span>
+        {% else %}
+            <span class="ab-badge" style="background: var(--bg-alt); color: var(--fg-light);">GRATUIT</span>
+            <span>Vous utilisez l'offre gratuite. Vos données sont conservées, quoi qu'il arrive.</span>
+        {% endif %}
+    </div>
+
+    {% if pending %}
+        <div class="ab-card" style="border-left: 4px solid #F59E0B;">
+            <p style="font-weight: 700;">⏳ Paiement en cours de vérification</p>
+            <p style="color: var(--fg-light); margin-top: .25rem;">{{ pending.methodLabel }} de {{ (pending.amount)|money(pending.currency) }} déclaré le {{ pending.createdAt|format_date(pattern: 'd MMMM', locale: 'fr') }} (réf. {{ pending.reference ?: '—' }}). Vous serez prévenu dès sa validation, généralement sous 24 à 48 h ouvrées.</p>
+        </div>
+    {% endif %}
+
+    <section class="ab-card">
+        <div style="display: flex; justify-content: space-between; align-items: center; gap: 1rem; flex-wrap: wrap;">
+            <h2 style="margin: 0;">KIINI SAWA PRO</h2>
+            <div class="ab-toggle" role="group" aria-label="Devise">
+                <button type="button" :class="currency === 'EUR' && 'on'" @click="currency = 'EUR'">Euros (€)</button>
+                <button type="button" :class="currency === 'XAF' && 'on'" @click="currency = 'XAF'">Francs CFA</button>
+            </div>
+        </div>
+        <div class="ab-plans">
+            {% for period, label in {YEARLY: 'Annuel', MONTHLY: 'Mensuel'} %}
+                <div class="ab-plan" :class="period === '{{ period }}' && 'on'" @click="period = '{{ period }}'">
+                    {% if period == 'YEARLY' %}
+                        {% set saveEur = ((1 - prices.EUR.YEARLY / (prices.EUR.MONTHLY * 12)) * 100)|round %}
+                        <span class="ab-save">{{ saveEur }} % d'économie</span>
+                    {% endif %}
+                    <div style="font-weight: 700;">{{ label }}</div>
+                    {% for cur in ['EUR', 'XAF'] %}
+                        <div class="ab-price" x-show="currency === '{{ cur }}'" {{ cur != 'EUR' ? 'x-cloak' }}>{{ (prices[cur][period])|money(cur) }}<small style="font-size: .9rem; color: var(--fg-muted);"> / {{ period == 'YEARLY' ? 'an' : 'mois' }}</small></div>
+                        {% if period == 'YEARLY' %}<div x-show="currency === '{{ cur }}'" {{ cur != 'EUR' ? 'x-cloak' }} style="font-size: .8rem; color: var(--fg-muted);">soit {{ (prices[cur].YEARLY / 12)|money(cur) }} par mois</div>{% endif %}
+                    {% endfor %}
+                </div>
+            {% endfor %}
+        </div>
+
+        <table class="ab-table" style="margin-top: 1.5rem;">
+            <tr><th></th><th>Gratuit</th><th>PRO</th></tr>
+            {% for row in [
+                ['Plan de Vie complet et analyse de cohérence', true, true],
+                ['Rituels', freeHabits ~ ' max.', 'Illimités'],
+                ['Journal, planner, revue de la semaine, méthode', true, true],
+                ['Partenaires de redevabilité', freeConnections ~ ' max.', 'Illimités'],
+                ['Plans de Croissance, Développement, Transmission, Hygiène', false, true],
+                ['Carte stratégique', false, true],
+                ['Export PDF de vos plans', false, true],
+                ['Revue du mois et historique de vos plans', false, true],
+            ] %}
+                <tr><td>{{ row[0] }}</td>
+                    {% for v in [row[1], row[2]] %}<td>{% if v is same as(true) %}<span style="color: var(--primary); font-weight: 800;">✓</span>{% elseif v is same as(false) %}<span style="color: #CBD5E1;">—</span>{% else %}<span style="font-size: .82rem;">{{ v }}</span>{% endif %}</td>{% endfor %}
+                </tr>
+            {% endfor %}
+        </table>
+    </section>
+
+    <section class="ab-card" id="payer">
+        <h2>Payer</h2>
+        {% if methods is empty %}
+            <p style="color: var(--fg-light);">Le paiement n'est pas encore ouvert. Écrivez-nous pour passer à PRO : nous vous indiquerons comment régler.</p>
+            {% if is_granted('ROLE_ADMIN') %}
+                <p style="margin-top: .5rem; font-size: .85rem; color: var(--danger);">Administrateur : renseignez vos coordonnées de virement et/ou de Mobile Money dans <a href="{{ path('admin_config') }}">Configuration</a> pour ouvrir le paiement.</p>
+            {% endif %}
+        {% else %}
+            <p style="color: var(--fg-light); margin-bottom: 1rem;">
+                1. Payez <strong><span x-show="currency === 'EUR'">{% for p in ['YEARLY', 'MONTHLY'] %}<span x-show="period === '{{ p }}'">{{ (prices.EUR[p])|money('EUR') }}</span>{% endfor %}</span><span x-show="currency === 'XAF'" x-cloak>{% for p in ['YEARLY', 'MONTHLY'] %}<span x-show="period === '{{ p }}'">{{ (prices.XAF[p])|money('XAF') }}</span>{% endfor %}</span></strong> avec le moyen de votre choix.
+                2. Déclarez votre paiement ci-dessous. 3. Nous activons PRO dès réception.
+            </p>
+            <div class="ab-toggle" style="margin-bottom: 1rem;">
+                {% for m in methods %}<button type="button" :class="method === '{{ m.key }}' && 'on'" @click="method = '{{ m.key }}'">{{ m.label }}</button>{% endfor %}
+            </div>
+            {% for m in methods %}
+                <div class="ab-instructions" x-show="method === '{{ m.key }}'" {{ not loop.first ? 'x-cloak' }}>{{ m.text }}</div>
+            {% endfor %}
+
+            {% if not pending %}
+                <form method="post" action="{{ path('app_subscription_declare') }}">
+                    <input type="hidden" name="period" :value="period">
+                    <input type="hidden" name="currency" :value="currency">
+                    <input type="hidden" name="method" :value="method">
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 0 1rem;">
+                        <div class="ab-field"><label for="reference">Référence du paiement</label><input id="reference" name="reference" maxlength="255" required placeholder="N° de transaction, libellé du virement…"></div>
+                        <div class="ab-field"><label for="paidAt">Date du paiement</label><input type="date" id="paidAt" name="paidAt" value="{{ 'now'|date('Y-m-d') }}" max="{{ 'now'|date('Y-m-d') }}"></div>
+                    </div>
+                    <div class="ab-field"><label for="note">Message (facultatif)</label><textarea id="note" name="note" rows="2" maxlength="500" placeholder="Nom du titulaire du compte, numéro d'envoi…"></textarea></div>
+                    <input type="hidden" name="_csrf_token" value="{{ csrf_token('subscription_declare') }}">
+                    <button type="submit" class="ab-btn">J'ai payé : déclarer mon paiement</button>
+                </form>
+            {% endif %}
+        {% endif %}
+    </section>
+
+    {% if transactions|length %}
+        <section class="ab-card">
+            <h2>Historique</h2>
+            <table class="ab-table">
+                {% for t in transactions %}
+                    <tr>
+                        <td>{{ t.createdAt|format_date(pattern: 'd MMM y', locale: 'fr') }} · {{ t.description }}<br><small style="color: var(--fg-muted);">{{ t.methodLabel }}{{ t.reference ? ' · réf. ' ~ t.reference }}</small></td>
+                        <td style="width: 120px;">{{ t.method == 'GIFT' ? 'Offert' : (t.amount)|money(t.currency) }}</td>
+                        <td style="width: 150px;">
+                            {% if t.status == 'VALIDATED' %}<span style="color: var(--primary); font-weight: 700;">Validé</span>{% if t.receiptNumber %}<br><a href="{{ path('app_subscription_receipt', {id: t.id}) }}" data-turbo="false" style="font-size: .8rem; color: var(--primary);">Reçu {{ t.receiptNumber }}</a>{% endif %}
+                            {% elseif t.status == 'PENDING' %}<span style="color: #B45309; font-weight: 700;">En vérification</span>
+                            {% else %}<span style="color: var(--danger); font-weight: 700;">Refusé</span>{% if t.adminNote %}<br><small>{{ t.adminNote }}</small>{% endif %}{% endif %}
+                        </td>
+                    </tr>
+                {% endfor %}
+            </table>
+        </section>
+    {% endif %}
+
+    <p style="font-size: .8rem; color: var(--fg-muted); text-align: center;">Pas de renouvellement automatique : à la fin de la période, vous repassez en gratuit sans rien perdre. <a href="{{ path('app_legal', {page: 'cgv'}) }}" style="color: var(--fg-muted);">Conditions de vente</a></p>
+</div>
+{% endblock %}

@@ -3,8 +3,7 @@
 namespace App\PlanDeVie\Service;
 
 use App\Compte\Entity\User;
-use Dompdf\Dompdf;
-use Dompdf\Options;
+use App\Shared\Service\PdfFactory;
 use Twig\Environment;
 
 /**
@@ -17,7 +16,7 @@ final class PlanPdfRenderer
         'CROISSANCE' => 'plan_de_vie/pdf/plan_de_croissance.html.twig',
     ];
 
-    public function __construct(private readonly Environment $twig, private readonly PlanDataProvider $data)
+    public function __construct(private readonly Environment $twig, private readonly PlanDataProvider $data, private readonly PdfFactory $pdf)
     {
     }
 
@@ -29,15 +28,7 @@ final class PlanPdfRenderer
             'name' => $user->getDisplayName(),
         ]);
 
-        $options = new Options();
-        $options->setIsRemoteEnabled(false); // aucune ressource externe chargée
-        $options->setDefaultFont('DejaVu Sans');
-        $pdf = new Dompdf($options);
-        $pdf->loadHtml($html, 'UTF-8');
-        $pdf->setPaper('A4');
-        $pdf->render();
-
-        return (string) $pdf->output();
+        return $this->pdf->render($html);
     }
 
     public static function filename(string $planKey): string

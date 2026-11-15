@@ -34,6 +34,8 @@ class WizardController extends AbstractPlanController
         if ($step < 1 || $step > 13 || (!$single && !\in_array($step, $allowedSteps, true))) {
             $step = $allowedSteps[0];
         }
+        // Plan stratégique réservé à PRO (y compris une étape isolée appartenant à ce plan)
+        $this->requirePlan($plan ?: (string) array_key_first(array_filter(LifePlanWizardSaver::STEPS_BY_PLAN, fn ($steps, $key) => '' !== $key && \in_array($step, $steps, true), \ARRAY_FILTER_USE_BOTH)));
 
         if ($request->isMethod('POST')) {
             // Protection CSRF : contrôle de l'origine (SameOriginRequestSubscriber), comme les autres formulaires des plans
@@ -61,7 +63,9 @@ class WizardController extends AbstractPlanController
         }
 
         if (null === $user->getPlanDeVie()) {
-            $em->persist((new PlanDeVie())->setUser($user));
+            $planDeVie = new PlanDeVie();
+            $user->setPlanDeVie($planDeVie); // relie aussi le côté utilisateur, utilisé juste après
+            $em->persist($planDeVie);
             $em->flush();
         }
 

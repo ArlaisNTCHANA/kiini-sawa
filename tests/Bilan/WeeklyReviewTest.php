@@ -19,7 +19,7 @@ class WeeklyReviewTest extends WebTestCase
     public function testReviewCoversAllPlansAndUpdatesThem(): void
     {
         $client = static::createClient();
-        $user = $this->createUser();
+        $user = $this->createUser(pro: true);
         $client->loginUser($user);
 
         // Un élément dans chacun des quatre plans

@@ -132,7 +132,8 @@ class OnboardingController extends AbstractController
 
         $plan = $user->getPlanDeVie();
         if (null === $plan) {
-            $plan = (new PlanDeVie())->setUser($user);
+            $plan = new PlanDeVie();
+            $user->setPlanDeVie($plan);
             $em->persist($plan);
         }
 

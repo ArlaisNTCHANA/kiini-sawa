@@ -12,10 +12,22 @@ use Symfony\Component\Routing\Attribute\Route;
 
 class DashboardController extends AbstractController
 {
-    #[Route('/', name: 'app_home')]
-    public function home(): Response
+    /** Page d'accueil publique (présentation et prix) ; un utilisateur connecté va à son tableau de bord. */
+    #[Route('/', name: 'app_home', methods: ['GET'])]
+    public function home(\App\Abonnement\Service\SubscriptionManager $prices, \App\Abonnement\Service\Entitlements $entitlements): Response
     {
-        return $this->redirectToRoute('app_dashboard');
+        if ($this->getUser()) {
+            return $this->redirectToRoute('app_dashboard');
+        }
+
+        return $this->render('dashboard/landing.html.twig', [
+            'prices' => [
+                'EUR' => ['MONTHLY' => $prices->price('MONTHLY', 'EUR'), 'YEARLY' => $prices->price('YEARLY', 'EUR')],
+                'XAF' => ['MONTHLY' => $prices->price('MONTHLY', 'XAF'), 'YEARLY' => $prices->price('YEARLY', 'XAF')],
+            ],
+            'trialDays' => $entitlements->config()->getTrialDurationDays(),
+            'freeHabits' => $entitlements->config()->getMaxHabitsFree(),
+        ]);
     }
 
     #[Route('/dashboard', name: 'app_dashboard')]

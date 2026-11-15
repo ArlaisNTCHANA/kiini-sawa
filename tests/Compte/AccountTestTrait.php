@@ -24,9 +24,14 @@ trait AccountTestTrait
         return $this->createdEmails[] = $prefix.'-'.uniqid().'@exemple.org';
     }
 
-    private function createUser(string $password = 'mot-de-passe-solide', bool $verified = true): User
+    private function createUser(string $password = 'mot-de-passe-solide', bool $verified = true, bool $pro = false): User
     {
         $user = (new User())->setEmail($this->uniqueEmail())->setRoles([])->setIsVerified($verified);
+        if ($pro) {
+            $user->setSubscription((new \App\Abonnement\Entity\Subscription())
+                ->setTier(\App\Abonnement\Enum\SubscriptionTier::PRO)->setStatus(\App\Abonnement\Enum\SubscriptionStatus::ACTIVE)
+                ->setCurrentPeriodEnd(new \DateTime('+1 month')));
+        }
         $user->setPassword(static::getContainer()->get('security.user_password_hasher')->hashPassword($user, $password));
         $this->em()->persist($user);
         $this->em()->flush();

@@ -69,7 +69,7 @@ class AppConfig
     private bool $enableHygieneDetailedFree = false;
 
     #[ORM\Column(options: ['default' => false])]
-    private bool $enableCoherenceAnalysisFree = false;
+    private bool $enableCoherenceAnalysisFree = true;
 
     #[ORM\Column(options: ['default' => false])]
     private bool $enableAdvancedCommentsFree = false;
@@ -78,10 +78,10 @@ class AppConfig
     private bool $enableChallengesFree = false;
 
     #[ORM\Column(options: ['default' => false])]
-    private bool $enableDiscoveryFree = false;
+    private bool $enableDiscoveryFree = true;
 
     #[ORM\Column(options: ['default' => false])]
-    private bool $enableJournalFree = false;
+    private bool $enableJournalFree = true;
 
     #[ORM\Column(options: ['default' => false])]
     private bool $enableGrowthFree = false;
@@ -93,19 +93,42 @@ class AppConfig
     private bool $enableTransmissionFree = false;
 
     #[ORM\Column(options: ['default' => false])]
-    private bool $enablePlannerFree = false;
+    private bool $enablePlannerFree = true;
 
     #[ORM\Column(options: ['default' => false])]
-    private bool $enableHabitsFree = false;
+    private bool $enableHabitsFree = true;
 
     #[ORM\Column(options: ['default' => false])]
-    private bool $enableSocialFree = false;
+    private bool $enableSocialFree = true;
 
     #[ORM\Column(options: ['default' => false])]
     private bool $enableCoachingFree = false;
 
     #[ORM\Column(options: ['default' => true])]
     private bool $enableMethodFree = true;
+
+    // ── Offres et paiements (phase 5) ──────────────────────────────
+    /** Prix en francs CFA (XAF), pour l'Afrique francophone. */
+    #[ORM\Column(options: ['default' => 3000])]
+    private int $proMonthlyPriceXaf = 3000;
+
+    #[ORM\Column(options: ['default' => 25000])]
+    private int $proYearlyPriceXaf = 25000;
+
+    #[ORM\Column(options: ['default' => false])]
+    private bool $enableDevelopmentFree = false;
+
+    /** Coordonnées et consignes affichées au client pour un virement (IBAN, RIB, libellé à indiquer…). */
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
+    private ?string $bankTransferInstructions = null;
+
+    /** Numéros et consignes pour un paiement Mobile Money (Orange Money, MTN MoMo…). */
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
+    private ?string $mobileMoneyInstructions = null;
+
+    /** Adresse qui reçoit les alertes de paiement à valider (sinon : les administrateurs). */
+    #[ORM\Column(length: 180, nullable: true)]
+    private ?string $paymentNotificationEmail = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $defaultPurposeStatement = 'En attendant de discerner plus clairement le but de Dieu pour ma vie, je choisis de faire fructifier fidèlement les capacités qu’Il m’a déjà confiées afin d’apporter soutien, valeur et impact positif aux personnes placées sur mon chemin';
@@ -582,4 +605,17 @@ class AppConfig
 
         return $this;
     }
+
+    public function getProMonthlyPriceXaf(): int { return $this->proMonthlyPriceXaf; }
+    public function setProMonthlyPriceXaf(int $v): static { $this->proMonthlyPriceXaf = $v; return $this; }
+    public function getProYearlyPriceXaf(): int { return $this->proYearlyPriceXaf; }
+    public function setProYearlyPriceXaf(int $v): static { $this->proYearlyPriceXaf = $v; return $this; }
+    public function isEnableDevelopmentFree(): bool { return $this->enableDevelopmentFree; }
+    public function setEnableDevelopmentFree(bool $v): static { $this->enableDevelopmentFree = $v; return $this; }
+    public function getBankTransferInstructions(): ?string { return $this->bankTransferInstructions; }
+    public function setBankTransferInstructions(?string $v): static { $this->bankTransferInstructions = $v; return $this; }
+    public function getMobileMoneyInstructions(): ?string { return $this->mobileMoneyInstructions; }
+    public function setMobileMoneyInstructions(?string $v): static { $this->mobileMoneyInstructions = $v; return $this; }
+    public function getPaymentNotificationEmail(): ?string { return $this->paymentNotificationEmail; }
+    public function setPaymentNotificationEmail(?string $v): static { $this->paymentNotificationEmail = $v; return $this; }
 }

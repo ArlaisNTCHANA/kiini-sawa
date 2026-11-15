@@ -6,6 +6,7 @@ use App\Compte\Entity\User;
 use App\Social\Entity\Connection;
 use App\Coaching\Entity\GoalSuggestion;
 use App\Notification\Service\Notifier;
+use App\Abonnement\Service\Entitlements;
 use App\Social\Entity\Comment;
 use App\PlanDeCroissance\Entity\GrowthGoal;
 use App\PlanDeCroissance\Entity\PlanDeCroissance;
@@ -116,13 +117,16 @@ class SocialController extends AbstractController
     }
 
     #[Route('/api/social/connection/add', name: 'api_social_connection_add', methods: ['POST'])]
-    public function addConnection(Request $request, EntityManagerInterface $em, Notifier $notifier): JsonResponse
+    public function addConnection(Request $request, EntityManagerInterface $em, Notifier $notifier, Entitlements $entitlements): JsonResponse
     {
         /** @var User $user */
         $user = $this->getUser();
         
         $data = json_decode($request->getContent(), true);
         $email = mb_strtolower(trim((string) ($data['email'] ?? '')));
+
+        $activeConnections = \count(array_filter(array_merge($user->getConnections()->toArray(), $user->getConnectedTo()->toArray()), fn ($c) => 'REJECTED' !== $c->getStatus()));
+        $entitlements->requireBelowLimit($user, 'connections', $activeConnections, 'Limite de partenaires de l\'offre gratuite atteinte : passez à PRO pour en inviter d\'autres.');
 
         if (!$email) {
             return new JsonResponse(['success' => false, 'error' => 'L\'adresse email est manquante.'], Response::HTTP_BAD_REQUEST);

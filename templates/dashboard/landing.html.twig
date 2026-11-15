@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>KIINI SAWA — Bâtissez une vie alignée sur le but de Dieu</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="KIINI SAWA vous aide à discerner votre raison d'être, à bâtir votre Plan de Vie et à le vivre au quotidien : plans de croissance, rituels, revues et partenaires de redevabilité.">
+    <meta name="theme-color" content="#0F766E">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root { --primary: #0F766E; --primary-dark: #115E59; --accent: #B45309; --fg: #0F172A; --muted: #64748B; --bg: #F8FAFC; --serif: 'Playfair Display', Georgia, serif; }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Inter', -apple-system, sans-serif; color: var(--fg); background: var(--bg); line-height: 1.6; }
+        a { color: inherit; }
+        .wrap { max-width: 1100px; margin: 0 auto; padding: 0 1.25rem; }
+        nav { display: flex; justify-content: space-between; align-items: center; padding: 1.1rem 0; }
+        .logo { font-family: var(--serif); font-weight: 700; font-size: 1.35rem; color: #fff; text-decoration: none; }
+        .nav-links { display: flex; gap: 1rem; align-items: center; font-size: .9rem; }
+        .nav-links a { color: #ccfbf1; text-decoration: none; }
+        .btn { display: inline-block; padding: .85rem 1.5rem; border-radius: 12px; font-weight: 700; text-decoration: none; transition: transform .15s; }
+        .btn:hover { transform: translateY(-1px); }
+        .btn-primary { background: linear-gradient(135deg, #2dd4bf, #0d9488); color: #fff; box-shadow: 0 6px 20px rgba(13,148,136,.35); }
+        .btn-light { background: #fff; color: var(--primary); }
+        .btn-ghost { color: #fff; border: 1.5px solid rgba(255,255,255,.35); }
+        header.hero { background: linear-gradient(135deg, #022c22 0%, #0f766e 55%, #014751 100%); color: #e2e8f0; padding-bottom: 5rem; }
+        .hero-inner { padding: 4rem 0 0; max-width: 760px; }
+        .kicker { display: inline-block; font-size: .75rem; font-weight: 800; letter-spacing: .15em; text-transform: uppercase; color: #5eead4; margin-bottom: 1rem; }
+        h1 { font-family: var(--serif); color: #fff; font-size: clamp(2.2rem, 5.5vw, 3.6rem); line-height: 1.12; margin-bottom: 1.25rem; }
+        .lead { font-size: clamp(1.05rem, 2.2vw, 1.25rem); color: #cbd5e1; margin-bottom: 2rem; }
+        .cta-row { display: flex; gap: .75rem; flex-wrap: wrap; align-items: center; }
+        .small { font-size: .85rem; color: #94a3b8; margin-top: .9rem; }
+        section { padding: 4.5rem 0; }
+        h2 { font-family: var(--serif); font-size: clamp(1.7rem, 3.5vw, 2.4rem); line-height: 1.2; margin-bottom: .75rem; }
+        .sub { color: var(--muted); font-size: 1.05rem; max-width: 680px; margin-bottom: 2.5rem; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1.25rem; }
+        .card { background: #fff; border-radius: 18px; padding: 1.5rem; box-shadow: 0 4px 20px -4px rgba(15,118,110,.08); }
+        .card h3 { font-size: 1.1rem; margin: .5rem 0 .35rem; }
+        .card p { color: var(--muted); font-size: .95rem; }
+        .icon { font-size: 1.6rem; }
+        .step-num { width: 2.2rem; height: 2.2rem; border-radius: 50%; background: #CCFBF1; color: var(--primary); font-weight: 800; display: flex; align-items: center; justify-content: center; }
+        .verse { font-family: var(--serif); font-style: italic; font-size: clamp(1.2rem, 2.6vw, 1.6rem); text-align: center; color: var(--primary-dark); max-width: 760px; margin: 0 auto; }
+        .verse small { display: block; font-style: normal; font-family: 'Inter', sans-serif; font-size: .85rem; color: var(--muted); margin-top: .75rem; letter-spacing: .08em; text-transform: uppercase; }
+        .pricing { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.25rem; max-width: 860px; }
+        .price-card { background: #fff; border-radius: 20px; padding: 2rem; box-shadow: 0 4px 20px -4px rgba(15,118,110,.1); border: 2px solid transparent; }
+        .price-card.featured { border-color: var(--primary); }
+        .price { font-family: var(--serif); font-size: 2.4rem; margin: .5rem 0 0; }
+        .price small { font-family: 'Inter', sans-serif; font-size: .95rem; color: var(--muted); }
+        .alt-price { color: var(--muted); font-size: .9rem; margin-bottom: 1.25rem; }
+        ul.check { list-style: none; margin: 1.25rem 0 1.5rem; }
+        ul.check li { padding: .35rem 0 .35rem 1.6rem; position: relative; font-size: .95rem; }
+        ul.check li::before { content: '✓'; position: absolute; left: 0; color: var(--primary); font-weight: 800; }
+        .toggle { display: inline-flex; background: #E2E8F0; border-radius: 999px; padding: .25rem; margin-bottom: 1.5rem; }
+        .toggle button { border: none; background: transparent; padding: .5rem 1.1rem; border-radius: 999px; font: inherit; font-weight: 600; cursor: pointer; color: var(--muted); }
+        .toggle button.on { background: #fff; color: var(--primary); }
+        details { background: #fff; border-radius: 14px; padding: 1.1rem 1.3rem; margin-bottom: .75rem; box-shadow: 0 2px 10px -4px rgba(0,0,0,.06); }
+        summary { font-weight: 700; cursor: pointer; }
+        details p { color: var(--muted); margin-top: .6rem; }
+        .final { background: linear-gradient(135deg, #022c22, #0f766e); color: #fff; text-align: center; border-radius: 28px; padding: 3.5rem 1.5rem; }
+        .final h2 { color: #fff; }
+        footer { padding: 2.5rem 0; color: var(--muted); font-size: .85rem; text-align: center; }
+        footer a { margin: 0 .5rem; text-decoration: none; }
+        @media (max-width: 640px) { .nav-links .hide-sm { display: none; } section { padding: 3.25rem 0; } }
+    </style>
+</head>
+<body>
+<header class="hero">
+    <div class="wrap">
+        <nav>
+            <a href="{{ path('app_home') }}" class="logo">KIINI SAWA</a>
+            <div class="nav-links">
+                <a href="#methode" class="hide-sm">La méthode</a>
+                <a href="#prix" class="hide-sm">Prix</a>
+                <a href="{{ path('app_login') }}">Se connecter</a>
+            </div>
+        </nav>
+        <div class="hero-inner">
+            <span class="kicker">Plan de Vie · Croissance · Transmission</span>
+            <h1>Bâtissez une vie alignée sur le but pour lequel Dieu vous a créé.</h1>
+            <p class="lead">KIINI SAWA vous guide pas à pas pour discerner votre raison d'être, la traduire en plans concrets et la vivre chaque jour, avec des rituels, des revues et des partenaires qui vous tiennent la main.</p>
+            <div class="cta-row">
+                <a href="{{ path('app_register') }}" class="btn btn-primary">Commencer gratuitement</a>
+                <a href="#methode" class="btn btn-ghost">Découvrir la méthode</a>
+            </div>
+            <p class="small">Gratuit pour toujours · {{ trialDays }} jours de PRO offerts · sans carte bancaire</p>
+        </div>
+    </div>
+</header>
+
+<section>
+    <div class="wrap">
+        <p class="verse">« Car je connais les projets que j'ai formés sur vous, dit l'Éternel, projets de paix et non de malheur, afin de vous donner un avenir et de l'espérance. »<small>Jérémie 29:11</small></p>
+    </div>
+</section>
+
+<section id="methode" style="background: #fff;">
+    <div class="wrap">
+        <h2>Beaucoup d'activité, peu de direction ?</h2>
+        <p class="sub">On peut faire beaucoup de choses bien, et passer à côté des bonnes. La méthode KIINI SAWA part de l'Être pour aller vers le Faire : d'abord votre raison d'être, puis des plans qui en découlent, puis un quotidien qui les nourrit.</p>
+        <div class="grid">
+            <div class="card"><div class="icon">🧭</div><h3>Plan de Vie</h3><p>But de Dieu, valeurs, passions, dons et talents, vision et objectifs : les fondations de tout le reste.</p></div>
+            <div class="card"><div class="icon">💎</div><h3>Plan de Croissance</h3><p>Caractère & Conviction, Relation & Réseau : devenir la personne capable de porter votre vision.</p></div>
+            <div class="card"><div class="icon">🎓</div><h3>Plan de Développement</h3><p>Compétence & Connaissance : les savoir-faire à acquérir, les livres et formations à suivre.</p></div>
+            <div class="card"><div class="icon">🎁</div><h3>Plan de Transmission</h3><p>Ce que vous voulez laisser : projets de legs, mentorat, service.</p></div>
+            <div class="card"><div class="icon">🛡️</div><h3>Plan d'Hygiène de Vie</h3><p>Corps, esprit, relations, ressources : l'énergie pour durer.</p></div>
+            <div class="card"><div class="icon">🗺️</div><h3>Carte et cohérence</h3><p>Voyez comment tout s'enchaîne, et recevez un score de cohérence avec les points à renforcer.</p></div>
+        </div>
+    </div>
+</section>
+
+<section>
+    <div class="wrap">
+        <h2>Comment ça marche</h2>
+        <p class="sub">Trois minutes pour commencer, une vie pour approfondir.</p>
+        <div class="grid">
+            <div class="card"><div class="step-num">1</div><h3>Posez vos fondations</h3><p>Votre raison d'être, 3 valeurs, un premier objectif. Vous obtenez aussitôt votre premier score de cohérence.</p></div>
+            <div class="card"><div class="step-num">2</div><h3>Bâtissez vos plans</h3><p>Un assistant vous guide étape par étape, avec à chaque écran le chapitre du livre qui l'explique.</p></div>
+            <div class="card"><div class="step-num">3</div><h3>Vivez-les chaque jour</h3><p>Rituels, journal, revue de la semaine, revue du mois, et un partenaire de redevabilité pour ne pas lâcher.</p></div>
+        </div>
+    </div>
+</section>
+
+<section id="prix" style="background: #fff;">
+    <div class="wrap">
+        <h2>Un prix juste, en euros ou en francs CFA</h2>
+        <p class="sub">Commencez gratuitement. Passez à PRO quand vous voulez bâtir vos quatre plans stratégiques.</p>
+        <div class="toggle" role="group" aria-label="Devise">
+            <button type="button" class="on" data-cur="EUR" onclick="setCur('EUR')">Euros (€)</button>
+            <button type="button" data-cur="XAF" onclick="setCur('XAF')">Francs CFA</button>
+        </div>
+        <div class="pricing">
+            <div class="price-card">
+                <h3>Gratuit</h3>
+                <p class="price">0 <small>pour toujours</small></p>
+                <p class="alt-price">Pour poser vos fondations</p>
+                <ul class="check">
+                    <li>Plan de Vie complet et score de cohérence</li>
+                    <li>{{ freeHabits }} rituels, journal, planner</li>
+                    <li>Revue de la semaine et rappels</li>
+                    <li>Un partenaire de redevabilité</li>
+                    <li>La méthode : tous les chapitres du livre</li>
+                </ul>
+                <a href="{{ path('app_register') }}" class="btn btn-light" style="border: 1.5px solid var(--primary);">Créer mon compte</a>
+            </div>
+            <div class="price-card featured">
+                <h3>PRO</h3>
+                {% for cur in ['EUR', 'XAF'] %}
+                    <div class="price-{{ cur }}" {{ cur == 'XAF' ? 'hidden' }}>
+                        <p class="price">{{ prices[cur].YEARLY|money(cur) }} <small>/ an</small></p>
+                        <p class="alt-price">ou {{ prices[cur].MONTHLY|money(cur) }} par mois · soit {{ (prices[cur].YEARLY / 12)|money(cur) }} par mois à l'année</p>
+                    </div>
+                {% endfor %}
+                <ul class="check">
+                    <li>Tout le gratuit, sans limite</li>
+                    <li>Plans de Croissance, Développement, Transmission et Hygiène</li>
+                    <li>Carte stratégique</li>
+                    <li>Export PDF de vos plans</li>
+                    <li>Revue du mois et historique de vos plans</li>
+                </ul>
+                <a href="{{ path('app_register') }}" class="btn btn-primary">Essayer {{ trialDays }} jours gratuitement</a>
+                <p style="color: var(--muted); font-size: .8rem; margin-top: .75rem;">Paiement par virement, Mobile Money ou espèces. Sans renouvellement automatique.</p>
+            </div>
+        </div>
+        <p style="margin-top: 2rem; color: var(--muted);">Église, association ou entreprise ? Nous accompagnons quelques structures pilotes : <a href="mailto:?subject=KIINI%20SAWA%20pour%20mon%20organisation" style="color: var(--primary); font-weight: 600;">écrivez-nous</a>.</p>
+    </div>
+</section>
+
+<section>
+    <div class="wrap" style="max-width: 760px;">
+        <h2>Questions fréquentes</h2>
+        <details><summary>Faut-il être chrétien pour utiliser KIINI SAWA ?</summary><p>La méthode est d'inspiration chrétienne et parle du « but de Dieu » pour votre vie. Elle reste accessible à toute personne qui cherche à vivre avec sens et intention.</p></details>
+        <details><summary>Mes réflexions sont-elles privées ?</summary><p>Oui. Votre journal et vos plans ne sont visibles que par vous et par les partenaires avec qui vous choisissez de partager. Ils ne sont jamais vendus ni utilisés pour de la publicité. Vous pouvez tout exporter ou tout supprimer à tout moment.</p></details>
+        <details><summary>Comment payer depuis l'Afrique ?</summary><p>Par Mobile Money, virement ou espèces, en francs CFA. Vous déclarez votre paiement dans l'application et votre accès PRO est activé dès sa vérification.</p></details>
+        <details><summary>Que se passe-t-il à la fin de mon abonnement ?</summary><p>Rien n'est perdu : vous repassez simplement en gratuit, et retrouvez tout dès que vous reprenez PRO.</p></details>
+        <details><summary>Y a-t-il un livre ?</summary><p>Oui : chaque étape de l'application est reliée au chapitre du livre KIINI SAWA qui l'explique, lisible directement dans l'application.</p></details>
+    </div>
+</section>
+
+<section style="padding-top: 0;">
+    <div class="wrap">
+        <div class="final">
+            <h2>Votre vie a un but. Commencez à le bâtir aujourd'hui.</h2>
+            <p style="color: #ccfbf1; margin: .5rem 0 1.75rem;">Trois minutes suffisent pour poser vos fondations.</p>
+            <a href="{{ path('app_register') }}" class="btn btn-light">Commencer gratuitement</a>
+        </div>
+    </div>
+</section>
+
+<footer>
+    <div class="wrap">
+        © {{ 'now'|date('Y') }} KIINI SAWA ·
+        {% include 'legal/_footer_links.html.twig' with {} only %}
+    </div>
+</footer>
+
+<script>
+    function setCur(cur) {
+        document.querySelectorAll('[data-cur]').forEach(b => b.classList.toggle('on', b.dataset.cur === cur));
+        ['EUR', 'XAF'].forEach(c => document.querySelectorAll('.price-' + c).forEach(el => el.hidden = c !== cur));
+    }
+</script>
+</body>
+</html>
