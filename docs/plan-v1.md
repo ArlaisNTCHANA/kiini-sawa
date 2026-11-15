@@ -238,11 +238,12 @@ Les estimations sont des jours de développement pour une personne. Les phases 0
 
 ### Phase 1 — Fondations techniques (4–5 j)
 
-- [ ] Mise à jour des dépendances (22 failles corrigées).
-- [ ] Contrôle d'accès central, limitation des tentatives de connexion, CSRF sur les API et le wizard.
-- [ ] Emails en POST, erreurs masquées, dates validées, en-têtes de sécurité, scripts servis localement.
-- [ ] Dépôt Git distant et CI ; base MySQL propre avec une seule migration.
-- [ ] Tests d'autorisation.
+- [x] Mise à jour des dépendances (22 failles corrigées, 0 restante).
+- [x] Contrôle d'accès central, limitation des tentatives de connexion, CSRF sur les API et le wizard.
+- [x] Emails en POST, erreurs masquées, dates validées, en-têtes de sécurité (CSP), scripts servis localement.
+- [x] Corrections rapides de l'audit : F1, F5, F6, F7, F8 ; liens morts du menu retirés ; dates en français.
+- [x] Tests d'autorisation et d'isolation des données (46 tests au total).
+- [ ] Dépôt Git distant et CI ; base MySQL propre avec une seule migration *(en attente de ta décision)*.
 
 ### Phase 2 — Entrée dans l'application et conformité (6–8 j)
 

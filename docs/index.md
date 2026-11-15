@@ -24,3 +24,5 @@ Ce portail est accessible directement depuis le back-end de l'application et com
    * État des lieux, écosystème, complétude de la migration, feuille de route V1.
 8. **[Plan complet V1 — produit, cohérence, vente et technique](plan-v1.md)**
    * Parité avec la version précédente, cohérence de l'offre, vendabilité, phases et décisions.
+9. **[Dépendances JavaScript](dependances-front.md)**
+   * Bibliothèques servies par l'application, versions, mise à jour.

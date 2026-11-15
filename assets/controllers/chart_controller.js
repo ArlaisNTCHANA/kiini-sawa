@@ -1,4 +1,5 @@
 import { Controller } from '@hotwired/stimulus';
+import { Chart, registerables } from 'chart.js';
 
 /**
  * Chart.js controller for admin dashboard.
@@ -16,9 +17,8 @@ export default class extends Controller {
         data: Object,
     };
 
-    async connect() {
-        // Dynamic import of Chart.js via CDN (no Node.js needed)
-        const { Chart, registerables } = await import('https://cdn.jsdelivr.net/npm/chart.js@4/dist/chart.auto/+esm');
+    connect() {
+        // Chart.js est servi par l'application (importmap), plus par un CDN
         Chart.register(...registerables);
 
         this._chart = this._createChart(Chart);
