@@ -84,7 +84,7 @@ class RegistrationTest extends WebTestCase
             'goalDeadline' => (new \DateTimeImmutable('+2 years'))->format('Y-m-d'),
             '_csrf_token' => $form->get('_csrf_token')->getValue(),
         ]);
-        $this->assertResponseRedirects('/life-plan?onglet=analysis');
+        $this->assertResponseRedirects('/plan-de-vie?onglet=analysis');
 
         $user = $this->findUser($email);
         $plan = $user->getPlanDeVie();

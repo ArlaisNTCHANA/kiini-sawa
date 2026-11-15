@@ -371,8 +371,8 @@
         <nav class="topnav-links">
         {% set mainNav = [
                 { label: 'Accueil',       path: path('app_dashboard'),   icon: 'home' },
-                { label: 'Mon Plan de Vie', path: path('app_user_life_plan'),  icon: 'compass' },
-                { label: 'Mes Stratégies',  path: path('app_user_strategies'), icon: 'trending-up' },
+                { label: 'Mon Plan de Vie', path: path('app_plan_de_vie'),  icon: 'compass' },
+                { label: 'Mes Stratégies',  path: path('app_strategies'), icon: 'trending-up' },
                 { label: 'Mon Journal',   path: path('app_journal'),      icon: 'book-open' },
                 { label: 'Habitudes',     path: path('app_user_habits'),       icon: 'activity' },
                 { label: 'Organisation',  path: path('app_planner'),      icon: 'calendar' },
@@ -492,7 +492,7 @@
 
         {% set mobileNav = [
             { label: 'Accueil',  path: path('app_dashboard'),   icon: 'home' },
-            { label: 'Plan',     path: path('app_user_life_plan'),   icon: 'compass' },
+            { label: 'Plan',     path: path('app_plan_de_vie'),   icon: 'compass' },
             { label: 'Journal',  path: path('app_journal'),     icon: 'book-open' },
             { label: 'Rituels',  path: path('app_user_habits'),      icon: 'activity' },
         ] %}
@@ -520,7 +520,7 @@
                         box-shadow:0 16px 40px rgba(44,85,89,0.15),0 0 0 1px rgba(44,85,89,0.06);">
                 {% set mobileMore = [
                     { label: 'Mes Découvertes', path: path('app_personality_index'), icon: 'sparkles' },
-                    { label: 'Stratégies',   path: path('app_user_strategies'),  icon: 'trending-up' },
+                    { label: 'Stratégies',   path: path('app_strategies'),  icon: 'trending-up' },
                     { label: 'Organisation', path: path('app_planner'),        icon: 'calendar' },
                     { label: 'Bilan',        path: path('app_bilan'),          icon: 'bar-chart-2' },
                     { label: 'Partenaires',  path: path('app_social'),         icon: 'users' },

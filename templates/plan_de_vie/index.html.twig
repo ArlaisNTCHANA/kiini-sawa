@@ -936,11 +936,11 @@
             Construisez un plan d'alignement personnel complet. Choisissez l'assistant pas à pas pour être guidé à chaque étape, ou modifiez librement chaque rubrique ci-dessous.
         </p>
         <div class="hero-actions">
-            <a href="{{ path('app_user_life_plan_wizard') }}" class="btn-hero-primary">
+            <a href="{{ path('app_plan_wizard') }}" class="btn-hero-primary">
                 <i data-lucide="sparkles" style="width: 18px; height: 18px;"></i>
                 Lancer l'Assistant Guidé
             </a>
-            <a href="{{ path('app_user_life_plan_visualize') }}" target="_blank" class="btn-hero-secondary">
+            <a href="{{ path('app_plan_de_vie_visualize') }}" target="_blank" class="btn-hero-secondary">
                 <i data-lucide="printer" style="width: 18px; height: 18px;"></i>
                 Visualiser & Imprimer
             </a>
@@ -998,7 +998,7 @@
                         </div>
                         <h2 class="card-title">But de Dieu</h2>
                     </div>
-                    <a href="{{ path('app_user_life_plan_wizard', { step: 1, single: 1 }) }}" class="btn-edit-card" title="Modifier">
+                    <a href="{{ path('app_plan_wizard', { step: 1, single: 1 }) }}" class="btn-edit-card" title="Modifier">
                         <i data-lucide="pencil" style="width: 14px; height: 14px;"></i>
                     </a>
                 </div>
@@ -1024,7 +1024,7 @@
                         </div>
                         <h2 class="card-title">Balance Interne</h2>
                     </div>
-                    <a href="{{ path('app_user_life_plan_wizard', { step: 2, single: 1 }) }}" class="btn-edit-card" title="Modifier">
+                    <a href="{{ path('app_plan_wizard', { step: 2, single: 1 }) }}" class="btn-edit-card" title="Modifier">
                         <i data-lucide="pencil" style="width: 14px; height: 14px;"></i>
                     </a>
                 </div>
@@ -1120,7 +1120,7 @@
                         </div>
                         <h2 class="card-title">Mes Passions</h2>
                     </div>
-                    <a href="{{ path('app_user_life_plan_wizard', { step: 3, single: 1 }) }}" class="btn-edit-card" title="Modifier">
+                    <a href="{{ path('app_plan_wizard', { step: 3, single: 1 }) }}" class="btn-edit-card" title="Modifier">
                         <i data-lucide="pencil" style="width: 14px; height: 14px;"></i>
                     </a>
                 </div>
@@ -1135,7 +1135,7 @@
                             {% endfor %}
                         </div>
                     {% else %}
-                        <div class="empty-state" onclick="window.location.href='{{ path('app_user_life_plan_wizard', { step: 3, single: 1 }) }}'">
+                        <div class="empty-state" onclick="window.location.href='{{ path('app_plan_wizard', { step: 3, single: 1 }) }}'">
                             <i data-lucide="heart" class="empty-icon" style="width: 24px; height: 24px;"></i>
                             <span class="empty-text">Ce qui vous passionne et vous redonne de l'énergie.</span>
                             <span class="empty-action">Ajouter mes passions</span>
@@ -1153,7 +1153,7 @@
                         </div>
                         <h2 class="card-title">Dons & Talents</h2>
                     </div>
-                    <a href="{{ path('app_user_life_plan_wizard', { step: 4, single: 1 }) }}" class="btn-edit-card" title="Modifier">
+                    <a href="{{ path('app_plan_wizard', { step: 4, single: 1 }) }}" class="btn-edit-card" title="Modifier">
                         <i data-lucide="pencil" style="width: 14px; height: 14px;"></i>
                     </a>
                 </div>
@@ -1168,7 +1168,7 @@
                             {% endfor %}
                         </div>
                     {% else %}
-                        <div class="empty-state" onclick="window.location.href='{{ path('app_user_life_plan_wizard', { step: 4, single: 1 }) }}'">
+                        <div class="empty-state" onclick="window.location.href='{{ path('app_plan_wizard', { step: 4, single: 1 }) }}'">
                             <i data-lucide="sparkles" class="empty-icon" style="width: 24px; height: 24px;"></i>
                             <span class="empty-text">Vos facilités innées et points forts uniques.</span>
                             <span class="empty-action">Identifier mes talents</span>
@@ -1186,7 +1186,7 @@
                         </div>
                         <h2 class="card-title">Ma Personnalité & Profils</h2>
                     </div>
-                    <a href="{{ path('app_user_life_plan_wizard', { step: 5, single: 1 }) }}" class="btn-edit-card" title="Modifier manuellement">
+                    <a href="{{ path('app_plan_wizard', { step: 5, single: 1 }) }}" class="btn-edit-card" title="Modifier manuellement">
                         <i data-lucide="pencil" style="width: 14px; height: 14px;"></i>
                     </a>
                 </div>
@@ -1279,7 +1279,7 @@
                         </div>
                         <h2 class="card-title">Ma Vision</h2>
                     </div>
-                    <a href="{{ path('app_user_life_plan_wizard', { step: 6, single: 1 }) }}" class="btn-edit-card" title="Modifier">
+                    <a href="{{ path('app_plan_wizard', { step: 6, single: 1 }) }}" class="btn-edit-card" title="Modifier">
                         <i data-lucide="pencil" style="width: 14px; height: 14px;"></i>
                     </a>
                 </div>
@@ -1296,7 +1296,7 @@
                             {% endif %}
                         </div>
                     {% else %}
-                        <div class="empty-state" onclick="window.location.href='{{ path('app_user_life_plan_wizard', { step: 6, single: 1 }) }}'">
+                        <div class="empty-state" onclick="window.location.href='{{ path('app_plan_wizard', { step: 6, single: 1 }) }}'">
                             <i data-lucide="eye" class="empty-icon" style="width: 24px; height: 24px;"></i>
                             <span class="empty-text">Votre idéal de vie projeté à moyen et long terme.</span>
                             <span class="empty-action">Définir ma vision</span>
@@ -1314,7 +1314,7 @@
                         </div>
                         <h2 class="card-title">Objectifs Spécifiques</h2>
                     </div>
-                    <a href="{{ path('app_user_life_plan_wizard', { step: 7, single: 1 }) }}" class="btn-edit-card" title="Modifier">
+                    <a href="{{ path('app_plan_wizard', { step: 7, single: 1 }) }}" class="btn-edit-card" title="Modifier">
                         <i data-lucide="pencil" style="width: 14px; height: 14px;"></i>
                     </a>
                 </div>
@@ -1411,7 +1411,7 @@
                             {% endif %}
                         </div>
                     {% else %}
-                        <div class="empty-state" onclick="window.location.href='{{ path('app_user_life_plan_wizard', { step: 7, single: 1 }) }}'">
+                        <div class="empty-state" onclick="window.location.href='{{ path('app_plan_wizard', { step: 7, single: 1 }) }}'">
                             <i data-lucide="target" class="empty-icon" style="width: 24px; height: 24px;"></i>
                             <span class="empty-text">Vos objectifs formulés selon 4 angles fondamentaux (BE, DO, HAVE, GIVE).</span>
                             <span class="empty-action">Ajouter mes objectifs</span>
@@ -1501,7 +1501,7 @@
                         </div>
                         <h2 class="card-title">Compétence & Connaissance</h2>
                     </div>
-                    <a href="{{ path('app_user_life_plan_wizard', { step: 8, single: 1 }) }}" class="btn-edit-card" title="Modifier">
+                    <a href="{{ path('app_plan_wizard', { step: 8, single: 1 }) }}" class="btn-edit-card" title="Modifier">
                         <i data-lucide="pencil" style="width: 14px; height: 14px;"></i>
                     </a>
                 </div>
@@ -1578,7 +1578,7 @@
                             </div>
                         {% endif %}
                     {% else %}
-                        <div class="empty-state" onclick="window.location.href='{{ path('app_user_life_plan_wizard', { step: 8, single: 1 }) }}'">
+                        <div class="empty-state" onclick="window.location.href='{{ path('app_plan_wizard', { step: 8, single: 1 }) }}'">
                             <i data-lucide="book-open" class="empty-icon" style="width: 24px; height: 24px;"></i>
                             <span class="empty-text">Savoir-faire et connaissances à acquérir pour soutenir vos objectifs.</span>
                             <span class="empty-action">Ajouter des compétences</span>
@@ -1587,7 +1587,7 @@
                 </div>
             </div>
 
-            <!-- 9. Caractère & Discipline -->
+            <!-- 9. Caractère & Conviction -->
             <div class="plan-card">
                 <div class="card-header">
                     <div class="card-title-group">
@@ -1596,7 +1596,7 @@
                         </div>
                         <h2 class="card-title">Caractère & Conviction</h2>
                     </div>
-                    <a href="{{ path('app_user_life_plan_wizard', { step: 9, single: 1 }) }}" class="btn-edit-card" title="Modifier">
+                    <a href="{{ path('app_plan_wizard', { step: 9, single: 1 }) }}" class="btn-edit-card" title="Modifier">
                         <i data-lucide="pencil" style="width: 14px; height: 14px;"></i>
                     </a>
                 </div>
@@ -1635,7 +1635,7 @@
                             {% endfor %}
                         </div>
                     {% else %}
-                        <div class="empty-state" onclick="window.location.href='{{ path('app_user_life_plan_wizard', { step: 9, single: 1 }) }}'">
+                        <div class="empty-state" onclick="window.location.href='{{ path('app_plan_wizard', { step: 9, single: 1 }) }}'">
                             <i data-lucide="shield" class="empty-icon" style="width: 24px; height: 24px;"></i>
                             <span class="empty-text">Attributs de caractère et savoir-être à forger.</span>
                             <span class="empty-action">Forger mon caractère</span>
@@ -1653,7 +1653,7 @@
                         </div>
                         <h2 class="card-title">Relation & Réseau</h2>
                     </div>
-                    <a href="{{ path('app_user_life_plan_wizard', { step: 10, single: 1 }) }}" class="btn-edit-card" title="Modifier">
+                    <a href="{{ path('app_plan_wizard', { step: 10, single: 1 }) }}" class="btn-edit-card" title="Modifier">
                         <i data-lucide="pencil" style="width: 14px; height: 14px;"></i>
                     </a>
                 </div>
@@ -1738,7 +1738,7 @@
                             {% endfor %}
                         </div>
                     {% else %}
-                        <div class="empty-state" onclick="window.location.href='{{ path('app_user_life_plan_wizard', { step: 10, single: 1 }) }}'">
+                        <div class="empty-state" onclick="window.location.href='{{ path('app_plan_wizard', { step: 10, single: 1 }) }}'">
                             <i data-lucide="users" class="empty-icon" style="width: 24px; height: 24px;"></i>
                             <span class="empty-text">Profils clés à intégrer dans votre cercle d'influence.</span>
                             <span class="empty-action">Développer mon réseau</span>
@@ -1761,7 +1761,7 @@
                         </div>
                         <h2 class="card-title">Héritage & Transmission</h2>
                     </div>
-                    <a href="{{ path('app_user_life_plan_wizard', { step: 11, single: 1 }) }}" class="btn-edit-card" title="Modifier">
+                    <a href="{{ path('app_plan_wizard', { step: 11, single: 1 }) }}" class="btn-edit-card" title="Modifier">
                         <i data-lucide="pencil" style="width: 14px; height: 14px;"></i>
                     </a>
                 </div>
@@ -1803,7 +1803,7 @@
                             {% endfor %}
                         </div>
                     {% else %}
-                        <div class="empty-state" onclick="window.location.href='{{ path('app_user_life_plan_wizard', { step: 11, single: 1 }) }}'">
+                        <div class="empty-state" onclick="window.location.href='{{ path('app_plan_wizard', { step: 11, single: 1 }) }}'">
                             <i data-lucide="gift" class="empty-icon" style="width: 24px; height: 24px;"></i>
                             <span class="empty-text">Ce que vous désirez léguer ou transmettre comme impact durable.</span>
                             <span class="empty-action">Définir mes projets d'héritage</span>
@@ -1821,7 +1821,7 @@
                         </div>
                         <h2 class="card-title">Hygiène de Vie</h2>
                     </div>
-                    <a href="{{ path('app_user_life_plan_wizard', { step: 12, single: 1 }) }}" class="btn-edit-card" title="Modifier">
+                    <a href="{{ path('app_plan_wizard', { step: 12, single: 1 }) }}" class="btn-edit-card" title="Modifier">
                         <i data-lucide="pencil" style="width: 14px; height: 14px;"></i>
                     </a>
                 </div>
@@ -1872,7 +1872,7 @@
                             {% endfor %}
                         </div>
                     {% else %}
-                        <div class="empty-state" onclick="window.location.href='{{ path('app_user_life_plan_wizard', { step: 12, single: 1 }) }}'">
+                        <div class="empty-state" onclick="window.location.href='{{ path('app_plan_wizard', { step: 12, single: 1 }) }}'">
                             <i data-lucide="heart-pulse" class="empty-icon" style="width: 24px; height: 24px;"></i>
                             <span class="empty-text">Votre hygiène de vie personnelle (Sommeil, Nutrition, Sport...).</span>
                             <span class="empty-action">Organiser mon hygiène de vie</span>
@@ -1888,7 +1888,7 @@
         <div x-data="{ activeCategory: 'ALL', activeYear: 'ALL' }" style="background: white; border-radius: 1.5rem; padding: 2.5rem; border: 1px solid rgba(15, 118, 110, 0.08); box-shadow: var(--card-shadow);">
             <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 2rem;">
                 <h2 style="font-family: var(--font-serif); font-size: 1.5rem; color: var(--primary); margin: 0;">📅 Mon Échéancier</h2>
-                <a href="{{ path('app_user_life_plan_wizard', { step: 7, single: 1 }) }}" class="btn-hero-primary" style="padding: 0.5rem 1rem; font-size: 0.85rem; box-shadow: none;">
+                <a href="{{ path('app_plan_wizard', { step: 7, single: 1 }) }}" class="btn-hero-primary" style="padding: 0.5rem 1rem; font-size: 0.85rem; box-shadow: none;">
                     <i data-lucide="pencil" style="width: 14px; height: 14px;"></i> Modifier les Objectifs
                 </a>
             </div>
@@ -2013,7 +2013,7 @@
                 </div>
                 </div>
             {% else %}
-                <div class="empty-state" onclick="window.location.href='{{ path('app_user_life_plan_wizard', { step: 7, single: 1 }) }}'" style="max-width: 500px; margin: 2rem auto;">
+                <div class="empty-state" onclick="window.location.href='{{ path('app_plan_wizard', { step: 7, single: 1 }) }}'" style="max-width: 500px; margin: 2rem auto;">
                     <i data-lucide="calendar" class="empty-icon" style="width: 24px; height: 24px;"></i>
                     <span class="empty-text">Aucun objectif daté dans votre échéancier pour le moment.</span>
                     <span class="empty-action">Ajouter des échéances</span>
@@ -2171,7 +2171,7 @@ graph TD
                     'icon': 'calendar',
                     'action': 'ADD_DEADLINE',
                     'itemId': g.id,
-                    'link': path('app_user_life_plan_wizard', { step: 7, single: 1 })
+                    'link': path('app_plan_wizard', { step: 7, single: 1 })
                 } %}
                 {% set issues = issues|merge([issue]) %}
             {% else %}
@@ -2185,7 +2185,7 @@ graph TD
                     'icon': 'alert-triangle',
                     'action': 'EDIT_LIFE_GOAL',
                     'itemId': g.id,
-                    'link': path('app_user_life_plan_wizard', { step: 7, single: 1 })
+                    'link': path('app_plan_wizard', { step: 7, single: 1 })
                 } %}
                 {% set issues = issues|merge([issue]) %}
             {% endif %}
@@ -2199,7 +2199,7 @@ graph TD
                 'message': "Rédigez votre vision personnelle pour donner une direction claire à vos objectifs.",
                 'icon': 'alert-circle',
                 'action': 'ADD_VISION',
-                'link': path('app_user_life_plan_wizard', { step: 6, single: 1 })
+                'link': path('app_plan_wizard', { step: 6, single: 1 })
             } %}
             {% set issues = issues|merge([issue]) %}
         {% else %}
@@ -2238,7 +2238,7 @@ graph TD
                     'icon': 'target',
                     'action': 'LINK_GROWTH',
                     'itemId': g.id,
-                    'link': path('app_user_life_plan_wizard', { step: 7, single: 1 })
+                    'link': path('app_plan_wizard', { step: 7, single: 1 })
                 } %}
                 {% set issues = issues|merge([issue]) %}
             {% else %}
@@ -2256,7 +2256,7 @@ graph TD
                     'icon': 'trending-up',
                     'action': 'LINK_GOAL',
                     'itemId': gg.id,
-                    'link': path('app_user_life_plan_wizard', { step: ggStep, single: 1 })
+                    'link': path('app_plan_wizard', { step: ggStep, single: 1 })
                 } %}
                 {% set issues = issues|merge([issue]) %}
             {% endif %}
@@ -2270,7 +2270,7 @@ graph TD
                     'icon': 'gift',
                     'action': 'LINK_GOAL',
                     'itemId': lg.id,
-                    'link': path('app_user_life_plan_wizard', { step: 11, single: 1 })
+                    'link': path('app_plan_wizard', { step: 11, single: 1 })
                 } %}
                 {% set issues = issues|merge([issue]) %}
             {% endif %}
@@ -2284,7 +2284,7 @@ graph TD
                     'icon': 'heart-pulse',
                     'action': 'LINK_GOAL',
                     'itemId': hd.id,
-                    'link': path('app_user_life_plan_wizard', { step: 12, single: 1 })
+                    'link': path('app_plan_wizard', { step: 12, single: 1 })
                 } %}
                 {% set issues = issues|merge([issue]) %}
             {% endif %}
@@ -2300,7 +2300,7 @@ graph TD
                 'message': "Vous avez identifié des croyances limitantes, mais aucun objectif de caractère pour les contrecarrer.",
                 'icon': 'shield-alert',
                 'action': 'EDIT_BALANCE',
-                'link': path('app_user_life_plan_wizard', { step: 2, single: 1 })
+                'link': path('app_plan_wizard', { step: 2, single: 1 })
             } %}
             {% set issues = issues|merge([issue]) %}
         {% endif %}
@@ -2408,7 +2408,7 @@ graph TD
             lucide.createIcons();
         }
 
-        // Ouverture directe d'un onglet via l'URL (ex. /life-plan?onglet=analysis après l'onboarding).
+        // Ouverture directe d'un onglet via l'URL (ex. /plan-de-vie?onglet=analysis après l'onboarding).
         // Paramètre plutôt qu'ancre : Turbo perd l'ancre lors d'une redirection après formulaire.
         const hashTab = new URLSearchParams(window.location.search).get('onglet') || window.location.hash.replace('#tab-', '');
         if (/^[a-z]+$/.test(hashTab)) {
@@ -2460,7 +2460,7 @@ graph TD
                 newEmailDashBtn.innerHTML = '<span style="margin-right: 5px;">⏳</span> Envoi...';
 
                 try {
-                    const response = await fetch("{{ path('app_user_life_plan_send_email') }}", {
+                    const response = await fetch("{{ path('app_plan_de_vie_email') }}", {
                         method: "POST"
                     });
                     const result = await response.json();

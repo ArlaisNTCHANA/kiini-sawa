@@ -142,9 +142,9 @@
     <div style="max-width: 800px; margin: 3rem auto; padding: 0 1.5rem;" class="animate-fade-in">
         <div style="margin-bottom: 2rem; display: flex; align-items: center; justify-content: space-between;">
             <div>
-                <a href="{{ plan ? path('app_user_strategies', { plan: plan }) : path('app_user_life_plan') }}" style="font-size: 0.875rem; color: var(--fg-muted); display: inline-flex; align-items: center; gap: 0.5rem; transition: color 0.2s;" onmouseover="this.style.color='var(--primary)'" onmouseout="this.style.color='var(--fg-muted)'">
+                <a href="{{ path(planRoute) }}" style="font-size: 0.875rem; color: var(--fg-muted); display: inline-flex; align-items: center; gap: 0.5rem; transition: color 0.2s;" onmouseover="this.style.color='var(--primary)'" onmouseout="this.style.color='var(--fg-muted)'">
                     <i data-lucide="arrow-left" style="width: 16px; height: 16px;"></i>
-                    Retour au {% if plan == 'CROISSANCE' %}Plan de Croissance{% elseif plan == 'DEVELOPPEMENT' %}Plan de Développement{% elseif plan == 'CONTRIBUTION' %}Plan de Transmission{% elseif plan == 'DISCIPLINE' %}Plan d'Hygiène de Vie{% else %}Plan de Vie{% endif %}
+                    Retour au {{ planLabel }}
                 </a>
                 <h1 style="font-family: var(--font-serif); font-size: 2.25rem; color: var(--primary); margin-top: 0.5rem; font-weight: 700; letter-spacing: -0.02em;">
                     {% if step == 1 %}Modifier mon But de Dieu
@@ -166,7 +166,7 @@
         </div>
 
         <div style="background: white; border-radius: 1.5rem; border: 1px solid rgba(15, 118, 110, 0.08); box-shadow: var(--card-shadow); overflow: hidden; display: flex; flex-direction: column;">
-            <form action="{{ path('app_user_life_plan_wizard', { step: step, single: 1, plan: plan }) }}" method="POST" style="flex: 1; display: flex; flex-direction: column; padding: 2.5rem; width: 100%;">
+            <form action="{{ path('app_plan_wizard', { step: step, single: 1, plan: plan }) }}" method="POST" style="flex: 1; display: flex; flex-direction: column; padding: 2.5rem; width: 100%;">
                 <input type="hidden" name="plan" value="{{ plan }}">
                 <div style="flex: 1;">
 {% else %}
@@ -184,12 +184,12 @@
             <h1 style="font-family: 'Playfair Display', serif; font-size: 1.35rem; font-weight: 700; color: white; letter-spacing: -0.01em;">
                 {% if plan == 'CROISSANCE' %}Plan de Croissance
                 {% elseif plan == 'DEVELOPPEMENT' %}Plan de Développement
-                {% elseif plan == 'CONTRIBUTION' %}Plan de Transmission
-                {% elseif plan == 'DISCIPLINE' %}Plan d'Hygiène de Vie
+                {% elseif plan == 'TRANSMISSION' %}Plan de Transmission
+                {% elseif plan == 'HYGIENE' %}Plan d'Hygiène de Vie
                 {% else %}Plan de Vie{% endif %}
             </h1>
         </div>
-        <a href="{{ plan ? path('app_user_strategies', { plan: plan }) : path('app_user_life_plan') }}" 
+        <a href="{{ path(planRoute) }}" 
            style="width: 2.25rem; height: 2.25rem; background: rgba(255, 255, 255, 0.15); border: 1px solid rgba(255, 255, 255, 0.2); color: white; display: flex; align-items: center; justify-content: center; border-radius: 50%; transition: all 0.2s; cursor: pointer;"
            onmouseover="this.style.background='rgba(255,255,255,0.25)'"
            onmouseout="this.style.background='rgba(255,255,255,0.15)'"
@@ -222,14 +222,14 @@
         </div>
 
         <!-- Form content -->
-        <form action="{{ path('app_user_life_plan_wizard', { step: step, single: 0, plan: plan }) }}" method="POST" style="flex: 1; display: flex; flex-direction: column; padding: 2rem 2.5rem 2.5rem; width: 100%;">
+        <form action="{{ path('app_plan_wizard', { step: step, single: 0, plan: plan }) }}" method="POST" style="flex: 1; display: flex; flex-direction: column; padding: 2rem 2.5rem 2.5rem; width: 100%;">
             <input type="hidden" name="plan" value="{{ plan }}">
             <div style="flex: 1; overflow-y: auto; max-height: 420px; padding-right: 0.5rem;" class="custom-scrollbar">
 {% endif %}
                 
                 {# ETAPE 1: BOUSSOLE (PURPOSE) #}
                 {% if (not single and 1 in allowedSteps) or (single and step == 1) %}
-                <div data-wizard-target="step" class="{% if step != 1 %}hidden{% endif %} animate-fade-in" data-step-title="But de Dieu">
+                <div data-wizard-target="step" data-step-number="1" class="{% if step != 1 %}hidden{% endif %} animate-fade-in" data-step-title="But de Dieu">
                     <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.75rem; color: var(--primary);">
                         <i data-lucide="compass" style="width: 24px; height: 24px;"></i>
                         <h2 style="font-family: 'Playfair Display', serif; font-size: 1.75rem; font-weight: 500;">But de Dieu pour ma vie</h2>
@@ -247,7 +247,7 @@
 
                 {# ETAPE 2: BALANCE INTERNE (VALUES, CONVICTIONS, LIMITING BELIEFS) #}
                 {% if (not single and 2 in allowedSteps) or (single and step == 2) %}
-                <div data-wizard-target="step" class="{% if step != 2 %}hidden{% endif %} animate-fade-in" data-step-title="Balance Interne">
+                <div data-wizard-target="step" data-step-number="2" class="{% if step != 2 %}hidden{% endif %} animate-fade-in" data-step-title="Balance Interne">
                     <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.75rem; color: var(--primary);">
                         <i data-lucide="activity" style="width: 24px; height: 24px;"></i>
                         <h2 style="font-family: 'Playfair Display', serif; font-size: 1.75rem; font-weight: 500;">Balance Interne</h2>
@@ -269,7 +269,7 @@
                                 {% if valuesReal|length > 0 %}
                                     {% for val in valuesReal %}
                                         <div class="dynamic-row">
-                                            <input type="text" name="values_real[]" class="wiz-input" style="border:none; background:transparent; padding:0;" value="{{ val.name }}" required>
+                                            <input type="hidden" name="values_real_ids[]" value="{{ val.id }}"><input type="text" name="values_real[]" class="wiz-input" style="border:none; background:transparent; padding:0;" value="{{ val.name }}" required>
                                             {% if not loop.first %}
                                                 <button type="button" onclick="this.parentElement.remove()" class="btn-remove" title="Supprimer">
                                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
@@ -279,7 +279,7 @@
                                     {% endfor %}
                                 {% else %}
                                     <div class="dynamic-row">
-                                        <input type="text" name="values_real[]" class="wiz-input" style="border:none; background:transparent; padding:0;" placeholder="Ex: Excellence" required>
+                                        <input type="hidden" name="values_real_ids[]" value=""><input type="text" name="values_real[]" class="wiz-input" style="border:none; background:transparent; padding:0;" placeholder="Ex: Excellence" required>
                                     </div>
                                 {% endif %}
                             </div>
@@ -297,7 +297,7 @@
                                 {% if valuesDeclared|length > 0 %}
                                     {% for val in valuesDeclared %}
                                         <div class="dynamic-row">
-                                            <input type="text" name="values_declared[]" class="wiz-input" style="border:none; background:transparent; padding:0;" value="{{ val.name }}" required>
+                                            <input type="hidden" name="values_declared_ids[]" value="{{ val.id }}"><input type="text" name="values_declared[]" class="wiz-input" style="border:none; background:transparent; padding:0;" value="{{ val.name }}" required>
                                             {% if not loop.first %}
                                                 <button type="button" onclick="this.parentElement.remove()" class="btn-remove" title="Supprimer">
                                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
@@ -307,7 +307,7 @@
                                     {% endfor %}
                                 {% else %}
                                     <div class="dynamic-row">
-                                        <input type="text" name="values_declared[]" class="wiz-input" style="border:none; background:transparent; padding:0;" placeholder="Ex: Impact" required>
+                                        <input type="hidden" name="values_declared_ids[]" value=""><input type="text" name="values_declared[]" class="wiz-input" style="border:none; background:transparent; padding:0;" placeholder="Ex: Impact" required>
                                     </div>
                                 {% endif %}
                             </div>
@@ -325,7 +325,7 @@
                                 {% if valuesCounter|length > 0 %}
                                     {% for val in valuesCounter %}
                                         <div class="dynamic-row">
-                                            <input type="text" name="values_counter[]" class="wiz-input" style="border:none; background:transparent; padding:0;" value="{{ val.name }}" required>
+                                            <input type="hidden" name="values_counter_ids[]" value="{{ val.id }}"><input type="text" name="values_counter[]" class="wiz-input" style="border:none; background:transparent; padding:0;" value="{{ val.name }}" required>
                                             {% if not loop.first %}
                                                 <button type="button" onclick="this.parentElement.remove()" class="btn-remove" title="Supprimer">
                                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
@@ -335,7 +335,7 @@
                                     {% endfor %}
                                 {% else %}
                                     <div class="dynamic-row">
-                                        <input type="text" name="values_counter[]" class="wiz-input" style="border:none; background:transparent; padding:0;" placeholder="Ex: Validation Externe" required>
+                                        <input type="hidden" name="values_counter_ids[]" value=""><input type="text" name="values_counter[]" class="wiz-input" style="border:none; background:transparent; padding:0;" placeholder="Ex: Validation Externe" required>
                                     </div>
                                 {% endif %}
                             </div>
@@ -353,7 +353,7 @@
                                 {% if convictionsDeep|length > 0 %}
                                     {% for c in convictionsDeep %}
                                         <div class="dynamic-row">
-                                            <input type="text" name="convictions_deep[]" class="wiz-input" style="border:none; background:transparent; padding:0;" value="{{ c.text }}" required>
+                                            <input type="hidden" name="convictions_deep_ids[]" value="{{ c.id }}"><input type="text" name="convictions_deep[]" class="wiz-input" style="border:none; background:transparent; padding:0;" value="{{ c.text }}" required>
                                             {% if not loop.first %}
                                                 <button type="button" onclick="this.parentElement.remove()" class="btn-remove" title="Supprimer">
                                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
@@ -363,7 +363,7 @@
                                     {% endfor %}
                                 {% else %}
                                     <div class="dynamic-row">
-                                        <input type="text" name="convictions_deep[]" class="wiz-input" style="border:none; background:transparent; padding:0;" placeholder="Ex: L'éducation doit être accessible à tous">
+                                        <input type="hidden" name="convictions_deep_ids[]" value=""><input type="text" name="convictions_deep[]" class="wiz-input" style="border:none; background:transparent; padding:0;" placeholder="Ex: L'éducation doit être accessible à tous">
                                     </div>
                                 {% endif %}
                             </div>
@@ -381,7 +381,7 @@
                                 {% if convictionsMedium|length > 0 %}
                                     {% for c in convictionsMedium %}
                                         <div class="dynamic-row">
-                                            <input type="text" name="convictions_medium[]" class="wiz-input" style="border:none; background:transparent; padding:0;" value="{{ c.text }}" required>
+                                            <input type="hidden" name="convictions_medium_ids[]" value="{{ c.id }}"><input type="text" name="convictions_medium[]" class="wiz-input" style="border:none; background:transparent; padding:0;" value="{{ c.text }}" required>
                                             {% if not loop.first %}
                                                 <button type="button" onclick="this.parentElement.remove()" class="btn-remove" title="Supprimer">
                                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
@@ -391,7 +391,7 @@
                                     {% endfor %}
                                 {% else %}
                                     <div class="dynamic-row">
-                                        <input type="text" name="convictions_medium[]" class="wiz-input" style="border:none; background:transparent; padding:0;" placeholder="Ex: La discipline bat le talent sur le long terme">
+                                        <input type="hidden" name="convictions_medium_ids[]" value=""><input type="text" name="convictions_medium[]" class="wiz-input" style="border:none; background:transparent; padding:0;" placeholder="Ex: La discipline bat le talent sur le long terme">
                                     </div>
                                 {% endif %}
                             </div>
@@ -409,7 +409,7 @@
                                 {% if convictionsLight|length > 0 %}
                                     {% for c in convictionsLight %}
                                         <div class="dynamic-row">
-                                            <input type="text" name="convictions_light[]" class="wiz-input" style="border:none; background:transparent; padding:0;" value="{{ c.text }}" required>
+                                            <input type="hidden" name="convictions_light_ids[]" value="{{ c.id }}"><input type="text" name="convictions_light[]" class="wiz-input" style="border:none; background:transparent; padding:0;" value="{{ c.text }}" required>
                                             {% if not loop.first %}
                                                 <button type="button" onclick="this.parentElement.remove()" class="btn-remove" title="Supprimer">
                                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
@@ -419,7 +419,7 @@
                                     {% endfor %}
                                 {% else %}
                                     <div class="dynamic-row">
-                                        <input type="text" name="convictions_light[]" class="wiz-input" style="border:none; background:transparent; padding:0;" placeholder="Ex: Le travail à distance est plus productif">
+                                        <input type="hidden" name="convictions_light_ids[]" value=""><input type="text" name="convictions_light[]" class="wiz-input" style="border:none; background:transparent; padding:0;" placeholder="Ex: Le travail à distance est plus productif">
                                     </div>
                                 {% endif %}
                             </div>
@@ -437,7 +437,7 @@
                                 {% if limitingBeliefs|length > 0 %}
                                     {% for lb in limitingBeliefs %}
                                         <div class="dynamic-row">
-                                            <input type="text" name="limiting_beliefs[]" class="wiz-input" style="border:none; background:transparent; padding:0;" value="{{ lb.text }}" required>
+                                            <input type="hidden" name="limiting_beliefs_ids[]" value="{{ lb.id }}"><input type="text" name="limiting_beliefs[]" class="wiz-input" style="border:none; background:transparent; padding:0;" value="{{ lb.text }}" required>
                                             {% if not loop.first %}
                                                 <button type="button" onclick="this.parentElement.remove()" class="btn-remove" title="Supprimer">
                                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
@@ -447,7 +447,7 @@
                                     {% endfor %}
                                 {% else %}
                                     <div class="dynamic-row">
-                                        <input type="text" name="limiting_beliefs[]" class="wiz-input" style="border:none; background:transparent; padding:0;" placeholder="Ex: Je ne suis pas assez expérimenté pour diriger">
+                                        <input type="hidden" name="limiting_beliefs_ids[]" value=""><input type="text" name="limiting_beliefs[]" class="wiz-input" style="border:none; background:transparent; padding:0;" placeholder="Ex: Je ne suis pas assez expérimenté pour diriger">
                                     </div>
                                 {% endif %}
                             </div>
@@ -458,7 +458,7 @@
 
                 {# ETAPE 3: PASSIONS #}
                 {% if (not single and 3 in allowedSteps) or (single and step == 3) %}
-                <div data-wizard-target="step" class="{% if step != 3 %}hidden{% endif %} animate-fade-in" data-step-title="Passions & Intérêts">
+                <div data-wizard-target="step" data-step-number="3" class="{% if step != 3 %}hidden{% endif %} animate-fade-in" data-step-title="Passions & Intérêts">
                     <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.75rem; color: var(--primary);">
                         <i data-lucide="heart" style="width: 24px; height: 24px;"></i>
                         <h2 style="font-family: 'Playfair Display', serif; font-size: 1.75rem; font-weight: 500;">Passions & Intérêts</h2>
@@ -478,7 +478,7 @@
                             {% if planDeVie and planDeVie.passions|length > 0 %}
                                 {% for p in planDeVie.passions %}
                                     <div class="dynamic-row">
-                                        <input type="text" name="passions[]" class="wiz-input" style="border:none; background:transparent; padding:0;" value="{{ p.name }}" required>
+                                        <input type="hidden" name="passions_ids[]" value="{{ p.id }}"><input type="text" name="passions[]" class="wiz-input" style="border:none; background:transparent; padding:0;" value="{{ p.name }}" required>
                                         {% if not loop.first %}
                                             <button type="button" onclick="this.parentElement.remove()" class="btn-remove" title="Supprimer">
                                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
@@ -488,7 +488,7 @@
                                 {% endfor %}
                             {% else %}
                                 <div class="dynamic-row">
-                                    <input type="text" name="passions[]" class="wiz-input" style="border:none; background:transparent; padding:0;" placeholder="Ex: Écriture & création de contenu" required>
+                                    <input type="hidden" name="passions_ids[]" value=""><input type="text" name="passions[]" class="wiz-input" style="border:none; background:transparent; padding:0;" placeholder="Ex: Écriture & création de contenu" required>
                                 </div>
                             {% endif %}
                         </div>
@@ -498,7 +498,7 @@
 
                 {# ETAPE 4: TALENTS #}
                 {% if (not single and 4 in allowedSteps) or (single and step == 4) %}
-                <div data-wizard-target="step" class="{% if step != 4 %}hidden{% endif %} animate-fade-in" data-step-title="Dons & Talents">
+                <div data-wizard-target="step" data-step-number="4" class="{% if step != 4 %}hidden{% endif %} animate-fade-in" data-step-title="Dons & Talents">
                     <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.75rem; color: var(--primary);">
                         <i data-lucide="sparkles" style="width: 24px; height: 24px;"></i>
                         <h2 style="font-family: 'Playfair Display', serif; font-size: 1.75rem; font-weight: 500;">Dons & Talents Naturels</h2>
@@ -518,7 +518,7 @@
                             {% if talents|length > 0 %}
                                 {% for t in talents %}
                                     <div class="dynamic-row">
-                                        <input type="text" name="talents[]" class="wiz-input" style="border:none; background:transparent; padding:0;" value="{{ t.text }}" required>
+                                        <input type="hidden" name="talents_ids[]" value="{{ t.id }}"><input type="text" name="talents[]" class="wiz-input" style="border:none; background:transparent; padding:0;" value="{{ t.text }}" required>
                                         {% if not loop.first %}
                                             <button type="button" onclick="this.parentElement.remove()" class="btn-remove" title="Supprimer">
                                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
@@ -528,7 +528,7 @@
                                 {% endfor %}
                             {% else %}
                                 <div class="dynamic-row">
-                                    <input type="text" name="talents[]" class="wiz-input" style="border:none; background:transparent; padding:0;" placeholder="Ex: Vulgarisation de concepts complexes" required>
+                                    <input type="hidden" name="talents_ids[]" value=""><input type="text" name="talents[]" class="wiz-input" style="border:none; background:transparent; padding:0;" placeholder="Ex: Vulgarisation de concepts complexes" required>
                                 </div>
                             {% endif %}
                         </div>
@@ -538,7 +538,7 @@
 
                 {# ETAPE 5: PERSONNALITÉ #}
                 {% if (not single and 5 in allowedSteps) or (single and step == 5) %}
-                <div data-wizard-target="step" class="{% if step != 5 %}hidden{% endif %} animate-fade-in" data-step-title="Profil de Personnalité">
+                <div data-wizard-target="step" data-step-number="5" class="{% if step != 5 %}hidden{% endif %} animate-fade-in" data-step-title="Profil de Personnalité">
                     <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.75rem; color: var(--primary);">
                         <i data-lucide="user" style="width: 24px; height: 24px;"></i>
                         <h2 style="font-family: 'Playfair Display', serif; font-size: 1.75rem; font-weight: 500;">Profil de Personnalité</h2>
@@ -631,7 +631,7 @@
 
                 {# ETAPE 6: VISION #}
                 {% if (not single and 6 in allowedSteps) or (single and step == 6) %}
-                <div data-wizard-target="step" class="{% if step != 6 %}hidden{% endif %} animate-fade-in" data-step-title="Ma Vision">
+                <div data-wizard-target="step" data-step-number="6" class="{% if step != 6 %}hidden{% endif %} animate-fade-in" data-step-title="Ma Vision">
                     <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.75rem; color: var(--primary);">
                         <i data-lucide="eye" style="width: 24px; height: 24px;"></i>
                         <h2 style="font-family: 'Playfair Display', serif; font-size: 1.75rem; font-weight: 500;">Ma Vision</h2>
@@ -656,7 +656,7 @@
 
                 {# ETAPE 7: OBJECTIFS SPÉCIFIQUES (BE, DO, HAVE, GIVE) #}
                 {% if (not single and 7 in allowedSteps) or (single and step == 7) %}
-                <div data-wizard-target="step" class="{% if step != 7 %}hidden{% endif %} animate-fade-in" data-step-title="Objectifs Spécifiques">
+                <div data-wizard-target="step" data-step-number="7" class="{% if step != 7 %}hidden{% endif %} animate-fade-in" data-step-title="Objectifs Spécifiques">
                     <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.75rem; color: var(--primary);">
                         <i data-lucide="target" style="width: 24px; height: 24px;"></i>
                         <h2 style="font-family: 'Playfair Display', serif; font-size: 1.75rem; font-weight: 500;">Objectifs Spécifiques (BE, DO, HAVE, GIVE)</h2>
@@ -678,7 +678,7 @@
                                 {% if lifeGoals.BE|length > 0 %}
                                     {% for goal in lifeGoals.BE %}
                                         <div class="dynamic-row" style="flex-wrap: wrap;">
-                                            <input type="text" name="life_goals_be[]" class="wiz-input" style="border:none; background:transparent; padding:0; flex: 1; min-width: 200px;" value="{{ goal.title }}" required>
+                                            <input type="hidden" name="life_goals_be_ids[]" value="{{ goal.id }}"><input type="text" name="life_goals_be[]" class="wiz-input" style="border:none; background:transparent; padding:0; flex: 1; min-width: 200px;" value="{{ goal.title }}" required>
                                             <div style="display: flex; align-items: center; gap: 0.5rem; background: #ffffff; border: 1px solid rgba(15, 118, 110, 0.12); border-radius: 0.5rem; padding: 0.25rem 0.5rem; margin-left: auto;">
                                                 <span style="font-size: 0.75rem; color: var(--fg-muted);">Échéance :</span>
                                                 <input type="date" name="life_goals_be_deadlines[]" class="wiz-input" style="border:none; background:transparent; padding:0; font-size: 0.8rem; width: 125px; color: var(--fg-light); outline: none;" value="{{ goal.deadline ? goal.deadline|date('Y-m-d') : '' }}">
@@ -692,7 +692,7 @@
                                     {% endfor %}
                                 {% else %}
                                     <div class="dynamic-row" style="flex-wrap: wrap;">
-                                        <input type="text" name="life_goals_be[]" class="wiz-input" style="border:none; background:transparent; padding:0; flex: 1; min-width: 200px;" placeholder="Ex: Un leader calme et à l'écoute">
+                                        <input type="hidden" name="life_goals_be_ids[]" value=""><input type="text" name="life_goals_be[]" class="wiz-input" style="border:none; background:transparent; padding:0; flex: 1; min-width: 200px;" placeholder="Ex: Un leader calme et à l'écoute">
                                         <div style="display: flex; align-items: center; gap: 0.5rem; background: #ffffff; border: 1px solid rgba(15, 118, 110, 0.12); border-radius: 0.5rem; padding: 0.25rem 0.5rem; margin-left: auto;">
                                             <span style="font-size: 0.75rem; color: var(--fg-muted);">Échéance :</span>
                                             <input type="date" name="life_goals_be_deadlines[]" class="wiz-input" style="border:none; background:transparent; padding:0; font-size: 0.8rem; width: 125px; color: var(--fg-light); outline: none;">
@@ -714,7 +714,7 @@
                                 {% if lifeGoals.DO|length > 0 %}
                                     {% for goal in lifeGoals.DO %}
                                         <div class="dynamic-row" style="flex-wrap: wrap;">
-                                            <input type="text" name="life_goals_do[]" class="wiz-input" style="border:none; background:transparent; padding:0; flex: 1; min-width: 200px;" value="{{ goal.title }}" required>
+                                            <input type="hidden" name="life_goals_do_ids[]" value="{{ goal.id }}"><input type="text" name="life_goals_do[]" class="wiz-input" style="border:none; background:transparent; padding:0; flex: 1; min-width: 200px;" value="{{ goal.title }}" required>
                                             <div style="display: flex; align-items: center; gap: 0.5rem; background: #ffffff; border: 1px solid rgba(15, 118, 110, 0.12); border-radius: 0.5rem; padding: 0.25rem 0.5rem; margin-left: auto;">
                                                 <span style="font-size: 0.75rem; color: var(--fg-muted);">Échéance :</span>
                                                 <input type="date" name="life_goals_do_deadlines[]" class="wiz-input" style="border:none; background:transparent; padding:0; font-size: 0.8rem; width: 125px; color: var(--fg-light); outline: none;" value="{{ goal.deadline ? goal.deadline|date('Y-m-d') : '' }}">
@@ -728,7 +728,7 @@
                                     {% endfor %}
                                 {% else %}
                                     <div class="dynamic-row" style="flex-wrap: wrap;">
-                                        <input type="text" name="life_goals_do[]" class="wiz-input" style="border:none; background:transparent; padding:0; flex: 1; min-width: 200px;" placeholder="Ex: Lancer ma propre structure de consulting">
+                                        <input type="hidden" name="life_goals_do_ids[]" value=""><input type="text" name="life_goals_do[]" class="wiz-input" style="border:none; background:transparent; padding:0; flex: 1; min-width: 200px;" placeholder="Ex: Lancer ma propre structure de consulting">
                                         <div style="display: flex; align-items: center; gap: 0.5rem; background: #ffffff; border: 1px solid rgba(15, 118, 110, 0.12); border-radius: 0.5rem; padding: 0.25rem 0.5rem; margin-left: auto;">
                                             <span style="font-size: 0.75rem; color: var(--fg-muted);">Échéance :</span>
                                             <input type="date" name="life_goals_do_deadlines[]" class="wiz-input" style="border:none; background:transparent; padding:0; font-size: 0.8rem; width: 125px; color: var(--fg-light); outline: none;">
@@ -750,7 +750,7 @@
                                 {% if lifeGoals.HAVE|length > 0 %}
                                     {% for goal in lifeGoals.HAVE %}
                                         <div class="dynamic-row" style="flex-wrap: wrap;">
-                                            <input type="text" name="life_goals_have[]" class="wiz-input" style="border:none; background:transparent; padding:0; flex: 1; min-width: 200px;" value="{{ goal.title }}" required>
+                                            <input type="hidden" name="life_goals_have_ids[]" value="{{ goal.id }}"><input type="text" name="life_goals_have[]" class="wiz-input" style="border:none; background:transparent; padding:0; flex: 1; min-width: 200px;" value="{{ goal.title }}" required>
                                             <div style="display: flex; align-items: center; gap: 0.5rem; background: #ffffff; border: 1px solid rgba(15, 118, 110, 0.12); border-radius: 0.5rem; padding: 0.25rem 0.5rem; margin-left: auto;">
                                                 <span style="font-size: 0.75rem; color: var(--fg-muted);">Échéance :</span>
                                                 <input type="date" name="life_goals_have_deadlines[]" class="wiz-input" style="border:none; background:transparent; padding:0; font-size: 0.8rem; width: 125px; color: var(--fg-light); outline: none;" value="{{ goal.deadline ? goal.deadline|date('Y-m-d') : '' }}">
@@ -764,7 +764,7 @@
                                     {% endfor %}
                                 {% else %}
                                     <div class="dynamic-row" style="flex-wrap: wrap;">
-                                        <input type="text" name="life_goals_have[]" class="wiz-input" style="border:none; background:transparent; padding:0; flex: 1; min-width: 200px;" placeholder="Ex: Un matelas de sécurité financière de 6 mois">
+                                        <input type="hidden" name="life_goals_have_ids[]" value=""><input type="text" name="life_goals_have[]" class="wiz-input" style="border:none; background:transparent; padding:0; flex: 1; min-width: 200px;" placeholder="Ex: Un matelas de sécurité financière de 6 mois">
                                         <div style="display: flex; align-items: center; gap: 0.5rem; background: #ffffff; border: 1px solid rgba(15, 118, 110, 0.12); border-radius: 0.5rem; padding: 0.25rem 0.5rem; margin-left: auto;">
                                             <span style="font-size: 0.75rem; color: var(--fg-muted);">Échéance :</span>
                                             <input type="date" name="life_goals_have_deadlines[]" class="wiz-input" style="border:none; background:transparent; padding:0; font-size: 0.8rem; width: 125px; color: var(--fg-light); outline: none;">
@@ -786,7 +786,7 @@
                                 {% if lifeGoals.GIVE|length > 0 %}
                                     {% for goal in lifeGoals.GIVE %}
                                         <div class="dynamic-row" style="flex-wrap: wrap;">
-                                            <input type="text" name="life_goals_give[]" class="wiz-input" style="border:none; background:transparent; padding:0; flex: 1; min-width: 200px;" value="{{ goal.title }}" required>
+                                            <input type="hidden" name="life_goals_give_ids[]" value="{{ goal.id }}"><input type="text" name="life_goals_give[]" class="wiz-input" style="border:none; background:transparent; padding:0; flex: 1; min-width: 200px;" value="{{ goal.title }}" required>
                                             <div style="display: flex; align-items: center; gap: 0.5rem; background: #ffffff; border: 1px solid rgba(15, 118, 110, 0.12); border-radius: 0.5rem; padding: 0.25rem 0.5rem; margin-left: auto;">
                                                 <span style="font-size: 0.75rem; color: var(--fg-muted);">Échéance :</span>
                                                 <input type="date" name="life_goals_give_deadlines[]" class="wiz-input" style="border:none; background:transparent; padding:0; font-size: 0.8rem; width: 125px; color: var(--fg-light); outline: none;" value="{{ goal.deadline ? goal.deadline|date('Y-m-d') : '' }}">
@@ -800,7 +800,7 @@
                                     {% endfor %}
                                 {% else %}
                                     <div class="dynamic-row" style="flex-wrap: wrap;">
-                                        <input type="text" name="life_goals_give[]" class="wiz-input" style="border:none; background:transparent; padding:0; flex: 1; min-width: 200px;" placeholder="Ex: Mentorer 2 jeunes entrepreneurs bénévolement">
+                                        <input type="hidden" name="life_goals_give_ids[]" value=""><input type="text" name="life_goals_give[]" class="wiz-input" style="border:none; background:transparent; padding:0; flex: 1; min-width: 200px;" placeholder="Ex: Mentorer 2 jeunes entrepreneurs bénévolement">
                                         <div style="display: flex; align-items: center; gap: 0.5rem; background: #ffffff; border: 1px solid rgba(15, 118, 110, 0.12); border-radius: 0.5rem; padding: 0.25rem 0.5rem; margin-left: auto;">
                                             <span style="font-size: 0.75rem; color: var(--fg-muted);">Échéance :</span>
                                             <input type="date" name="life_goals_give_deadlines[]" class="wiz-input" style="border:none; background:transparent; padding:0; font-size: 0.8rem; width: 125px; color: var(--fg-light); outline: none;">
@@ -815,7 +815,7 @@
 
                 {# ETAPE 8: COMPÉTENCE (PLAN DE CROISSANCE) #}
                 {% if (not single and 8 in allowedSteps) or (single and step == 8) %}
-                <div data-wizard-target="step" class="{% if step != 8 %}hidden{% endif %} animate-fade-in" data-step-title="Compétence & Connaissance">
+                <div data-wizard-target="step" data-step-number="8" class="{% if step != 8 %}hidden{% endif %} animate-fade-in" data-step-title="Compétence & Connaissance">
                     <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.75rem; color: var(--primary);">
                         <i data-lucide="book-open" style="width: 24px; height: 24px;"></i>
                         <h2 style="font-family: 'Playfair Display', serif; font-size: 1.75rem; font-weight: 500;">Compétence & Connaissance</h2>
@@ -843,7 +843,7 @@
                                         {% endif %}
                                         <div style="display: flex; flex-direction: column; gap: 0.25rem;">
                                             <label style="font-size: 0.7rem; font-weight: 700; color: var(--fg-light); text-transform: uppercase;">Nom de la compétence</label>
-                                            <input type="text" name="growth_competence_title[{{ loop.index0 }}]" class="wiz-input" value="{{ goal.title }}" required>
+                                            <input type="text" name="growth_competence_title[{{ loop.index0 }}]" class="wiz-input" value="{{ goal.title }}" required><input type="hidden" name="growth_competence_id[{{ loop.index0 }}]" value="{{ goal.id }}">
                                         </div>
 
                                         <div style="display: flex; flex-direction: column; gap: 0.25rem;">
@@ -925,7 +925,7 @@
                                         {% endif %}
                                         <div style="display: flex; flex-direction: column; gap: 0.25rem;">
                                             <label style="font-size: 0.7rem; font-weight: 700; color: var(--fg-light); text-transform: uppercase;">Nom de la connaissance</label>
-                                            <input type="text" name="growth_connaissance_title[{{ loop.index0 }}]" class="wiz-input" value="{{ goal.title }}" required>
+                                            <input type="text" name="growth_connaissance_title[{{ loop.index0 }}]" class="wiz-input" value="{{ goal.title }}" required><input type="hidden" name="growth_connaissance_id[{{ loop.index0 }}]" value="{{ goal.id }}">
                                         </div>
 
                                         <div style="display: flex; flex-direction: column; gap: 0.25rem;">
@@ -994,7 +994,7 @@
 
                 {# ETAPE 9: CARACTÈRE (PLAN DE CROISSANCE) #}
                 {% if (not single and 9 in allowedSteps) or (single and step == 9) %}
-                <div data-wizard-target="step" class="{% if step != 9 %}hidden{% endif %} animate-fade-in" data-step-title="Caractère & Conviction">
+                <div data-wizard-target="step" data-step-number="9" class="{% if step != 9 %}hidden{% endif %} animate-fade-in" data-step-title="Caractère & Conviction">
                     <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.75rem; color: var(--primary);">
                         <i data-lucide="shield" style="width: 24px; height: 24px;"></i>
                         <h2 style="font-family: 'Playfair Display', serif; font-size: 1.75rem; font-weight: 500;">Caractère & Conviction</h2>
@@ -1021,7 +1021,7 @@
                                         {% endif %}
                                         <div style="display: flex; flex-direction: column; gap: 0.25rem;">
                                             <label style="font-size: 0.7rem; font-weight: 700; color: var(--fg-light); text-transform: uppercase;">Trait à forger</label>
-                                            <input type="text" name="growth_character_title[{{ loop.index0 }}]" class="wiz-input" value="{{ goal.title }}" required>
+                                            <input type="text" name="growth_character_title[{{ loop.index0 }}]" class="wiz-input" value="{{ goal.title }}" required><input type="hidden" name="growth_character_id[{{ loop.index0 }}]" value="{{ goal.id }}">
                                         </div>
                                         <div style="display: flex; flex-direction: column; gap: 0.25rem;">
                                             <label style="font-size: 0.7rem; font-weight: 700; color: var(--fg-light); text-transform: uppercase;">Statut d'acquisition</label>
@@ -1088,7 +1088,7 @@
 
                 {# ETAPE 10: RELATIONS (PLAN DE CROISSANCE) #}
                 {% if (not single and 10 in allowedSteps) or (single and step == 10) %}
-                <div data-wizard-target="step" class="{% if step != 10 %}hidden{% endif %} animate-fade-in" data-step-title="Relation & Réseau">
+                <div data-wizard-target="step" data-step-number="10" class="{% if step != 10 %}hidden{% endif %} animate-fade-in" data-step-title="Relation & Réseau">
                     <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.75rem; color: var(--primary);">
                         <i data-lucide="users" style="width: 24px; height: 24px;"></i>
                         <h2 style="font-family: 'Playfair Display', serif; font-size: 1.75rem; font-weight: 500;">Relation & Réseau</h2>
@@ -1115,7 +1115,7 @@
                                         {% endif %}
                                         <div style="display: flex; flex-direction: column; gap: 0.25rem;">
                                             <label style="font-size: 0.7rem; font-weight: 700; color: var(--fg-light); text-transform: uppercase;">Profil visé</label>
-                                            <input type="text" name="growth_relation_title[{{ loop.index0 }}]" class="wiz-input" value="{{ goal.title }}" required>
+                                            <input type="text" name="growth_relation_title[{{ loop.index0 }}]" class="wiz-input" value="{{ goal.title }}" required><input type="hidden" name="growth_relation_id[{{ loop.index0 }}]" value="{{ goal.id }}">
                                         </div>
                                         <div style="display: flex; flex-direction: column; gap: 0.25rem;">
                                             <label style="font-size: 0.7rem; font-weight: 700; color: var(--fg-light); text-transform: uppercase;">Catégorie de Réseau</label>
@@ -1202,7 +1202,7 @@
 
                 {# ETAPE 11: TRANSMISSION #}
                 {% if (not single and 11 in allowedSteps) or (single and step == 11) %}
-                <div data-wizard-target="step" class="{% if step != 11 %}hidden{% endif %} animate-fade-in" data-step-title="Héritage & Transmission">
+                <div data-wizard-target="step" data-step-number="11" class="{% if step != 11 %}hidden{% endif %} animate-fade-in" data-step-title="Héritage & Transmission">
                     <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.75rem; color: var(--primary);">
                         <i data-lucide="gift" style="width: 24px; height: 24px;"></i>
                         <h2 style="font-family: 'Playfair Display', serif; font-size: 1.75rem; font-weight: 500;">Héritage & Impact</h2>
@@ -1229,7 +1229,7 @@
                                         {% endif %}
                                         <div style="display: flex; flex-direction: column; gap: 0.25rem;">
                                             <label style="font-size: 0.7rem; font-weight: 700; color: var(--fg-light); text-transform: uppercase;">Nom du projet de transmission</label>
-                                            <input type="text" name="legacy_title[{{ loop.index0 }}]" class="wiz-input" value="{{ lg.title }}" placeholder="Ex: Financer une bourse d'études annuelle" required>
+                                            <input type="text" name="legacy_title[{{ loop.index0 }}]" class="wiz-input" value="{{ lg.title }}" placeholder="Ex: Financer une bourse d'études annuelle" required><input type="hidden" name="legacy_id[{{ loop.index0 }}]" value="{{ lg.id }}">
                                         </div>
                                         <div style="display: flex; flex-direction: column; gap: 0.25rem;">
                                             <label style="font-size: 0.7rem; font-weight: 700; color: var(--fg-light); text-transform: uppercase;">Statut d'acquisition / Mobilisation</label>
@@ -1296,7 +1296,7 @@
 
                 {# ETAPE 12: HYGIENE #}
                 {% if (not single and 12 in allowedSteps) or (single and step == 12) %}
-                <div data-wizard-target="step" class="{% if step != 12 %}hidden{% endif %} animate-fade-in" data-step-title="Hygiène de Vie">
+                <div data-wizard-target="step" data-step-number="12" class="{% if step != 12 %}hidden{% endif %} animate-fade-in" data-step-title="Hygiène de Vie">
                     <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.75rem; color: var(--primary);">
                         <i data-lucide="heart-pulse" style="width: 24px; height: 24px;"></i>
                         <h2 style="font-family: 'Playfair Display', serif; font-size: 1.75rem; font-weight: 500;">Hygiène de Vie</h2>
@@ -1385,7 +1385,7 @@
                                         {% endif %}
                                         <div style="display: flex; flex-direction: column; gap: 0.25rem;">
                                             <label style="font-size: 0.7rem; font-weight: 700; color: var(--fg-light); text-transform: uppercase;">Nom du domaine d'hygiène</label>
-                                            <input type="text" name="hygiene_name[{{ loop.index0 }}]" class="wiz-input" value="{{ hd.name }}" placeholder="Ex: Sommeil (Rituel de coucher à 22h30 max)" required>
+                                            <input type="text" name="hygiene_name[{{ loop.index0 }}]" class="wiz-input" value="{{ hd.name }}" placeholder="Ex: Sommeil (Rituel de coucher à 22h30 max)" required><input type="hidden" name="hygiene_id[{{ loop.index0 }}]" value="{{ hd.id }}">
                                         </div>
                                         <div style="display: flex; flex-direction: column; gap: 0.25rem;">
                                             <label style="font-size: 0.7rem; font-weight: 700; color: var(--fg-light); text-transform: uppercase;">Statut d'acquisition / Mobilisation</label>
@@ -1452,7 +1452,7 @@
 
                 {# ETAPE 13: ECHEANCIER #}
                 {% if (not single and 13 in allowedSteps) or (single and step == 13) %}
-                <div data-wizard-target="step" class="{% if step != 13 %}hidden{% endif %} animate-fade-in" data-step-title="Mon Échéancier">
+                <div data-wizard-target="step" data-step-number="13" class="{% if step != 13 %}hidden{% endif %} animate-fade-in" data-step-title="Mon Échéancier">
                     <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.75rem; color: var(--primary);">
                         <i data-lucide="calendar" style="width: 24px; height: 24px;"></i>
                         <h2 style="font-family: 'Playfair Display', serif; font-size: 1.75rem; font-weight: 500;">Mon Échéancier</h2>
@@ -1478,7 +1478,7 @@
             <!-- Footer Navigation Buttons -->
             <div style="margin-top: auto; padding-top: 1.5rem; border-top: 1px solid rgba(15, 118, 110, 0.05); display: flex; justify-content: space-between; align-items: center; background: white;">
                 {% if single %}
-                    <a href="{{ plan ? path('app_user_strategies', { plan: plan }) : path('app_user_life_plan') }}" 
+                    <a href="{{ path(planRoute) }}" 
                        style="padding: 0.75rem 1.5rem; border-radius: 12px; background: #F1F5F9; color: #475569; border: none; font-size: 0.9rem; font-weight: 700; cursor: pointer; transition: all 0.2s;"
                        onmouseover="this.style.background='#E2E8F0'"
                        onmouseout="this.style.background='#F1F5F9'">
@@ -1541,7 +1541,7 @@
         const container = document.getElementById('values-real-container');
         const html = `
             <div class="dynamic-row">
-                <input type="text" name="values_real[]" class="wiz-input" style="border:none; background:transparent; padding:0;" placeholder="Ex: Excellence" required>
+                <input type="hidden" name="values_real_ids[]" value=""><input type="text" name="values_real[]" class="wiz-input" style="border:none; background:transparent; padding:0;" placeholder="Ex: Excellence" required>
                 ${createDeleteButton()}
             </div>
         `;
@@ -1552,7 +1552,7 @@
         const container = document.getElementById('values-declared-container');
         const html = `
             <div class="dynamic-row">
-                <input type="text" name="values_declared[]" class="wiz-input" style="border:none; background:transparent; padding:0;" placeholder="Ex: Impact" required>
+                <input type="hidden" name="values_declared_ids[]" value=""><input type="text" name="values_declared[]" class="wiz-input" style="border:none; background:transparent; padding:0;" placeholder="Ex: Impact" required>
                 ${createDeleteButton()}
             </div>
         `;
@@ -1563,7 +1563,7 @@
         const container = document.getElementById('values-counter-container');
         const html = `
             <div class="dynamic-row">
-                <input type="text" name="values_counter[]" class="wiz-input" style="border:none; background:transparent; padding:0;" placeholder="Ex: Validation Externe" required>
+                <input type="hidden" name="values_counter_ids[]" value=""><input type="text" name="values_counter[]" class="wiz-input" style="border:none; background:transparent; padding:0;" placeholder="Ex: Validation Externe" required>
                 ${createDeleteButton()}
             </div>
         `;
@@ -1574,7 +1574,7 @@
         const container = document.getElementById('convictions-deep-container');
         const html = `
             <div class="dynamic-row">
-                <input type="text" name="convictions_deep[]" class="wiz-input" style="border:none; background:transparent; padding:0;" placeholder="Ex: L'intégrité personnelle est la base de toute influence durable" required>
+                <input type="hidden" name="convictions_deep_ids[]" value=""><input type="text" name="convictions_deep[]" class="wiz-input" style="border:none; background:transparent; padding:0;" placeholder="Ex: L'intégrité personnelle est la base de toute influence durable" required>
                 ${createDeleteButton()}
             </div>
         `;
@@ -1585,7 +1585,7 @@
         const container = document.getElementById('convictions-medium-container');
         const html = `
             <div class="dynamic-row">
-                <input type="text" name="convictions_medium[]" class="wiz-input" style="border:none; background:transparent; padding:0;" placeholder="Ex: La discipline quotidienne produit des résultats exponentiels" required>
+                <input type="hidden" name="convictions_medium_ids[]" value=""><input type="text" name="convictions_medium[]" class="wiz-input" style="border:none; background:transparent; padding:0;" placeholder="Ex: La discipline quotidienne produit des résultats exponentiels" required>
                 ${createDeleteButton()}
             </div>
         `;
@@ -1596,7 +1596,7 @@
         const container = document.getElementById('convictions-light-container');
         const html = `
             <div class="dynamic-row">
-                <input type="text" name="convictions_light[]" class="wiz-input" style="border:none; background:transparent; padding:0;" placeholder="Ex: Le travail à distance asynchrone est plus productif" required>
+                <input type="hidden" name="convictions_light_ids[]" value=""><input type="text" name="convictions_light[]" class="wiz-input" style="border:none; background:transparent; padding:0;" placeholder="Ex: Le travail à distance asynchrone est plus productif" required>
                 ${createDeleteButton()}
             </div>
         `;
@@ -1607,7 +1607,7 @@
         const container = document.getElementById('limiting-beliefs-container');
         const html = `
             <div class="dynamic-row">
-                <input type="text" name="limiting_beliefs[]" class="wiz-input" style="border:none; background:transparent; padding:0;" placeholder="Ex: Je ne suis pas créatif" required>
+                <input type="hidden" name="limiting_beliefs_ids[]" value=""><input type="text" name="limiting_beliefs[]" class="wiz-input" style="border:none; background:transparent; padding:0;" placeholder="Ex: Je ne suis pas créatif" required>
                 ${createDeleteButton()}
             </div>
         `;
@@ -1618,7 +1618,7 @@
         const container = document.getElementById('passions-container');
         const html = `
             <div class="dynamic-row">
-                <input type="text" name="passions[]" class="wiz-input" style="border:none; background:transparent; padding:0;" placeholder="Ex: La cuisine bistronomique" required>
+                <input type="hidden" name="passions_ids[]" value=""><input type="text" name="passions[]" class="wiz-input" style="border:none; background:transparent; padding:0;" placeholder="Ex: La cuisine bistronomique" required>
                 ${createDeleteButton()}
             </div>
         `;
@@ -1630,7 +1630,7 @@
         const container = document.getElementById('talents-container');
         const html = `
             <div class="dynamic-row">
-                <input type="text" name="talents[]" class="wiz-input" style="border:none; background:transparent; padding:0;" placeholder="Ex: Capacité d'adaptation ultra-rapide" required>
+                <input type="hidden" name="talents_ids[]" value=""><input type="text" name="talents[]" class="wiz-input" style="border:none; background:transparent; padding:0;" placeholder="Ex: Capacité d'adaptation ultra-rapide" required>
                 ${createDeleteButton()}
             </div>
         `;
@@ -1648,7 +1648,7 @@
 
         const html = `
             <div class="dynamic-row" style="flex-wrap: wrap;">
-                <input type="text" name="life_goals_${category}[]" class="wiz-input" style="border:none; background:transparent; padding:0; flex: 1; min-width: 200px;" placeholder="${placeholderText}" required>
+                <input type="hidden" name="life_goals_${category}_ids[]" value=""><input type="text" name="life_goals_${category}[]" class="wiz-input" style="border:none; background:transparent; padding:0; flex: 1; min-width: 200px;" placeholder="${placeholderText}" required>
                 <div style="display: flex; align-items: center; gap: 0.5rem; background: #ffffff; border: 1px solid rgba(15, 118, 110, 0.12); border-radius: 0.5rem; padding: 0.25rem 0.5rem; margin-left: auto;">
                     <span style="font-size: 0.75rem; color: var(--fg-muted);">Échéance :</span>
                     <input type="date" name="life_goals_${category}_deadlines[]" class="wiz-input" style="border:none; background:transparent; padding:0; font-size: 0.8rem; width: 125px; color: var(--fg-light); outline: none;">
@@ -1697,6 +1697,9 @@
             const typeSelect = block.querySelector(`[name^="growth_${axis}_type"]`);
             if (typeSelect) typeSelect.name = `growth_${axis}_type[${index}]`;
             
+            const idInput = block.querySelector(`[name^="growth_${axis}_id"]`);
+            if (idInput) idInput.name = `growth_${axis}_id[${index}]`;
+
             const statusSelect = block.querySelector(`[name^="growth_${axis}_status"]`);
             if (statusSelect) statusSelect.name = `growth_${axis}_status[${index}]`;
             
@@ -1770,6 +1773,9 @@
             const titleInput = block.querySelector('[name^="legacy_title"]');
             if (titleInput) titleInput.name = `legacy_title[${index}]`;
             
+            const idInput = block.querySelector('[name^="legacy_id"]');
+            if (idInput) idInput.name = `legacy_id[${index}]`;
+
             const statusSelect = block.querySelector('[name^="legacy_status"]');
             if (statusSelect) statusSelect.name = `legacy_status[${index}]`;
             
@@ -1838,6 +1844,9 @@
             const titleInput = block.querySelector('[name^="hygiene_name"]');
             if (titleInput) titleInput.name = `hygiene_name[${index}]`;
             
+            const idInput = block.querySelector('[name^="hygiene_id"]');
+            if (idInput) idInput.name = `hygiene_id[${index}]`;
+
             const statusSelect = block.querySelector('[name^="hygiene_status"]');
             if (statusSelect) statusSelect.name = `hygiene_status[${index}]`;
             

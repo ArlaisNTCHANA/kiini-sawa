@@ -10,7 +10,7 @@ class UserPlanControllerTest extends WebTestCase
     public function testLifePlanRedirectsToLogin(): void
     {
         $client = static::createClient();
-        $client->request('GET', '/life-plan');
+        $client->request('GET', '/plan-de-vie');
 
         $this->assertResponseRedirects('/login');
     }
@@ -23,7 +23,7 @@ class UserPlanControllerTest extends WebTestCase
         $testUser = $userRepository->findOneByEmail('admin@kiinisawa.com');
         $client->loginUser($testUser);
 
-        $client->request('GET', '/life-plan');
+        $client->request('GET', '/plan-de-vie');
 
         $this->assertResponseIsSuccessful();
         
@@ -58,7 +58,7 @@ class UserPlanControllerTest extends WebTestCase
         $client->loginUser($testUser);
 
         // Request Step 1 in single edit mode
-        $crawler = $client->request('GET', '/mes-plans/vie/wizard?step=1&single=1');
+        $crawler = $client->request('GET', '/plan-de-vie/assistant?step=1&single=1');
 
         $this->assertResponseIsSuccessful();
 
@@ -82,7 +82,7 @@ class UserPlanControllerTest extends WebTestCase
         $client->loginUser($testUser);
 
         // Request wizard mode (single=0)
-        $client->request('GET', '/mes-plans/vie/wizard?step=1&single=0');
+        $client->request('GET', '/plan-de-vie/assistant?step=1&single=0');
 
         $this->assertResponseIsSuccessful();
 
@@ -110,7 +110,7 @@ class UserPlanControllerTest extends WebTestCase
 
         try {
             $client->loginUser($testUser);
-            $client->request('GET', '/life-plan');
+            $client->request('GET', '/plan-de-vie');
 
             $this->assertResponseIsSuccessful();
             
@@ -154,7 +154,7 @@ class UserPlanControllerTest extends WebTestCase
             $client->loginUser($testUser);
             
             // Post goals with deadlines
-            $client->request('POST', '/mes-plans/vie/wizard?step=7&single=1', [
+            $client->request('POST', '/plan-de-vie/assistant?step=7&single=1', [
                 'life_goals_be' => ['Devenir un leader inspirant', 'Être calme'],
                 'life_goals_be_deadlines' => ['2026-12-31', ''],
                 'life_goals_do' => ['Lancer un produit'],
@@ -165,7 +165,7 @@ class UserPlanControllerTest extends WebTestCase
                 'life_goals_give_deadlines' => [],
             ]);
 
-            $this->assertResponseRedirects('/life-plan');
+            $this->assertResponseRedirects('/plan-de-vie');
 
             // Clear entity manager to force reload from DB
             $em->clear();
@@ -267,7 +267,7 @@ class UserPlanControllerTest extends WebTestCase
             $lgId2 = $lifeGoals[1]->getId();
             
             // Post Step 8 data
-            $client->request('POST', '/mes-plans/vie/wizard?step=8&single=1', [
+            $client->request('POST', '/plan-de-vie/assistant?step=8&single=1', [
                 'growth_competence_title' => ['Négocier des contrats', 'Programmer en PHP'],
                 'growth_competence_strategy' => ['Pratique réelle', 'Suivre des cours Symfony'],
                 'growth_competence_status' => ['leverage', 'consolidate'],
@@ -283,7 +283,7 @@ class UserPlanControllerTest extends WebTestCase
                 ]
             ]);
 
-            $this->assertResponseRedirects('/life-plan');
+            $this->assertResponseRedirects('/plan-de-vie');
 
             // Clear entity manager to force reload from DB
             $em->clear();
@@ -396,7 +396,7 @@ class UserPlanControllerTest extends WebTestCase
             $lgId1 = $lifeGoals[0]->getId();
             
             // Post Step 9 data
-            $client->request('POST', '/mes-plans/vie/wizard?step=9&single=1', [
+            $client->request('POST', '/plan-de-vie/assistant?step=9&single=1', [
                 'growth_character_title' => ['Faire preuve de patience'],
                 'growth_character_strategy' => ['Méditer chaque matin'],
                 'growth_character_status' => ['consolidate'],
@@ -405,10 +405,10 @@ class UserPlanControllerTest extends WebTestCase
                 ]
             ]);
 
-            $this->assertResponseRedirects('/life-plan');
+            $this->assertResponseRedirects('/plan-de-vie');
 
             // Post Step 10 data
-            $client->request('POST', '/mes-plans/vie/wizard?step=10&single=1', [
+            $client->request('POST', '/plan-de-vie/assistant?step=10&single=1', [
                 'growth_relation_title' => ['Trouver un mentor technique'],
                 'growth_relation_strategy' => ['Assister aux meetups'],
                 'growth_relation_status' => ['build'],
@@ -418,7 +418,7 @@ class UserPlanControllerTest extends WebTestCase
                 ]
             ]);
 
-            $this->assertResponseRedirects('/life-plan');
+            $this->assertResponseRedirects('/plan-de-vie');
 
             // Clear entity manager to force reload from DB
             $em->clear();
@@ -511,7 +511,7 @@ class UserPlanControllerTest extends WebTestCase
             $lgId1 = $lifeGoals[0]->getId();
             
             // Post Step 11 data
-            $client->request('POST', '/mes-plans/vie/wizard?step=11&single=1', [
+            $client->request('POST', '/plan-de-vie/assistant?step=11&single=1', [
                 'legacy_title' => ['Fonder une académie de leadership'],
                 'legacy_status' => ['leverage'],
                 'legacy_goals' => [
@@ -519,7 +519,7 @@ class UserPlanControllerTest extends WebTestCase
                 ]
             ]);
 
-            $this->assertResponseRedirects('/life-plan');
+            $this->assertResponseRedirects('/plan-de-vie');
 
             // Clear entity manager to force reload from DB
             $em->clear();
@@ -594,7 +594,7 @@ class UserPlanControllerTest extends WebTestCase
             $lgId1 = $lifeGoals[0]->getId();
             
             // Post Step 12 data
-            $client->request('POST', '/mes-plans/vie/wizard?step=12&single=1', [
+            $client->request('POST', '/plan-de-vie/assistant?step=12&single=1', [
                 'hygiene_name' => ['Physique (Sommeil/Nutrition)'],
                 'hygiene_status' => ['consolidate'],
                 'hygiene_goals' => [
@@ -602,7 +602,7 @@ class UserPlanControllerTest extends WebTestCase
                 ]
             ]);
 
-            $this->assertResponseRedirects('/life-plan');
+            $this->assertResponseRedirects('/plan-de-vie');
 
             // Clear entity manager to force reload from DB
             $em->clear();
@@ -674,7 +674,7 @@ class UserPlanControllerTest extends WebTestCase
 
         try {
             // Post to the route
-            $client->request('POST', "/mes-strategies/croissance/axis/save/LIMITING_BELIEF/{$ibId}", [
+            $client->request('POST', "/plan-de-croissance/axe/LIMITING_BELIEF/{$ibId}", [
                 'status' => 'consolidate',
                 'strategy' => 'Une stratégie de croissance',
                 'life_goals' => [$lgId],
@@ -684,7 +684,7 @@ class UserPlanControllerTest extends WebTestCase
                 'habit_frequencies' => ['WEEKLY']
             ]);
 
-            $this->assertResponseRedirects('/mes-strategies?plan=CROISSANCE&tab=SYSTEM');
+            $this->assertResponseRedirects('/plan-de-croissance?tab=SYSTEM');
 
             // Clear to reload from DB
             $em->clear();
@@ -768,13 +768,13 @@ class UserPlanControllerTest extends WebTestCase
 
         try {
             // Post to the save principles route
-            $client->request('POST', '/mes-strategies/croissance/principles/save', [
+            $client->request('POST', '/principes/CROISSANCE', [
                 'proposed_principles' => ['syst-obj', 'one-thing'],
                 'custom_principle_titles' => ['Mon principe perso', ''],
                 'custom_principle_descriptions' => ['Explication de mon principe', '']
             ]);
 
-            $this->assertResponseRedirects('/mes-strategies?plan=CROISSANCE&tab=LAWS');
+            $this->assertResponseRedirects('/plan-de-croissance?tab=LAWS');
 
             $em->clear();
             $testUser = $userRepository->findOneByEmail('admin@kiinisawa.com');
@@ -826,7 +826,7 @@ class UserPlanControllerTest extends WebTestCase
         $testUser = $userRepository->findOneByEmail('admin@kiinisawa.com');
         $client->loginUser($testUser);
 
-        $client->request('GET', '/mes-strategies/croissance/visualiser');
+        $client->request('GET', '/plan-de-croissance/visualiser');
 
         $this->assertResponseIsSuccessful();
         $this->assertSelectorTextContains('h1', 'Plan de Croissance');
@@ -841,7 +841,7 @@ class UserPlanControllerTest extends WebTestCase
         $testUser = $userRepository->findOneByEmail('admin@kiinisawa.com');
         $client->loginUser($testUser);
 
-        $client->request('POST', '/mes-strategies/croissance/email');
+        $client->request('POST', '/plan-de-croissance/email');
 
         $this->assertResponseIsSuccessful();
         $responseContent = $client->getResponse()->getContent();
@@ -860,29 +860,30 @@ class UserPlanControllerTest extends WebTestCase
         $client->loginUser($testUser);
 
         // Request wizard for CROISSANCE
-        $client->request('GET', '/mes-plans/vie/wizard?plan=CROISSANCE');
+        $client->request('GET', '/plan-de-vie/assistant?plan=CROISSANCE');
         $this->assertResponseIsSuccessful();
         $this->assertSelectorTextContains('h1', 'Plan de Croissance');
         $this->assertSelectorNotExists('div[data-step-title="But de Dieu"]');
         $this->assertSelectorExists('div[data-step-title="Balance Interne"]');
         $this->assertSelectorExists('div[data-step-title="Caractère & Conviction"]');
+        $this->assertSelectorExists('div[data-step-title="Relation & Réseau"]');
 
         // Request wizard for DEVELOPPEMENT
-        $client->request('GET', '/mes-plans/vie/wizard?plan=DEVELOPPEMENT');
+        $client->request('GET', '/plan-de-vie/assistant?plan=DEVELOPPEMENT');
         $this->assertResponseIsSuccessful();
         $this->assertSelectorTextContains('h1', 'Plan de Développement');
         $this->assertSelectorExists('div[data-step-title="Compétence & Connaissance"]');
         $this->assertSelectorNotExists('div[data-step-title="But de Dieu"]');
 
-        // Request wizard for CONTRIBUTION
-        $client->request('GET', '/mes-plans/vie/wizard?plan=CONTRIBUTION');
+        // Request wizard for TRANSMISSION
+        $client->request('GET', '/plan-de-vie/assistant?plan=TRANSMISSION');
         $this->assertResponseIsSuccessful();
         $this->assertSelectorTextContains('h1', 'Plan de Transmission');
-        $this->assertSelectorExists('div[data-step-title="Relation & Réseau"]');
+        $this->assertSelectorNotExists('div[data-step-title="Relation & Réseau"]', 'Relation & Réseau est un axe du Plan de Croissance (charte §1bis)');
         $this->assertSelectorExists('div[data-step-title="Héritage & Transmission"]');
 
-        // Request wizard for DISCIPLINE
-        $client->request('GET', '/mes-plans/vie/wizard?plan=DISCIPLINE');
+        // Request wizard for HYGIENE
+        $client->request('GET', '/plan-de-vie/assistant?plan=HYGIENE');
         $this->assertResponseIsSuccessful();
         $this->assertSelectorTextContains('h1', 'Plan d\'Hygiène de Vie');
         $this->assertSelectorExists('div[data-step-title="Hygiène de Vie"]');
@@ -898,12 +899,12 @@ class UserPlanControllerTest extends WebTestCase
         $client->loginUser($testUser);
 
         // 1. Save DEVELOPPEMENT principles
-        $client->request('POST', '/mes-strategies/developpement/principles/save', [
+        $client->request('POST', '/principes/DEVELOPPEMENT', [
             'proposed_principles' => ['syst-obj'],
             'custom_principle_titles' => ['Perso Dev', ''],
             'custom_principle_descriptions' => ['Desc Dev', '']
         ]);
-        $this->assertResponseRedirects('/mes-strategies?plan=DEVELOPPEMENT&tab=LAWS');
+        $this->assertResponseRedirects('/plan-de-developpement?tab=LAWS');
 
         $em->clear();
         $testUser = $userRepository->findOneByEmail('admin@kiinisawa.com');
@@ -925,35 +926,35 @@ class UserPlanControllerTest extends WebTestCase
         $client->loginUser($testUser);
 
         // Test DEVELOPPEMENT
-        $client->request('GET', '/mes-strategies/developpement/visualiser');
+        $client->request('GET', '/plan-de-developpement/visualiser');
         $this->assertResponseIsSuccessful();
         $this->assertSelectorTextContains('h1', 'Plan de Développement');
 
-        $client->request('POST', '/mes-strategies/developpement/email');
+        $client->request('POST', '/plan-de-developpement/email');
         $this->assertResponseIsSuccessful();
         $responseContent = $client->getResponse()->getContent();
         $this->assertJson($responseContent);
         $data = json_decode($responseContent, true);
         $this->assertTrue($data['success']);
 
-        // Test CONTRIBUTION
-        $client->request('GET', '/mes-strategies/contribution/visualiser');
+        // Test TRANSMISSION
+        $client->request('GET', '/plan-de-transmission/visualiser');
         $this->assertResponseIsSuccessful();
         $this->assertSelectorTextContains('h1', 'Plan de Transmission');
 
-        $client->request('POST', '/mes-strategies/contribution/email');
+        $client->request('POST', '/plan-de-transmission/email');
         $this->assertResponseIsSuccessful();
         $responseContent = $client->getResponse()->getContent();
         $this->assertJson($responseContent);
         $data = json_decode($responseContent, true);
         $this->assertTrue($data['success']);
 
-        // Test DISCIPLINE
-        $client->request('GET', '/mes-strategies/discipline/visualiser');
+        // Test HYGIENE
+        $client->request('GET', '/plan-d-hygiene/visualiser');
         $this->assertResponseIsSuccessful();
         $this->assertSelectorTextContains('h1', 'Plan d\'Hygiène de Vie');
 
-        $client->request('POST', '/mes-strategies/discipline/email');
+        $client->request('POST', '/plan-d-hygiene/email');
         $this->assertResponseIsSuccessful();
         $responseContent = $client->getResponse()->getContent();
         $this->assertJson($responseContent);

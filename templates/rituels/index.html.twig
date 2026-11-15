@@ -320,7 +320,7 @@
             { id: 'ALL',          label: 'Tout',          color: '#0F766E', glow: 'rgba(15, 118, 110, 0.15)' },
             { id: 'CROISSANCE',   label: 'Croissance',    color: '#D97706', glow: 'rgba(217, 119, 6, 0.15)' },
             { id: 'DEVELOPPEMENT',label: 'Développement', color: '#059669', glow: 'rgba(5, 150, 105, 0.15)' },
-            { id: 'CONTRIBUTION', label: 'Contribution',  color: '#DB2777', glow: 'rgba(219, 39, 119, 0.15)' },
+            { id: 'TRANSMISSION', label: 'Transmission',  color: '#DB2777', glow: 'rgba(219, 39, 119, 0.15)' },
             { id: 'HYGIENE',      label: 'Hygiène',       color: '#4F46E5', glow: 'rgba(79, 70, 229, 0.15)' },
         ] %}
         <div style="display: flex; flex-wrap: wrap; gap: 0.5rem; justify-content: center; margin-bottom: 0.5rem;">
@@ -386,10 +386,10 @@
                                             {% set pGlow = 'rgba(5, 150, 105, 0.08)' %}
                                             {% set pText = 'Développement' %}
                                         {% elseif habit.legacyGoal is not null %}
-                                            {% set hPillar = 'CONTRIBUTION' %}
+                                            {% set hPillar = 'TRANSMISSION' %}
                                             {% set pColor = '#DB2777' %}
                                             {% set pGlow = 'rgba(219, 39, 119, 0.08)' %}
-                                            {% set pText = 'Contribution' %}
+                                            {% set pText = 'Transmission' %}
                                         {% elseif habit.hygieneDomain is not null %}
                                             {% set hPillar = 'HYGIENE' %}
                                             {% set pColor = '#4F46E5' %}
@@ -508,10 +508,10 @@
                     {% set pGlow = 'rgba(5, 150, 105, 0.08)' %}
                     {% set pText = 'Développement' %}
                 {% elseif habit.legacyGoal is not null %}
-                    {% set hPillar = 'CONTRIBUTION' %}
+                    {% set hPillar = 'TRANSMISSION' %}
                     {% set pColor = '#DB2777' %}
                     {% set pGlow = 'rgba(219, 39, 119, 0.08)' %}
-                    {% set pText = 'Contribution' %}
+                    {% set pText = 'Transmission' %}
                 {% elseif habit.hygieneDomain is not null %}
                     {% set hPillar = 'HYGIENE' %}
                     {% set pColor = '#4F46E5' %}
@@ -818,10 +818,10 @@
                         {% set pGlow = 'rgba(5, 150, 105, 0.08)' %}
                         {% set pText = 'Développement' %}
                     {% elseif habit.legacyGoal is not null %}
-                        {% set hPillar = 'CONTRIBUTION' %}
+                        {% set hPillar = 'TRANSMISSION' %}
                         {% set pColor = '#DB2777' %}
                         {% set pGlow = 'rgba(219, 39, 119, 0.08)' %}
-                        {% set pText = 'Contribution' %}
+                        {% set pText = 'Transmission' %}
                     {% elseif habit.hygieneDomain is not null %}
                         {% set hPillar = 'HYGIENE' %}
                         {% set pColor = '#4F46E5' %}

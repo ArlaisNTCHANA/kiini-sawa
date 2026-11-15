@@ -428,7 +428,7 @@
                 { id: 'ALL',          label: 'Tout',          color: '#0F766E', glow: 'rgba(15, 118, 110, 0.15)' },
                 { id: 'CROISSANCE',   label: 'Croissance',    color: '#D97706', glow: 'rgba(217, 119, 6, 0.15)' },
                 { id: 'DEVELOPPEMENT',label: 'Développement', color: '#059669', glow: 'rgba(5, 150, 105, 0.15)' },
-                { id: 'CONTRIBUTION', label: 'Contribution',  color: '#DB2777', glow: 'rgba(219, 39, 119, 0.15)' },
+                { id: 'TRANSMISSION', label: 'Transmission',  color: '#DB2777', glow: 'rgba(219, 39, 119, 0.15)' },
                 { id: 'HYGIENE',      label: 'Hygiène',       color: '#4F46E5', glow: 'rgba(79, 70, 229, 0.15)' },
             ] %}
             <div style="display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 2.25rem; justify-content: center;">
@@ -457,7 +457,7 @@
             {% set pillarMeta = {
                 'CROISSANCE':   { color: '#D97706', glow: 'rgba(217, 119, 6, 0.08)', bg: '#FEF3C7', border: '#FCD34D' },
                 'DEVELOPPEMENT':{ color: '#059669', glow: 'rgba(5, 150, 105, 0.08)', bg: '#D1FAE5', border: '#6EE7B7' },
-                'CONTRIBUTION': { color: '#DB2777', glow: 'rgba(219, 39, 119, 0.08)', bg: '#FCE7F3', border: '#FBCFE8' },
+                'TRANSMISSION': { color: '#DB2777', glow: 'rgba(219, 39, 119, 0.08)', bg: '#FCE7F3', border: '#FBCFE8' },
                 'HYGIENE':      { color: '#4F46E5', glow: 'rgba(79, 70, 229, 0.08)', bg: '#E0E7FF', border: '#C7D2FE' },
                 'ALL':          { color: '#0F766E', glow: 'rgba(15, 118, 110, 0.08)', bg: '#E6F4F1', border: '#B2DFDB' }
             } %}
@@ -488,7 +488,7 @@
                         {% elseif habit.skillGoal is not null %}
                             {% set hPillar = 'DEVELOPPEMENT' %}
                         {% elseif habit.legacyGoal is not null %}
-                            {% set hPillar = 'CONTRIBUTION' %}
+                            {% set hPillar = 'TRANSMISSION' %}
                         {% elseif habit.hygieneDomain is not null %}
                             {% set hPillar = 'HYGIENE' %}
                         {% endif %}
@@ -543,7 +543,7 @@
             <p style="color: var(--fg-muted); font-size: 0.95rem; line-height: 1.7; max-width: 24rem; margin-bottom: 2rem;">
                 Définissez vos objectifs de croissance et de vie dans votre Plan de Vie global pour y associer des rituels quotidiens.
             </p>
-            <a href="{{ path('app_user_life_plan') }}"
+            <a href="{{ path('app_plan_de_vie') }}"
                style="display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.8rem 1.75rem;
                       background: var(--primary); color: white; border-radius: 9999px; font-weight: 700;
                       font-size: 0.875rem; text-decoration: none; transition: all 0.25s var(--ease);

@@ -81,7 +81,7 @@ class OnboardingController extends AbstractController
                 $this->save($user, $data, $em);
                 $this->addFlash('success', 'Votre premier Plan de Vie est posé. Voici son analyse de cohérence : chaque point vous indique comment l\'enrichir.');
 
-                return $this->redirectToRoute('app_user_life_plan', ['onglet' => 'analysis']);
+                return $this->redirectToRoute('app_plan_de_vie', ['onglet' => 'analysis']);
             }
         }
 

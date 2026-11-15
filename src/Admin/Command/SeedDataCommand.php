@@ -284,12 +284,12 @@ class SeedDataCommand extends Command
             ['pillar' => 'DEVELOPPEMENT', 'title' => 'Faire, puis perfectionner', 'description' => 'Le mouvement vaut mieux que la paralysie par l\'analyse.'],
             ['pillar' => 'DEVELOPPEMENT', 'title' => 'Apprendre en public', 'description' => 'Je partage ce que j\'apprends, même imparfaitement, pour consolider ma maîtrise.'],
             ['pillar' => 'DEVELOPPEMENT', 'title' => '1% mieux chaque jour', 'description' => 'L\'amélioration constante et marginale produit des résultats exponentiels.'],
-            ['pillar' => 'CONTRIBUTION', 'title' => 'Réseau avant besoin', 'description' => 'Je construis mes relations avant d\'en avoir besoin.'],
-            ['pillar' => 'CONTRIBUTION', 'title' => 'Donner sans attendre de retour', 'description' => 'La valeur crée est la monnaie de l\'impact durable.'],
-            ['pillar' => 'CONTRIBUTION', 'title' => 'Laisser chaque espace meilleur', 'description' => 'Chaque interaction doit enrichir la personne en face.'],
-            ['pillar' => 'DISCIPLINE', 'title' => 'La liberté naît de la discipline', 'description' => 'Plus mes routines sont solides, plus mon énergie est libre pour l\'essentiel.'],
-            ['pillar' => 'DISCIPLINE', 'title' => 'Rituel > Motivation', 'description' => 'Je ne compte pas sur la motivation, je crée des rituels qui m\'y conduisent.'],
-            ['pillar' => 'DISCIPLINE', 'title' => 'Environnement > Volonté', 'description' => 'Je conçois mon environnement pour que le bon comportement soit le plus facile.'],
+            ['pillar' => 'TRANSMISSION', 'title' => 'Réseau avant besoin', 'description' => 'Je construis mes relations avant d\'en avoir besoin.'],
+            ['pillar' => 'TRANSMISSION', 'title' => 'Donner sans attendre de retour', 'description' => 'La valeur crée est la monnaie de l\'impact durable.'],
+            ['pillar' => 'TRANSMISSION', 'title' => 'Laisser chaque espace meilleur', 'description' => 'Chaque interaction doit enrichir la personne en face.'],
+            ['pillar' => 'HYGIENE', 'title' => 'La liberté naît de la discipline', 'description' => 'Plus mes routines sont solides, plus mon énergie est libre pour l\'essentiel.'],
+            ['pillar' => 'HYGIENE', 'title' => 'Rituel > Motivation', 'description' => 'Je ne compte pas sur la motivation, je crée des rituels qui m\'y conduisent.'],
+            ['pillar' => 'HYGIENE', 'title' => 'Environnement > Volonté', 'description' => 'Je conçois mon environnement pour que le bon comportement soit le plus facile.'],
         ];
         foreach ($principlesData as $pr) {
             $principle = new Principle();

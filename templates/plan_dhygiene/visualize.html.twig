@@ -348,7 +348,7 @@
     <section class="no-break">
         <div class="section-header">3. Lois & Principes Directeurs</div>
         <div style="display: flex; flex-direction: column; gap: 12px; margin-top: 15px;">
-            {% for pr in growthPrinciples.DISCIPLINE %}
+            {% for pr in growthPrinciples.HYGIENE %}
                 <div style="padding: 15px; background: #ecfdf5; border-radius: 8px; border: 1px solid rgba(0,0,0,0.03); border-left: 4px solid #059669;">
                     <h3 style="font-weight: 700; font-size: 1rem; color: #1e293b; margin-bottom: 4px; font-family: 'Inter', sans-serif;">{{ pr.title }}</h3>
                     {% if pr.description %}<p style="font-size: 0.88rem; color: #334155; line-height: 1.5; margin: 0;">{{ pr.description }}</p>{% endif %}
@@ -426,7 +426,7 @@
 
     {# Fixed print toolbar at the bottom #}
     <div class="toolbar no-print">
-        <a href="{{ path('app_user_strategies', { plan: 'DISCIPLINE' }) }}" class="btn-toolbar btn-toolbar-secondary">
+        <a href="{{ path('app_plan_d_hygiene') }}" class="btn-toolbar btn-toolbar-secondary">
             <i data-lucide="arrow-left" style="width: 16px; height: 16px;"></i>
             Retour
         </a>
@@ -459,7 +459,7 @@
                     emailBtn.innerHTML = 'Envoi en cours...';
 
                     try {
-                        const response = await fetch("{{ path('app_user_discipline_plan_send_email') }}", {
+                        const response = await fetch("{{ path('app_plan_d_hygiene_email') }}", {
                             method: "POST"
                         });
                         const result = await response.json();

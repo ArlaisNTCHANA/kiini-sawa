@@ -90,7 +90,7 @@ class AppConfig
     private bool $enableHygieneFree = false;
 
     #[ORM\Column(options: ['default' => false])]
-    private bool $enableContributionFree = false;
+    private bool $enableTransmissionFree = false;
 
     #[ORM\Column(options: ['default' => false])]
     private bool $enablePlannerFree = false;
@@ -451,14 +451,14 @@ class AppConfig
         return $this;
     }
 
-    public function isEnableContributionFree(): bool
+    public function isEnableTransmissionFree(): bool
     {
-        return $this->enableContributionFree;
+        return $this->enableTransmissionFree;
     }
 
-    public function setEnableContributionFree(bool $enableContributionFree): static
+    public function setEnableTransmissionFree(bool $enableTransmissionFree): static
     {
-        $this->enableContributionFree = $enableContributionFree;
+        $this->enableTransmissionFree = $enableTransmissionFree;
 
         return $this;
     }

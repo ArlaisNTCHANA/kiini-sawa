@@ -38,7 +38,12 @@ class SecurityGuardsTest extends WebTestCase
                 continue;
             }
             $methods = $route->getMethods() ?: ['GET'];
-            $path = preg_replace('/\{[^}]+\}/', '1', $route->getPath());
+            // Paramètre remplacé par une valeur acceptée par ses contraintes (première alternative, sinon 1)
+            $path = preg_replace_callback('/\{([^}]+)\}/', function ($m) use ($route) {
+                $requirement = $route->getRequirement($m[1]);
+
+                return $requirement && preg_match('/^[A-Za-z_\-]+/', $requirement, $alt) ? $alt[0] : '1';
+            }, $route->getPath());
             $client->request($methods[0], $path);
             $status = $client->getResponse()->getStatusCode();
 
@@ -99,7 +104,7 @@ class SecurityGuardsTest extends WebTestCase
     public function testEmailRoutesRefuseGet(): void
     {
         $client = $this->loggedClient();
-        $client->request('GET', '/mes-plans/vie/email');
+        $client->request('GET', '/plan-de-vie/email');
 
         $this->assertResponseStatusCodeSame(405);
     }
