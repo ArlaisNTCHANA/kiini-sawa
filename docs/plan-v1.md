@@ -321,3 +321,14 @@ Listes, découverte communautaire, Google Calendar et flux iCal, vue année du p
 4. **Périmètre MVP** : valides-tu la colonne « Proposition » du §2 ?
 5. **Offre Organisation (B2B)** au lancement ou après ?
 6. **Pilotes** : quelles organisations ou quels coachs contacter ?
+
+### 6.1 Décisions prises le 15/11/2026
+
+| # | Décision | Conséquences |
+|---|---|---|
+| 1 | **Positionnement chrétien assumé** | Cible : églises, réseaux et coachs chrétiens. Le vocabulaire spirituel (« But de Dieu »…) reste visible dans l'application et le marketing. |
+| 2 | **5 plans**, le livre sera mis à jour | Vie, Croissance, Développement, Hygiène, Transmission. L'axe « Compétence & Connaissance » **quitte le Plan de Croissance** pour rejoindre le Plan de Développement, qui garde ce titre. La Croissance garde « Caractère & Conviction » et « Relation & Réseau ». Il faudra des chapitres au livre pour Développement, Hygiène et Transmission. |
+| 3 | **Lexique : « Hygiène » et « Transmission »** | « Discipline » et « Contribution » disparaissent des écrans, des URL et du code (phase 3). Le lexique de référence est dans `../docs/charte-projet.md` §1bis. |
+| 4 | **Offre Organisation après le lancement**, avec des pilotes | Le MVP comprend Gratuit + PRO. L'offre Organisation est construite en phase 6, une fois 2 ou 3 structures pilotes engagées. |
+| 5 | Périmètre MVP | Par défaut, la colonne « Proposition » du §2 s'applique, jusqu'à révision. |
+| 6 | Pilotes | À identifier. |
