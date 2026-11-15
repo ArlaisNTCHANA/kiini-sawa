@@ -11,6 +11,7 @@ Le code de KIINI SAWA est rangé **par module métier**. Chaque module regroupe 
 | [Bilan](modules/bilan.md) | Bilans et revues : revue hebdomadaire sur les 4 plans, revue mensuelle, scores de croissance | 3 | 4 | Oui |
 | [Coaching](modules/coaching.md) | Mentorat | 4 | 0 | Non |
 | [Compte](modules/compte.md) | Identité et accès : inscription, vérification email, profil, RGPD, onboarding, pages légales | 4 | 18 | Oui |
+| [Couple](modules/couple.md) | Espace couple : vision, valeurs, projets, thèmes de croissance, rituels, revue, rapport croisé ; offre Duo | 3 | 10 | Oui |
 | [Dashboard](modules/dashboard.md) | Accueil (citation du jour, raison d'être, échéances) et administration des citations | 1 | 6 | Oui |
 | [Defis](modules/defis.md) | Défis collectifs | 5 | 0 | Partielle |
 | [Feedback](modules/feedback.md) | Feedback 360°, questionnaires et retours sur l'application | 5 | 0 | Non |
@@ -19,7 +20,7 @@ Le code de KIINI SAWA est rangé **par module métier**. Chaque module regroupe 
 | [Methode](modules/methode.md) | La méthode : chapitres du livre et encarts « Comprendre cette étape » | 0 | 2 | Oui |
 | [Notification](modules/notification.md) | Centre de notifications, préférences, rappels par email | 3 | 5 | Oui |
 | [Organisation](modules/organisation.md) | Offre B2B : églises, associations, entreprises ; places, rôles, accompagnateurs, engagement | 3 | 11 | Oui |
-| [Personnalite](modules/personnalite.md) | Tests de personnalité (DISC, MBTI, Ennéagramme, Big 5…), calcul des scores et administration du référentiel | 4 | 11 | Oui |
+| [Personnalite](modules/personnalite.md) | Questionnaires psychométriques (IPIP-NEO, type, style, ennéagramme, dons), rapports PDF, fidélité ; tests d'aptitudes et d'hygiène | 5 | 14 | Oui |
 | [PlanDHygiene](modules/plan_d_hygiene.md) | Plan d'Hygiène de Vie | 3 | 3 | Oui |
 | [PlanDeCroissance](modules/plan_de_croissance.md) | Plan de Croissance : Caractère & Conviction, Relation & Réseau, principes, export PDF | 7 | 6 | Oui |
 | [PlanDeDeveloppement](modules/plan_de_developpement.md) | Plan de Développement : Compétence & Connaissance | 4 | 3 | Oui |

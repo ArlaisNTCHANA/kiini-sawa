@@ -1,0 +1,13 @@
+{% extends 'compte/_auth_layout.html.twig' %}
+
+{% block title %}KIINI SAWA — Invitation{% endblock %}
+
+{% block content %}
+    <h1 class="auth-title">{{ couple.partnerA.displayName }} vous invite</h1>
+    <p class="auth-text">Rejoignez votre conjoint sur KIINI SAWA pour bâtir ensemble votre vision, vos projets et votre croissance de couple.</p>
+    <a href="{{ path('app_register') }}" style="display: block; text-decoration: none;"><button type="button">Créer mon compte</button></a>
+    <div class="auth-links">
+        <span>Déjà un compte ? <a href="{{ path('app_login') }}">Se connecter</a></span>
+        <span style="font-size: .8rem;">Vous reviendrez automatiquement sur cette invitation.</span>
+    </div>
+{% endblock %}

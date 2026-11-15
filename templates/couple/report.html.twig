@@ -1,0 +1,70 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Notre rapport croisé{% endblock %}
+
+{% block body %}
+{% set a = report.people[0] %}
+{% set b = report.people[1] %}
+{% macro bar(score, color) %}<div style="background: #E2E8F0; border-radius: 4px; height: 8px;"><div style="background: {{ color }}; height: 8px; border-radius: 4px; width: {{ max(2, score) }}%;"></div></div>{% endmacro %}
+<div style="max-width: 860px; margin: 0 auto; padding: 2rem 1.25rem 8rem; line-height: 1.6;">
+    <a href="{{ path('app_couple') }}" style="font-size: .8rem; font-weight: 700; color: var(--fg-muted); text-transform: uppercase; letter-spacing: .05em; text-decoration: none;">← Notre couple</a>
+    <h1 style="font-family: var(--font-serif); color: var(--primary); font-size: 2rem; margin: .4rem 0 .3rem;">Notre rapport croisé</h1>
+    <p style="color: var(--fg-muted); margin-bottom: 1.5rem;">Vos personnalités côte à côte : pour vous comprendre, pas pour vous juger. Les différences sont souvent une force, à condition de les connaître.</p>
+
+    {% for p in [a, b] %}
+        {% if not p.shares %}
+            <div style="background: #F8FAFC; border-radius: var(--r-md); padding: 1rem; margin-bottom: 1rem;">🔒 {{ p.user.displayName }} ne partage pas ses résultats de tests pour l'instant.</div>
+        {% elseif not p.profile %}
+            <div style="background: #FFFBEB; border-radius: var(--r-md); padding: 1rem; margin-bottom: 1rem;">{{ p.user.displayName }} n'a pas encore passé de test de personnalité. {% if p.user == me %}<a href="{{ path('app_assessment_take', {slug: 'profil-complet'}) }}" style="color: var(--primary); font-weight: 700;">Passer le profil complet (15 min) →</a>{% endif %}</div>
+        {% endif %}
+    {% endfor %}
+
+    {% if report.domains|length %}
+        <section style="background: var(--card-bg); box-shadow: var(--card-shadow); border-radius: var(--r-lg); padding: 1.5rem; margin-bottom: 1.25rem;">
+            <h2 style="font-family: var(--font-serif); font-size: 1.3rem; margin-bottom: .75rem;">Nos cinq grandes dimensions</h2>
+            <p style="font-size: .85rem; margin-bottom: 1rem;"><span style="color: var(--primary); font-weight: 700;">■ {{ a.user.displayName }}</span> · <span style="color: #DB2777; font-weight: 700;">■ {{ b.user.displayName }}</span></p>
+            {% for d in report.domains %}
+                <div style="margin-bottom: 1rem;">
+                    <div style="font-weight: 700;">{{ d.label }}</div>
+                    <div style="margin: .25rem 0;">{{ _self.bar(d.a, 'var(--primary)') }}</div>
+                    <div>{{ _self.bar(d.b, '#DB2777') }}</div>
+                    {% if d.tip %}<p style="font-size: .88rem; color: var(--fg-light); margin-top: .4rem;">💡 {{ d.tip }}</p>{% endif %}
+                </div>
+            {% endfor %}
+        </section>
+    {% endif %}
+
+    {% if report.types %}
+        <section style="background: var(--card-bg); box-shadow: var(--card-shadow); border-radius: var(--r-lg); padding: 1.5rem; margin-bottom: 1.25rem;">
+            <h2 style="font-family: var(--font-serif); font-size: 1.3rem; margin-bottom: .5rem;">Nos types de fonctionnement</h2>
+            <p>{{ a.user.displayName }} : <strong>{{ report.types.a }} · {{ report.types.aName }}</strong> — {{ b.user.displayName }} : <strong>{{ report.types.b }} · {{ report.types.bName }}</strong>. Vous partagez {{ report.types.shared }} préférence{{ report.types.shared > 1 ? 's' }} sur 4.</p>
+            <ul style="padding-left: 1.2rem; margin-top: .5rem;">
+                {% for ax in report.types.axes %}{% if ax.tip %}<li>{{ ax.a }} / {{ ax.b }} : {{ ax.tip }}</li>{% endif %}{% endfor %}
+            </ul>
+        </section>
+    {% endif %}
+
+    {% if report.styles %}
+        <section style="background: var(--card-bg); box-shadow: var(--card-shadow); border-radius: var(--r-lg); padding: 1.5rem; margin-bottom: 1.25rem;">
+            <h2 style="font-family: var(--font-serif); font-size: 1.3rem; margin-bottom: .5rem;">Comment nous parler</h2>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1rem;">
+                <div><p style="font-weight: 700; color: var(--primary);">Pour parler à {{ a.user.displayName }} ({{ report.styles.a.name }})</p><p>{{ report.styles.a.communicate }}</p><p style="font-size: .85rem; color: var(--fg-muted);">Sous tension : {{ report.styles.a.watch|lower }}</p></div>
+                <div><p style="font-weight: 700; color: #DB2777;">Pour parler à {{ b.user.displayName }} ({{ report.styles.b.name }})</p><p>{{ report.styles.b.communicate }}</p><p style="font-size: .85rem; color: var(--fg-muted);">Sous tension : {{ report.styles.b.watch|lower }}</p></div>
+            </div>
+            {% if report.styles.same %}<p style="margin-top: .75rem; font-size: .9rem;">💡 Vous avez le même style : vous vous comprenez vite, mais vos angles morts s'additionnent. Invitez un regard extérieur sur les décisions importantes.</p>{% endif %}
+        </section>
+    {% endif %}
+
+    {% if report.enneagram %}
+        <section style="background: var(--card-bg); box-shadow: var(--card-shadow); border-radius: var(--r-lg); padding: 1.5rem; margin-bottom: 1.25rem;">
+            <h2 style="font-family: var(--font-serif); font-size: 1.3rem; margin-bottom: .5rem;">Nos motivations profondes</h2>
+            {% for x in [[a, report.enneagram.a], [b, report.enneagram.b]] %}
+                <p><strong>{{ x[0].user.displayName }} · type {{ x[1].n }}, {{ x[1].name }}</strong> : a besoin de {{ x[1].motivation|lower }} Craint : {{ x[1].fear|lower }}</p>
+            {% endfor %}
+            <p style="font-size: .9rem; color: var(--fg-light); margin-top: .5rem;">💡 Rassurez l'autre sur sa peur profonde : c'est souvent là que naissent les malentendus.</p>
+        </section>
+    {% endif %}
+
+    <p style="font-size: .78rem; color: var(--fg-muted);">Ce rapport est un outil de dialogue, pas un verdict. Lisez-le ensemble, et reprenez vos thèmes de croissance dans votre espace couple.</p>
+</div>
+{% endblock %}

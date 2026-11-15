@@ -366,6 +366,10 @@
                     <i data-lucide="quote"></i>
                     <span>Citations</span>
                 </a>
+                <a href="{{ path('admin_psychometrics') }}" class="ks-sidebar__link {{ app.request.attributes.get('_route') == 'admin_psychometrics' ? 'active' }}" id="nav-psy">
+                    <i data-lucide="gauge"></i>
+                    <span>Fidélité des tests</span>
+                </a>
                 <a href="{{ path('admin_personality_dashboard') }}" class="ks-sidebar__link {{ app.request.attributes.get('_route') starts with 'admin_personality' ? 'active' }}" id="nav-tests">
                     <i data-lucide="brain"></i>
                     <span>Tests</span>

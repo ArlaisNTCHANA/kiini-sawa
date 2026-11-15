@@ -20,7 +20,7 @@ use Symfony\Component\Routing\Attribute\Route;
 #[Route('/abonnement', name: 'app_subscription')]
 class AbonnementController extends AbstractController
 {
-    public function __construct(private readonly Entitlements $entitlements, private readonly SubscriptionManager $manager)
+    public function __construct(private readonly Entitlements $entitlements, private readonly SubscriptionManager $manager, private readonly \App\Couple\Repository\CoupleRepository $couples)
     {
     }
 
@@ -47,6 +47,8 @@ class AbonnementController extends AbstractController
                 'EUR' => ['MONTHLY' => $this->manager->price('MONTHLY', 'EUR'), 'YEARLY' => $this->manager->price('YEARLY', 'EUR')],
                 'XAF' => ['MONTHLY' => $this->manager->price('MONTHLY', 'XAF'), 'YEARLY' => $this->manager->price('YEARLY', 'XAF')],
             ],
+            'duoPrices' => ['EUR' => $this->manager->price('DUO', 'EUR'), 'XAF' => $this->manager->price('DUO', 'XAF')],
+            'hasCouple' => (bool) $this->couples->findFor($user)?->isActive(),
             'defaultCurrency' => $request->query->getString('devise') ?: (str_starts_with((string) $request->getPreferredLanguage(['fr_CM', 'fr_FR']), 'fr_CM') ? 'XAF' : 'EUR'),
             'bankInstructions' => $config->getBankTransferInstructions(),
             'mobileMoneyInstructions' => $config->getMobileMoneyInstructions(),
@@ -79,6 +81,11 @@ class AbonnementController extends AbstractController
             return $this->redirectToRoute('app_subscription');
         }
         $paidAt = \DateTimeImmutable::createFromFormat('!Y-m-d', $payload->getString('paidAt')) ?: null;
+        if ('DUO' === $payload->getString('period') && !$this->couples->findFor($user)?->isActive()) {
+            $this->addFlash('error', 'L\'abonnement Duo nécessite un espace couple : invitez d\'abord votre conjoint depuis « Notre couple ».');
+
+            return $this->redirectToRoute('app_subscription');
+        }
 
         try {
             $t = $this->manager->declare($user, $payload->getString('period'), $payload->getString('currency'), $payload->getString('method'), $reference, $paidAt, trim($payload->getString('note')) ?: null);

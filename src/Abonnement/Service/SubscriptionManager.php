@@ -29,7 +29,7 @@ use Symfony\Component\DependencyInjection\Attribute\Autowire;
 final class SubscriptionManager
 {
     public const CURRENCIES = ['EUR' => '€', 'XAF' => 'FCFA'];
-    public const PERIODS = ['MONTHLY' => 'Mensuel', 'YEARLY' => 'Annuel'];
+    public const PERIODS = ['MONTHLY' => 'Mensuel', 'YEARLY' => 'Annuel', 'DUO' => 'Duo annuel (couple)'];
     public const MANUAL_METHODS = ['BANK_TRANSFER', 'MOBILE_MONEY', 'CASH'];
 
     public function __construct(
@@ -39,6 +39,7 @@ final class SubscriptionManager
         private readonly MailerInterface $mailer,
         private readonly LoggerInterface $logger,
         private readonly ReceiptNumberGenerator $receipts,
+        private readonly \App\Couple\Repository\CoupleRepository $couples,
         #[Autowire('%app.mailer_from%')] private readonly string $from,
     ) {
     }
@@ -52,6 +53,8 @@ final class SubscriptionManager
             ['YEARLY', 'EUR'] => $c->getProYearlyPrice(),
             ['MONTHLY', 'XAF'] => (float) $c->getProMonthlyPriceXaf(),
             ['YEARLY', 'XAF'] => (float) $c->getProYearlyPriceXaf(),
+            ['DUO', 'EUR'] => $c->getDuoYearlyPriceEur(),
+            ['DUO', 'XAF'] => (float) $c->getDuoYearlyPriceXaf(),
             default => throw new \InvalidArgumentException('Formule inconnue.'),
         };
     }
@@ -116,7 +119,17 @@ final class SubscriptionManager
         $transaction->setStatus(Transaction::STATUS_VALIDATED)->setProcessedAt(new \DateTimeImmutable())
             ->setAdminNote($note)->setReceiptNumber($this->receipts->next());
         $end = $this->extend($user, $transaction->getPeriod());
+        // Duo : le conjoint (espace couple actif) reçoit aussi un an de PRO
+        $partner = 'DUO' === $transaction->getPeriod() ? $this->couples->findFor($user)?->partnerOf($user) : null;
+        if ($partner) {
+            $partnerEnd = $this->extend($partner, 'YEARLY');
+        }
         $this->em->flush();
+        if ($partner) {
+            $this->notifier->notify($partner, NotificationType::PAYMENT_VALIDATED, 'Votre abonnement Duo est actif',
+                sprintf('%s a réglé l\'abonnement Duo : vous êtes PRO tous les deux jusqu\'au %s.', $user->getDisplayName(), $partnerEnd->format('d/m/Y')),
+                '/couple', 'duo '.$transaction->getId());
+        }
 
         $this->notifier->notify($user, NotificationType::PAYMENT_VALIDATED, 'Paiement reçu : bienvenue en PRO !',
             sprintf('Votre paiement de %s a été validé. Votre accès PRO est actif jusqu\'au %s. Votre reçu est disponible dans votre espace abonnement.',
@@ -163,7 +176,7 @@ final class SubscriptionManager
         $start = $currentEnd ? \DateTime::createFromInterface($currentEnd) : new \DateTime();
         $end = (clone $start)->modify(match (true) {
             $months > 0 => "+$months months",
-            'YEARLY' === $period => '+1 year',
+            \in_array($period, ['YEARLY', 'DUO'], true) => '+1 year',
             default => '+1 month',
         });
         $sub->setTier(SubscriptionTier::PRO)->setStatus(SubscriptionStatus::ACTIVE)

@@ -1,5 +1,24 @@
 # Module Personnalite
 
+## Questionnaires psychométriques (`src/Personnalite/Psychometrie/`)
+
+| Questionnaire | Items | Base |
+|---|---|---|
+| Profil complet | 116 | IPIP-NEO-120 (Johnson 2014, domaine public), 29 facettes : facette « Libéralisme » retirée |
+| Big Five essentiel | 58 | 2 items par facette |
+| Type de fonctionnement | 48 | Facettes IPIP liées aux 4 axes de Jung ; 16 types aux noms KIINI SAWA |
+| Style comportemental | 52 | Facettes IPIP liées au modèle DISC de Marston ; 4 styles aux noms KIINI SAWA |
+| Ennéagramme | 72 | Items originaux (outil d'introspection) |
+| Dons spirituels | 60 | Items originaux, 15 dons bibliques |
+
+- Les réponses IPIP se cumulent entre questionnaires (`AssessmentService::mergedIpipAnswers`).
+- Scores 0-100 (pourcentage du maximum possible) ; percentiles dès 200 profils fiables (`NormService`).
+- Fidélité (alpha de Cronbach) suivie dans `/admin/tests-fidelite`.
+- Qualité des réponses : réponses identiques, trop rapides ou contradictoires signalées dans le rapport.
+- Marques : aucun nom protégé (16Personalities, MBTI®, DiSC®) ; une simple mention de référence, sans affiliation.
+- Les anciens tests courts MBTI, DISC, Ennéagramme et Big Five sont retirés ; leurs adresses redirigent vers les nouveaux questionnaires.
+
+
 **Interface utilisateur** : Oui
 
 ## Rôle

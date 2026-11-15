@@ -29,8 +29,8 @@
     <table>
         <tr><th>Désignation</th><th>Période</th><th>Moyen de paiement</th><th style="text-align: right;">Montant</th></tr>
         <tr>
-            <td>Abonnement KIINI SAWA PRO</td>
-            <td>{{ t.period == 'YEARLY' ? '12 mois' : '1 mois' }}</td>
+            <td>Abonnement KIINI SAWA PRO{{ t.period == 'DUO' ? ' Duo (couple)' }}</td>
+            <td>{{ t.period == 'MONTHLY' ? '1 mois' : '12 mois' }}{{ t.period == 'DUO' ? ', 2 personnes' }}</td>
             <td>{{ t.methodLabel }}{% if t.reference %}<br><span class="muted">réf. {{ t.reference }}</span>{% endif %}{% if t.paidAt %}<br><span class="muted">payé le {{ t.paidAt|date('d/m/Y') }}</span>{% endif %}</td>
             <td style="text-align: right;">{{ amount }}</td>
         </tr>

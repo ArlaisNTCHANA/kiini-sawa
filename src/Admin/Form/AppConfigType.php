@@ -40,6 +40,8 @@ class AppConfigType extends AbstractType
             ])
             ->add('proMonthlyPriceXaf', IntegerType::class, ['label' => 'Prix mensuel PRO (FCFA)', 'required' => true])
             ->add('proYearlyPriceXaf', IntegerType::class, ['label' => 'Prix annuel PRO (FCFA)', 'required' => true])
+            ->add('duoYearlyPriceEur', NumberType::class, ['label' => 'Duo (couple) : prix annuel (€)', 'scale' => 2, 'required' => true])
+            ->add('duoYearlyPriceXaf', IntegerType::class, ['label' => 'Duo (couple) : prix annuel (FCFA)', 'required' => true])
             ->add('orgSeatYearlyPriceEur', NumberType::class, ['label' => 'Organisation : prix annuel d\'une place (€)', 'scale' => 2, 'required' => true])
             ->add('orgSeatYearlyPriceXaf', IntegerType::class, ['label' => 'Organisation : prix annuel d\'une place (FCFA)', 'required' => true])
             ->add('maxHabitsFree', IntegerType::class, ['label' => 'Rituels maximum en gratuit', 'required' => true])

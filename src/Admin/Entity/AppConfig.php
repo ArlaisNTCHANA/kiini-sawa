@@ -118,6 +118,13 @@ class AppConfig
     #[ORM\Column(options: ['default' => false])]
     private bool $enableDevelopmentFree = false;
 
+    /** Abonnement Duo (couple) : un paiement annuel pour les deux conjoints. */
+    #[ORM\Column(options: ['default' => 119.99])]
+    private float $duoYearlyPriceEur = 119.99;
+
+    #[ORM\Column(options: ['default' => 39000])]
+    private int $duoYearlyPriceXaf = 39000;
+
     /** Prix annuel d'une place dans l'offre Organisation (avant remise de volume). */
     #[ORM\Column(options: ['default' => 30])]
     private float $orgSeatYearlyPriceEur = 30;
@@ -629,4 +636,8 @@ class AppConfig
     public function setOrgSeatYearlyPriceEur(float $v): static { $this->orgSeatYearlyPriceEur = $v; return $this; }
     public function getOrgSeatYearlyPriceXaf(): int { return $this->orgSeatYearlyPriceXaf; }
     public function setOrgSeatYearlyPriceXaf(int $v): static { $this->orgSeatYearlyPriceXaf = $v; return $this; }
+    public function getDuoYearlyPriceEur(): float { return $this->duoYearlyPriceEur; }
+    public function setDuoYearlyPriceEur(float $v): static { $this->duoYearlyPriceEur = $v; return $this; }
+    public function getDuoYearlyPriceXaf(): int { return $this->duoYearlyPriceXaf; }
+    public function setDuoYearlyPriceXaf(int $v): static { $this->duoYearlyPriceXaf = $v; return $this; }
 }

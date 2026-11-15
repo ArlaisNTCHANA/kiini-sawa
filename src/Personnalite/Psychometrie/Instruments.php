@@ -71,7 +71,7 @@ final class Instruments
     }
 
     /**
-     * Questions d'un questionnaire, dans un ordre mélangé stable (les items d'une même facette ne se suivent pas).
+     * Questions d'un questionnaire, dans un ordre stable où les items d'une même facette ne se suivent pas.
      *
      * @return list<array{key: string, text: string}>
      */
@@ -80,13 +80,21 @@ final class Instruments
         $def = self::CATALOG[$slug];
         $items = [];
         if ('ipip' === $def['bank']) {
+            // Tourniquet : un item de chaque facette, puis le suivant… (jamais deux items d'une même facette à la suite)
             $facets = 'all' === $def['facets'] ? array_keys(IpipItemBank::FACETS) : $def['facets'];
-            foreach ($facets as $facet) {
-                foreach (\array_slice(IpipItemBank::itemsOfFacet($facet), 0, $def['perFacet']) as $id) {
-                    $items[] = ['key' => 'ipip:'.$id, 'text' => IpipItemBank::ITEMS[$id][2]];
+            // Domaines entrelacés aussi : N1, E1, O1, A1, C1, N2, E2…
+            $order = array_flip(array_keys(IpipItemBank::DOMAINS));
+            usort($facets, fn ($x, $y) => [$x[1], $order[$x[0]]] <=> [$y[1], $order[$y[0]]]);
+            $byFacet = array_map(fn ($f) => \array_slice(IpipItemBank::itemsOfFacet($f), 0, $def['perFacet']), $facets);
+            for ($round = 0; $round < $def['perFacet']; ++$round) {
+                foreach ($byFacet as $list) {
+                    if (isset($list[$round])) {
+                        $items[] = ['key' => 'ipip:'.$list[$round], 'text' => IpipItemBank::ITEMS[$list[$round]][2]];
+                    }
                 }
             }
         } elseif ('enn' === $def['bank']) {
+            // Les items sont déjà entrelacés par type (1, 2, … 9, 1, 2…)
             foreach (EnneagramBank::ITEMS as $id => [, $text]) {
                 $items[] = ['key' => 'enn:'.$id, 'text' => $text];
             }
@@ -95,8 +103,6 @@ final class Instruments
                 $items[] = ['key' => 'don:'.$id, 'text' => $text];
             }
         }
-        // Mélange déterministe : même ordre pour tous, facettes entrelacées
-        usort($items, fn ($a, $b) => crc32($a['key'].'ks') <=> crc32($b['key'].'ks'));
 
         return $items;
     }

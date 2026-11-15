@@ -90,6 +90,15 @@
                     {% endfor %}
                 </div>
             {% endfor %}
+            <div class="ab-plan" id="duo" :class="period === 'DUO' && 'on'" @click="{{ hasCouple ? "period = 'DUO'" : "window.location.href = '" ~ path('app_couple') ~ "'" }}">
+                <span class="ab-save" style="background: #DB2777;">Pour deux</span>
+                <div style="font-weight: 700;">Duo (couple), annuel</div>
+                {% for cur in ['EUR', 'XAF'] %}
+                    <div class="ab-price" x-show="currency === '{{ cur }}'" {{ cur != 'EUR' ? 'x-cloak' }}>{{ duoPrices[cur]|money(cur) }}<small style="font-size: .9rem; color: var(--fg-muted);"> / an</small></div>
+                    <div x-show="currency === '{{ cur }}'" {{ cur != 'EUR' ? 'x-cloak' }} style="font-size: .8rem; color: var(--fg-muted);">les deux conjoints PRO + l'espace couple</div>
+                {% endfor %}
+                {% if not hasCouple %}<div style="font-size: .78rem; color: #DB2777; margin-top: .35rem;">Invitez d'abord votre conjoint →</div>{% endif %}
+            </div>
         </div>
 
         <table class="ab-table" style="margin-top: 1.5rem;">
@@ -103,6 +112,7 @@
                 ['Carte stratégique', false, true],
                 ['Export PDF de vos plans', false, true],
                 ['Revue du mois et historique de vos plans', false, true],
+                ['Espace couple (offre Duo)', false, 'Avec Duo'],
             ] %}
                 <tr><td>{{ row[0] }}</td>
                     {% for v in [row[1], row[2]] %}<td>{% if v is same as(true) %}<span style="color: var(--primary); font-weight: 800;">✓</span>{% elseif v is same as(false) %}<span style="color: #CBD5E1;">—</span>{% else %}<span style="font-size: .82rem;">{{ v }}</span>{% endif %}</td>{% endfor %}
@@ -120,7 +130,7 @@
             {% endif %}
         {% else %}
             <p style="color: var(--fg-light); margin-bottom: 1rem;">
-                1. Payez <strong><span x-show="currency === 'EUR'">{% for p in ['YEARLY', 'MONTHLY'] %}<span x-show="period === '{{ p }}'">{{ (prices.EUR[p])|money('EUR') }}</span>{% endfor %}</span><span x-show="currency === 'XAF'" x-cloak>{% for p in ['YEARLY', 'MONTHLY'] %}<span x-show="period === '{{ p }}'">{{ (prices.XAF[p])|money('XAF') }}</span>{% endfor %}</span></strong> avec le moyen de votre choix.
+                1. Payez <strong><span x-show="currency === 'EUR'">{% for p in ['YEARLY', 'MONTHLY'] %}<span x-show="period === '{{ p }}'">{{ (prices.EUR[p])|money('EUR') }}</span>{% endfor %}<span x-show="period === 'DUO'">{{ duoPrices.EUR|money('EUR') }}</span></span><span x-show="currency === 'XAF'" x-cloak>{% for p in ['YEARLY', 'MONTHLY'] %}<span x-show="period === '{{ p }}'">{{ (prices.XAF[p])|money('XAF') }}</span>{% endfor %}<span x-show="period === 'DUO'">{{ duoPrices.XAF|money('XAF') }}</span></span></strong> avec le moyen de votre choix.
                 2. Déclarez votre paiement ci-dessous. 3. Nous activons PRO dès réception.
             </p>
             <div class="ab-toggle" style="margin-bottom: 1rem;">

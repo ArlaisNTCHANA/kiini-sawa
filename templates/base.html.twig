@@ -442,6 +442,7 @@
                             { label: is_pro() ? (is_trialing() ? 'Essai PRO' : 'Mon abonnement') : 'Passer à PRO', icon: 'crown', href: path('app_subscription'), desc: is_trialing() ? 'Jusqu\'au ' ~ pro_until()|date('d/m') : (is_pro() ? 'Offre PRO' : 'Débloquer les 4 plans') },
                             { label: 'Mes Découvertes', icon: 'sparkles',      href: path('app_personality_index'),      desc: 'Tests & valeurs' },
                             { label: 'Calendrier',      icon: 'calendar',      href: path('app_planner'), desc: 'Planning' },
+                            { label: 'Notre couple',    icon: 'heart',         href: path('app_couple'), desc: 'Vision et projets à deux' },
                             { label: 'Mon organisation', icon: 'building-2',  href: path('app_organisation_index'), desc: 'Église, association…' },
                             { label: 'La Méthode',      icon: 'book-open',     href: path('app_methode_index'), desc: 'Les chapitres du livre' },
                         ] %}

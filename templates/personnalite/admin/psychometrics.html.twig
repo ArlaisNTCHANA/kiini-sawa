@@ -1,0 +1,32 @@
+{% extends 'admin/layout.html.twig' %}
+
+{% block title %}Fidélité des tests{% endblock %}
+{% block page_title %}Qualité scientifique des tests{% endblock %}
+
+{% block content %}
+<div class="ks-card" style="margin-bottom: 20px;">
+    <h2 style="font-size: 16px; font-weight: 700; margin-bottom: 10px;">Passations</h2>
+    {% for instrument, n in counts %}<span style="display: inline-block; margin: 0 16px 6px 0;"><strong>{{ n }}</strong> {{ instrument }}</span>{% else %}<span style="color: var(--text-secondary);">Aucune passation pour l'instant.</span>{% endfor %}
+    <p style="font-size: 13px; color: var(--text-secondary); margin-top: 10px;">
+        Percentiles : affichés aux utilisateurs dès {{ minSample }} profils fiables par échelle.
+        {% for d, label in domains %}{{ label }} : {{ norms[d].n ?? 0 }}{{ not loop.last ? ' · ' }}{% endfor %}.
+    </p>
+</div>
+
+<div class="ks-card">
+    <h2 style="font-size: 16px; font-weight: 700; margin-bottom: 6px;">Fidélité (alpha de Cronbach)</h2>
+    <p style="font-size: 13px; color: var(--text-secondary); margin-bottom: 12px;">Calculée dès 30 réponses complètes par échelle. Repères : ≥ 0,70 bon, 0,60 à 0,70 acceptable pour 4 items, &lt; 0,60 à revoir (traduction ou formulation). Pour l'IPIP, la colonne « Origine » donne l'alpha de l'échantillon anglophone de Johnson (N = 619 150).</p>
+    <table style="width: 100%; border-collapse: collapse; font-size: 14px;">
+        <tr style="text-align: left; color: var(--text-secondary);"><th style="padding: 6px;">Échelle</th><th style="padding: 6px;">Réponses</th><th style="padding: 6px;">Alpha KIINI SAWA</th><th style="padding: 6px;">Origine</th></tr>
+        {% for code, r in reliability %}
+            {% set facet = code starts with 'ipip:' ? code|slice(5) : null %}
+            <tr style="border-top: 1px solid rgba(255,255,255,.06);">
+                <td style="padding: 6px;">{{ facet ? facet ~ ' · ' }}{{ r.label }}</td>
+                <td style="padding: 6px;">{{ r.n }}</td>
+                <td style="padding: 6px; font-weight: 700; color: {{ r.alpha is null ? 'var(--text-secondary)' : (r.alpha >= 0.7 ? '#34d399' : (r.alpha >= 0.6 ? '#fbbf24' : '#f87171')) }};">{{ r.alpha is null ? '—' : r.alpha|number_format(2, ',') }}</td>
+                <td style="padding: 6px; color: var(--text-secondary);">{{ facet and originalAlpha[facet] is defined ? originalAlpha[facet]|number_format(2, ',') : '—' }}</td>
+            </tr>
+        {% endfor %}
+    </table>
+</div>
+{% endblock %}

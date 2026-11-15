@@ -1,0 +1,200 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Notre couple{% endblock %}
+
+{% block body %}
+<style>
+    .cp-wrap { max-width: 960px; margin: 0 auto; padding: 2rem 1.25rem 8rem; }
+    .cp-card { background: var(--card-bg); border-radius: var(--r-lg); box-shadow: var(--card-shadow); padding: 1.5rem; margin-bottom: 1.25rem; }
+    .cp-card h2 { font-family: var(--font-serif); font-size: 1.3rem; margin-bottom: .3rem; display: flex; align-items: center; gap: .5rem; }
+    .cp-sub { color: var(--fg-muted); font-size: .88rem; margin-bottom: 1rem; }
+    .cp-input { padding: .6rem .8rem; border: 1.5px solid #E2E8F0; border-radius: var(--r-md); font: inherit; font-size: .9rem; background: #fff; }
+    .cp-btn { padding: .6rem 1.1rem; border: none; border-radius: var(--r-md); background: var(--primary); color: #fff; font: inherit; font-weight: 700; font-size: .88rem; cursor: pointer; }
+    .cp-btn.sec { background: var(--bg-alt); color: var(--fg); }
+    .cp-item { border-top: 1px solid #F1F5F9; padding: .75rem 0; display: flex; justify-content: space-between; gap: 1rem; align-items: flex-start; }
+    .cp-item:first-child { border-top: none; }
+    .cp-pill { display: inline-block; font-size: .7rem; font-weight: 700; padding: .1rem .5rem; border-radius: 999px; background: #FDF2F8; color: #BE185D; margin-right: .3rem; }
+    .cp-mini { font-size: .78rem; color: var(--fg-muted); }
+    .cp-x { background: none; border: none; color: #CBD5E1; cursor: pointer; font-size: 1rem; }
+    .cp-x:hover { color: var(--danger); }
+    .cp-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: .75rem; }
+    .cp-theme { border: 1.5px solid #F1F5F9; border-radius: var(--r-md); padding: .9rem; }
+</style>
+{% set token = csrf_token('couple') %}
+
+<div class="cp-wrap">
+    <p style="font-size: .75rem; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; color: #DB2777;">Notre couple</p>
+    <h1 style="font-family: var(--font-serif); color: var(--primary); font-size: 2rem; margin: .2rem 0 .3rem;">{{ couple.partnerA.displayName }} &amp; {{ couple.partnerB.displayName }}</h1>
+    <p class="cp-mini" style="margin-bottom: 1.25rem;">Ensemble sur KIINI SAWA depuis {{ couple.joinedAt|format_date(pattern: 'MMMM y', locale: 'fr') }} · <a href="{{ path('app_couple_report') }}" style="color: var(--primary); font-weight: 700;">🔍 Notre rapport croisé</a></p>
+
+    {# ── Vision ───────────────────────────── #}
+    <section class="cp-card" id="vision">
+        <h2>🧭 Notre vision commune</h2>
+        <p class="cp-sub">Pourquoi sommes-nous ensemble ? Ce que nous voulons bâtir et laisser.</p>
+        <form method="post" action="{{ path('app_couple_vision') }}">
+            <textarea name="vision" class="cp-input" rows="4" style="width: 100%;" placeholder="Ex. : Bâtir un foyer où Dieu est au centre, où chacun grandit dans sa vocation, et ouvert à ceux qui ont besoin d'une famille." aria-label="Vision commune">{{ couple.vision }}</textarea>
+            <input name="verse" class="cp-input" style="width: 100%; margin-top: .5rem;" value="{{ couple.verse }}" placeholder="La parole qui nous porte (ex. : Josué 24:15)" aria-label="Verset du couple">
+            <input type="hidden" name="_csrf_token" value="{{ token }}">
+            <div style="margin-top: .6rem;"><button class="cp-btn" type="submit">Enregistrer</button></div>
+        </form>
+    </section>
+
+    {# ── Valeurs ───────────────────────────── #}
+    <section class="cp-card" id="value">
+        <h2>💎 Nos valeurs communes</h2>
+        <p class="cp-sub">Ce qui guide nos décisions de couple, même quand c'est difficile.</p>
+        <div style="display: flex; flex-wrap: wrap; gap: .5rem; margin-bottom: .75rem;">
+            {% for v in couple.itemsOfKind('VALUE') %}
+                <form method="post" action="{{ path('app_couple_item_update', {id: v.id}) }}" style="display: inline-flex; align-items: center; gap: .2rem; background: #F0FDFA; border-radius: 999px; padding: .3rem .4rem .3rem .8rem;">
+                    <span style="font-weight: 600; color: var(--primary);">{{ v.title }}</span>
+                    <input type="hidden" name="action" value="delete"><input type="hidden" name="_csrf_token" value="{{ token }}">
+                    <button class="cp-x" type="submit" title="Retirer" aria-label="Retirer {{ v.title }}">×</button>
+                </form>
+            {% else %}
+                <span class="cp-mini">Aucune valeur pour l'instant.</span>
+            {% endfor %}
+        </div>
+        <form method="post" action="{{ path('app_couple_item_add') }}" style="display: flex; gap: .5rem;">
+            <input type="hidden" name="kind" value="VALUE"><input type="hidden" name="_csrf_token" value="{{ token }}">
+            <input name="title" class="cp-input" required maxlength="255" placeholder="Ex. : Fidélité, Pardon, Générosité" style="flex: 1;" aria-label="Valeur">
+            <button class="cp-btn" type="submit">Ajouter</button>
+        </form>
+    </section>
+
+    {# ── Projets ───────────────────────────── #}
+    <section class="cp-card" id="project">
+        <h2>🎯 Nos projets communs</h2>
+        <p class="cp-sub">Ce que nous voulons être, faire, avoir et donner ensemble.</p>
+        {% for p in couple.itemsOfKind('PROJECT') %}
+            <div class="cp-item">
+                <div style="flex: 1;">
+                    <span class="cp-pill">{{ categories[p.category] ?? 'Projet' }}</span><strong>{{ p.title }}</strong>
+                    {% if p.details %}<p class="cp-mini" style="margin-top: .2rem;">{{ p.details }}</p>{% endif %}
+                    <form method="post" action="{{ path('app_couple_item_update', {id: p.id}) }}" style="display: flex; gap: .5rem; align-items: center; margin-top: .4rem; flex-wrap: wrap;" x-data="{ v: {{ p.progress }} }">
+                        <input type="range" name="progress" min="0" max="100" step="5" x-model="v" style="accent-color: var(--primary); width: 140px;" aria-label="Avancement">
+                        <span class="cp-mini" x-text="v + ' %'"></span>
+                        <input type="date" name="deadline" class="cp-input" style="padding: .3rem .5rem;" value="{{ p.deadline ? p.deadline|date('Y-m-d') }}" aria-label="Échéance">
+                        <input type="hidden" name="_csrf_token" value="{{ token }}">
+                        <button class="cp-btn sec" type="submit" style="padding: .35rem .7rem;">OK</button>
+                    </form>
+                </div>
+                <form method="post" action="{{ path('app_couple_item_update', {id: p.id}) }}" onsubmit="return confirm('Supprimer ce projet ?')">
+                    <input type="hidden" name="action" value="delete"><input type="hidden" name="_csrf_token" value="{{ token }}">
+                    <button class="cp-x" type="submit" aria-label="Supprimer">×</button>
+                </form>
+            </div>
+        {% else %}
+            <p class="cp-mini">Aucun projet commun pour l'instant.</p>
+        {% endfor %}
+        <form method="post" action="{{ path('app_couple_item_add') }}" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: .5rem; margin-top: 1rem;">
+            <input type="hidden" name="kind" value="PROJECT"><input type="hidden" name="_csrf_token" value="{{ token }}">
+            <input name="title" class="cp-input" required maxlength="255" placeholder="Ex. : Acheter notre maison" style="grid-column: span 2;" aria-label="Projet">
+            <select name="category" class="cp-input" aria-label="Catégorie">{% for k, l in categories %}<option value="{{ k }}">{{ l }}</option>{% endfor %}</select>
+            <input type="date" name="deadline" class="cp-input" aria-label="Échéance">
+            <input name="details" class="cp-input" maxlength="1000" placeholder="Premier pas, détails (facultatif)" style="grid-column: 1 / -1;" aria-label="Détails">
+            <div><button class="cp-btn" type="submit">Ajouter le projet</button></div>
+        </form>
+    </section>
+
+    {# ── Thèmes de croissance ───────────────── #}
+    <section class="cp-card" id="theme">
+        <h2>🌱 Nos thèmes de croissance</h2>
+        <p class="cp-sub">Choisissez un à trois thèmes à travailler en ce moment, et notez votre engagement.</p>
+        {% set chosen = couple.itemsOfKind('THEME') %}
+        {% for t in chosen %}
+            {% set meta = themes[t.category] ?? null %}
+            <div class="cp-item">
+                <div style="flex: 1;">
+                    <strong>{{ t.title }}</strong>{% if meta %}<span class="cp-mini"> · {{ meta[2] }}</span>{% endif %}
+                    <form method="post" action="{{ path('app_couple_item_update', {id: t.id}) }}" style="display: flex; gap: .5rem; margin-top: .4rem;">
+                        <input name="details" class="cp-input" style="flex: 1;" value="{{ t.details }}" placeholder="{{ meta ? 'Idée : ' ~ meta[3] : 'Notre engagement' }}" aria-label="Notre engagement">
+                        <input type="hidden" name="_csrf_token" value="{{ token }}">
+                        <button class="cp-btn sec" type="submit" style="padding: .35rem .7rem;">OK</button>
+                    </form>
+                </div>
+                <form method="post" action="{{ path('app_couple_item_update', {id: t.id}) }}">
+                    <input type="hidden" name="action" value="delete"><input type="hidden" name="_csrf_token" value="{{ token }}">
+                    <button class="cp-x" type="submit" aria-label="Retirer">×</button>
+                </form>
+            </div>
+        {% endfor %}
+        {% set chosenKeys = chosen|map(t => t.category) %}
+        <div class="cp-grid" style="margin-top: 1rem;">
+            {% for key, meta in themes %}
+                {% if key not in chosenKeys %}
+                    <form method="post" action="{{ path('app_couple_item_add') }}" class="cp-theme">
+                        <input type="hidden" name="kind" value="THEME"><input type="hidden" name="category" value="{{ key }}"><input type="hidden" name="_csrf_token" value="{{ token }}">
+                        <div style="font-weight: 700; display: flex; gap: .4rem; align-items: center;"><i data-lucide="{{ meta[1] }}" style="width: 16px; height: 16px; color: #DB2777;"></i> {{ meta[0] }}</div>
+                        <p class="cp-mini" style="margin: .3rem 0 .6rem;">{{ meta[2] }}</p>
+                        <button class="cp-btn sec" type="submit" style="padding: .35rem .7rem;">Choisir</button>
+                    </form>
+                {% endif %}
+            {% endfor %}
+        </div>
+    </section>
+
+    {# ── Rituels ───────────────────────────── #}
+    <section class="cp-card" id="ritual">
+        <h2>🔁 Nos rituels de couple</h2>
+        <p class="cp-sub">Les petites habitudes qui font les grands couples.</p>
+        {% for r in couple.itemsOfKind('RITUAL') %}
+            <div class="cp-item">
+                <div><span class="cp-pill">{{ frequencies[r.category] ?? '' }}</span><strong>{{ r.title }}</strong></div>
+                <form method="post" action="{{ path('app_couple_item_update', {id: r.id}) }}">
+                    <input type="hidden" name="action" value="delete"><input type="hidden" name="_csrf_token" value="{{ token }}">
+                    <button class="cp-x" type="submit" aria-label="Retirer">×</button>
+                </form>
+            </div>
+        {% else %}
+            <p class="cp-mini">Idées : prière du soir, rendez-vous amoureux mensuel, point budget, marche du dimanche.</p>
+        {% endfor %}
+        <form method="post" action="{{ path('app_couple_item_add') }}" style="display: flex; gap: .5rem; margin-top: .75rem; flex-wrap: wrap;">
+            <input type="hidden" name="kind" value="RITUAL"><input type="hidden" name="_csrf_token" value="{{ token }}">
+            <input name="title" class="cp-input" required maxlength="255" placeholder="Ex. : Prier ensemble avant de dormir" style="flex: 1; min-width: 200px;" aria-label="Rituel">
+            <select name="category" class="cp-input" aria-label="Fréquence">{% for k, l in frequencies %}<option value="{{ k }}">{{ l }}</option>{% endfor %}</select>
+            <button class="cp-btn" type="submit">Ajouter</button>
+        </form>
+    </section>
+
+    {# ── Revue de couple ───────────────────── #}
+    <section class="cp-card" id="revue">
+        <h2>📅 Notre revue de {{ month|format_date(pattern: 'MMMM', locale: 'fr') }}</h2>
+        <p class="cp-sub">À faire ensemble, une fois par mois, dans un moment calme. Chacun peut la compléter.</p>
+        <form method="post" action="{{ path('app_couple_review') }}">
+            {% for key, q in questions %}
+                <div style="margin-bottom: .9rem;">
+                    <label for="r-{{ key }}" style="font-weight: 700;">{{ q[0] }}</label>
+                    <p class="cp-mini" style="margin-bottom: .3rem;">{{ q[1] }}</p>
+                    <textarea id="r-{{ key }}" name="answers[{{ key }}]" class="cp-input" rows="2" style="width: 100%;">{{ review ? review.answers[key] ?? '' }}</textarea>
+                </div>
+            {% endfor %}
+            <input type="hidden" name="_csrf_token" value="{{ token }}">
+            <button class="cp-btn" type="submit">Enregistrer notre revue</button>
+        </form>
+        {% set past = reviews|filter(r => not review or r.id != review.id) %}
+        {% if past|length %}
+            <div style="margin-top: 1.25rem;">
+                <p style="font-weight: 700; margin-bottom: .4rem;">Nos décisions des mois précédents</p>
+                {% for r in past %}<p class="cp-mini" style="padding: .3rem 0; border-top: 1px solid #F1F5F9;"><strong>{{ r.month|format_date(pattern: 'MMMM y', locale: 'fr')|capitalize }}</strong> : {{ r.answers.decision ?? '—' }}</p>{% endfor %}
+            </div>
+        {% endif %}
+    </section>
+
+    {# ── Réglages ──────────────────────────── #}
+    <section class="cp-card">
+        <h2>⚙️ Réglages</h2>
+        <form method="post" action="{{ path('app_couple_settings') }}">
+            <label style="display: flex; gap: .6rem; align-items: center; cursor: pointer;">
+                <input type="checkbox" name="shareTests" value="1" {{ sharesTests ? 'checked' }} style="accent-color: var(--primary);">
+                Je partage mes résultats de tests avec {{ partner.displayName }} (rapport croisé)
+            </label>
+            <input type="hidden" name="action" value="share"><input type="hidden" name="_csrf_token" value="{{ token }}">
+            <button class="cp-btn sec" type="submit" style="margin-top: .6rem;">Enregistrer</button>
+        </form>
+        <form method="post" action="{{ path('app_couple_settings') }}" style="margin-top: 1rem;" onsubmit="return confirm('Fermer l\'espace couple ? Tout ce qui est commun (vision, projets, revues) sera supprimé. Vos espaces personnels restent intacts.')">
+            <input type="hidden" name="action" value="dissolve"><input type="hidden" name="_csrf_token" value="{{ token }}">
+            <button type="submit" style="background: none; border: none; color: var(--fg-muted); text-decoration: underline; cursor: pointer; font: inherit; font-size: .85rem;">Fermer l'espace couple</button>
+        </form>
+    </section>
+</div>
+{% endblock %}
