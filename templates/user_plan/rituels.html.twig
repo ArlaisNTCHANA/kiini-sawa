@@ -1,0 +1,1038 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Mes Rituels — KIINI SAWA{% endblock %}
+
+{% block body %}
+<style>
+    .rituals-wrap {
+        max-width: 1000px;
+        margin: 0 auto;
+        padding: 2.5rem 1.5rem 8rem;
+    }
+    @media (min-width: 1024px) {
+        .rituals-wrap {
+            padding: 3.5rem 2rem 5rem;
+        }
+    }
+
+    .back-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.375rem;
+        font-size: 0.8rem;
+        font-weight: 700;
+        color: var(--fg-muted);
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        transition: color 0.2s;
+    }
+    .back-btn:hover {
+        color: var(--primary);
+    }
+
+    /* Tabs buttons */
+    .tab-btn {
+        padding: 0.75rem 1.5rem;
+        border-radius: var(--r-md);
+        font-size: 0.875rem;
+        font-weight: 600;
+        transition: all 0.25s var(--ease);
+        cursor: pointer;
+        border: 1px solid transparent;
+        background: transparent;
+        color: var(--fg-muted);
+    }
+    .tab-btn.active {
+        background: var(--primary-glow);
+        color: var(--primary);
+        border-color: rgba(15, 118, 110, 0.15);
+    }
+
+    /* Section Cards */
+    .ritual-section {
+        background: rgba(255, 255, 255, 0.85);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        border: 1px solid rgba(15, 118, 110, 0.06);
+        border-radius: 2rem;
+        padding: 2.25rem;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.02);
+    }
+
+    /* Habit Cards */
+    .habit-item-card {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        padding: 1.1rem 1.25rem;
+        border-radius: 1.25rem;
+        background: #ffffff;
+        cursor: pointer;
+        border: 1px solid rgba(15, 118, 110, 0.05);
+        box-shadow: 0 4px 12px rgba(15, 118, 110, 0.02);
+        transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+        overflow: visible;
+        position: relative;
+        height: auto !important;
+        min-height: fit-content !important;
+    }
+
+    .custom-chk-circle {
+        width: 1.35rem;
+        height: 1.35rem;
+        border-radius: 50%;
+        flex-shrink: 0;
+        border: 2px solid #CBD5E1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.2s ease;
+        background: white;
+    }
+
+    .pill-btn-filter {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.5rem 1.25rem;
+        border-radius: 9999px;
+        font-size: 0.75rem;
+        font-weight: 750;
+        letter-spacing: 0.05em;
+        text-transform: uppercase;
+        cursor: pointer;
+        border: 1.5px solid transparent;
+        transition: all 0.25s var(--ease);
+        font-family: 'Inter', sans-serif;
+        background: rgba(241, 245, 249, 0.8);
+        color: #475569;
+    }
+    .pill-btn-filter.active {
+        background: var(--p-color) !important;
+        color: white !important;
+        border-color: var(--p-color) !important;
+        box-shadow: 0 4px 14px var(--p-glow) !important;
+    }
+
+    /* Forms inputs */
+    .ritual-input, .ritual-select, .ritual-textarea {
+        width: 100%;
+        padding: 0.85rem 1.1rem;
+        background-color: #ffffff;
+        border: 1.5px solid rgba(15, 118, 110, 0.08);
+        border-radius: 12px;
+        color: var(--fg);
+        font-family: inherit;
+        font-size: 0.95rem;
+        outline: none;
+        box-shadow: inset 0 2px 4px rgba(0,0,0,0.01);
+        transition: all 0.25s;
+    }
+    .ritual-input:focus, .ritual-select:focus, .ritual-textarea:focus {
+        border-color: var(--primary-light);
+        box-shadow: 0 0 0 4px rgba(13, 148, 136, 0.12), inset 0 2px 4px rgba(0,0,0,0.01);
+    }
+
+    .btn-submit {
+        padding: 0.9rem;
+        background: linear-gradient(135deg, #0D9488 0%, #0F766E 100%);
+        border: none;
+        border-radius: 12px;
+        color: #ffffff;
+        font-family: inherit;
+        font-weight: 700;
+        font-size: 0.95rem;
+        cursor: pointer;
+        transition: all 0.25s ease;
+        box-shadow: 0 4px 14px rgba(15, 118, 110, 0.3);
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+    }
+    .btn-submit:hover:not(:disabled) {
+        opacity: 0.95;
+        box-shadow: 0 6px 20px rgba(15, 118, 110, 0.45);
+        transform: translateY(-1px);
+    }
+    .btn-submit:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+    }
+
+    /* Toast overlay */
+    .toast-overlay {
+        position: fixed;
+        bottom: 2rem;
+        right: 2rem;
+        background: #0F172A;
+        color: white;
+        padding: 1rem 1.5rem;
+        border-radius: 1rem;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.25);
+        z-index: 10000;
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        font-size: 0.875rem;
+        font-weight: 600;
+    }
+
+    /* Premium Rooting Card Inputs */
+    .rooting-field-card {
+        border: 1.5px solid rgba(15, 118, 110, 0.08);
+        border-radius: 14px;
+        padding: 0.85rem 1.1rem;
+        background-color: rgba(248, 250, 252, 0.55);
+        transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+        display: flex;
+        flex-direction: column;
+        gap: 0.25rem;
+    }
+    .rooting-field-card:focus-within {
+        background-color: #ffffff;
+        border-color: var(--primary-light);
+        box-shadow: 0 0 0 4px rgba(13, 148, 136, 0.12);
+        transform: translateY(-1px);
+    }
+    .rooting-field-card label {
+        display: block;
+        font-size: 0.675rem;
+        font-weight: 800;
+        color: var(--fg-muted);
+        letter-spacing: 0.05em;
+        text-transform: uppercase;
+        margin: 0;
+    }
+    .rooting-field-card input, 
+    .rooting-field-card textarea, 
+    .rooting-field-card select {
+        width: 100% !important;
+        background: transparent !important;
+        border: none !important;
+        padding: 0 !important;
+        margin: 0 !important;
+        color: var(--fg) !important;
+        font-family: inherit !important;
+        font-size: 0.95rem !important;
+        font-weight: 500 !important;
+        outline: none !important;
+        box-shadow: none !important;
+        resize: none !important;
+    }
+    .rooting-field-card input::placeholder, 
+    .rooting-field-card textarea::placeholder {
+        color: #94A3B8;
+        opacity: 0.6;
+    }
+    .ritual-pill-select {
+        padding: 0.4rem 0.75rem;
+        background-color: #ffffff;
+        border: 1.5px solid rgba(15, 118, 110, 0.12);
+        border-radius: 8px;
+        font-size: 0.75rem;
+        font-weight: 700;
+        color: var(--primary);
+        text-transform: uppercase;
+        letter-spacing: 0.03em;
+        outline: none;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    .ritual-pill-select:focus {
+        border-color: var(--primary);
+        box-shadow: 0 0 0 3px rgba(13, 148, 136, 0.1);
+    }
+    .ritual-pill-input {
+        padding: 0.4rem 0.75rem;
+        background-color: #ffffff;
+        border: 1.5px solid rgba(15, 118, 110, 0.12);
+        border-radius: 8px;
+        font-size: 0.75rem;
+        color: var(--fg);
+        outline: none;
+        transition: all 0.2s;
+    }
+    .ritual-pill-input:focus {
+        border-color: var(--primary);
+        box-shadow: 0 0 0 3px rgba(13, 148, 136, 0.1);
+    }
+
+    /* Layout grid for Rooting view */
+    .rooting-grid {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 2rem;
+        align-items: start;
+    }
+    @media (min-width: 1024px) {
+        .rooting-grid {
+            grid-template-columns: 300px 1fr;
+        }
+    }
+</style>
+
+<div class="rituals-wrap" x-data="habitTrackerHandler()">
+    {# Toast Notification #}
+    <div x-show="toast.show" x-cloak class="toast-overlay"
+         x-transition:enter="transition ease-out duration-300"
+         x-transition:enter-start="opacity-0 translate-y-4"
+         x-transition:enter-end="opacity-100 translate-y-0"
+         x-transition:leave="transition ease-in duration-200"
+         x-transition:leave-start="opacity-100 translate-y-0"
+         x-transition:leave-end="opacity-0 translate-y-4">
+        <i :data-lucide="toast.icon" :class="toast.type === 'success' ? 'text-emerald-400' : 'text-rose-400'" style="width: 18px; height: 18px;"></i>
+        <span x-text="toast.message"></span>
+    </div>
+
+    <header style="margin-bottom: 2rem;">
+        <a href="{{ path('app_dashboard') }}" class="back-btn">
+            <i data-lucide="arrow-left" style="width: 14px; height: 14px; stroke-width: 2.5px;"></i>
+            <span>Dashboard</span>
+        </a>
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 0.5rem; flex-wrap: wrap; gap: 1rem;">
+            <div>
+                <h1 style="font-family: 'Playfair Display', serif; font-size: clamp(2rem, 4.5vw, 2.75rem);
+                           font-weight: 500; color: var(--primary); line-height: 1.25;">
+                    Mes Rituels
+                </h1>
+                <p style="color: var(--fg-muted); font-size: 0.95rem; margin-top: 0.35rem;">
+                    Suivez vos habitudes et ancrez-les dans votre quotidien.
+                </p>
+            </div>
+
+            {# Mode Switcher #}
+            <div style="display: flex; background: rgba(15, 118, 110, 0.05); padding: 0.375rem; border-radius: var(--r-lg); border: 1px solid rgba(15, 118, 110, 0.06);">
+                <button @click="setTab('TRACKER')" class="tab-btn" :class="tab === 'TRACKER' ? 'active' : ''">
+                    Suivi quotidien
+                </button>
+                <button @click="setTab('ROOTING')" class="tab-btn" :class="tab === 'ROOTING' ? 'active' : ''">
+                    Ancrage cognitif
+                </button>
+            </div>
+        </div>
+    </header>
+
+    {# ══════════════════════════════════════════════════════
+       VIEW 1 — TRACKER (Suivi quotidien)
+    ══════════════════════════════════════════════════════ #}
+    <div x-show="tab === 'TRACKER'" x-cloak style="display: flex; flex-direction: column; gap: 2rem;">
+        {# Pillar Filters #}
+        {% set pillars = [
+            { id: 'ALL',          label: 'Tout',          color: '#0F766E', glow: 'rgba(15, 118, 110, 0.15)' },
+            { id: 'CROISSANCE',   label: 'Croissance',    color: '#D97706', glow: 'rgba(217, 119, 6, 0.15)' },
+            { id: 'DEVELOPPEMENT',label: 'Développement', color: '#059669', glow: 'rgba(5, 150, 105, 0.15)' },
+            { id: 'CONTRIBUTION', label: 'Contribution',  color: '#DB2777', glow: 'rgba(219, 39, 119, 0.15)' },
+            { id: 'HYGIENE',      label: 'Hygiène',       color: '#4F46E5', glow: 'rgba(79, 70, 229, 0.15)' },
+        ] %}
+        <div style="display: flex; flex-wrap: wrap; gap: 0.5rem; justify-content: center; margin-bottom: 0.5rem;">
+            {% for p in pillars %}
+            <button @click="selectedPillar = '{{ p.id }}'"
+                    class="pill-btn-filter"
+                    :class="selectedPillar === '{{ p.id }}' ? 'active' : ''"
+                    style="--p-color: {{ p.color }}; --p-glow: {{ p.glow }};">
+                {% if p.id != 'ALL' %}
+                <span style="width: 0.5rem; height: 0.5rem; border-radius: 50%; background: {{ p.color }}; display: inline-block;"></span>
+                {% endif %}
+                {{ p.label }}
+            </button>
+            {% endfor %}
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr; gap: 2rem; align-items: start;" class="md:grid-cols-3">
+            {# Habits Lists #}
+            <div style="grid-column: span 2; display: flex; flex-direction: column; gap: 1.5rem;" class="md:col-span-2">
+                <section class="ritual-section" style="display: flex; flex-direction: column; gap: 2rem;">
+                    
+                    {% set habitGroups = [
+                        { key: 'DAILY',   label: 'Ma Journée' },
+                        { key: 'WEEKLY',  label: 'Ma Semaine' },
+                        { key: 'MONTHLY', label: 'Mon Mois' },
+                    ] %}
+
+                    {% set hasAnyHabit = habits is not empty %}
+                    
+                    {% if not hasAnyHabit %}
+                        <div style="display: flex; flex-direction: column; align-items: center; text-align: center; padding: 4rem 1.5rem; background: rgba(255,255,255,0.4); border-radius: 1.5rem; border: 1.5px dashed rgba(15,118,110,0.12);">
+                            <i data-lucide="info" style="width: 32px; height: 32px; color: var(--fg-muted); margin-bottom: 0.75rem;"></i>
+                            <h3 style="font-family: 'Playfair Display', serif; font-size: 1.25rem; color: var(--primary); margin-bottom: 0.5rem;">Aucun rituel configuré</h3>
+                            <p style="color: var(--fg-muted); font-size: 0.95rem; line-height: 1.6; max-width: 20rem;">Ajoutez votre premier rituel à l'aide du formulaire sur la droite pour commencer.</p>
+                        </div>
+                    {% else %}
+                        {% for group in habitGroups %}
+                            {% set groupHabits = habits|filter(h => h.frequency.value == group.key) %}
+                            
+                            <div x-show="hasVisibleHabits('{{ group.key }}')" style="display: flex; flex-direction: column; gap: 1rem;">
+                                <div style="display: flex; align-items: center; gap: 0.75rem;">
+                                    <h2 style="font-family: 'Playfair Display', serif; font-size: 1.25rem; color: var(--primary); font-weight: 500; white-space: nowrap;">
+                                        {{ group.label }}
+                                    </h2>
+                                    <div style="height: 1px; flex: 1; background: rgba(15, 118, 110, 0.08);"></div>
+                                </div>
+
+                                <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 0.75rem;">
+                                    {% for habit in groupHabits %}
+                                        {# Categorize Habit Pillar #}
+                                        {% set hPillar = 'ALL' %}
+                                        {% set pColor = '#0F766E' %}
+                                        {% set pGlow = 'rgba(15, 118, 110, 0.08)' %}
+                                        {% set pText = 'Général' %}
+                                        {% if habit.growthGoal is not null %}
+                                            {% set hPillar = 'CROISSANCE' %}
+                                            {% set pColor = '#D97706' %}
+                                            {% set pGlow = 'rgba(217, 119, 6, 0.08)' %}
+                                            {% set pText = 'Croissance' %}
+                                        {% elseif habit.skillGoal is not null %}
+                                            {% set hPillar = 'DEVELOPPEMENT' %}
+                                            {% set pColor = '#059669' %}
+                                            {% set pGlow = 'rgba(5, 150, 105, 0.08)' %}
+                                            {% set pText = 'Développement' %}
+                                        {% elseif habit.legacyGoal is not null %}
+                                            {% set hPillar = 'CONTRIBUTION' %}
+                                            {% set pColor = '#DB2777' %}
+                                            {% set pGlow = 'rgba(219, 39, 119, 0.08)' %}
+                                            {% set pText = 'Contribution' %}
+                                        {% elseif habit.hygieneDomain is not null %}
+                                            {% set hPillar = 'HYGIENE' %}
+                                            {% set pColor = '#4F46E5' %}
+                                            {% set pGlow = 'rgba(79, 70, 229, 0.08)' %}
+                                            {% set pText = 'Hygiène' %}
+                                        {% endif %}
+
+                                        <label class="habit-item-card"
+                                               x-show="selectedPillar === 'ALL' || selectedPillar === '{{ hPillar }}'"
+                                               style="--pillar-color: {{ pColor }}; --pillar-glow: {{ pGlow }};"
+                                               onmouseover="this.style.borderColor='{{ pColor }}'; this.style.boxShadow='0 10px 24px {{ pGlow }}'; this.style.transform='translateY(-2px)'"
+                                               onmouseout="this.style.borderColor='rgba(15, 118, 110, 0.05)'; this.style.boxShadow='0 4px 12px rgba(15, 118, 110, 0.02)'; this.style.transform=''"
+                                               @click="toggleHabit({{ habit.id }}, $event)">
+                                            <span style="position: absolute; left: 0; top: 0; bottom: 0; width: 4px; background: {{ pColor }};"></span>
+
+                                            <span class="custom-chk-circle" :style="checkedLogs[{{ habit.id }}] ? 'border-color: var(--pillar-color); background: var(--pillar-glow);' : 'border-color: {{ pColor }}50;'">
+                                                <span style="width: 0.6rem; height: 0.6rem; background: var(--pillar-color); border-radius: 50%; transition: all 0.25s var(--ease);"
+                                                      :style="checkedLogs[{{ habit.id }}] ? 'opacity: 1; transform: scale(1);' : 'opacity: 0; transform: scale(0.5);'"></span>
+                                            </span>
+
+                                            <div style="flex: 1; min-width: 0;">
+                                                <p style="font-size: 0.925rem; font-weight: 600; margin: 0; transition: all 0.2s;"
+                                                   :style="checkedLogs[{{ habit.id }}] ? 'color: var(--fg-muted); text-decoration: line-through;' : 'color: var(--fg);'">
+                                                    {{ habit.title }}
+                                                </p>
+                                                <div style="display: flex; align-items: center; gap: 0.5rem; margin-top: 2px;">
+                                                    <span style="font-size: 0.65rem; color: var(--fg-muted); font-weight: 700; text-transform: uppercase; letter-spacing: 0.02em;">{{ pText }}</span>
+                                                    {% if habit.growthGoal is not null %}
+                                                        <span style="font-size: 0.65rem; color: var(--fg-muted);">•</span>
+                                                        <span style="font-size: 0.65rem; color: var(--fg-muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 120px;">{{ habit.growthGoal.title }}</span>
+                                                    {% endif %}
+                                                </div>
+                                            </div>
+                                        </label>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+                </section>
+            </div>
+
+            {# Quick Add Habit Form #}
+            <div style="grid-column: span 1;" class="md:col-span-1">
+                <section class="ritual-section" style="position: sticky; top: 96px; padding: 2rem 1.75rem;">
+                    <div style="display: flex; align-items: center; gap: 0.625rem; margin-bottom: 1.5rem;">
+                        <div style="width: 6px; height: 12px; background: var(--primary); border-radius: 999px;"></div>
+                        <h2 style="font-family: 'Playfair Display', serif; font-size: 1.2rem; color: var(--primary); font-weight: 500;">
+                            Nouveau Rituel
+                        </h2>
+                    </div>
+                    
+                    {{ form_start(form, {'attr': {'class': 'flex flex-col gap-4'}}) }}
+                        <div style="display: flex; flex-direction: column; gap: 0.375rem;">
+                            {{ form_label(form.title, 'Intitulé', {'label_attr': {'style': 'font-size: 0.75rem; font-weight: 700; color: var(--fg-light); letter-spacing: 0.05em; text-transform: uppercase;'}}) }}
+                            {{ form_widget(form.title, {'attr': {'class': 'ritual-input', 'placeholder': 'Ex: Méditer 10 minutes'}}) }}
+                        </div>
+
+                        <div style="display: flex; flex-direction: column; gap: 0.375rem;">
+                            {{ form_label(form.frequency, 'Fréquence', {'label_attr': {'style': 'font-size: 0.75rem; font-weight: 700; color: var(--fg-light); letter-spacing: 0.05em; text-transform: uppercase;'}}) }}
+                            {{ form_widget(form.frequency, {'attr': {'class': 'ritual-select'}}) }}
+                        </div>
+
+                        <button type="submit" class="btn-submit" style="margin-top: 0.5rem;">
+                            Créer le rituel
+                        </button>
+                    {{ form_end(form) }}
+                </section>
+            </div>
+        </div>
+    </div>
+
+    {# ══════════════════════════════════════════════════════
+       VIEW 2 — ROOTING (Ancrage cognitif)
+    ══════════════════════════════════════════════════════ #}
+    <div x-show="tab === 'ROOTING'" x-cloak style="display: flex; flex-direction: column; gap: 2rem;">
+        {# Pillar Filters (same as Tracker view) #}
+        <div style="display: flex; flex-wrap: wrap; gap: 0.5rem; justify-content: center; margin-bottom: 0.5rem;">
+            {% for p in pillars %}
+            <button @click="selectedPillar = '{{ p.id }}'"
+                    class="pill-btn-filter"
+                    :class="selectedPillar === '{{ p.id }}' ? 'active' : ''"
+                    style="--p-color: {{ p.color }}; --p-glow: {{ p.glow }};">
+                {% if p.id != 'ALL' %}
+                <span style="width: 0.5rem; height: 0.5rem; border-radius: 50%; background: {{ p.color }}; display: inline-block;"></span>
+                {% endif %}
+                {{ p.label }}
+            </button>
+            {% endfor %}
+        </div>
+
+        <div class="rooting-grid">
+        {# Sidebar: List of Habits #}
+        <aside style="display: flex; flex-direction: column; gap: 0.75rem;">
+            <div style="position: relative; margin-bottom: 0.5rem;">
+                <i data-lucide="search" style="position: absolute; left: 12px; top: 50%; transform: translateY(-50%); width: 14px; height: 14px; color: var(--fg-muted);"></i>
+                <input type="text" x-model="searchQuery" placeholder="Rechercher..."
+                       class="ritual-input" style="padding: 0.6rem 1rem 0.6rem 2.5rem; font-size: 0.85rem; border-radius: 10px;">
+            </div>
+
+            <div style="display: flex; flex-direction: column; gap: 0.5rem; max-height: 550px; overflow-y: auto;" class="ks-scroll">
+                {% for habit in habits %}
+                {# Categorize Habit Pillar #}
+                {% set hPillar = 'ALL' %}
+                {% set pColor = '#0F766E' %}
+                {% set pGlow = 'rgba(15, 118, 110, 0.08)' %}
+                {% set pText = 'Général' %}
+                {% if habit.growthGoal is not null %}
+                    {% set hPillar = 'CROISSANCE' %}
+                    {% set pColor = '#D97706' %}
+                    {% set pGlow = 'rgba(217, 119, 6, 0.08)' %}
+                    {% set pText = 'Croissance' %}
+                {% elseif habit.skillGoal is not null %}
+                    {% set hPillar = 'DEVELOPPEMENT' %}
+                    {% set pColor = '#059669' %}
+                    {% set pGlow = 'rgba(5, 150, 105, 0.08)' %}
+                    {% set pText = 'Développement' %}
+                {% elseif habit.legacyGoal is not null %}
+                    {% set hPillar = 'CONTRIBUTION' %}
+                    {% set pColor = '#DB2777' %}
+                    {% set pGlow = 'rgba(219, 39, 119, 0.08)' %}
+                    {% set pText = 'Contribution' %}
+                {% elseif habit.hygieneDomain is not null %}
+                    {% set hPillar = 'HYGIENE' %}
+                    {% set pColor = '#4F46E5' %}
+                    {% set pGlow = 'rgba(79, 70, 229, 0.08)' %}
+                    {% set pText = 'Hygiène' %}
+                {% endif %}
+
+                {% set isRooted = habit.rootingIntention is not empty or habit.rootingAnchor is not empty %}
+                <button @click="selectHabit({{ {
+                    id: habit.id,
+                    title: habit.title,
+                    frequency: habit.frequency.value,
+                    recurrenceDay: habit.recurrenceDay,
+                    recurrenceWeek: habit.recurrenceWeek,
+                    endDate: habit.endDate ? habit.endDate|date('Y-m-d') : '',
+                    implementationWhen: habit.implementationWhen ?: '',
+                    implementationThen: habit.implementationThen ?: '',
+                    supportStrategy: habit.supportStrategy ?: '',
+                    rootingIntention: habit.rootingIntention ?: '',
+                    rootingAction: habit.rootingAction ?: '',
+                    rootingMoment: habit.rootingMoment ?: '',
+                    rootingAnchor: habit.rootingAnchor ?: '',
+                    rootingBenefit: habit.rootingBenefit ?: '',
+                    rootingFacilitator: habit.rootingFacilitator ?: '',
+                    growthGoalId: habit.growthGoal ? habit.growthGoal.id : '',
+                    pillarText: pText,
+                    pillarColor: pColor
+                }|json_encode }})"
+                        class="habit-item-card"
+                        :style="selectedHabitId === {{ habit.id }} ? 'border-color: var(--primary); background: var(--primary-glow);' : 'background: white;'"
+                        style="display: flex !important; align-items: flex-start !important; justify-content: flex-start !important; text-align: left !important; padding: 0.85rem 1rem; width: 100%; gap: 0.75rem; height: auto !important; min-height: fit-content !important; overflow: hidden;"
+                        x-show="matchesSearch('{{ habit.title }}') && (selectedPillar === 'ALL' || selectedPillar === '{{ hPillar }}')">
+                    
+                    {# Colored bar on left #}
+                    <span style="position: absolute; left: 0; top: 0; bottom: 0; width: 4px; background: {{ pColor }}; border-top-left-radius: 1.25rem; border-bottom-left-radius: 1.25rem;"></span>
+
+                    <div style="position: relative; flex-shrink: 0; margin-top: 2px; padding-left: 4px;">
+                        <i data-lucide="zap" :class="selectedHabitId === {{ habit.id }} ? 'text-primary' : '{{ isRooted ? 'text-emerald-500' : 'text-slate-300' }}'" style="width: 18px; height: 18px;"></i>
+                        {% if isRooted %}
+                        <span style="position: absolute; top: -2px; right: -2px; width: 6px; height: 6px; border-radius: 50%; background: #10B981; border: 1px solid white;"></span>
+                        {% endif %}
+                    </div>
+                    <div style="flex: 1; min-width: 0; text-align: left !important;">
+                        <span style="text-align: left !important; font-size: 0.875rem; font-weight: 650; display: block; overflow-wrap: break-word; word-wrap: break-word; white-space: normal !important;"
+                              :style="selectedHabitId === {{ habit.id }} ? 'color: var(--primary); text-align: left !important;' : 'text-align: left !important;'">
+                            {{ habit.title }}
+                        </span>
+                        <div style="display: flex; align-items: center; justify-content: flex-start; gap: 0.35rem; margin-top: 2px; text-align: left !important; flex-wrap: wrap;">
+                            <span style="font-size: 0.65rem; color: var(--fg-muted); font-weight: 700; text-transform: uppercase;">
+                                {{ habit.frequency.value }}
+                            </span>
+                            <span style="font-size: 0.65rem; color: var(--fg-muted);">•</span>
+                            <span style="font-size: 0.65rem; color: {{ pColor }}; font-weight: 700; text-transform: uppercase;">
+                                {{ pText }}
+                            </span>
+                            {% if isRooted %}
+                            <span style="font-size: 0.65rem; color: #10B981; font-weight: 700;">• ANCRÉ</span>
+                            {% endif %}
+                        </div>
+                    </div>
+                </button>
+                {% endfor %}
+            </div>
+        </aside>
+
+        {# Rooting Form Panel #}
+        <main class="ritual-section" style="padding: 2.25rem 2.5rem;">
+            <template x-if="selectedHabitId !== null">
+                <div style="display: flex; flex-direction: column; gap: 2rem;">
+                    {# Header #}
+                    <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 1rem;">
+                        <div style="display: flex; align-items: center; gap: 0.75rem;">
+                            <div style="width: 3rem; height: 3rem; border-radius: 1rem; background: var(--primary-glow); color: var(--primary); display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                                <i data-lucide="zap" style="width: 24px; height: 24px;"></i>
+                            </div>
+                            <div>
+                                <h3 style="font-family: var(--font-sans); font-weight: 700; font-size: 1.25rem; color: var(--fg); line-height: 1.2; overflow-wrap: break-word; word-wrap: break-word; white-space: normal;" x-text="rooting.title"></h3>
+                                <div style="display: flex; align-items: center; gap: 0.5rem; margin-top: 4px; flex-wrap: wrap;">
+                                    <span style="font-size: 0.65rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em; padding: 0.2rem 0.5rem; border-radius: 4px; color: white;"
+                                          :style="`background: ${rooting.pillarColor}`"
+                                          x-text="rooting.pillarText"></span>
+                                    <span style="font-size: 0.65rem; color: var(--fg-muted); font-weight: 700; text-transform: uppercase; letter-spacing: 0.02em;" x-text="rooting.frequency"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <button @click="deleteHabit()" style="border: none; background: transparent; cursor: pointer; padding: 0.5rem; border-radius: 0.5rem; color: #94a3b8;"
+                                onmouseover="this.style.color='var(--danger)'; this.style.background='var(--danger-light)'"
+                                onmouseout="this.style.color='#94a3b8'; this.style.background='transparent'">
+                            <i data-lucide="trash-2" style="width: 18px; height: 18px;"></i>
+                        </button>
+                    </div>
+
+                    {# Dynamic Formula Preview #}
+                    <div style="background: linear-gradient(135deg, rgba(13, 148, 136, 0.05) 0%, rgba(79, 70, 229, 0.05) 100%);
+                                border: 1px solid rgba(13, 148, 136, 0.15);
+                                border-radius: 1.25rem;
+                                padding: 1.5rem;
+                                display: flex;
+                                align-items: flex-start;
+                                gap: 1rem;">
+                        <div style="width: 2.25rem; height: 2.25rem; border-radius: 0.75rem; background: rgba(13, 148, 136, 0.15); color: var(--primary); display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 2px;">
+                            <i data-lucide="brain-circuit" style="width: 18px; height: 18px;"></i>
+                        </div>
+                        <div style="flex: 1;">
+                            <span style="display: block; font-size: 0.725rem; font-weight: 800; color: var(--fg-muted); letter-spacing: 0.05em; text-transform: uppercase; margin-bottom: 0.5rem;">
+                                Formule d'Ancrage Mental
+                            </span>
+                            <p style="font-family: 'Playfair Display', serif; font-size: 1.15rem; line-height: 1.6; color: var(--fg); margin: 0;">
+                                Quand je <span style="border-bottom: 2px dashed #0D9488; padding: 0 4px; font-weight: 600;" :style="rooting.rootingAnchor ? 'color: #0D9488; border-bottom-style: solid;' : 'color: #94A3B8;'" x-text="rooting.rootingAnchor || '... routine ancre ...'"></span>, 
+                                je vais <span style="border-bottom: 2px dashed #D97706; padding: 0 4px; font-weight: 600;" :style="rooting.rootingAction ? 'color: #D97706; border-bottom-style: solid;' : 'color: #94A3B8;'" x-text="rooting.rootingAction || '... action minimale ...'"></span> 
+                                à/en <span style="border-bottom: 2px dashed #4F46E5; padding: 0 4px; font-weight: 600;" :style="rooting.rootingMoment ? 'color: #4F46E5; border-bottom-style: solid;' : 'color: #94A3B8;'" x-text="rooting.rootingMoment || '... moment ...'"></span> 
+                                pour obtenir <span style="border-bottom: 2px dashed #DB2777; padding: 0 4px; font-weight: 600;" :style="rooting.rootingBenefit ? 'color: #DB2777; border-bottom-style: solid;' : 'color: #94A3B8;'" x-text="rooting.rootingBenefit || '... récompense ...'"></span>.
+                            </p>
+                        </div>
+                    </div>
+
+                    {# Form Grid #}
+                    <div style="display: grid; grid-template-columns: 1fr; gap: 1.25rem;" class="md:grid-cols-2">
+                        
+                        {# Intention d'ancrage #}
+                        <div style="grid-column: span 2;" class="rooting-field-card">
+                            <label>Intention d'ancrage globale</label>
+                            <textarea x-model="rooting.rootingIntention" rows="2"
+                                      placeholder="Pourquoi cette habitude est-elle essentielle pour vous ? Quel est votre engagement ?"></textarea>
+                        </div>
+
+                        {# Fréquence et Recurrence #}
+                        <div style="grid-column: span 2; display: flex; flex-wrap: wrap; align-items: center; gap: 1rem; background: rgba(248, 250, 252, 0.6); padding: 0.75rem 1.25rem; border-radius: 1rem; border: 1px solid rgba(15,118,110,0.08);">
+                            <div style="display: flex; align-items: center; gap: 0.5rem;">
+                                <span style="font-size: 0.75rem; font-weight: 800; color: var(--fg-muted); text-transform: uppercase; letter-spacing: 0.05em;">Fréquence :</span>
+                                <select x-model="rooting.frequency" class="ritual-pill-select">
+                                    <option value="DAILY">Quotidien</option>
+                                    <option value="WEEKLY">Hebdomadaire</option>
+                                    <option value="MONTHLY">Mensuel</option>
+                                </select>
+                            </div>
+
+                            {# Weekly Recurrence Day #}
+                            <template x-if="rooting.frequency === 'WEEKLY'">
+                                <div style="display: flex; align-items: center; gap: 0.5rem;">
+                                    <span style="font-size: 0.75rem; color: var(--fg-muted); font-weight: 500;">Chaque :</span>
+                                    <select x-model.number="rooting.recurrenceDay" class="ritual-pill-select">
+                                        <option value="1">Lundi</option>
+                                        <option value="2">Mardi</option>
+                                        <option value="3">Mercredi</option>
+                                        <option value="4">Jeudi</option>
+                                        <option value="5">Vendredi</option>
+                                        <option value="6">Samedi</option>
+                                        <option value="0">Dimanche</option>
+                                    </select>
+                                </div>
+                            </template>
+
+                            {# Monthly Recurrence #}
+                            <template x-if="rooting.frequency === 'MONTHLY'">
+                                <div style="display: flex; align-items: center; gap: 0.75rem;">
+                                    <div style="display: flex; background: rgba(0,0,0,0.06); padding: 2px; border-radius: 6px;">
+                                        <button @click="rooting.recurrenceWeek = null; rooting.recurrenceDay = 1"
+                                                class="tab-btn" style="padding: 0.25rem 0.5rem; font-size: 0.7rem; border-radius: 4px;"
+                                                :style="rooting.recurrenceWeek === null ? 'background:white; color:var(--primary); font-weight:700; box-shadow:0 1px 3px rgba(0,0,0,0.08);' : ''">
+                                            Date fixe
+                                        </button>
+                                        <button @click="rooting.recurrenceWeek = 1; rooting.recurrenceDay = 1"
+                                                class="tab-btn" style="padding: 0.25rem 0.5rem; font-size: 0.7rem; border-radius: 4px;"
+                                                :style="rooting.recurrenceWeek !== null ? 'background:white; color:var(--primary); font-weight:700; box-shadow:0 1px 3px rgba(0,0,0,0.08);' : ''">
+                                            Jour relatif
+                                        </button>
+                                    </div>
+
+                                    <template x-if="rooting.recurrenceWeek === null">
+                                        <div style="display: flex; align-items: center; gap: 0.25rem;">
+                                            <span style="font-size: 0.75rem; color: var(--fg-muted); font-weight: 500;">Le</span>
+                                            <input type="number" min="1" max="31" x-model.number="rooting.recurrenceDay"
+                                                   class="ritual-pill-input" style="width: 3.5rem; text-align: center;">
+                                        </div>
+                                    </template>
+
+                                    <template x-if="rooting.recurrenceWeek !== null">
+                                        <div style="display: flex; gap: 0.25rem;">
+                                            <select x-model.number="rooting.recurrenceWeek" class="ritual-pill-select">
+                                                <option value="1">1er</option>
+                                                <option value="2">2ème</option>
+                                                <option value="3">3ème</option>
+                                                <option value="4">4ème</option>
+                                                <option value="5">Dernier</option>
+                                            </select>
+                                            <select x-model.number="rooting.recurrenceDay" class="ritual-pill-select">
+                                                <option value="1">Lundi</option>
+                                                <option value="2">Mardi</option>
+                                                <option value="3">Mercredi</option>
+                                                <option value="4">Jeudi</option>
+                                                <option value="5">Vendredi</option>
+                                                <option value="6">Samedi</option>
+                                                <option value="0">Dimanche</option>
+                                            </select>
+                                        </div>
+                                    </template>
+                                </div>
+                            </template>
+
+                            <div style="width: 1px; height: 1.5rem; background: rgba(15,118,110,0.15); margin: 0 0.5rem;"></div>
+
+                            {# End date #}
+                            <div style="display: flex; align-items: center; gap: 0.5rem;">
+                                <span style="font-size: 0.75rem; color: var(--fg-muted); font-weight: 500;">Jusqu'au</span>
+                                <input type="date" x-model="rooting.endDate" class="ritual-pill-input" style="color: var(--fg-light);">
+                            </div>
+                        </div>
+
+                        {# Intention / Action minimale #}
+                        <div class="rooting-field-card">
+                            <label>Action minimale de secours</label>
+                            <textarea x-model="rooting.rootingAction" rows="2"
+                                      placeholder="Version ultra-courte (ex: 2 pompes)"></textarea>
+                        </div>
+
+                        {# Moment #}
+                        <div class="rooting-field-card">
+                            <label>Moment / Déclencheur temporel</label>
+                            <textarea x-model="rooting.rootingMoment" rows="2"
+                                      placeholder="A quel moment (ex: au réveil, à 14h...)"></textarea>
+                        </div>
+
+                        {# Ancre #}
+                        <div class="rooting-field-card">
+                            <label>Routine ancre existante</label>
+                            <textarea x-model="rooting.rootingAnchor" rows="2"
+                                      placeholder="Action réflexe (ex: après avoir allumé ma cafetière)"></textarea>
+                        </div>
+
+                        {# Bénéfice #}
+                        <div class="rooting-field-card">
+                            <label>Récompense / Bénéfice immédiat</label>
+                            <textarea x-model="rooting.rootingBenefit" rows="2"
+                                      placeholder="Sens de satisfaction (ex: me sentir énergisé)"></textarea>
+                        </div>
+
+                        {# Facilitateur #}
+                        <div style="grid-column: span 2;" class="rooting-field-card">
+                            <label>Facilitateur d'environnement</label>
+                            <textarea x-model="rooting.rootingFacilitator" rows="2"
+                                      placeholder="Comment rendre l'action évidente dans votre espace de vie ? (ex: poser mon livre sur mon oreiller le matin)"></textarea>
+                        </div>
+
+                        {# Growth Goal Selector #}
+                        <div style="grid-column: span 2;" class="rooting-field-card">
+                            <label>Objectif de croissance associé</label>
+                            <select x-model="rooting.growthGoalId">
+                                <option value="">Aucun objectif lié (Habitude libre)</option>
+                                <template x-for="gg in growthGoals" :key="gg.id">
+                                    <option :value="gg.id" x-text="`[${gg.axis}] ${gg.title}`" :selected="rooting.growthGoalId == gg.id"></option>
+                                </template>
+                            </select>
+                        </div>
+                    </div>
+
+                    {# Save Button #}
+                    <button @click="saveRooting()" :disabled="isSaving" class="btn-submit"
+                            style="margin-top: 1rem; display: flex; align-items: center; justify-content: center; gap: 0.5rem; height: 3.25rem;">
+                        <span x-show="!isSaving">Enregistrer les réglages d'ancrage</span>
+                        <span x-show="isSaving">Enregistrement en cours...</span>
+                    </button>
+                </div>
+            </template>
+
+            <template x-if="selectedHabitId === null">
+                <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 400px; color: var(--fg-muted);">
+                    <i data-lucide="zap" style="width: 48px; height: 48px; opacity: 0.2; margin-bottom: 1rem;"></i>
+                    <p style="font-size: 0.95rem;">Sélectionnez une habitude dans la colonne de gauche pour l'ancrer.</p>
+                </div>
+            </template>
+        </main>
+    </div>
+    </div>
+</div>
+
+<script>
+    function habitTrackerHandler() {
+        return {
+            tab: 'TRACKER',
+            selectedPillar: 'ALL',
+            searchQuery: '',
+            selectedHabitId: null,
+            isSaving: false,
+            growthGoals: {{ growthGoals|json_encode|raw }},
+            
+            // Populate list of habits for auto-selection and local state
+            habits: [
+                {% for habit in habits %}
+                    {# Categorize Habit Pillar #}
+                    {% set hPillar = 'ALL' %}
+                    {% set pColor = '#0F766E' %}
+                    {% set pGlow = 'rgba(15, 118, 110, 0.08)' %}
+                    {% set pText = 'Général' %}
+                    {% if habit.growthGoal is not null %}
+                        {% set hPillar = 'CROISSANCE' %}
+                        {% set pColor = '#D97706' %}
+                        {% set pGlow = 'rgba(217, 119, 6, 0.08)' %}
+                        {% set pText = 'Croissance' %}
+                    {% elseif habit.skillGoal is not null %}
+                        {% set hPillar = 'DEVELOPPEMENT' %}
+                        {% set pColor = '#059669' %}
+                        {% set pGlow = 'rgba(5, 150, 105, 0.08)' %}
+                        {% set pText = 'Développement' %}
+                    {% elseif habit.legacyGoal is not null %}
+                        {% set hPillar = 'CONTRIBUTION' %}
+                        {% set pColor = '#DB2777' %}
+                        {% set pGlow = 'rgba(219, 39, 119, 0.08)' %}
+                        {% set pText = 'Contribution' %}
+                    {% elseif habit.hygieneDomain is not null %}
+                        {% set hPillar = 'HYGIENE' %}
+                        {% set pColor = '#4F46E5' %}
+                        {% set pGlow = 'rgba(79, 70, 229, 0.08)' %}
+                        {% set pText = 'Hygiène' %}
+                    {% endif %}
+                    {{ {
+                        id: habit.id,
+                        title: habit.title,
+                        frequency: habit.frequency.value,
+                        recurrenceDay: habit.recurrenceDay,
+                        recurrenceWeek: habit.recurrenceWeek,
+                        endDate: habit.endDate ? habit.endDate|date('Y-m-d') : '',
+                        implementationWhen: habit.implementationWhen ?: '',
+                        implementationThen: habit.implementationThen ?: '',
+                        supportStrategy: habit.supportStrategy ?: '',
+                        rootingIntention: habit.rootingIntention ?: '',
+                        rootingAction: habit.rootingAction ?: '',
+                        rootingMoment: habit.rootingMoment ?: '',
+                        rootingAnchor: habit.rootingAnchor ?: '',
+                        rootingBenefit: habit.rootingBenefit ?: '',
+                        rootingFacilitator: habit.rootingFacilitator ?: '',
+                        growthGoalId: habit.growthGoal ? habit.growthGoal.id : '',
+                        pillar: hPillar,
+                        pillarText: pText,
+                        pillarColor: pColor
+                    }|json_encode|raw }},
+                {% endfor %}
+            ],
+            
+            // Map of logs completions (pre-populated by twig variables)
+            checkedLogs: {
+                {% for habit in habits %}
+                    {{ habit.id }}: {{ habit.isCompletedForCurrentPeriod() ? 'true' : 'false' }},
+                {% endfor %}
+            },
+
+            toast: {
+                show: false,
+                message: '',
+                type: 'success',
+                icon: 'check-circle-2'
+            },
+
+            rooting: {
+                id: null,
+                title: '',
+                frequency: 'DAILY',
+                recurrenceDay: null,
+                recurrenceWeek: null,
+                endDate: '',
+                implementationWhen: '',
+                implementationThen: '',
+                supportStrategy: '',
+                rootingIntention: '',
+                rootingAction: '',
+                rootingMoment: '',
+                rootingAnchor: '',
+                rootingBenefit: '',
+                rootingFacilitator: '',
+                growthGoalId: ''
+            },
+
+            init() {
+                if (this.tab === 'ROOTING' && this.selectedHabitId === null && this.habits.length > 0) {
+                    this.selectFirstVisibleHabit();
+                }
+                // Watch selectedPillar and searchQuery to auto-select first visible habit when filters change
+                this.$watch('selectedPillar', () => {
+                    if (this.tab === 'ROOTING') {
+                        this.selectFirstVisibleHabit();
+                    }
+                });
+                this.$watch('searchQuery', () => {
+                    if (this.tab === 'ROOTING') {
+                        this.selectFirstVisibleHabit();
+                    }
+                });
+            },
+
+            setTab(tabName) {
+                this.tab = tabName;
+                if (tabName === 'ROOTING') {
+                    this.selectFirstVisibleHabit();
+                }
+                this.$nextTick(() => {
+                    if (typeof lucide !== 'undefined') lucide.createIcons();
+                });
+            },
+
+            showToast(message, type = 'success', icon = 'check-circle-2') {
+                this.toast.message = message;
+                this.toast.type = type;
+                this.toast.icon = icon;
+                this.toast.show = true;
+                this.$nextTick(() => {
+                    if (typeof lucide !== 'undefined') lucide.createIcons();
+                });
+                setTimeout(() => {
+                    this.toast.show = false;
+                }, 3000);
+            },
+
+            hasVisibleHabits(groupKey) {
+                return this.habits.some(h => 
+                    h.frequency === groupKey && 
+                    (this.selectedPillar === 'ALL' || h.pillar === this.selectedPillar) &&
+                    (!this.searchQuery.trim() || h.title.toLowerCase().includes(this.searchQuery.toLowerCase()))
+                );
+            },
+
+            matchesSearch(title) {
+                if (!this.searchQuery.trim()) return true;
+                return title.toLowerCase().includes(this.searchQuery.toLowerCase());
+            },
+
+            selectFirstVisibleHabit() {
+                const visible = this.habits.filter(h => {
+                    const matchesSearch = !this.searchQuery.trim() || h.title.toLowerCase().includes(this.searchQuery.toLowerCase());
+                    const matchesPillar = this.selectedPillar === 'ALL' || h.pillar === this.selectedPillar;
+                    return matchesSearch && matchesPillar;
+                });
+                if (visible.length > 0) {
+                    this.selectHabit(visible[0]);
+                } else {
+                    this.selectedHabitId = null;
+                }
+            },
+
+            selectHabit(h) {
+                this.selectedHabitId = h.id;
+                this.rooting = { ...h };
+                this.$nextTick(() => {
+                    if (typeof lucide !== 'undefined') lucide.createIcons();
+                });
+            },
+
+            toggleHabit(id, event) {
+                // Prevent double execution if clicking labels or nested inputs
+                if (event.target.tagName === 'INPUT') return;
+
+                const current = this.checkedLogs[id];
+                this.checkedLogs[id] = !current;
+
+                fetch('/api/habits/' + id + '/log', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ status: !current })
+                })
+                .then(res => res.json())
+                .then(data => {
+                    if (data.success) {
+                        this.checkedLogs[id] = data.isCompleted;
+                        this.showToast(data.isCompleted ? 'Rituel accompli !' : 'Rituel réinitialisé.', 'success', 'check-circle-2');
+                    } else {
+                        throw new Error();
+                    }
+                })
+                .catch(() => {
+                    this.checkedLogs[id] = current; // Revert
+                    this.showToast('Erreur de connexion.', 'error', 'alert-circle');
+                });
+            },
+
+            saveRooting() {
+                if (this.selectedHabitId === null) return;
+                this.isSaving = true;
+
+                fetch('/api/habits/' + this.selectedHabitId + '/rooting', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(this.rooting)
+                })
+                .then(res => res.json())
+                .then(data => {
+                    this.isSaving = false;
+                    if (data.success) {
+                        this.showToast('Réglages d\'ancrage enregistrés avec succès !', 'success', 'save');
+                        // Reload window or update local state
+                        setTimeout(() => window.location.reload(), 800);
+                    } else {
+                        this.showToast('Erreur lors de la sauvegarde.', 'error', 'alert-circle');
+                    }
+                })
+                .catch(() => {
+                    this.isSaving = false;
+                    this.showToast('Erreur réseau.', 'error', 'alert-circle');
+                });
+            },
+
+            deleteHabit() {
+                if (this.selectedHabitId === null) return;
+                if (!confirm("Supprimer définitivement cette habitude et tout son historique ?")) return;
+
+                fetch('/api/habits/' + this.selectedHabitId, {
+                    method: 'DELETE'
+                })
+                .then(res => res.json())
+                .then(data => {
+                    if (data.success) {
+                        this.showToast('Habitude supprimée.', 'success', 'trash-2');
+                        setTimeout(() => window.location.reload(), 800);
+                    } else {
+                        this.showToast('Erreur lors de la suppression.', 'error', 'alert-circle');
+                    }
+                })
+                .catch(() => {
+                    this.showToast('Erreur de connexion.', 'error', 'alert-circle');
+                });
+            }
+        };
+    }
+</script>
+{% endblock %}

@@ -1,0 +1,858 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Mon Journal — KIINI SAWA{% endblock %}
+
+{% block body %}
+<style>
+    .journal-wrap {
+        max-width: 850px;
+        margin: 0 auto;
+        padding: 2.5rem 1.5rem 8rem;
+    }
+    @media (min-width: 1024px) {
+        .journal-wrap {
+            padding: 3.5rem 2rem 5rem;
+        }
+    }
+
+    .back-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.375rem;
+        font-size: 0.8rem;
+        font-weight: 700;
+        color: var(--fg-muted);
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        transition: color 0.2s;
+    }
+    .back-btn:hover {
+        color: var(--primary);
+    }
+
+    /* Vibrant Type Pills */
+    .type-pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.375rem;
+        padding: 0.5rem 1.1rem;
+        border-radius: 9999px;
+        font-size: 0.725rem;
+        font-weight: 700;
+        letter-spacing: 0.05em;
+        text-transform: uppercase;
+        white-space: nowrap;
+        cursor: pointer;
+        border: 1.5px solid transparent;
+        transition: all 0.25s var(--ease);
+        background: rgba(255, 255, 255, 0.85);
+        color: #475569;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.02);
+    }
+    .type-pill:hover {
+        background: #ffffff;
+        color: var(--primary);
+        border-color: rgba(15, 118, 110, 0.15);
+        transform: translateY(-1px);
+    }
+    .type-pill.active-idea { background: #EAB308 !important; color: white !important; box-shadow: 0 4px 14px rgba(234, 179, 8, 0.3) !important; border-color: #EAB308 !important; }
+    .type-pill.active-reflection { background: #10B981 !important; color: white !important; box-shadow: 0 4px 14px rgba(16, 185, 129, 0.3) !important; border-color: #10B981 !important; }
+    .type-pill.active-resolution { background: #6366F1 !important; color: white !important; box-shadow: 0 4px 14px rgba(99, 102, 241, 0.3) !important; border-color: #6366F1 !important; }
+    .type-pill.active-milestone { background: #F43F5E !important; color: white !important; box-shadow: 0 4px 14px rgba(244, 63, 94, 0.3) !important; border-color: #F43F5E !important; }
+    .type-pill.active-temoignage { background: #06B6D4 !important; color: white !important; box-shadow: 0 4px 14px rgba(6, 182, 212, 0.3) !important; border-color: #06B6D4 !important; }
+    .type-pill.active-insight { background: #0D9488 !important; color: white !important; box-shadow: 0 4px 14px rgba(13, 148, 136, 0.3) !important; border-color: #0D9488 !important; }
+
+    /* Textarea Focus glow */
+    .capture-textarea {
+        width: 100%;
+        background: white;
+        border-radius: 1.25rem;
+        padding: 1.25rem 3.5rem 1.25rem 1.25rem;
+        font-family: 'Inter', sans-serif;
+        font-size: 1rem;
+        line-height: 1.75;
+        color: #0F172A;
+        border: 1.5px solid rgba(15, 118, 110, 0.08);
+        resize: none;
+        outline: none;
+        box-shadow: inset 0 2px 4px rgba(0,0,0,0.01), 0 4px 12px rgba(0,0,0,0.01);
+        transition: all 0.25s;
+        min-height: 110px;
+    }
+    .capture-textarea:focus {
+        border-color: var(--primary-light) !important;
+        box-shadow: 0 0 0 4px rgba(13, 148, 136, 0.12), inset 0 2px 4px rgba(0,0,0,0.01) !important;
+    }
+
+    /* Mood buttons */
+    .mood-btn {
+        opacity: 0.45;
+        transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .mood-btn:hover {
+        opacity: 0.9;
+        transform: scale(1.1);
+    }
+    .mood-btn.active-happy { opacity: 1 !important; background: #FEF3C7 !important; border: 1.5px solid #FCD34D !important; transform: scale(1.15); box-shadow: 0 4px 12px rgba(245, 158, 11, 0.15); }
+    .mood-btn.active-energized { opacity: 1 !important; background: #FFEDD5 !important; border: 1.5px solid #FDBA74 !important; transform: scale(1.15); box-shadow: 0 4px 12px rgba(249, 115, 22, 0.15); }
+    .mood-btn.active-neutral { opacity: 1 !important; background: #F1F5F9 !important; border: 1.5px solid #CBD5E1 !important; transform: scale(1.15); box-shadow: 0 4px 12px rgba(100, 116, 139, 0.15); }
+    .mood-btn.active-tired { opacity: 1 !important; background: #EFF6FF !important; border: 1.5px solid #93C5FD !important; transform: scale(1.15); box-shadow: 0 4px 12px rgba(59, 130, 246, 0.15); }
+    .mood-btn.active-sad { opacity: 1 !important; background: #F5F3FF !important; border: 1.5px solid #C4B5FD !important; transform: scale(1.15); box-shadow: 0 4px 12px rgba(139, 92, 246, 0.15); }
+
+    /* Collection tags */
+    .collection-btn {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.6rem 1.25rem;
+        border-radius: var(--r-md);
+        font-size: 0.875rem;
+        font-weight: 700;
+        transition: all 0.25s var(--ease);
+        white-space: nowrap;
+        background: white;
+        border: 1px solid rgba(15, 118, 110, 0.05);
+        color: var(--fg-muted);
+        cursor: pointer;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.02);
+    }
+    .collection-btn.active {
+        background: #0F172A;
+        color: white;
+        box-shadow: 0 4px 12px rgba(15, 23, 42, 0.15);
+        border-color: #0F172A;
+    }
+
+    /* Modal dialog */
+    .modal-backdrop {
+        position: fixed;
+        inset: 0;
+        background: rgba(15, 23, 42, 0.3);
+        backdrop-filter: blur(8px);
+        -webkit-backdrop-filter: blur(8px);
+        z-index: 10000;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 1.5rem;
+    }
+    .modal-box {
+        background: white;
+        border-radius: 2rem;
+        padding: 2rem;
+        width: 100%;
+        max-width: 400px;
+        box-shadow: 0 20px 50px rgba(0,0,0,0.15);
+    }
+
+    /* Quick Inputs */
+    .collection-input {
+        width: 100%;
+        padding: 0.75rem 1rem;
+        background-color: #f8fafc;
+        border: 1.5px solid rgba(15, 118, 110, 0.08);
+        border-radius: 12px;
+        outline: none;
+    }
+
+    /* Feed entries */
+    .feed-card {
+        background: white;
+        border: 1px solid rgba(15, 118, 110, 0.05);
+        border-radius: 2rem;
+        padding: 1.5rem;
+        box-shadow: 0 4px 12px rgba(15, 118, 110, 0.02);
+        transition: all 0.25s var(--ease);
+    }
+    .feed-card:hover {
+        background: rgba(255, 255, 255, 0.95);
+        border-color: rgba(15, 118, 110, 0.12);
+        box-shadow: 0 8px 24px rgba(15, 118, 110, 0.04);
+    }
+
+    .toast-overlay {
+        position: fixed;
+        bottom: 2rem;
+        right: 2rem;
+        background: #0F172A;
+        color: white;
+        padding: 1rem 1.5rem;
+        border-radius: 1rem;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.25);
+        z-index: 11000;
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        font-size: 0.875rem;
+        font-weight: 600;
+    }
+</style>
+
+<div class="journal-wrap" x-data="journalHandler()">
+    {# Toast Notification #}
+    <div x-show="toast.show" x-cloak class="toast-overlay"
+         x-transition:enter="transition ease-out duration-300"
+         x-transition:enter-start="opacity-0 translate-y-4"
+         x-transition:enter-end="opacity-100 translate-y-0"
+         x-transition:leave="transition ease-in duration-200"
+         x-transition:leave-start="opacity-100 translate-y-0"
+         x-transition:leave-end="opacity-0 translate-y-4">
+        <i :data-lucide="toast.icon" :class="toast.type === 'success' ? 'text-emerald-400' : 'text-rose-400'" style="width: 18px; height: 18px;"></i>
+        <span x-text="toast.message"></span>
+    </div>
+
+    {# ══════════════════════════════════════════════════════
+       SECTION 1 — TOPBAR / COLLECTIONS
+    ══════════════════════════════════════════════════════ #}
+    <section style="display: flex; flex-direction: column; gap: 1rem; margin-bottom: 2.5rem;">
+        <div style="display: flex; justify-content: space-between; align-items: center; padding: 0 0.5rem;">
+            <span style="font-size: 0.65rem; font-weight: 800; letter-spacing: 0.15em; text-transform: uppercase; color: var(--fg-muted);">Collections</span>
+            <button @click="showAddCollection = true"
+                    style="display: flex; align-items: center; gap: 0.25rem; font-size: 0.7rem; font-weight: 700;
+                           color: var(--fg-muted); text-transform: uppercase; letter-spacing: 0.05em; padding: 0.4rem 0.85rem;
+                           border-radius: 9999px; border: 1.5px solid rgba(15, 118, 110, 0.1); background: white; cursor: pointer;">
+                <i data-lucide="plus" style="width: 12px; height: 12px;"></i>
+                <span>Nouveau</span>
+            </button>
+        </div>
+
+        {# Collections list #}
+        <div style="display: flex; gap: 0.5rem; overflow-x: auto; padding-bottom: 0.5rem; scrollbar-width: none;">
+            <button @click="selectCollection(null)" class="collection-btn" :class="activeCollectionId === null ? 'active' : ''">
+                <span style="width: 0.4rem; height: 0.4rem; border-radius: 50%; background: #0D9488; display: inline-block;"></span>
+                Toutes les notes
+            </button>
+
+            <template x-for="col in collections" :key="col.id">
+                <button @click="selectCollection(col.id)" class="collection-btn" :class="activeCollectionId === col.id ? 'active' : ''" style="position: relative; padding-right: 2.25rem;">
+                    <span style="width: 0.4rem; height: 0.4rem; border-radius: 50%; display: inline-block;" :style="`background: ${col.color}`"></span>
+                    <span x-text="col.name"></span>
+                    
+                    {# Delete collection trash icon #}
+                    <span @click.stop="deleteCollection(col.id)"
+                          style="position: absolute; right: 0.6rem; top: 50%; transform: translateY(-50%); opacity: 0.6; cursor: pointer;"
+                          onmouseover="this.style.opacity='1'; this.style.color='var(--danger)'"
+                          onmouseout="this.style.opacity='0.6'; this.style.color=''">
+                        <i data-lucide="trash-2" style="width: 12px; height: 12px;"></i>
+                    </span>
+                </button>
+            </template>
+        </div>
+    </section>
+
+    {# Header Description #}
+    <header style="margin-bottom: 3rem; text-align: center; display: flex; flex-direction: column; align-items: center;">
+        <div style="width: 3.5rem; height: 3.5rem; border-radius: 1.25rem; background: var(--primary-glow); color: var(--primary); display: flex; align-items: center; justify-content: center; margin-bottom: 1.25rem;">
+            <i data-lucide="book-open" style="width: 24px; height: 24px; stroke-width: 2px;"></i>
+        </div>
+        <h1 style="font-family: 'Playfair Display', serif; font-size: clamp(2rem, 4.5vw, 2.75rem);
+                   font-weight: 500; color: var(--primary); line-height: 1.25;" x-text="activeCollectionName()">
+        </h1>
+        <p style="color: var(--fg-muted); font-size: 0.95rem; margin-top: 0.35rem; font-style: italic; max-width: 26rem;">
+            Capturez vos pensées, construisez votre second cerveau.
+        </p>
+    </header>
+
+    <div style="display: flex; flex-direction: column; gap: 3rem;">
+        {# ══════════════════════════════════════════════════════
+           SECTION 2 — QUICK CAPTURE
+        ══════════════════════════════════════════════════════ #}
+        <section style="background: rgba(255, 255, 255, 0.75); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+                        border: 1px solid rgba(15, 118, 110, 0.08); border-radius: 2rem;
+                        box-shadow: 0 15px 40px -10px rgba(15, 118, 110, 0.06); overflow: hidden;">
+            {# Type Pills #}
+            {% set captureTypes = [
+                { value: 'IDEA',       label: 'Idée',       icon: 'lightbulb' },
+                { value: 'REFLECTION', label: 'Pensée',     icon: 'brain' },
+                { value: 'RESOLUTION', label: 'Résolution', icon: 'target' },
+                { value: 'MILESTONE',  label: 'Victoire',   icon: 'trophy' },
+                { value: 'TEMOIGNAGE', label: 'Témoignage', icon: 'quote' },
+                { value: 'INSIGHT',    label: 'Insight',    icon: 'eye' },
+            ] %}
+            <div style="display: flex; gap: 0.5rem; padding: 1.25rem 1.25rem 0.25rem; overflow-x: auto; scrollbar-width: none;">
+                {% for t in captureTypes %}
+                <button @click="capture.type = '{{ t.value }}'"
+                        class="type-pill"
+                        :class="capture.type === '{{ t.value }}' ? 'active-{{ t.value|lower }}' : ''"
+                        style="--t-color: {% if t.value == 'IDEA' %}#EAB308{% elseif t.value == 'REFLECTION' %}#10B981{% elseif t.value == 'RESOLUTION' %}#6366F1{% elseif t.value == 'MILESTONE' %}#F43F5E{% elseif t.value == 'TEMOIGNAGE' %}#06B6D4{% else %}#0D9488{% endif %};">
+                    <i data-lucide="{{ t.icon }}" style="width: 13px; height: 13px;"></i>
+                    <span>{{ t.label }}</span>
+                </button>
+                {% endfor %}
+            </div>
+
+            {# Textarea Input #}
+            <div style="padding: 0.75rem 1.25rem; position: relative;">
+                <textarea x-model="capture.content" :placeholder="capturePlaceholder()" rows="3" class="capture-textarea"></textarea>
+                <button @click="capture.showExtras = !capture.showExtras"
+                        style="position: absolute; top: 1.5rem; right: 2rem; width: 2.25rem; height: 2.25rem;
+                               border-radius: 0.75rem; cursor: pointer; transition: all 0.25s var(--ease); border: none;
+                               display: flex; align-items: center; justify-content: center;"
+                        :style="capture.showExtras
+                            ? 'background: rgba(15, 118, 110, 0.08); color: var(--primary);'
+                            : 'background: transparent; color: #94a3b8;'">
+                    <i data-lucide="plus" style="width: 18px; height: 18px; transition: transform 0.25s;"
+                       :style="capture.showExtras ? 'transform: rotate(45deg)' : ''"></i>
+                </button>
+            </div>
+
+            {# Optional Fields (Lieu, Collection) #}
+            <div x-show="capture.showExtras" style="display: none; padding: 0 1.25rem 0.875rem;"
+                 x-transition:enter="transition ease-out duration-200"
+                 x-transition:enter-start="opacity-0 -translate-y-1"
+                 x-transition:enter-end="opacity-100 translate-y-0">
+                <div style="display: grid; grid-template-columns: 1fr; gap: 0.75rem;" class="md:grid-cols-2">
+                    <div style="position: relative;">
+                        <i data-lucide="map-pin" style="position: absolute; left: 1rem; top: 50%;
+                                                         transform: translateY(-50%); width: 14px; height: 14px; color: #64748b;"></i>
+                        <input type="text" x-model="capture.location" placeholder="Lieu (ex: Paris, bureau...)"
+                               class="collection-input" style="padding-left: 2.5rem; font-size: 0.85rem;">
+                    </div>
+                    <div style="position: relative;">
+                        <i data-lucide="folder" style="position: absolute; left: 1rem; top: 50%;
+                                                         transform: translateY(-50%); width: 14px; height: 14px; color: #64748b;"></i>
+                        <select x-model="capture.collectionId" class="collection-input" style="padding-left: 2.5rem; font-size: 0.85rem; appearance: none;">
+                            <option value="">Collection (Optionnel)</option>
+                            <template x-for="c in collections" :key="c.id">
+                                <option :value="c.id" x-text="c.name" :selected="capture.collectionId == c.id"></option>
+                            </template>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            {# Footer: Mood + Energy + Save button #}
+            <div style="display: flex; align-items: center; justify-content: space-between;
+                        padding: 0.75rem 1.25rem 1.25rem; gap: 1rem; flex-wrap: wrap;">
+                {# Mood selection #}
+                <div style="display: flex; align-items: center; gap: 0.75rem;">
+                    <span style="font-size: 0.65rem; font-weight: 800; letter-spacing: 0.15em; text-transform: uppercase; color: #64748b;">Humeur</span>
+                    {% set moodList = [
+                        { value: 'HAPPY',     icon: '😊' },
+                        { value: 'ENERGIZED', icon: '🔥' },
+                        { value: 'NEUTRAL',   icon: '😐' },
+                        { value: 'TIRED',     icon: '😫' },
+                        { value: 'SAD',       icon: '😔' },
+                    ] %}
+                    <div style="display: flex; gap: 3px; background: white; padding: 0.25rem; border-radius: 1rem;
+                                border: 1px solid rgba(15,118,110,0.06); box-shadow: 0 2px 8px rgba(0,0,0,0.02);">
+                        {% for m in moodList %}
+                        <button @click="capture.mood = '{{ m.value }}'"
+                                class="mood-btn"
+                                :class="capture.mood === '{{ m.value }}' ? 'active-{{ m.value|lower }}' : ''"
+                                style="width: 2.25rem; height: 2.25rem; border-radius: 0.75rem; font-size: 1.25rem;
+                                       display: flex; align-items: center; justify-content: center; cursor: pointer;
+                                       border: none; background: transparent;"
+                                title="{{ m.value }}">
+                            {{ m.icon }}
+                        </button>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <div style="display: flex; align-items: center; gap: 1.25rem; flex-wrap: wrap;">
+                    {# Energy Slider #}
+                    <div style="display: flex; align-items: center; gap: 0.625rem;">
+                        <i data-lucide="zap" style="width: 15px; height: 15px; flex-shrink: 0; transition: color 0.2s;"
+                           :style="capture.energy >= 7 ? 'color: #EAB308; fill: #EAB308' : 'color: #cbd5e1'"></i>
+                        <input type="range" min="1" max="10" x-model.number="capture.energy"
+                               style="width: 6rem; accent-color: var(--primary); height: 4px; cursor: pointer;">
+                        <span style="font-size: 0.875rem; font-weight: 800; color: #0F172A; min-width: 1.25rem;"
+                               x-text="capture.energy"></span>
+                    </div>
+
+                    {# Send button #}
+                    <button :disabled="isSubmitting || !capture.content.trim()"
+                            @click="submitCapture()"
+                            :style="capture.content.trim()
+                                ? 'background: var(--primary); box-shadow: 0 4px 14px rgba(15, 118, 110, 0.35); cursor: pointer;'
+                                : 'background: rgba(15, 118, 110, 0.25); cursor: not-allowed;'"
+                            style="display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.7rem 1.5rem;
+                                   border-radius: 0.875rem; font-size: 0.825rem; font-weight: 700; color: white;
+                                   transition: all 0.25s var(--ease); border: none; font-family: 'Inter', sans-serif; height: 2.75rem;">
+                        <i data-lucide="send" style="width: 14px; height: 14px;"></i>
+                        <span x-text="isSubmitting ? 'Envoi...' : 'Capturer'"></span>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        {# ══════════════════════════════════════════════════════
+           SECTION 3 — REFLECTION FEED
+        ══════════════════════════════════════════════════════ #}
+        <section style="display: flex; flex-direction: column; gap: 1.5rem;">
+            {# Feed Separator / Filter Types #}
+            <div style="display: flex; align-items: center; gap: 1rem; flex-wrap: wrap;">
+                <div style="display: flex; align-items: center; gap: 0.5rem;">
+                    <i data-lucide="filter" style="width: 14px; height: 14px; color: var(--fg-muted);"></i>
+                    <span style="font-size: 0.7rem; font-weight: 800; letter-spacing: 0.15em; text-transform: uppercase; color: var(--fg-muted);">Flux de Réflexion</span>
+                </div>
+                
+                <div style="display: flex; gap: 0.375rem; overflow-x: auto; scrollbar-width: none;">
+                    <button @click="filterType('ALL')" class="type-pill" :class="activeTypeFilter === 'ALL' ? 'active-insight' : ''" style="padding: 0.35rem 0.85rem; font-size: 0.65rem;">
+                        Tous
+                    </button>
+                    <button @click="filterType('REFLECTION')" class="type-pill" :class="activeTypeFilter === 'REFLECTION' ? 'active-reflection' : ''" style="padding: 0.35rem 0.85rem; font-size: 0.65rem;">
+                        Pensées
+                    </button>
+                    <button @click="filterType('IDEA')" class="type-pill" :class="activeTypeFilter === 'IDEA' ? 'active-idea' : ''" style="padding: 0.35rem 0.85rem; font-size: 0.65rem;">
+                        Idées
+                    </button>
+                    <button @click="filterType('MILESTONE')" class="type-pill" :class="activeTypeFilter === 'MILESTONE' ? 'active-milestone' : ''" style="padding: 0.35rem 0.85rem; font-size: 0.65rem;">
+                        Victoires
+                    </button>
+                </div>
+                <div style="height: 1px; flex: 1; background: rgba(15, 118, 110, 0.08); min-width: 50px;"></div>
+            </div>
+
+            {# The Timeline list #}
+            <div style="position: relative; display: flex; flex-direction: column; gap: 1.5rem;">
+                {# Left Vertical line on desktop #}
+                <div style="position: absolute; left: 1.5rem; top: 0; bottom: 0; width: 2px; background: rgba(15, 118, 110, 0.05);" class="hidden md:block"></div>
+
+                <template x-for="(entry, index) in entries" :key="entry.id">
+                    <div style="display: flex; flex-direction: column; gap: 0.75rem;">
+                        {# Date header badge if new day #}
+                        <template x-if="isNewDay(index)">
+                            <div style="margin-bottom: 0.5rem;" class="md:ml-12">
+                                <span style="font-size: 0.7rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em; color: var(--primary); background: var(--primary-glow); padding: 0.35rem 0.85rem; border-radius: 9999px; border: 1px solid rgba(15,118,110,0.1);">
+                                    <span x-text="formatDateHeader(entry.date)"></span>
+                                </span>
+                            </div>
+                        </template>
+
+                        <div style="position: relative; display: flex; gap: 1rem;" class="md:pl-12">
+                            {# Timeline dot on desktop #}
+                            <div class="hidden md:block" style="position: absolute; left: 1.5rem; top: 1.5rem; transform: translateX(-50%); width: 0.75rem; height: 0.75rem; border-radius: 50%; background: white; border: 2.5px solid #cbd5e1; z-index: 1;"></div>
+
+                            {# The note card itself #}
+                            <div class="feed-card" style="flex: 1; display: flex; flex-direction: column; gap: 1rem;">
+                                {# Header metadata #}
+                                <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 1rem;">
+                                    <div style="display: flex; align-items: center; gap: 0.75rem;">
+                                        <span style="font-size: 1.5rem;" x-text="getMoodEmoji(entry.mood)"></span>
+                                        <div style="display: flex; flex-direction: column;">
+                                            <div style="display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap;">
+                                                <span style="font-size: 0.8rem; font-weight: 700; color: var(--fg); display: inline-flex; align-items: center; gap: 0.25rem;">
+                                                    <i :data-lucide="getTypeIcon(entry.type)" style="width: 14px; height: 14px;"></i>
+                                                    <span x-text="getTypeLabel(entry.type)"></span>
+                                                </span>
+                                                <span style="font-size: 0.7rem; color: var(--fg-muted);">•</span>
+                                                <span style="font-size: 0.75rem; color: var(--fg-muted); font-weight: 500;" x-text="formatTime(entry.date)"></span>
+                                            </div>
+
+                                            <div style="display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap; margin-top: 0.25rem;">
+                                                {# Source tag #}
+                                                <span style="font-size: 0.65rem; font-weight: 800; text-transform: uppercase; color: var(--fg-muted); letter-spacing: 0.02em;" x-text="entry.source"></span>
+                                                
+                                                {# Location if exists #}
+                                                <template x-if="entry.location">
+                                                    <div style="display: inline-flex; align-items: center; gap: 0.25rem; background: var(--primary-glow); color: var(--primary); padding: 0.15rem 0.5rem; border-radius: 4px; font-size: 0.65rem; font-weight: 600;">
+                                                        <i data-lucide="map-pin" style="width: 10px; height: 10px;"></i>
+                                                        <span x-text="entry.location"></span>
+                                                    </div>
+                                                </template>
+
+                                                {# Collection if exists #}
+                                                <template x-if="entry.collection">
+                                                    <div style="display: inline-flex; align-items: center; gap: 0.25rem; padding: 0.15rem 0.5rem; border-radius: 4px; font-size: 0.65rem; font-weight: 700; text-transform: uppercase;"
+                                                         :style="`background: ${entry.collection.color}15; color: ${entry.collection.color};`">
+                                                        <i data-lucide="folder" style="width: 10px; height: 10px;"></i>
+                                                        <span x-text="entry.collection.name"></span>
+                                                    </div>
+                                                </template>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    {# Delete Note button #}
+                                    <template x-if="entry.category === 'REFLECTION'">
+                                        <button @click="deleteNote(entry.id)"
+                                                style="border: none; background: transparent; cursor: pointer; color: #94a3b8; padding: 0.35rem; border-radius: 0.5rem; transition: all 0.2s;"
+                                                onmouseover="this.style.color='var(--danger)'; this.style.background='var(--danger-light)'"
+                                                onmouseout="this.style.color='#94a3b8'; this.style.background='transparent'">
+                                            <i data-lucide="trash-2" style="width: 14px; height: 14px;"></i>
+                                        </button>
+                                    </template>
+                                </div>
+
+                                {# Content #}
+                                <p style="font-family: var(--font-serif); font-size: 1.05rem; line-height: 1.7; color: var(--fg-light); white-space: pre-wrap; margin: 0;" x-text="entry.content"></p>
+
+                                {# Energy progress bar #}
+                                <template x-if="entry.energy !== null">
+                                    <div style="display: flex; align-items: center; gap: 0.5rem; margin-top: 0.5rem; border-top: 1px solid rgba(0,0,0,0.03); padding-top: 0.75rem;">
+                                        <div style="display: flex; align-items: center; gap: 0.25rem; font-size: 0.7rem; font-weight: 700; color: var(--fg-muted); text-transform: uppercase;">
+                                            <i data-lucide="zap" style="width: 12px; height: 12px; color: #EAB308; fill: #EAB308;"></i>
+                                            <span>Énergie</span>
+                                        </div>
+                                        <div style="height: 4px; background: #e2e8f0; border-radius: 999px; flex: 1; max-width: 80px; overflow: hidden;">
+                                            <div style="height: 100%; background: #eab308; border-radius: 999px;" :style="`width: ${entry.energy * 10}%`"></div>
+                                        </div>
+                                        <span style="font-size: 0.7rem; font-weight: 700; color: var(--fg-light);" x-text="`${entry.energy}/10`"></span>
+                                    </div>
+                                </template>
+                            </div>
+                        </div>
+                    </div>
+                </template>
+
+                {# Empty State #}
+                <div x-show="entries.length === 0" style="display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 5rem 2rem; text-align: center; background: rgba(255,255,255,0.4); border-radius: 2rem; border: 1.5px dashed rgba(15,118,110,0.12);" class="md:ml-12">
+                    <i data-lucide="quote" style="width: 32px; height: 32px; color: var(--fg-muted); opacity: 0.3; margin-bottom: 0.75rem;"></i>
+                    <p style="font-family: var(--font-serif); font-size: 1.1rem; font-style: italic; color: var(--fg-muted); max-width: 18rem; line-height: 1.6;">
+                        Votre journal est encore vide. Capturez une idée ou une pensée pour commencer.
+                    </p>
+                </div>
+
+                {# Load More Button #}
+                <div x-show="hasMore" style="display: flex; justify-content: center; margin-top: 1rem;" class="md:ml-12">
+                    <button @click="loadMore()" :disabled="isLoadingMore"
+                            style="display: flex; align-items: center; gap: 0.5rem; padding: 0.75rem 2rem; border-radius: var(--r-xl);
+                                   border: 1px solid rgba(15,118,110,0.15); background: white; font-weight: 700; color: var(--primary);
+                                   font-size: 0.85rem; cursor: pointer; transition: all 0.2s;"
+                            onmouseover="this.style.background='var(--primary-glow)'"
+                            onmouseout="this.style.background='white'">
+                        <i data-lucide="calendar" style="width: 14px; height: 14px;"></i>
+                        <span x-text="isLoadingMore ? 'Chargement...' : 'Charger plus de notes'"></span>
+                    </button>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    {# ══════════════════════════════════════════════════════
+       MODAL — ADD COLLECTION
+    ══════════════════════════════════════════════════════ #}
+    <div x-show="showAddCollection" x-cloak class="modal-backdrop">
+        <div class="modal-box" @click.outside="showAddCollection = false">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+                <div style="display: flex; align-items: center; gap: 0.5rem;">
+                    <div style="width: 2.25rem; height: 2.25rem; border-radius: 0.5rem; background: var(--primary-glow); color: var(--primary); display: flex; align-items: center; justify-content: center;">
+                        <i data-lucide="folder-plus" style="width: 16px; height: 16px;"></i>
+                    </div>
+                    <h3 style="font-family: var(--font-sans); font-weight: 700; font-size: 1.1rem; color: var(--fg);">Nouvelle collection</h3>
+                </div>
+                <button @click="showAddCollection = false" style="border: none; background: transparent; cursor: pointer; color: #94a3b8; padding: 0.25rem;">
+                    <i data-lucide="x" style="width: 20px; height: 20px;"></i>
+                </button>
+            </div>
+
+            <div style="display: flex; flex-direction: column; gap: 1.25rem;">
+                <div style="display: flex; flex-direction: column; gap: 0.375rem;">
+                    <label style="font-size: 0.7rem; font-weight: 800; letter-spacing: 0.05em; text-transform: uppercase; color: var(--fg-light);">Nom de la collection</label>
+                    <input type="text" x-model="newCollection.name" placeholder="ex: Projet KIINI, Gratitude..." class="collection-input">
+                </div>
+
+                <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+                    <label style="font-size: 0.7rem; font-weight: 800; letter-spacing: 0.05em; text-transform: uppercase; color: var(--fg-light);">Couleur</label>
+                    <div style="display: flex; flex-wrap: wrap; gap: 0.5rem;">
+                        <template x-for="color in presetColors">
+                            <button @click="newCollection.color = color"
+                                    style="width: 1.75rem; height: 1.75rem; border-radius: 50%; border: none; cursor: pointer; transition: transform 0.2s;"
+                                    :style="`background: ${color}; transform: ${newCollection.color === color ? 'scale(1.15) ring' : 'scale(1)'}; border: ${newCollection.color === color ? '2px solid white' : 'none'}; box-shadow: ${newCollection.color === color ? '0 0 0 2px ' + color : 'none'};`"></button>
+                        </template>
+                    </div>
+                </div>
+
+                <button @click="createCollection()" :disabled="!newCollection.name.trim() || isSubmittingCollection"
+                        class="btn-submit" style="margin-top: 0.5rem; display: flex; align-items: center; justify-content: center; gap: 0.5rem; height: 3rem;">
+                    <span x-text="isSubmittingCollection ? 'Création...' : 'Créer la collection'"></span>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function journalHandler() {
+        return {
+            entries: {{ initialEntries|json_encode|raw }},
+            totalCount: {{ totalCount }},
+            collections: {{ collections|map(c => {id: c.id, name: c.name, color: c.color, icon: c.icon})|json_encode|raw }},
+            activeCollectionId: null,
+            activeTypeFilter: 'ALL',
+            showAddCollection: false,
+            isSubmittingCollection: false,
+            isSubmitting: false,
+            isLoadingMore: false,
+            hasMore: {{ (initialEntries|length < totalCount) ? 'true' : 'false' }},
+
+            toast: {
+                show: false,
+                message: '',
+                type: 'success',
+                icon: 'check-circle-2'
+            },
+
+            capture: {
+                content: '',
+                type: 'IDEA',
+                mood: 'HAPPY',
+                energy: 7,
+                showExtras: false,
+                location: '',
+                collectionId: ''
+            },
+
+            newCollection: {
+                name: '',
+                color: '#6366f1'
+            },
+
+            presetColors: [
+                "#6366f1", "#ec4899", "#f59e0b", "#10b981", "#3b82f6", "#8b5cf6", "#ef4444", "#64748b"
+            ],
+
+            activeCollectionName() {
+                if (this.activeCollectionId === null) return 'Toutes les notes';
+                const col = this.collections.find(c => c.id === this.activeCollectionId);
+                return col ? col.name : 'Collection';
+            },
+
+            showToast(message, type = 'success', icon = 'check-circle-2') {
+                this.toast.message = message;
+                this.toast.type = type;
+                this.toast.icon = icon;
+                this.toast.show = true;
+                this.$nextTick(() => {
+                    if (typeof lucide !== 'undefined') lucide.createIcons();
+                });
+                setTimeout(() => {
+                    this.toast.show = false;
+                }, 3000);
+            },
+
+            capturePlaceholder() {
+                const placeholders = {
+                    IDEA: 'Une idée géniale ? Notez-la avant qu\'elle ne s\'envole...',
+                    REFLECTION: 'Qu\'est-ce qui occupe votre esprit en ce moment ?',
+                    RESOLUTION: 'Quelle promesse vous faites-vous aujourd\'hui ?',
+                    MILESTONE: 'Quelle belle victoire voulez-vous célébrer ?',
+                    TEMOIGNAGE: 'Partagez un moment marquant...',
+                    INSIGHT: 'Une prise de conscience, une révélation...'
+                };
+                return placeholders[this.capture.type] || 'Quoi de neuf dans votre esprit ?';
+            },
+
+            isNewDay(index) {
+                if (index === 0) return true;
+                const d1 = new Date(this.entries[index - 1].date).toDateString();
+                const d2 = new Date(this.entries[index].date).toDateString();
+                return d1 !== d2;
+            },
+
+            formatDateHeader(dateStr) {
+                const dateObj = new Date(dateStr);
+                return dateObj.toLocaleDateString('fr-FR', { weekday: 'long', day: 'numeric', month: 'long' });
+            },
+
+            formatTime(dateStr) {
+                const dateObj = new Date(dateStr);
+                return dateObj.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' });
+            },
+
+            getMoodEmoji(mood) {
+                const moodMap = {
+                    HAPPY: '😊',
+                    NEUTRAL: '😐',
+                    SAD: '😔',
+                    ENERGIZED: '🔥',
+                    TIRED: '😫'
+                };
+                return moodMap[mood] || '😊';
+            },
+
+            getTypeIcon(type) {
+                const iconMap = {
+                    IDEA: 'lightbulb',
+                    REFLECTION: 'brain',
+                    RESOLUTION: 'target',
+                    MILESTONE: 'trophy',
+                    INSIGHT: 'zap',
+                    TEMOIGNAGE: 'quote'
+                };
+                return iconMap[type] || 'brain';
+            },
+
+            getTypeLabel(type) {
+                const labelMap = {
+                    IDEA: 'Idée',
+                    REFLECTION: 'Pensée',
+                    RESOLUTION: 'Résolution',
+                    MILESTONE: 'Victoire',
+                    INSIGHT: 'Insight',
+                    TEMOIGNAGE: 'Témoignage'
+                };
+                return labelMap[type] || 'Pensée';
+            },
+
+            fetchEntries(reset = true) {
+                let url = '/api/journal/entries?';
+                if (this.activeCollectionId) {
+                    url += 'collectionId=' + this.activeCollectionId + '&';
+                }
+                if (this.activeTypeFilter !== 'ALL') {
+                    url += 'type=' + this.activeTypeFilter + '&';
+                }
+                
+                const offset = reset ? 0 : this.entries.length;
+                url += 'offset=' + offset;
+
+                fetch(url)
+                    .then(res => res.json())
+                    .then(data => {
+                        if (reset) {
+                            this.entries = data.entries;
+                        } else {
+                            this.entries = [...this.entries, ...data.entries];
+                        }
+                        this.totalCount = data.totalCount;
+                        this.hasMore = this.entries.length < this.totalCount;
+                        
+                        this.$nextTick(() => {
+                            if (typeof lucide !== 'undefined') lucide.createIcons();
+                        });
+                    });
+            },
+
+            selectCollection(id) {
+                this.activeCollectionId = id;
+                this.fetchEntries(true);
+            },
+
+            filterType(type) {
+                this.activeTypeFilter = type;
+                this.fetchEntries(true);
+            },
+
+            submitCapture() {
+                if (!this.capture.content.trim()) return;
+                this.isSubmitting = true;
+
+                fetch('/api/journal/entries/create', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(this.capture)
+                })
+                .then(res => res.json())
+                .then(data => {
+                    this.isSubmitting = false;
+                    if (data.success) {
+                        this.capture.content = '';
+                        this.capture.location = '';
+                        this.capture.showExtras = false;
+                        this.showToast('Note enregistrée dans votre journal.', 'success', 'send');
+                        this.fetchEntries(true);
+                    } else {
+                        this.showToast('Erreur lors de la capture.', 'error', 'alert-circle');
+                    }
+                })
+                .catch(() => {
+                    this.isSubmitting = false;
+                    this.showToast('Erreur de connexion.', 'error', 'alert-circle');
+                });
+            },
+
+            deleteNote(id) {
+                if (!confirm("Supprimer cette note de votre journal ?")) return;
+
+                fetch('/api/journal/entries/' + id, {
+                    method: 'DELETE'
+                })
+                .then(res => res.json())
+                .then(data => {
+                    if (data.success) {
+                        this.entries = this.entries.filter(e => e.id !== id);
+                        this.totalCount--;
+                        this.showToast('Note supprimée.', 'success', 'trash-2');
+                    } else {
+                        this.showToast('Impossible de supprimer.', 'error', 'alert-circle');
+                    }
+                })
+                .catch(() => {
+                    this.showToast('Erreur réseau.', 'error', 'alert-circle');
+                });
+            },
+
+            createCollection() {
+                if (!this.newCollection.name.trim()) return;
+                this.isSubmittingCollection = true;
+
+                fetch('/api/journal/collections/create', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(this.newCollection)
+                })
+                .then(res => res.json())
+                .then(data => {
+                    this.isSubmittingCollection = false;
+                    if (data.success) {
+                        this.newCollection.name = '';
+                        this.showAddCollection = false;
+                        this.showToast('Collection créée.', 'success', 'folder-plus');
+                        
+                        // Refetch collections dynamically
+                        window.location.reload();
+                    } else {
+                        this.showToast('Erreur de création.', 'error', 'alert-circle');
+                    }
+                })
+                .catch(() => {
+                    this.isSubmittingCollection = false;
+                    this.showToast('Erreur de connexion.', 'error', 'alert-circle');
+                });
+            },
+
+            deleteCollection(id) {
+                if (!confirm("Supprimer cette collection ? Les notes resteront mais ne seront plus classées.")) return;
+
+                fetch('/api/journal/collections/' + id, {
+                    method: 'DELETE'
+                })
+                .then(res => res.json())
+                .then(data => {
+                    if (data.success) {
+                        this.showToast('Collection supprimée.', 'success', 'trash-2');
+                        setTimeout(() => window.location.reload(), 800);
+                    } else {
+                        this.showToast('Erreur lors de la suppression.', 'error', 'alert-circle');
+                    }
+                })
+                .catch(() => {
+                    this.showToast('Erreur réseau.', 'error', 'alert-circle');
+                });
+            },
+
+            loadMore() {
+                if (this.isLoadingMore || !this.hasMore) return;
+                this.isLoadingMore = true;
+
+                let url = '/api/journal/entries?';
+                if (this.activeCollectionId) {
+                    url += 'collectionId=' + this.activeCollectionId + '&';
+                }
+                if (this.activeTypeFilter !== 'ALL') {
+                    url += 'type=' + this.activeTypeFilter + '&';
+                }
+                url += 'offset=' + this.entries.length + '&limit=20';
+
+                fetch(url)
+                    .then(res => res.json())
+                    .then(data => {
+                        this.entries = [...this.entries, ...data.entries];
+                        this.isLoadingMore = false;
+                        this.hasMore = this.entries.length < this.totalCount;
+                        
+                        this.$nextTick(() => {
+                            if (typeof lucide !== 'undefined') lucide.createIcons();
+                        });
+                    })
+                    .catch(() => {
+                        this.isLoadingMore = false;
+                    });
+            }
+        };
+    }
+</script>
+{% endblock %}

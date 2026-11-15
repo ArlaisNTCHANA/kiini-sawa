@@ -1,0 +1,93 @@
+{# Radar Chart — personality/_radar_chart.html.twig
+   Rendered via Canvas JS (Twig n'a pas de filtres cos/sin natifs)
+   data: [{label, key, value}]
+   color: CSS color string
+#}
+<canvas id="radar-chart-canvas" width="220" height="220" style="display:block;"></canvas>
+<script>
+(function() {
+    const data   = {{ data|json_encode|raw }};
+    const color  = '{{ color|e('js') }}';
+    const canvas = document.getElementById('radar-chart-canvas');
+    if (!canvas || !data.length) return;
+
+    const ctx = canvas.getContext('2d');
+    const W = canvas.width, H = canvas.height;
+    const cx = W / 2, cy = H / 2;
+    const R = Math.min(W, H) / 2 - 28;
+    const n = data.length;
+
+    function point(i, radius) {
+        const angle = (i / n) * 2 * Math.PI - Math.PI / 2;
+        return { x: cx + radius * Math.cos(angle), y: cy + radius * Math.sin(angle) };
+    }
+
+    // Detect max value range
+    const maxVal = data.some(d => d.value > 10) ? 100 : 10;
+
+    // Grid
+    ctx.strokeStyle = '#e8eaf0';
+    ctx.lineWidth   = 1;
+    [0.25, 0.5, 0.75, 1].forEach(f => {
+        ctx.beginPath();
+        for (let i = 0; i < n; i++) {
+            const p = point(i, R * f);
+            i === 0 ? ctx.moveTo(p.x, p.y) : ctx.lineTo(p.x, p.y);
+        }
+        ctx.closePath();
+        ctx.stroke();
+    });
+
+    // Axes + Labels
+    for (let i = 0; i < n; i++) {
+        const p = point(i, R);
+        ctx.beginPath();
+        ctx.moveTo(cx, cy);
+        ctx.lineTo(p.x, p.y);
+        ctx.strokeStyle = '#e8eaf0';
+        ctx.lineWidth   = 1;
+        ctx.stroke();
+
+        const lp = point(i, R + 16);
+        ctx.fillStyle    = '#64748b';
+        ctx.font         = 'bold 8px Inter, sans-serif';
+        ctx.textAlign    = 'center';
+        ctx.textBaseline = 'middle';
+        const label = (data[i].label || '').slice(0, 10);
+        ctx.fillText(label, lp.x, lp.y);
+    }
+
+    // Data polygon
+    const hexToRgb = h => {
+        const r = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(h);
+        return r ? `${parseInt(r[1],16)},${parseInt(r[2],16)},${parseInt(r[3],16)}` : '99,102,241';
+    };
+    const rgb = hexToRgb(color);
+
+    ctx.beginPath();
+    for (let i = 0; i < n; i++) {
+        const norm = Math.min(data[i].value / maxVal, 1);
+        const p = point(i, R * norm);
+        i === 0 ? ctx.moveTo(p.x, p.y) : ctx.lineTo(p.x, p.y);
+    }
+    ctx.closePath();
+    ctx.fillStyle   = `rgba(${rgb}, 0.15)`;
+    ctx.fill();
+    ctx.strokeStyle = color;
+    ctx.lineWidth   = 2;
+    ctx.stroke();
+
+    // Dots
+    for (let i = 0; i < n; i++) {
+        const norm = Math.min(data[i].value / maxVal, 1);
+        const p = point(i, R * norm);
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, 4, 0, Math.PI * 2);
+        ctx.fillStyle   = color;
+        ctx.fill();
+        ctx.strokeStyle = '#fff';
+        ctx.lineWidth   = 2;
+        ctx.stroke();
+    }
+})();
+</script>

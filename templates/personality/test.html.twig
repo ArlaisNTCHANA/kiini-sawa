@@ -1,0 +1,407 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ testMeta.name }} — Test{% endblock %}
+
+{% block stylesheets %}
+{{ parent() }}
+<style>
+.test-engine {
+    min-height: 100vh;
+    background: #f8f7f4;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 2rem 1rem 4rem;
+}
+.test-top-bar {
+    width: 100%;
+    max-width: 660px;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 2.5rem;
+}
+.test-back-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.5rem 0.9rem;
+    border-radius: 10px;
+    border: 1.5px solid #e2e8f0;
+    background: #fff;
+    color: #64748b;
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition: background 0.15s;
+}
+.test-back-btn:hover { background: #f8fafc; }
+.test-progress-container {
+    flex: 1;
+}
+.test-progress-label {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #94a3b8;
+    margin-bottom: 0.4rem;
+}
+.test-progress-track {
+    height: 6px;
+    background: #e2e8f0;
+    border-radius: 99px;
+    overflow: hidden;
+}
+.test-progress-fill {
+    height: 100%;
+    border-radius: 99px;
+    transition: width 0.4s ease;
+}
+.test-card-wrap {
+    width: 100%;
+    max-width: 660px;
+    position: relative;
+}
+.test-question-card {
+    background: #fff;
+    border-radius: 24px;
+    border: 1px solid #e8eaf0;
+    padding: 2.5rem;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.06);
+}
+.test-q-header {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 2rem;
+}
+.test-q-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+.test-q-icon svg { width: 20px; height: 20px; stroke: currentColor; stroke-width: 2; fill: none; }
+.test-q-num {
+    font-size: 0.65rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: #94a3b8;
+}
+.test-q-text {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: #1e293b;
+    line-height: 1.5;
+    margin: 0 0 2rem;
+}
+.test-answers {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    margin-bottom: 2rem;
+}
+.answer-option {
+    display: flex;
+    align-items: center;
+    gap: 0.9rem;
+    padding: 1rem 1.25rem;
+    border-radius: 14px;
+    border: 2px solid #e8eaf0;
+    background: #fafafa;
+    cursor: pointer;
+    transition: border-color 0.18s, background 0.18s, transform 0.1s;
+    position: relative;
+}
+.answer-option:hover {
+    background: #f1f5f9;
+    border-color: #cbd5e1;
+    transform: translateY(-1px);
+}
+.answer-option.selected {
+    background: var(--ans-bg, #eef2ff);
+    border-color: var(--ans-color, #6366f1);
+}
+.answer-option input[type=radio] {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+}
+.answer-radio-dot {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    border: 2px solid #cbd5e1;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: border-color 0.18s, background 0.18s;
+}
+.answer-option.selected .answer-radio-dot {
+    border-color: var(--ans-color, #6366f1);
+    background: var(--ans-color, #6366f1);
+}
+.answer-radio-dot::after {
+    content: '';
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #fff;
+    opacity: 0;
+    transition: opacity 0.18s;
+}
+.answer-option.selected .answer-radio-dot::after { opacity: 1; }
+.answer-text {
+    font-size: 0.92rem;
+    color: #374151;
+    font-weight: 500;
+    line-height: 1.4;
+}
+.answer-option.selected .answer-text { color: #1e293b; font-weight: 600; }
+
+/* Scale (1-10) layout */
+.answer-scale {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 2rem;
+}
+.scale-btn {
+    width: 52px;
+    height: 52px;
+    border-radius: 12px;
+    border: 2px solid #e8eaf0;
+    background: #fafafa;
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #475569;
+    cursor: pointer;
+    transition: border-color 0.18s, background 0.18s, color 0.18s, transform 0.1s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.scale-btn:hover { background: #f1f5f9; border-color: #cbd5e1; transform: scale(1.05); }
+.scale-btn.selected {
+    background: var(--ans-color, #6366f1);
+    border-color: var(--ans-color, #6366f1);
+    color: #fff;
+    transform: scale(1.08);
+}
+
+.test-nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+}
+.btn-prev, .btn-next, .btn-submit {
+    padding: 0.75rem 1.5rem;
+    border-radius: 12px;
+    font-size: 0.9rem;
+    font-weight: 700;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: opacity 0.18s, transform 0.1s;
+    border: none;
+}
+.btn-prev { background: #f1f5f9; color: #475569; }
+.btn-prev:hover { background: #e2e8f0; }
+.btn-next { color: #fff; }
+.btn-next:hover, .btn-submit:hover { opacity: 0.88; transform: scale(1.02); }
+.btn-submit { color: #fff; }
+.btn-next:disabled, .btn-submit:disabled { opacity: 0.4; pointer-events: none; }
+.q-slide { display: none; }
+.q-slide.active { display: block; }
+.test-complete-cta {
+    text-align: center;
+    padding: 1.5rem 0 0;
+    color: #94a3b8;
+    font-size: 0.8rem;
+}
+</style>
+{% endblock %}
+
+{% block body %}
+<div class="test-engine">
+    <div class="test-top-bar">
+        <a href="{{ path('app_personality_index') }}" class="test-back-btn">
+            <svg style="width:14px;height:14px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>
+            Retour
+        </a>
+        <div class="test-progress-container">
+            <div class="test-progress-label">
+                <span>{{ testMeta.name }}</span>
+                <span id="progress-label">1 / {{ questions|length }}</span>
+            </div>
+            <div class="test-progress-track">
+                <div class="test-progress-fill" id="progress-fill" style="width:{{ (1 / questions|length * 100)|round }}%;background:{{ testMeta.color }};"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="test-card-wrap">
+        <form id="test-form" method="POST" action="{{ path('app_personality_submit', {type: type|lower}) }}">
+            {% for q in questions %}
+            {% set qIndex = loop.index0 %}
+            {% set isScale = q.answers|length == 10 %}
+            <div class="q-slide {% if loop.first %}active{% endif %}" data-index="{{ qIndex }}">
+                <div class="test-question-card">
+                    <div class="test-q-header">
+                        <div class="test-q-icon" style="background:{{ testMeta.bg }};color:{{ testMeta.color }};">
+                            <svg viewBox="0 0 24 24"><path d="M9 9a3 3 0 1 1 6 0c0 2-3 3-3 5"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+                        </div>
+                        <div>
+                            <div class="test-q-num">Question {{ loop.index }} / {{ questions|length }}</div>
+                        </div>
+                    </div>
+
+                    <p class="test-q-text">{{ q.question }}</p>
+
+                    {% if isScale %}
+                    <div class="answer-scale" style="--ans-color:{{ testMeta.color }};">
+                        {% for ans in q.answers %}
+                        <button type="button"
+                            class="scale-btn"
+                            data-qid="{{ q.id }}"
+                            data-qcat="{{ q.category }}"
+                            data-value="{{ ans.value }}"
+                            onclick="selectScale(this)">
+                            {{ ans.text }}
+                        </button>
+                        <input type="hidden" name="answers[{{ q.category }}]" id="hidden-{{ q.id }}" value="">
+                        {% endfor %}
+                    </div>
+                    {% else %}
+                    <div class="test-answers" style="--ans-color:{{ testMeta.color }};--ans-bg:{{ testMeta.bg }};">
+                        {% for ans in q.answers %}
+                        <label class="answer-option" onclick="selectAnswer(this)">
+                            <input type="radio" name="answers[{{ q.category }}]" value="{{ ans.value }}" required>
+                            <div class="answer-radio-dot"></div>
+                            <span class="answer-text">{{ ans.text }}</span>
+                        </label>
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+
+                    <div class="test-nav">
+                        <button type="button" class="btn-prev" id="btn-prev-{{ qIndex }}" onclick="prevQuestion({{ qIndex }})" {% if loop.first %}style="visibility:hidden;"{% endif %}>
+                            <svg style="width:14px;height:14px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>
+                            Précédent
+                        </button>
+
+                        {% if not loop.last %}
+                        <button type="button" class="btn-next" id="btn-next-{{ qIndex }}"
+                            style="background:{{ testMeta.color }};"
+                            onclick="nextQuestion({{ qIndex }}, {{ questions|length }})"
+                            disabled>
+                            Suivant
+                            <svg style="width:14px;height:14px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+                        </button>
+                        {% else %}
+                        <button type="submit" class="btn-submit" id="btn-submit-{{ qIndex }}"
+                            style="background:{{ testMeta.color }};"
+                            disabled>
+                            <svg style="width:14px;height:14px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                            Voir mes résultats
+                        </button>
+                        {% endif %}
+                    </div>
+                </div>
+                {% if loop.last %}
+                <p class="test-complete-cta">Répondez à toutes les questions pour soumettre votre test.</p>
+                {% endif %}
+            </div>
+            {% endfor %}
+        </form>
+    </div>
+</div>
+
+<script>
+let currentIndex = 0;
+const total = {{ questions|length }};
+const answered = new Set();
+const color = '{{ testMeta.color }}';
+
+function selectAnswer(label) {
+    // Deselect siblings
+    const group = label.closest('.test-answers');
+    group.querySelectorAll('.answer-option').forEach(l => l.classList.remove('selected'));
+    label.classList.add('selected');
+    label.querySelector('input[type=radio]').checked = true;
+
+    const slide = label.closest('.q-slide');
+    const idx = parseInt(slide.dataset.index);
+    answered.add(idx);
+    unlockNext(idx);
+}
+
+function selectScale(btn) {
+    const qid = btn.dataset.qid;
+    const qcat = btn.dataset.qcat;
+    const val = btn.dataset.value;
+
+    // Deselect siblings in this scale group
+    btn.closest('.answer-scale').querySelectorAll('.scale-btn[data-qid="' + qid + '"]').forEach(b => b.classList.remove('selected'));
+    btn.classList.add('selected');
+
+    // Set hidden input value (use category as key)
+    const hidden = document.getElementById('hidden-' + qid);
+    if (hidden) {
+        hidden.name = 'answers[' + qcat + ']';
+        hidden.value = val;
+    }
+
+    const slide = btn.closest('.q-slide');
+    const idx = parseInt(slide.dataset.index);
+    answered.add(idx);
+    unlockNext(idx);
+}
+
+function unlockNext(idx) {
+    const nextBtn = document.getElementById('btn-next-' + idx);
+    const submitBtn = document.getElementById('btn-submit-' + idx);
+    if (nextBtn) nextBtn.disabled = false;
+    if (submitBtn) submitBtn.disabled = false;
+}
+
+function nextQuestion(currentIdx, total) {
+    if (!answered.has(currentIdx)) return;
+    if (currentIdx >= total - 1) return;
+
+    const slides = document.querySelectorAll('.q-slide');
+    slides[currentIdx].classList.remove('active');
+    slides[currentIdx + 1].classList.add('active');
+    currentIndex = currentIdx + 1;
+    updateProgress();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function prevQuestion(currentIdx) {
+    if (currentIdx <= 0) return;
+
+    const slides = document.querySelectorAll('.q-slide');
+    slides[currentIdx].classList.remove('active');
+    slides[currentIdx - 1].classList.add('active');
+    currentIndex = currentIdx - 1;
+    updateProgress();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function updateProgress() {
+    const pct = Math.round(((currentIndex + 1) / total) * 100);
+    document.getElementById('progress-fill').style.width = pct + '%';
+    document.getElementById('progress-label').textContent = (currentIndex + 1) + ' / ' + total;
+}
+</script>
+{% endblock %}

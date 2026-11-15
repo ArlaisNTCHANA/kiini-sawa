@@ -1,0 +1,2480 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Mon Plan de Vie — KIINI SAWA{% endblock %}
+
+{% block body %}
+<style>
+    .life-wrap {
+        max-width: 1080px;
+        margin: 0 auto;
+        padding: 2.5rem 1.5rem 8rem;
+    }
+    @media (min-width: 1024px) {
+        .life-wrap {
+            padding: 3.5rem 2rem 5rem;
+        }
+    }
+
+    /* Choice / Welcome Hero Header */
+    .hero-choice {
+        background: rgba(255, 255, 255, 0.85);
+        backdrop-filter: blur(20px);
+        border: 1px solid rgba(15, 118, 110, 0.08);
+        border-radius: 2.5rem;
+        padding: 2.5rem;
+        box-shadow: var(--card-shadow);
+        margin-bottom: 3rem;
+        position: relative;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        gap: 1.5rem;
+    }
+    .hero-choice::before {
+        content: '';
+        position: absolute;
+        top: -10%; left: -10%;
+        width: 30%; height: 50%;
+        background: radial-gradient(circle, rgba(13, 148, 136, 0.08) 0%, transparent 70%);
+        pointer-events: none;
+    }
+    .hero-choice::after {
+        content: '';
+        position: absolute;
+        bottom: -10%; right: -10%;
+        width: 40%; height: 60%;
+        background: radial-gradient(circle, rgba(180, 83, 9, 0.05) 0%, transparent 70%);
+        pointer-events: none;
+    }
+    .hero-badge {
+        background: var(--primary-glow);
+        color: var(--primary);
+        font-size: 0.725rem;
+        font-weight: 850;
+        text-transform: uppercase;
+        letter-spacing: 0.12em;
+        padding: 0.5rem 1.25rem;
+        border-radius: 9999px;
+        border: 1px solid rgba(15, 118, 110, 0.12);
+        display: inline-flex;
+        align-items: center;
+        gap: 0.375rem;
+    }
+    .hero-title {
+        font-family: var(--font-serif);
+        font-size: clamp(1.85rem, 4.5vw, 2.85rem);
+        color: var(--primary);
+        font-weight: 500;
+        line-height: 1.2;
+        max-width: 600px;
+    }
+    .hero-desc {
+        color: var(--fg-muted);
+        font-size: 1.05rem;
+        max-width: 580px;
+        line-height: 1.6;
+    }
+    .hero-actions {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 1rem;
+        margin-top: 0.5rem;
+        position: relative;
+        z-index: 5;
+    }
+    .btn-hero-primary {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.95rem 1.85rem;
+        background: linear-gradient(135deg, #0D9488 0%, #0F766E 100%);
+        color: white;
+        font-weight: 750;
+        font-size: 0.95rem;
+        border-radius: 1rem;
+        box-shadow: 0 4px 14px rgba(15, 118, 110, 0.3);
+        transition: all 0.25s var(--ease);
+    }
+    .btn-hero-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(15, 118, 110, 0.45);
+        opacity: 0.98;
+    }
+    .btn-hero-secondary {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.95rem 1.85rem;
+        background: white;
+        color: var(--fg-light);
+        font-weight: 750;
+        font-size: 0.95rem;
+        border-radius: 1rem;
+        border: 1px solid rgba(15, 118, 110, 0.15);
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.02);
+        transition: all 0.25s var(--ease);
+        cursor: pointer;
+    }
+    .btn-hero-secondary:hover {
+        background: var(--bg-alt);
+        color: var(--primary);
+        border-color: var(--primary-light);
+        transform: translateY(-2px);
+    }
+    .btn-hero-secondary.active {
+        background: rgba(15, 118, 110, 0.08);
+        color: var(--primary);
+        border-color: var(--primary);
+        box-shadow: 0 0 0 1px var(--primary);
+    }
+
+    /* Tab navigation system */
+    .tabs-nav {
+        display: flex;
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        gap: 0.25rem;
+        border-bottom: 2px solid rgba(15, 118, 110, 0.06);
+        padding-bottom: 0.25rem;
+        margin-bottom: 2.5rem;
+        scrollbar-width: thin;
+        scrollbar-color: rgba(15, 118, 110, 0.25) transparent;
+    }
+    .tabs-nav::-webkit-scrollbar {
+        height: 4px;
+    }
+    .tabs-nav::-webkit-scrollbar-track {
+        background: transparent;
+    }
+    .tabs-nav::-webkit-scrollbar-thumb {
+        background: rgba(15, 118, 110, 0.25);
+        border-radius: 99px;
+    }
+    .tab-btn {
+        display: flex;
+        align-items: center;
+        gap: 0.375rem;
+        padding: 0.75rem 0.85rem;
+        background: transparent;
+        border: none;
+        color: var(--fg-muted);
+        font-family: inherit;
+        font-weight: 650;
+        font-size: 0.85rem;
+        cursor: pointer;
+        white-space: nowrap;
+        position: relative;
+        transition: all 0.25s;
+        border-radius: 0.75rem 0.75rem 0 0;
+    }
+    @media (min-width: 1024px) {
+        .tabs-nav {
+            flex-wrap: nowrap;
+            overflow-x: visible;
+            gap: 0.5rem;
+        }
+        .tabs-nav::-webkit-scrollbar {
+            display: none;
+        }
+        .tab-btn {
+            padding: 0.85rem 1.25rem;
+            font-size: 0.925rem;
+            gap: 0.5rem;
+        }
+    }
+    .tab-btn:hover {
+        color: var(--primary);
+        background: rgba(15, 118, 110, 0.03);
+    }
+    .tab-btn.active {
+        color: var(--primary);
+        font-weight: 750;
+    }
+    .tab-btn.active::after {
+        content: '';
+        position: absolute;
+        bottom: -4px; left: 0; right: 0;
+        height: 3px;
+        background: var(--primary);
+        border-radius: 99px;
+    }
+
+    /* Grids & Cards */
+    .cards-grid {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 2rem;
+    }
+    @media (min-width: 768px) {
+        .cards-grid {
+            grid-template-columns: repeat(2, 1fr);
+        }
+    }
+    .grid-full {
+        grid-column: span 1;
+    }
+    @media (min-width: 768px) {
+        .grid-full {
+            grid-column: span 2;
+        }
+    }
+
+    .plan-card {
+        background: white;
+        border: 1px solid rgba(15, 118, 110, 0.06);
+        border-radius: 2rem;
+        padding: 2rem;
+        box-shadow: var(--card-shadow);
+        transition: all 0.25s var(--ease);
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        min-height: 240px;
+    }
+    .plan-card:hover {
+        transform: translateY(-3px);
+        box-shadow: var(--card-shadow-hover);
+        border-color: rgba(15, 118, 110, 0.15);
+    }
+    .card-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 1.5rem;
+        border-bottom: 1px solid rgba(15, 118, 110, 0.05);
+        padding-bottom: 0.75rem;
+    }
+    .card-title-group {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+    }
+    .card-icon {
+        width: 2.25rem; height: 2.25rem;
+        border-radius: 0.75rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    .card-title {
+        font-family: var(--font-serif);
+        font-size: 1.2rem;
+        font-weight: 500;
+        color: var(--primary);
+        margin: 0;
+    }
+    .btn-edit-card {
+        width: 2rem; height: 2rem;
+        border-radius: 50%;
+        border: 1px solid rgba(15, 118, 110, 0.1);
+        background: transparent;
+        color: var(--fg-muted);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    .btn-edit-card:hover {
+        background: var(--primary-glow);
+        color: var(--primary);
+        border-color: var(--primary-light);
+        transform: scale(1.05);
+    }
+    .card-body {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    /* Content components */
+    .empty-state {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        padding: 2.5rem 1rem;
+        background: rgba(15, 118, 110, 0.02);
+        border: 1.5px dashed rgba(15, 118, 110, 0.1);
+        border-radius: 1.5rem;
+        gap: 0.5rem;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    .empty-state:hover {
+        background: var(--primary-glow);
+        border-color: var(--primary-light);
+    }
+    .empty-icon {
+        color: var(--fg-muted);
+        margin-bottom: 0.25rem;
+    }
+    .empty-text {
+        font-size: 0.85rem;
+        color: var(--fg-muted);
+        line-height: 1.4;
+    }
+    .empty-action {
+        font-size: 0.8rem;
+        font-weight: 750;
+        color: var(--primary);
+        text-decoration: underline;
+    }
+
+    /* Purpose */
+    .purpose-quote {
+        font-family: var(--font-serif);
+        font-size: 1.25rem;
+        font-style: italic;
+        color: var(--primary-dark);
+        line-height: 1.6;
+        border-left: 3px solid var(--primary-light);
+        padding-left: 1rem;
+        margin: 0.5rem 0;
+    }
+
+    /* Tags lists */
+    .badge-flex {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+    }
+    .ks-badge {
+        padding: 0.4rem 0.85rem;
+        border-radius: 9999px;
+        font-size: 0.8rem;
+        font-weight: 600;
+    }
+    .badge-primary { background: #E6F4F1; color: #0F766E; }
+    .badge-secondary { background: #FEF3C7; color: #D97706; }
+    .badge-tertiary { background: #F3E8FF; color: #7E22CE; }
+    .badge-neutral { background: #F1F5F9; color: #475569; }
+
+    /* Internal balance details */
+    .sub-section-title {
+        font-size: 0.7rem;
+        font-weight: 800;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        color: var(--fg-muted);
+        margin-bottom: 0.5rem;
+    }
+    .conviction-row {
+        padding: 0.65rem 0.85rem;
+        background: #F8FAFC;
+        border-left: 3.5px solid var(--primary-light);
+        border-radius: 0.5rem;
+        font-size: 0.85rem;
+        color: var(--fg-light);
+        margin-bottom: 0.5rem;
+    }
+    .belief-row {
+        padding: 0.65rem 0.85rem;
+        background: var(--danger-light);
+        border-left: 3.5px solid var(--danger);
+        border-radius: 0.5rem;
+        font-size: 0.85rem;
+        font-style: italic;
+        color: var(--danger);
+        margin-bottom: 0.5rem;
+    }
+
+    /* Goals categories list */
+    .goal-cat-card {
+        background: #F8FAFC;
+        border: 1px solid rgba(15, 118, 110, 0.04);
+        border-radius: 1.25rem;
+        padding: 1.25rem;
+        margin-bottom: 1rem;
+    }
+    .goal-cat-header {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        margin-bottom: 0.75rem;
+    }
+    .goal-cat-dot {
+        width: 8px; height: 8px;
+        border-radius: 50%;
+    }
+    .goal-cat-label {
+        font-size: 0.75rem;
+        font-weight: 800;
+        letter-spacing: 0.05em;
+    }
+    .goal-item {
+        font-size: 0.9rem;
+        color: var(--fg-light);
+        padding: 0.4rem 0.5rem;
+        border-bottom: 1px solid rgba(15, 118, 110, 0.03);
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+    .goal-item:last-child {
+        border: none;
+    }
+
+    /* Growth Goal axis rows */
+    .growth-item {
+        padding: 1rem;
+        background: #F8FAFC;
+        border-radius: 1rem;
+        border: 1px solid rgba(15, 118, 110, 0.04);
+    }
+    .growth-title {
+        font-weight: 700;
+        font-size: 0.9rem;
+        color: var(--fg);
+        margin-bottom: 0.25rem;
+    }
+    .growth-strat {
+        font-size: 0.8rem;
+        color: var(--fg-muted);
+        line-height: 1.4;
+    }
+
+    /* Personality capsule */
+    .personality-capsule {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        background: #F8FAFC;
+        border-radius: 1.25rem;
+        padding: 1.25rem;
+        border: 1px solid rgba(15, 118, 110, 0.04);
+    }
+    .pers-badge {
+        font-family: var(--font-serif);
+        font-size: 1.35rem;
+        font-weight: 600;
+        color: var(--primary);
+        background: white;
+        padding: 0.5rem 1rem;
+        border-radius: 0.75rem;
+        border: 1.5px solid rgba(15, 118, 110, 0.08);
+        box-shadow: 0 2px 6px rgba(0,0,0,0.02);
+    }
+
+    .personality-grid {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 1.25rem;
+    }
+    @media (min-width: 640px) {
+        .personality-grid {
+            grid-template-columns: repeat(2, 1fr);
+        }
+    }
+    @media (min-width: 1024px) {
+        .personality-grid {
+            grid-template-columns: repeat(3, 1fr);
+        }
+    }
+
+    .test-card {
+        border-radius: 1.5rem;
+        padding: 1.25rem;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        min-height: 220px;
+        transition: all 0.25s var(--ease);
+        border: 1px solid rgba(15, 118, 110, 0.06);
+        background: #ffffff;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.01);
+    }
+    .test-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px -4px rgba(15, 118, 110, 0.08);
+        border-color: rgba(15, 118, 110, 0.15);
+    }
+    .test-card.not-completed {
+        background: #F8FAFC;
+        border-style: dashed;
+        border-width: 1.5px;
+        box-shadow: none;
+    }
+    .test-card.not-completed:hover {
+        background: rgba(15, 118, 110, 0.02);
+    }
+    .test-card-header {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        margin-bottom: 0.75rem;
+    }
+    .test-card-icon {
+        width: 2rem;
+        height: 2rem;
+        border-radius: 0.625rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+    }
+    .test-card-title {
+        font-weight: 700;
+        font-size: 0.875rem;
+        color: var(--fg);
+        line-height: 1.2;
+    }
+    .test-card-subtitle {
+        font-size: 0.7rem;
+        color: var(--fg-muted);
+    }
+    .test-badge-result {
+        font-family: var(--font-sans);
+        font-size: 1.15rem;
+        font-weight: 800;
+        padding: 0.35rem 0.75rem;
+        border-radius: 0.5rem;
+        display: inline-block;
+        margin: 0.5rem 0;
+    }
+    .test-insights {
+        font-size: 0.75rem;
+        color: var(--fg-light);
+        line-height: 1.45;
+        margin-top: 0.5rem;
+        flex: 1;
+        display: -webkit-box;
+        -webkit-line-clamp: 3;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
+    .test-action-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.375rem;
+        padding: 0.5rem 1rem;
+        font-size: 0.75rem;
+        font-weight: 750;
+        border-radius: 0.5rem;
+        transition: all 0.2s;
+        text-decoration: none;
+        width: 100%;
+        margin-top: 1rem;
+        cursor: pointer;
+    }
+    .test-action-btn.take-btn {
+        background: rgba(15, 118, 110, 0.05);
+        color: var(--primary);
+        border: 1px solid rgba(15, 118, 110, 0.1);
+    }
+    .test-action-btn.take-btn:hover {
+        background: var(--primary);
+        color: white;
+    }
+    .test-action-btn.view-btn {
+        background: transparent;
+        color: var(--fg-muted);
+        border: 1px solid rgba(0, 0, 0, 0.08);
+    }
+    .test-action-btn.view-btn:hover {
+        background: var(--bg-alt);
+        color: var(--fg);
+        border-color: rgba(0, 0, 0, 0.15);
+    }
+    
+    .mini-progress-container {
+        display: flex;
+        flex-direction: column;
+        gap: 0.375rem;
+        margin-top: 0.5rem;
+        flex: 1;
+    }
+    .mini-progress-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 0.5rem;
+    }
+    .mini-progress-label {
+        font-size: 0.65rem;
+        color: var(--fg-muted);
+        font-weight: 600;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-width: 110px;
+    }
+    .mini-progress-bar-wrap {
+        flex: 1;
+        height: 6px;
+        background: #F1F5F9;
+        border-radius: 99px;
+        overflow: hidden;
+    }
+    .mini-progress-bar-fill {
+        height: 100%;
+        border-radius: 99px;
+    }
+    .mini-progress-val {
+        font-size: 0.65rem;
+        font-weight: 700;
+        color: var(--fg-light);
+    }
+
+    /* Timeline styles */
+    .timeline-container {
+        position: relative;
+        padding-left: 2rem;
+        border-left: 2px solid rgba(15, 118, 110, 0.1);
+        margin: 2rem 0;
+    }
+    .timeline-item {
+        position: relative;
+        margin-bottom: 3rem;
+        display: flex;
+        align-items: flex-start;
+    }
+    .timeline-dot {
+        position: absolute;
+        left: calc(-2rem - 6px);
+        top: 0.25rem;
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        background: var(--primary);
+        border: 2.5px solid white;
+        box-shadow: 0 0 0 3px rgba(15, 118, 110, 0.15);
+    }
+    .timeline-date-label {
+        font-size: 0.8rem;
+        font-weight: 800;
+        color: var(--primary);
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        margin-bottom: 0.25rem;
+    }
+    .timeline-content {
+        background: white;
+        border-radius: 1.5rem;
+        padding: 1.5rem;
+        border: 1px solid rgba(15, 118, 110, 0.08);
+        box-shadow: var(--card-shadow);
+        transition: all 0.25s var(--ease);
+    }
+    .timeline-content:hover {
+        transform: translateY(-2px);
+        box-shadow: var(--card-shadow-hover);
+        border-color: rgba(15, 118, 110, 0.15);
+    }
+    .timeline-title {
+        font-size: 1.15rem;
+        font-weight: 750;
+        color: var(--fg-dark);
+        line-height: 1.35;
+    }
+    .timeline-category {
+        display: inline-block;
+        font-size: 0.65rem;
+        font-weight: 750;
+        padding: 0.15rem 0.5rem;
+        border-radius: 9999px;
+        text-transform: uppercase;
+        border: 1px solid transparent;
+    }
+    .timeline-priority-badge {
+        display: inline-block;
+        font-size: 0.65rem;
+        font-weight: 750;
+        padding: 0.15rem 0.5rem;
+        border-radius: 9999px;
+        text-transform: uppercase;
+        border: 1px solid transparent;
+    }
+    .timeline-priority--HIGH {
+        background: rgba(239, 68, 68, 0.08);
+        color: #ef4444;
+        border-color: rgba(239, 68, 68, 0.15);
+    }
+    .timeline-priority--MEDIUM {
+        background: rgba(245, 158, 11, 0.08);
+        color: #f59e0b;
+        border-color: rgba(245, 158, 11, 0.15);
+    }
+    .timeline-priority--LOW {
+        background: rgba(100, 116, 139, 0.08);
+        color: #64748b;
+        border-color: rgba(100, 116, 139, 0.15);
+    }
+    .timeline-year-heading {
+        font-family: var(--font-serif);
+        font-size: 1.6rem;
+        font-weight: 750;
+        color: var(--primary);
+        margin: 2.5rem 0 1.5rem -1rem;
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+    }
+    .timeline-year-heading::after {
+        content: '';
+        flex: 1;
+        height: 1px;
+        background: rgba(15, 118, 110, 0.12);
+    }
+    .timeline-card-grid {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+    }
+    @media (min-width: 768px) {
+        .timeline-card-grid {
+            grid-template-columns: 1.3fr 1fr;
+        }
+    }
+    .timeline-milestones {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+    .timeline-milestone-item {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-size: 0.8rem;
+        color: var(--fg-light);
+    }
+    .timeline-milestone-item.completed {
+        color: var(--fg-muted);
+        text-decoration: line-through;
+        opacity: 0.8;
+    }
+    .timeline-milestone-item.completed i {
+        color: #10b981;
+    }
+    .timeline-milestone-item i {
+        color: var(--primary-light);
+    }
+    .milestone-date-badge {
+        font-size: 0.7rem;
+        background: rgba(15, 118, 110, 0.05);
+        color: var(--primary);
+        padding: 0.1rem 0.35rem;
+        border-radius: 4px;
+        margin-left: auto;
+        font-weight: 600;
+        white-space: nowrap;
+    }
+    .btn-filter-pill {
+        background: white;
+        border: 1px solid rgba(15, 118, 110, 0.12);
+        color: var(--fg-light);
+        padding: 0.4rem 1rem;
+        border-radius: 9999px;
+        font-size: 0.8rem;
+        font-weight: 650;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    .btn-filter-pill:hover {
+        border-color: var(--primary);
+        color: var(--primary);
+        background: rgba(15, 118, 110, 0.02);
+    }
+    .btn-filter-pill.active {
+        background: var(--primary);
+        color: white;
+        border-color: var(--primary);
+        box-shadow: 0 4px 12px rgba(15, 118, 110, 0.15);
+    }
+    .btn-filter-pill.active.pill-be { background: #4f46e5; border-color: #4f46e5; box-shadow: 0 4px 12px rgba(79, 70, 229, 0.15); }
+    .btn-filter-pill.active.pill-do { background: #2563eb; border-color: #2563eb; box-shadow: 0 4px 12px rgba(37, 99, 235, 0.15); }
+    .btn-filter-pill.active.pill-have { background: #059669; border-color: #059669; box-shadow: 0 4px 12px rgba(5, 150, 105, 0.15); }
+    .btn-filter-pill.active.pill-give { background: #e11d48; border-color: #e11d48; box-shadow: 0 4px 12px rgba(225, 29, 72, 0.15); }
+
+    /* Coherence Analysis styles */
+    .analysis-card {
+        background: white;
+        border-radius: 1.5rem;
+        padding: 2.5rem;
+        border: 1px solid rgba(15, 118, 110, 0.08);
+        box-shadow: var(--card-shadow);
+    }
+    .analysis-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 2rem;
+        flex-wrap: wrap;
+        gap: 1rem;
+    }
+    .analysis-score-badge {
+        padding: 0.75rem 1.5rem;
+        border-radius: 9999px;
+        font-weight: 800;
+        font-size: 1.1rem;
+    }
+    .analysis-perfect-state {
+        text-align: center;
+        padding: 4rem 2rem;
+    }
+    .analysis-issue-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 1.25rem;
+        border-radius: 1rem;
+        margin-bottom: 1rem;
+        gap: 1.5rem;
+        flex-wrap: wrap;
+        border: 1px solid transparent;
+        transition: all 0.2s;
+    }
+    .analysis-issue-row:hover {
+        transform: translateY(-1px);
+    }
+    .analysis-issue-content {
+        display: flex;
+        gap: 1rem;
+        align-items: center;
+        flex: 1;
+    }
+    .analysis-issue-icon {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 2.25rem;
+        height: 2.25rem;
+        border-radius: 50%;
+        flex-shrink: 0;
+    }
+    .analysis-issue-text {
+        font-size: 0.95rem;
+        color: var(--fg-dark);
+        line-height: 1.5;
+        font-weight: 550;
+    }
+    .btn-analysis-fix {
+        font-size: 0.8rem;
+        font-weight: 750;
+        color: var(--primary);
+        background: white;
+        border: 1px solid var(--primary);
+        padding: 0.5rem 1.25rem;
+        border-radius: 0.75rem;
+        cursor: pointer;
+        transition: all 0.2s;
+        text-decoration: none;
+        white-space: nowrap;
+    }
+    .btn-analysis-fix:hover {
+        background: var(--primary);
+        color: white;
+        box-shadow: 0 4px 12px rgba(15, 118, 110, 0.15);
+    }
+
+    /* Strategic Map styles */
+    .map-card {
+        background: white;
+        border-radius: 1.5rem;
+        padding: 2.5rem;
+        border: 1px solid rgba(15, 118, 110, 0.08);
+        box-shadow: var(--card-shadow);
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        min-height: 600px;
+    }
+    .map-mermaid-wrapper {
+        width: 100%;
+        overflow-x: auto;
+        display: flex;
+        justify-content: center;
+        margin-top: 1.5rem;
+        padding: 1.5rem;
+        background: #fafafa;
+        border-radius: 1rem;
+        border: 1px solid rgba(0, 0, 0, 0.02);
+    }
+    .map-legend {
+        margin-top: 2.5rem;
+        width: 100%;
+        border-top: 1px solid rgba(15, 118, 110, 0.08);
+        padding-top: 1.5rem;
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 1.25rem;
+    }
+    .legend-item {
+        display: flex;
+        align-items: center;
+        gap: 0.625rem;
+    }
+    .legend-color {
+        width: 14px;
+        height: 14px;
+        border-radius: 4px;
+        flex-shrink: 0;
+    }
+    .legend-label {
+        font-size: 0.85rem;
+        color: var(--fg-muted);
+        font-weight: 550;
+    }
+</style>
+
+<div class="life-wrap">
+    <!-- Hero Header -->
+    <header class="hero-choice">
+        <div class="hero-badge">
+            <i data-lucide="compass" style="width: 14px; height: 14px;"></i>
+            Espace Plan de Vie
+        </div>
+        <h1 class="hero-title">Visualisez et forgez votre destinée</h1>
+        <p class="hero-desc">
+            Construisez un plan d'alignement personnel complet. Choisissez l'assistant pas à pas pour être guidé à chaque étape, ou modifiez librement chaque rubrique ci-dessous.
+        </p>
+        <div class="hero-actions">
+            <a href="{{ path('app_user_life_plan_wizard') }}" class="btn-hero-primary">
+                <i data-lucide="sparkles" style="width: 18px; height: 18px;"></i>
+                Lancer l'Assistant Guidé
+            </a>
+            <a href="{{ path('app_user_life_plan_visualize') }}" target="_blank" class="btn-hero-secondary">
+                <i data-lucide="printer" style="width: 18px; height: 18px;"></i>
+                Visualiser & Imprimer
+            </a>
+            <button id="dashboard-send-email" class="btn-hero-secondary">
+                <i data-lucide="mail" style="width: 18px; height: 18px;"></i>
+                M'envoyer par email
+            </button>
+            <button class="btn-hero-secondary tab-trigger" data-tab="map">
+                <i data-lucide="map" style="width: 18px; height: 18px;"></i>
+                Carte
+            </button>
+            <button class="btn-hero-secondary tab-trigger" data-tab="analysis">
+                <i data-lucide="activity" style="width: 18px; height: 18px;"></i>
+                Analyse
+            </button>
+            <button class="btn-hero-secondary" onclick="document.getElementById('rubrics-start').scrollIntoView({ behavior: 'smooth' })">
+                <i data-lucide="layout-grid" style="width: 18px; height: 18px;"></i>
+                Remplir par Rubrique
+            </button>
+        </div>
+    </header>
+
+    <!-- Tab navigation -->
+    <div id="rubrics-start">
+        <nav class="tabs-nav">
+            <button class="tab-btn active" data-tab="foundations">
+                <i data-lucide="compass" style="width: 16px; height: 16px;"></i> Fondations
+            </button>
+            <button class="tab-btn" data-tab="vision">
+                <i data-lucide="eye" style="width: 16px; height: 16px;"></i> Vision & Objectifs
+            </button>
+            <button class="tab-btn" data-tab="growth">
+                <i data-lucide="folder-open" style="width: 16px; height: 16px;"></i> Ressources & Moyens
+            </button>
+            <button class="tab-btn" data-tab="environment">
+                <i data-lucide="users" style="width: 16px; height: 16px;"></i> Énergie & Transmission
+            </button>
+            <button class="tab-btn" data-tab="timeline">
+                <i data-lucide="calendar" style="width: 16px; height: 16px;"></i> Échéancier
+            </button>
+        </nav>
+    </div>
+
+    <!-- TABS CONTENT -->
+
+    <!-- Tab 1: Fondations -->
+    <div class="tab-content" id="tab-foundations">
+        <div class="cards-grid">
+            <!-- 1. But de Dieu (Purpose) -->
+            <div class="plan-card">
+                <div class="card-header">
+                    <div class="card-title-group">
+                        <div class="card-icon" style="background: rgba(13, 148, 136, 0.08); color: var(--primary);">
+                            <i data-lucide="compass" style="width: 18px; height: 18px;"></i>
+                        </div>
+                        <h2 class="card-title">But de Dieu</h2>
+                    </div>
+                    <a href="{{ path('app_user_life_plan_wizard', { step: 1, single: 1 }) }}" class="btn-edit-card" title="Modifier">
+                        <i data-lucide="pencil" style="width: 14px; height: 14px;"></i>
+                    </a>
+                </div>
+                <div class="card-body">
+                    {% if planDeVie and planDeVie.purpose and planDeVie.purpose.statement %}
+                        <div class="purpose-quote">
+                            "{{ planDeVie.purpose.statement }}"
+                        </div>
+                    {% else %}
+                        <div class="purpose-quote" style="opacity: 0.85; font-style: italic;">
+                            "{{ defaultPurposeStatement }}"
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- 2. Balance Interne (Convictions, Values, Limiting Beliefs) -->
+            <div class="plan-card">
+                <div class="card-header">
+                    <div class="card-title-group">
+                        <div class="card-icon" style="background: rgba(99, 102, 241, 0.08); color: #6366f1;">
+                            <i data-lucide="activity" style="width: 18px; height: 18px;"></i>
+                        </div>
+                        <h2 class="card-title">Balance Interne</h2>
+                    </div>
+                    <a href="{{ path('app_user_life_plan_wizard', { step: 2, single: 1 }) }}" class="btn-edit-card" title="Modifier">
+                        <i data-lucide="pencil" style="width: 14px; height: 14px;"></i>
+                    </a>
+                </div>
+                <div class="card-body">
+                    {% set hasBalance = valuesReal|length > 0 or valuesDeclared|length > 0 or valuesCounter|length > 0 or convictionsDeep|length > 0 or convictionsMedium|length > 0 or convictionsLight|length > 0 or limitingBeliefs|length > 0 %}
+                    {% if hasBalance %}
+                        {% if valuesReal|length > 0 or valuesDeclared|length > 0 or valuesCounter|length > 0 %}
+                            <div style="display: flex; flex-direction: column; gap: 0.75rem;">
+                                {% if valuesReal|length > 0 %}
+                                    <div>
+                                        <div class="sub-section-title">Valeurs Réelles & Vécues</div>
+                                        <div class="badge-flex">
+                                            {% for val in valuesReal %}
+                                                <span class="ks-badge badge-primary">{{ val.name }}</span>
+                                            {% endfor %}
+                                        </div>
+                                    </div>
+                                {% endif %}
+
+                                {% if valuesDeclared|length > 0 %}
+                                    <div>
+                                        <div class="sub-section-title">Valeurs Déclarées & Admirées</div>
+                                        <div class="badge-flex">
+                                            {% for val in valuesDeclared %}
+                                                <span class="ks-badge badge-secondary" style="background: rgba(16, 185, 129, 0.08); color: #10b981; border: 1px solid rgba(16, 185, 129, 0.15);">{{ val.name }}</span>
+                                            {% endfor %}
+                                        </div>
+                                    </div>
+                                {% endif %}
+
+                                {% if valuesCounter|length > 0 %}
+                                    <div>
+                                        <div class="sub-section-title">Contre-valeurs observées</div>
+                                        <div class="badge-flex">
+                                            {% for val in valuesCounter %}
+                                                <span class="ks-badge badge-danger" style="background: rgba(239, 68, 68, 0.08); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.15);">{{ val.name }}</span>
+                                            {% endfor %}
+                                        </div>
+                                    </div>
+                                {% endif %}
+                            </div>
+                        {% endif %}
+
+                        {% if convictionsDeep|length > 0 or convictionsMedium|length > 0 or convictionsLight|length > 0 %}
+                            <div style="margin-top: 1rem; display: flex; flex-direction: column; gap: 0.5rem;">
+                                {% if convictionsDeep|length > 0 %}
+                                    <div>
+                                        <div class="sub-section-title">Convictions Profondes / Dogmatiques</div>
+                                        {% for c in convictionsDeep %}
+                                            <div class="conviction-row" style="border-left: 2px solid #6366f1; padding-left: 8px; margin-bottom: 4px;">{{ c.text }}</div>
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+
+                                {% if convictionsMedium|length > 0 %}
+                                    <div>
+                                        <div class="sub-section-title">Convictions Médianes / Raisonnées</div>
+                                        {% for c in convictionsMedium %}
+                                            <div class="conviction-row" style="border-left: 2px solid #f59e0b; padding-left: 8px; margin-bottom: 4px;">{{ c.text }}</div>
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+
+                                {% if convictionsLight|length > 0 %}
+                                    <div>
+                                        <div class="sub-section-title">Convictions Légères / Circonstancielles</div>
+                                        {% for c in convictionsLight %}
+                                            <div class="conviction-row" style="border-left: 2px solid #10b981; padding-left: 8px; margin-bottom: 4px;">{{ c.text }}</div>
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                        {% endif %}
+
+                        {% if limitingBeliefs|length > 0 %}
+                            <div style="margin-top: 1rem;">
+                                <div class="sub-section-title">Croyances Limitantes</div>
+                                {% for lb in limitingBeliefs %}
+                                    <div class="belief-row" style="border-left: 2px solid #ec4899; padding-left: 8px; margin-bottom: 4px;">{{ lb.text }}</div>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- 3. Passions -->
+            <div class="plan-card">
+                <div class="card-header">
+                    <div class="card-title-group">
+                        <div class="card-icon" style="background: rgba(244, 114, 182, 0.08); color: #f472b6;">
+                            <i data-lucide="heart" style="width: 18px; height: 18px;"></i>
+                        </div>
+                        <h2 class="card-title">Mes Passions</h2>
+                    </div>
+                    <a href="{{ path('app_user_life_plan_wizard', { step: 3, single: 1 }) }}" class="btn-edit-card" title="Modifier">
+                        <i data-lucide="pencil" style="width: 14px; height: 14px;"></i>
+                    </a>
+                </div>
+                <div class="card-body">
+                    {% if planDeVie and planDeVie.passions|length > 0 %}
+                        <div class="badge-flex" style="margin-top: 0.5rem;">
+                            {% for p in planDeVie.passions %}
+                                <span class="ks-badge badge-tertiary">
+                                    <i data-lucide="heart" style="width: 10px; height: 10px; display: inline-block; vertical-align: middle; margin-right: 4px; fill: currentColor;"></i>
+                                    {{ p.name }}
+                                </span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        <div class="empty-state" onclick="window.location.href='{{ path('app_user_life_plan_wizard', { step: 3, single: 1 }) }}'">
+                            <i data-lucide="heart" class="empty-icon" style="width: 24px; height: 24px;"></i>
+                            <span class="empty-text">Ce qui vous passionne et vous redonne de l'énergie.</span>
+                            <span class="empty-action">Ajouter mes passions</span>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- 4. Dons & Talents -->
+            <div class="plan-card">
+                <div class="card-header">
+                    <div class="card-title-group">
+                        <div class="card-icon" style="background: rgba(245, 158, 11, 0.08); color: #d97706;">
+                            <i data-lucide="sparkles" style="width: 18px; height: 18px;"></i>
+                        </div>
+                        <h2 class="card-title">Dons & Talents</h2>
+                    </div>
+                    <a href="{{ path('app_user_life_plan_wizard', { step: 4, single: 1 }) }}" class="btn-edit-card" title="Modifier">
+                        <i data-lucide="pencil" style="width: 14px; height: 14px;"></i>
+                    </a>
+                </div>
+                <div class="card-body">
+                    {% if talents|length > 0 %}
+                        <div class="badge-flex" style="margin-top: 0.5rem;">
+                            {% for t in talents %}
+                                <span class="ks-badge badge-secondary">
+                                    <i data-lucide="star" style="width: 10px; height: 10px; display: inline-block; vertical-align: middle; margin-right: 4px; fill: currentColor;"></i>
+                                    {{ t.text }}
+                                </span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        <div class="empty-state" onclick="window.location.href='{{ path('app_user_life_plan_wizard', { step: 4, single: 1 }) }}'">
+                            <i data-lucide="sparkles" class="empty-icon" style="width: 24px; height: 24px;"></i>
+                            <span class="empty-text">Vos facilités innées et points forts uniques.</span>
+                            <span class="empty-action">Identifier mes talents</span>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- 5. Personnalité -->
+            <div class="plan-card grid-full" style="min-height: auto;">
+                <div class="card-header">
+                    <div class="card-title-group">
+                        <div class="card-icon" style="background: rgba(16, 185, 129, 0.08); color: #10b981;">
+                            <i data-lucide="user" style="width: 18px; height: 18px;"></i>
+                        </div>
+                        <h2 class="card-title">Ma Personnalité & Profils</h2>
+                    </div>
+                    <a href="{{ path('app_user_life_plan_wizard', { step: 5, single: 1 }) }}" class="btn-edit-card" title="Modifier manuellement">
+                        <i data-lucide="pencil" style="width: 14px; height: 14px;"></i>
+                    </a>
+                </div>
+                <div class="card-body">
+                    <div class="personality-grid">
+                        {% for typeKey, test in latestTests %}
+                            <div class="test-card {% if not test.completed %}not-completed{% endif %}">
+                                <div style="display: flex; flex-direction: column; height: 100%; justify-content: space-between; flex: 1;">
+                                    <div>
+                                        <div class="test-card-header">
+                                            <div class="test-card-icon" style="background: {{ test.meta.bg }}; color: {{ test.meta.color }};">
+                                                <i data-lucide="{{ test.meta.icon }}" style="width: 15px; height: 15px;"></i>
+                                            </div>
+                                            <div style="min-width: 0; flex: 1;">
+                                                <div class="test-card-title" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{ test.meta.name }}</div>
+                                                {% if test.completed %}
+                                                    <div class="test-card-subtitle">Fait le {{ test.date|date('d/m/Y') }}</div>
+                                                {% else %}
+                                                    <div class="test-card-subtitle">Non complété</div>
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                        
+                                        {% if test.completed %}
+                                            {% if test.chartData|length > 0 %}
+                                                <div class="mini-progress-container">
+                                                    {% for dim in test.chartData|slice(0, 4) %}
+                                                        <div class="mini-progress-row">
+                                                            <span class="mini-progress-label" title="{{ dim.label }}">{{ dim.label }}</span>
+                                                            <div class="mini-progress-bar-wrap">
+                                                                <div class="mini-progress-bar-fill" style="width: {{ dim.value }}%; background: {{ test.meta.color }};"></div>
+                                                            </div>
+                                                            <span class="mini-progress-val">{{ dim.value|round }}%</span>
+                                                        </div>
+                                                    {% endfor %}
+                                                    {% if test.chartData|length > 4 %}
+                                                        <div style="font-size: 0.6rem; color: var(--fg-muted); text-align: right; margin-top: 2px;">
+                                                            + {{ test.chartData|length - 4 }} autres dimensions
+                                                        </div>
+                                                    {% endif %}
+                                                </div>
+                                            {% else %}
+                                                <div class="test-badge-result" style="color: {{ test.meta.color }}; background: {{ test.meta.bg }};">
+                                                    {% if test.type == 'ENNEAGRAM' or test.type == 'ENNEAGRAMME' %}
+                                                        Type {{ test.result }}
+                                                    {% else %}
+                                                        {{ test.result }}
+                                                    {% endif %}
+                                                </div>
+                                                {% if test.insights %}
+                                                    <div class="test-insights" title="{{ test.insights }}">{{ test.insights }}</div>
+                                                {% endif %}
+                                            {% endif %}
+                                        {% else %}
+                                            <div class="test-insights" style="color: var(--fg-muted); font-style: italic;">
+                                                Découvrez votre profil comportemental en passant ce test.
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                    
+                                    <div>
+                                        {% if test.completed %}
+                                            <a href="{{ path('app_personality_result', { type: test.meta.url_key }) }}" class="test-action-btn view-btn">
+                                                <i data-lucide="eye" style="width: 12px; height: 12px;"></i> Voir les résultats
+                                            </a>
+                                        {% else %}
+                                            <a href="{{ path('app_personality_take', { type: test.meta.url_key }) }}" class="test-action-btn take-btn">
+                                                <i data-lucide="play" style="width: 12px; height: 12px;"></i> Passer le test
+                                            </a>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tab 2: Vision & Objectifs -->
+    <div class="tab-content hidden" id="tab-vision">
+        <div class="cards-grid">
+            <!-- 6. Ma Vision -->
+            <div class="plan-card">
+                <div class="card-header">
+                    <div class="card-title-group">
+                        <div class="card-icon" style="background: rgba(217, 70, 239, 0.08); color: #d946ef;">
+                            <i data-lucide="eye" style="width: 18px; height: 18px;"></i>
+                        </div>
+                        <h2 class="card-title">Ma Vision</h2>
+                    </div>
+                    <a href="{{ path('app_user_life_plan_wizard', { step: 6, single: 1 }) }}" class="btn-edit-card" title="Modifier">
+                        <i data-lucide="pencil" style="width: 14px; height: 14px;"></i>
+                    </a>
+                </div>
+                <div class="card-body">
+                    {% if planDeVie and planDeVie.vision and planDeVie.vision.content %}
+                        <div style="display:flex; flex-direction:column; gap:0.75rem;">
+                            <div style="font-size:0.95rem; color: var(--fg-light); line-height: 1.6; white-space: pre-wrap;">
+                                "{{ planDeVie.vision.content }}"
+                            </div>
+                            {% if planDeVie.vision.horizon %}
+                                <div style="font-size: 0.725rem; font-weight: 850; letter-spacing:0.03em; color: var(--primary); text-transform:uppercase;">
+                                    Horizon : {{ planDeVie.vision.horizon }}
+                                </div>
+                            {% endif %}
+                        </div>
+                    {% else %}
+                        <div class="empty-state" onclick="window.location.href='{{ path('app_user_life_plan_wizard', { step: 6, single: 1 }) }}'">
+                            <i data-lucide="eye" class="empty-icon" style="width: 24px; height: 24px;"></i>
+                            <span class="empty-text">Votre idéal de vie projeté à moyen et long terme.</span>
+                            <span class="empty-action">Définir ma vision</span>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- 7. Objectifs Spécifiques (BE, DO, HAVE, GIVE) -->
+            <div class="plan-card">
+                <div class="card-header">
+                    <div class="card-title-group">
+                        <div class="card-icon" style="background: rgba(148, 163, 184, 0.08); color: #64748b;">
+                            <i data-lucide="target" style="width: 18px; height: 18px;"></i>
+                        </div>
+                        <h2 class="card-title">Objectifs Spécifiques</h2>
+                    </div>
+                    <a href="{{ path('app_user_life_plan_wizard', { step: 7, single: 1 }) }}" class="btn-edit-card" title="Modifier">
+                        <i data-lucide="pencil" style="width: 14px; height: 14px;"></i>
+                    </a>
+                </div>
+                <div class="card-body">
+                    {% set hasGoals = lifeGoals.BE|length > 0 or lifeGoals.DO|length > 0 or lifeGoals.HAVE|length > 0 or lifeGoals.GIVE|length > 0 %}
+                    {% if hasGoals %}
+                        <div style="display:flex; flex-direction:column; gap:0.25rem;">
+                            {% if lifeGoals.BE|length > 0 %}
+                                <div class="goal-cat-card">
+                                    <div class="goal-cat-header">
+                                        <div class="goal-cat-dot" style="background: #6366f1;"></div>
+                                        <span class="goal-cat-label" style="color: #6366f1;">BE (Qui je veux être)</span>
+                                    </div>
+                                    {% for goal in lifeGoals.BE %}
+                                        <div class="goal-item" style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
+                                            <div style="display: flex; align-items: center; gap: 0.5rem;">
+                                                <i data-lucide="check" style="width:12px; height:12px; color:#6366f1;"></i>
+                                                <span>{{ goal.title }}</span>
+                                            </div>
+                                            {% if goal.deadline %}
+                                                <span style="font-size: 0.75rem; color: var(--fg-muted); background: rgba(99, 102, 241, 0.05); padding: 0.15rem 0.4rem; border-radius: 0.25rem; font-weight: 500; white-space: nowrap; margin-left: 0.5rem;">
+                                                    Échéance : {{ goal.deadline|date('d/m/Y') }}
+                                                </span>
+                                            {% endif %}
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+
+                            {% if lifeGoals.DO|length > 0 %}
+                                <div class="goal-cat-card">
+                                    <div class="goal-cat-header">
+                                        <div class="goal-cat-dot" style="background: #3b82f6;"></div>
+                                        <span class="goal-cat-label" style="color: #3b82f6;">DO (Ce que je veux accomplir)</span>
+                                    </div>
+                                    {% for goal in lifeGoals.DO %}
+                                        <div class="goal-item" style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
+                                            <div style="display: flex; align-items: center; gap: 0.5rem;">
+                                                <i data-lucide="check" style="width:12px; height:12px; color:#3b82f6;"></i>
+                                                <span>{{ goal.title }}</span>
+                                            </div>
+                                            {% if goal.deadline %}
+                                                <span style="font-size: 0.75rem; color: var(--fg-muted); background: rgba(59, 130, 246, 0.05); padding: 0.15rem 0.4rem; border-radius: 0.25rem; font-weight: 500; white-space: nowrap; margin-left: 0.5rem;">
+                                                    Échéance : {{ goal.deadline|date('d/m/Y') }}
+                                                </span>
+                                            {% endif %}
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+
+                            {% if lifeGoals.HAVE|length > 0 %}
+                                <div class="goal-cat-card">
+                                    <div class="goal-cat-header">
+                                        <div class="goal-cat-dot" style="background: #10b981;"></div>
+                                        <span class="goal-cat-label" style="color: #10b981;">HAVE (Ce que je veux posséder)</span>
+                                    </div>
+                                    {% for goal in lifeGoals.HAVE %}
+                                        <div class="goal-item" style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
+                                            <div style="display: flex; align-items: center; gap: 0.5rem;">
+                                                <i data-lucide="check" style="width:12px; height:12px; color:#10b981;"></i>
+                                                <span>{{ goal.title }}</span>
+                                            </div>
+                                            {% if goal.deadline %}
+                                                <span style="font-size: 0.75rem; color: var(--fg-muted); background: rgba(16, 185, 129, 0.05); padding: 0.15rem 0.4rem; border-radius: 0.25rem; font-weight: 500; white-space: nowrap; margin-left: 0.5rem;">
+                                                    Échéance : {{ goal.deadline|date('d/m/Y') }}
+                                                </span>
+                                            {% endif %}
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+
+                            {% if lifeGoals.GIVE|length > 0 %}
+                                <div class="goal-cat-card">
+                                    <div class="goal-cat-header">
+                                        <div class="goal-cat-dot" style="background: #ec4899;"></div>
+                                        <span class="goal-cat-label" style="color: #ec4899;">GIVE (Ce que je veux transmettre)</span>
+                                    </div>
+                                    {% for goal in lifeGoals.GIVE %}
+                                        <div class="goal-item" style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
+                                            <div style="display: flex; align-items: center; gap: 0.5rem;">
+                                                <i data-lucide="check" style="width:12px; height:12px; color:#ec4899;"></i>
+                                                <span>{{ goal.title }}</span>
+                                            </div>
+                                            {% if goal.deadline %}
+                                                <span style="font-size: 0.75rem; color: var(--fg-muted); background: rgba(236, 72, 153, 0.05); padding: 0.15rem 0.4rem; border-radius: 0.25rem; font-weight: 500; white-space: nowrap; margin-left: 0.5rem;">
+                                                    Échéance : {{ goal.deadline|date('d/m/Y') }}
+                                                </span>
+                                            {% endif %}
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                        </div>
+                    {% else %}
+                        <div class="empty-state" onclick="window.location.href='{{ path('app_user_life_plan_wizard', { step: 7, single: 1 }) }}'">
+                            <i data-lucide="target" class="empty-icon" style="width: 24px; height: 24px;"></i>
+                            <span class="empty-text">Vos objectifs formulés selon 4 angles fondamentaux (BE, DO, HAVE, GIVE).</span>
+                            <span class="empty-action">Ajouter mes objectifs</span>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tab 3: Croissance -->
+    <div class="tab-content hidden" id="tab-growth">
+        <div class="cards-grid">
+            <!-- Fondations de Croissance (Valeurs & Croyances) -->
+            <div class="plan-card grid-full" style="background: linear-gradient(135deg, rgba(99, 102, 241, 0.02) 0%, rgba(16, 185, 129, 0.02) 100%); border: 1px solid rgba(99, 102, 241, 0.1);">
+                <div class="card-header">
+                    <div class="card-title-group">
+                        <div class="card-icon" style="background: rgba(16, 185, 129, 0.08); color: #10b981;">
+                            <i data-lucide="trending-up" style="width: 18px; height: 18px;"></i>
+                        </div>
+                        <h2 class="card-title">Fondations de Croissance</h2>
+                    </div>
+                    <span style="font-size: 0.75rem; color: var(--text-muted); font-weight: 500; background: rgba(99, 102, 241, 0.05); padding: 4px 10px; border-radius: 9999px;">
+                        Alimente le plan de croissance
+                    </span>
+                </div>
+                <div class="card-body" style="display: grid; grid-template-columns: 1fr; gap: 1.5rem;">
+                    <!-- Valeurs Déclarées & Admirées -->
+                    <div style="background: white; padding: 1.25rem; border-radius: 1rem; border: 1px solid rgba(0,0,0,0.03); box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.01);">
+                        <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.75rem;">
+                            <i data-lucide="award" style="width: 16px; height: 16px; color: #10b981;"></i>
+                            <span style="font-size: 0.85rem; font-weight: 700; text-transform: uppercase; color: var(--text-primary); letter-spacing: 0.03em;">Valeurs Déclarées & Admirées</span>
+                        </div>
+                        {% if valuesDeclared|length > 0 %}
+                            <div class="badge-flex" style="margin-top: 0.5rem;">
+                                {% for val in valuesDeclared %}
+                                    <span class="ks-badge" style="background: rgba(16, 185, 129, 0.08); color: #10b981; border: 1px solid rgba(16, 185, 129, 0.15);">{{ val.name }}</span>
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            <span style="font-size: 0.85rem; color: var(--text-muted); font-style: italic;">Aucune valeur définie.</span>
+                        {% endif %}
+                    </div>
+
+                    <!-- Contre-valeurs observées -->
+                    <div style="background: white; padding: 1.25rem; border-radius: 1rem; border: 1px solid rgba(0,0,0,0.03); box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.01);">
+                        <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.75rem;">
+                            <i data-lucide="alert-triangle" style="width: 16px; height: 16px; color: #ef4444;"></i>
+                            <span style="font-size: 0.85rem; font-weight: 700; text-transform: uppercase; color: var(--text-primary); letter-spacing: 0.03em;">Contre-valeurs observées</span>
+                        </div>
+                        {% if valuesCounter|length > 0 %}
+                            <div class="badge-flex" style="margin-top: 0.5rem;">
+                                {% for val in valuesCounter %}
+                                    <span class="ks-badge" style="background: rgba(239, 68, 68, 0.08); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.15);">{{ val.name }}</span>
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            <span style="font-size: 0.85rem; color: var(--text-muted); font-style: italic;">Aucune contre-valeur observée.</span>
+                        {% endif %}
+                    </div>
+
+                    <!-- Croyances Limitantes -->
+                    <div style="background: white; padding: 1.25rem; border-radius: 1rem; border: 1px solid rgba(0,0,0,0.03); box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.01);">
+                        <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.75rem;">
+                            <i data-lucide="lock" style="width: 16px; height: 16px; color: #ec4899;"></i>
+                            <span style="font-size: 0.85rem; font-weight: 700; text-transform: uppercase; color: var(--text-primary); letter-spacing: 0.03em;">Croyances Limitantes à dépasser</span>
+                        </div>
+                        {% if limitingBeliefs|length > 0 %}
+                            <div style="display: flex; flex-direction: column; gap: 0.4rem; margin-top: 0.5rem;">
+                                {% for lb in limitingBeliefs %}
+                                    <div style="font-size: 0.85rem; color: var(--text-muted); border-left: 2px solid #ec4899; padding-left: 8px; line-height: 1.4;">{{ lb.text }}</div>
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            <span style="font-size: 0.85rem; color: var(--text-muted); font-style: italic;">Aucune croyance limitante renseignée.</span>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+            <!-- 8. Compétences -->
+            <div class="plan-card">
+                <div class="card-header">
+                    <div class="card-title-group">
+                        <div class="card-icon" style="background: rgba(13, 148, 136, 0.08); color: var(--primary);">
+                            <i data-lucide="book-open" style="width: 18px; height: 18px;"></i>
+                        </div>
+                        <h2 class="card-title">Compétence & Connaissance</h2>
+                    </div>
+                    <a href="{{ path('app_user_life_plan_wizard', { step: 8, single: 1 }) }}" class="btn-edit-card" title="Modifier">
+                        <i data-lucide="pencil" style="width: 14px; height: 14px;"></i>
+                    </a>
+                </div>
+                <div class="card-body" style="display: flex; flex-direction: column; gap: 1.5rem;">
+                    {% if competences.COMPETENCE|length > 0 or competences.CONNAISSANCE|length > 0 %}
+                        {% set statusInfo = {
+                            'leverage': {'label': 'À mettre à profit', 'bg': 'rgba(16, 185, 129, 0.08)', 'color': '#10b981'},
+                            'consolidate': {'label': 'À consolider', 'bg': 'rgba(59, 130, 246, 0.08)', 'color': '#3b82f6'},
+                            'build': {'label': 'À construire', 'bg': 'rgba(245, 158, 11, 0.08)', 'color': '#f59e0b'},
+                            'absence': {'label': 'Absence assumée', 'bg': 'rgba(107, 114, 128, 0.08)', 'color': '#6b7280'}
+                        } %}
+
+                        {% if competences.COMPETENCE|length > 0 %}
+                            <div>
+                                <h3 style="font-size: 0.85rem; font-weight: 700; color: var(--fg-light); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.75rem;">Compétences</h3>
+                                <div style="display:flex; flex-direction:column; gap:0.75rem;">
+                                    {% for goal in competences.COMPETENCE %}
+                                        {% set status = goal.subtype|default('build') %}
+                                        {% set info = statusInfo[status]|default(statusInfo['build']) %}
+                                        <div class="growth-item" style="display: flex; justify-content: space-between; align-items: flex-start; gap: 1rem;">
+                                            <div style="flex: 1;">
+                                                <div class="growth-title" style="margin-bottom: 0.25rem;">{{ goal.title }}</div>
+                                                {% if goal.strategy %}
+                                                    <div class="growth-strat">Stratégie : {{ goal.strategy }}</div>
+                                                {% endif %}
+                                                {% if goal.supportedLifeGoals|length > 0 %}
+                                                    <div style="display: flex; flex-wrap: wrap; gap: 0.25rem; margin-top: 0.5rem;">
+                                                        {% for lg in goal.supportedLifeGoals %}
+                                                            <span style="font-size: 0.65rem; padding: 2px 6px; border-radius: 4px; background: rgba(13, 148, 136, 0.05); color: var(--primary); border: 1px solid rgba(13, 148, 136, 0.1);">
+                                                                [{{ lg.category }}] {{ lg.title }}
+                                                            </span>
+                                                        {% endfor %}
+                                                    </div>
+                                                {% endif %}
+                                            </div>
+                                            <span style="font-size: 0.65rem; font-weight: 700; padding: 0.25rem 0.5rem; border-radius: 0.5rem; background: {{ info.bg }}; color: {{ info.color }}; border: 1px solid {{ info.color }}33; text-transform: uppercase; letter-spacing: 0.025em; white-space: nowrap;">
+                                                {{ info.label }}
+                                            </span>
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        {% endif %}
+
+                        {% if competences.CONNAISSANCE|length > 0 %}
+                            <div>
+                                <h3 style="font-size: 0.85rem; font-weight: 700; color: var(--fg-light); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.75rem; {% if competences.COMPETENCE|length > 0 %}margin-top: 1.25rem;{% endif %}">Connaissances</h3>
+                                <div style="display:flex; flex-direction:column; gap:0.75rem;">
+                                    {% for goal in competences.CONNAISSANCE %}
+                                        {% set status = goal.subtype|default('build') %}
+                                        {% set info = statusInfo[status]|default(statusInfo['build']) %}
+                                        <div class="growth-item" style="display: flex; justify-content: space-between; align-items: flex-start; gap: 1rem;">
+                                            <div style="flex: 1;">
+                                                <div class="growth-title" style="margin-bottom: 0.25rem;">{{ goal.title }}</div>
+                                                {% if goal.strategy %}
+                                                    <div class="growth-strat">Stratégie : {{ goal.strategy }}</div>
+                                                {% endif %}
+                                                {% if goal.supportedLifeGoals|length > 0 %}
+                                                    <div style="display: flex; flex-wrap: wrap; gap: 0.25rem; margin-top: 0.5rem;">
+                                                        {% for lg in goal.supportedLifeGoals %}
+                                                            <span style="font-size: 0.65rem; padding: 2px 6px; border-radius: 4px; background: rgba(13, 148, 136, 0.05); color: var(--primary); border: 1px solid rgba(13, 148, 136, 0.1);">
+                                                                [{{ lg.category }}] {{ lg.title }}
+                                                            </span>
+                                                        {% endfor %}
+                                                    </div>
+                                                {% endif %}
+                                            </div>
+                                            <span style="font-size: 0.65rem; font-weight: 700; padding: 0.25rem 0.5rem; border-radius: 0.5rem; background: {{ info.bg }}; color: {{ info.color }}; border: 1px solid {{ info.color }}33; text-transform: uppercase; letter-spacing: 0.025em; white-space: nowrap;">
+                                                {{ info.label }}
+                                            </span>
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        {% endif %}
+                    {% else %}
+                        <div class="empty-state" onclick="window.location.href='{{ path('app_user_life_plan_wizard', { step: 8, single: 1 }) }}'">
+                            <i data-lucide="book-open" class="empty-icon" style="width: 24px; height: 24px;"></i>
+                            <span class="empty-text">Savoir-faire et connaissances à acquérir pour soutenir vos objectifs.</span>
+                            <span class="empty-action">Ajouter des compétences</span>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- 9. Caractère & Discipline -->
+            <div class="plan-card">
+                <div class="card-header">
+                    <div class="card-title-group">
+                        <div class="card-icon" style="background: rgba(245, 158, 11, 0.08); color: #d97706;">
+                            <i data-lucide="shield" style="width: 18px; height: 18px;"></i>
+                        </div>
+                        <h2 class="card-title">Caractère & Conviction</h2>
+                    </div>
+                    <a href="{{ path('app_user_life_plan_wizard', { step: 9, single: 1 }) }}" class="btn-edit-card" title="Modifier">
+                        <i data-lucide="pencil" style="width: 14px; height: 14px;"></i>
+                    </a>
+                </div>
+                <div class="card-body">
+                    {% if growthGoals.CHARACTER|length > 0 %}
+                        {% set statusInfo = {
+                            'leverage': {'label': 'À mettre à profit', 'bg': 'rgba(16, 185, 129, 0.08)', 'color': '#10b981'},
+                            'consolidate': {'label': 'À consolider', 'bg': 'rgba(59, 130, 246, 0.08)', 'color': '#3b82f6'},
+                            'build': {'label': 'À construire', 'bg': 'rgba(245, 158, 11, 0.08)', 'color': '#f59e0b'},
+                            'absence': {'label': 'Absence assumée', 'bg': 'rgba(107, 114, 128, 0.08)', 'color': '#6b7280'}
+                        } %}
+                        <div style="display:flex; flex-direction:column; gap:0.75rem;">
+                            {% for goal in growthGoals.CHARACTER %}
+                                {% set status = goal.subtype|default('build') %}
+                                {% set info = statusInfo[status]|default(statusInfo['build']) %}
+                                <div class="growth-item" style="border-left: 3px solid #d97706; display: flex; justify-content: space-between; align-items: flex-start; gap: 1rem;">
+                                    <div style="flex: 1;">
+                                        <div class="growth-title" style="margin-bottom: 0.25rem;">{{ goal.title }}</div>
+                                        {% if goal.strategy %}
+                                            <div class="growth-strat">Méthode : {{ goal.strategy }}</div>
+                                        {% endif %}
+                                        {% if goal.supportedLifeGoals|length > 0 %}
+                                            <div style="display: flex; flex-wrap: wrap; gap: 0.25rem; margin-top: 0.5rem;">
+                                                {% for lg in goal.supportedLifeGoals %}
+                                                    <span style="font-size: 0.65rem; padding: 2px 6px; border-radius: 4px; background: rgba(217, 119, 6, 0.05); color: #d97706; border: 1px solid rgba(217, 119, 6, 0.1);">
+                                                        [{{ lg.category }}] {{ lg.title }}
+                                                    </span>
+                                                {% endfor %}
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                    <span style="font-size: 0.65rem; font-weight: 700; padding: 0.25rem 0.5rem; border-radius: 0.5rem; background: {{ info.bg }}; color: {{ info.color }}; border: 1px solid {{ info.color }}33; text-transform: uppercase; letter-spacing: 0.025em; white-space: nowrap;">
+                                        {{ info.label }}
+                                    </span>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        <div class="empty-state" onclick="window.location.href='{{ path('app_user_life_plan_wizard', { step: 9, single: 1 }) }}'">
+                            <i data-lucide="shield" class="empty-icon" style="width: 24px; height: 24px;"></i>
+                            <span class="empty-text">Attributs de caractère et savoir-être à forger.</span>
+                            <span class="empty-action">Forger mon caractère</span>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- 10. Relations & Mentorat -->
+            <div class="plan-card grid-full">
+                <div class="card-header">
+                    <div class="card-title-group">
+                        <div class="card-icon" style="background: rgba(99, 102, 241, 0.08); color: #6366f1;">
+                            <i data-lucide="users" style="width: 18px; height: 18px;"></i>
+                        </div>
+                        <h2 class="card-title">Relation & Réseau</h2>
+                    </div>
+                    <a href="{{ path('app_user_life_plan_wizard', { step: 10, single: 1 }) }}" class="btn-edit-card" title="Modifier">
+                        <i data-lucide="pencil" style="width: 14px; height: 14px;"></i>
+                    </a>
+                </div>
+                <div class="card-body">
+                    {% if growthGoals.RELATION|length > 0 %}
+                        {% set statusInfo = {
+                            'leverage': {'label': 'À mettre à profit', 'bg': 'rgba(16, 185, 129, 0.08)', 'color': '#10b981'},
+                            'consolidate': {'label': 'À consolider', 'bg': 'rgba(59, 130, 246, 0.08)', 'color': '#3b82f6'},
+                            'build': {'label': 'À construire', 'bg': 'rgba(245, 158, 11, 0.08)', 'color': '#f59e0b'},
+                            'absence': {'label': 'Absence assumée', 'bg': 'rgba(107, 114, 128, 0.08)', 'color': '#6b7280'}
+                        } %}
+                        
+                        {% set orientationGoals = [] %}
+                        {% set croissanceGoals = [] %}
+                        {% set soutienGoals = [] %}
+                        {% set responsabiliteGoals = [] %}
+                        {% set environnementGoals = [] %}
+                        
+                        {% for goal in growthGoals.RELATION %}
+                            {% if goal.type == 'orientation' %}
+                                {% set orientationGoals = orientationGoals|merge([goal]) %}
+                            {% elseif goal.type == 'croissance' %}
+                                {% set croissanceGoals = croissanceGoals|merge([goal]) %}
+                            {% elseif goal.type == 'soutien' %}
+                                {% set soutienGoals = soutienGoals|merge([goal]) %}
+                            {% elseif goal.type == 'responsabilite' %}
+                                {% set responsabiliteGoals = responsabiliteGoals|merge([goal]) %}
+                            {% elseif goal.type == 'environnement' %}
+                                {% set environnementGoals = environnementGoals|merge([goal]) %}
+                            {% else %}
+                                {% set orientationGoals = orientationGoals|merge([goal]) %}
+                            {% endif %}
+                        {% endfor %}
+                        
+                        {% set networkCategories = {
+                            'orientation': {'label': "Réseau d'Orientation", 'icon': 'compass', 'goals': orientationGoals, 'bg': 'rgba(15, 118, 110, 0.05)', 'color': '#0f766e'},
+                            'croissance': {'label': 'Réseau de Croissance', 'icon': 'trending-up', 'goals': croissanceGoals, 'bg': 'rgba(59, 130, 246, 0.05)', 'color': '#3b82f6'},
+                            'soutien': {'label': 'Réseau de Soutien', 'icon': 'heart', 'goals': soutienGoals, 'bg': 'rgba(239, 68, 68, 0.05)', 'color': '#ef4444'},
+                            'responsabilite': {'label': 'Réseau de Responsabilité', 'icon': 'check-square', 'goals': responsabiliteGoals, 'bg': 'rgba(139, 92, 246, 0.05)', 'color': '#8b5cf6'},
+                            'environnement': {'label': 'Réseau d\'Environnement', 'icon': 'map-pin', 'goals': environnementGoals, 'bg': 'rgba(245, 158, 11, 0.05)', 'color': '#f59e0b'}
+                        } %}
+                        
+                        <div style="display: flex; flex-direction: column; gap: 2rem;">
+                            {% for catKey, catInfo in networkCategories %}
+                                {% if catInfo.goals|length > 0 %}
+                                    <div style="display: flex; flex-direction: column; gap: 0.75rem;">
+                                        <div style="display: flex; align-items: center; gap: 0.5rem; border-bottom: 1px solid rgba(15, 118, 110, 0.08); padding-bottom: 0.5rem;">
+                                            <div style="width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; background: {{ catInfo.bg }}; color: {{ catInfo.color }};">
+                                                <i data-lucide="{{ catInfo.icon }}" style="width: 14px; height: 14px;"></i>
+                                            </div>
+                                            <h3 style="font-size: 0.95rem; font-weight: 600; color: var(--fg-dark); margin: 0;">{{ catInfo.label }}</h3>
+                                            <span style="font-size: 0.75rem; color: var(--fg-muted); background: rgba(0,0,0,0.04); padding: 1px 6px; border-radius: 10px;">{{ catInfo.goals|length }}</span>
+                                        </div>
+                                        <div style="display:grid; grid-template-columns: 1fr; gap: 1rem;" class="md:grid-cols-2">
+                                            {% for goal in catInfo.goals %}
+                                                {% set status = goal.subtype|default('build') %}
+                                                {% set info = statusInfo[status]|default(statusInfo['build']) %}
+                                                <div class="growth-item" style="border-left: 3px solid {{ catInfo.color }}; display: flex; justify-content: space-between; align-items: flex-start; gap: 1rem;">
+                                                    <div style="flex: 1;">
+                                                        <div class="growth-title" style="margin-bottom: 0.25rem;">{{ goal.title }}</div>
+                                                        {% if goal.strategy %}
+                                                            <div class="growth-strat">Action : {{ goal.strategy }}</div>
+                                                        {% endif %}
+                                                        {% if goal.supportedLifeGoals|length > 0 %}
+                                                            <div style="display: flex; flex-wrap: wrap; gap: 0.25rem; margin-top: 0.5rem;">
+                                                                {% for lg in goal.supportedLifeGoals %}
+                                                                    <span style="font-size: 0.65rem; padding: 2px 6px; border-radius: 4px; background: rgba(99, 102, 241, 0.05); color: #6366f1; border: 1px solid rgba(99, 102, 241, 0.1);">
+                                                                        [{{ lg.category }}] {{ lg.title }}
+                                                                    </span>
+                                                                {% endfor %}
+                                                            </div>
+                                                        {% endif %}
+                                                    </div>
+                                                    <span style="font-size: 0.65rem; font-weight: 700; padding: 0.25rem 0.5rem; border-radius: 0.5rem; background: {{ info.bg }}; color: {{ info.color }}; border: 1px solid {{ info.color }}33; text-transform: uppercase; letter-spacing: 0.025em; white-space: nowrap;">
+                                                        {{ info.label }}
+                                                    </span>
+                                                </div>
+                                            {% endfor %}
+                                        </div>
+                                    </div>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        <div class="empty-state" onclick="window.location.href='{{ path('app_user_life_plan_wizard', { step: 10, single: 1 }) }}'">
+                            <i data-lucide="users" class="empty-icon" style="width: 24px; height: 24px;"></i>
+                            <span class="empty-text">Profils clés à intégrer dans votre cercle d'influence.</span>
+                            <span class="empty-action">Développer mon réseau</span>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tab 4: Environnement -->
+    <div class="tab-content hidden" id="tab-environment">
+        <div class="cards-grid">
+            <!-- 11. Transmission & Héritage -->
+            <div class="plan-card">
+                <div class="card-header">
+                    <div class="card-title-group">
+                        <div class="card-icon" style="background: rgba(244, 63, 94, 0.08); color: #f43f5e;">
+                            <i data-lucide="gift" style="width: 18px; height: 18px;"></i>
+                        </div>
+                        <h2 class="card-title">Héritage & Transmission</h2>
+                    </div>
+                    <a href="{{ path('app_user_life_plan_wizard', { step: 11, single: 1 }) }}" class="btn-edit-card" title="Modifier">
+                        <i data-lucide="pencil" style="width: 14px; height: 14px;"></i>
+                    </a>
+                </div>
+                <div class="card-body">
+                    {% if legacyGoals|length > 0 %}
+                        {% set statusInfo = {
+                            'leverage': {'label': 'À mettre à profit', 'bg': 'rgba(16, 185, 129, 0.08)', 'color': '#10b981'},
+                            'consolidate': {'label': 'À consolider', 'bg': 'rgba(59, 130, 246, 0.08)', 'color': '#3b82f6'},
+                            'build': {'label': 'À construire', 'bg': 'rgba(245, 158, 11, 0.08)', 'color': '#f59e0b'},
+                            'absence': {'label': 'Absence assumée', 'bg': 'rgba(107, 114, 128, 0.08)', 'color': '#6b7280'}
+                        } %}
+                        <div style="display:flex; flex-direction:column; gap:0.75rem;">
+                            {% for lg in legacyGoals %}
+                                {% set status = lg.subtype|default('build') %}
+                                {% set info = statusInfo[status]|default(statusInfo['build']) %}
+                                <div style="padding: 0.85rem; background: #F8FAFC; border-radius: 0.75rem; border: 1px solid rgba(15, 118, 110, 0.04); display: flex; justify-content: space-between; align-items: flex-start; gap: 1rem;">
+                                    <div style="flex: 1;">
+                                        <div style="font-weight: 600; color: var(--fg-dark); font-size: 0.925rem; display: flex; align-items: center; gap: 0.5rem;">
+                                            <i data-lucide="gift" style="width: 14px; height: 14px; color: #f43f5e; flex-shrink: 0;"></i>
+                                            {{ lg.title }}
+                                        </div>
+                                        {% if lg.targetBeneficiary %}
+                                            <div style="font-size: 0.75rem; color: var(--fg-muted); margin-top: 0.25rem;">Bénéficiaire : {{ lg.targetBeneficiary }}</div>
+                                        {% endif %}
+                                        {% if lg.supportedLifeGoals|length > 0 %}
+                                            <div style="display: flex; flex-wrap: wrap; gap: 0.25rem; margin-top: 0.5rem;">
+                                                {% for lg_item in lg.supportedLifeGoals %}
+                                                    <span style="font-size: 0.65rem; padding: 2px 6px; border-radius: 4px; background: rgba(99, 102, 241, 0.05); color: #6366f1; border: 1px solid rgba(99, 102, 241, 0.1);">
+                                                        [{{ lg_item.category }}] {{ lg_item.title }}
+                                                    </span>
+                                                {% endfor %}
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                    <span style="font-size: 0.65rem; font-weight: 700; padding: 0.25rem 0.5rem; border-radius: 0.5rem; background: {{ info.bg }}; color: {{ info.color }}; border: 1px solid {{ info.color }}33; text-transform: uppercase; letter-spacing: 0.025em; white-space: nowrap;">
+                                        {{ info.label }}
+                                    </span>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        <div class="empty-state" onclick="window.location.href='{{ path('app_user_life_plan_wizard', { step: 11, single: 1 }) }}'">
+                            <i data-lucide="gift" class="empty-icon" style="width: 24px; height: 24px;"></i>
+                            <span class="empty-text">Ce que vous désirez léguer ou transmettre comme impact durable.</span>
+                            <span class="empty-action">Définir mes projets d'héritage</span>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- 12. Hygiène de Vie -->
+            <div class="plan-card">
+                <div class="card-header">
+                    <div class="card-title-group">
+                        <div class="card-icon" style="background: rgba(16, 185, 129, 0.08); color: #10b981;">
+                            <i data-lucide="heart-pulse" style="width: 18px; height: 18px;"></i>
+                        </div>
+                        <h2 class="card-title">Hygiène de Vie</h2>
+                    </div>
+                    <a href="{{ path('app_user_life_plan_wizard', { step: 12, single: 1 }) }}" class="btn-edit-card" title="Modifier">
+                        <i data-lucide="pencil" style="width: 14px; height: 14px;"></i>
+                    </a>
+                </div>
+                <div class="card-body">
+                    {% if hygieneDomains|length > 0 %}
+                        {% set statusInfo = {
+                            'leverage': {'label': 'À mettre à profit', 'bg': 'rgba(16, 185, 129, 0.08)', 'color': '#10b981'},
+                            'consolidate': {'label': 'À consolider', 'bg': 'rgba(59, 130, 246, 0.08)', 'color': '#3b82f6'},
+                            'build': {'label': 'À construire', 'bg': 'rgba(245, 158, 11, 0.08)', 'color': '#f59e0b'},
+                            'absence': {'label': 'Absence assumée', 'bg': 'rgba(107, 114, 128, 0.08)', 'color': '#6b7280'}
+                        } %}
+                        <div style="display:flex; flex-direction:column; gap:1.25rem;">
+                            {% for category, hds in groupedHygieneDomains %}
+                                {% if hds|length > 0 %}
+                                    <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+                                        <div style="font-size: 0.72rem; font-weight: 800; color: var(--primary); text-transform: uppercase; letter-spacing: 0.05em; display: flex; align-items: center; gap: 0.25rem;">
+                                            <span style="width: 5px; height: 5px; border-radius: 50%; background: var(--primary);"></span>
+                                            {{ category }}
+                                        </div>
+                                        <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+                                            {% for hd in hds %}
+                                                {% set status = hd.subtype|default('build') %}
+                                                {% set info = statusInfo[status]|default(statusInfo['build']) %}
+                                                <div style="padding: 0.75rem 0.85rem; background: #F8FAFC; border-radius: 0.75rem; border: 1px solid rgba(15, 118, 110, 0.04); display: flex; justify-content: space-between; align-items: flex-start; gap: 1rem;">
+                                                    <div style="flex: 1;">
+                                                        <div style="font-weight: 600; color: var(--fg-dark); font-size: 0.875rem; display: flex; align-items: center; gap: 0.4rem;">
+                                                            <i data-lucide="check" style="width: 13px; height: 13px; color: #10b981; flex-shrink: 0;"></i>
+                                                            {{ hd.name }}
+                                                        </div>
+                                                        {% if hd.supportedLifeGoals|length > 0 %}
+                                                            <div style="display: flex; flex-wrap: wrap; gap: 0.25rem; margin-top: 0.4rem;">
+                                                                {% for lg in hd.supportedLifeGoals %}
+                                                                    <span style="font-size: 0.65rem; padding: 1px 5px; border-radius: 4px; background: rgba(99, 102, 241, 0.05); color: #6366f1; border: 1px solid rgba(99, 102, 241, 0.1);">
+                                                                        [{{ lg.category }}] {{ lg.title }}
+                                                                    </span>
+                                                                {% endfor %}
+                                                            </div>
+                                                        {% endif %}
+                                                    </div>
+                                                    <span style="font-size: 0.62rem; font-weight: 700; padding: 0.2rem 0.45rem; border-radius: 0.4rem; background: {{ info.bg }}; color: {{ info.color }}; border: 1px solid {{ info.color }}33; text-transform: uppercase; letter-spacing: 0.025em; white-space: nowrap; margin-top: 0.1rem;">
+                                                        {{ info.label }}
+                                                    </span>
+                                                </div>
+                                            {% endfor %}
+                                        </div>
+                                    </div>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        <div class="empty-state" onclick="window.location.href='{{ path('app_user_life_plan_wizard', { step: 12, single: 1 }) }}'">
+                            <i data-lucide="heart-pulse" class="empty-icon" style="width: 24px; height: 24px;"></i>
+                            <span class="empty-text">Votre hygiène de vie personnelle (Sommeil, Nutrition, Sport...).</span>
+                            <span class="empty-action">Organiser mon hygiène de vie</span>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tab 5: Échéancier -->
+    <div class="tab-content hidden" id="tab-timeline">
+        <div x-data="{ activeCategory: 'ALL', activeYear: 'ALL' }" style="background: white; border-radius: 1.5rem; padding: 2.5rem; border: 1px solid rgba(15, 118, 110, 0.08); box-shadow: var(--card-shadow);">
+            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 2rem;">
+                <h2 style="font-family: var(--font-serif); font-size: 1.5rem; color: var(--primary); margin: 0;">📅 Mon Échéancier</h2>
+                <a href="{{ path('app_user_life_plan_wizard', { step: 7, single: 1 }) }}" class="btn-hero-primary" style="padding: 0.5rem 1rem; font-size: 0.85rem; box-shadow: none;">
+                    <i data-lucide="pencil" style="width: 14px; height: 14px;"></i> Modifier les Objectifs
+                </a>
+            </div>
+
+            {% if timelineGoals|length > 0 %}
+                <!-- Filters -->
+                <div style="display: flex; flex-wrap: wrap; gap: 1rem; align-items: center; justify-content: space-between; margin-bottom: 2.5rem; background: rgba(15, 118, 110, 0.02); padding: 1.25rem; border-radius: 1rem; border: 1px solid rgba(15, 118, 110, 0.06);">
+                    <div style="display: flex; flex-wrap: wrap; gap: 0.5rem; align-items: center;">
+                        <span style="font-size: 0.8rem; font-weight: 700; color: var(--fg-light); text-transform: uppercase; margin-right: 0.5rem; font-family: 'Inter', sans-serif;">Filtrer :</span>
+                        <button @click="activeCategory = 'ALL'" :class="activeCategory === 'ALL' ? 'active' : ''" class="btn-filter-pill">Tout</button>
+                        <button @click="activeCategory = 'BE'" :class="activeCategory === 'BE' ? 'active' : ''" class="btn-filter-pill pill-be">Devenir (Be)</button>
+                        <button @click="activeCategory = 'DO'" :class="activeCategory === 'DO' ? 'active' : ''" class="btn-filter-pill pill-do">Accomplir (Do)</button>
+                        <button @click="activeCategory = 'HAVE'" :class="activeCategory === 'HAVE' ? 'active' : ''" class="btn-filter-pill pill-have">Posséder (Have)</button>
+                        <button @click="activeCategory = 'GIVE'" :class="activeCategory === 'GIVE' ? 'active' : ''" class="btn-filter-pill pill-give">Léguer (Give)</button>
+                    </div>
+                    <div style="display: flex; flex-wrap: wrap; gap: 0.5rem; align-items: center;">
+                        <span style="font-size: 0.8rem; font-weight: 700; color: var(--fg-light); text-transform: uppercase; margin-right: 0.5rem; font-family: 'Inter', sans-serif;">Année :</span>
+                        <button @click="activeYear = 'ALL'" :class="activeYear === 'ALL' ? 'active' : ''" class="btn-filter-pill">Toutes</button>
+                        {% set years = [] %}
+                        {% for goal in timelineGoals %}
+                            {% set y = goal.deadline|date('Y') %}
+                            {% if y not in years %}
+                                {% set years = years|merge([y]) %}
+                            {% endif %}
+                        {% endfor %}
+                        {% for y in years|sort %}
+                            <button @click="activeYear = '{{ y }}'" :class="activeYear === '{{ y }}' ? 'active' : ''" class="btn-filter-pill">{{ y }}</button>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <div class="timeline-container">
+                    {% for year, goals in timelineGoalsGrouped %}
+                        {% set yearCategories = [] %}
+                        {% for goal in goals %}
+                            {% if goal.category not in yearCategories %}
+                                {% set yearCategories = yearCategories|merge([goal.category]) %}
+                            {% endif %}
+                        {% endfor %}
+
+                        <div class="timeline-year-group" 
+                             x-show="(activeYear === 'ALL' || activeYear === '{{ year }}') && (activeCategory === 'ALL' || [{% for cat in yearCategories %}'{{ cat }}'{% if not loop.last %}, {% endif %}{% endfor %}].includes(activeCategory))">
+                            <div class="timeline-year-heading">
+                                <span>{{ year }}</span>
+                            </div>
+
+                            {% for goal in goals %}
+                                {% set catMap = {
+                                    'BE': {'label': 'Devenir', 'bg': 'rgba(79, 70, 229, 0.08)', 'color': '#4f46e5'},
+                                    'DO': {'label': 'Accomplir', 'bg': 'rgba(37, 99, 235, 0.08)', 'color': '#2563eb'},
+                                    'HAVE': {'label': 'Posséder', 'bg': 'rgba(5, 150, 105, 0.08)', 'color': '#059669'},
+                                    'GIVE': {'label': 'Léguer', 'bg': 'rgba(225, 29, 72, 0.08)', 'color': '#e11d48'}
+                                } %}
+                                {% set cInfo = catMap[goal.category]|default({'label': goal.category, 'bg': 'rgba(15, 118, 110, 0.08)', 'color': 'var(--primary)'}) %}
+
+                                <div class="timeline-item" x-show="activeCategory === 'ALL' || activeCategory === '{{ goal.category }}'" x-transition>
+                                    <div class="timeline-dot" style="background: {{ cInfo.color }}; box-shadow: 0 0 0 3px {{ cInfo.color }}22;"></div>
+                                    <div style="display: flex; flex-direction: column; gap: 0.5rem; width: 100%;">
+                                        <div class="timeline-date-label" style="color: {{ cInfo.color }};">
+                                            <i data-lucide="calendar" style="width: 14px; height: 14px; display: inline-block; vertical-align: middle; margin-right: 0.25rem;"></i>
+                                            {{ goal.deadline|date('d F', 'Europe/Paris')|replace({
+                                                'January': 'janvier', 'February': 'février', 'March': 'mars', 'April': 'avril',
+                                                'May': 'mai', 'June': 'juin', 'July': 'juillet', 'August': 'août',
+                                                'September': 'septembre', 'October': 'octobre', 'November': 'novembre', 'December': 'décembre'
+                                            }) }}
+                                        </div>
+                                        <div class="timeline-content">
+                                            <div class="timeline-card-grid">
+                                                <!-- Left Side: Title, Category, Priority, Progress -->
+                                                <div style="display: flex; flex-direction: column; justify-content: space-between; gap: 1rem;">
+                                                    <div>
+                                                        <div class="timeline-title">{{ goal.title }}</div>
+                                                        <div style="display: flex; gap: 0.5rem; align-items: center; margin-top: 0.5rem; flex-wrap: wrap;">
+                                                            <span class="timeline-category" style="background: {{ cInfo.bg }}; color: {{ cInfo.color }}; border: 1px solid {{ cInfo.color }}22;">
+                                                                {{ cInfo.label }}
+                                                            </span>
+                                                            <span class="timeline-priority-badge timeline-priority--{{ goal.priority }}">
+                                                                {{ goal.priority == 'HIGH' ? 'Haute priorité' : (goal.priority == 'MEDIUM' ? 'Moyenne priorité' : 'Basse priorité') }}
+                                                            </span>
+                                                        </div>
+                                                    </div>
+
+                                                    <div style="margin-top: auto;">
+                                                        <div style="display: flex; justify-content: space-between; font-size: 0.8rem; color: var(--fg-light); font-weight: 700; margin-bottom: 0.25rem;">
+                                                            <span>Progression</span>
+                                                            <span>{{ goal.progress }}%</span>
+                                                        </div>
+                                                        <div style="width: 100%; height: 6px; background: rgba(15, 118, 110, 0.06); border-radius: 99px; overflow: hidden;">
+                                                            <div style="width: {{ goal.progress }}%; height: 100%; background: {{ cInfo.color }}; border-radius: 99px;"></div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <!-- Right Side: Milestones list -->
+                                                <div style="border-left: 1px dashed rgba(15, 118, 110, 0.1); padding-left: 1.25rem;">
+                                                    <div style="font-size: 0.8rem; font-weight: 700; color: var(--fg-light); margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.25rem; font-family: 'Inter', sans-serif;">
+                                                        <i data-lucide="check-square" style="width: 14px; height: 14px;"></i> Jalons associés
+                                                    </div>
+                                                    {% if goal.milestones|length > 0 %}
+                                                        <div class="timeline-milestones">
+                                                            {% for ms in goal.milestones %}
+                                                                <div class="timeline-milestone-item {% if ms.completed %}completed{% endif %}">
+                                                                    <i data-lucide="{% if ms.completed %}check-circle{% else %}circle{% endif %}" style="width: 14px; height: 14px; flex-shrink: 0;"></i>
+                                                                    <span style="font-weight: 500;">{{ ms.title }}</span>
+                                                                    <span class="milestone-date-badge">{{ ms.dueDate|date('d/m/Y') }}</span>
+                                                                </div>
+                                                            {% endfor %}
+                                                        </div>
+                                                    {% else %}
+                                                        <div style="font-size: 0.8rem; color: var(--fg-muted); font-style: italic; padding: 0.5rem 0;">
+                                                            Aucun jalon spécifique pour cet objectif.
+                                                        </div>
+                                                    {% endif %}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    {% endfor %}
+                </div>
+                </div>
+            {% else %}
+                <div class="empty-state" onclick="window.location.href='{{ path('app_user_life_plan_wizard', { step: 7, single: 1 }) }}'" style="max-width: 500px; margin: 2rem auto;">
+                    <i data-lucide="calendar" class="empty-icon" style="width: 24px; height: 24px;"></i>
+                    <span class="empty-text">Aucun objectif daté dans votre échéancier pour le moment.</span>
+                    <span class="empty-action">Ajouter des échéances</span>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Tab 6: Carte -->
+    <div class="tab-content hidden" id="tab-map">
+        <div class="map-card">
+            <div style="width: 100%; display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.5rem; flex-wrap: wrap; gap: 1rem;">
+                <div>
+                    <h2 style="font-family: var(--font-serif); font-size: 1.5rem; color: var(--primary); margin: 0;">🗺️ Ma Carte Stratégique</h2>
+                    <p style="color: var(--fg-muted); font-size: 0.875rem; margin: 0.25rem 0 0 0;">Visualisation de la cascade entre votre Vision, vos Objectifs et vos plans de Croissance.</p>
+                </div>
+                <button onclick="window.print()" class="btn-hero-primary" style="padding: 0.5rem 1rem; font-size: 0.85rem; box-shadow: none;">
+                    <i data-lucide="printer" style="width: 14px; height: 14px;"></i> Imprimer la Carte
+                </button>
+            </div>
+
+            <div class="map-mermaid-wrapper" style="width:100%;">
+                <!-- Hidden source container for the raw mermaid code -->
+                <div id="mermaid-code-src" style="display:none;">
+graph TD
+  Vision["✨ {{ planDeVie.vision.content|default('Ma Vision')|slice(0, 60)|escape('html') }}..."]
+  
+  {# Define goals and index them #}
+  {% set allGoals = [] %}
+  {% for cat, list in lifeGoals %}
+      {% set allGoals = allGoals|merge(list) %}
+  {% endfor %}
+
+  {% for g in allGoals %}
+      Goal{{ g.id }}["🎯 {{ g.title|escape('html') }}"]
+      Vision --> Goal{{ g.id }}
+  {% endfor %}
+
+  {# Define growth goals #}
+  {% set allGrowth = [] %}
+  {% for axis, list in growthGoals %}
+      {% set allGrowth = allGrowth|merge(list) %}
+  {% endfor %}
+
+  {% for gg in allGrowth %}
+      {% set axisLabel = gg.axis == 'COMPETENCE' ? '📚' : (gg.axis == 'CHARACTER' ? '💎' : '🤝') %}
+      GG{{ gg.id }}["{{ axisLabel }} {{ gg.title|escape('html') }}"]
+      
+      {# Link to supported life goals #}
+      {% for sg in gg.supportedLifeGoals %}
+          Goal{{ sg.id }} --> GG{{ gg.id }}
+      {% endfor %}
+  {% endfor %}
+
+  {# Define legacy goals #}
+  {% for lg in legacyGoals %}
+      Legacy{{ lg.id }}["🌱 {{ lg.title|escape('html') }}"]
+      {% for sg in lg.supportedLifeGoals %}
+          Goal{{ sg.id }} --> Legacy{{ lg.id }}
+      {% endfor %}
+  {% endfor %}
+
+  {# Define hygiene domains #}
+  {% for hd in hygieneDomains %}
+      Hygiene{{ hd.id }}["⭐ {{ hd.name|escape('html') }}"]
+      {% for sg in hd.supportedLifeGoals %}
+          Goal{{ sg.id }} --> Hygiene{{ hd.id }}
+      {% endfor %}
+  {% endfor %}
+
+  {# Styling #}
+  style Vision fill:#fdf4ff,stroke:#d946ef,stroke-width:2px,color:#701a75
+  classDef goal fill:#eff6ff,stroke:#3b82f6,stroke-width:2px,color:#1e40af
+  classDef comp fill:#f0fdf4,stroke:#22c55e,stroke-width:1px,color:#166534
+  classDef char fill:#fffbeb,stroke:#f59e0b,stroke-width:1px,color:#92400e
+  classDef rel fill:#fdf2f8,stroke:#ec4899,stroke-width:1px,color:#9d174d
+  classDef trans fill:#e0e7ff,stroke:#6366f1,stroke-width:1px,color:#3730a3
+  classDef hyg fill:#d1fae5,stroke:#10b981,stroke-width:1px,color:#065f46
+
+  {% for g in allGoals %}
+      class Goal{{ g.id }} goal
+  {% endfor %}
+  {% for gg in allGrowth %}
+      {% if gg.axis == 'COMPETENCE' %}
+          class GG{{ gg.id }} comp
+      {% elseif gg.axis == 'CHARACTER' %}
+          class GG{{ gg.id }} char
+      {% elseif gg.axis == 'RELATION' %}
+          class GG{{ gg.id }} rel
+      {% endif %}
+  {% endfor %}
+  {% for lg in legacyGoals %}
+      class Legacy{{ lg.id }} trans
+  {% endfor %}
+  {% for hd in hygieneDomains %}
+      class Hygiene{{ hd.id }} hyg
+  {% endfor %}
+                </div>
+                <!-- Container where Mermaid will render the SVG -->
+                <pre class="mermaid" id="mermaid-target" style="background: transparent; border: none; margin: 0; padding: 0; width: 100%; text-align: center; display: flex; justify-content: center;"></pre>
+            </div>
+
+            <div class="map-legend">
+                <div class="legend-item">
+                    <div class="legend-color" style="background: #d946ef;"></div>
+                    <span class="legend-label">✨ Vision</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background: #3b82f6;"></div>
+                    <span class="legend-label">🎯 Objectifs Spécifiques</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background: #22c55e;"></div>
+                    <span class="legend-label">📚 Compétences & Connaissances</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background: #f59e0b;"></div>
+                    <span class="legend-label">💎 Caractère & Rituels</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background: #ec4899;"></div>
+                    <span class="legend-label">🤝 Relation & Réseau</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background: #6366f1;"></div>
+                    <span class="legend-label">🌱 Héritage & Transmission</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background: #10b981;"></div>
+                    <span class="legend-label">⭐ Hygiène de Vie</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tab 7: Analyse de Cohérence -->
+    <div class="tab-content hidden" id="tab-analysis">
+        {# Compute coherence analysis #}
+        {% set issues = [] %}
+        {% set scoreTotal = 0 %}
+        {% set scoreCurrent = 0 %}
+
+        {# 1. Check Specific Goals #}
+        {% set allGoals = [] %}
+        {% for cat, list in lifeGoals %}
+            {% set allGoals = allGoals|merge(list) %}
+        {% endfor %}
+
+        {% for g in allGoals %}
+            {% set scoreTotal = scoreTotal + 10 %}
+            {% if not g.deadline %}
+                {% set issue = {
+                    'type': 'WARNING',
+                    'message': "L'objectif spécifique '" ~ g.title ~ "' n'a pas de date d'échéance.",
+                    'icon': 'calendar',
+                    'action': 'ADD_DEADLINE',
+                    'itemId': g.id,
+                    'link': path('app_user_life_plan_wizard', { step: 7, single: 1 })
+                } %}
+                {% set issues = issues|merge([issue]) %}
+            {% else %}
+                {% set scoreCurrent = scoreCurrent + 10 %}
+            {% endif %}
+
+            {% if g.title|split(' ')|length < 3 %}
+                {% set issue = {
+                    'type': 'INFO',
+                    'message': "La formulation de '" ~ g.title ~ "' est un peu trop courte pour être spécifique.",
+                    'icon': 'alert-triangle',
+                    'action': 'EDIT_LIFE_GOAL',
+                    'itemId': g.id,
+                    'link': path('app_user_life_plan_wizard', { step: 7, single: 1 })
+                } %}
+                {% set issues = issues|merge([issue]) %}
+            {% endif %}
+        {% endfor %}
+
+        {# 2. Check Vision #}
+        {% set scoreTotal = scoreTotal + 10 %}
+        {% if not planDeVie or not planDeVie.vision or planDeVie.vision.content|length < 20 %}
+            {% set issue = {
+                'type': 'CRITICAL',
+                'message': "Rédigez votre vision personnelle pour donner une direction claire à vos objectifs.",
+                'icon': 'alert-circle',
+                'action': 'ADD_VISION',
+                'link': path('app_user_life_plan_wizard', { step: 6, single: 1 })
+            } %}
+            {% set issues = issues|merge([issue]) %}
+        {% else %}
+            {% set scoreCurrent = scoreCurrent + 10 %}
+        {% endif %}
+
+        {# 3. Goals without Growth support #}
+        {% set supportedGoalIds = [] %}
+        {% set allGrowth = [] %}
+        {% for axis, list in growthGoals %}
+            {% set allGrowth = allGrowth|merge(list) %}
+        {% endfor %}
+
+        {% for gg in allGrowth %}
+            {% for sg in gg.supportedLifeGoals %}
+                {% set supportedGoalIds = supportedGoalIds|merge([sg.id]) %}
+            {% endfor %}
+        {% endfor %}
+        {% for lg in legacyGoals %}
+            {% for sg in lg.supportedLifeGoals %}
+                {% set supportedGoalIds = supportedGoalIds|merge([sg.id]) %}
+            {% endfor %}
+        {% endfor %}
+        {% for hd in hygieneDomains %}
+            {% for sg in hd.supportedLifeGoals %}
+                {% set supportedGoalIds = supportedGoalIds|merge([sg.id]) %}
+            {% endfor %}
+        {% endfor %}
+
+        {% for g in allGoals %}
+            {% set scoreTotal = scoreTotal + 5 %}
+            {% if g.id not in supportedGoalIds %}
+                {% set issue = {
+                    'type': 'WARNING',
+                    'message': "L'objectif spécifique '" ~ g.title ~ "' n'est soutenu par aucun moyen de croissance, de transmission ou d'hygiène.",
+                    'icon': 'target',
+                    'action': 'LINK_GROWTH',
+                    'itemId': g.id,
+                    'link': path('app_user_life_plan_wizard', { step: 7, single: 1 })
+                } %}
+                {% set issues = issues|merge([issue]) %}
+            {% else %}
+                {% set scoreCurrent = scoreCurrent + 5 %}
+            {% endif %}
+        {% endfor %}
+
+        {# 4. Orphan Growth Goals, Legacy Goals, Hygiene Domains #}
+        {% for gg in allGrowth %}
+            {% if gg.supportedLifeGoals|length == 0 %}
+                {% set ggStep = gg.axis == 'COMPETENCE' ? 8 : (gg.axis == 'CHARACTER' ? 9 : 10) %}
+                {% set issue = {
+                    'type': 'WARNING',
+                    'message': "L'objectif de croissance '" ~ gg.title ~ "' ne soutient aucun de vos objectifs spécifiques.",
+                    'icon': 'trending-up',
+                    'action': 'LINK_GOAL',
+                    'itemId': gg.id,
+                    'link': path('app_user_life_plan_wizard', { step: ggStep, single: 1 })
+                } %}
+                {% set issues = issues|merge([issue]) %}
+            {% endif %}
+        {% endfor %}
+
+        {% for lg in legacyGoals %}
+            {% if lg.supportedLifeGoals|length == 0 %}
+                {% set issue = {
+                    'type': 'WARNING',
+                    'message': "Le projet de transmission '" ~ lg.title ~ "' ne soutient aucun de vos objectifs spécifiques.",
+                    'icon': 'gift',
+                    'action': 'LINK_GOAL',
+                    'itemId': lg.id,
+                    'link': path('app_user_life_plan_wizard', { step: 11, single: 1 })
+                } %}
+                {% set issues = issues|merge([issue]) %}
+            {% endif %}
+        {% endfor %}
+
+        {% for hd in hygieneDomains %}
+            {% if hd.supportedLifeGoals|length == 0 %}
+                {% set issue = {
+                    'type': 'WARNING',
+                    'message': "Le domaine d'hygiène '" ~ hd.name ~ "' ne soutient aucun de vos objectifs spécifiques.",
+                    'icon': 'heart-pulse',
+                    'action': 'LINK_GOAL',
+                    'itemId': hd.id,
+                    'link': path('app_user_life_plan_wizard', { step: 12, single: 1 })
+                } %}
+                {% set issues = issues|merge([issue]) %}
+            {% endif %}
+        {% endfor %}
+
+        {# 5. Internal Balance Check #}
+        {% set hasLimitingBeliefs = limitingBeliefs|length > 0 %}
+        {% set hasCharacterGoals = growthGoals.CHARACTER|default([])|length > 0 %}
+
+        {% if hasLimitingBeliefs and not hasCharacterGoals %}
+            {% set issue = {
+                'type': 'WARNING',
+                'message': "Vous avez identifié des croyances limitantes, mais aucun objectif de caractère pour les contrecarrer.",
+                'icon': 'shield-alert',
+                'action': 'EDIT_BALANCE',
+                'link': path('app_user_life_plan_wizard', { step: 2, single: 1 })
+            } %}
+            {% set issues = issues|merge([issue]) %}
+        {% endif %}
+
+        {% set healthScore = scoreTotal == 0 ? 0 : ((scoreCurrent / scoreTotal) * 100)|round %}
+        {% if issues|length > 0 and healthScore == 100 %}
+            {% set healthScore = 95 %}
+        {% endif %}
+
+        <div class="analysis-card">
+            <div class="analysis-header">
+                <div>
+                    <h2 style="font-family: var(--font-serif); font-size: 1.5rem; color: var(--primary); margin: 0;">🔍 Analyse de Cohérence</h2>
+                    <p style="color: var(--fg-muted); font-size: 0.875rem; margin: 0.25rem 0 0 0;">Évaluation automatique de la clarté et de l'alignement de votre plan de vie.</p>
+                </div>
+                {% set scoreColor = healthScore > 80 ? '#166534' : (healthScore > 50 ? '#854d0e' : '#991b1b') %}
+                {% set scoreBg = healthScore > 80 ? '#dcfce7' : (healthScore > 50 ? '#fef9c3' : '#fee2e2') %}
+                <div class="analysis-score-badge" style="background: {{ scoreBg }}; color: {{ scoreColor }};">
+                    Score d'Alignement : {{ healthScore }}/100
+                </div>
+            </div>
+
+            {% if issues|length == 0 %}
+                <div class="analysis-perfect-state" style="color: #166534;">
+                    <i data-lucide="check-circle" style="width: 48px; height: 48px; margin-bottom: 1rem; opacity: 0.5;"></i>
+                    <p style="font-weight: 700; font-size: 1.1rem; margin-bottom: 0.25rem;">Votre Plan de Vie est parfaitement aligné !</p>
+                    <p style="font-size: 0.9rem; opacity: 0.8;">Félicitations, tous vos objectifs sont spécifiques, datés et reliés de façon logique à votre vision et vos plans de développement.</p>
+                </div>
+            {% else %}
+                <div style="display: flex; flex-direction: column; gap: 0.75rem;">
+                    {% for issue in issues %}
+                        {% set rowBg = issue.type == 'CRITICAL' ? '#fef2f2' : (issue.type == 'WARNING' ? '#fffbeb' : '#f8fafc') %}
+                        {% set rowBorder = issue.type == 'CRITICAL' ? '#ef4444' : (issue.type == 'WARNING' ? '#f59e0b' : '#94a3b8') %}
+                        {% set iconColor = rowBorder %}
+                        <div class="analysis-issue-row" style="background: {{ rowBg }}; border-left: 4px solid {{ rowBorder }};">
+                            <div class="analysis-issue-content">
+                                <div style="color: {{ iconColor }}; flex-shrink: 0;">
+                                    <i data-lucide="{{ issue.icon }}" style="width: 18px; height: 18px;"></i>
+                                </div>
+                                <div class="analysis-issue-text">{{ issue.message }}</div>
+                            </div>
+                            <a href="{{ issue.link }}" class="btn-analysis-fix" style="border-color: {{ rowBorder }}; color: {{ rowBorder }};">
+                                Corriger
+                            </a>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<div id="toast-dashboard" class="toast-notify" style="position: fixed; top: 20px; right: 20px; background: #0f766e; color: white; padding: 14px 24px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); font-size: 0.9rem; font-weight: 600; z-index: 9999; transform: translateY(-100px); transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);">Plan de Vie envoyé avec succès à votre adresse email !</div>
+
+<!-- Load Mermaid.js CDN -->
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+
+<script>
+    // Tab switching system
+    document.addEventListener('DOMContentLoaded', () => {
+        setupTabs();
+        setupEmailHandler();
+    });
+
+    document.addEventListener('turbo:load', () => {
+        setupTabs();
+        setupEmailHandler();
+    });
+
+    function setupTabs() {
+        const buttons = document.querySelectorAll('.tab-btn, .tab-trigger');
+        const contents = document.querySelectorAll('.tab-content');
+
+        if (buttons.length === 0) return;
+
+        buttons.forEach(btn => {
+            btn.addEventListener('click', () => {
+                const targetTab = btn.getAttribute('data-tab');
+
+                // Remove active class from all tab buttons and header triggers
+                buttons.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+
+                contents.forEach(content => {
+                    const contentId = content.getAttribute('id');
+                    if (contentId === `tab-${targetTab}`) {
+                        content.classList.remove('hidden');
+                    } else {
+                        content.classList.add('hidden');
+                    }
+                });
+
+                if (targetTab === 'map') {
+                    initMermaid();
+                }
+
+                // Smooth scroll down to the content start when a header trigger is clicked
+                if (btn.classList.contains('tab-trigger')) {
+                    document.getElementById('rubrics-start').scrollIntoView({ behavior: 'smooth' });
+                }
+            });
+        });
+        
+        if (typeof lucide !== 'undefined') {
+            lucide.createIcons();
+        }
+    }
+
+    function initMermaid() {
+        if (window.mermaid) {
+            const srcEl = document.getElementById('mermaid-code-src');
+            const targetEl = document.getElementById('mermaid-target');
+            if (srcEl && targetEl) {
+                targetEl.removeAttribute('data-processed');
+                targetEl.textContent = srcEl.textContent.trim();
+                
+                try {
+                    window.mermaid.initialize({
+                        startOnLoad: false,
+                        theme: 'neutral',
+                        securityLevel: 'loose',
+                        flowchart: {
+                            useMaxWidth: true,
+                            htmlLabels: true
+                        }
+                    });
+                    window.mermaid.run({
+                        nodes: [targetEl]
+                    });
+                } catch (e) {
+                    console.error("Mermaid run failed", e);
+                }
+            }
+        }
+    }
+
+    function setupEmailHandler() {
+        const emailDashBtn = document.getElementById('dashboard-send-email');
+        const toastDash = document.getElementById('toast-dashboard');
+
+        if (emailDashBtn && toastDash) {
+            // Remove any existing listeners by cloning the button (to prevent duplicate listeners with turbo/pjax)
+            const newEmailDashBtn = emailDashBtn.cloneNode(true);
+            emailDashBtn.parentNode.replaceChild(newEmailDashBtn, emailDashBtn);
+
+            newEmailDashBtn.addEventListener('click', async () => {
+                newEmailDashBtn.disabled = true;
+                newEmailDashBtn.style.opacity = '0.7';
+                const originalText = newEmailDashBtn.innerHTML;
+                newEmailDashBtn.innerHTML = '<span style="margin-right: 5px;">⏳</span> Envoi...';
+
+                try {
+                    const response = await fetch("{{ path('app_user_life_plan_send_email') }}", {
+                        method: "POST"
+                    });
+                    const result = await response.json();
+                    if (result.success) {
+                        toastDash.innerText = `Plan de Vie envoyé avec succès à ${result.emailSentTo} !`;
+                        toastDash.style.transform = 'translateY(0)';
+                        setTimeout(() => {
+                            toastDash.style.transform = 'translateY(-100px)';
+                        }, 4000);
+                    } else {
+                        alert("Erreur lors de l'envoi : " + result.error);
+                    }
+                } catch (err) {
+                    alert("Erreur réseau ou serveur lors de l'envoi.");
+                } finally {
+                    newEmailDashBtn.disabled = false;
+                    newEmailDashBtn.style.opacity = '1';
+                    newEmailDashBtn.innerHTML = originalText;
+                }
+            });
+        }
+    }
+</script>
+{% endblock %}

@@ -1,0 +1,1117 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Mon Bilan & Progression{% endblock %}
+
+{% block body %}
+<style>
+    .bilan-wrap {
+        max-width: 900px;
+        margin: 0 auto;
+        padding: 2.5rem 1.5rem 8rem;
+    }
+    @media (min-width: 1024px) {
+        .bilan-wrap {
+            padding: 3.5rem 2rem 5rem;
+        }
+    }
+
+    /* Section Cards — aligned with ritual-section */
+    .bilan-section {
+        background: rgba(255, 255, 255, 0.85);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        border: 1px solid rgba(15, 118, 110, 0.06);
+        border-radius: 2rem;
+        padding: 2.25rem;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.02);
+    }
+
+    /* Tab buttons — aligned with tab-btn */
+    .bilan-tab {
+        padding: 0.75rem 1.5rem;
+        border-radius: var(--r-md);
+        font-size: 0.875rem;
+        font-weight: 600;
+        transition: all 0.25s var(--ease);
+        cursor: pointer;
+        border: 1px solid transparent;
+        background: transparent;
+        color: var(--fg-muted);
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+    .bilan-tab.active {
+        background: var(--primary-glow);
+        color: var(--primary);
+        border-color: rgba(15, 118, 110, 0.15);
+    }
+    .bilan-tab:hover:not(.active) {
+        background: var(--bg-alt);
+        color: var(--fg-light);
+    }
+
+    /* Stat KPI Cards */
+    .bilan-stat-card {
+        background: rgba(255, 255, 255, 0.9);
+        border: 1px solid rgba(15, 118, 110, 0.06);
+        border-radius: 1.25rem;
+        padding: 1.25rem 1.5rem;
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        transition: all 0.25s var(--ease);
+        box-shadow: 0 4px 12px rgba(15, 118, 110, 0.02);
+    }
+    .bilan-stat-card:hover {
+        box-shadow: 0 8px 20px rgba(15, 118, 110, 0.06);
+        transform: translateY(-1px);
+    }
+
+    /* Metric sub-cards inside goal cards */
+    .bilan-metric {
+        padding: 1.25rem;
+        border-radius: 1.25rem;
+        border: 1px solid rgba(15, 118, 110, 0.06);
+        background: rgba(248, 250, 252, 0.6);
+        display: flex;
+        flex-direction: column;
+        gap: 0.85rem;
+        transition: all 0.25s var(--ease);
+    }
+    .bilan-metric:hover {
+        background: rgba(248, 250, 252, 0.9);
+    }
+
+    /* Labels */
+    .bilan-label {
+        font-size: 0.675rem;
+        font-weight: 800;
+        color: var(--fg-muted);
+        letter-spacing: 0.05em;
+        text-transform: uppercase;
+    }
+    .bilan-sublabel {
+        font-size: 0.7rem;
+        color: #94A3B8;
+        line-height: 1.4;
+    }
+
+    /* Inputs — aligned with ritual-input */
+    .bilan-input {
+        width: 100%;
+        padding: 0.85rem 1.1rem;
+        background-color: #ffffff;
+        border: 1.5px solid rgba(15, 118, 110, 0.08);
+        border-radius: 12px;
+        color: var(--fg);
+        font-family: inherit;
+        font-size: 0.95rem;
+        outline: none;
+        box-shadow: inset 0 2px 4px rgba(0,0,0,0.01);
+        transition: all 0.25s;
+    }
+    .bilan-input:focus {
+        border-color: var(--primary-light);
+        box-shadow: 0 0 0 4px rgba(13, 148, 136, 0.12), inset 0 2px 4px rgba(0,0,0,0.01);
+    }
+
+    /* Buttons — aligned with btn-submit */
+    .bilan-btn {
+        padding: 0.75rem 1.5rem;
+        background: linear-gradient(135deg, #0D9488 0%, #0F766E 100%);
+        border: none;
+        border-radius: 12px;
+        color: #ffffff;
+        font-family: inherit;
+        font-weight: 700;
+        font-size: 0.85rem;
+        cursor: pointer;
+        transition: all 0.25s ease;
+        box-shadow: 0 4px 14px rgba(15, 118, 110, 0.3);
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+    .bilan-btn:hover:not(:disabled) {
+        opacity: 0.95;
+        box-shadow: 0 6px 20px rgba(15, 118, 110, 0.45);
+        transform: translateY(-1px);
+    }
+    .bilan-btn:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+    }
+    .bilan-btn-ghost {
+        padding: 0.65rem 1.25rem;
+        background: transparent;
+        border: none;
+        color: var(--fg-muted);
+        font-family: inherit;
+        font-weight: 700;
+        font-size: 0.85rem;
+        cursor: pointer;
+        transition: color 0.2s;
+    }
+    .bilan-btn-ghost:hover { color: var(--fg); }
+    .bilan-btn-ghost:disabled { opacity: 0.3; cursor: not-allowed; }
+
+    /* Habit accordion items */
+    .bilan-habit-item {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        padding: 1rem 1.15rem;
+        border-radius: 1rem;
+        background: #ffffff;
+        border: 1px solid rgba(15, 118, 110, 0.05);
+        box-shadow: 0 4px 12px rgba(15, 118, 110, 0.02);
+        transition: all 0.2s var(--ease);
+    }
+
+    /* Custom range slider */
+    .ks-slider {
+        -webkit-appearance: none;
+        width: 100%;
+        background: transparent;
+    }
+    .ks-slider:focus { outline: none; }
+    .ks-slider::-webkit-slider-runnable-track {
+        width: 100%;
+        height: 6px;
+        cursor: pointer;
+        background: #e2e8f0;
+        border-radius: 9999px;
+    }
+    .ks-slider::-webkit-slider-thumb {
+        height: 18px;
+        width: 18px;
+        border-radius: 50%;
+        background: var(--primary);
+        border: 2px solid white;
+        cursor: pointer;
+        -webkit-appearance: none;
+        margin-top: -6px;
+        box-shadow: 0 2px 6px rgba(15, 118, 110, 0.3);
+        transition: transform 0.1s var(--ease);
+    }
+    .ks-slider::-webkit-slider-thumb:hover { transform: scale(1.15); }
+    .ks-slider::-moz-range-track {
+        width: 100%;
+        height: 6px;
+        cursor: pointer;
+        background: #e2e8f0;
+        border-radius: 9999px;
+    }
+    .ks-slider::-moz-range-thumb {
+        height: 18px;
+        width: 18px;
+        border-radius: 50%;
+        background: var(--primary);
+        border: 2px solid white;
+        cursor: pointer;
+        box-shadow: 0 2px 6px rgba(15, 118, 110, 0.3);
+    }
+
+    /* Progress bars */
+    .bilan-progress-track {
+        width: 100%;
+        height: 5px;
+        background: rgba(226, 232, 240, 0.7);
+        border-radius: 9999px;
+        overflow: hidden;
+    }
+    .bilan-progress-fill {
+        height: 100%;
+        border-radius: 9999px;
+        transition: width 0.5s var(--ease);
+    }
+</style>
+
+<div class="bilan-wrap"
+     x-data="bilanData()"
+     x-init="initBilan()">
+     
+    <!-- Header -->
+    <header class="text-center" style="margin-bottom: 2rem;">
+        <h1 style="font-size: 1.75rem; font-weight: 700; line-height: 1.2;">Mon Bilan & Progression</h1>
+        <p style="color: var(--fg-muted); font-size: 0.875rem; margin-top: 0.5rem;">Évaluez vos progrès, suivez votre discipline et observez votre évolution.</p>
+    </header>
+
+    <!-- Tabs Navigation -->
+    <nav style="display: flex; gap: 0.5rem; justify-content: center; flex-wrap: wrap; margin-bottom: 2.5rem;">
+        <button @click="activeTab = 'COMPETENCE'"
+                class="bilan-tab"
+                :class="activeTab === 'COMPETENCE' ? 'active' : ''">
+            <i data-lucide="book-open" class="w-4 h-4"></i>
+            <span>Compétences</span>
+        </button>
+        <button @click="activeTab = 'CHARACTER'"
+                class="bilan-tab"
+                :class="activeTab === 'CHARACTER' ? 'active' : ''">
+            <i data-lucide="shield" class="w-4 h-4"></i>
+            <span>Caractère</span>
+        </button>
+        <button @click="activeTab = 'RELATION'"
+                class="bilan-tab"
+                :class="activeTab === 'RELATION' ? 'active' : ''">
+            <i data-lucide="users" class="w-4 h-4"></i>
+            <span>Relations</span>
+        </button>
+    </nav>
+
+    <!-- Global Category Stats (KPIs) -->
+    <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; margin-bottom: 1.5rem;" class="sm:!grid-cols-4" x-show="filteredGoals().length > 0">
+        <div class="bilan-stat-card">
+            <div style="padding: 0.6rem; background: rgba(13,148,136,0.06); border-radius: 0.75rem; color: var(--primary);">
+                <i data-lucide="target" class="w-4 h-4"></i>
+            </div>
+            <div>
+                <span class="bilan-label" style="display: block;">Objectifs Actifs</span>
+                <span style="font-size: 1.1rem; font-weight: 800; color: var(--fg);" x-text="filteredGoals().length"></span>
+            </div>
+        </div>
+        <div class="bilan-stat-card">
+            <div style="padding: 0.6rem; background: rgba(16,185,129,0.08); border-radius: 0.75rem; color: #059669;">
+                <i data-lucide="activity" class="w-4 h-4"></i>
+            </div>
+            <div>
+                <span class="bilan-label" style="display: block;">Discipline Moyenne</span>
+                <span style="font-size: 1.1rem; font-weight: 800; color: var(--fg);" x-text="averageHabitRate() + '%'"></span>
+            </div>
+        </div>
+        <div class="bilan-stat-card">
+            <div style="padding: 0.6rem; background: rgba(99,102,241,0.08); border-radius: 0.75rem; color: #4F46E5;">
+                <i data-lucide="trending-up" class="w-4 h-4"></i>
+            </div>
+            <div>
+                <span class="bilan-label" style="display: block;">Atteinte Moyenne</span>
+                <span style="font-size: 1.1rem; font-weight: 800; color: var(--fg);" x-text="averageProgress() + '%'"></span>
+            </div>
+        </div>
+        <div class="bilan-stat-card">
+            <div style="padding: 0.6rem; background: rgba(245,158,11,0.08); border-radius: 0.75rem; color: #D97706;">
+                <i data-lucide="smile" class="w-4 h-4"></i>
+            </div>
+            <div>
+                <span class="bilan-label" style="display: block;">Sentiment Moyen</span>
+                <span style="font-size: 1.1rem; font-weight: 800; color: var(--fg);" x-text="averageSentiment() === '-' ? '-' : averageSentiment() + '/10'"></span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div style="display: flex; flex-direction: column; gap: 1.75rem;">
+        
+        <!-- Empty State -->
+        <div x-show="filteredGoals().length === 0" class="bilan-section" style="text-align: center; padding: 3rem 2rem; display: flex; flex-direction: column; align-items: center; gap: 1.5rem; border-style: dashed;">
+            <div style="padding: 1rem; background: var(--bg-alt); border-radius: 9999px; color: var(--fg-muted);">
+                <i data-lucide="target" class="w-10 h-10"></i>
+            </div>
+            <div>
+                <p style="color: var(--fg-light); font-weight: 600; margin-bottom: 0.25rem;">Aucun objectif actif dans cette catégorie.</p>
+                <p class="bilan-sublabel" style="max-width: 24rem; margin: 0 auto;">
+                    Ajoutez des objectifs de croissance ou liez des habitudes dans votre plan pour commencer le suivi de votre progression.
+                </p>
+            </div>
+            <a href="{{ path('app_user_strategies') }}" class="bilan-btn">
+                Gérer mes Stratégies
+            </a>
+        </div>
+
+        <!-- Goals Cards Loop -->
+        <template x-for="goal in filteredGoals()" :key="goal.id">
+            <div class="bilan-section" style="display: flex; flex-direction: column; gap: 1.75rem;">
+                
+                <!-- Card Header -->
+                <div class="flex justify-between items-start">
+                    <div style="display: flex; flex-direction: column; gap: 0.35rem;">
+                        <span class="bilan-label" x-text="goal.sourceTitle || 'OBJECTIF DE CROISSANCE'"></span>
+                        <h3 style="font-size: 1.1rem; font-weight: 700; line-height: 1.3;" x-text="goal.title"></h3>
+                    </div>
+                    
+                    <!-- Dynamic Signal Badge -->
+                    <div style="display: flex; align-items: center; gap: 0.4rem; padding: 0.4rem 0.85rem; border-radius: 9999px; font-size: 0.7rem; font-weight: 700; white-space: nowrap;"
+                         :class="getSignalColorClass(goal)" 
+                         x-html="getGoalSignal(goal)">
+                    </div>
+                </div>
+
+                <!-- Metrics Grid -->
+                <div style="display: grid; grid-template-columns: 1fr; gap: 1rem;" class="md:!grid-cols-2">
+                    <!-- Regularity -->
+                    <div class="bilan-metric">
+                        <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                            <div style="display: flex; flex-direction: column; gap: 0.2rem;">
+                                <div style="display: flex; align-items: center; gap: 0.4rem;">
+                                    <i data-lucide="repeat" class="w-3.5 h-3.5" style="color: var(--fg-muted);"></i>
+                                    <span class="bilan-label">Régularité</span>
+                                </div>
+                                <span class="bilan-sublabel">Complétion des habitudes liées</span>
+                            </div>
+                            <span style="font-size: 1.25rem; font-weight: 800; line-height: 1;" 
+                                  :class="getHabitRateColor(goal)" 
+                                  x-text="calculateHabitRate(goal) + '%'"></span>
+                        </div>
+                        <div class="bilan-progress-track">
+                            <div class="bilan-progress-fill" 
+                                 :class="getHabitRateBg(goal)" 
+                                 :style="'width: ' + calculateHabitRate(goal) + '%'"></div>
+                        </div>
+                    </div>
+
+                    <!-- Progress level -->
+                    <div class="bilan-metric" style="background: rgba(13,148,136,0.03);">
+                        <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                            <div style="display: flex; flex-direction: column; gap: 0.2rem;">
+                                <div style="display: flex; align-items: center; gap: 0.4rem;">
+                                    <i data-lucide="trending-up" class="w-3.5 h-3.5" style="color: var(--primary);"></i>
+                                    <span class="bilan-label" style="color: var(--primary);">Niveau d'atteinte</span>
+                                </div>
+                                <span class="bilan-sublabel">Progrès vers le résultat final</span>
+                            </div>
+                            <span style="font-size: 1.25rem; font-weight: 800; color: var(--primary); line-height: 1;" x-text="goal.progress + '%'"></span>
+                        </div>
+                        <div class="bilan-progress-track" style="background: rgba(13,148,136,0.1);">
+                            <div class="bilan-progress-fill" style="background: var(--primary);" :style="'width: ' + goal.progress + '%'"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Sentiment Graph -->
+                <div style="display: flex; flex-direction: column; gap: 0.75rem;">
+                    <div style="display: flex; align-items: center; gap: 0.4rem;">
+                        <i data-lucide="history" class="w-4 h-4" style="color: var(--fg-muted);"></i>
+                        <span class="bilan-label">Sentiment de progression</span>
+                    </div>
+                    
+                    <div class="bilan-metric" style="display: flex; align-items: center; justify-content: center; min-height: 100px; position: relative;"
+                         x-data="{ activeTooltip: null }">
+                        <template x-if="goal.scores.length === 0">
+                            <span class="text-slate-400 text-xs italic">Aucun score enregistré. Complétez votre premier bilan.</span>
+                        </template>
+                        <template x-if="goal.scores.length > 0">
+                            <div class="w-full relative">
+                                <svg viewBox="0 0 500 100" class="w-full h-20 overflow-visible text-teal-700/80">
+                                    <defs>
+                                        <linearGradient :id="'gradient-' + goal.id" x1="0" y1="0" x2="0" y2="1">
+                                            <stop offset="0%" stop-color="rgb(15, 118, 110)" stop-opacity="0.22" />
+                                            <stop offset="100%" stop-color="rgb(15, 118, 110)" stop-opacity="0.0" />
+                                        </linearGradient>
+                                    </defs>
+                                    <!-- Background Grid Lines -->
+                                    <line x1="10" y1="10" x2="490" y2="10" stroke="rgba(15, 118, 110, 0.08)" stroke-width="1" stroke-dasharray="2,2" />
+                                    <line x1="10" y1="50" x2="490" y2="50" stroke="rgba(15, 118, 110, 0.08)" stroke-width="1" stroke-dasharray="2,2" />
+                                    <line x1="10" y1="90" x2="490" y2="90" stroke="rgba(15, 118, 110, 0.08)" stroke-width="1" stroke-dasharray="2,2" />
+                                    <!-- Area Path -->
+                                    <path :d="getAreaPath(goal.scores)" :fill="'url(#gradient-' + goal.id + ')'" stroke="none" />
+                                    <!-- Stroke Path -->
+                                    <path :d="getStrokePath(goal.scores)" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" />
+                                </svg>
+
+                                <!-- Interactive Dots Layer (HTML overlay to bypass browser SVG template parsing bugs) -->
+                                <div class="absolute inset-0 pointer-events-none">
+                                    <template x-for="(s, idx) in goal.scores" :key="s.id">
+                                        <div class="absolute pointer-events-auto group/dot cursor-pointer"
+                                             :style="`left: ${getX(idx, goal.scores.length) / 500 * 100}%; top: ${getY(s.score)}%; transform: translate(-50%, -50%); width: 24px; height: 24px; display: flex; align-items: center; justify-content: center;`"
+                                             @mouseenter="activeTooltip = { index: idx, score: s.score, date: formatDateShort(s.date), x: getX(idx, goal.scores.length), y: getY(s.score) }"
+                                             @mouseleave="activeTooltip = null">
+                                            <!-- Visible inner dot -->
+                                            <div class="w-1.5 h-1.5 rounded-full bg-teal-700 transition-transform duration-200 group-hover/dot:scale-125"></div>
+                                            <!-- Glowing pulse ring on hover -->
+                                            <div class="absolute w-5 h-5 rounded-full bg-teal-700/15 opacity-0 group-hover/dot:opacity-100 transition-opacity duration-200"></div>
+                                        </div>
+                                    </template>
+                                </div>
+
+                                <!-- Tooltip Bubble (Positioned relative to the SVG container) -->
+                                <div x-show="activeTooltip" 
+                                     x-transition:enter="transition ease-out duration-200"
+                                     x-transition:enter-start="opacity-0 translate-y-1"
+                                     x-transition:enter-end="opacity-100 translate-y-0"
+                                     x-transition:leave="transition ease-in duration-150"
+                                     x-transition:leave-start="opacity-100 translate-y-0"
+                                     x-transition:leave-end="opacity-0 translate-y-1"
+                                     class="absolute bg-slate-800 text-white text-[10px] font-bold px-2.5 py-1 rounded-lg shadow-md pointer-events-none -translate-x-1/2 -translate-y-full z-10"
+                                     :style="`left: ${activeTooltip ? (activeTooltip.x / 500 * 100) : 0}%; top: ${activeTooltip ? (activeTooltip.y - 6) : 0}%;`"
+                                     x-cloak>
+                                    <span x-text="activeTooltip ? `${activeTooltip.score}/10 (${activeTooltip.date})` : ''"></span>
+                                </div>
+                            </div>
+                        </template>
+                    </div>
+                </div>
+
+                <!-- Associated Habits Accordion -->
+                <div style="border-top: 1px solid rgba(15,118,110,0.06); padding-top: 1.25rem; margin-top: 0.5rem;">
+                    <button @click="goal.showHabits = !goal.showHabits" 
+                            class="w-full flex items-center justify-between text-xs font-semibold text-slate-500 hover:text-teal-700 transition-colors cursor-pointer">
+                        <span class="flex items-center gap-2">
+                            <i data-lucide="activity" class="w-3.5 h-3.5 text-slate-400"></i>
+                            <span x-text="goal.showHabits ? 'Masquer les rituels associés' : 'Voir les rituels associés (' + goal.habits.length + ')'"></span>
+                        </span>
+                        <i data-lucide="chevron-down" class="w-4 h-4 transition-transform duration-300" :class="goal.showHabits ? 'rotate-180 text-teal-755' : ''"></i>
+                    </button>
+                    
+                    <div x-show="goal.showHabits"
+                         x-transition:enter="transition ease-out duration-200"
+                         x-transition:enter-start="opacity-0 -translate-y-2"
+                         x-transition:enter-end="opacity-100 translate-y-0"
+                         style="margin-top: 1rem; display: flex; flex-direction: column; gap: 0.75rem; background: rgba(248,250,252,0.5); border-radius: 1.25rem; border: 1px solid rgba(15,118,110,0.05); padding: 1.25rem;">
+                        
+                        <template x-if="goal.habits.length === 0">
+                            <p class="text-xs text-slate-400 italic text-center py-2">Aucune habitude liée à cet objectif.</p>
+                        </template>
+                        
+                        <template x-for="h in goal.habits" :key="h.id">  
+                            <div class="bilan-habit-item" style="flex-direction: column; gap: 0.75rem;" class="sm:!flex-row sm:!items-center">
+                                <div style="display: flex; align-items: center; gap: 0.75rem; min-width: 0; flex: 1;">
+                                    <span style="width: 4px; height: 1.5rem; border-radius: 9999px; background: var(--primary); flex-shrink: 0;"></span>
+                                    <div style="min-width: 0;">
+                                        <span style="font-size: 0.85rem; font-weight: 700; color: var(--fg-light); display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" x-text="h.title"></span>
+                                        <span class="bilan-label" x-text="h.frequency === 'DAILY' ? 'Tous les jours' : (h.frequency === 'WEEKLY' ? 'Chaque semaine' : 'Chaque mois')"></span>
+                                    </div>
+                                </div>
+                                
+                                <!-- 7-day mini calendar tracker -->
+                                <div class="flex items-center gap-1.5 self-end sm:self-center">
+                                    <template x-for="day in getRecentDays()" :key="day.dateStr">
+                                        <div class="flex flex-col items-center gap-0.5">
+                                            <span class="text-[8px] font-bold text-slate-400" x-text="day.label"></span>
+                                            
+                                            <div class="w-5 h-5 rounded-full flex items-center justify-center text-[9px] font-extrabold transition-all"
+                                                 :class="
+                                                    isHabitLogged(h, day.dateStr) 
+                                                        ? 'bg-emerald-500 text-white shadow-sm shadow-emerald-500/10' 
+                                                        : (isHabitScheduled(h, day.dateStr) 
+                                                            ? (new Date(day.dateStr) < new Date(new Date().setHours(0,0,0,0)) 
+                                                                ? 'bg-rose-50 text-rose-500 border border-rose-100' 
+                                                                : 'bg-teal-50 text-teal-600 border border-teal-150') 
+                                                            : 'bg-slate-100/60 text-slate-350 border border-transparent')
+                                                 "
+                                                 :title="day.dateStr + ' : ' + (isHabitLogged(h, day.dateStr) ? 'Complété' : (isHabitScheduled(h, day.dateStr) ? 'Manqué' : 'Non requis'))">
+                                                <span x-show="isHabitLogged(h, day.dateStr)">✓</span>
+                                                <span x-show="!isHabitLogged(h, day.dateStr) && isHabitScheduled(h, day.dateStr)" x-text="day.isToday ? '•' : '×'"></span>
+                                                <span x-show="!isHabitLogged(h, day.dateStr) && !isHabitScheduled(h, day.dateStr)" class="text-[7px] text-slate-350">—</span>
+                                            </div>
+                                        </div>
+                                    </template>
+                                </div>
+                            </div>
+                        </template>
+                    </div>
+                </div>
+
+            </div>
+        </template>
+    </div>
+
+    <!-- Coach's Guide -->
+    <div class="max-w-[800px] mx-auto mt-10 bg-slate-50 rounded-3xl p-2">
+        <button @click="guideOpen = !guideOpen"
+                class="w-full p-5 flex items-center justify-between bg-white border border-slate-200 rounded-2xl cursor-pointer text-left shadow-sm/5">
+            <span class="text-sm font-bold text-slate-700 flex items-center gap-3">
+                <span class="p-2 bg-teal-50 rounded-full text-teal-700"><i data-lucide="book-open" class="w-4 h-4"></i></span>
+                Note du Coach : Comprendre votre dynamique
+            </span>
+            <i data-lucide="chevron-down" class="w-5 h-5 text-slate-400 transition-transform" :class="guideOpen ? 'rotate-180' : ''"></i>
+        </button>
+        <div x-show="guideOpen" class="p-6 space-y-4 text-sm text-slate-600 leading-relaxed border-t border-slate-100 bg-white rounded-b-2xl mt-1">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                    <h4 class="font-bold text-slate-800 flex items-center gap-1.5 mb-1 text-xs uppercase tracking-wider text-teal-700">
+                        <span class="w-2.5 h-1 bg-teal-600 rounded"></span> La Régularité (Input)
+                    </h4>
+                    <p class="text-xs text-slate-500">
+                        C'est votre engagement quotidien. Un taux supérieur à 80% assure généralement la réussite. C'est le levier sur lequel vous avez un contrôle absolu.
+                    </p>
+                </div>
+                <div>
+                    <h4 class="font-bold text-slate-800 flex items-center gap-1.5 mb-1 text-xs uppercase tracking-wider text-indigo-700">
+                        <span class="w-2.5 h-1 bg-indigo-500 rounded"></span> L'Atteinte (Output)
+                    </h4>
+                    <p class="text-xs text-slate-500">
+                        C'est la progression concrète vers votre résultat final. Mettez-la à jour à chaque jalon significatif franchi.
+                    </p>
+                </div>
+            </div>
+            <div class="pt-2">
+                <h4 class="font-bold text-slate-800 flex items-center gap-1.5 mb-1 text-xs uppercase tracking-wider text-amber-700">
+                    <span class="w-2.5 h-1 bg-amber-600 rounded"></span> Le Sentiment (Subjectif)
+                </h4>
+                <p class="text-xs text-slate-500">
+                    Il reflète votre fluidité psychologique. Les hauts et les bas sont normaux. Une baisse de sentiment alors que votre régularité est bonne annonce souvent une percée prochaine.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Sticky Bottom Weekly Bilan Launch Button -->
+    <div class="fixed bottom-8 left-0 right-0 flex justify-center z-40 pointer-events-none px-4">
+        <button @click="openWizard()"
+                class="pointer-events-auto bg-white/90 backdrop-blur-md text-slate-700 border border-teal-100 py-3 px-8 rounded-full font-semibold text-sm cursor-pointer flex items-center gap-3 shadow-lg hover:text-teal-700 hover:border-teal-200 hover:shadow-xl transition-all active:scale-95">
+            <span class="bg-teal-50 p-1.5 rounded-full text-teal-600"><i data-lucide="check-circle" class="w-5 h-5"></i></span>
+            <span>Bilan Hebdomadaire</span>
+            <i data-lucide="arrow-right" class="w-4 h-4 text-slate-400"></i>
+        </button>
+    </div>
+    
+    <div class="h-32"></div>
+
+    <!-- 3. Weekly Review Wizard Modal -->
+    <div class="fixed inset-0 bg-slate-900/40 backdrop-blur-md flex items-start justify-center p-4 lg:p-12 z-50 overflow-y-auto"
+         x-show="wizardOpen" x-cloak
+         x-transition:enter="transition ease-out duration-300"
+         x-transition:enter-start="opacity-0 scale-95"
+         x-transition:enter-end="opacity-100 scale-100"
+         x-transition:leave="transition ease-in duration-200"
+         x-transition:leave-start="opacity-100 scale-100"
+         x-transition:leave-end="opacity-0 scale-95">
+         
+         <div class="bg-white rounded-3xl border border-slate-200 shadow-2xl max-w-2xl w-full flex flex-col overflow-hidden max-h-[90vh]">
+             <!-- Header -->
+             <header class="p-6 border-b border-slate-100 flex justify-between items-center bg-slate-50/50">
+                 <div>
+                     <h3 class="text-lg font-serif font-bold text-slate-800">Revue Hebdomadaire</h3>
+                     <p x-show="wizardStep === 'REVIEW'" class="text-xs text-slate-400 font-semibold" 
+                        x-text="'Objectif ' + (currentGoalIdx + 1) + ' sur ' + wizardGoals.length"></p>
+                 </div>
+                 <button class="text-slate-400 hover:text-slate-600 transition-colors" @click="wizardOpen = false">
+                     <i data-lucide="x" class="w-5 h-5"></i>
+                 </button>
+             </header>
+
+             <!-- Scrollable Wizard Content -->
+             <div class="p-8 flex-1 overflow-y-auto ks-scroll space-y-6">
+                 
+                 <!-- Step A: INTRO -->
+                 <div x-show="wizardStep === 'INTRO'" class="text-center py-6 space-y-6">
+                     <div class="w-20 h-20 bg-teal-50 rounded-full flex items-center justify-center mx-auto text-teal-700">
+                         <i data-lucide="target" class="w-10 h-10"></i>
+                     </div>
+                     <div class="space-y-2">
+                         <h2 class="text-xl font-serif font-bold text-slate-800">Le moment de vérité.</h2>
+                         <p class="text-slate-500 text-sm max-w-md mx-auto leading-relaxed">
+                             Prenez quelques minutes pour évaluer votre semaine écoulée. Soyez honnête avec vous-même, c'est le fondement de la croissance.
+                         </p>
+                     </div>
+                     <button class="bg-teal-700 hover:bg-teal-800 text-white font-semibold py-3 px-8 rounded-full shadow-md transition-colors"
+                             @click="startReviews()"
+                             x-text="wizardGoals.length > 0 ? 'Commencer l\'évaluation (' + wizardGoals.length + ' objectifs)' : 'Pas d\'objectifs actifs'"></button>
+                 </div>
+
+                 <!-- Step B: REVIEW GOALS -->
+                 <div x-show="wizardStep === 'REVIEW'">
+                      <template x-if="activeReviewGoal">
+                          <div class="space-y-6">
+                              <!-- Goal Heading -->
+                              <div class="text-center space-y-3">
+                                  <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-slate-100 text-[9px] font-bold text-slate-500 uppercase tracking-widest">
+                                      <span class="w-2 h-2 rounded-full" 
+                                            :class="activeReviewGoal.axis === 'COMPETENCE' ? 'bg-blue-500' : activeReviewGoal.axis === 'CHARACTER' ? 'bg-amber-500' : 'bg-green-500'"></span>
+                                      <span x-text="activeReviewGoal.axis"></span>
+                                  </span>
+                                  <h2 class="text-xl font-serif font-bold text-slate-800" x-text="activeReviewGoal.title"></h2>
+                              </div>
+
+                              <!-- Catch-up section for missed habits -->
+                              <template x-if="getMissedHabits(activeReviewGoal).length > 0">
+                                  <div class="p-5 bg-orange-50 border border-orange-100 rounded-2xl space-y-3">
+                                      <div class="flex items-center gap-2 text-orange-800 font-bold text-xs uppercase tracking-wider">
+                                          <i data-lucide="alert-circle" class="w-4 h-4 text-orange-600"></i>
+                                          <span>Habitudes oubliées cette semaine ?</span>
+                                      </div>
+                                      <div class="flex flex-wrap gap-2">
+                                          <template x-for="item in getMissedHabits(activeReviewGoal)" :key="item.habitId + '-' + item.dateStr">
+                                              <button class="px-3 py-1.5 bg-white border border-orange-200 hover:border-orange-400 rounded-xl text-xs font-semibold text-orange-700 flex items-center gap-1.5 shadow-sm transition-all"
+                                                      @click="catchUpHabit(item)">
+                                                  <i data-lucide="plus" class="w-3.5 h-3.5"></i>
+                                                  <span x-text="item.title + ' (' + item.dayLabel + ')'"></span>
+                                              </button>
+                                          </template>
+                                      </div>
+                                  </div>
+                              </template>
+
+                              <!-- Question 1: Score -->
+                              <div class="space-y-3">
+                                  <label class="block text-sm font-bold text-slate-700">1. Avez-vous bien progressé sur cet objectif cette semaine ? (Sentiment : 1-10)</label>
+                                  <div class="flex justify-between text-[10px] text-slate-400 uppercase tracking-wide font-bold">
+                                      <span>Difficilement</span>
+                                      <span>Énormément</span>
+                                  </div>
+                                  <div class="flex justify-between gap-1.5 md:gap-2">
+                                      <template x-for="n in 10">
+                                          <button class="flex-1 aspect-square md:h-12 border rounded-2xl font-bold transition-all duration-200 text-sm active:scale-95 shadow-sm/5"
+                                                  :class="wizardState.scores[activeReviewGoal.id] === n 
+                                                      ? 'bg-gradient-to-br from-teal-700 to-teal-800 border-teal-700 text-white shadow-md shadow-teal-700/10 scale-105' 
+                                                      : 'bg-slate-50/50 border-slate-200 text-slate-600 hover:bg-teal-50 hover:border-teal-300 hover:text-teal-800'"
+                                                  @click="wizardState.scores[activeReviewGoal.id] = n"
+                                                  x-text="n"></button>
+                                      </template>
+                                  </div>
+                              </div>
+
+                              <!-- Question 2: Progress Slider -->
+                              <div class="space-y-3">
+                                  <label class="block text-sm font-bold text-slate-700">2. À quel pourcentage estimez-vous la complétion finale ?</label>
+                                  <div class="flex items-center gap-6 bg-slate-50 border border-slate-200/50 p-4 rounded-2xl">
+                                      <input type="range" min="0" max="100" 
+                                             class="ks-slider flex-1"
+                                             x-model="wizardState.progressValues[activeReviewGoal.id]" />
+                                      <span class="text-xl font-bold text-teal-700 min-w-[60px] text-right" 
+                                            x-text="wizardState.progressValues[activeReviewGoal.id] + '%'"></span>
+                                  </div>
+                              </div>
+
+                              <!-- Question 3: Observation Note -->
+                              <div class="space-y-1.5">
+                                  <label class="block text-sm font-bold text-slate-700">3. Une remarque marquante à consigner ? (Optionnel)</label>
+                                  <input type="text" placeholder="ex: Difficile en début de semaine, puis déclic..."
+                                         class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm text-slate-800 focus:outline-none focus:ring-1 focus:ring-teal-600 focus:border-teal-600"
+                                         x-model="wizardState.notes[activeReviewGoal.id]" />
+                              </div>
+                          </div>
+                      </template>
+                 </div>
+
+                 <!-- Step C: OUTRO -->
+                 <div x-show="wizardStep === 'OUTRO'" class="text-center py-6 space-y-6">
+                     <div class="w-20 h-20 bg-green-50 rounded-full flex items-center justify-center mx-auto text-green-600">
+                         <i data-lucide="check-circle-2" class="w-10 h-10"></i>
+                     </div>
+                     <div class="space-y-2">
+                         <h2 class="text-xl font-serif font-bold text-slate-800">Bilan Complété !</h2>
+                         <p class="text-slate-500 text-sm max-w-sm mx-auto leading-relaxed">
+                             Excellent travail. Vos scores et observations ont été enregistrés avec succès. Continuez à agir avec intention.
+                         </p>
+                     </div>
+                     <button class="bg-teal-700 hover:bg-teal-800 text-white font-semibold py-3 px-8 rounded-full shadow-md transition-colors"
+                             @click="closeWizard()">
+                         Fermer
+                     </button>
+                 </div>
+
+             </div>
+
+             <!-- Footer actions for REVIEW -->
+             <footer class="p-6 border-t border-slate-100 bg-slate-50/50 flex justify-between items-center" x-show="wizardStep === 'REVIEW'">
+                 <button class="px-5 py-2 text-sm font-bold text-slate-500 hover:text-slate-700 transition-colors"
+                         :disabled="currentGoalIdx === 0"
+                         :class="currentGoalIdx === 0 ? 'opacity-30 cursor-not-allowed' : ''"
+                         @click="prevReviewGoal()">Précédent</button>
+                         
+                 <button class="bg-teal-700 hover:bg-teal-800 text-white font-semibold py-2.5 px-6 rounded-xl shadow-md transition-colors flex items-center gap-1.5"
+                         :disabled="!wizardState.scores[activeReviewGoal?.id]"
+                         :class="!wizardState.scores[activeReviewGoal?.id] ? 'opacity-50 cursor-not-allowed' : ''"
+                         @click="nextReviewGoal()">
+                     <span x-text="currentGoalIdx < wizardGoals.length - 1 ? 'Suivant' : 'Terminer'"></span>
+                     <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                 </button>
+             </footer>
+         </div>
+    </div>
+
+</div>
+
+<!-- Script de gestion interactive -->
+<script>
+function bilanData() {
+    return {
+        // State
+        activeTab: 'COMPETENCE',
+        guideOpen: false,
+        goals: {{ goalsJson|json_encode|raw }},
+        challenges: {{ challengesJson|json_encode|raw }},
+        
+        // Wizard state
+        wizardOpen: false,
+        wizardStep: 'INTRO',
+        wizardGoals: [],
+        currentGoalIdx: 0,
+        activeReviewGoal: null,
+        
+        wizardState: {
+            scores: {},
+            progressValues: {},
+            notes: {}
+        },
+
+        initBilan() {
+            // Initialize showHabits dynamically on goals
+            this.goals = this.goals.map(g => ({ ...g, showHabits: false }));
+
+            // Hotkeys listening for review step
+            window.addEventListener('keydown', (e) => {
+                if (!this.wizardOpen || this.wizardStep !== 'REVIEW' || !this.activeReviewGoal) return;
+                
+                // Ignore hotkeys if focused on input fields
+                if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') {
+                    return;
+                }
+
+                // 1 to 9 key presses -> score
+                if (e.key >= '1' && e.key <= '9') {
+                    this.wizardState.scores[this.activeReviewGoal.id] = parseInt(e.key);
+                } else if (e.key === '0') {
+                    this.wizardState.scores[this.activeReviewGoal.id] = 10;
+                }
+                
+                // Enter -> next step
+                if (e.key === 'Enter' && this.wizardState.scores[this.activeReviewGoal.id]) {
+                    this.nextReviewGoal();
+                }
+            });
+        },
+
+        filteredGoals() {
+            return this.goals.filter(g => g.axis === this.activeTab);
+        },
+
+        // Category KPI Averages
+        averageHabitRate() {
+            const active = this.filteredGoals();
+            if (active.length === 0) return 0;
+            let total = 0;
+            active.forEach(g => {
+                total += this.calculateHabitRate(g);
+            });
+            return Math.round(total / active.length);
+        },
+
+        averageProgress() {
+            const active = this.filteredGoals();
+            if (active.length === 0) return 0;
+            let total = 0;
+            active.forEach(g => {
+                total += g.progress;
+            });
+            return Math.round(total / active.length);
+        },
+
+        averageSentiment() {
+            const active = this.filteredGoals();
+            let total = 0;
+            let count = 0;
+            active.forEach(g => {
+                if (g.scores && g.scores.length > 0) {
+                    total += g.scores[g.scores.length - 1].score;
+                    count++;
+                }
+            });
+            return count > 0 ? (total / count).toFixed(1) : '-';
+        },
+
+        // 7-day tracker helpers
+        getRecentDays() {
+            const days = [];
+            const dayLabels = ['D', 'L', 'M', 'M', 'J', 'V', 'S'];
+            const today = new Date();
+            today.setHours(0,0,0,0);
+            for (let i = 6; i >= 0; i--) {
+                const d = new Date();
+                d.setDate(today.getDate() - i);
+                d.setHours(0,0,0,0);
+                days.push({
+                    dateStr: d.toISOString().split('T')[0],
+                    label: dayLabels[d.getDay()],
+                    isToday: i === 0
+                });
+            }
+            return days;
+        },
+
+        isHabitLogged(habit, dateStr) {
+            if (!habit.logs) return false;
+            const log = habit.logs.find(l => l.date === dateStr);
+            return log ? log.status : false;
+        },
+
+        isHabitScheduled(habit, dateStr) {
+            const d = new Date(dateStr);
+            if (habit.endDate && new Date(habit.endDate) < d) return false;
+            
+            if (habit.frequency === 'DAILY') return true;
+            if (habit.frequency === 'WEEKLY') {
+                const targetDay = habit.recurrenceDay ?? 1;
+                return d.getDay() === targetDay;
+            }
+            if (habit.frequency === 'MONTHLY') {
+                return d.getDate() === (habit.recurrenceDay ?? 1);
+            }
+            return false;
+        },
+
+        // Helper calculations
+        calculateHabitRate(goal) {
+            let total = 0;
+            let completed = 0;
+            
+            goal.habits.forEach(h => {
+                h.logs.forEach(l => {
+                    total++;
+                    if (l.status) completed++;
+                });
+            });
+            
+            return total > 0 ? Math.round((completed / total) * 100) : 0;
+        },
+
+        getHabitRateColor(goal) {
+            const r = this.calculateHabitRate(goal);
+            return r >= 80 ? 'text-emerald-600' : r >= 50 ? 'text-amber-600' : 'text-rose-600';
+        },
+
+        getHabitRateBg(goal) {
+            const r = this.calculateHabitRate(goal);
+            return r >= 80 ? 'bg-emerald-500' : r >= 50 ? 'bg-amber-500' : 'bg-rose-500';
+        },
+
+        getSignalColorClass(goal) {
+            const r = this.calculateHabitRate(goal);
+            const p = goal.progress;
+            
+            if (r < 40) return 'bg-rose-50 text-rose-700 border border-rose-100';
+            if (r >= 80 && p < 20) return 'bg-emerald-50 text-emerald-700 border border-emerald-100';
+            if (p >= 90) return 'bg-teal-50 text-teal-700 border border-teal-100';
+            return 'bg-slate-50 text-slate-600 border border-slate-100';
+        },
+
+        getGoalSignal(goal) {
+            const r = this.calculateHabitRate(goal);
+            const p = goal.progress;
+            
+            if (r < 40) return '<span>🏗️ Discipline à bâtir</span>';
+            if (r >= 80 && p < 20) return '<span>🌱 Semis (Patience)</span>';
+            if (p >= 90) return '<span>🏆 Victoire proche</span>';
+            return '<span>⚡ En action</span>';
+        },
+
+        // SVG graphing helpers
+        getX(idx, total) {
+            if (total <= 1) return 250;
+            return (idx / (total - 1)) * 480 + 10;
+        },
+
+        getY(score) {
+            // score 1-10 -> height range 90 (at bottom) to 10 (at top)
+            return 90 - (score / 10) * 80;
+        },
+
+        getStrokePath(scores) {
+            return this.getBezierPath(scores, false);
+        },
+
+        getAreaPath(scores) {
+            return this.getBezierPath(scores, true);
+        },
+
+        getBezierPath(scores, isClosed = false) {
+            if (!scores || scores.length === 0) return '';
+            
+            const points = scores.map((s, idx) => ({
+                x: this.getX(idx, scores.length),
+                y: this.getY(s.score)
+            }));
+            
+            if (points.length === 1) {
+                if (isClosed) {
+                    return `M ${points[0].x - 10},90 L ${points[0].x - 10},${points[0].y} L ${points[0].x + 10},${points[0].y} L ${points[0].x + 10},90 Z`;
+                }
+                return `M ${points[0].x - 10},${points[0].y} L ${points[0].x + 10},${points[0].y}`;
+            }
+
+            const line = (pointA, pointB) => {
+                const lengthX = pointB.x - pointA.x;
+                const lengthY = pointB.y - pointA.y;
+                return {
+                    length: Math.sqrt(Math.pow(lengthX, 2) + Math.pow(lengthY, 2)),
+                    angle: Math.atan2(lengthY, lengthX)
+                };
+            };
+
+            const controlPoint = (current, previous, next, reverse) => {
+                const p = previous || current;
+                const n = next || current;
+                const smoothing = 0.2;
+                const o = line(p, n);
+                const angle = o.angle + (reverse ? Math.PI : 0);
+                const length = o.length * smoothing;
+                const x = current.x + Math.cos(angle) * length;
+                const y = current.y + Math.sin(angle) * length;
+                return { x, y };
+            };
+
+            let d = `M ${points[0].x},${points[0].y}`;
+            
+            for (let i = 1; i < points.length; i++) {
+                const cpStart = controlPoint(points[i - 1], points[i - 2], points[i], false);
+                const cpEnd = controlPoint(points[i], points[i - 1], points[i + 1], true);
+                
+                const constrain = (val) => Math.max(10, Math.min(90, val));
+                cpStart.y = constrain(cpStart.y);
+                cpEnd.y = constrain(cpEnd.y);
+                
+                d += ` C ${cpStart.x},${cpStart.y} ${cpEnd.x},${cpEnd.y} ${points[i].x},${points[i].y}`;
+            }
+
+            if (isClosed) {
+                d += ` L ${points[points.length - 1].x},90 L ${points[0].x},90 Z`;
+            }
+            return d;
+        },
+
+        formatDateShort(dateStr) {
+            const date = new Date(dateStr);
+            return date.toLocaleDateString('fr-FR', { day: 'numeric', month: 'short' });
+        },
+
+        // Wizard management
+        openWizard() {
+            this.wizardGoals = this.goals;
+            if (this.wizardGoals.length === 0) {
+                alert("Vous devez avoir des objectifs actifs pour faire un bilan.");
+                return;
+            }
+
+            // Reset wizard state
+            this.wizardStep = 'INTRO';
+            this.currentGoalIdx = 0;
+            this.wizardState.scores = {};
+            this.wizardState.progressValues = {};
+            this.wizardState.notes = {};
+
+            // Prefill current progress values
+            this.wizardGoals.forEach(g => {
+                this.wizardState.progressValues[g.id] = g.progress;
+                this.wizardState.notes[g.id] = '';
+            });
+
+            this.wizardOpen = true;
+        },
+
+        startReviews() {
+            this.wizardStep = 'REVIEW';
+            this.currentGoalIdx = 0;
+            this.activeReviewGoal = this.wizardGoals[0];
+        },
+
+        prevReviewGoal() {
+            if (this.currentGoalIdx > 0) {
+                this.currentGoalIdx--;
+                this.activeReviewGoal = this.wizardGoals[this.currentGoalIdx];
+            }
+        },
+
+        nextReviewGoal() {
+            // Save score via API
+            const goalId = this.activeReviewGoal.id;
+            const score = this.wizardState.scores[goalId];
+            const progressValue = this.wizardState.progressValues[goalId];
+            const note = this.wizardState.notes[goalId];
+
+            fetch('/api/bilan/save-score', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ goalId, score, progressValue, note })
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.success) {
+                    // Update local model
+                    this.activeReviewGoal.progress = progressValue;
+                    this.activeReviewGoal.scores.push({
+                        id: Date.now(), // dummy temporary id
+                        date: new Date().toISOString().split('T')[0],
+                        score,
+                        progressValue,
+                        note
+                    });
+
+                    // Proceed
+                    if (this.currentGoalIdx < this.wizardGoals.length - 1) {
+                        this.currentGoalIdx++;
+                        this.activeReviewGoal = this.wizardGoals[this.currentGoalIdx];
+                    } else {
+                        this.wizardStep = 'OUTRO';
+                    }
+                } else {
+                    alert("Erreur lors de la sauvegarde.");
+                }
+            });
+        },
+
+        closeWizard() {
+            this.wizardOpen = false;
+            this.activeReviewGoal = null;
+        },
+
+        // Missed Habits Catch-up
+        getMissedHabits(goal) {
+            let missed = [];
+            let today = new Date();
+            today.setHours(0,0,0,0);
+            
+            const dayNames = ["dimanche", "lundi", "mardi", "mercredi", "jeudi", "vendredi", "samedi"];
+
+            for (let i = 6; i >= 0; i--) {
+                let checkDate = new Date();
+                checkDate.setDate(today.getDate() - i);
+                checkDate.setHours(0,0,0,0);
+                
+                let checkDateStr = checkDate.toISOString().split('T')[0];
+                let dayOfWeek = checkDate.getDay(); // 0 (Sun) - 6 (Sat)
+                
+                goal.habits.forEach(h => {
+                    if (h.endDate && new Date(h.endDate) < checkDate) return;
+                    
+                    let matchesRecurrence = false;
+                    if (h.frequency === 'DAILY') {
+                        matchesRecurrence = true;
+                    } else if (h.frequency === 'WEEKLY') {
+                        let targetDay = h.recurrenceDay ?? 1;
+                        if (dayOfWeek === targetDay) matchesRecurrence = true;
+                    } else if (h.frequency === 'MONTHLY') {
+                        if (checkDate.getDate() === (h.recurrenceDay ?? 1)) matchesRecurrence = true;
+                    }
+                    
+                    if (matchesRecurrence) {
+                        let log = h.logs.find(l => l.date === checkDateStr && l.status);
+                        if (!log) {
+                            missed.push({
+                                habitId: h.id,
+                                title: h.title,
+                                date: checkDate,
+                                dateStr: checkDateStr,
+                                dayLabel: dayNames[dayOfWeek]
+                            });
+                        }
+                    }
+                });
+            }
+            return missed;
+        },
+
+        catchUpHabit(item) {
+            fetch(`/api/planner/toggle/HABIT/${item.habitId}`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ date: item.dateStr })
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.success && data.isCompleted) {
+                    // Update local logs
+                    const goal = this.goals.find(g => g.id === this.activeReviewGoal.id);
+                    const habit = goal.habits.find(h => h.id === item.habitId);
+                    habit.logs.push({
+                        date: item.dateStr,
+                        status: true
+                    });
+                }
+            });
+        }
+    }
+}
+</script>
+{% endblock %}

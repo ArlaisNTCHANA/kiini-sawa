@@ -1,0 +1,1943 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Strategic Hub - Life Plan - KIINI SAWA{% endblock %}
+
+{% block stylesheets %}
+    <style>
+        .animate-fade-in { animation: fadeIn 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(12px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        /* Custom scrollbar for inner container */
+        .custom-scrollbar::-webkit-scrollbar { width: 6px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+        
+        .wizard-body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            min-height: calc(100vh - 72px);
+            position: relative;
+            background: linear-gradient(135deg, #022c22 0%, #0f766e 50%, #014751 100%);
+            padding: 2.5rem 1.5rem;
+        }
+
+        /* Ambient glows for onboarding/wizard vibe */
+        .glow-1 {
+            position: absolute;
+            top: -10%; left: -10%;
+            width: 45vw; height: 45vh;
+            background: radial-gradient(circle, rgba(45, 212, 191, 0.15) 0%, transparent 70%);
+            filter: blur(60px);
+            pointer-events: none;
+        }
+        .glow-2 {
+            position: absolute;
+            bottom: -10%; right: -10%;
+            width: 55vw; height: 55vh;
+            background: radial-gradient(circle, rgba(245, 158, 11, 0.12) 0%, transparent 70%);
+            filter: blur(80px);
+            pointer-events: none;
+        }
+        .dots {
+            position: absolute;
+            inset: 0;
+            opacity: 0.12;
+            background-image: radial-gradient(circle, rgba(255, 255, 255, 0.15) 1.5px, transparent 1.5px);
+            background-size: 24px 24px;
+            pointer-events: none;
+        }
+
+        /* Input fields in wizard */
+        .wiz-input, .wiz-select, .wiz-textarea {
+            width: 100%;
+            padding: 0.85rem 1.1rem;
+            background-color: #F8FAFC;
+            border: 1.5px solid rgba(15, 118, 110, 0.08);
+            border-radius: 12px;
+            color: var(--fg);
+            font-family: inherit;
+            font-size: 0.95rem;
+            outline: none;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.01);
+            transition: all 0.25s;
+        }
+        .wiz-input:focus, .wiz-select:focus, .wiz-textarea:focus {
+            border-color: var(--primary-light);
+            box-shadow: 0 0 0 4px rgba(13, 148, 136, 0.12), inset 0 2px 4px rgba(0,0,0,0.01);
+            background-color: #ffffff;
+        }
+
+        .dynamic-row {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem 1rem;
+            background: #F8FAFC;
+            border: 1px solid rgba(15, 118, 110, 0.06);
+            border-radius: 1rem;
+            animation: fadeIn 0.3s ease-out;
+            margin-bottom: 0.5rem;
+        }
+
+        .btn-add {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.375rem;
+            padding: 0.5rem 1.1rem;
+            border-radius: 9999px;
+            background: rgba(13, 148, 136, 0.08);
+            color: var(--primary);
+            font-weight: 750;
+            font-size: 0.75rem;
+            border: none;
+            cursor: pointer;
+            transition: all 0.2s;
+            outline: none;
+        }
+        .btn-add:hover {
+            background: var(--primary);
+            color: white;
+            box-shadow: 0 4px 10px rgba(15, 118, 110, 0.15);
+        }
+
+        .btn-remove {
+            background: transparent;
+            border: none;
+            color: #94a3b8;
+            cursor: pointer;
+            padding: 0.375rem;
+            border-radius: 0.5rem;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .btn-remove:hover {
+            color: #EF4444;
+            background: #FEF2F2;
+        }
+
+        /* Stepper progress */
+        .progress-line {
+            height: 5px;
+            width: 100%;
+            background: #E2E8F0;
+            overflow: hidden;
+        }
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #0D9488 0%, #2dd4bf 100%);
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+    </style>
+{% endblock %}
+
+{% block body %}
+{% if single %}
+    <div style="max-width: 800px; margin: 3rem auto; padding: 0 1.5rem;" class="animate-fade-in">
+        <div style="margin-bottom: 2rem; display: flex; align-items: center; justify-content: space-between;">
+            <div>
+                <a href="{{ plan ? path('app_user_strategies', { plan: plan }) : path('app_user_life_plan') }}" style="font-size: 0.875rem; color: var(--fg-muted); display: inline-flex; align-items: center; gap: 0.5rem; transition: color 0.2s;" onmouseover="this.style.color='var(--primary)'" onmouseout="this.style.color='var(--fg-muted)'">
+                    <i data-lucide="arrow-left" style="width: 16px; height: 16px;"></i>
+                    Retour au {% if plan == 'CROISSANCE' %}Plan de Croissance{% elseif plan == 'DEVELOPPEMENT' %}Plan de Développement{% elseif plan == 'CONTRIBUTION' %}Plan de Transmission{% elseif plan == 'DISCIPLINE' %}Plan d'Hygiène de Vie{% else %}Plan de Vie{% endif %}
+                </a>
+                <h1 style="font-family: var(--font-serif); font-size: 2.25rem; color: var(--primary); margin-top: 0.5rem; font-weight: 700; letter-spacing: -0.02em;">
+                    {% if step == 1 %}Modifier mon But de Dieu
+                    {% elseif step == 2 %}Modifier ma Balance Interne
+                    {% elseif step == 3 %}Modifier mes Passions & Intérêts
+                    {% elseif step == 4 %}Modifier mes Dons & Talents
+                    {% elseif step == 5 %}Modifier mon Profil de Personnalité
+                    {% elseif step == 6 %}Modifier ma Vision Personnelle
+                    {% elseif step == 7 %}Modifier mes Objectifs Spécifiques
+                    {% elseif step == 8 %}Modifier Compétence & Connaissance
+                    {% elseif step == 9 %}Modifier Caractère & Conviction
+                    {% elseif step == 10 %}Modifier Relation & Réseau
+                    {% elseif step == 11 %}Modifier Héritage & Transmission
+                    {% elseif step == 12 %}Modifier mon Hygiène de Vie
+                    {% elseif step == 13 %}Modifier mon Échéancier
+                    {% endif %}
+                </h1>
+            </div>
+        </div>
+
+        <div style="background: white; border-radius: 1.5rem; border: 1px solid rgba(15, 118, 110, 0.08); box-shadow: var(--card-shadow); overflow: hidden; display: flex; flex-direction: column;">
+            <form action="{{ path('app_user_life_plan_wizard', { step: step, single: 1, plan: plan }) }}" method="POST" style="flex: 1; display: flex; flex-direction: column; padding: 2.5rem; width: 100%;">
+                <input type="hidden" name="plan" value="{{ plan }}">
+                <div style="flex: 1;">
+{% else %}
+<div class="wizard-body">
+    <div class="glow-1"></div>
+    <div class="glow-2"></div>
+    <div class="dots"></div>
+
+    <!-- Top Bar / Navigation header -->
+    <div style="width: 100%; max-width: 900px; margin-bottom: 1.5rem; display: flex; justify-content: space-between; align-items: center; position: relative; z-index: 10;">
+        <div style="display: flex; align-items: center; gap: 0.75rem;">
+            <div style="width: 2.25rem; height: 2.25rem; border-radius: 50%; background: var(--primary); display: flex; align-items: center; justify-content: center; color: white; box-shadow: 0 4px 12px rgba(15, 118, 110, 0.25);">
+                <i data-lucide="compass" style="width: 18px; height: 18px; stroke-width: 2.5px;"></i>
+            </div>
+            <h1 style="font-family: 'Playfair Display', serif; font-size: 1.35rem; font-weight: 700; color: white; letter-spacing: -0.01em;">
+                {% if plan == 'CROISSANCE' %}Plan de Croissance
+                {% elseif plan == 'DEVELOPPEMENT' %}Plan de Développement
+                {% elseif plan == 'CONTRIBUTION' %}Plan de Transmission
+                {% elseif plan == 'DISCIPLINE' %}Plan d'Hygiène de Vie
+                {% else %}Plan de Vie{% endif %}
+            </h1>
+        </div>
+        <a href="{{ plan ? path('app_user_strategies', { plan: plan }) : path('app_user_life_plan') }}" 
+           style="width: 2.25rem; height: 2.25rem; background: rgba(255, 255, 255, 0.15); border: 1px solid rgba(255, 255, 255, 0.2); color: white; display: flex; align-items: center; justify-content: center; border-radius: 50%; transition: all 0.2s; cursor: pointer;"
+           onmouseover="this.style.background='rgba(255,255,255,0.25)'"
+           onmouseout="this.style.background='rgba(255,255,255,0.15)'"
+           title="Fermer et retour">
+            <i data-lucide="x" style="width: 16px; height: 16px; stroke-width: 2.5px;"></i>
+        </a>
+    </div>
+
+    <!-- Main Wizard Card -->
+    <div style="width: 100%; max-width: 900px; background: rgba(255, 255, 255, 0.98); border-radius: 2rem; 
+                box-shadow: 0 30px 70px rgba(0, 0, 0, 0.2); border: 1px solid rgba(15, 118, 110, 0.06);
+                display: flex; flex-direction: column; overflow: hidden; position: relative; z-index: 10; min-height: 520px;"
+          data-controller="wizard" 
+          data-wizard-current-step-value="{{ currentWizardStep }}"
+          data-wizard-total-steps-value="{{ allowedSteps|length }}">
+        
+        <!-- Stepper Header -->
+        <div style="position: relative; z-index: 10;">
+            <div class="progress-line">
+                <div class="progress-fill" data-wizard-target="progress" style="width: 0%;"></div>
+            </div>
+            <div style="padding: 1.25rem 2rem; border-bottom: 1px solid rgba(15, 118, 110, 0.05); display: flex; justify-content: space-between; align-items: center; background: white;">
+                <div style="display: flex; flex-direction: column;">
+                    <span style="font-size: 0.65rem; font-weight: 800; text-transform: uppercase; tracking: 0.1em; color: var(--primary);" data-wizard-target="progressText">
+                        Étape {{ currentWizardStep }} sur {{ allowedSteps|length }}
+                    </span>
+                    <h3 style="font-size: 0.95rem; font-weight: 700; color: #334155; display: flex; align-items: center; gap: 0.5rem; margin-top: 2px;" id="step-title">But de Dieu</h3>
+                </div>
+            </div>
+        </div>
+
+        <!-- Form content -->
+        <form action="{{ path('app_user_life_plan_wizard', { step: step, single: 0, plan: plan }) }}" method="POST" style="flex: 1; display: flex; flex-direction: column; padding: 2rem 2.5rem 2.5rem; width: 100%;">
+            <input type="hidden" name="plan" value="{{ plan }}">
+            <div style="flex: 1; overflow-y: auto; max-height: 420px; padding-right: 0.5rem;" class="custom-scrollbar">
+{% endif %}
+                
+                {# ETAPE 1: BOUSSOLE (PURPOSE) #}
+                {% if (not single and 1 in allowedSteps) or (single and step == 1) %}
+                <div data-wizard-target="step" class="{% if step != 1 %}hidden{% endif %} animate-fade-in" data-step-title="But de Dieu">
+                    <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.75rem; color: var(--primary);">
+                        <i data-lucide="compass" style="width: 24px; height: 24px;"></i>
+                        <h2 style="font-family: 'Playfair Display', serif; font-size: 1.75rem; font-weight: 500;">But de Dieu pour ma vie</h2>
+                    </div>
+                    <p style="color: var(--fg-muted); font-size: 0.95rem; margin-bottom: 1.75rem; line-height: 1.6;">
+                        Définissez votre mission de vie principale. Quelle est la phrase ou le paragraphe qui résume le sens que vous donnez à votre existence ?
+                    </p>
+                    
+                    <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+                        <label style="font-size: 0.75rem; font-weight: 700; color: var(--fg-light); letter-spacing: 0.05em; text-transform: uppercase;">Énoncé de mission</label>
+                        <textarea name="purpose_statement" class="wiz-textarea" rows="5" placeholder="Ex: Guider et inspirer les autres à réaliser leur plein potentiel par l'éducation, le partage et l'engagement continu.">{% if planDeVie and planDeVie.purpose and planDeVie.purpose.statement %}{{ planDeVie.purpose.statement }}{% else %}{{ defaultPurposeStatement }}{% endif %}</textarea>
+                    </div>
+                </div>
+                {% endif %}
+
+                {# ETAPE 2: BALANCE INTERNE (VALUES, CONVICTIONS, LIMITING BELIEFS) #}
+                {% if (not single and 2 in allowedSteps) or (single and step == 2) %}
+                <div data-wizard-target="step" class="{% if step != 2 %}hidden{% endif %} animate-fade-in" data-step-title="Balance Interne">
+                    <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.75rem; color: var(--primary);">
+                        <i data-lucide="activity" style="width: 24px; height: 24px;"></i>
+                        <h2 style="font-family: 'Playfair Display', serif; font-size: 1.75rem; font-weight: 500;">Balance Interne</h2>
+                    </div>
+                    <p style="color: var(--fg-muted); font-size: 0.95rem; margin-bottom: 1.75rem; line-height: 1.6;">
+                        Vos fondations psychologiques : vos valeurs cardinales, convictions profondes et croyances limitantes à surmonter.
+                    </p>
+
+                    <div style="display: flex; flex-direction: column; gap: 1.5rem;">
+                        {# Values Real #}
+                        <div>
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
+                                <label style="font-size: 0.75rem; font-weight: 700; color: var(--fg-light); letter-spacing: 0.05em; text-transform: uppercase;">Valeurs Réelles & Vécues</label>
+                                <button type="button" class="btn-add" onclick="addValueReal()">
+                                    <i data-lucide="plus" style="width: 12px; height: 12px;"></i> Ajouter
+                                </button>
+                            </div>
+                            <div id="values-real-container">
+                                {% if valuesReal|length > 0 %}
+                                    {% for val in valuesReal %}
+                                        <div class="dynamic-row">
+                                            <input type="text" name="values_real[]" class="wiz-input" style="border:none; background:transparent; padding:0;" value="{{ val.name }}" required>
+                                            {% if not loop.first %}
+                                                <button type="button" onclick="this.parentElement.remove()" class="btn-remove" title="Supprimer">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                                                </button>
+                                            {% endif %}
+                                        </div>
+                                    {% endfor %}
+                                {% else %}
+                                    <div class="dynamic-row">
+                                        <input type="text" name="values_real[]" class="wiz-input" style="border:none; background:transparent; padding:0;" placeholder="Ex: Excellence" required>
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        {# Values Declared #}
+                        <div>
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
+                                <label style="font-size: 0.75rem; font-weight: 700; color: var(--fg-light); letter-spacing: 0.05em; text-transform: uppercase;">Valeurs Déclarées & Admirées (alimente la croissance)</label>
+                                <button type="button" class="btn-add" onclick="addValueDeclared()">
+                                    <i data-lucide="plus" style="width: 12px; height: 12px;"></i> Ajouter
+                                </button>
+                            </div>
+                            <div id="values-declared-container">
+                                {% if valuesDeclared|length > 0 %}
+                                    {% for val in valuesDeclared %}
+                                        <div class="dynamic-row">
+                                            <input type="text" name="values_declared[]" class="wiz-input" style="border:none; background:transparent; padding:0;" value="{{ val.name }}" required>
+                                            {% if not loop.first %}
+                                                <button type="button" onclick="this.parentElement.remove()" class="btn-remove" title="Supprimer">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                                                </button>
+                                            {% endif %}
+                                        </div>
+                                    {% endfor %}
+                                {% else %}
+                                    <div class="dynamic-row">
+                                        <input type="text" name="values_declared[]" class="wiz-input" style="border:none; background:transparent; padding:0;" placeholder="Ex: Impact" required>
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        {# Values Counter #}
+                        <div>
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
+                                <label style="font-size: 0.75rem; font-weight: 700; color: var(--fg-light); letter-spacing: 0.05em; text-transform: uppercase;">Contre-valeurs observées (alimente la croissance)</label>
+                                <button type="button" class="btn-add" onclick="addValueCounter()">
+                                    <i data-lucide="plus" style="width: 12px; height: 12px;"></i> Ajouter
+                                </button>
+                            </div>
+                            <div id="values-counter-container">
+                                {% if valuesCounter|length > 0 %}
+                                    {% for val in valuesCounter %}
+                                        <div class="dynamic-row">
+                                            <input type="text" name="values_counter[]" class="wiz-input" style="border:none; background:transparent; padding:0;" value="{{ val.name }}" required>
+                                            {% if not loop.first %}
+                                                <button type="button" onclick="this.parentElement.remove()" class="btn-remove" title="Supprimer">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                                                </button>
+                                            {% endif %}
+                                        </div>
+                                    {% endfor %}
+                                {% else %}
+                                    <div class="dynamic-row">
+                                        <input type="text" name="values_counter[]" class="wiz-input" style="border:none; background:transparent; padding:0;" placeholder="Ex: Validation Externe" required>
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        {# Convictions Deep #}
+                        <div>
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
+                                <label style="font-size: 0.75rem; font-weight: 700; color: var(--fg-light); letter-spacing: 0.05em; text-transform: uppercase;">Convictions profondes ou dogmatiques</label>
+                                <button type="button" class="btn-add" onclick="addConvictionDeep()">
+                                    <i data-lucide="plus" style="width: 12px; height: 12px;"></i> Ajouter
+                                </button>
+                            </div>
+                            <div id="convictions-deep-container">
+                                {% if convictionsDeep|length > 0 %}
+                                    {% for c in convictionsDeep %}
+                                        <div class="dynamic-row">
+                                            <input type="text" name="convictions_deep[]" class="wiz-input" style="border:none; background:transparent; padding:0;" value="{{ c.text }}" required>
+                                            {% if not loop.first %}
+                                                <button type="button" onclick="this.parentElement.remove()" class="btn-remove" title="Supprimer">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                                                </button>
+                                            {% endif %}
+                                        </div>
+                                    {% endfor %}
+                                {% else %}
+                                    <div class="dynamic-row">
+                                        <input type="text" name="convictions_deep[]" class="wiz-input" style="border:none; background:transparent; padding:0;" placeholder="Ex: L'éducation doit être accessible à tous">
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        {# Convictions Medium #}
+                        <div>
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
+                                <label style="font-size: 0.75rem; font-weight: 700; color: var(--fg-light); letter-spacing: 0.05em; text-transform: uppercase;">Convictions médianes ou raisonnées</label>
+                                <button type="button" class="btn-add" onclick="addConvictionMedium()">
+                                    <i data-lucide="plus" style="width: 12px; height: 12px;"></i> Ajouter
+                                </button>
+                            </div>
+                            <div id="convictions-medium-container">
+                                {% if convictionsMedium|length > 0 %}
+                                    {% for c in convictionsMedium %}
+                                        <div class="dynamic-row">
+                                            <input type="text" name="convictions_medium[]" class="wiz-input" style="border:none; background:transparent; padding:0;" value="{{ c.text }}" required>
+                                            {% if not loop.first %}
+                                                <button type="button" onclick="this.parentElement.remove()" class="btn-remove" title="Supprimer">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                                                </button>
+                                            {% endif %}
+                                        </div>
+                                    {% endfor %}
+                                {% else %}
+                                    <div class="dynamic-row">
+                                        <input type="text" name="convictions_medium[]" class="wiz-input" style="border:none; background:transparent; padding:0;" placeholder="Ex: La discipline bat le talent sur le long terme">
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        {# Convictions Light #}
+                        <div>
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
+                                <label style="font-size: 0.75rem; font-weight: 700; color: var(--fg-light); letter-spacing: 0.05em; text-transform: uppercase;">Convictions légères ou circonstancielles</label>
+                                <button type="button" class="btn-add" onclick="addConvictionLight()">
+                                    <i data-lucide="plus" style="width: 12px; height: 12px;"></i> Ajouter
+                                </button>
+                            </div>
+                            <div id="convictions-light-container">
+                                {% if convictionsLight|length > 0 %}
+                                    {% for c in convictionsLight %}
+                                        <div class="dynamic-row">
+                                            <input type="text" name="convictions_light[]" class="wiz-input" style="border:none; background:transparent; padding:0;" value="{{ c.text }}" required>
+                                            {% if not loop.first %}
+                                                <button type="button" onclick="this.parentElement.remove()" class="btn-remove" title="Supprimer">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                                                </button>
+                                            {% endif %}
+                                        </div>
+                                    {% endfor %}
+                                {% else %}
+                                    <div class="dynamic-row">
+                                        <input type="text" name="convictions_light[]" class="wiz-input" style="border:none; background:transparent; padding:0;" placeholder="Ex: Le travail à distance est plus productif">
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        {# Limiting beliefs #}
+                        <div>
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
+                                <label style="font-size: 0.75rem; font-weight: 700; color: var(--fg-light); letter-spacing: 0.05em; text-transform: uppercase;">Croyances Limitantes (alimente la croissance)</label>
+                                <button type="button" class="btn-add" onclick="addLimitingBelief()">
+                                    <i data-lucide="plus" style="width: 12px; height: 12px;"></i> Ajouter
+                                </button>
+                            </div>
+                            <div id="limiting-beliefs-container">
+                                {% if limitingBeliefs|length > 0 %}
+                                    {% for lb in limitingBeliefs %}
+                                        <div class="dynamic-row">
+                                            <input type="text" name="limiting_beliefs[]" class="wiz-input" style="border:none; background:transparent; padding:0;" value="{{ lb.text }}" required>
+                                            {% if not loop.first %}
+                                                <button type="button" onclick="this.parentElement.remove()" class="btn-remove" title="Supprimer">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                                                </button>
+                                            {% endif %}
+                                        </div>
+                                    {% endfor %}
+                                {% else %}
+                                    <div class="dynamic-row">
+                                        <input type="text" name="limiting_beliefs[]" class="wiz-input" style="border:none; background:transparent; padding:0;" placeholder="Ex: Je ne suis pas assez expérimenté pour diriger">
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+
+                {# ETAPE 3: PASSIONS #}
+                {% if (not single and 3 in allowedSteps) or (single and step == 3) %}
+                <div data-wizard-target="step" class="{% if step != 3 %}hidden{% endif %} animate-fade-in" data-step-title="Passions & Intérêts">
+                    <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.75rem; color: var(--primary);">
+                        <i data-lucide="heart" style="width: 24px; height: 24px;"></i>
+                        <h2 style="font-family: 'Playfair Display', serif; font-size: 1.75rem; font-weight: 500;">Passions & Intérêts</h2>
+                    </div>
+                    <p style="color: var(--fg-muted); font-size: 0.95rem; margin-bottom: 1.75rem; line-height: 1.6;">
+                        Qu'est-ce qui vous anime, vous passionne, vous fait oublier le temps et vous redonne de l'énergie ?
+                    </p>
+
+                    <div>
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
+                            <label style="font-size: 0.75rem; font-weight: 700; color: var(--fg-light); letter-spacing: 0.05em; text-transform: uppercase;">Vos Passions</label>
+                            <button type="button" class="btn-add" onclick="addPassion()">
+                                <i data-lucide="plus" style="width: 12px; height: 12px;"></i> Ajouter
+                            </button>
+                        </div>
+                        <div id="passions-container" style="display: flex; flex-direction: column; gap: 0.5rem;">
+                            {% if planDeVie and planDeVie.passions|length > 0 %}
+                                {% for p in planDeVie.passions %}
+                                    <div class="dynamic-row">
+                                        <input type="text" name="passions[]" class="wiz-input" style="border:none; background:transparent; padding:0;" value="{{ p.name }}" required>
+                                        {% if not loop.first %}
+                                            <button type="button" onclick="this.parentElement.remove()" class="btn-remove" title="Supprimer">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                                            </button>
+                                        {% endif %}
+                                    </div>
+                                {% endfor %}
+                            {% else %}
+                                <div class="dynamic-row">
+                                    <input type="text" name="passions[]" class="wiz-input" style="border:none; background:transparent; padding:0;" placeholder="Ex: Écriture & création de contenu" required>
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+
+                {# ETAPE 4: TALENTS #}
+                {% if (not single and 4 in allowedSteps) or (single and step == 4) %}
+                <div data-wizard-target="step" class="{% if step != 4 %}hidden{% endif %} animate-fade-in" data-step-title="Dons & Talents">
+                    <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.75rem; color: var(--primary);">
+                        <i data-lucide="sparkles" style="width: 24px; height: 24px;"></i>
+                        <h2 style="font-family: 'Playfair Display', serif; font-size: 1.75rem; font-weight: 500;">Dons & Talents Naturels</h2>
+                    </div>
+                    <p style="color: var(--fg-muted); font-size: 0.95rem; margin-bottom: 1.75rem; line-height: 1.6;">
+                        Quelles sont vos facilités innées ? Ce que vous effectuez avec aisance et plaisir là où d'autres doivent faire de gros efforts.
+                    </p>
+
+                    <div>
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
+                            <label style="font-size: 0.75rem; font-weight: 700; color: var(--fg-light); letter-spacing: 0.05em; text-transform: uppercase;">Vos Talents</label>
+                            <button type="button" class="btn-add" onclick="addTalent()">
+                                <i data-lucide="plus" style="width: 12px; height: 12px;"></i> Ajouter
+                            </button>
+                        </div>
+                        <div id="talents-container" style="display: flex; flex-direction: column; gap: 0.5rem;">
+                            {% if talents|length > 0 %}
+                                {% for t in talents %}
+                                    <div class="dynamic-row">
+                                        <input type="text" name="talents[]" class="wiz-input" style="border:none; background:transparent; padding:0;" value="{{ t.text }}" required>
+                                        {% if not loop.first %}
+                                            <button type="button" onclick="this.parentElement.remove()" class="btn-remove" title="Supprimer">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                                            </button>
+                                        {% endif %}
+                                    </div>
+                                {% endfor %}
+                            {% else %}
+                                <div class="dynamic-row">
+                                    <input type="text" name="talents[]" class="wiz-input" style="border:none; background:transparent; padding:0;" placeholder="Ex: Vulgarisation de concepts complexes" required>
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+
+                {# ETAPE 5: PERSONNALITÉ #}
+                {% if (not single and 5 in allowedSteps) or (single and step == 5) %}
+                <div data-wizard-target="step" class="{% if step != 5 %}hidden{% endif %} animate-fade-in" data-step-title="Profil de Personnalité">
+                    <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.75rem; color: var(--primary);">
+                        <i data-lucide="user" style="width: 24px; height: 24px;"></i>
+                        <h2 style="font-family: 'Playfair Display', serif; font-size: 1.75rem; font-weight: 500;">Profil de Personnalité</h2>
+                    </div>
+                    <p style="color: var(--fg-muted); font-size: 0.95rem; margin-bottom: 1.75rem; line-height: 1.6;">
+                        Indiquez vos résultats aux tests de personnalité si vous les connaissez, afin d'enrichir votre plan d'alignement.
+                    </p>
+
+                    <div style="display: flex; flex-direction: column; gap: 1.25rem;">
+
+                        {# MBTI #}
+                        <div style="display: flex; flex-direction: column; gap: 0.375rem;">
+                            <label style="font-size: 0.75rem; font-weight: 700; color: var(--fg-light); letter-spacing: 0.05em; text-transform: uppercase;">Profil MBTI</label>
+                            <select name="profile_mbti" class="wiz-select">
+                                <option value="">Je ne sais pas...</option>
+                                <option value="INTJ" {% if mbtiVal == 'INTJ' %}selected{% endif %}>INTJ (Architecte)</option>
+                                <option value="INTP" {% if mbtiVal == 'INTP' %}selected{% endif %}>INTP (Logicien)</option>
+                                <option value="ENTJ" {% if mbtiVal == 'ENTJ' %}selected{% endif %}>ENTJ (Commandant)</option>
+                                <option value="ENTP" {% if mbtiVal == 'ENTP' %}selected{% endif %}>ENTP (Innovateur)</option>
+                                <option value="INFJ" {% if mbtiVal == 'INFJ' %}selected{% endif %}>INFJ (Avocat)</option>
+                                <option value="INFP" {% if mbtiVal == 'INFP' %}selected{% endif %}>INFP (Médiateur)</option>
+                                <option value="ENFJ" {% if mbtiVal == 'ENFJ' %}selected{% endif %}>ENFJ (Protagoniste)</option>
+                                <option value="ENFP" {% if mbtiVal == 'ENFP' %}selected{% endif %}>ENFP (Inspirateur)</option>
+                                <option value="ISTJ" {% if mbtiVal == 'ISTJ' %}selected{% endif %}>ISTJ (Logisticien)</option>
+                                <option value="ISFJ" {% if mbtiVal == 'ISFJ' %}selected{% endif %}>ISFJ (Défenseur)</option>
+                                <option value="ESTJ" {% if mbtiVal == 'ESTJ' %}selected{% endif %}>ESTJ (Directeur)</option>
+                                <option value="ESFJ" {% if mbtiVal == 'ESFJ' %}selected{% endif %}>ESFJ (Consul)</option>
+                                <option value="ISTP" {% if mbtiVal == 'ISTP' %}selected{% endif %}>ISTP (Virtuose)</option>
+                                <option value="ISFP" {% if mbtiVal == 'ISFP' %}selected{% endif %}>ISFP (Aventurier)</option>
+                                <option value="ESTP" {% if mbtiVal == 'ESTP' %}selected{% endif %}>ESTP (Entrepreneur)</option>
+                                <option value="ESFP" {% if mbtiVal == 'ESFP' %}selected{% endif %}>ESFP (Amuseur)</option>
+                            </select>
+                        </div>
+
+                        {# DISC #}
+                        <div style="display: flex; flex-direction: column; gap: 0.375rem;">
+                            <label style="font-size: 0.75rem; font-weight: 700; color: var(--fg-light); letter-spacing: 0.05em; text-transform: uppercase;">Profil DISC</label>
+                            <select name="profile_disc" class="wiz-select">
+                                <option value="">Je ne sais pas...</option>
+                                <option value="D" {% if discVal == 'D' %}selected{% endif %}>D — Dominant (Direct, Décidé)</option>
+                                <option value="I" {% if discVal == 'I' %}selected{% endif %}>I — Influent (Enthousiaste, Sociable)</option>
+                                <option value="S" {% if discVal == 'S' %}selected{% endif %}>S — Stable (Patient, Fiable)</option>
+                                <option value="C" {% if discVal == 'C' %}selected{% endif %}>C — Consciencieux (Analytique, Précis)</option>
+                                <option value="DI" {% if discVal == 'DI' %}selected{% endif %}>DI — Dominant / Influent</option>
+                                <option value="DC" {% if discVal == 'DC' %}selected{% endif %}>DC — Dominant / Consciencieux</option>
+                                <option value="IS" {% if discVal == 'IS' %}selected{% endif %}>IS — Influent / Stable</option>
+                                <option value="SC" {% if discVal == 'SC' %}selected{% endif %}>SC — Stable / Consciencieux</option>
+                            </select>
+                        </div>
+
+                        {# ENNÉAGRAMME #}
+                        <div style="display: flex; flex-direction: column; gap: 0.375rem;">
+                            <label style="font-size: 0.75rem; font-weight: 700; color: var(--fg-light); letter-spacing: 0.05em; text-transform: uppercase;">Type Ennéagramme</label>
+                            <select name="profile_enneagram" class="wiz-select">
+                                <option value="">Je ne sais pas...</option>
+                                <option value="1" {% if enneagramVal == '1' %}selected{% endif %}>Type 1 (Perfectionniste / Réformateur)</option>
+                                <option value="2" {% if enneagramVal == '2' %}selected{% endif %}>Type 2 (Altruiste / Aidant)</option>
+                                <option value="3" {% if enneagramVal == '3' %}selected{% endif %}>Type 3 (Battant / Réalisateur)</option>
+                                <option value="4" {% if enneagramVal == '4' %}selected{% endif %}>Type 4 (Individualiste / Romantique)</option>
+                                <option value="5" {% if enneagramVal == '5' %}selected{% endif %}>Type 5 (Investigateur / Observateur)</option>
+                                <option value="6" {% if enneagramVal == '6' %}selected{% endif %}>Type 6 (Loyaliste / Sceptique)</option>
+                                <option value="7" {% if enneagramVal == '7' %}selected{% endif %}>Type 7 (Enthousiaste / Épicurien)</option>
+                                <option value="8" {% if enneagramVal == '8' %}selected{% endif %}>Type 8 (Challenger / Chef)</option>
+                                <option value="9" {% if enneagramVal == '9' %}selected{% endif %}>Type 9 (Pacificateur / Médiateur)</option>
+                            </select>
+                        </div>
+
+                        {# BIG 5 (OCEAN) #}
+                        <div style="display: flex; flex-direction: column; gap: 0.375rem;">
+                            <label style="font-size: 0.75rem; font-weight: 700; color: var(--fg-light); letter-spacing: 0.05em; text-transform: uppercase;">Big Five (OCEAN) — Profil dominant</label>
+                            <select name="profile_big5" class="wiz-select">
+                                <option value="">Je ne sais pas...</option>
+                                <option value="O" {% if big5Val == 'O' %}selected{% endif %}>O — Ouverture (Curiosité, Créativité)</option>
+                                <option value="C" {% if big5Val == 'C' %}selected{% endif %}>C — Conscienciosité (Organisation, Fiabilité)</option>
+                                <option value="E" {% if big5Val == 'E' %}selected{% endif %}>E — Extraversion (Sociabilité, Énergie)</option>
+                                <option value="A" {% if big5Val == 'A' %}selected{% endif %}>A — Agréabilité (Coopération, Bienveillance)</option>
+                                <option value="N" {% if big5Val == 'N' %}selected{% endif %}>N — Névrosisme (Sensibilité émotionnelle)</option>
+                                <option value="OC" {% if big5Val == 'OC' %}selected{% endif %}>OC — Ouverture + Conscienciosité</option>
+                                <option value="OE" {% if big5Val == 'OE' %}selected{% endif %}>OE — Ouverture + Extraversion</option>
+                                <option value="CE" {% if big5Val == 'CE' %}selected{% endif %}>CE — Conscienciosité + Extraversion</option>
+                                <option value="CA" {% if big5Val == 'CA' %}selected{% endif %}>CA — Conscienciosité + Agréabilité</option>
+                                <option value="AE" {% if big5Val == 'AE' %}selected{% endif %}>AE — Agréabilité + Extraversion</option>
+                            </select>
+                        </div>
+
+                    </div>
+                </div>
+                {% endif %}
+
+
+                {# ETAPE 6: VISION #}
+                {% if (not single and 6 in allowedSteps) or (single and step == 6) %}
+                <div data-wizard-target="step" class="{% if step != 6 %}hidden{% endif %} animate-fade-in" data-step-title="Ma Vision">
+                    <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.75rem; color: var(--primary);">
+                        <i data-lucide="eye" style="width: 24px; height: 24px;"></i>
+                        <h2 style="font-family: 'Playfair Display', serif; font-size: 1.75rem; font-weight: 500;">Ma Vision</h2>
+                    </div>
+                    <p style="color: var(--fg-muted); font-size: 0.95rem; margin-bottom: 1.75rem; line-height: 1.6;">
+                        Projetez-vous à moyen/long terme. À quoi ressemblerait votre vie idéale ? Que voulez-vous avoir accompli ?
+                    </p>
+
+                    <div style="display: flex; flex-direction: column; gap: 1.25rem;">
+                        <div style="display: flex; flex-direction: column; gap: 0.375rem;">
+                            <label style="font-size: 0.75rem; font-weight: 700; color: var(--fg-light); letter-spacing: 0.05em; text-transform: uppercase;">Description de votre Vision</label>
+                            <textarea name="vision_content" class="wiz-textarea" rows="4" placeholder="Ex: Devenir un consultant indépendant épanoui, travaillant depuis n'importe où dans le monde, tout en maintenant une santé robuste et un équilibre familial parfait...">{% if planDeVie and planDeVie.vision %}{{ planDeVie.vision.content }}{% endif %}</textarea>
+                        </div>
+
+                        <div style="display: flex; flex-direction: column; gap: 0.375rem;">
+                            <label style="font-size: 0.75rem; font-weight: 700; color: var(--fg-light); letter-spacing: 0.05em; text-transform: uppercase;">Horizon temporel</label>
+                            <input type="text" name="vision_horizon" class="wiz-input" placeholder="Ex: 5 ans, 10 ans..." value="{% if planDeVie and planDeVie.vision %}{{ planDeVie.vision.horizon }}{% endif %}">
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+
+                {# ETAPE 7: OBJECTIFS SPÉCIFIQUES (BE, DO, HAVE, GIVE) #}
+                {% if (not single and 7 in allowedSteps) or (single and step == 7) %}
+                <div data-wizard-target="step" class="{% if step != 7 %}hidden{% endif %} animate-fade-in" data-step-title="Objectifs Spécifiques">
+                    <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.75rem; color: var(--primary);">
+                        <i data-lucide="target" style="width: 24px; height: 24px;"></i>
+                        <h2 style="font-family: 'Playfair Display', serif; font-size: 1.75rem; font-weight: 500;">Objectifs Spécifiques (BE, DO, HAVE, GIVE)</h2>
+                    </div>
+                    <p style="color: var(--fg-muted); font-size: 0.95rem; margin-bottom: 1.75rem; line-height: 1.6;">
+                        Déclinez votre vision générale en objectifs catégorisés selon 4 angles fondamentaux.
+                    </p>
+
+                    <div style="display: flex; flex-direction: column; gap: 1.5rem;">
+                        {# BE #}
+                        <div>
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+                                <label style="font-size: 0.75rem; font-weight: 700; color: var(--fg-light); letter-spacing: 0.05em; text-transform: uppercase;">BE (Qui je veux être)</label>
+                                <button type="button" class="btn-add" onclick="addLifeGoal('be')">
+                                    <i data-lucide="plus" style="width: 12px; height: 12px;"></i> Ajouter
+                                </button>
+                            </div>
+                            <div id="life-goals-be-container">
+                                {% if lifeGoals.BE|length > 0 %}
+                                    {% for goal in lifeGoals.BE %}
+                                        <div class="dynamic-row" style="flex-wrap: wrap;">
+                                            <input type="text" name="life_goals_be[]" class="wiz-input" style="border:none; background:transparent; padding:0; flex: 1; min-width: 200px;" value="{{ goal.title }}" required>
+                                            <div style="display: flex; align-items: center; gap: 0.5rem; background: #ffffff; border: 1px solid rgba(15, 118, 110, 0.12); border-radius: 0.5rem; padding: 0.25rem 0.5rem; margin-left: auto;">
+                                                <span style="font-size: 0.75rem; color: var(--fg-muted);">Échéance :</span>
+                                                <input type="date" name="life_goals_be_deadlines[]" class="wiz-input" style="border:none; background:transparent; padding:0; font-size: 0.8rem; width: 125px; color: var(--fg-light); outline: none;" value="{{ goal.deadline ? goal.deadline|date('Y-m-d') : '' }}">
+                                            </div>
+                                            {% if not loop.first %}
+                                                <button type="button" onclick="this.parentElement.remove()" class="btn-remove" title="Supprimer">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                                                </button>
+                                            {% endif %}
+                                        </div>
+                                    {% endfor %}
+                                {% else %}
+                                    <div class="dynamic-row" style="flex-wrap: wrap;">
+                                        <input type="text" name="life_goals_be[]" class="wiz-input" style="border:none; background:transparent; padding:0; flex: 1; min-width: 200px;" placeholder="Ex: Un leader calme et à l'écoute">
+                                        <div style="display: flex; align-items: center; gap: 0.5rem; background: #ffffff; border: 1px solid rgba(15, 118, 110, 0.12); border-radius: 0.5rem; padding: 0.25rem 0.5rem; margin-left: auto;">
+                                            <span style="font-size: 0.75rem; color: var(--fg-muted);">Échéance :</span>
+                                            <input type="date" name="life_goals_be_deadlines[]" class="wiz-input" style="border:none; background:transparent; padding:0; font-size: 0.8rem; width: 125px; color: var(--fg-light); outline: none;">
+                                        </div>
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        {# DO #}
+                        <div>
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+                                <label style="font-size: 0.75rem; font-weight: 700; color: var(--fg-light); letter-spacing: 0.05em; text-transform: uppercase;">DO (Ce que je veux accomplir)</label>
+                                <button type="button" class="btn-add" onclick="addLifeGoal('do')">
+                                    <i data-lucide="plus" style="width: 12px; height: 12px;"></i> Ajouter
+                                </button>
+                            </div>
+                            <div id="life-goals-do-container">
+                                {% if lifeGoals.DO|length > 0 %}
+                                    {% for goal in lifeGoals.DO %}
+                                        <div class="dynamic-row" style="flex-wrap: wrap;">
+                                            <input type="text" name="life_goals_do[]" class="wiz-input" style="border:none; background:transparent; padding:0; flex: 1; min-width: 200px;" value="{{ goal.title }}" required>
+                                            <div style="display: flex; align-items: center; gap: 0.5rem; background: #ffffff; border: 1px solid rgba(15, 118, 110, 0.12); border-radius: 0.5rem; padding: 0.25rem 0.5rem; margin-left: auto;">
+                                                <span style="font-size: 0.75rem; color: var(--fg-muted);">Échéance :</span>
+                                                <input type="date" name="life_goals_do_deadlines[]" class="wiz-input" style="border:none; background:transparent; padding:0; font-size: 0.8rem; width: 125px; color: var(--fg-light); outline: none;" value="{{ goal.deadline ? goal.deadline|date('Y-m-d') : '' }}">
+                                            </div>
+                                            {% if not loop.first %}
+                                                <button type="button" onclick="this.parentElement.remove()" class="btn-remove" title="Supprimer">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                                                </button>
+                                            {% endif %}
+                                        </div>
+                                    {% endfor %}
+                                {% else %}
+                                    <div class="dynamic-row" style="flex-wrap: wrap;">
+                                        <input type="text" name="life_goals_do[]" class="wiz-input" style="border:none; background:transparent; padding:0; flex: 1; min-width: 200px;" placeholder="Ex: Lancer ma propre structure de consulting">
+                                        <div style="display: flex; align-items: center; gap: 0.5rem; background: #ffffff; border: 1px solid rgba(15, 118, 110, 0.12); border-radius: 0.5rem; padding: 0.25rem 0.5rem; margin-left: auto;">
+                                            <span style="font-size: 0.75rem; color: var(--fg-muted);">Échéance :</span>
+                                            <input type="date" name="life_goals_do_deadlines[]" class="wiz-input" style="border:none; background:transparent; padding:0; font-size: 0.8rem; width: 125px; color: var(--fg-light); outline: none;">
+                                        </div>
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        {# HAVE #}
+                        <div>
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+                                <label style="font-size: 0.75rem; font-weight: 700; color: var(--fg-light); letter-spacing: 0.05em; text-transform: uppercase;">HAVE (Ce que je veux posséder)</label>
+                                <button type="button" class="btn-add" onclick="addLifeGoal('have')">
+                                    <i data-lucide="plus" style="width: 12px; height: 12px;"></i> Ajouter
+                                </button>
+                            </div>
+                            <div id="life-goals-have-container">
+                                {% if lifeGoals.HAVE|length > 0 %}
+                                    {% for goal in lifeGoals.HAVE %}
+                                        <div class="dynamic-row" style="flex-wrap: wrap;">
+                                            <input type="text" name="life_goals_have[]" class="wiz-input" style="border:none; background:transparent; padding:0; flex: 1; min-width: 200px;" value="{{ goal.title }}" required>
+                                            <div style="display: flex; align-items: center; gap: 0.5rem; background: #ffffff; border: 1px solid rgba(15, 118, 110, 0.12); border-radius: 0.5rem; padding: 0.25rem 0.5rem; margin-left: auto;">
+                                                <span style="font-size: 0.75rem; color: var(--fg-muted);">Échéance :</span>
+                                                <input type="date" name="life_goals_have_deadlines[]" class="wiz-input" style="border:none; background:transparent; padding:0; font-size: 0.8rem; width: 125px; color: var(--fg-light); outline: none;" value="{{ goal.deadline ? goal.deadline|date('Y-m-d') : '' }}">
+                                            </div>
+                                            {% if not loop.first %}
+                                                <button type="button" onclick="this.parentElement.remove()" class="btn-remove" title="Supprimer">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                                                </button>
+                                            {% endif %}
+                                        </div>
+                                    {% endfor %}
+                                {% else %}
+                                    <div class="dynamic-row" style="flex-wrap: wrap;">
+                                        <input type="text" name="life_goals_have[]" class="wiz-input" style="border:none; background:transparent; padding:0; flex: 1; min-width: 200px;" placeholder="Ex: Un matelas de sécurité financière de 6 mois">
+                                        <div style="display: flex; align-items: center; gap: 0.5rem; background: #ffffff; border: 1px solid rgba(15, 118, 110, 0.12); border-radius: 0.5rem; padding: 0.25rem 0.5rem; margin-left: auto;">
+                                            <span style="font-size: 0.75rem; color: var(--fg-muted);">Échéance :</span>
+                                            <input type="date" name="life_goals_have_deadlines[]" class="wiz-input" style="border:none; background:transparent; padding:0; font-size: 0.8rem; width: 125px; color: var(--fg-light); outline: none;">
+                                        </div>
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        {# GIVE #}
+                        <div>
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+                                <label style="font-size: 0.75rem; font-weight: 700; color: var(--fg-light); letter-spacing: 0.05em; text-transform: uppercase;">GIVE (Ce que je veux transmettre)</label>
+                                <button type="button" class="btn-add" onclick="addLifeGoal('give')">
+                                    <i data-lucide="plus" style="width: 12px; height: 12px;"></i> Ajouter
+                                </button>
+                            </div>
+                            <div id="life-goals-give-container">
+                                {% if lifeGoals.GIVE|length > 0 %}
+                                    {% for goal in lifeGoals.GIVE %}
+                                        <div class="dynamic-row" style="flex-wrap: wrap;">
+                                            <input type="text" name="life_goals_give[]" class="wiz-input" style="border:none; background:transparent; padding:0; flex: 1; min-width: 200px;" value="{{ goal.title }}" required>
+                                            <div style="display: flex; align-items: center; gap: 0.5rem; background: #ffffff; border: 1px solid rgba(15, 118, 110, 0.12); border-radius: 0.5rem; padding: 0.25rem 0.5rem; margin-left: auto;">
+                                                <span style="font-size: 0.75rem; color: var(--fg-muted);">Échéance :</span>
+                                                <input type="date" name="life_goals_give_deadlines[]" class="wiz-input" style="border:none; background:transparent; padding:0; font-size: 0.8rem; width: 125px; color: var(--fg-light); outline: none;" value="{{ goal.deadline ? goal.deadline|date('Y-m-d') : '' }}">
+                                            </div>
+                                            {% if not loop.first %}
+                                                <button type="button" onclick="this.parentElement.remove()" class="btn-remove" title="Supprimer">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                                                </button>
+                                            {% endif %}
+                                        </div>
+                                    {% endfor %}
+                                {% else %}
+                                    <div class="dynamic-row" style="flex-wrap: wrap;">
+                                        <input type="text" name="life_goals_give[]" class="wiz-input" style="border:none; background:transparent; padding:0; flex: 1; min-width: 200px;" placeholder="Ex: Mentorer 2 jeunes entrepreneurs bénévolement">
+                                        <div style="display: flex; align-items: center; gap: 0.5rem; background: #ffffff; border: 1px solid rgba(15, 118, 110, 0.12); border-radius: 0.5rem; padding: 0.25rem 0.5rem; margin-left: auto;">
+                                            <span style="font-size: 0.75rem; color: var(--fg-muted);">Échéance :</span>
+                                            <input type="date" name="life_goals_give_deadlines[]" class="wiz-input" style="border:none; background:transparent; padding:0; font-size: 0.8rem; width: 125px; color: var(--fg-light); outline: none;">
+                                        </div>
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+
+                {# ETAPE 8: COMPÉTENCE (PLAN DE CROISSANCE) #}
+                {% if (not single and 8 in allowedSteps) or (single and step == 8) %}
+                <div data-wizard-target="step" class="{% if step != 8 %}hidden{% endif %} animate-fade-in" data-step-title="Compétence & Connaissance">
+                    <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.75rem; color: var(--primary);">
+                        <i data-lucide="book-open" style="width: 24px; height: 24px;"></i>
+                        <h2 style="font-family: 'Playfair Display', serif; font-size: 1.75rem; font-weight: 500;">Compétence & Connaissance</h2>
+                    </div>
+                    <p style="color: var(--fg-muted); font-size: 0.95rem; margin-bottom: 1.75rem; line-height: 1.6;">
+                        Quels savoirs ou compétences techniques / comportementales devez-vous développer pour soutenir vos objectifs de vie ?
+                    </p>
+
+                    <div>
+                        <!-- Section Compétences -->
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
+                            <label style="font-size: 0.75rem; font-weight: 700; color: var(--fg-light); letter-spacing: 0.05em; text-transform: uppercase;">Compétences cibles</label>
+                            <button type="button" class="btn-add" onclick="addGrowthGoal('competence')">
+                                <i data-lucide="plus" style="width: 12px; height: 12px;"></i> Ajouter
+                            </button>
+                        </div>
+                        <div id="competence-container" style="display: flex; flex-direction: column; gap: 1rem; margin-bottom: 2rem;">
+                            {% if competences.COMPETENCE|length > 0 %}
+                                {% for goal in competences.COMPETENCE %}
+                                    <div class="growth-goal-block" style="padding: 1.25rem; background: #F8FAFC; border: 1px solid rgba(15, 118, 110, 0.08); border-radius: 1.25rem; display: flex; flex-direction: column; gap: 0.75rem; position: relative;">
+                                        {% if not loop.first %}
+                                            <button type="button" onclick="this.parentElement.remove(); reindexGrowthGoals('competence-container', 'competence')" class="btn-remove" style="position: absolute; top: 0.5rem; right: 0.5rem;" title="Supprimer">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                                            </button>
+                                        {% endif %}
+                                        <div style="display: flex; flex-direction: column; gap: 0.25rem;">
+                                            <label style="font-size: 0.7rem; font-weight: 700; color: var(--fg-light); text-transform: uppercase;">Nom de la compétence</label>
+                                            <input type="text" name="growth_competence_title[{{ loop.index0 }}]" class="wiz-input" value="{{ goal.title }}" required>
+                                        </div>
+
+                                        <div style="display: flex; flex-direction: column; gap: 0.25rem;">
+                                            <label style="font-size: 0.7rem; font-weight: 700; color: var(--fg-light); text-transform: uppercase;">Statut d'acquisition</label>
+                                            <select name="growth_competence_status[{{ loop.index0 }}]" class="wiz-input" style="height: 42px; padding: 0.5rem 1rem;">
+                                                <option value="build" {% if goal.subtype == 'build' %}selected{% endif %}>À construire</option>
+                                                <option value="consolidate" {% if goal.subtype == 'consolidate' %}selected{% endif %}>À consolider</option>
+                                                <option value="leverage" {% if goal.subtype == 'leverage' %}selected{% endif %}>À mettre à profit</option>
+                                                <option value="absence" {% if goal.subtype == 'absence' %}selected{% endif %}>Absence assumée</option>
+                                            </select>
+                                        </div>
+                                        <div style="display: flex; flex-direction: column; gap: 0.25rem;">
+                                            <label style="font-size: 0.7rem; font-weight: 700; color: var(--fg-light); text-transform: uppercase;">Objectifs spécifiques soutenus</label>
+                                            <div class="checkbox-list-container" style="display: flex; flex-direction: column; gap: 0.5rem; margin-top: 0.25rem; background: #ffffff; border: 1px solid rgba(15, 118, 110, 0.12); border-radius: 0.75rem; padding: 0.75rem; max-height: 180px; overflow-y: auto;">
+                                                {% if allLifeGoals|length > 0 %}
+                                                    {% for lg in allLifeGoals %}
+                                                        <label style="display: flex; align-items: flex-start; gap: 0.5rem; font-size: 0.85rem; color: var(--fg-light); cursor: pointer; padding: 0.25rem 0; margin-bottom: 0;">
+                                                            <input type="checkbox" name="growth_competence_goals[{{ loop.parent.loop.index0 }}][]" value="{{ lg.id }}" {% if goal.supportedLifeGoals.contains(lg) %}checked{% endif %} style="margin-top: 0.2rem; cursor: pointer;">
+                                                            <span>[{{ lg.category|upper }}] {{ lg.title }}</span>
+                                                        </label>
+                                                    {% endfor %}
+                                                {% else %}
+                                                    <span style="font-size: 0.85rem; color: var(--fg-muted); font-style: italic;">Aucun objectif spécifique défini.</span>
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            {% else %}
+                                <div class="growth-goal-block" style="padding: 1.25rem; background: #F8FAFC; border: 1px solid rgba(15, 118, 110, 0.08); border-radius: 1.25rem; display: flex; flex-direction: column; gap: 0.75rem; position: relative;">
+                                    <div style="display: flex; flex-direction: column; gap: 0.25rem;">
+                                        <label style="font-size: 0.7rem; font-weight: 700; color: var(--fg-light); text-transform: uppercase;">Nom de la compétence</label>
+                                        <input type="text" name="growth_competence_title[0]" class="wiz-input" placeholder="Ex: Apprendre à pitcher une idée" required>
+                                    </div>
+
+                                    <div style="display: flex; flex-direction: column; gap: 0.25rem;">
+                                        <label style="font-size: 0.7rem; font-weight: 700; color: var(--fg-light); text-transform: uppercase;">Statut d'acquisition</label>
+                                        <select name="growth_competence_status[0]" class="wiz-input" style="height: 42px; padding: 0.5rem 1rem;">
+                                            <option value="build" selected>À construire</option>
+                                            <option value="consolidate">À consolider</option>
+                                            <option value="leverage">À mettre à profit</option>
+                                            <option value="absence">Absence assumée</option>
+                                        </select>
+                                    </div>
+                                    <div style="display: flex; flex-direction: column; gap: 0.25rem;">
+                                        <label style="font-size: 0.7rem; font-weight: 700; color: var(--fg-light); text-transform: uppercase;">Objectifs spécifiques soutenus</label>
+                                        <div class="checkbox-list-container" style="display: flex; flex-direction: column; gap: 0.5rem; margin-top: 0.25rem; background: #ffffff; border: 1px solid rgba(15, 118, 110, 0.12); border-radius: 0.75rem; padding: 0.75rem; max-height: 180px; overflow-y: auto;">
+                                            {% if allLifeGoals|length > 0 %}
+                                                {% for lg in allLifeGoals %}
+                                                    <label style="display: flex; align-items: flex-start; gap: 0.5rem; font-size: 0.85rem; color: var(--fg-light); cursor: pointer; padding: 0.25rem 0; margin-bottom: 0;">
+                                                        <input type="checkbox" name="growth_competence_goals[0][]" value="{{ lg.id }}" style="margin-top: 0.2rem; cursor: pointer;">
+                                                        <span>[{{ lg.category|upper }}] {{ lg.title }}</span>
+                                                    </label>
+                                                {% endfor %}
+                                            {% else %}
+                                                <span style="font-size: 0.85rem; color: var(--fg-muted); font-style: italic;">Aucun objectif spécifique défini.</span>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endif %}
+                        </div>
+
+                        <!-- Section Connaissances -->
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
+                            <label style="font-size: 0.75rem; font-weight: 700; color: var(--fg-light); letter-spacing: 0.05em; text-transform: uppercase;">Connaissances cibles</label>
+                            <button type="button" class="btn-add" onclick="addGrowthGoal('connaissance')">
+                                <i data-lucide="plus" style="width: 12px; height: 12px;"></i> Ajouter
+                            </button>
+                        </div>
+                        <div id="connaissance-container" style="display: flex; flex-direction: column; gap: 1rem;">
+                            {% if competences.CONNAISSANCE|length > 0 %}
+                                {% for goal in competences.CONNAISSANCE %}
+                                    <div class="growth-goal-block" style="padding: 1.25rem; background: #F8FAFC; border: 1px solid rgba(15, 118, 110, 0.08); border-radius: 1.25rem; display: flex; flex-direction: column; gap: 0.75rem; position: relative;">
+                                        {% if not loop.first %}
+                                            <button type="button" onclick="this.parentElement.remove(); reindexGrowthGoals('connaissance-container', 'connaissance')" class="btn-remove" style="position: absolute; top: 0.5rem; right: 0.5rem;" title="Supprimer">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                                            </button>
+                                        {% endif %}
+                                        <div style="display: flex; flex-direction: column; gap: 0.25rem;">
+                                            <label style="font-size: 0.7rem; font-weight: 700; color: var(--fg-light); text-transform: uppercase;">Nom de la connaissance</label>
+                                            <input type="text" name="growth_connaissance_title[{{ loop.index0 }}]" class="wiz-input" value="{{ goal.title }}" required>
+                                        </div>
+
+                                        <div style="display: flex; flex-direction: column; gap: 0.25rem;">
+                                            <label style="font-size: 0.7rem; font-weight: 700; color: var(--fg-light); text-transform: uppercase;">Statut d'acquisition</label>
+                                            <select name="growth_connaissance_status[{{ loop.index0 }}]" class="wiz-input" style="height: 42px; padding: 0.5rem 1rem;">
+                                                <option value="build" {% if goal.subtype == 'build' %}selected{% endif %}>À construire</option>
+                                                <option value="consolidate" {% if goal.subtype == 'consolidate' %}selected{% endif %}>À consolider</option>
+                                                <option value="leverage" {% if goal.subtype == 'leverage' %}selected{% endif %}>À mettre à profit</option>
+                                                <option value="absence" {% if goal.subtype == 'absence' %}selected{% endif %}>Absence assumée</option>
+                                            </select>
+                                        </div>
+                                        <div style="display: flex; flex-direction: column; gap: 0.25rem;">
+                                            <label style="font-size: 0.7rem; font-weight: 700; color: var(--fg-light); text-transform: uppercase;">Objectifs spécifiques soutenus</label>
+                                            <div class="checkbox-list-container" style="display: flex; flex-direction: column; gap: 0.5rem; margin-top: 0.25rem; background: #ffffff; border: 1px solid rgba(15, 118, 110, 0.12); border-radius: 0.75rem; padding: 0.75rem; max-height: 180px; overflow-y: auto;">
+                                                {% if allLifeGoals|length > 0 %}
+                                                    {% for lg in allLifeGoals %}
+                                                        <label style="display: flex; align-items: flex-start; gap: 0.5rem; font-size: 0.85rem; color: var(--fg-light); cursor: pointer; padding: 0.25rem 0; margin-bottom: 0;">
+                                                            <input type="checkbox" name="growth_connaissance_goals[{{ loop.parent.loop.index0 }}][]" value="{{ lg.id }}" {% if goal.supportedLifeGoals.contains(lg) %}checked{% endif %} style="margin-top: 0.2rem; cursor: pointer;">
+                                                            <span>[{{ lg.category|upper }}] {{ lg.title }}</span>
+                                                        </label>
+                                                    {% endfor %}
+                                                {% else %}
+                                                    <span style="font-size: 0.85rem; color: var(--fg-muted); font-style: italic;">Aucun objectif spécifique défini.</span>
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            {% else %}
+                                <div class="growth-goal-block" style="padding: 1.25rem; background: #F8FAFC; border: 1px solid rgba(15, 118, 110, 0.08); border-radius: 1.25rem; display: flex; flex-direction: column; gap: 0.75rem; position: relative;">
+                                    <div style="display: flex; flex-direction: column; gap: 0.25rem;">
+                                        <label style="font-size: 0.7rem; font-weight: 700; color: var(--fg-light); text-transform: uppercase;">Nom de la connaissance</label>
+                                        <input type="text" name="growth_connaissance_title[0]" class="wiz-input" placeholder="Ex: Finance d'entreprise" required>
+                                    </div>
+
+                                    <div style="display: flex; flex-direction: column; gap: 0.25rem;">
+                                        <label style="font-size: 0.7rem; font-weight: 700; color: var(--fg-light); text-transform: uppercase;">Statut d'acquisition</label>
+                                        <select name="growth_connaissance_status[0]" class="wiz-input" style="height: 42px; padding: 0.5rem 1rem;">
+                                            <option value="build" selected>À construire</option>
+                                            <option value="consolidate">À consolider</option>
+                                            <option value="leverage">À mettre à profit</option>
+                                            <option value="absence">Absence assumée</option>
+                                        </select>
+                                    </div>
+                                    <div style="display: flex; flex-direction: column; gap: 0.25rem;">
+                                        <label style="font-size: 0.7rem; font-weight: 700; color: var(--fg-light); text-transform: uppercase;">Objectifs spécifiques soutenus</label>
+                                        <div class="checkbox-list-container" style="display: flex; flex-direction: column; gap: 0.5rem; margin-top: 0.25rem; background: #ffffff; border: 1px solid rgba(15, 118, 110, 0.12); border-radius: 0.75rem; padding: 0.75rem; max-height: 180px; overflow-y: auto;">
+                                            {% if allLifeGoals|length > 0 %}
+                                                {% for lg in allLifeGoals %}
+                                                    <label style="display: flex; align-items: flex-start; gap: 0.5rem; font-size: 0.85rem; color: var(--fg-light); cursor: pointer; padding: 0.25rem 0; margin-bottom: 0;">
+                                                        <input type="checkbox" name="growth_connaissance_goals[0][]" value="{{ lg.id }}" style="margin-top: 0.2rem; cursor: pointer;">
+                                                        <span>[{{ lg.category|upper }}] {{ lg.title }}</span>
+                                                    </label>
+                                                {% endfor %}
+                                            {% else %}
+                                                <span style="font-size: 0.85rem; color: var(--fg-muted); font-style: italic;">Aucun objectif spécifique défini.</span>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+
+                {# ETAPE 9: CARACTÈRE (PLAN DE CROISSANCE) #}
+                {% if (not single and 9 in allowedSteps) or (single and step == 9) %}
+                <div data-wizard-target="step" class="{% if step != 9 %}hidden{% endif %} animate-fade-in" data-step-title="Caractère & Conviction">
+                    <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.75rem; color: var(--primary);">
+                        <i data-lucide="shield" style="width: 24px; height: 24px;"></i>
+                        <h2 style="font-family: 'Playfair Display', serif; font-size: 1.75rem; font-weight: 500;">Caractère & Conviction</h2>
+                    </div>
+                    <p style="color: var(--fg-muted); font-size: 0.95rem; margin-bottom: 1.75rem; line-height: 1.6;">
+                        Quelles facettes de votre personnalité ou de vos habitudes morales souhaitez-vous forger pour accroître votre résilience ou discipline ?
+                    </p>
+
+                    <div>
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
+                            <label style="font-size: 0.75rem; font-weight: 700; color: var(--fg-light); letter-spacing: 0.05em; text-transform: uppercase;">Traits de caractère cibles</label>
+                            <button type="button" class="btn-add" onclick="addGrowthGoal('character')">
+                                <i data-lucide="plus" style="width: 12px; height: 12px;"></i> Ajouter
+                            </button>
+                        </div>
+                        <div id="character-container" style="display: flex; flex-direction: column; gap: 1rem;">
+                            {% if growthGoals.CHARACTER|length > 0 %}
+                                {% for goal in growthGoals.CHARACTER %}
+                                    <div class="growth-goal-block" style="padding: 1.25rem; background: #F8FAFC; border: 1px solid rgba(15, 118, 110, 0.08); border-radius: 1.25rem; display: flex; flex-direction: column; gap: 0.75rem; position: relative;">
+                                        {% if not loop.first %}
+                                            <button type="button" onclick="this.parentElement.remove(); reindexGrowthGoals('character-container', 'character')" class="btn-remove" style="position: absolute; top: 0.5rem; right: 0.5rem;" title="Supprimer">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                                            </button>
+                                        {% endif %}
+                                        <div style="display: flex; flex-direction: column; gap: 0.25rem;">
+                                            <label style="font-size: 0.7rem; font-weight: 700; color: var(--fg-light); text-transform: uppercase;">Trait à forger</label>
+                                            <input type="text" name="growth_character_title[{{ loop.index0 }}]" class="wiz-input" value="{{ goal.title }}" required>
+                                        </div>
+                                        <div style="display: flex; flex-direction: column; gap: 0.25rem;">
+                                            <label style="font-size: 0.7rem; font-weight: 700; color: var(--fg-light); text-transform: uppercase;">Statut d'acquisition</label>
+                                            <select name="growth_character_status[{{ loop.index0 }}]" class="wiz-input" style="height: 42px; padding: 0.5rem 1rem;">
+                                                <option value="build" {% if goal.subtype == 'build' %}selected{% endif %}>À construire</option>
+                                                <option value="consolidate" {% if goal.subtype == 'consolidate' %}selected{% endif %}>À consolider</option>
+                                                <option value="leverage" {% if goal.subtype == 'leverage' %}selected{% endif %}>À mettre à profit</option>
+                                                <option value="absence" {% if goal.subtype == 'absence' %}selected{% endif %}>Absence assumée</option>
+                                            </select>
+                                        </div>
+                                        <div style="display: flex; flex-direction: column; gap: 0.25rem;">
+                                            <label style="font-size: 0.7rem; font-weight: 700; color: var(--fg-light); text-transform: uppercase;">Objectifs spécifiques soutenus</label>
+                                            <div class="checkbox-list-container" style="display: flex; flex-direction: column; gap: 0.5rem; margin-top: 0.25rem; background: #ffffff; border: 1px solid rgba(15, 118, 110, 0.12); border-radius: 0.75rem; padding: 0.75rem; max-height: 180px; overflow-y: auto;">
+                                                {% if allLifeGoals|length > 0 %}
+                                                    {% for lg in allLifeGoals %}
+                                                        <label style="display: flex; align-items: flex-start; gap: 0.5rem; font-size: 0.85rem; color: var(--fg-light); cursor: pointer; padding: 0.25rem 0; margin-bottom: 0;">
+                                                            <input type="checkbox" name="growth_character_goals[{{ loop.parent.loop.index0 }}][]" value="{{ lg.id }}" {% if goal.supportedLifeGoals.contains(lg) %}checked{% endif %} style="margin-top: 0.2rem; cursor: pointer;">
+                                                            <span>[{{ lg.category|upper }}] {{ lg.title }}</span>
+                                                        </label>
+                                                    {% endfor %}
+                                                {% else %}
+                                                    <span style="font-size: 0.85rem; color: var(--fg-muted); font-style: italic;">Aucun objectif spécifique défini.</span>
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            {% else %}
+                                <div class="growth-goal-block" style="padding: 1.25rem; background: #F8FAFC; border: 1px solid rgba(15, 118, 110, 0.08); border-radius: 1.25rem; display: flex; flex-direction: column; gap: 0.75rem; position: relative;">
+                                    <div style="display: flex; flex-direction: column; gap: 0.25rem;">
+                                        <label style="font-size: 0.7rem; font-weight: 700; color: var(--fg-light); text-transform: uppercase;">Trait à forger</label>
+                                        <input type="text" name="growth_character_title[0]" class="wiz-input" placeholder="Ex: Patience sous pression" required>
+                                    </div>
+                                    <div style="display: flex; flex-direction: column; gap: 0.25rem;">
+                                        <label style="font-size: 0.7rem; font-weight: 700; color: var(--fg-light); text-transform: uppercase;">Statut d'acquisition</label>
+                                        <select name="growth_character_status[0]" class="wiz-input" style="height: 42px; padding: 0.5rem 1rem;">
+                                            <option value="build" selected>À construire</option>
+                                            <option value="consolidate">À consolider</option>
+                                            <option value="leverage">À mettre à profit</option>
+                                            <option value="absence">Absence assumée</option>
+                                        </select>
+                                    </div>
+                                    <div style="display: flex; flex-direction: column; gap: 0.25rem;">
+                                        <label style="font-size: 0.7rem; font-weight: 700; color: var(--fg-light); text-transform: uppercase;">Objectifs spécifiques soutenus</label>
+                                        <div class="checkbox-list-container" style="display: flex; flex-direction: column; gap: 0.5rem; margin-top: 0.25rem; background: #ffffff; border: 1px solid rgba(15, 118, 110, 0.12); border-radius: 0.75rem; padding: 0.75rem; max-height: 180px; overflow-y: auto;">
+                                            {% if allLifeGoals|length > 0 %}
+                                                {% for lg in allLifeGoals %}
+                                                    <label style="display: flex; align-items: flex-start; gap: 0.5rem; font-size: 0.85rem; color: var(--fg-light); cursor: pointer; padding: 0.25rem 0; margin-bottom: 0;">
+                                                        <input type="checkbox" name="growth_character_goals[0][]" value="{{ lg.id }}" style="margin-top: 0.2rem; cursor: pointer;">
+                                                        <span>[{{ lg.category|upper }}] {{ lg.title }}</span>
+                                                    </label>
+                                                {% endfor %}
+                                            {% else %}
+                                                <span style="font-size: 0.85rem; color: var(--fg-muted); font-style: italic;">Aucun objectif spécifique défini.</span>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+
+                {# ETAPE 10: RELATIONS (PLAN DE CROISSANCE) #}
+                {% if (not single and 10 in allowedSteps) or (single and step == 10) %}
+                <div data-wizard-target="step" class="{% if step != 10 %}hidden{% endif %} animate-fade-in" data-step-title="Relation & Réseau">
+                    <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.75rem; color: var(--primary);">
+                        <i data-lucide="users" style="width: 24px; height: 24px;"></i>
+                        <h2 style="font-family: 'Playfair Display', serif; font-size: 1.75rem; font-weight: 500;">Relation & Réseau</h2>
+                    </div>
+                    <p style="color: var(--fg-muted); font-size: 0.95rem; margin-bottom: 1.75rem; line-height: 1.6;">
+                        Quels profils d'individus devez-vous intégrer à votre entourage (mentors, pairs, soutiens) pour catalyser votre réussite ?
+                    </p>
+
+                    <div>
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
+                            <label style="font-size: 0.75rem; font-weight: 700; color: var(--fg-light); letter-spacing: 0.05em; text-transform: uppercase;">Profils cibles</label>
+                            <button type="button" class="btn-add" onclick="addGrowthGoal('relation')">
+                                <i data-lucide="plus" style="width: 12px; height: 12px;"></i> Ajouter
+                            </button>
+                        </div>
+                        <div id="relation-container" style="display: flex; flex-direction: column; gap: 1rem;">
+                            {% if growthGoals.RELATION|length > 0 %}
+                                {% for goal in growthGoals.RELATION %}
+                                    <div class="growth-goal-block" style="padding: 1.25rem; background: #F8FAFC; border: 1px solid rgba(15, 118, 110, 0.08); border-radius: 1.25rem; display: flex; flex-direction: column; gap: 0.75rem; position: relative;">
+                                        {% if not loop.first %}
+                                            <button type="button" onclick="this.parentElement.remove(); reindexGrowthGoals('relation-container', 'relation')" class="btn-remove" style="position: absolute; top: 0.5rem; right: 0.5rem;" title="Supprimer">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                                            </button>
+                                        {% endif %}
+                                        <div style="display: flex; flex-direction: column; gap: 0.25rem;">
+                                            <label style="font-size: 0.7rem; font-weight: 700; color: var(--fg-light); text-transform: uppercase;">Profil visé</label>
+                                            <input type="text" name="growth_relation_title[{{ loop.index0 }}]" class="wiz-input" value="{{ goal.title }}" required>
+                                        </div>
+                                        <div style="display: flex; flex-direction: column; gap: 0.25rem;">
+                                            <label style="font-size: 0.7rem; font-weight: 700; color: var(--fg-light); text-transform: uppercase;">Catégorie de Réseau</label>
+                                            <select name="growth_relation_type[{{ loop.index0 }}]" class="wiz-input" style="height: 42px; padding: 0.5rem 1rem;">
+                                                <option value="orientation" {% if goal.type == 'orientation' %}selected{% endif %}>Réseau d'Orientation (Mentors, conseillers)</option>
+                                                <option value="croissance" {% if goal.type == 'croissance' %}selected{% endif %}>Réseau de Croissance (Pairs, masterminds)</option>
+                                                <option value="soutien" {% if goal.type == 'soutien' %}selected{% endif %}>Réseau de Soutien (Amis proches, famille)</option>
+                                                <option value="responsabilite" {% if goal.type == 'responsabilite' %}selected{% endif %}>Réseau de Responsabilité (Binômes d'imputabilité)</option>
+                                                <option value="environnement" {% if goal.type == 'environnement' %}selected{% endif %}>Réseau d'Environnement (Écosystème, bureau)</option>
+                                            </select>
+                                        </div>
+                                        <div style="display: flex; flex-direction: column; gap: 0.25rem;">
+                                            <label style="font-size: 0.7rem; font-weight: 700; color: var(--fg-light); text-transform: uppercase;">Statut d'acquisition</label>
+                                            <select name="growth_relation_status[{{ loop.index0 }}]" class="wiz-input" style="height: 42px; padding: 0.5rem 1rem;">
+                                                <option value="build" {% if goal.subtype == 'build' %}selected{% endif %}>À construire</option>
+                                                <option value="consolidate" {% if goal.subtype == 'consolidate' %}selected{% endif %}>À consolider</option>
+                                                <option value="leverage" {% if goal.subtype == 'leverage' %}selected{% endif %}>À mettre à profit</option>
+                                                <option value="absence" {% if goal.subtype == 'absence' %}selected{% endif %}>Absence assumée</option>
+                                            </select>
+                                        </div>
+                                        <div style="display: flex; flex-direction: column; gap: 0.25rem;">
+                                            <label style="font-size: 0.7rem; font-weight: 700; color: var(--fg-light); text-transform: uppercase;">Objectifs spécifiques soutenus</label>
+                                            <div class="checkbox-list-container" style="display: flex; flex-direction: column; gap: 0.5rem; margin-top: 0.25rem; background: #ffffff; border: 1px solid rgba(15, 118, 110, 0.12); border-radius: 0.75rem; padding: 0.75rem; max-height: 180px; overflow-y: auto;">
+                                                {% if allLifeGoals|length > 0 %}
+                                                    {% for lg in allLifeGoals %}
+                                                        <label style="display: flex; align-items: flex-start; gap: 0.5rem; font-size: 0.85rem; color: var(--fg-light); cursor: pointer; padding: 0.25rem 0; margin-bottom: 0;">
+                                                            <input type="checkbox" name="growth_relation_goals[{{ loop.parent.loop.index0 }}][]" value="{{ lg.id }}" {% if goal.supportedLifeGoals.contains(lg) %}checked{% endif %} style="margin-top: 0.2rem; cursor: pointer;">
+                                                            <span>[{{ lg.category|upper }}] {{ lg.title }}</span>
+                                                        </label>
+                                                    {% endfor %}
+                                                {% else %}
+                                                    <span style="font-size: 0.85rem; color: var(--fg-muted); font-style: italic;">Aucun objectif spécifique défini.</span>
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            {% else %}
+                                <div class="growth-goal-block" style="padding: 1.25rem; background: #F8FAFC; border: 1px solid rgba(15, 118, 110, 0.08); border-radius: 1.25rem; display: flex; flex-direction: column; gap: 0.75rem; position: relative;">
+                                    <div style="display: flex; flex-direction: column; gap: 0.25rem;">
+                                        <label style="font-size: 0.7rem; font-weight: 700; color: var(--fg-light); text-transform: uppercase;">Profil visé</label>
+                                        <input type="text" name="growth_relation_title[0]" class="wiz-input" placeholder="Ex: Un mentor expert en levée de fonds" required>
+                                    </div>
+                                    <div style="display: flex; flex-direction: column; gap: 0.25rem;">
+                                        <label style="font-size: 0.7rem; font-weight: 700; color: var(--fg-light); text-transform: uppercase;">Catégorie de Réseau</label>
+                                        <select name="growth_relation_type[0]" class="wiz-input" style="height: 42px; padding: 0.5rem 1rem;">
+                                            <option value="orientation" selected>Réseau d'Orientation (Mentors, conseillers)</option>
+                                            <option value="croissance">Réseau de Croissance (Pairs, masterminds)</option>
+                                            <option value="soutien">Réseau de Soutien (Amis proches, famille)</option>
+                                            <option value="responsabilite">Réseau de Responsabilité (Binômes d'imputabilité)</option>
+                                            <option value="environnement">Réseau d'Environnement (Écosystème, bureau)</option>
+                                        </select>
+                                    </div>
+                                    <div style="display: flex; flex-direction: column; gap: 0.25rem;">
+                                        <label style="font-size: 0.7rem; font-weight: 700; color: var(--fg-light); text-transform: uppercase;">Statut d'acquisition</label>
+                                        <select name="growth_relation_status[0]" class="wiz-input" style="height: 42px; padding: 0.5rem 1rem;">
+                                            <option value="build" selected>À construire</option>
+                                            <option value="consolidate">À consolider</option>
+                                            <option value="leverage">À mettre à profit</option>
+                                            <option value="absence">Absence assumée</option>
+                                        </select>
+                                    </div>
+                                    <div style="display: flex; flex-direction: column; gap: 0.25rem;">
+                                        <label style="font-size: 0.7rem; font-weight: 700; color: var(--fg-light); text-transform: uppercase;">Objectifs spécifiques soutenus</label>
+                                        <div class="checkbox-list-container" style="display: flex; flex-direction: column; gap: 0.5rem; margin-top: 0.25rem; background: #ffffff; border: 1px solid rgba(15, 118, 110, 0.12); border-radius: 0.75rem; padding: 0.75rem; max-height: 180px; overflow-y: auto;">
+                                            {% if allLifeGoals|length > 0 %}
+                                                {% for lg in allLifeGoals %}
+                                                    <label style="display: flex; align-items: flex-start; gap: 0.5rem; font-size: 0.85rem; color: var(--fg-light); cursor: pointer; padding: 0.25rem 0; margin-bottom: 0;">
+                                                        <input type="checkbox" name="growth_relation_goals[0][]" value="{{ lg.id }}" style="margin-top: 0.2rem; cursor: pointer;">
+                                                        <span>[{{ lg.category|upper }}] {{ lg.title }}</span>
+                                                    </label>
+                                                {% endfor %}
+                                            {% else %}
+                                                <span style="font-size: 0.85rem; color: var(--fg-muted); font-style: italic;">Aucun objectif spécifique défini.</span>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+
+                {# ETAPE 11: TRANSMISSION #}
+                {% if (not single and 11 in allowedSteps) or (single and step == 11) %}
+                <div data-wizard-target="step" class="{% if step != 11 %}hidden{% endif %} animate-fade-in" data-step-title="Héritage & Transmission">
+                    <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.75rem; color: var(--primary);">
+                        <i data-lucide="gift" style="width: 24px; height: 24px;"></i>
+                        <h2 style="font-family: 'Playfair Display', serif; font-size: 1.75rem; font-weight: 500;">Héritage & Impact</h2>
+                    </div>
+                    <p style="color: var(--fg-muted); font-size: 0.95rem; margin-bottom: 1.75rem; line-height: 1.6;">
+                        Héritage & Transmission : quel impact durable souhaitez-vous laisser ? Que désirez-vous transmettre (savoirs, fonds, fondation, valeurs) ? Ces projets sont par défaut orientés pour soutenir vos objectifs de type <strong>GIVE</strong>.
+                    </p>
+
+                    <div>
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
+                            <label style="font-size: 0.75rem; font-weight: 700; color: var(--fg-light); letter-spacing: 0.05em; text-transform: uppercase;">Projets de transmission</label>
+                            <button type="button" class="btn-add" onclick="addLegacyGoal()">
+                                <i data-lucide="plus" style="width: 12px; height: 12px;"></i> Ajouter
+                            </button>
+                        </div>
+                        <div id="legacy-container" style="display: flex; flex-direction: column; gap: 1rem;">
+                            {% if legacyGoals|length > 0 %}
+                                {% for lg in legacyGoals %}
+                                    <div class="legacy-goal-block" style="padding: 1.25rem; background: #F8FAFC; border: 1px solid rgba(15, 118, 110, 0.08); border-radius: 1.25rem; display: flex; flex-direction: column; gap: 0.75rem; position: relative;">
+                                        {% if not loop.first %}
+                                            <button type="button" onclick="this.parentElement.remove(); reindexLegacyGoals()" class="btn-remove" style="position: absolute; top: 0.5rem; right: 0.5rem;" title="Supprimer">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                                            </button>
+                                        {% endif %}
+                                        <div style="display: flex; flex-direction: column; gap: 0.25rem;">
+                                            <label style="font-size: 0.7rem; font-weight: 700; color: var(--fg-light); text-transform: uppercase;">Nom du projet de transmission</label>
+                                            <input type="text" name="legacy_title[{{ loop.index0 }}]" class="wiz-input" value="{{ lg.title }}" placeholder="Ex: Financer une bourse d'études annuelle" required>
+                                        </div>
+                                        <div style="display: flex; flex-direction: column; gap: 0.25rem;">
+                                            <label style="font-size: 0.7rem; font-weight: 700; color: var(--fg-light); text-transform: uppercase;">Statut d'acquisition / Mobilisation</label>
+                                            <select name="legacy_status[{{ loop.index0 }}]" class="wiz-input" style="height: 42px; padding: 0.5rem 1rem;">
+                                                <option value="build" {% if lg.subtype == 'build' or lg.subtype == '' %}selected{% endif %}>À construire</option>
+                                                <option value="consolidate" {% if lg.subtype == 'consolidate' %}selected{% endif %}>À consolider</option>
+                                                <option value="leverage" {% if lg.subtype == 'leverage' %}selected{% endif %}>À mettre à profit</option>
+                                                <option value="absence" {% if lg.subtype == 'absence' %}selected{% endif %}>Absence assumée</option>
+                                            </select>
+                                        </div>
+                                        <div style="display: flex; flex-direction: column; gap: 0.25rem;">
+                                            <label style="font-size: 0.7rem; font-weight: 700; color: var(--fg-light); text-transform: uppercase;">Objectifs spécifiques soutenus</label>
+                                            <div class="checkbox-list-container" style="display: flex; flex-direction: column; gap: 0.5rem; margin-top: 0.25rem; background: #ffffff; border: 1px solid rgba(15, 118, 110, 0.12); border-radius: 0.75rem; padding: 0.75rem; max-height: 180px; overflow-y: auto;">
+                                                {% if allLifeGoals|length > 0 %}
+                                                    {% for lgGoal in allLifeGoals %}
+                                                        <label style="display: flex; align-items: flex-start; gap: 0.5rem; font-size: 0.85rem; color: var(--fg-light); cursor: pointer; padding: 0.25rem 0; margin-bottom: 0;">
+                                                            <input type="checkbox" name="legacy_goals[{{ loop.parent.loop.index0 }}][]" value="{{ lgGoal.id }}" {% if lg.supportedLifeGoals.contains(lgGoal) %}checked{% endif %} style="margin-top: 0.2rem; cursor: pointer;">
+                                                            <span>[{{ lgGoal.category|upper }}] {{ lgGoal.title }}</span>
+                                                        </label>
+                                                    {% endfor %}
+                                                {% else %}
+                                                    <span style="font-size: 0.85rem; color: var(--fg-muted); font-style: italic;">Aucun objectif spécifique défini.</span>
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            {% else %}
+                                <div class="legacy-goal-block" style="padding: 1.25rem; background: #F8FAFC; border: 1px solid rgba(15, 118, 110, 0.08); border-radius: 1.25rem; display: flex; flex-direction: column; gap: 0.75rem; position: relative;">
+                                    <div style="display: flex; flex-direction: column; gap: 0.25rem;">
+                                        <label style="font-size: 0.7rem; font-weight: 700; color: var(--fg-light); text-transform: uppercase;">Nom du projet de transmission</label>
+                                        <input type="text" name="legacy_title[0]" class="wiz-input" placeholder="Ex: Financer une bourse d'études annuelle" required>
+                                    </div>
+                                    <div style="display: flex; flex-direction: column; gap: 0.25rem;">
+                                        <label style="font-size: 0.7rem; font-weight: 700; color: var(--fg-light); text-transform: uppercase;">Statut d'acquisition / Mobilisation</label>
+                                        <select name="legacy_status[0]" class="wiz-input" style="height: 42px; padding: 0.5rem 1rem;">
+                                            <option value="build" selected>À construire</option>
+                                            <option value="consolidate">À consolider</option>
+                                            <option value="leverage">À mettre à profit</option>
+                                            <option value="absence">Absence assumée</option>
+                                        </select>
+                                    </div>
+                                    <div style="display: flex; flex-direction: column; gap: 0.25rem;">
+                                        <label style="font-size: 0.7rem; font-weight: 700; color: var(--fg-light); text-transform: uppercase;">Objectifs spécifiques soutenus</label>
+                                        <div class="checkbox-list-container" style="display: flex; flex-direction: column; gap: 0.5rem; margin-top: 0.25rem; background: #ffffff; border: 1px solid rgba(15, 118, 110, 0.12); border-radius: 0.75rem; padding: 0.75rem; max-height: 180px; overflow-y: auto;">
+                                            {% if allLifeGoals|length > 0 %}
+                                                {% for lgGoal in allLifeGoals %}
+                                                    <label style="display: flex; align-items: flex-start; gap: 0.5rem; font-size: 0.85rem; color: var(--fg-light); cursor: pointer; padding: 0.25rem 0; margin-bottom: 0;">
+                                                        <input type="checkbox" name="legacy_goals[0][]" value="{{ lgGoal.id }}" style="margin-top: 0.2rem; cursor: pointer;">
+                                                        <span>[{{ lgGoal.category|upper }}] {{ lgGoal.title }}</span>
+                                                    </label>
+                                                {% endfor %}
+                                            {% else %}
+                                                <span style="font-size: 0.85rem; color: var(--fg-muted); font-style: italic;">Aucun objectif spécifique défini.</span>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+
+                {# ETAPE 12: HYGIENE #}
+                {% if (not single and 12 in allowedSteps) or (single and step == 12) %}
+                <div data-wizard-target="step" class="{% if step != 12 %}hidden{% endif %} animate-fade-in" data-step-title="Hygiène de Vie">
+                    <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.75rem; color: var(--primary);">
+                        <i data-lucide="heart-pulse" style="width: 24px; height: 24px;"></i>
+                        <h2 style="font-family: 'Playfair Display', serif; font-size: 1.75rem; font-weight: 500;">Hygiène de Vie</h2>
+                    </div>
+                    <p style="color: var(--fg-muted); font-size: 0.95rem; margin-bottom: 1.25rem; line-height: 1.6;">
+                        Le socle de votre énergie physique et mentale. Quels domaines de votre hygiène de vie souhaitez-vous structurer ?
+                    </p>
+
+                    {% if hygieneTest is not null %}
+                        <div style="padding: 1rem 1.25rem; background: rgba(15, 118, 110, 0.05); border: 1px dashed rgba(15, 118, 110, 0.3); border-radius: 1rem; margin-bottom: 1.25rem; display: flex; align-items: flex-start; gap: 0.75rem;">
+                            <i data-lucide="info" style="width: 20px; height: 20px; color: var(--primary); flex-shrink: 0; margin-top: 0.1rem;"></i>
+                            <div style="font-size: 0.88rem; color: var(--fg-light); line-height: 1.5;">
+                                <strong style="color: var(--primary);">Test d'Hygiène détecté !</strong> Les domaines et statuts de mobilisation ci-dessous ont été pré-remplis à partir de vos scores d'auto-évaluation du test passé le {{ hygieneTest.date|date('d/m/Y') }}.
+                            </div>
+                        </div>
+
+                        {% if hygieneTestScores is not null %}
+                            <div class="test-scores-summary" style="margin-bottom: 2rem; background: #ffffff; border: 1px solid rgba(15, 118, 110, 0.12); border-radius: 1.25rem; padding: 1.5rem; box-shadow: 0 4px 20px rgba(0,0,0,0.02);">
+                                <h4 style="margin: 0 0 1rem 0; font-size: 1.02rem; font-family: 'Playfair Display', serif; color: var(--primary); display: flex; align-items: center; gap: 0.5rem; font-weight: 600;">
+                                    <i data-lucide="bar-chart-2" style="width: 18px; height: 18px; color: var(--primary);"></i>
+                                    Synthèse de votre test du {{ hygieneTest.date|date('d/m/Y') }}
+                                </h4>
+                                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1rem;">
+                                    {% for categoryKey, score in hygieneTestScores.axes %}
+                                        {% set categoryName = categoryKey == 'physique' ? 'Physique' : 
+                                                             (categoryKey == 'mental' ? 'Mental' : 
+                                                             (categoryKey == 'relationnel' ? 'Relationnel' : 
+                                                             (categoryKey == 'spirituel' ? 'Spirituel' : 
+                                                             (categoryKey == 'ressources' ? 'Ressources' : 
+                                                             (categoryKey == 'environnement' ? 'Environnement' : categoryKey|capitalize))))) %}
+                                        <div style="padding: 0.85rem; background: #F8FAFC; border-radius: 1rem; border: 1px solid rgba(15, 118, 110, 0.05); display: flex; flex-direction: column; gap: 0.6rem;">
+                                            <div style="display: flex; justify-content: space-between; align-items: center;">
+                                                <span style="font-weight: 750; font-size: 0.88rem; color: var(--fg-light);">{{ categoryName }}</span>
+                                                <span style="font-size: 0.8rem; font-weight: 800; padding: 0.15rem 0.45rem; border-radius: 5px;
+                                                    {% if score >= 7.0 %}background: #ECFDF5; color: #059669;
+                                                    {% elseif score >= 4.0 %}background: #FFFBEB; color: #D97706;
+                                                    {% else %}background: #FEF2F2; color: #EF4444;{% endif %}">
+                                                    {{ score }}/10
+                                                </span>
+                                            </div>
+                                            {% if hygieneTestScores.details[categoryKey] is defined %}
+                                                <div style="display: flex; flex-direction: column; gap: 0.35rem; padding-top: 0.4rem; border-top: 1px dashed rgba(15, 118, 110, 0.08);">
+                                                    {% for subtheme, subScore in hygieneTestScores.details[categoryKey] %}
+                                                        <div style="display: flex; justify-content: space-between; align-items: center; font-size: 0.78rem; color: var(--fg-muted);">
+                                                            <span style="display: flex; align-items: center; gap: 0.25rem;">
+                                                                <i data-lucide="{% if subScore >= 7.0 %}check-circle-2{% else %}alert-circle{% endif %}" 
+                                                                   style="width: 11px; height: 11px; color: {% if subScore >= 7.0 %}#059669{% else %}#D97706{% endif %}; flex-shrink: 0;"></i>
+                                                                {{ subtheme }}
+                                                            </span>
+                                                            <span style="font-weight: 600; color: {% if subScore >= 7.0 %}#059669{% elseif subScore >= 4.0 %}#D97706{% else %}#EF4444{% endif %};">
+                                                                {{ subScore }}/10
+                                                            </span>
+                                                        </div>
+                                                    {% endfor %}
+                                                </div>
+                                            {% endif %}
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        {% endif %}
+                    {% else %}
+                        <div style="padding: 1rem 1.25rem; background: rgba(236, 72, 153, 0.05); border: 1px dashed rgba(236, 72, 153, 0.3); border-radius: 1rem; margin-bottom: 1.75rem; display: flex; align-items: flex-start; gap: 0.75rem;">
+                            <i data-lucide="help-circle" style="width: 20px; height: 20px; color: #ec4899; flex-shrink: 0; margin-top: 0.1rem;"></i>
+                            <div style="font-size: 0.88rem; color: var(--fg-light); line-height: 1.5;">
+                                <strong style="color: #ec4899;">Audit d'Hygiène non détecté.</strong> Vous pouvez <a href="{{ path('app_personality_take', { type: 'HYGIENE' }) }}" style="color: #ec4899; text-decoration: underline; font-weight: 600;">passer le test d'Hygiène de vie</a> pour pré-remplir automatiquement ces domaines selon vos forces et faiblesses actuelles.
+                            </div>
+                        </div>
+                    {% endif %}
+
+                    <div>
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
+                            <label style="font-size: 0.75rem; font-weight: 700; color: var(--fg-light); letter-spacing: 0.05em; text-transform: uppercase;">Domaines d'hygiène</label>
+                            <button type="button" class="btn-add" onclick="addHygieneDomain()">
+                                <i data-lucide="plus" style="width: 12px; height: 12px;"></i> Ajouter
+                            </button>
+                        </div>
+                        <div id="hygiene-container" style="display: flex; flex-direction: column; gap: 1rem;">
+                            {% if hygieneDomains|length > 0 %}
+                                {% for hd in hygieneDomains %}
+                                    <div class="hygiene-domain-block" style="padding: 1.25rem; background: #F8FAFC; border: 1px solid rgba(15, 118, 110, 0.08); border-radius: 1.25rem; display: flex; flex-direction: column; gap: 0.75rem; position: relative;">
+                                        {% if not loop.first %}
+                                            <button type="button" onclick="this.parentElement.remove(); reindexHygieneDomains()" class="btn-remove" style="position: absolute; top: 0.5rem; right: 0.5rem;" title="Supprimer">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                                            </button>
+                                        {% endif %}
+                                        <div style="display: flex; flex-direction: column; gap: 0.25rem;">
+                                            <label style="font-size: 0.7rem; font-weight: 700; color: var(--fg-light); text-transform: uppercase;">Nom du domaine d'hygiène</label>
+                                            <input type="text" name="hygiene_name[{{ loop.index0 }}]" class="wiz-input" value="{{ hd.name }}" placeholder="Ex: Sommeil (Rituel de coucher à 22h30 max)" required>
+                                        </div>
+                                        <div style="display: flex; flex-direction: column; gap: 0.25rem;">
+                                            <label style="font-size: 0.7rem; font-weight: 700; color: var(--fg-light); text-transform: uppercase;">Statut d'acquisition / Mobilisation</label>
+                                            <select name="hygiene_status[{{ loop.index0 }}]" class="wiz-input" style="height: 42px; padding: 0.5rem 1rem;">
+                                                <option value="build" {% if hd.subtype == 'build' or hd.subtype == '' %}selected{% endif %}>À construire</option>
+                                                <option value="consolidate" {% if hd.subtype == 'consolidate' %}selected{% endif %}>À consolider</option>
+                                                <option value="leverage" {% if hd.subtype == 'leverage' %}selected{% endif %}>À mettre à profit</option>
+                                                <option value="absence" {% if hd.subtype == 'absence' %}selected{% endif %}>Absence assumée</option>
+                                            </select>
+                                        </div>
+                                        <div style="display: flex; flex-direction: column; gap: 0.25rem;">
+                                            <label style="font-size: 0.7rem; font-weight: 700; color: var(--fg-light); text-transform: uppercase;">Objectifs spécifiques soutenus</label>
+                                            <div class="checkbox-list-container" style="display: flex; flex-direction: column; gap: 0.5rem; margin-top: 0.25rem; background: #ffffff; border: 1px solid rgba(15, 118, 110, 0.12); border-radius: 0.75rem; padding: 0.75rem; max-height: 180px; overflow-y: auto;">
+                                                {% if allLifeGoals|length > 0 %}
+                                                    {% for lgGoal in allLifeGoals %}
+                                                        <label style="display: flex; align-items: flex-start; gap: 0.5rem; font-size: 0.85rem; color: var(--fg-light); cursor: pointer; padding: 0.25rem 0; margin-bottom: 0;">
+                                                            <input type="checkbox" name="hygiene_goals[{{ loop.parent.loop.index0 }}][]" value="{{ lgGoal.id }}" {% if hd.supportedLifeGoals.contains(lgGoal) %}checked{% endif %} style="margin-top: 0.2rem; cursor: pointer;">
+                                                            <span>[{{ lgGoal.category|upper }}] {{ lgGoal.title }}</span>
+                                                        </label>
+                                                    {% endfor %}
+                                                {% else %}
+                                                    <span style="font-size: 0.85rem; color: var(--fg-muted); font-style: italic;">Aucun objectif spécifique défini.</span>
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            {% else %}
+                                <div class="hygiene-domain-block" style="padding: 1.25rem; background: #F8FAFC; border: 1px solid rgba(15, 118, 110, 0.08); border-radius: 1.25rem; display: flex; flex-direction: column; gap: 0.75rem; position: relative;">
+                                    <div style="display: flex; flex-direction: column; gap: 0.25rem;">
+                                        <label style="font-size: 0.7rem; font-weight: 700; color: var(--fg-light); text-transform: uppercase;">Nom du domaine d'hygiène</label>
+                                        <input type="text" name="hygiene_name[0]" class="wiz-input" placeholder="Ex: Sommeil (Rituel de coucher à 22h30 max)" required>
+                                    </div>
+                                    <div style="display: flex; flex-direction: column; gap: 0.25rem;">
+                                        <label style="font-size: 0.7rem; font-weight: 700; color: var(--fg-light); text-transform: uppercase;">Statut d'acquisition / Mobilisation</label>
+                                        <select name="hygiene_status[0]" class="wiz-input" style="height: 42px; padding: 0.5rem 1rem;">
+                                            <option value="build" selected>À construire</option>
+                                            <option value="consolidate">À consolider</option>
+                                            <option value="leverage">À mettre à profit</option>
+                                            <option value="absence">Absence assumée</option>
+                                        </select>
+                                    </div>
+                                    <div style="display: flex; flex-direction: column; gap: 0.25rem;">
+                                        <label style="font-size: 0.7rem; font-weight: 700; color: var(--fg-light); text-transform: uppercase;">Objectifs spécifiques soutenus</label>
+                                        <div class="checkbox-list-container" style="display: flex; flex-direction: column; gap: 0.5rem; margin-top: 0.25rem; background: #ffffff; border: 1px solid rgba(15, 118, 110, 0.12); border-radius: 0.75rem; padding: 0.75rem; max-height: 180px; overflow-y: auto;">
+                                            {% if allLifeGoals|length > 0 %}
+                                                {% for lgGoal in allLifeGoals %}
+                                                    <label style="display: flex; align-items: flex-start; gap: 0.5rem; font-size: 0.85rem; color: var(--fg-light); cursor: pointer; padding: 0.25rem 0; margin-bottom: 0;">
+                                                        <input type="checkbox" name="hygiene_goals[0][]" value="{{ lgGoal.id }}" style="margin-top: 0.2rem; cursor: pointer;">
+                                                        <span>[{{ lgGoal.category|upper }}] {{ lgGoal.title }}</span>
+                                                    </label>
+                                                {% endfor %}
+                                            {% else %}
+                                                <span style="font-size: 0.85rem; color: var(--fg-muted); font-style: italic;">Aucun objectif spécifique défini.</span>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+
+                {# ETAPE 13: ECHEANCIER #}
+                {% if (not single and 13 in allowedSteps) or (single and step == 13) %}
+                <div data-wizard-target="step" class="{% if step != 13 %}hidden{% endif %} animate-fade-in" data-step-title="Mon Échéancier">
+                    <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.75rem; color: var(--primary);">
+                        <i data-lucide="calendar" style="width: 24px; height: 24px;"></i>
+                        <h2 style="font-family: 'Playfair Display', serif; font-size: 1.75rem; font-weight: 500;">Mon Échéancier</h2>
+                    </div>
+                    
+                    <div style="display: flex; flex-direction: column; align-items: center; text-align: center; padding: 2.5rem 1.5rem; background: rgba(15, 118, 110, 0.04); border: 1px solid rgba(15, 118, 110, 0.1); border-radius: 1.5rem; margin-top: 1rem; gap: 1rem;">
+                        <div style="width: 3.5rem; height: 3.5rem; border-radius: 50%; background: white; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 12px rgba(0,0,0,0.04);">
+                            <i data-lucide="check" style="width: 28px; height: 28px; color: var(--primary);"></i>
+                        </div>
+                        <h3 style="font-family: 'Playfair Display', serif; font-size: 1.35rem; color: var(--primary); font-weight: 500;">Félicitations !</h3>
+                        <p style="color: var(--fg-light); font-size: 0.95rem; line-height: 1.6; max-width: 28rem;">
+                            Votre plan global de vie est complété. En sauvegardant, KIINI SAWA va structurer vos piliers de croissance et y rattacher vos objectifs.
+                        </p>
+                        <p style="color: var(--fg-muted); font-size: 0.85rem; max-width: 24rem;">
+                            Vous pourrez configurer des échéances et des jalons temporels interactifs directement depuis votre tableau de bord.
+                        </p>
+                    </div>
+                </div>
+                {% endif %}
+
+            </div>
+
+            <!-- Footer Navigation Buttons -->
+            <div style="margin-top: auto; padding-top: 1.5rem; border-top: 1px solid rgba(15, 118, 110, 0.05); display: flex; justify-content: space-between; align-items: center; background: white;">
+                {% if single %}
+                    <a href="{{ plan ? path('app_user_strategies', { plan: plan }) : path('app_user_life_plan') }}" 
+                       style="padding: 0.75rem 1.5rem; border-radius: 12px; background: #F1F5F9; color: #475569; border: none; font-size: 0.9rem; font-weight: 700; cursor: pointer; transition: all 0.2s;"
+                       onmouseover="this.style.background='#E2E8F0'"
+                       onmouseout="this.style.background='#F1F5F9'">
+                        Annuler
+                    </a>
+                    
+                    <button type="submit" 
+                            name="save_single"
+                            style="padding: 0.75rem 1.75rem; border-radius: 12px; background: linear-gradient(135deg, #0D9488 0%, #0F766E 100%); color: white; border: none; font-size: 0.9rem; font-weight: 700; cursor: pointer; transition: all 0.2s; box-shadow: 0 4px 14px rgba(15, 118, 110, 0.3);"
+                            onmouseover="this.style.opacity='0.95'"
+                            onmouseout="this.style.opacity='1'">
+                        Enregistrer les modifications
+                    </button>
+                {% else %}
+                    <button type="button" 
+                            data-action="click->wizard#previous" 
+                            data-wizard-target="prevButton"
+                            style="padding: 0.75rem 1.5rem; border-radius: 12px; background: #F1F5F9; color: #475569; border: none; font-size: 0.9rem; font-weight: 700; cursor: pointer; transition: all 0.2s;"
+                            onmouseover="this.style.background='#E2E8F0'"
+                            onmouseout="this.style.background='#F1F5F9'"
+                            class="invisible">
+                        Précédent
+                    </button>
+                    
+                    <button type="button" 
+                            data-action="click->wizard#next"
+                            data-wizard-target="nextButton"
+                            style="padding: 0.75rem 1.75rem; border-radius: 12px; background: var(--primary); color: white; border: none; font-size: 0.9rem; font-weight: 700; cursor: pointer; transition: all 0.2s; box-shadow: 0 4px 12px rgba(15, 118, 110, 0.2);"
+                            onmouseover="this.style.background='var(--primary-dark)'"
+                            onmouseout="this.style.background='var(--primary)'">
+                        Continuer
+                    </button>
+ 
+                    <button type="submit" 
+                            data-wizard-target="submitButton"
+                            style="padding: 0.75rem 1.75rem; border-radius: 12px; background: linear-gradient(135deg, #0D9488 0%, #0F766E 100%); color: white; border: none; font-size: 0.9rem; font-weight: 700; cursor: pointer; transition: all 0.2s; box-shadow: 0 4px 14px rgba(15, 118, 110, 0.3);"
+                            onmouseover="this.style.opacity='0.95'"
+                            onmouseout="this.style.opacity='1'"
+                            class="hidden">
+                        Sauvegarder mon Plan
+                    </button>
+                {% endif %}
+            </div>
+        </form>
+ 
+    </div>
+</div>
+
+<script>
+    // Helper function to create dynamic row deletion button
+    function createDeleteButton() {
+        return `
+            <button type="button" onclick="this.parentElement.remove()" class="btn-remove" title="Supprimer">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+            </button>
+        `;
+    }
+
+    function addValueReal() {
+        const container = document.getElementById('values-real-container');
+        const html = `
+            <div class="dynamic-row">
+                <input type="text" name="values_real[]" class="wiz-input" style="border:none; background:transparent; padding:0;" placeholder="Ex: Excellence" required>
+                ${createDeleteButton()}
+            </div>
+        `;
+        container.insertAdjacentHTML('beforeend', html);
+    }
+
+    function addValueDeclared() {
+        const container = document.getElementById('values-declared-container');
+        const html = `
+            <div class="dynamic-row">
+                <input type="text" name="values_declared[]" class="wiz-input" style="border:none; background:transparent; padding:0;" placeholder="Ex: Impact" required>
+                ${createDeleteButton()}
+            </div>
+        `;
+        container.insertAdjacentHTML('beforeend', html);
+    }
+
+    function addValueCounter() {
+        const container = document.getElementById('values-counter-container');
+        const html = `
+            <div class="dynamic-row">
+                <input type="text" name="values_counter[]" class="wiz-input" style="border:none; background:transparent; padding:0;" placeholder="Ex: Validation Externe" required>
+                ${createDeleteButton()}
+            </div>
+        `;
+        container.insertAdjacentHTML('beforeend', html);
+    }
+
+    function addConvictionDeep() {
+        const container = document.getElementById('convictions-deep-container');
+        const html = `
+            <div class="dynamic-row">
+                <input type="text" name="convictions_deep[]" class="wiz-input" style="border:none; background:transparent; padding:0;" placeholder="Ex: L'intégrité personnelle est la base de toute influence durable" required>
+                ${createDeleteButton()}
+            </div>
+        `;
+        container.insertAdjacentHTML('beforeend', html);
+    }
+
+    function addConvictionMedium() {
+        const container = document.getElementById('convictions-medium-container');
+        const html = `
+            <div class="dynamic-row">
+                <input type="text" name="convictions_medium[]" class="wiz-input" style="border:none; background:transparent; padding:0;" placeholder="Ex: La discipline quotidienne produit des résultats exponentiels" required>
+                ${createDeleteButton()}
+            </div>
+        `;
+        container.insertAdjacentHTML('beforeend', html);
+    }
+
+    function addConvictionLight() {
+        const container = document.getElementById('convictions-light-container');
+        const html = `
+            <div class="dynamic-row">
+                <input type="text" name="convictions_light[]" class="wiz-input" style="border:none; background:transparent; padding:0;" placeholder="Ex: Le travail à distance asynchrone est plus productif" required>
+                ${createDeleteButton()}
+            </div>
+        `;
+        container.insertAdjacentHTML('beforeend', html);
+    }
+
+    function addLimitingBelief() {
+        const container = document.getElementById('limiting-beliefs-container');
+        const html = `
+            <div class="dynamic-row">
+                <input type="text" name="limiting_beliefs[]" class="wiz-input" style="border:none; background:transparent; padding:0;" placeholder="Ex: Je ne suis pas créatif" required>
+                ${createDeleteButton()}
+            </div>
+        `;
+        container.insertAdjacentHTML('beforeend', html);
+    }
+
+    function addPassion() {
+        const container = document.getElementById('passions-container');
+        const html = `
+            <div class="dynamic-row">
+                <input type="text" name="passions[]" class="wiz-input" style="border:none; background:transparent; padding:0;" placeholder="Ex: La cuisine bistronomique" required>
+                ${createDeleteButton()}
+            </div>
+        `;
+        container.insertAdjacentHTML('beforeend', html);
+    }
+
+    // Add dynamic row for simple list types (passions, talents, goals, etc.)
+    function addTalent() {
+        const container = document.getElementById('talents-container');
+        const html = `
+            <div class="dynamic-row">
+                <input type="text" name="talents[]" class="wiz-input" style="border:none; background:transparent; padding:0;" placeholder="Ex: Capacité d'adaptation ultra-rapide" required>
+                ${createDeleteButton()}
+            </div>
+        `;
+        container.insertAdjacentHTML('beforeend', html);
+    }
+
+    function addLifeGoal(category) {
+        const container = document.getElementById(`life-goals-${category}-container`);
+        const placeholderText = {
+            be: 'Ex: Un leader inspirant',
+            do: 'Ex: Ouvrir un restaurant',
+            have: 'Ex: Une maison en bord de mer',
+            give: 'Ex: Publier des guides de formation'
+        }[category] || '';
+
+        const html = `
+            <div class="dynamic-row" style="flex-wrap: wrap;">
+                <input type="text" name="life_goals_${category}[]" class="wiz-input" style="border:none; background:transparent; padding:0; flex: 1; min-width: 200px;" placeholder="${placeholderText}" required>
+                <div style="display: flex; align-items: center; gap: 0.5rem; background: #ffffff; border: 1px solid rgba(15, 118, 110, 0.12); border-radius: 0.5rem; padding: 0.25rem 0.5rem; margin-left: auto;">
+                    <span style="font-size: 0.75rem; color: var(--fg-muted);">Échéance :</span>
+                    <input type="date" name="life_goals_${category}_deadlines[]" class="wiz-input" style="border:none; background:transparent; padding:0; font-size: 0.8rem; width: 125px; color: var(--fg-light); outline: none;">
+                </div>
+                ${createDeleteButton()}
+            </div>
+        `;
+        container.insertAdjacentHTML('beforeend', html);
+    }
+
+    const allLifeGoals = [
+        {% for lg in allLifeGoals %}
+            { id: {{ lg.id }}, title: "{{ lg.title|escape('js') }}", category: "{{ lg.category|escape('js') }}" },
+        {% endfor %}
+    ];
+
+    function getLifeGoalsCheckboxesHtml(axis, index) {
+        if (allLifeGoals.length === 0) {
+            return `<span style="font-size: 0.85rem; color: var(--fg-muted); font-style: italic;">Aucun objectif spécifique défini.</span>`;
+        }
+        let html = `<div class="checkbox-list-container" style="display: flex; flex-direction: column; gap: 0.5rem; margin-top: 0.25rem; background: #ffffff; border: 1px solid rgba(15, 118, 110, 0.12); border-radius: 0.75rem; padding: 0.75rem; max-height: 180px; overflow-y: auto;">`;
+        allLifeGoals.forEach(lg => {
+            const catLabel = lg.category.toUpperCase();
+            html += `
+                <label style="display: flex; align-items: flex-start; gap: 0.5rem; font-size: 0.85rem; color: var(--fg-light); cursor: pointer; padding: 0.25rem 0; margin-bottom: 0;">
+                    <input type="checkbox" name="growth_${axis}_goals[${index}][]" value="${lg.id}" style="margin-top: 0.2rem; cursor: pointer;">
+                    <span>[${catLabel}] ${lg.title}</span>
+                </label>
+            `;
+        });
+        html += `</div>`;
+        return html;
+    }
+
+    function reindexGrowthGoals(containerId, axis) {
+        const container = document.getElementById(containerId);
+        if (!container) return;
+        const blocks = container.querySelectorAll('.growth-goal-block');
+        blocks.forEach((block, index) => {
+            const titleInput = block.querySelector(`[name^="growth_${axis}_title"]`);
+            if (titleInput) titleInput.name = `growth_${axis}_title[${index}]`;
+            
+            const strategyTextarea = block.querySelector(`[name^="growth_${axis}_strategy"]`);
+            if (strategyTextarea) strategyTextarea.name = `growth_${axis}_strategy[${index}]`;
+            
+            const typeSelect = block.querySelector(`[name^="growth_${axis}_type"]`);
+            if (typeSelect) typeSelect.name = `growth_${axis}_type[${index}]`;
+            
+            const statusSelect = block.querySelector(`[name^="growth_${axis}_status"]`);
+            if (statusSelect) statusSelect.name = `growth_${axis}_status[${index}]`;
+            
+            const checkboxes = block.querySelectorAll(`[name^="growth_${axis}_goals"]`);
+            checkboxes.forEach(checkbox => {
+                checkbox.name = `growth_${axis}_goals[${index}][]`;
+            });
+        });
+    }
+
+    function addGrowthGoal(axis) {
+        const container = document.getElementById(`${axis}-container`);
+        if (!container) return;
+        const index = container.querySelectorAll('.growth-goal-block').length;
+        const placeHolderMap = {
+            competence: { title: 'Nom de la compétence' },
+            connaissance: { title: 'Nom de la connaissance' },
+            character: { title: 'Trait à forger' },
+            relation: { title: 'Profil visé' }
+        }[axis];
+
+        const typeSelectHtml = axis !== 'relation' ? '' : `
+            <div style="display: flex; flex-direction: column; gap: 0.25rem;">
+                <label style="font-size: 0.7rem; font-weight: 700; color: var(--fg-light); text-transform: uppercase;">Catégorie de Réseau</label>
+                <select name="growth_${axis}_type[${index}]" class="wiz-input" style="height: 42px; padding: 0.5rem 1rem;">
+                    <option value="orientation" selected>Réseau d'Orientation (Mentors, conseillers)</option>
+                    <option value="croissance">Réseau de Croissance (Pairs, masterminds)</option>
+                    <option value="soutien">Réseau de Soutien (Amis proches, famille)</option>
+                    <option value="responsabilite">Réseau de Responsabilité (Binômes d'imputabilité)</option>
+                    <option value="environnement">Réseau d'Environnement (Écosystème, bureau)</option>
+                </select>
+            </div>
+        `;
+
+        const checkboxesHtml = getLifeGoalsCheckboxesHtml(axis, index);
+
+        const html = `
+            <div class="growth-goal-block" style="padding: 1.25rem; background: #F8FAFC; border: 1px solid rgba(15, 118, 110, 0.08); border-radius: 1.25rem; display: flex; flex-direction: column; gap: 0.75rem; position: relative; animation: fadeIn 0.3s ease-out; margin-bottom: 0.75rem;">
+                <button type="button" onclick="this.parentElement.remove(); reindexGrowthGoals('${axis}-container', '${axis}')" class="btn-remove" style="position: absolute; top: 0.5rem; right: 0.5rem;" title="Supprimer">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                </button>
+                <div style="display: flex; flex-direction: column; gap: 0.25rem;">
+                    <label style="font-size: 0.7rem; font-weight: 700; color: var(--fg-light); text-transform: uppercase;">${placeHolderMap.title}</label>
+                    <input type="text" name="growth_${axis}_title[${index}]" class="wiz-input" placeholder="Ex: ..." required>
+                </div>
+                ${typeSelectHtml}
+                <div style="display: flex; flex-direction: column; gap: 0.25rem;">
+                    <label style="font-size: 0.7rem; font-weight: 700; color: var(--fg-light); text-transform: uppercase;">Statut d'acquisition</label>
+                    <select name="growth_${axis}_status[${index}]" class="wiz-input" style="height: 42px; padding: 0.5rem 1rem;">
+                        <option value="build" selected>À construire</option>
+                        <option value="consolidate">À consolider</option>
+                        <option value="leverage">À mettre à profit</option>
+                        <option value="absence">Absence assumée</option>
+                    </select>
+                </div>
+                <div style="display: flex; flex-direction: column; gap: 0.25rem;">
+                    <label style="font-size: 0.7rem; font-weight: 700; color: var(--fg-light); text-transform: uppercase;">Objectifs spécifiques soutenus</label>
+                    ${checkboxesHtml}
+                </div>
+            </div>
+        `;
+        container.insertAdjacentHTML('beforeend', html);
+        reindexGrowthGoals(`${axis}-container`, axis);
+    }
+
+    function reindexLegacyGoals() {
+        const container = document.getElementById('legacy-container');
+        if (!container) return;
+        const blocks = container.querySelectorAll('.legacy-goal-block');
+        blocks.forEach((block, index) => {
+            const titleInput = block.querySelector('[name^="legacy_title"]');
+            if (titleInput) titleInput.name = `legacy_title[${index}]`;
+            
+            const statusSelect = block.querySelector('[name^="legacy_status"]');
+            if (statusSelect) statusSelect.name = `legacy_status[${index}]`;
+            
+            const checkboxes = block.querySelectorAll('[name^="legacy_goals"]');
+            checkboxes.forEach(checkbox => {
+                checkbox.name = `legacy_goals[${index}][]`;
+            });
+        });
+    }
+
+    function addLegacyGoal() {
+        const container = document.getElementById('legacy-container');
+        if (!container) return;
+        const index = container.querySelectorAll('.legacy-goal-block').length;
+        
+        let checkboxesHtml = '';
+        if (allLifeGoals.length === 0) {
+            checkboxesHtml = `<span style="font-size: 0.85rem; color: var(--fg-muted); font-style: italic;">Aucun objectif spécifique défini.</span>`;
+        } else {
+            checkboxesHtml = `<div class="checkbox-list-container" style="display: flex; flex-direction: column; gap: 0.5rem; margin-top: 0.25rem; background: #ffffff; border: 1px solid rgba(15, 118, 110, 0.12); border-radius: 0.75rem; padding: 0.75rem; max-height: 180px; overflow-y: auto;">`;
+            allLifeGoals.forEach(lg => {
+                checkboxesHtml += `
+                    <label style="display: flex; align-items: flex-start; gap: 0.5rem; font-size: 0.85rem; color: var(--fg-light); cursor: pointer; padding: 0.25rem 0; margin-bottom: 0;">
+                        <input type="checkbox" name="legacy_goals[${index}][]" value="${lg.id}" style="margin-top: 0.2rem; cursor: pointer;">
+                        <span>[${lg.category.toUpperCase()}] ${lg.title}</span>
+                    </label>
+                `;
+            });
+            checkboxesHtml += `</div>`;
+        }
+
+        const html = `
+            <div class="legacy-goal-block" style="padding: 1.25rem; background: #F8FAFC; border: 1px solid rgba(15, 118, 110, 0.08); border-radius: 1.25rem; display: flex; flex-direction: column; gap: 0.75rem; position: relative; animation: fadeIn 0.3s ease-out; margin-bottom: 0.75rem;">
+                <button type="button" onclick="this.parentElement.remove(); reindexLegacyGoals()" class="btn-remove" style="position: absolute; top: 0.5rem; right: 0.5rem;" title="Supprimer">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                </button>
+                <div style="display: flex; flex-direction: column; gap: 0.25rem;">
+                    <label style="font-size: 0.7rem; font-weight: 700; color: var(--fg-light); text-transform: uppercase;">Nom du projet de transmission</label>
+                    <input type="text" name="legacy_title[${index}]" class="wiz-input" placeholder="Ex: Financer une bourse d'études annuelle" required>
+                </div>
+                <div style="display: flex; flex-direction: column; gap: 0.25rem;">
+                    <label style="font-size: 0.7rem; font-weight: 700; color: var(--fg-light); text-transform: uppercase;">Statut d'acquisition / Mobilisation</label>
+                    <select name="legacy_status[${index}]" class="wiz-input" style="height: 42px; padding: 0.5rem 1rem;">
+                        <option value="build" selected>À construire</option>
+                        <option value="consolidate">À consolider</option>
+                        <option value="leverage">À mettre à profit</option>
+                        <option value="absence">Absence assumée</option>
+                    </select>
+                </div>
+                <div style="display: flex; flex-direction: column; gap: 0.25rem;">
+                    <label style="font-size: 0.7rem; font-weight: 700; color: var(--fg-light); text-transform: uppercase;">Objectifs spécifiques soutenus</label>
+                    ${checkboxesHtml}
+                </div>
+            </div>
+        `;
+        container.insertAdjacentHTML('beforeend', html);
+        reindexLegacyGoals();
+        if (typeof lucide !== 'undefined') lucide.createIcons();
+    }
+
+    function reindexHygieneDomains() {
+        const container = document.getElementById('hygiene-container');
+        if (!container) return;
+        const blocks = container.querySelectorAll('.hygiene-domain-block');
+        blocks.forEach((block, index) => {
+            const titleInput = block.querySelector('[name^="hygiene_name"]');
+            if (titleInput) titleInput.name = `hygiene_name[${index}]`;
+            
+            const statusSelect = block.querySelector('[name^="hygiene_status"]');
+            if (statusSelect) statusSelect.name = `hygiene_status[${index}]`;
+            
+            const checkboxes = block.querySelectorAll('[name^="hygiene_goals"]');
+            checkboxes.forEach(checkbox => {
+                checkbox.name = `hygiene_goals[${index}][]`;
+            });
+        });
+    }
+
+    function addHygieneDomain() {
+        const container = document.getElementById('hygiene-container');
+        if (!container) return;
+        const index = container.querySelectorAll('.hygiene-domain-block').length;
+        
+        let checkboxesHtml = '';
+        if (allLifeGoals.length === 0) {
+            checkboxesHtml = `<span style="font-size: 0.85rem; color: var(--fg-muted); font-style: italic;">Aucun objectif spécifique défini.</span>`;
+        } else {
+            checkboxesHtml = `<div class="checkbox-list-container" style="display: flex; flex-direction: column; gap: 0.5rem; margin-top: 0.25rem; background: #ffffff; border: 1px solid rgba(15, 118, 110, 0.12); border-radius: 0.75rem; padding: 0.75rem; max-height: 180px; overflow-y: auto;">`;
+            allLifeGoals.forEach(lg => {
+                checkboxesHtml += `
+                    <label style="display: flex; align-items: flex-start; gap: 0.5rem; font-size: 0.85rem; color: var(--fg-light); cursor: pointer; padding: 0.25rem 0; margin-bottom: 0;">
+                        <input type="checkbox" name="hygiene_goals[${index}][]" value="${lg.id}" style="margin-top: 0.2rem; cursor: pointer;">
+                        <span>[${lg.category.toUpperCase()}] ${lg.title}</span>
+                    </label>
+                `;
+            });
+            checkboxesHtml += `</div>`;
+        }
+
+        const html = `
+            <div class="hygiene-domain-block" style="padding: 1.25rem; background: #F8FAFC; border: 1px solid rgba(15, 118, 110, 0.08); border-radius: 1.25rem; display: flex; flex-direction: column; gap: 0.75rem; position: relative; animation: fadeIn 0.3s ease-out; margin-bottom: 0.75rem;">
+                <button type="button" onclick="this.parentElement.remove(); reindexHygieneDomains()" class="btn-remove" style="position: absolute; top: 0.5rem; right: 0.5rem;" title="Supprimer">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                </button>
+                <div style="display: flex; flex-direction: column; gap: 0.25rem;">
+                    <label style="font-size: 0.7rem; font-weight: 700; color: var(--fg-light); text-transform: uppercase;">Nom du domaine d'hygiène</label>
+                    <input type="text" name="hygiene_name[${index}]" class="wiz-input" placeholder="Ex: Sommeil (Rituel de coucher à 22h30 max)" required>
+                </div>
+                <div style="display: flex; flex-direction: column; gap: 0.25rem;">
+                    <label style="font-size: 0.7rem; font-weight: 700; color: var(--fg-light); text-transform: uppercase;">Statut d'acquisition / Mobilisation</label>
+                    <select name="hygiene_status[${index}]" class="wiz-input" style="height: 42px; padding: 0.5rem 1rem;">
+                        <option value="build" selected>À construire</option>
+                        <option value="consolidate">À consolider</option>
+                        <option value="leverage">À mettre à profit</option>
+                        <option value="absence">Absence assumée</option>
+                    </select>
+                </div>
+                <div style="display: flex; flex-direction: column; gap: 0.25rem;">
+                    <label style="font-size: 0.7rem; font-weight: 700; color: var(--fg-light); text-transform: uppercase;">Objectifs spécifiques soutenus</label>
+                    ${checkboxesHtml}
+                </div>
+            </div>
+        `;
+        container.insertAdjacentHTML('beforeend', html);
+        reindexHygieneDomains();
+        if (typeof lucide !== 'undefined') lucide.createIcons();
+    }
+
+    // Monitor step change to update step title
+    document.addEventListener('turbo:load', () => {
+        setupObserver();
+    });
+    
+    // In case of non-turbo reload fallback
+    document.addEventListener('DOMContentLoaded', () => {
+        setupObserver();
+    });
+
+    function setupObserver() {
+        const stepHeader = document.getElementById('step-title');
+        if (!stepHeader) return;
+
+        const observer = new MutationObserver((mutations) => {
+            mutations.forEach((mutation) => {
+                if (mutation.type === 'attributes' && mutation.attributeName === 'class') {
+                    const target = mutation.target;
+                    if (!target.classList.contains('hidden')) {
+                        const stepTitle = target.getAttribute('data-step-title');
+                        if (stepTitle) {
+                            stepHeader.textContent = stepTitle;
+                        }
+                    }
+                }
+            });
+        });
+
+        document.querySelectorAll('[data-wizard-target="step"]').forEach(step => {
+            observer.observe(step, { attributes: true });
+        });
+
+        // Initialize header with the first visible step's title
+        const firstStep = document.querySelector('[data-wizard-target="step"]:not(.hidden)');
+        if (firstStep) {
+            const title = firstStep.getAttribute('data-step-title');
+            if (title) stepHeader.textContent = title;
+        }
+        
+        if (typeof lucide !== 'undefined') lucide.createIcons();
+    }
+</script>
+{% endblock %}

@@ -1,0 +1,46 @@
+@import "tailwindcss";
+
+@source "../../templates/**/*.html.twig";
+@source "../../templates/**/*.twig";
+
+/* ══════════════════════════════════════════════════════
+   KIINI SAWA — Global Styles & Utilities
+   ══════════════════════════════════════════════════════ */
+
+/* Custom thin scrollbars */
+.ks-scroll::-webkit-scrollbar {
+    width: 5px;
+    height: 5px;
+}
+.ks-scroll::-webkit-scrollbar-track {
+    background: transparent;
+}
+.ks-scroll::-webkit-scrollbar-thumb {
+    background: rgba(148, 163, 184, 0.3);
+    border-radius: 9999px;
+}
+.ks-scroll::-webkit-scrollbar-thumb:hover {
+    background: rgba(148, 163, 184, 0.5);
+}
+
+/* Hide scrollbars but keep functionality */
+.no-scrollbar::-webkit-scrollbar {
+    display: none;
+}
+.no-scrollbar {
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+}
+
+/* Glassmorphism utility */
+.ks-glass {
+    background: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.4);
+}
+
+/* Smooth transition for active cells */
+.calendar-cell-transition {
+    transition: background-color 0.2s cubic-bezier(0.16, 1, 0.3, 1), transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}

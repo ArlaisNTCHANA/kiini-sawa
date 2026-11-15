@@ -1,0 +1,501 @@
+{% extends 'admin/layout.html.twig' %}
+
+{% block title %}Questions — {{ testMeta.name }}{% endblock %}
+{% block page_title %}Questions — {{ testMeta.name }}{% endblock %}
+
+{% block stylesheets %}
+<style>
+    .header-actions {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 24px;
+    }
+
+    .btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 10px 16px;
+        border-radius: var(--radius-md);
+        font-size: 14px;
+        font-weight: 600;
+        text-decoration: none;
+        cursor: pointer;
+        transition: all var(--transition);
+        border: 1px solid transparent;
+    }
+
+    .btn--secondary {
+        background: rgba(255, 255, 255, 0.03);
+        color: var(--text-secondary);
+        border-color: var(--border);
+    }
+
+    .btn--secondary:hover {
+        background: rgba(255, 255, 255, 0.08);
+        color: var(--text-primary);
+    }
+
+    .btn--primary {
+        background: var(--accent);
+        color: #fff;
+    }
+
+    .btn--primary:hover {
+        background: var(--accent-light);
+        box-shadow: var(--shadow-glow);
+    }
+
+    .btn--danger {
+        background: rgba(239, 68, 68, 0.1);
+        color: #ef4444;
+        border-color: rgba(239, 68, 68, 0.2);
+    }
+
+    .btn--danger:hover {
+        background: #ef4444;
+        color: #fff;
+        border-color: #ef4444;
+    }
+
+    /* Questions Table Card */
+    .questions-card {
+        background: var(--bg-card);
+        border: 1px solid var(--border);
+        border-radius: var(--radius-lg);
+        padding: 24px;
+        backdrop-filter: blur(8px);
+    }
+
+    .q-table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    .q-table th {
+        font-size: 11px;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        color: var(--text-muted);
+        padding: 12px 16px;
+        text-align: left;
+        border-bottom: 1px solid var(--border);
+    }
+
+    .q-table td {
+        padding: 16px;
+        font-size: 14px;
+        color: var(--text-secondary);
+        border-bottom: 1px solid var(--border);
+        vertical-align: top;
+    }
+
+    .q-table tr:last-child td {
+        border-bottom: none;
+    }
+
+    .q-table tr:hover td {
+        color: var(--text-primary);
+        background: rgba(255, 255, 255, 0.01);
+    }
+
+    .q-order {
+        font-weight: 700;
+        color: var(--text-primary);
+        background: rgba(255, 255, 255, 0.05);
+        border-radius: var(--radius-sm);
+        padding: 2px 6px;
+        font-size: 12px;
+    }
+
+    .q-category {
+        display: inline-block;
+        padding: 2px 8px;
+        border-radius: 20px;
+        font-size: 11px;
+        font-weight: 600;
+        background: rgba(99, 102, 241, 0.1);
+        color: var(--accent-light);
+        border: 1px solid rgba(99, 102, 241, 0.2);
+    }
+
+    .answer-badge-list {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+        margin-top: 8px;
+    }
+
+    .answer-badge {
+        font-size: 12px;
+        background: rgba(255, 255, 255, 0.04);
+        border: 1px solid var(--border);
+        padding: 4px 8px;
+        border-radius: var(--radius-sm);
+        color: var(--text-secondary);
+    }
+
+    .answer-badge strong {
+        color: var(--accent-light);
+        margin-right: 4px;
+    }
+
+    /* Modal Styles */
+    .ks-modal {
+        display: none;
+        position: fixed;
+        inset: 0;
+        z-index: 1000;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+    }
+
+    .ks-modal.active {
+        display: flex;
+    }
+
+    .ks-modal__overlay {
+        position: absolute;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.8);
+        backdrop-filter: blur(8px);
+    }
+
+    .ks-modal__container {
+        position: relative;
+        background: #0d121f;
+        border: 1px solid var(--border-active);
+        border-radius: var(--radius-lg);
+        width: 100%;
+        max-width: 600px;
+        max-height: 90vh;
+        overflow-y: auto;
+        box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+        animation: modalIn 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        z-index: 1001;
+    }
+
+    @keyframes modalIn {
+        from { opacity: 0; transform: scale(0.95) translateY(10px); }
+        to { opacity: 1; transform: scale(1) translateY(0); }
+    }
+
+    .ks-modal__header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 20px 24px;
+        border-bottom: 1px solid var(--border);
+    }
+
+    .ks-modal__title {
+        font-size: 18px;
+        font-weight: 700;
+        color: var(--text-primary);
+    }
+
+    .ks-modal__close {
+        background: none;
+        border: none;
+        color: var(--text-secondary);
+        cursor: pointer;
+        padding: 4px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: color var(--transition);
+    }
+
+    .ks-modal__close:hover {
+        color: var(--text-primary);
+    }
+
+    .ks-modal__body {
+        padding: 24px;
+    }
+
+    /* Form control styling */
+    .form-group {
+        margin-bottom: 20px;
+    }
+
+    .form-group label {
+        display: block;
+        font-size: 13px;
+        font-weight: 600;
+        color: var(--text-secondary);
+        margin-bottom: 8px;
+    }
+
+    .form-control {
+        width: 100%;
+        background: var(--bg-input);
+        border: 1px solid var(--border);
+        border-radius: var(--radius-md);
+        padding: 12px 14px;
+        color: var(--text-primary);
+        font-family: inherit;
+        font-size: 14px;
+        transition: all var(--transition);
+    }
+
+    .form-control:focus {
+        outline: none;
+        border-color: var(--accent);
+        box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15);
+    }
+
+    .form-help {
+        font-size: 12px;
+        color: var(--text-muted);
+        margin-top: 6px;
+        line-height: 1.4;
+    }
+
+    .ks-modal__footer {
+        padding: 16px 24px;
+        border-top: 1px solid var(--border);
+        display: flex;
+        justify-content: flex-end;
+        gap: 12px;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+    <div class="header-actions">
+        <a href="{{ path('admin_personality_dashboard') }}" class="btn btn--secondary">
+            <i data-lucide="arrow-left" style="width: 16px; height: 16px;"></i>
+            Retour aux tests
+        </a>
+        <button class="btn btn--primary" onclick="openModal('add-modal')">
+            <i data-lucide="plus" style="width: 16px; height: 16px;"></i>
+            Ajouter une question
+        </button>
+    </div>
+
+    {# Flash Messages #}
+    {% for label, messages in app.flashes %}
+        {% for message in messages %}
+            <div style="padding: 16px; border-radius: var(--radius-md); margin-bottom: 20px; font-size: 14px; display: flex; align-items: center; gap: 10px; 
+                {% if label == 'success' %}
+                    background: rgba(16, 185, 129, 0.15); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.3);
+                {% else %}
+                    background: rgba(244, 63, 94, 0.15); color: #fb7185; border: 1px solid rgba(244, 63, 94, 0.3);
+                {% endif %}
+            ">
+                <i data-lucide="{% if label == 'success' %}check-circle{% else %}alert-circle{% endif %}" style="width: 18px; height: 18px;"></i>
+                <span>{{ message }}</span>
+            </div>
+        {% endfor %}
+    {% endfor %}
+
+    <div class="questions-card">
+        <table class="q-table" id="questions-table">
+            <thead>
+                <tr>
+                    <th style="width: 80px;">Ordre</th>
+                    <th style="width: 150px;">Catégorie</th>
+                    <th>Question & Réponses</th>
+                    <th style="width: 180px; text-align: right;">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for q in questions %}
+                    {% set answers_raw = "" %}
+                    {% for ans in q.answers %}
+                        {% set answers_raw = answers_raw ~ ans.value ~ "|" ~ ans.text ~ (not loop.last ? "\n" : "") %}
+                    {% endfor %}
+                    <tr id="question-row-{{ q.id }}">
+                        <td>
+                            <span class="q-order">{{ q.sortOrder }}</span>
+                        </td>
+                        <td>
+                            {% if q.category %}
+                                <span class="q-category">{{ q.category }}</span>
+                            {% else %}
+                                <span style="color: var(--text-muted); font-style: italic; font-size: 12px;">Aucune</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            <div style="font-weight: 600; color: var(--text-primary); margin-bottom: 8px;">
+                                {{ q.question }}
+                            </div>
+                            <div class="answer-badge-list">
+                                {% for ans in q.answers %}
+                                    <span class="answer-badge">
+                                        <strong>{{ ans.value }}</strong> {{ ans.text }}
+                                    </span>
+                                {% else %}
+                                    <span style="color: var(--text-muted); font-size: 12px; font-style: italic;">Aucune réponse configurée</span>
+                                {% endfor %}
+                            </div>
+                        </td>
+                        <td>
+                            <div style="display: flex; gap: 8px; justify-content: flex-end;">
+                                <button class="btn btn--secondary" style="padding: 6px 10px; font-size: 12px;" 
+                                    onclick="openEditModal({{ q.id }}, '{{ q.question|escape('js') }}', '{{ q.category|escape('js') }}', {{ q.sortOrder }}, '{{ answers_raw|escape('js') }}')">
+                                    <i data-lucide="edit-2" style="width: 12px; height: 12px;"></i>
+                                    Modifier
+                                </button>
+                                <form action="{{ path('admin_personality_question_delete', {id: q.id}) }}" method="POST" style="display: inline-block;" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cette question ? Cette action est irréversible.');">
+                                    <input type="hidden" name="_csrf_token" value="{{ csrf_token('delete_question_' ~ q.id) }}">
+                                    <button type="submit" class="btn btn--danger" style="padding: 6px 10px; font-size: 12px;">
+                                        <i data-lucide="trash-2" style="width: 12px; height: 12px;"></i>
+                                        Supprimer
+                                    </button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td colspan="4" style="text-align: center; padding: 40px; color: var(--text-muted); font-style: italic;">
+                            Aucune question n'a été ajoutée pour ce test.
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    {# MODAL AJOUT #}
+    <div class="ks-modal" id="add-modal">
+        <div class="ks-modal__overlay" onclick="closeModal('add-modal')"></div>
+        <div class="ks-modal__container">
+            <div class="ks-modal__header">
+                <h3 class="ks-modal__title">Ajouter une question</h3>
+                <button class="ks-modal__close" onclick="closeModal('add-modal')">
+                    <i data-lucide="x" style="width: 20px; height: 20px;"></i>
+                </button>
+            </div>
+            <form action="{{ path('admin_personality_questions', {type: type|lower}) }}" method="POST">
+                <input type="hidden" name="_csrf_token" value="{{ csrf_token('add_question') }}">
+                <div class="ks-modal__body">
+                    <div class="form-group">
+                        <label for="add-question">Texte de la question</label>
+                        <textarea name="question" id="add-question" rows="3" class="form-control" placeholder="Entrez la question..." required></textarea>
+                    </div>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+                        <div class="form-group">
+                            <label for="add-category">Catégorie / Dimension</label>
+                            <input type="text" name="category" id="add-category" class="form-control" placeholder="Ex: E/I ou Force">
+                        </div>
+                        <div class="form-group">
+                            <label for="add-sortOrder">Ordre d'affichage</label>
+                            <input type="number" name="sortOrder" id="add-sortOrder" class="form-control" value="1" min="1" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="add-answers">Choix de réponses</label>
+                        <textarea name="answers" id="add-answers" rows="6" class="form-control" placeholder="valeur|Libellé de la réponse" style="font-family: monospace; font-size: 13px;"></textarea>
+                        <p class="form-help">
+                            Saisissez un choix de réponse par ligne au format <code>valeur|Libellé de la réponse</code>.<br>
+                            Exemple pour un test MBTI :<br>
+                            <code>E|Je préfère être en groupe et interagir</code><br>
+                            <code>I|Je préfère réfléchir seul dans le calme</code>
+                        </p>
+                    </div>
+                </div>
+                <div class="ks-modal__footer">
+                    <button type="button" class="btn btn--secondary" onclick="closeModal('add-modal')">Annuler</button>
+                    <button type="submit" class="btn btn--primary">Créer la question</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    {# MODAL EDITION #}
+    <div class="ks-modal" id="edit-modal">
+        <div class="ks-modal__overlay" onclick="closeModal('edit-modal')"></div>
+        <div class="ks-modal__container">
+            <div class="ks-modal__header">
+                <h3 class="ks-modal__title">Modifier la question</h3>
+                <button class="ks-modal__close" onclick="closeModal('edit-modal')">
+                    <i data-lucide="x" style="width: 20px; height: 20px;"></i>
+                </button>
+            </div>
+            <form id="edit-form" method="POST">
+                <input type="hidden" name="_csrf_token" id="edit-csrf-token">
+                <div class="ks-modal__body">
+                    <div class="form-group">
+                        <label for="edit-question">Texte de la question</label>
+                        <textarea name="question" id="edit-question" rows="3" class="form-control" placeholder="Entrez la question..." required></textarea>
+                    </div>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+                        <div class="form-group">
+                            <label for="edit-category">Catégorie / Dimension</label>
+                            <input type="text" name="category" id="edit-category" class="form-control" placeholder="Ex: E/I ou Force">
+                        </div>
+                        <div class="form-group">
+                            <label for="edit-sortOrder">Ordre d'affichage</label>
+                            <input type="number" name="sortOrder" id="edit-sortOrder" class="form-control" min="1" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="edit-answers">Choix de réponses</label>
+                        <textarea name="answers" id="edit-answers" rows="6" class="form-control" placeholder="valeur|Libellé de la réponse" style="font-family: monospace; font-size: 13px;"></textarea>
+                        <p class="form-help">
+                            Saisissez un choix de réponse par ligne au format <code>valeur|Libellé de la réponse</code>.
+                        </p>
+                    </div>
+                </div>
+                <div class="ks-modal__footer">
+                    <button type="button" class="btn btn--secondary" onclick="closeModal('edit-modal')">Annuler</button>
+                    <button type="submit" class="btn btn--primary">Enregistrer les modifications</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        function openModal(id) {
+            const modal = document.getElementById(id);
+            if (modal) {
+                modal.classList.add('active');
+                document.body.style.overflow = 'hidden';
+            }
+        }
+
+        function closeModal(id) {
+            const modal = document.getElementById(id);
+            if (modal) {
+                modal.classList.remove('active');
+                document.body.style.overflow = '';
+            }
+        }
+
+        function openEditModal(id, question, category, sortOrder, answers) {
+            const form = document.getElementById('edit-form');
+            form.action = `/admin/tests/question/${id}/edit`;
+            
+            document.getElementById('edit-question').value = question;
+            document.getElementById('edit-category').value = category;
+            document.getElementById('edit-sortOrder').value = sortOrder;
+            document.getElementById('edit-answers').value = answers;
+            
+            // Build the CSRF token name for editing this specific question
+            const csrfTokenElement = document.getElementById('edit-csrf-token');
+            // We can retrieve the token from the delete form for safety, or generate it, 
+            // but Symfony's isCsrfTokenValid expects 'edit_question_' . $id. We can render the CSRF token dynamically 
+            // by passing it or retrieving it using a JS mapper. To make it completely reliable, we will inject 
+            // it using Twig in each row's edit button, or render them ahead.
+            // Let's pass the token value as well.
+            // Let's fetch the edit CSRF token.
+            const token = csrfTokens[id] || '';
+            csrfTokenElement.value = token;
+
+            openModal('edit-modal');
+        }
+
+        // Object containing edit tokens for each question to be accessible by JS
+        const csrfTokens = {
+            {% for q in questions %}
+                "{{ q.id }}": "{{ csrf_token('edit_question_' ~ q.id) }}",
+            {% endfor %}
+        };
+    </script>
+{% endblock %}

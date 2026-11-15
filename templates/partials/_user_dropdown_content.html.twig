@@ -1,0 +1,107 @@
+{# ══════════════════════════════════════════════════════════
+   _user_dropdown_content.html.twig
+   Contenu partagé du dropdown utilisateur (mobile + desktop)
+   Fidèle à UserMenu.tsx de kiini-align
+══════════════════════════════════════════════════════════ #}
+
+{# ── Header identité ── #}
+<div style="padding: 1.25rem 1.5rem; border-bottom: 1px solid rgba(44,85,89,0.06); position: relative; overflow: hidden;">
+    <div style="position: absolute; top: 0; right: 0; width: 8rem; height: 8rem;
+                background: radial-gradient(circle, rgba(44,85,89,0.05), transparent 70%);
+                transform: translate(30%,-30%); pointer-events: none;"></div>
+    <div style="position: relative; z-index: 1; display: flex; justify-content: space-between; align-items: flex-start;">
+        <div>
+            <p style="font-size: 1.05rem; font-weight: 700; color: #1C1917; letter-spacing: -0.01em; line-height: 1.3;">
+                {{ app.user.email|split('@')|first|capitalize }}
+            </p>
+            <p style="font-size: 0.8rem; color: #a8a29e; font-weight: 500; margin-top: 2px; overflow: hidden; text-overflow: ellipsis; max-width: 200px; white-space: nowrap;">
+                {{ app.user.email }}
+            </p>
+        </div>
+        {# Point de présence vert #}
+        <div style="display: flex; align-items: center; gap: 0.35rem; background: #F0FDF4;
+                    padding: 0.3rem 0.625rem; border-radius: 9999px; border: 1px solid #BBF7D0;">
+            <div style="width: 0.45rem; height: 0.45rem; background: #22C55E; border-radius: 50%;"></div>
+            <span style="font-size: 0.65rem; font-weight: 700; color: #16A34A; letter-spacing: 0.05em; text-transform: uppercase;">Actif</span>
+        </div>
+    </div>
+</div>
+
+{# ── Contenu scrollable ── #}
+<div style="max-height: 65vh; overflow-y: auto; padding: 0.5rem;" class="ks-scroll">
+
+    {# GROUPE 1 : Moi & Ma Croissance #}
+    <div style="margin-bottom: 0.5rem;">
+        <p style="padding: 0.5rem 1rem; font-size: 0.6rem; font-weight: 800; color: #a8a29e;
+                  letter-spacing: 0.2em; text-transform: uppercase;">Moi & Ma Croissance</p>
+        <div>
+            {% set menuItems1 = [
+                { label: 'Mon Profil',       desc: 'Gérer mon identité',               icon: 'user',      href: '/profile' },
+                { label: 'Mes Découvertes',  desc: 'Tests de personnalité & valeurs',  icon: 'sparkles',  href: '/discovery' },
+                { label: 'Mon Coaching',     desc: 'Expertise Team KIINI',             icon: 'message-square', href: '/coaching' },
+                { label: 'Mes Listes',       desc: 'Listes personnelles & to-do',      icon: 'list',      href: '/lists' },
+                { label: 'Calendrier',       desc: 'Planification & organisation',     icon: 'calendar',  href: '/planner' },
+            ] %}
+            {% for item in menuItems1 %}
+            <a href="{{ item.href }}" class="menu-item">
+                <div class="menu-item-icon" style="color: #a8a29e;">
+                    <i data-lucide="{{ item.icon }}" style="width: 18px; height: 18px;"></i>
+                </div>
+                <div>
+                    <p style="font-size: 0.875rem; font-weight: 500; color: #3E3A36; line-height: 1.2;">{{ item.label }}</p>
+                    <p style="font-size: 0.7rem; color: #a8a29e; margin-top: 1px;">{{ item.desc }}</p>
+                </div>
+            </a>
+            {% endfor %}
+        </div>
+    </div>
+
+    {# Séparateur #}
+    <div style="height: 1px; background: rgba(44,85,89,0.06); margin: 0.25rem 1rem 0.75rem;"></div>
+
+    {# GROUPE 2 : Réseau & Alertes #}
+    <div style="margin-bottom: 0.5rem;">
+        <p style="padding: 0.5rem 1rem; font-size: 0.6rem; font-weight: 800; color: #a8a29e;
+                  letter-spacing: 0.2em; text-transform: uppercase;">Réseau & Alertes</p>
+        <a href="/notifications" class="menu-item">
+            <div class="menu-item-icon" style="color: #a8a29e;">
+                <i data-lucide="bell" style="width: 18px; height: 18px;"></i>
+            </div>
+            <div>
+                <p style="font-size: 0.875rem; font-weight: 500; color: #3E3A36;">Notifications</p>
+                <p style="font-size: 0.7rem; color: #a8a29e; margin-top: 1px;">Rappels & activité</p>
+            </div>
+        </a>
+    </div>
+
+    {# GROUPE 3 : Admin (conditionnel) #}
+    {% if is_granted('ROLE_ADMIN') %}
+    <div style="height: 1px; background: rgba(44,85,89,0.06); margin: 0.25rem 1rem 0.75rem;"></div>
+    <div style="margin-bottom: 0.5rem;">
+        <p style="padding: 0.5rem 1rem; font-size: 0.6rem; font-weight: 800; color: #a8a29e;
+                  letter-spacing: 0.2em; text-transform: uppercase;">Aide & Système</p>
+        <a href="/admin" class="menu-item">
+            <div class="menu-item-icon" style="color: #a8a29e;">
+                <i data-lucide="shield" style="width: 18px; height: 18px;"></i>
+            </div>
+            <div>
+                <p style="font-size: 0.875rem; font-weight: 500; color: #3E3A36;">Admin Dashboard</p>
+                <p style="font-size: 0.7rem; color: #a8a29e; margin-top: 1px;">Gestion & statistiques</p>
+            </div>
+        </a>
+    </div>
+    {% endif %}
+</div>
+
+{# ── Footer : Déconnexion ── #}
+<div style="padding: 0.5rem; border-top: 1px solid rgba(44,85,89,0.06); background: rgba(250,250,248,0.5);">
+    <a href="{{ path('app_logout') }}" class="menu-item menu-item-logout">
+        <div class="menu-item-icon">
+            <i data-lucide="log-out" style="width: 18px; height: 18px;"></i>
+        </div>
+        <div>
+            <p style="font-size: 0.875rem; font-weight: 500;">Déconnexion</p>
+            <p style="font-size: 0.7rem; color: #a8a29e; margin-top: 1px;">Fermer la session</p>
+        </div>
+    </a>
+</div>

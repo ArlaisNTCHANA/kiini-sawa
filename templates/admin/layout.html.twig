@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Admin{% endblock %} — Kiini Sawa</title>
+    <meta name="description" content="Administration de la plateforme Kiini Sawa — Gestion des utilisateurs, plans et métriques.">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- Lucide Icons (CDN) -->
+    <script src="https://unpkg.com/lucide@latest" defer></script>
+    <script>document.addEventListener('DOMContentLoaded', () => { if(window.lucide) lucide.createIcons(); });</script>
+
+    {% block stylesheets %}{% endblock %}
+
+    {% block javascripts %}
+        {% block importmap %}{{ importmap('app') }}{% endblock %}
+    {% endblock %}
+
+    <style>
+        /* ===== Design Tokens ===== */
+        :root {
+            --bg-body: #080b14;
+            --bg-sidebar: rgba(12, 17, 30, 0.85);
+            --bg-card: rgba(17, 24, 42, 0.55);
+            --bg-card-hover: rgba(22, 30, 52, 0.7);
+            --bg-input: rgba(15, 23, 42, 0.6);
+
+            --accent: #6366f1;
+            --accent-light: #818cf8;
+            --accent-gradient: linear-gradient(135deg, #6366f1 0%, #a855f7 50%, #ec4899 100%);
+            --accent-gradient-subtle: linear-gradient(135deg, rgba(99,102,241,0.15) 0%, rgba(168,85,247,0.08) 100%);
+
+            --text-primary: #f1f5f9;
+            --text-secondary: #94a3b8;
+            --text-muted: #475569;
+
+            --border: rgba(255, 255, 255, 0.06);
+            --border-active: rgba(99, 102, 241, 0.4);
+
+            --radius-sm: 8px;
+            --radius-md: 12px;
+            --radius-lg: 16px;
+            --radius-xl: 20px;
+
+            --shadow-card: 0 4px 24px rgba(0, 0, 0, 0.2);
+            --shadow-glow: 0 0 40px rgba(99, 102, 241, 0.08);
+
+            --sidebar-width: 260px;
+            --sidebar-collapsed: 72px;
+            --header-height: 64px;
+
+            --transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        /* ===== Reset ===== */
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Inter', -apple-system, sans-serif;
+            background-color: var(--bg-body);
+            color: var(--text-primary);
+            min-height: 100vh;
+            background-image:
+                radial-gradient(ellipse at 0% 0%, rgba(99, 102, 241, 0.08) 0%, transparent 50%),
+                radial-gradient(ellipse at 100% 80%, rgba(168, 85, 247, 0.06) 0%, transparent 50%);
+            overflow-x: hidden;
+        }
+
+        /* ===== Sidebar ===== */
+        .ks-sidebar {
+            position: fixed;
+            top: 0; left: 0;
+            width: var(--sidebar-width);
+            height: 100vh;
+            background: var(--bg-sidebar);
+            border-right: 1px solid var(--border);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            z-index: 100;
+            display: flex;
+            flex-direction: column;
+            transition: width var(--transition), transform var(--transition);
+            overflow: hidden;
+        }
+
+        .ks-sidebar.collapsed {
+            width: var(--sidebar-collapsed);
+        }
+
+        .ks-sidebar__brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 20px 20px 16px;
+            border-bottom: 1px solid var(--border);
+            min-height: 65px;
+        }
+
+        .ks-sidebar__logo {
+            width: 32px; height: 32px;
+            background: var(--accent-gradient);
+            border-radius: var(--radius-sm);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            font-size: 14px;
+            color: #fff;
+            flex-shrink: 0;
+        }
+
+        .ks-sidebar__name {
+            font-weight: 700;
+            font-size: 16px;
+            background: var(--accent-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            white-space: nowrap;
+            opacity: 1;
+            transition: opacity var(--transition);
+        }
+
+        .collapsed .ks-sidebar__name { opacity: 0; pointer-events: none; }
+
+        .ks-sidebar__nav {
+            flex: 1;
+            padding: 12px 8px;
+            overflow-y: auto;
+        }
+
+        .ks-sidebar__label {
+            font-size: 10px;
+            font-weight: 600;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            padding: 16px 12px 6px;
+            white-space: nowrap;
+            opacity: 1;
+            transition: opacity var(--transition);
+        }
+
+        .collapsed .ks-sidebar__label { opacity: 0; height: 0; padding: 0; overflow: hidden; }
+
+        .ks-sidebar__link {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 12px;
+            border-radius: var(--radius-sm);
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all var(--transition);
+            white-space: nowrap;
+            position: relative;
+        }
+
+        .ks-sidebar__link:hover {
+            color: var(--text-primary);
+            background: rgba(99, 102, 241, 0.08);
+        }
+
+        .ks-sidebar__link.active {
+            color: var(--text-primary);
+            background: rgba(99, 102, 241, 0.12);
+        }
+
+        .ks-sidebar__link.active::before {
+            content: '';
+            position: absolute;
+            left: 0; top: 50%;
+            transform: translateY(-50%);
+            width: 3px;
+            height: 20px;
+            background: var(--accent-gradient);
+            border-radius: 0 3px 3px 0;
+        }
+
+        .ks-sidebar__link i { flex-shrink: 0; width: 20px; height: 20px; }
+
+        .ks-sidebar__link span {
+            opacity: 1;
+            transition: opacity var(--transition);
+        }
+
+        .collapsed .ks-sidebar__link span { opacity: 0; pointer-events: none; }
+
+        .ks-sidebar__footer {
+            padding: 12px;
+            border-top: 1px solid var(--border);
+        }
+
+        .ks-sidebar__footer .ks-sidebar__link {
+            color: #ef4444;
+        }
+        .ks-sidebar__footer .ks-sidebar__link:hover {
+            background: rgba(239, 68, 68, 0.1);
+        }
+
+        /* ===== Overlay (mobile) ===== */
+        .ks-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(4px);
+            z-index: 90;
+            opacity: 0;
+            transition: opacity var(--transition);
+        }
+
+        .ks-overlay.active {
+            display: block;
+            opacity: 1;
+        }
+
+        /* ===== Main Content ===== */
+        .ks-main {
+            margin-left: var(--sidebar-width);
+            min-height: 100vh;
+            transition: margin-left var(--transition);
+        }
+
+        .collapsed ~ .ks-main {
+            margin-left: var(--sidebar-collapsed);
+        }
+
+        /* ===== Header ===== */
+        .ks-header {
+            height: var(--header-height);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 28px;
+            border-bottom: 1px solid var(--border);
+            background: rgba(8, 11, 20, 0.7);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            position: sticky;
+            top: 0;
+            z-index: 50;
+        }
+
+        .ks-header__left {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .ks-header__toggle {
+            background: none;
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            color: var(--text-secondary);
+            cursor: pointer;
+            padding: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all var(--transition);
+        }
+
+        .ks-header__toggle:hover {
+            color: var(--text-primary);
+            border-color: var(--border-active);
+            background: rgba(99, 102, 241, 0.08);
+        }
+
+        .ks-header__title {
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        .ks-header__right {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .ks-header__user {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 6px 12px;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+
+        .ks-header__avatar {
+            width: 28px; height: 28px;
+            border-radius: 50%;
+            background: var(--accent-gradient);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 11px;
+            color: #fff;
+        }
+
+        /* ===== Page Content ===== */
+        .ks-content {
+            padding: 28px;
+            max-width: 1440px;
+        }
+
+        /* ===== Responsive ===== */
+        @media (max-width: 1024px) {
+            .ks-sidebar {
+                transform: translateX(-100%);
+                width: var(--sidebar-width) !important;
+            }
+            .ks-sidebar.mobile-open {
+                transform: translateX(0);
+            }
+            .ks-main {
+                margin-left: 0 !important;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div data-controller="sidebar">
+        {# ===== Sidebar ===== #}
+        <aside class="ks-sidebar" data-sidebar-target="sidebar">
+            <div class="ks-sidebar__brand">
+                <div class="ks-sidebar__logo">KS</div>
+                <span class="ks-sidebar__name">Kiini Sawa</span>
+            </div>
+
+            <nav class="ks-sidebar__nav">
+                <div class="ks-sidebar__label">Principal</div>
+                <a href="{{ path('admin_dashboard') }}" class="ks-sidebar__link {{ app.request.attributes.get('_route') == 'admin_dashboard' ? 'active' }}" id="nav-dashboard">
+                    <i data-lucide="layout-dashboard"></i>
+                    <span>Tableau de bord</span>
+                </a>
+                <a href="#" class="ks-sidebar__link" id="nav-users">
+                    <i data-lucide="users"></i>
+                    <span>Utilisateurs</span>
+                </a>
+
+                <div class="ks-sidebar__label">Plans</div>
+                <a href="{{ path('admin_plan_de_vie') }}" class="ks-sidebar__link {{ app.request.attributes.get('_route') starts with 'admin_plan_de_vie' ? 'active' }}" id="nav-plan-vie">
+                    <i data-lucide="compass"></i>
+                    <span>Plan de Vie</span>
+                </a>
+                <a href="#" class="ks-sidebar__link" id="nav-plan-croissance">
+                    <i data-lucide="trending-up"></i>
+                    <span>Croissance</span>
+                </a>
+                <a href="#" class="ks-sidebar__link" id="nav-plan-pdp">
+                    <i data-lucide="graduation-cap"></i>
+                    <span>Développement</span>
+                </a>
+                <a href="#" class="ks-sidebar__link" id="nav-plan-hygiene">
+                    <i data-lucide="heart-pulse"></i>
+                    <span>Hygiène</span>
+                </a>
+                <a href="#" class="ks-sidebar__link" id="nav-plan-transmission">
+                    <i data-lucide="share-2"></i>
+                    <span>Transmission</span>
+                </a>
+
+                <div class="ks-sidebar__label">Modules</div>
+                <a href="#" class="ks-sidebar__link" id="nav-habits">
+                    <i data-lucide="repeat"></i>
+                    <span>Habitudes</span>
+                </a>
+                <a href="#" class="ks-sidebar__link" id="nav-journal">
+                    <i data-lucide="book-open"></i>
+                    <span>Journal</span>
+                </a>
+                <a href="#" class="ks-sidebar__link" id="nav-challenges">
+                    <i data-lucide="trophy"></i>
+                    <span>Défis</span>
+                </a>
+                <a href="{{ path('admin_personality_dashboard') }}" class="ks-sidebar__link {{ app.request.attributes.get('_route') starts with 'admin_personality' ? 'active' }}" id="nav-tests">
+                    <i data-lucide="brain"></i>
+                    <span>Tests</span>
+                </a>
+
+                <div class="ks-sidebar__label">Système</div>
+                <a href="{{ path('admin_doc') }}" class="ks-sidebar__link {{ app.request.attributes.get('_route') starts with 'admin_doc' ? 'active' }}" id="nav-docs">
+                    <i data-lucide="file-text"></i>
+                    <span>Documentation</span>
+                </a>
+                <a href="{{ path('admin_config') }}" class="ks-sidebar__link {{ app.request.attributes.get('_route') starts with 'admin_config' ? 'active' }}" id="nav-config">
+                    <i data-lucide="settings"></i>
+                    <span>Configuration</span>
+                </a>
+            </nav>
+
+            <div class="ks-sidebar__footer">
+                <a href="{{ path('app_logout') }}" class="ks-sidebar__link" id="nav-logout">
+                    <i data-lucide="log-out"></i>
+                    <span>Déconnexion</span>
+                </a>
+            </div>
+        </aside>
+
+        {# ===== Mobile overlay ===== #}
+        <div class="ks-overlay" data-sidebar-target="overlay" data-action="click->sidebar#closeOverlay"></div>
+
+        {# ===== Main ===== #}
+        <main class="ks-main">
+            <header class="ks-header">
+                <div class="ks-header__left">
+                    <button class="ks-header__toggle" data-action="click->sidebar#toggle" aria-label="Toggle sidebar">
+                        <i data-lucide="panel-left" style="width:18px;height:18px;"></i>
+                    </button>
+                    <h1 class="ks-header__title">{% block page_title %}Tableau de bord{% endblock %}</h1>
+                </div>
+                <div class="ks-header__right">
+                    <div class="ks-header__user">
+                        <div class="ks-header__avatar">
+                            {{ app.user.email|slice(0,1)|upper }}
+                        </div>
+                        <span>{{ app.user.email }}</span>
+                    </div>
+                </div>
+            </header>
+
+            <div class="ks-content">
+                {% block content %}{% endblock %}
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // Re-render Lucide icons after Turbo navigation
+        document.addEventListener('turbo:load', () => { if(window.lucide) lucide.createIcons(); });
+        document.addEventListener('turbo:render', () => { if(window.lucide) lucide.createIcons(); });
+    </script>
+</body>
+</html>

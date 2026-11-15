@@ -1,0 +1,2727 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Mes Plans Stratégiques — KIINI SAWA{% endblock %}
+
+{% block body %}
+<style>
+    .strat-wrap {
+        max-width: 1080px;
+        margin: 0 auto;
+        padding: 2.5rem 1.5rem 8rem;
+    }
+    @media (min-width: 1024px) {
+        .strat-wrap {
+            padding: 3.5rem 2rem 5rem;
+        }
+    }
+
+    /* Page Header for Hub */
+    .strat-header {
+        margin-bottom: 3rem;
+    }
+    .strat-header-icon {
+        width: 3rem; height: 3rem;
+        border-radius: 1rem;
+        background: var(--primary-glow);
+        color: var(--primary);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 1rem;
+    }
+    .strat-title {
+        font-family: var(--font-serif);
+        font-size: clamp(2rem, 4vw, 2.75rem);
+        color: var(--primary);
+        font-weight: 500;
+        margin-bottom: 0.5rem;
+    }
+    .strat-desc {
+        color: var(--fg-muted);
+        font-size: 1.05rem;
+        max-width: 650px;
+        line-height: 1.6;
+    }
+
+    /* Hub Grid & Cards */
+    .plans-grid {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+    }
+    @media (min-width: 640px) {
+        .plans-grid {
+            grid-template-columns: repeat(2, 1fr);
+        }
+    }
+    @media (min-width: 1024px) {
+        .plans-grid {
+            grid-template-columns: repeat(4, 1fr);
+        }
+    }
+
+    .plan-hub-card {
+        background: white;
+        border: 1px solid rgba(15, 118, 110, 0.06);
+        border-radius: 2rem;
+        padding: 2rem;
+        box-shadow: var(--card-shadow);
+        transition: all 0.3s var(--ease);
+        position: relative;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+        min-height: 280px;
+        cursor: pointer;
+        text-align: left;
+    }
+    .plan-hub-card:hover {
+        transform: translateY(-5px);
+        box-shadow: var(--card-shadow-hover);
+        border-color: rgba(15, 118, 110, 0.15);
+    }
+    .plan-card-decor {
+        position: absolute;
+        top: -2rem; right: -2rem;
+        width: 8rem; height: 8rem;
+        border-radius: 50%;
+        opacity: 0.03;
+        transition: opacity 0.3s;
+    }
+    .plan-hub-card:hover .plan-card-decor {
+        opacity: 0.08;
+    }
+
+    .plan-card-icon {
+        width: 3.25rem; height: 3.25rem;
+        border-radius: 1.25rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 1.5rem;
+        box-shadow: inset 0 2px 4px rgba(0,0,0,0.02);
+    }
+    .plan-card-subtitle {
+        font-size: 0.725rem;
+        font-weight: 800;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--fg-muted);
+        margin-bottom: 0.25rem;
+    }
+    .plan-card-title {
+        font-family: var(--font-serif);
+        font-size: 1.35rem;
+        font-weight: 500;
+        color: var(--fg);
+        margin-bottom: 0.75rem;
+    }
+    .plan-card-desc {
+        font-size: 0.85rem;
+        color: var(--fg-muted);
+        line-height: 1.5;
+        margin-bottom: 1.5rem;
+    }
+    .plan-card-footer {
+        margin-top: auto;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding-top: 1.25rem;
+        border-top: 1px solid rgba(0, 0, 0, 0.03);
+    }
+    .plan-card-count {
+        display: flex;
+        align-items: baseline;
+        gap: 0.25rem;
+    }
+    .plan-card-number {
+        font-size: 1.2rem;
+        font-weight: 800;
+        color: var(--fg);
+    }
+    .plan-card-label {
+        font-size: 0.7rem;
+        color: var(--fg-muted);
+        font-weight: 600;
+        text-transform: uppercase;
+    }
+    .plan-card-arrow {
+        width: 2rem; height: 2rem;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: transform 0.2s;
+    }
+    .plan-hub-card:hover .plan-card-arrow {
+        transform: translateX(3px);
+    }
+
+    /* ──────────────────────────────────────────────────────────────────────
+       REPLICATED LIFE PLAN DESIGN SYSTEM
+       ────────────────────────────────────────────────────────────────────── */
+
+    /* Choice / Welcome Hero Header */
+    .hero-choice {
+        background: rgba(255, 255, 255, 0.85);
+        backdrop-filter: blur(20px);
+        border: 1px solid rgba(15, 118, 110, 0.08);
+        border-radius: 2.5rem;
+        padding: 2.5rem;
+        box-shadow: var(--card-shadow);
+        margin-bottom: 3rem;
+        position: relative;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        gap: 1.5rem;
+    }
+    .hero-choice::before {
+        content: '';
+        position: absolute;
+        top: -10%; left: -10%;
+        width: 30%; height: 50%;
+        background: radial-gradient(circle, rgba(13, 148, 136, 0.08) 0%, transparent 70%);
+        pointer-events: none;
+    }
+    .hero-choice::after {
+        content: '';
+        position: absolute;
+        bottom: -10%; right: -10%;
+        width: 40%; height: 60%;
+        background: radial-gradient(circle, rgba(180, 83, 9, 0.05) 0%, transparent 70%);
+        pointer-events: none;
+    }
+    .hero-badge {
+        background: var(--primary-glow);
+        color: var(--primary);
+        font-size: 0.725rem;
+        font-weight: 850;
+        text-transform: uppercase;
+        letter-spacing: 0.12em;
+        padding: 0.5rem 1.25rem;
+        border-radius: 9999px;
+        border: 1px solid rgba(15, 118, 110, 0.12);
+        display: inline-flex;
+        align-items: center;
+        gap: 0.375rem;
+    }
+    .hero-title {
+        font-family: var(--font-serif);
+        font-size: clamp(1.85rem, 4.5vw, 2.85rem);
+        color: var(--primary);
+        font-weight: 500;
+        line-height: 1.2;
+        max-width: 600px;
+    }
+    .hero-desc {
+        color: var(--fg-muted);
+        font-size: 1.05rem;
+        max-width: 580px;
+        line-height: 1.6;
+    }
+    .hero-actions {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 1rem;
+        margin-top: 0.5rem;
+        position: relative;
+        z-index: 5;
+    }
+    .btn-hero-primary {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.95rem 1.85rem;
+        background: linear-gradient(135deg, #0D9488 0%, #0F766E 100%);
+        color: white;
+        font-weight: 750;
+        font-size: 0.95rem;
+        border-radius: 1rem;
+        box-shadow: 0 4px 14px rgba(15, 118, 110, 0.3);
+        transition: all 0.25s var(--ease);
+    }
+    .btn-hero-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(15, 118, 110, 0.45);
+        opacity: 0.98;
+    }
+    .btn-hero-secondary {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.95rem 1.85rem;
+        background: white;
+        color: var(--fg-light);
+        font-weight: 750;
+        font-size: 0.95rem;
+        border-radius: 1rem;
+        border: 1px solid rgba(15, 118, 110, 0.15);
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.02);
+        transition: all 0.25s var(--ease);
+        cursor: pointer;
+    }
+    .btn-hero-secondary:hover {
+        background: var(--bg-alt);
+        color: var(--primary);
+        border-color: var(--primary-light);
+        transform: translateY(-2px);
+    }
+    .btn-hero-secondary.active {
+        background: rgba(15, 118, 110, 0.08);
+        color: var(--primary);
+        border-color: var(--primary);
+        box-shadow: 0 0 0 1px var(--primary);
+    }
+
+    /* Tab navigation system */
+    .tabs-nav {
+        display: flex;
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        gap: 0.25rem;
+        border-bottom: 2px solid rgba(15, 118, 110, 0.06);
+        padding-bottom: 0.25rem;
+        margin-bottom: 2.5rem;
+        scrollbar-width: thin;
+        scrollbar-color: rgba(15, 118, 110, 0.25) transparent;
+    }
+    .tabs-nav::-webkit-scrollbar {
+        height: 4px;
+    }
+    .tabs-nav::-webkit-scrollbar-track {
+        background: transparent;
+    }
+    .tabs-nav::-webkit-scrollbar-thumb {
+        background: rgba(15, 118, 110, 0.25);
+        border-radius: 99px;
+    }
+    .tab-btn {
+        display: flex;
+        align-items: center;
+        gap: 0.375rem;
+        padding: 0.75rem 0.85rem;
+        background: transparent;
+        border: none;
+        color: var(--fg-muted);
+        font-family: inherit;
+        font-weight: 650;
+        font-size: 0.85rem;
+        cursor: pointer;
+        white-space: nowrap;
+        position: relative;
+        transition: all 0.25s;
+        border-radius: 0.75rem 0.75rem 0 0;
+    }
+    @media (min-width: 1024px) {
+        .tabs-nav {
+            flex-wrap: nowrap;
+            overflow-x: visible;
+            gap: 0.5rem;
+        }
+        .tabs-nav::-webkit-scrollbar {
+            display: none;
+        }
+        .tab-btn {
+            padding: 0.85rem 1.25rem;
+            font-size: 0.925rem;
+            gap: 0.5rem;
+        }
+    }
+    .tab-btn:hover {
+        color: var(--primary);
+        background: rgba(15, 118, 110, 0.03);
+    }
+    .tab-btn.active {
+        color: var(--primary);
+        font-weight: 750;
+    }
+    .tab-btn.active::after {
+        content: '';
+        position: absolute;
+        bottom: -4px; left: 0; right: 0;
+        height: 3px;
+        background: var(--primary);
+        border-radius: 99px;
+    }
+
+    /* Grids & Cards */
+    .cards-grid {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 2rem;
+    }
+    @media (min-width: 768px) {
+        .cards-grid {
+            grid-template-columns: repeat(2, 1fr);
+        }
+    }
+    .grid-full {
+        grid-column: span 1;
+    }
+    @media (min-width: 768px) {
+        .grid-full {
+            grid-column: span 2;
+        }
+    }
+
+    .plan-card {
+        background: white;
+        border: 1px solid rgba(15, 118, 110, 0.06);
+        border-radius: 2rem;
+        padding: 2rem;
+        box-shadow: var(--card-shadow);
+        transition: all 0.25s var(--ease);
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        min-height: 240px;
+    }
+    .plan-card:hover {
+        transform: translateY(-3px);
+        box-shadow: var(--card-shadow-hover);
+        border-color: rgba(15, 118, 110, 0.15);
+    }
+    .card-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 1.5rem;
+        border-bottom: 1px solid rgba(15, 118, 110, 0.05);
+        padding-bottom: 0.75rem;
+    }
+    .card-title-group {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+    }
+    .card-icon {
+        width: 2.25rem; height: 2.25rem;
+        border-radius: 0.75rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    .card-title {
+        font-family: var(--font-serif);
+        font-size: 1.2rem;
+        font-weight: 500;
+        color: var(--primary);
+        margin: 0;
+    }
+    .btn-edit-card {
+        width: 2rem; height: 2rem;
+        border-radius: 50%;
+        border: 1px solid rgba(15, 118, 110, 0.1);
+        background: transparent;
+        color: var(--fg-muted);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    .btn-edit-card:hover {
+        background: var(--primary-glow);
+        color: var(--primary);
+        border-color: var(--primary-light);
+        transform: scale(1.05);
+    }
+    .card-body {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    /* Purpose */
+    .purpose-quote {
+        font-family: var(--font-serif);
+        font-size: 1.25rem;
+        font-style: italic;
+        color: var(--primary-dark);
+        line-height: 1.6;
+        border-left: 3px solid var(--primary-light);
+        padding-left: 1rem;
+        margin: 0.5rem 0;
+    }
+
+    /* Tags lists */
+    .badge-flex {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+    }
+    .ks-badge {
+        padding: 0.4rem 0.85rem;
+        border-radius: 9999px;
+        font-size: 0.8rem;
+        font-weight: 600;
+        display: inline-block;
+    }
+    .badge-primary { background: #E6F4F1; color: #0F766E; }
+    .badge-secondary { background: #FEF3C7; color: #D97706; }
+    .badge-tertiary { background: #F3E8FF; color: #7E22CE; }
+    .badge-neutral { background: #F1F5F9; color: #475569; }
+
+    /* Internal balance details */
+    .sub-section-title {
+        font-size: 0.7rem;
+        font-weight: 800;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        color: var(--fg-muted);
+        margin-bottom: 0.5rem;
+        margin-top: 0.5rem;
+    }
+
+    /* Timeline styles */
+    .timeline-container {
+        position: relative;
+        padding-left: 2rem;
+        border-left: 2px solid rgba(15, 118, 110, 0.08);
+        display: flex;
+        flex-direction: column;
+        gap: 2rem;
+        margin-top: 1rem;
+    }
+    .timeline-item {
+        position: relative;
+        display: flex;
+        align-items: flex-start;
+        gap: 1.5rem;
+        width: 100%;
+    }
+    .timeline-dot {
+        position: absolute;
+        left: calc(-2rem - 6px);
+        top: 0.5rem;
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        background: var(--primary);
+        box-shadow: 0 0 0 3px rgba(15, 118, 110, 0.12);
+        z-index: 2;
+    }
+    .timeline-date-label {
+        font-size: 0.85rem;
+        font-weight: 800;
+        min-width: 3.5rem;
+        color: var(--primary);
+        font-family: monospace;
+        text-align: right;
+        margin-top: 0.35rem;
+        white-space: nowrap;
+    }
+    .timeline-content {
+        flex: 1;
+        background: white;
+        border: 1px solid rgba(15, 118, 110, 0.06);
+        border-radius: 1.25rem;
+        padding: 1.25rem;
+        box-shadow: var(--card-shadow);
+        transition: all 0.2s ease;
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+    }
+    .timeline-content:hover {
+        transform: translateY(-2px);
+        box-shadow: var(--card-shadow-hover);
+        border-color: rgba(15, 118, 110, 0.15);
+    }
+    .timeline-title {
+        font-size: 0.95rem;
+        font-weight: 700;
+        color: var(--fg);
+        line-height: 1.4;
+    }
+    .timeline-category {
+        font-size: 0.7rem;
+        font-weight: 800;
+        padding: 0.2rem 0.5rem;
+        border-radius: 4px;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+    }
+    .timeline-year-heading {
+        font-family: var(--font-serif);
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: var(--primary);
+        margin-bottom: 1rem;
+        position: relative;
+        padding-left: 0.5rem;
+    }
+    .timeline-year-heading::after {
+        content: '';
+        position: absolute;
+        bottom: -4px; left: 0;
+        width: 2rem; height: 2px;
+        background: var(--primary);
+    }
+    .timeline-year-group {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+        width: 100%;
+        position: relative;
+    }
+
+    /* Coherence Analysis styles */
+    .analysis-score-badge {
+        font-size: 0.8rem;
+        font-weight: 800;
+        padding: 0.4rem 1rem;
+        border-radius: 9999px;
+        text-transform: uppercase;
+    }
+    .analysis-issue-row {
+        padding: 1rem 1.25rem;
+        border-radius: 1rem;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 1.5rem;
+    }
+    .analysis-issue-content {
+        display: flex;
+        align-items: flex-start;
+        gap: 0.75rem;
+    }
+    .analysis-issue-text {
+        font-size: 0.9rem;
+        font-weight: 550;
+        color: var(--fg-light);
+        line-height: 1.45;
+    }
+    .btn-analysis-fix {
+        background: white;
+        border: 1px solid transparent;
+        padding: 0.4rem 1rem;
+        border-radius: 0.5rem;
+        font-size: 0.75rem;
+        font-weight: 750;
+        text-decoration: none;
+        cursor: pointer;
+        transition: all 0.2s;
+        white-space: nowrap;
+    }
+    .btn-analysis-fix:hover {
+        background: var(--bg-alt);
+        transform: scale(1.02);
+    }
+
+    /* Mermaid Legend */
+    .map-legend {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 1.25rem;
+        margin-top: 2rem;
+        padding: 1.25rem;
+        background: #F8FAFC;
+        border-radius: 1rem;
+        border: 1px solid rgba(0,0,0,0.03);
+    }
+    .legend-item {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+    .legend-color {
+        width: 14px; height: 14px;
+        border-radius: 4px;
+    }
+    .legend-label {
+        font-size: 0.775rem;
+        font-weight: 600;
+        color: var(--fg-light);
+    }
+</style>
+
+<div class="strat-wrap" x-data="{ 
+    activePlan: null, 
+    activeTab: 'INTENTION',
+    showAxisModal: false,
+    showPrinciplesModal: false,
+    currentAxis: { sourceType: '', sourceId: 0, text: '', strategy: '', status: 'build', lifeGoals: [], actions: [], habits: [] },
+    customPrinciples: [],
+    hasProposed(title) {
+        const activeTitles = {
+            'CROISSANCE': [
+                {% for pr in growthPrinciples.CROISSANCE %}
+                    '{{ pr.title|escape('js') }}',
+                {% endfor %}
+            ],
+            'DEVELOPPEMENT': [
+                {% for pr in growthPrinciples.DEVELOPPEMENT %}
+                    '{{ pr.title|escape('js') }}',
+                {% endfor %}
+            ],
+            'CONTRIBUTION': [
+                {% for pr in growthPrinciples.CONTRIBUTION %}
+                    '{{ pr.title|escape('js') }}',
+                {% endfor %}
+            ],
+            'DISCIPLINE': [
+                {% for pr in growthPrinciples.DISCIPLINE %}
+                    '{{ pr.title|escape('js') }}',
+                {% endfor %}
+            ]
+        };
+        const plan = this.activePlan || 'CROISSANCE';
+        return (activeTitles[plan] || []).includes(title);
+    }
+}" x-init="
+    $watch('activePlan', value => {
+        if (value) {
+            $nextTick(() => {
+                if (typeof lucide !== 'undefined') {
+                    lucide.createIcons();
+                }
+            });
+        }
+    });
+    const params = new URLSearchParams(window.location.search);
+    const p = params.get('plan') || params.get('activePlan');
+    const t = params.get('tab') || params.get('activeTab');
+    if (p && ['CROISSANCE', 'DEVELOPPEMENT', 'CONTRIBUTION', 'DISCIPLINE'].includes(p)) {
+        activePlan = p;
+    }
+    if (t) {
+        activeTab = t;
+    }
+    $nextTick(() => {
+        if (typeof lucide !== 'undefined') {
+            lucide.createIcons();
+        }
+    });
+">
+
+    {# ──────────────────────────────────────────────────────────────────────
+       HUB VIEW (Active Plan is Null)
+       ────────────────────────────────────────────────────────────────────── #}
+    <div x-show="activePlan === null" x-transition:enter="transition ease-out duration-300">
+        <header class="strat-header">
+            <div class="strat-header-icon">
+                <i data-lucide="sparkles" style="width: 24px; height: 24px;"></i>
+            </div>
+            <h1 class="strat-title">Plans Stratégiques</h1>
+            <p class="strat-desc">
+                Pilotez votre évolution à travers quatre piliers fondamentaux. Vos objectifs de vie sont ici transformés en systèmes concrets d'exécution.
+            </p>
+        </header>
+
+        <div class="plans-grid">
+            {# 1. Plan de Croissance #}
+            <div @click="activePlan = 'CROISSANCE'; activeTab = 'INTENTION'" class="plan-hub-card">
+                <div class="plan-card-decor bg-gradient-to-br from-amber-400 to-orange-500"></div>
+                <div class="plan-card-icon" style="background: #FFFBEB; color: #D97706;">
+                    <i data-lucide="zap" style="width: 22px; height: 22px;"></i>
+                </div>
+                <div>
+                    <div class="plan-card-subtitle">L'Évolution (BE)</div>
+                    <h2 class="plan-card-title">Croissance</h2>
+                    <p class="plan-card-desc">Caractère, Convictions profondes & Valeurs d'alignement.</p>
+                </div>
+                <div class="plan-card-footer">
+                    <div class="plan-card-count">
+                        <span class="plan-card-number">{{ growthGoals.CHARACTER|length }}</span>
+                        <span class="plan-card-label">éléments</span>
+                    </div>
+                    <div class="plan-card-arrow" style="background: #FFFBEB; color: #D97706;">
+                        <i data-lucide="chevron-right" style="width: 16px; height: 16px;"></i>
+                    </div>
+                </div>
+            </div>
+
+            {# 2. Plan de Développement #}
+            <div @click="activePlan = 'DEVELOPPEMENT'; activeTab = 'INTENTION'" class="plan-hub-card">
+                <div class="plan-card-decor bg-gradient-to-br from-blue-400 to-indigo-600"></div>
+                <div class="plan-card-icon" style="background: #EFF6FF; color: #2563EB;">
+                    <i data-lucide="graduation-cap" style="width: 22px; height: 22px;"></i>
+                </div>
+                <div>
+                    <div class="plan-card-subtitle">L'Exécution (DO)</div>
+                    <h2 class="plan-card-title">Développement</h2>
+                    <p class="plan-card-desc">Compétences à acquérir, Formations & Livres d'étude.</p>
+                </div>
+                <div class="plan-card-footer">
+                    <div class="plan-card-count">
+                        <span class="plan-card-number">{{ growthGoals.COMPETENCE|length }}</span>
+                        <span class="plan-card-label">éléments</span>
+                    </div>
+                    <div class="plan-card-arrow" style="background: #EFF6FF; color: #2563EB;">
+                        <i data-lucide="chevron-right" style="width: 16px; height: 16px;"></i>
+                    </div>
+                </div>
+            </div>
+
+            {# 3. Plan de Transmission #}
+            <div @click="activePlan = 'CONTRIBUTION'; activeTab = 'INTENTION'" class="plan-hub-card">
+                <div class="plan-card-decor bg-gradient-to-br from-pink-400 to-rose-600"></div>
+                <div class="plan-card-icon" style="background: #FDF2F8; color: #DB2777;">
+                    <i data-lucide="heart" style="width: 22px; height: 22px;"></i>
+                </div>
+                <div>
+                    <div class="plan-card-subtitle">L'Impact (GIVE)</div>
+                    <h2 class="plan-card-title">Transmission</h2>
+                    <p class="plan-card-desc">Mentorat, Service, Réseaux d'influence & Projets de legs.</p>
+                </div>
+                <div class="plan-card-footer">
+                    <div class="plan-card-count">
+                        <span class="plan-card-number">{{ growthGoals.RELATION|length }}</span>
+                        <span class="plan-card-label">éléments</span>
+                    </div>
+                    <div class="plan-card-arrow" style="background: #FDF2F8; color: #DB2777;">
+                        <i data-lucide="chevron-right" style="width: 16px; height: 16px;"></i>
+                    </div>
+                </div>
+            </div>
+
+            {# 4. Plan d'Hygiène #}
+            <div @click="activePlan = 'DISCIPLINE'; activeTab = 'INTENTION'" class="plan-hub-card">
+                <div class="plan-card-decor bg-gradient-to-br from-emerald-400 to-teal-600"></div>
+                <div class="plan-card-icon" style="background: #ECFDF5; color: #059669;">
+                    <i data-lucide="shield" style="width: 22px; height: 22px;"></i>
+                </div>
+                <div>
+                    <div class="plan-card-subtitle">Le Système</div>
+                    <h2 class="plan-card-title">Hygiène de Vie</h2>
+                    <p class="plan-card-desc">Sommeil, Nutrition, Sport, Méditation & Environnement.</p>
+                </div>
+                <div class="plan-card-footer">
+                    <div class="plan-card-count">
+                        <span class="plan-card-number">{{ hygieneDomains|length }}</span>
+                        <span class="plan-card-label">domaines</span>
+                    </div>
+                    <div class="plan-card-arrow" style="background: #ECFDF5; color: #059669;">
+                        <i data-lucide="chevron-right" style="width: 16px; height: 16px;"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {# ──────────────────────────────────────────────────────────────────────
+       DETAILED VIEW (Active Plan is Set)
+       ────────────────────────────────────────────────────────────────────── #}
+    <div x-show="activePlan !== null" x-cloak x-transition:enter="transition ease-out duration-300">
+        
+        <!-- Hero Header (Replicating Life Plan style) -->
+        <header class="hero-choice" style="margin-bottom: 2rem;">
+            <div class="hero-badge" 
+                 :style="activePlan === 'CROISSANCE' ? 'background: #FFFBEB; color: #D97706; border-color: rgba(217, 119, 6, 0.15);' : 
+                         (activePlan === 'DEVELOPPEMENT' ? 'background: #EFF6FF; color: #2563EB; border-color: rgba(37, 99, 235, 0.15);' : 
+                          (activePlan === 'CONTRIBUTION' ? 'background: #FDF2F8; color: #DB2777; border-color: rgba(219, 39, 119, 0.15);' : 
+                           'background: #ECFDF5; color: #059669; border-color: rgba(5, 150, 105, 0.15);'))">
+                <template x-if="activePlan === 'CROISSANCE'"><span style="display:flex; align-items:center; gap:0.25rem;"><i data-lucide="zap" style="width: 14px; height: 14px;"></i> Plan de Croissance</span></template>
+                <template x-if="activePlan === 'DEVELOPPEMENT'"><span style="display:flex; align-items:center; gap:0.25rem;"><i data-lucide="graduation-cap" style="width: 14px; height: 14px;"></i> Plan de Développement</span></template>
+                <template x-if="activePlan === 'CONTRIBUTION'"><span style="display:flex; align-items:center; gap:0.25rem;"><i data-lucide="heart" style="width: 14px; height: 14px;"></i> Plan de Transmission</span></template>
+                <template x-if="activePlan === 'DISCIPLINE'"><span style="display:flex; align-items:center; gap:0.25rem;"><i data-lucide="shield" style="width: 14px; height: 14px;"></i> Plan d'Hygiène de Vie</span></template>
+            </div>
+            <h1 class="hero-title"
+                x-text="activePlan === 'CROISSANCE' ? 'Plan de Croissance' : 
+                        (activePlan === 'DEVELOPPEMENT' ? 'Plan de Développement' : 
+                         (activePlan === 'CONTRIBUTION' ? 'Plan de Transmission' : 'Plan d\'Hygiène de Vie'))">
+            </h1>
+            <p class="hero-desc"
+               x-text="activePlan === 'CROISSANCE' ? 'Pilotez l\'évolution de votre Être (BE). Alignez votre caractère, vos convictions et vos valeurs.' : 
+                       (activePlan === 'DEVELOPPEMENT' ? 'Pilotez l\'exécution de votre Talent (DO). Développez vos compétences et vos connaissances.' : 
+                        (activePlan === 'CONTRIBUTION' ? 'Pilotez l\'impact de votre Vision (GIVE). Organisez votre mentorat, service et projets de legs.' : 
+                         'Gériez vos systèmes quotidiens (Discipline) : sommeil, nutrition, sport et environnement vital.'))">
+            </p>
+            <div class="hero-actions">
+                <button @click="activePlan = null" class="btn-hero-secondary">
+                    <i data-lucide="layout-dashboard" style="width: 18px; height: 18px;"></i>
+                    Retour aux Plans
+                </button>
+                <a :href="activePlan ? '{{ path('app_user_life_plan_wizard') }}?plan=' + activePlan : '{{ path('app_user_life_plan_wizard') }}'" class="btn-hero-primary">
+                    <i data-lucide="sparkles" style="width: 18px; height: 18px;"></i>
+                    Lancer l'Assistant Guidé
+                </a>
+                <template x-if="activePlan === 'CROISSANCE'">
+                    <span style="display: inline-flex; gap: 1rem; flex-wrap: wrap;">
+                        <a href="{{ path('app_user_croissance_plan_visualize') }}" target="_blank" class="btn-hero-secondary">
+                            <i data-lucide="printer" style="width: 18px; height: 18px;"></i>
+                            Visualiser & Imprimer
+                        </a>
+                        <button @click="sendPlanEmail('CROISSANCE', $event.currentTarget)" class="btn-hero-secondary">
+                            <i data-lucide="mail" style="width: 18px; height: 18px;"></i>
+                            M'envoyer par email
+                        </button>
+                        <button class="btn-hero-secondary" @click="activeTab = 'MAP'; $nextTick(() => initMermaid('CROISSANCE'))">
+                            <i data-lucide="map" style="width: 18px; height: 18px;"></i>
+                            Carte
+                        </button>
+                        <button class="btn-hero-secondary" @click="activeTab = 'ANALYSIS'">
+                            <i data-lucide="activity" style="width: 18px; height: 18px;"></i>
+                            Analyse
+                        </button>
+                    </span>
+                </template>
+                <template x-if="activePlan === 'DEVELOPPEMENT'">
+                    <span style="display: inline-flex; gap: 1rem; flex-wrap: wrap;">
+                        <a href="{{ path('app_user_developpement_plan_visualize') }}" target="_blank" class="btn-hero-secondary">
+                            <i data-lucide="printer" style="width: 18px; height: 18px;"></i>
+                            Visualiser & Imprimer
+                        </a>
+                        <button @click="sendPlanEmail('DEVELOPPEMENT', $event.currentTarget)" class="btn-hero-secondary">
+                            <i data-lucide="mail" style="width: 18px; height: 18px;"></i>
+                            M'envoyer par email
+                        </button>
+                        <button class="btn-hero-secondary" @click="activeTab = 'MAP'; $nextTick(() => initMermaid('DEVELOPPEMENT'))">
+                            <i data-lucide="map" style="width: 18px; height: 18px;"></i>
+                            Carte
+                        </button>
+                        <button class="btn-hero-secondary" @click="activeTab = 'ANALYSIS'">
+                            <i data-lucide="activity" style="width: 18px; height: 18px;"></i>
+                            Analyse
+                        </button>
+                    </span>
+                </template>
+                <template x-if="activePlan === 'CONTRIBUTION'">
+                    <span style="display: inline-flex; gap: 1rem; flex-wrap: wrap;">
+                        <a href="{{ path('app_user_contribution_plan_visualize') }}" target="_blank" class="btn-hero-secondary">
+                            <i data-lucide="printer" style="width: 18px; height: 18px;"></i>
+                            Visualiser & Imprimer
+                        </a>
+                        <button @click="sendPlanEmail('CONTRIBUTION', $event.currentTarget)" class="btn-hero-secondary">
+                            <i data-lucide="mail" style="width: 18px; height: 18px;"></i>
+                            M'envoyer par email
+                        </button>
+                        <button class="btn-hero-secondary" @click="activeTab = 'MAP'; $nextTick(() => initMermaid('CONTRIBUTION'))">
+                            <i data-lucide="map" style="width: 18px; height: 18px;"></i>
+                            Carte
+                        </button>
+                        <button class="btn-hero-secondary" @click="activeTab = 'ANALYSIS'">
+                            <i data-lucide="activity" style="width: 18px; height: 18px;"></i>
+                            Analyse
+                        </button>
+                    </span>
+                </template>
+                <template x-if="activePlan === 'DISCIPLINE'">
+                    <span style="display: inline-flex; gap: 1rem; flex-wrap: wrap;">
+                        <a href="{{ path('app_user_discipline_plan_visualize') }}" target="_blank" class="btn-hero-secondary">
+                            <i data-lucide="printer" style="width: 18px; height: 18px;"></i>
+                            Visualiser & Imprimer
+                        </a>
+                        <button @click="sendPlanEmail('DISCIPLINE', $event.currentTarget)" class="btn-hero-secondary">
+                            <i data-lucide="mail" style="width: 18px; height: 18px;"></i>
+                            M'envoyer par email
+                        </button>
+                        <button class="btn-hero-secondary" @click="activeTab = 'MAP'; $nextTick(() => initMermaid('DISCIPLINE'))">
+                            <i data-lucide="map" style="width: 18px; height: 18px;"></i>
+                            Carte
+                        </button>
+                        <button class="btn-hero-secondary" @click="activeTab = 'ANALYSIS'">
+                            <i data-lucide="activity" style="width: 18px; height: 18px;"></i>
+                            Analyse
+                        </button>
+                    </span>
+                </template>
+            </div>
+        </header>
+
+        <!-- Sub-tabs Navigation (Replicating Life Plan style) -->
+        <nav class="tabs-nav">
+            <button @click="activeTab = 'INTENTION'" :class="activeTab === 'INTENTION' ? 'active' : ''" class="tab-btn">
+                <i data-lucide="compass" style="width: 16px; height: 16px;"></i> Intention
+            </button>
+            <button @click="activeTab = 'PRIORITIES'" :class="activeTab === 'PRIORITIES' ? 'active' : ''" class="tab-btn">
+                <i data-lucide="target" style="width: 16px; height: 16px;"></i>
+                <span x-text="activePlan === 'CROISSANCE' ? 'Axes de Croissance' : 
+                             (activePlan === 'DEVELOPPEMENT' ? 'Axes de Développement' : 
+                              (activePlan === 'CONTRIBUTION' ? 'Axes de Transmission' : 'Axes d\'Hygiène'))"></span>
+            </button>
+            <button @click="activeTab = 'LAWS'" :class="activeTab === 'LAWS' ? 'active' : ''" class="tab-btn">
+                <i data-lucide="scale" style="width: 16px; height: 16px;"></i> Lois & Principes
+            </button>
+            <button @click="activeTab = 'SYSTEM'" :class="activeTab === 'SYSTEM' ? 'active' : ''" class="tab-btn">
+                <i data-lucide="activity" style="width: 16px; height: 16px;"></i> Système
+            </button>
+            <button @click="activeTab = 'TIMELINE'" :class="activeTab === 'TIMELINE' ? 'active' : ''" class="tab-btn">
+                <i data-lucide="calendar" style="width: 16px; height: 16px;"></i> Échéancier
+            </button>
+        </nav>
+
+        <!-- Content Area -->
+        <div style="margin-top: 1rem;">
+
+            {# ════════════════ 1. INTENTION TAB ════════════════ #}
+            <div x-show="activeTab === 'INTENTION'">
+                <div class="cards-grid">
+                    <!-- Card 1: Déclaration d'Intention & Vision -->
+                    <div class="plan-card">
+                        <div class="card-header">
+                            <div class="card-title-group">
+                                <div class="card-icon" style="background: rgba(13, 148, 136, 0.08); color: var(--primary);">
+                                    <i data-lucide="compass" style="width: 18px; height: 18px;"></i>
+                                </div>
+                                <h2 class="card-title">Intention & Raison d'être</h2>
+                            </div>
+                            <a :href="'{{ path('app_user_life_plan_wizard', { step: 1, single: 1 }) }}&plan=' + activePlan" class="btn-edit-card" title="Modifier la raison d'être">
+                                <i data-lucide="pencil" style="width: 14px; height: 14px;"></i>
+                            </a>
+                        </div>
+                        <div class="card-body">
+                            <p style="font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 0.25rem;"
+                               :style="activePlan === 'CROISSANCE' ? 'color: #D97706;' : 
+                                       (activePlan === 'DEVELOPPEMENT' ? 'color: #2563EB;' : 
+                                        (activePlan === 'CONTRIBUTION' ? 'color: #DB2777;' : 'color: #059669;'))">
+                                Intention de ce pilier
+                            </p>
+                            <h3 style="font-family: var(--font-serif); font-size: 1.35rem; font-weight: 800; margin: 0 0 1rem 0;"
+                                :style="activePlan === 'CROISSANCE' ? 'color: #D97706;' : 
+                                        (activePlan === 'DEVELOPPEMENT' ? 'color: #2563EB;' : 
+                                         (activePlan === 'CONTRIBUTION' ? 'color: #DB2777;' : 'color: #059669;'))">
+                                Ce que je vais <span style="text-decoration: underline; text-decoration-style: wavy; text-underline-offset: 4px;"
+                                                    x-text="activePlan === 'CROISSANCE' ? 'DEVENIR' : 
+                                                            (activePlan === 'DEVELOPPEMENT' ? 'ACCOMPLIR' : 
+                                                             (activePlan === 'CONTRIBUTION' ? 'LÉGUER' : 'MAÎTRISER'))"></span>
+                            </h3>
+                            
+                            <div class="sub-section-title">Ma Raison d'être & Mission</div>
+                            <p style="font-size: 0.95rem; font-weight: 600; color: var(--fg); line-height: 1.6; margin: 0 0 1rem 0;">
+                                {{ planDeVie.purpose.statement|default('Aucune mission de vie définie.') }}
+                            </p>
+
+                            <div class="sub-section-title">Ma Vision</div>
+                            <div class="purpose-quote">
+                                "{{ planDeVie.vision.content|default('Aucune vision définie.') }}"
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Card 2: Objectifs Spécifiques Associés -->
+                    <div class="plan-card">
+                        <div class="card-header">
+                            <div class="card-title-group">
+                                <div class="card-icon" style="background: rgba(59, 130, 246, 0.08); color: #3b82f6;">
+                                    <i data-lucide="target" style="width: 18px; height: 18px;"></i>
+                                </div>
+                                <h2 class="card-title">Objectifs Spécifiques Associés</h2>
+                            </div>
+                            <a :href="'{{ path('app_user_life_plan_wizard', { step: 7, single: 1 }) }}&plan=' + activePlan" class="btn-edit-card" title="Modifier les objectifs">
+                                <i data-lucide="pencil" style="width: 14px; height: 14px;"></i>
+                            </a>
+                        </div>
+                        <div class="card-body">
+                            <div style="display: flex; flex-direction: column; gap: 0.5rem; margin-top: 0.5rem;">
+                                {# Loop on goals character (BE) #}
+                                <div x-show="activePlan === 'CROISSANCE'" style="display: flex; flex-direction: column; gap: 0.5rem;">
+                                    {% for goal in lifeGoals.BE %}
+                                        <div style="display: flex; align-items: center; gap: 0.75rem; padding: 0.75rem 1rem; background: #F8FAFC; border-radius: 0.75rem; border-left: 3px solid #D97706;">
+                                            <i data-lucide="arrow-up-right" style="width: 14px; height: 14px; color: #D97706; flex-shrink: 0;"></i>
+                                            <span style="font-size: 0.9rem; color: var(--fg-light); font-weight: 600;">{{ goal.title }}</span>
+                                        </div>
+                                    {% else %}
+                                        <p style="font-size: 0.85rem; color: var(--fg-muted); font-style: italic;">Aucun objectif spécifique de type 'BE' lié.</p>
+                                    {% endfor %}
+                                </div>
+                                {# Loop on competence goals (DO) #}
+                                <div x-show="activePlan === 'DEVELOPPEMENT'" style="display: flex; flex-direction: column; gap: 0.5rem;">
+                                    {% for goal in lifeGoals.DO %}
+                                        <div style="display: flex; align-items: center; gap: 0.75rem; padding: 0.75rem 1rem; background: #F8FAFC; border-radius: 0.75rem; border-left: 3px solid #2563EB;">
+                                            <i data-lucide="arrow-up-right" style="width: 14px; height: 14px; color: #2563EB; flex-shrink: 0;"></i>
+                                            <span style="font-size: 0.9rem; color: var(--fg-light); font-weight: 600;">{{ goal.title }}</span>
+                                        </div>
+                                    {% else %}
+                                        <p style="font-size: 0.85rem; color: var(--fg-muted); font-style: italic;">Aucun objectif spécifique de type 'DO' lié.</p>
+                                    {% endfor %}
+                                </div>
+                                {# Loop on contribution goals (GIVE) #}
+                                <div x-show="activePlan === 'CONTRIBUTION'" style="display: flex; flex-direction: column; gap: 0.5rem;">
+                                    {% for goal in lifeGoals.GIVE %}
+                                        <div style="display: flex; align-items: center; gap: 0.75rem; padding: 0.75rem 1rem; background: #F8FAFC; border-radius: 0.75rem; border-left: 3px solid #DB2777;">
+                                            <i data-lucide="arrow-up-right" style="width: 14px; height: 14px; color: #DB2777; flex-shrink: 0;"></i>
+                                            <span style="font-size: 0.9rem; color: var(--fg-light); font-weight: 600;">{{ goal.title }}</span>
+                                        </div>
+                                    {% else %}
+                                        <p style="font-size: 0.85rem; color: var(--fg-muted); font-style: italic;">Aucun objectif spécifique de type 'GIVE' lié.</p>
+                                    {% endfor %}
+                                </div>
+                                {# Loop on hygiene goals (HAVE) #}
+                                <div x-show="activePlan === 'DISCIPLINE'" style="display: flex; flex-direction: column; gap: 0.5rem;">
+                                    {% for goal in lifeGoals.HAVE %}
+                                        <div style="display: flex; align-items: center; gap: 0.75rem; padding: 0.75rem 1rem; background: #F8FAFC; border-radius: 0.75rem; border-left: 3px solid #059669;">
+                                            <i data-lucide="arrow-up-right" style="width: 14px; height: 14px; color: #059669; flex-shrink: 0;"></i>
+                                            <span style="font-size: 0.9rem; color: var(--fg-light); font-weight: 600;">{{ goal.title }}</span>
+                                        </div>
+                                    {% else %}
+                                        <p style="font-size: 0.85rem; color: var(--fg-muted); font-style: italic;">Aucun objectif spécifique de type 'HAVE' lié.</p>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Card 3: Diagnostic Vitalité (DISCIPLINE Only) -->
+                    <div class="plan-card grid-full" x-show="activePlan === 'DISCIPLINE'">
+                        <div class="card-header">
+                            <div class="card-title-group">
+                                <div class="card-icon" style="background: rgba(16, 185, 129, 0.08); color: #10b981;">
+                                    <i data-lucide="heart-pulse" style="width: 18px; height: 18px;"></i>
+                                </div>
+                                <h2 class="card-title">Diagnostic Vitalité</h2>
+                            </div>
+                            <a :href="'{{ path('app_user_life_plan_wizard', { step: 12, single: 1 }) }}&plan=' + activePlan" class="btn-edit-card" title="Modifier le diagnostic d'hygiène">
+                                <i data-lucide="pencil" style="width: 14px; height: 14px;"></i>
+                            </a>
+                        </div>
+                        <div class="card-body">
+                            {% if hygieneDomains|length > 0 %}
+                                <div style="display: flex; flex-direction: column; gap: 1rem; margin-top: 0.5rem;">
+                                    {% for category, hds in groupedHygieneDomains %}
+                                        {% if hds|length > 0 %}
+                                            <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+                                                <div style="font-size: 0.72rem; font-weight: 800; color: var(--primary); text-transform: uppercase; letter-spacing: 0.05em; display: flex; align-items: center; gap: 0.25rem;">
+                                                    <span style="width: 6px; height: 6px; border-radius: 50%; background: var(--primary);"></span>
+                                                    {{ category }}
+                                                </div>
+                                                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 0.5rem;">
+                                                    {% for hd in hds %}
+                                                        <div style="background: #F8FAFC; padding: 0.6rem 0.85rem; border-radius: 0.75rem; border: 1px solid rgba(0,0,0,0.04); display: flex; justify-content: space-between; align-items: center; gap: 0.5rem;">
+                                                            <span style="font-size: 0.82rem; font-weight: 600; color: var(--fg-light);">{{ hd.name }}</span>
+                                                            <span style="font-size: 0.7rem; font-weight: 800; padding: 0.15rem 0.4rem; border-radius: 5px; text-transform: uppercase; background: {% if hd.subtype == 'leverage' %}#D1F2EB; color: #0E6251;{% elseif hd.subtype == 'consolidate' %}#D5F5E3; color: #196F3D;{% else %}#FCF3CF; color: #7E5109;{% endif %}">
+                                                                {{ hd.subtype == 'leverage' ? 'À exploiter' : (hd.subtype == 'consolidate' ? 'À consolider' : 'À construire') }}
+                                                            </span>
+                                                        </div>
+                                                    {% endfor %}
+                                                </div>
+                                            </div>
+                                        {% endif %}
+                                    {% endfor %}
+                                </div>
+                            {% else %}
+                                <p style="font-size: 0.85rem; color: var(--fg-muted); font-style: italic; margin: 0;">Aucun domaine d'hygiène n'est configuré pour le moment.</p>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {# ════════════════ 2. PRIORITIES TAB ════════════════ #}
+            <div x-show="activeTab === 'PRIORITIES'">
+                <div class="cards-grid">
+                    <div class="plan-card grid-full">
+                        <div class="card-header">
+                            <div class="card-title-group">
+                                <div class="card-icon" style="background: rgba(13, 148, 136, 0.08); color: var(--primary);">
+                                    <i data-lucide="target" style="width: 18px; height: 18px;"></i>
+                                </div>
+                                <h2 class="card-title" x-text="activePlan === 'CROISSANCE' ? 'Axes de Croissance' : 
+                                                               (activePlan === 'DEVELOPPEMENT' ? 'Axes de Développement' : 
+                                                                (activePlan === 'CONTRIBUTION' ? 'Axes de Transmission' : 'Axes d\'Hygiène'))">Axes</h2>
+                            </div>
+                            <a :href="activePlan === 'CROISSANCE' ? '{{ path('app_user_life_plan_wizard', { step: 9, single: 1 }) }}&plan=CROISSANCE' : 
+                                      (activePlan === 'DEVELOPPEMENT' ? '{{ path('app_user_life_plan_wizard', { step: 8, single: 1 }) }}&plan=DEVELOPPEMENT' : 
+                                       (activePlan === 'CONTRIBUTION' ? '{{ path('app_user_life_plan_wizard', { step: 10, single: 1 }) }}&plan=CONTRIBUTION' : 
+                                        '{{ path('app_user_life_plan_wizard', { step: 12, single: 1 }) }}&plan=DISCIPLINE'))"
+                               class="btn-edit-card" title="Modifier les axes">
+                                <i data-lucide="pencil" style="width: 14px; height: 14px;"></i>
+                            </a>
+                        </div>
+                        <div class="card-body">
+                            <!-- Growth Goals Character -->
+                            <div x-show="activePlan === 'CROISSANCE'" style="display: flex; flex-direction: column; gap: 1.5rem; margin-top: 0.5rem;">
+                                {% set categoriesMeta = {
+                                    'LIMITING_BELIEF': {'label': 'Croyances Limitantes', 'icon': 'shield-alert', 'color': '#EF4444', 'bg': '#FEF2F2'},
+                                    'COUNTER_VALUE': {'label': 'Contre-valeurs observées', 'icon': 'shield-x', 'color': '#F59E0B', 'bg': '#FFFBEB'},
+                                    'DECLARED_VALUE': {'label': 'Valeurs déclarées & admirées', 'icon': 'star', 'color': '#3B82F6', 'bg': '#EFF6FF'},
+                                    'CONVICTION': {'label': 'Caractère & Convictions', 'icon': 'heart', 'color': '#10B981', 'bg': '#ECFDF5'}
+                                } %}
+
+                                {% for type, meta in categoriesMeta %}
+                                    {% set axesList = croissanceAxes[type] ?? [] %}
+                                    {% if axesList|length > 0 %}
+                                        <div style="background: white; border-radius: 1rem; border: 1px solid rgba(15, 118, 110, 0.08); padding: 1.25rem;">
+                                            <h3 style="font-size: 1rem; font-weight: 700; color: {{ meta.color }}; display: flex; align-items: center; gap: 0.5rem; margin: 0 0 1rem 0;">
+                                                <i data-lucide="{{ meta.icon }}" style="width: 18px; height: 18px;"></i>
+                                                {{ meta.label }}
+                                            </h3>
+                                            <div style="display: flex; flex-direction: column; gap: 0.75rem;">
+                                                {% for item in axesList %}
+                                                    <div style="padding: 1rem; background: #F8FAFC; border-radius: 0.75rem; border: 1px solid rgba(0,0,0,0.02); display: flex; justify-content: space-between; align-items: center; gap: 1rem; flex-wrap: wrap;">
+                                                        <div style="flex: 1; min-width: 250px;">
+                                                            <div style="font-weight: 600; font-size: 0.95rem; color: var(--fg);">{{ item.text }}</div>
+                                                            {% if item.goal %}
+                                                                <div style="font-size: 0.8rem; color: var(--fg-muted); margin-top: 0.25rem;">
+                                                                    <strong>Stratégie :</strong> {{ item.goal.strategy|default('Aucune stratégie définie.') }}
+                                                                </div>
+                                                                <div style="display: flex; flex-wrap: wrap; gap: 0.35rem; margin-top: 0.5rem;">
+                                                                    {% for lg in item.goal.supportedLifeGoals %}
+                                                                        <span class="ks-badge badge-secondary" style="font-size: 0.7rem; background: rgba(15,118,110,0.06); color: var(--primary);">
+                                                                            {{ lg.title }}
+                                                                        </span>
+                                                                    {% endfor %}
+                                                                </div>
+                                                            {% else %}
+                                                                <div style="font-size: 0.8rem; color: var(--fg-muted); font-style: italic; margin-top: 0.25rem;">
+                                                                    Axe non configuré.
+                                                                </div>
+                                                            {% endif %}
+                                                        </div>
+                                                        
+                                                        <div style="display: flex; align-items: center; gap: 0.75rem;">
+                                                            {% if item.goal %}
+                                                                <span style="font-size: 0.75rem; font-weight: 700; padding: 0.25rem 0.5rem; border-radius: 0.35rem; text-transform: uppercase; background: {% if item.goal.subtype == 'consolidate' %}#D1F2EB; color: #0E6251;{% else %}#FCF3CF; color: #7E5109;{% endif %}">
+                                                                    {{ item.goal.subtype == 'consolidate' ? 'À consolider' : 'À construire' }}
+                                                                </span>
+                                                            {% endif %}
+                                                            <button type="button" 
+                                                                    @click="
+                                                                        currentAxis = {
+                                                                            sourceType: '{{ type }}',
+                                                                            sourceId: {{ item.id }},
+                                                                            text: '{{ item.text|escape('js') }}',
+                                                                            strategy: '{{ item.goal ? item.goal.strategy|escape('js') : '' }}',
+                                                                            status: '{{ item.goal ? item.goal.subtype|escape('js') : 'build' }}',
+                                                                            lifeGoals: [
+                                                                                {% if item.goal %}
+                                                                                    {% for lg in item.goal.supportedLifeGoals %}{{ lg.id }}{% if not loop.last %},{% endif %}{% endfor %}
+                                                                                {% endif %}
+                                                                            ],
+                                                                            actions: [
+                                                                                {% if item.goal %}
+                                                                                    {% for act in item.goal.actions %}
+                                                                                        { title: '{{ act.title|escape('js') }}', deadline: '{{ act.deadline ? act.deadline|date('Y-m-d') : '' }}' }{% if not loop.last %},{% endif %}
+                                                                                    {% endfor %}
+                                                                                {% endif %}
+                                                                            ],
+                                                                            habits: [
+                                                                                {% if item.goal %}
+                                                                                    {% for hab in item.goal.habits %}
+                                                                                        { title: '{{ hab.title|escape('js') }}', frequency: '{{ hab.frequency.value }}' }{% if not loop.last %},{% endif %}
+                                                                                    {% endfor %}
+                                                                                {% endif %}
+                                                                            ]
+                                                                        };
+                                                                        if (currentAxis.actions.length === 0) currentAxis.actions.push({ title: '', deadline: '' });
+                                                                        if (currentAxis.habits.length === 0) currentAxis.habits.push({ title: '', frequency: 'DAILY' });
+                                                                        showAxisModal = true;
+                                                                    "
+                                                                    style="display: inline-flex; align-items: center; gap: 0.35rem; font-size: 0.8rem; font-weight: 600; padding: 0.4rem 0.8rem; border-radius: 0.5rem; background: var(--primary); color: white; border: none; cursor: pointer; transition: opacity 0.2s;"
+                                                                    onmouseover="this.style.opacity='0.9'"
+                                                                    onmouseout="this.style.opacity='1'">
+                                                                <i data-lucide="settings" style="width: 14px; height: 14px;"></i>
+                                                                Configurer
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                {% endfor %}
+                                            </div>
+                                        </div>
+                                    {% endif %}
+                                {% endfor %}
+                            </div>
+
+                            <!-- Growth Goals Competence -->
+                            <div x-show="activePlan === 'DEVELOPPEMENT'" style="display: flex; flex-direction: column; gap: 1rem; margin-top: 0.5rem;">
+                                {% for gg in growthGoals.COMPETENCE %}
+                                    <div style="padding: 1.25rem; background: #F8FAFC; border-radius: 1rem; border: 1px solid rgba(0, 0, 0, 0.03); border-left: 3px solid #2563EB;">
+                                        <h3 style="font-weight: 700; font-size: 1rem; color: var(--fg); margin-bottom: 0.25rem;">{{ gg.title }}</h3>
+                                        {% if gg.strategy %}<p style="font-size: 0.85rem; color: var(--fg-muted); line-height: 1.4; margin: 0;">{{ gg.strategy }}</p>{% endif %}
+                                    </div>
+                                {% else %}
+                                    <p style="font-size: 0.9rem; color: var(--fg-muted); font-style: italic;">Aucun objectif de développement (compétences) défini.</p>
+                                {% endfor %}
+                            </div>
+
+                            <!-- Growth Goals Relation -->
+                            <div x-show="activePlan === 'CONTRIBUTION'" style="display: flex; flex-direction: column; gap: 1rem; margin-top: 0.5rem;">
+                                {% for gg in growthGoals.RELATION %}
+                                    <div style="padding: 1.25rem; background: #F8FAFC; border-radius: 1rem; border: 1px solid rgba(0, 0, 0, 0.03); border-left: 3px solid #DB2777;">
+                                        <h3 style="font-weight: 700; font-size: 1rem; color: var(--fg); margin-bottom: 0.25rem;">{{ gg.title }}</h3>
+                                        {% if gg.strategy %}<p style="font-size: 0.85rem; color: var(--fg-muted); line-height: 1.4; margin: 0;">{{ gg.strategy }}</p>{% endif %}
+                                    </div>
+                                {% else %}
+                                    <p style="font-size: 0.9rem; color: var(--fg-muted); font-style: italic;">Aucun objectif de transmission (réseau/influence) défini.</p>
+                                {% endfor %}
+                            </div>
+
+                            <!-- Hygiene Domains -->
+                            <div x-show="activePlan === 'DISCIPLINE'" style="display: flex; flex-direction: column; gap: 1.5rem; margin-top: 0.5rem;">
+                                {% set hasAnyHygiene = false %}
+                                {% for category, hds in groupedHygieneDomains %}
+                                    {% if hds|length > 0 %}
+                                        {% set hasAnyHygiene = true %}
+                                        <div style="border: 1px solid rgba(15, 118, 110, 0.08); border-radius: 1.25rem; padding: 1.25rem; background: #ffffff;">
+                                            <h3 style="font-size: 1rem; font-weight: 750; color: var(--primary); margin: 0 0 1rem 0; display: flex; align-items: center; gap: 0.5rem; border-bottom: 1px dashed rgba(15, 118, 110, 0.12); padding-bottom: 0.5rem; font-family: 'Playfair Display', serif;">
+                                                <i data-lucide="shield" style="width: 16px; height: 16px; color: var(--primary);"></i>
+                                                Axe {{ category }}
+                                            </h3>
+                                            <div style="display: flex; flex-direction: column; gap: 1rem;">
+                                                {% for hd in hds %}
+                                                    <div style="padding: 1rem; background: #F8FAFC; border-radius: 0.85rem; border: 1px solid rgba(0, 0, 0, 0.03); border-left: 3px solid #059669; display: flex; flex-direction: column; gap: 0.75rem;">
+                                                        <div style="display: flex; justify-content: space-between; align-items: center; width: 100%; flex-wrap: wrap; gap: 0.5rem;">
+                                                            <h4 style="font-weight: 700; font-size: 0.95rem; color: var(--fg); margin: 0;">{{ hd.name }}</h4>
+                                                            <span style="font-size: 0.72rem; font-weight: 700; padding: 0.2rem 0.5rem; border-radius: 0.35rem; text-transform: uppercase; background: {% if hd.subtype == 'leverage' %}#D1F2EB; color: #0E6251;{% elseif hd.subtype == 'consolidate' %}#D5F5E3; color: #196F3D;{% else %}#FCF3CF; color: #7E5109;{% endif %}">
+                                                                {{ hd.subtype == 'leverage' ? 'À mettre à profit' : (hd.subtype == 'consolidate' ? 'À consolider' : 'À construire') }}
+                                                            </span>
+                                                        </div>
+
+                                                        {% if hygieneTestScores is not null and hygieneTestScores.details is defined %}
+                                                            {% set categoryKey = category|lower %}
+                                                            {% set score = hygieneTestScores.details[categoryKey][hd.name] ?? null %}
+                                                            {% if score is not null %}
+                                                                <div style="display: flex; align-items: center; gap: 0.4rem; font-size: 0.8rem; color: var(--fg-muted);">
+                                                                    <i data-lucide="bar-chart-2" style="width: 14px; height: 14px; color: var(--primary);"></i>
+                                                                    <span>Score d'auto-évaluation au test :</span>
+                                                                    <strong style="color: {% if score >= 7.0 %}#059669{% elseif score >= 4.0 %}#D97706{% else %}#EF4444{% endif %};">{{ score }}/10</strong>
+                                                                </div>
+                                                            {% endif %}
+                                                        {% endif %}
+
+                                                        {% if hd.supportedLifeGoals|length > 0 %}
+                                                            <div style="font-size: 0.78rem; color: var(--fg-muted); display: flex; flex-direction: column; gap: 0.25rem;">
+                                                                <span style="font-weight: 700; color: var(--fg-light); font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.03em;">Soutient les objectifs de vie :</span>
+                                                                <div style="display: flex; flex-wrap: wrap; gap: 0.35rem; margin-top: 0.15rem;">
+                                                                    {% for lg in hd.supportedLifeGoals %}
+                                                                        <span style="background: rgba(59, 130, 246, 0.06); color: #1e3a8a; border: 1px solid rgba(59, 130, 246, 0.15); padding: 0.15rem 0.45rem; border-radius: 5px; font-size: 0.72rem; font-weight: 500;">
+                                                                            [{{ lg.category|upper }}] {{ lg.title }}
+                                                                        </span>
+                                                                    {% endfor %}
+                                                                </div>
+                                                            </div>
+                                                        {% endif %}
+                                                    </div>
+                                                {% endfor %}
+                                            </div>
+                                        </div>
+                                    {% endif %}
+                                {% endfor %}
+
+                                {% if not hasAnyHygiene %}
+                                    <p style="font-size: 0.9rem; color: var(--fg-muted); font-style: italic;">Aucun domaine d'hygiène configuré.</p>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {# ════════════════ 3. LAWS TAB ════════════════ #}
+            <div x-show="activeTab === 'LAWS'">
+                <div class="cards-grid">
+                    <div class="plan-card grid-full">
+                        <div class="card-header">
+                            <div class="card-title-group">
+                                <div class="card-icon" style="background: rgba(13, 148, 136, 0.08); color: var(--primary);">
+                                    <i data-lucide="scale" style="width: 18px; height: 18px;"></i>
+                                </div>
+                                <h2 class="card-title">Lois & Principes Directeurs</h2>
+                            </div>
+                            <a href="#" 
+                               @click.prevent="
+                                    const planPrs = {
+                                        'CROISSANCE': [
+                                            {% for pr in growthPrinciples.CROISSANCE %}
+                                                {% if pr.title not in ['Systèmes > Objectifs', 'Caractère avant compétence', 'Une chose à la fois'] %}
+                                                    { title: '{{ pr.title|escape('js') }}', description: '{{ pr.description|escape('js') }}' },
+                                                {% endif %}
+                                            {% endfor %}
+                                        ],
+                                        'DEVELOPPEMENT': [
+                                            {% for pr in growthPrinciples.DEVELOPPEMENT %}
+                                                { title: '{{ pr.title|escape('js') }}', description: '{{ pr.description|escape('js') }}' },
+                                            {% endfor %}
+                                        ],
+                                        'CONTRIBUTION': [
+                                            {% for pr in growthPrinciples.CONTRIBUTION %}
+                                                { title: '{{ pr.title|escape('js') }}', description: '{{ pr.description|escape('js') }}' },
+                                            {% endfor %}
+                                        ],
+                                        'DISCIPLINE': [
+                                            {% for pr in growthPrinciples.DISCIPLINE %}
+                                                { title: '{{ pr.title|escape('js') }}', description: '{{ pr.description|escape('js') }}' },
+                                            {% endfor %}
+                                        ]
+                                    };
+                                    customPrinciples = planPrs[activePlan] || [];
+                                    if (customPrinciples.length === 0) customPrinciples.push({ title: '', description: '' });
+                                    showPrinciplesModal = true;
+                               "
+                               class="btn-edit-card" title="Gérer mes principes">
+                                <i data-lucide="pencil" style="width: 14px; height: 14px;"></i>
+                            </a>
+                        </div>
+                        <div class="card-body">
+                            <div style="display: flex; flex-direction: column; gap: 1rem; margin-top: 0.5rem;">
+                                <!-- Growth principles matching CROISSANCE -->
+                                <div x-show="activePlan === 'CROISSANCE'" style="display: flex; flex-direction: column; gap: 1rem;">
+                                    {% for pr in growthPrinciples.CROISSANCE %}
+                                        <div style="padding: 1.25rem; background: #F8FAFC; border-radius: 1rem; border: 1px solid rgba(0, 0, 0, 0.04); border-left: 4px solid #D97706;">
+                                            <h3 style="font-weight: 700; font-size: 0.95rem; color: var(--fg); margin-bottom: 0.25rem;">{{ pr.title }}</h3>
+                                            {% if pr.description %}<p style="font-size: 0.85rem; color: var(--fg-muted); line-height: 1.4; margin: 0;">{{ pr.description }}</p>{% endif %}
+                                        </div>
+                                    {% else %}
+                                        <p style="font-size: 0.9rem; color: var(--fg-muted); font-style: italic;">Aucun principe de croissance défini.</p>
+                                    {% endfor %}
+                                </div>
+
+                                <!-- Growth principles matching DEVELOPPEMENT -->
+                                <div x-show="activePlan === 'DEVELOPPEMENT'" style="display: flex; flex-direction: column; gap: 1rem;">
+                                    {% for pr in growthPrinciples.DEVELOPPEMENT %}
+                                        <div style="padding: 1.25rem; background: #F8FAFC; border-radius: 1rem; border: 1px solid rgba(0, 0, 0, 0.04); border-left: 4px solid #2563EB;">
+                                            <h3 style="font-weight: 700; font-size: 0.95rem; color: var(--fg); margin-bottom: 0.25rem;">{{ pr.title }}</h3>
+                                            {% if pr.description %}<p style="font-size: 0.85rem; color: var(--fg-muted); line-height: 1.4; margin: 0;">{{ pr.description }}</p>{% endif %}
+                                        </div>
+                                    {% else %}
+                                        <p style="font-size: 0.9rem; color: var(--fg-muted); font-style: italic;">Aucun principe de développement défini.</p>
+                                    {% endfor %}
+                                </div>
+
+                                <!-- Growth principles matching CONTRIBUTION -->
+                                <div x-show="activePlan === 'CONTRIBUTION'" style="display: flex; flex-direction: column; gap: 1rem;">
+                                    {% for pr in growthPrinciples.CONTRIBUTION %}
+                                        <div style="padding: 1.25rem; background: #F8FAFC; border-radius: 1rem; border: 1px solid rgba(0, 0, 0, 0.04); border-left: 4px solid #DB2777;">
+                                            <h3 style="font-weight: 700; font-size: 0.95rem; color: var(--fg); margin-bottom: 0.25rem;">{{ pr.title }}</h3>
+                                            {% if pr.description %}<p style="font-size: 0.85rem; color: var(--fg-muted); line-height: 1.4; margin: 0;">{{ pr.description }}</p>{% endif %}
+                                        </div>
+                                    {% else %}
+                                        <p style="font-size: 0.9rem; color: var(--fg-muted); font-style: italic;">Aucun principe de transmission défini.</p>
+                                    {% endfor %}
+                                </div>
+
+                                <!-- Growth principles matching DISCIPLINE -->
+                                <div x-show="activePlan === 'DISCIPLINE'" style="display: flex; flex-direction: column; gap: 1rem;">
+                                    {% for pr in growthPrinciples.DISCIPLINE %}
+                                        <div style="padding: 1.25rem; background: #F8FAFC; border-radius: 1rem; border: 1px solid rgba(0, 0, 0, 0.04); border-left: 4px solid #059669;">
+                                            <h3 style="font-weight: 700; font-size: 0.95rem; color: var(--fg); margin-bottom: 0.25rem;">{{ pr.title }}</h3>
+                                            {% if pr.description %}<p style="font-size: 0.85rem; color: var(--fg-muted); line-height: 1.4; margin: 0;">{{ pr.description }}</p>{% endif %}
+                                        </div>
+                                    {% else %}
+                                        <p style="font-size: 0.9rem; color: var(--fg-muted); font-style: italic;">Aucun principe d'hygiène de vie défini.</p>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {# ════════════════ 4. SYSTEM TAB ════════════════ #}
+            <div x-show="activeTab === 'SYSTEM'">
+                <!-- CROISSANCE Goals -->
+                <div x-show="activePlan === 'CROISSANCE'">
+                    <div class="cards-grid">
+                        {% for gg in growthGoals.CHARACTER %}
+                            <div class="plan-card">
+                                <div class="card-header">
+                                    <div class="card-title-group">
+                                        <div class="card-icon" style="background: rgba(217, 119, 6, 0.08); color: #D97706;">
+                                            <i data-lucide="zap" style="width: 18px; height: 18px;"></i>
+                                        </div>
+                                        <h2 class="card-title">{{ gg.title }}</h2>
+                                    </div>
+                                    <a href="#" 
+                                       @click.prevent="
+                                            currentAxis = {
+                                                sourceType: '{{ gg.sourceType }}',
+                                                sourceId: {{ gg.sourceId|default(0) }},
+                                                text: '{{ gg.title|escape('js') }}',
+                                                strategy: '{{ gg.strategy|escape('js') }}',
+                                                status: '{{ gg.subtype|escape('js') }}',
+                                                lifeGoals: [
+                                                    {% for lg in gg.supportedLifeGoals %}{{ lg.id }}{% if not loop.last %},{% endif %}{% endfor %}
+                                                ],
+                                                actions: [
+                                                    {% for act in gg.actions %}
+                                                        { title: '{{ act.title|escape('js') }}', deadline: '{{ act.deadline ? act.deadline|date('Y-m-d') : '' }}' }{% if not loop.last %},{% endif %}
+                                                    {% endfor %}
+                                                ],
+                                                habits: [
+                                                    {% for hab in gg.habits %}
+                                                        { title: '{{ hab.title|escape('js') }}', frequency: '{{ hab.frequency.value }}' }{% if not loop.last %},{% endif %}
+                                                    {% endfor %}
+                                                ]
+                                            };
+                                            if (currentAxis.actions.length === 0) currentAxis.actions.push({ title: '', deadline: '' });
+                                            if (currentAxis.habits.length === 0) currentAxis.habits.push({ title: '', frequency: 'DAILY' });
+                                            showAxisModal = true;
+                                       "
+                                       class="btn-edit-card" title="Modifier">
+                                        <i data-lucide="pencil" style="width: 14px; height: 14px;"></i>
+                                    </a>
+                                </div>
+                                <div class="card-body">
+                                    <div class="sub-section-title">Stratégie d'exécution</div>
+                                    <div class="purpose-quote" style="border-left-color: #D97706; color: #7c2d12;">
+                                        "{{ gg.strategy|default('Aucune stratégie définie.') }}"
+                                    </div>
+
+                                    <div class="sub-section-title">🎯 Actions & Jalons</div>
+                                    <div style="display: flex; flex-direction: column; gap: 0.5rem; margin-top: 0.25rem; margin-bottom: 1.25rem;">
+                                        {% for act in gg.actions %}
+                                            <div style="display: flex; justify-content: space-between; align-items: center; background: white; padding: 0.5rem 0.75rem; border-radius: 0.5rem; border: 1px solid rgba(0,0,0,0.03);">
+                                                <span style="font-size: 0.85rem; color: var(--fg-light); font-weight: 500;">{{ act.title }}</span>
+                                                {% if act.deadline %}
+                                                    <span style="font-size: 0.75rem; color: var(--fg-muted);">Échéance : {{ act.deadline|date('d/m/Y') }}</span>
+                                                {% endif %}
+                                            </div>
+                                        {% else %}
+                                            <span style="font-size: 0.8rem; color: var(--fg-muted); font-style: italic;">Aucune action planifiée.</span>
+                                        {% endfor %}
+                                    </div>
+
+                                    <div class="sub-section-title">⚡ Rituels & Habitudes</div>
+                                    <div class="badge-flex" style="margin-top: 0.25rem;">
+                                        {% for h in gg.habits %}
+                                            <span class="ks-badge badge-primary" style="display: inline-flex; align-items: center; gap: 0.35rem; background: #FFFBEB; color: #D97706; border: 1px solid rgba(217,119,6,0.15);">
+                                                {{ h.title }} <small style="opacity: 0.85; font-weight: bold; background: white; padding: 0.05rem 0.25rem; border-radius: 4px; border: 1px solid rgba(217,119,6,0.1);">{{ h.frequency.value }}</small>
+                                            </span>
+                                        {% else %}
+                                            <span style="font-size: 0.8rem; color: var(--fg-muted); font-style: italic;">Aucune habitude configurée.</span>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                            </div>
+                        {% else %}
+                            <div class="plan-card grid-full">
+                                <p style="font-size: 0.9rem; color: var(--fg-muted); font-style: italic; text-align: center; margin: 2rem 0;">Aucun axe de croissance configuré.</p>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <!-- DEVELOPPEMENT Goals -->
+                <div x-show="activePlan === 'DEVELOPPEMENT'">
+                    <div class="cards-grid">
+                        {% for gg in growthGoals.COMPETENCE %}
+                            <div class="plan-card">
+                                <div class="card-header">
+                                    <div class="card-title-group">
+                                        <div class="card-icon" style="background: rgba(37, 99, 235, 0.08); color: #2563EB;">
+                                            <i data-lucide="graduation-cap" style="width: 18px; height: 18px;"></i>
+                                        </div>
+                                        <h2 class="card-title">{{ gg.title }}</h2>
+                                    </div>
+                                    <a href="{{ path('app_user_life_plan_wizard', { step: 8, single: 1, plan: 'DEVELOPPEMENT' }) }}" class="btn-edit-card" title="Modifier">
+                                        <i data-lucide="pencil" style="width: 14px; height: 14px;"></i>
+                                    </a>
+                                </div>
+                                <div class="card-body">
+                                    <div class="sub-section-title">Stratégie d'exécution</div>
+                                    <div class="purpose-quote" style="border-left-color: #2563EB; color: #1e3a8a;">
+                                        "{{ gg.strategy|default('Aucune stratégie définie.') }}"
+                                    </div>
+
+                                    <div class="sub-section-title">⚡ Rituels & Habitudes</div>
+                                    <div class="badge-flex" style="margin-top: 0.25rem;">
+                                        {% for h in gg.habits %}
+                                            <span class="ks-badge badge-primary" style="display: inline-flex; align-items: center; gap: 0.35rem; background: #EFF6FF; color: #2563EB; border: 1px solid rgba(37,99,235,0.15);">
+                                                {{ h.title }} <small style="opacity: 0.85; font-weight: bold; background: white; padding: 0.05rem 0.25rem; border-radius: 4px; border: 1px solid rgba(37,99,235,0.1);">{{ h.frequency.value }}</small>
+                                            </span>
+                                        {% else %}
+                                            <span style="font-size: 0.8rem; color: var(--fg-muted); font-style: italic;">Aucune habitude configurée.</span>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                            </div>
+                        {% else %}
+                            <div class="plan-card grid-full">
+                                <p style="font-size: 0.9rem; color: var(--fg-muted); font-style: italic; text-align: center; margin: 2rem 0;">Aucun axe de développement configuré.</p>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <!-- CONTRIBUTION Goals -->
+                <div x-show="activePlan === 'CONTRIBUTION'">
+                    <div class="cards-grid">
+                        {% for gg in growthGoals.RELATION %}
+                            <div class="plan-card">
+                                <div class="card-header">
+                                    <div class="card-title-group">
+                                        <div class="card-icon" style="background: rgba(219, 39, 119, 0.08); color: #DB2777;">
+                                            <i data-lucide="heart" style="width: 18px; height: 18px;"></i>
+                                        </div>
+                                        <h2 class="card-title">{{ gg.title }}</h2>
+                                    </div>
+                                    <a href="{{ path('app_user_life_plan_wizard', { step: 10, single: 1, plan: 'CONTRIBUTION' }) }}" class="btn-edit-card" title="Modifier">
+                                        <i data-lucide="pencil" style="width: 14px; height: 14px;"></i>
+                                    </a>
+                                </div>
+                                <div class="card-body">
+                                    <div class="sub-section-title">Stratégie d'exécution</div>
+                                    <div class="purpose-quote" style="border-left-color: #DB2777; color: #831843;">
+                                        "{{ gg.strategy|default('Aucune stratégie définie.') }}"
+                                    </div>
+
+                                    <div class="sub-section-title">⚡ Rituels & Habitudes</div>
+                                    <div class="badge-flex" style="margin-top: 0.25rem;">
+                                        {% for h in gg.habits %}
+                                            <span class="ks-badge badge-primary" style="display: inline-flex; align-items: center; gap: 0.35rem; background: #FDF2F8; color: #DB2777; border: 1px solid rgba(219,39,119,0.15);">
+                                                {{ h.title }} <small style="opacity: 0.85; font-weight: bold; background: white; padding: 0.05rem 0.25rem; border-radius: 4px; border: 1px solid rgba(219,39,119,0.1);">{{ h.frequency.value }}</small>
+                                            </span>
+                                        {% else %}
+                                            <span style="font-size: 0.8rem; color: var(--fg-muted); font-style: italic;">Aucune habitude configurée.</span>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                            </div>
+                        {% else %}
+                            <div class="plan-card grid-full">
+                                <p style="font-size: 0.9rem; color: var(--fg-muted); font-style: italic; text-align: center; margin: 2rem 0;">Aucun axe de transmission configuré.</p>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <!-- DISCIPLINE Domains -->
+                <div x-show="activePlan === 'DISCIPLINE'">
+                    <div class="cards-grid">
+                        {% for hd in hygieneDomains %}
+                            <div class="plan-card">
+                                <div class="card-header">
+                                    <div class="card-title-group">
+                                        <div class="card-icon" style="background: rgba(5, 150, 105, 0.08); color: #059669;">
+                                            <i data-lucide="shield" style="width: 18px; height: 18px;"></i>
+                                        </div>
+                                        <h2 class="card-title">{{ hd.name }}</h2>
+                                    </div>
+                                    <a href="{{ path('app_user_life_plan_wizard', { step: 12, single: 1, plan: 'DISCIPLINE' }) }}" class="btn-edit-card" title="Modifier">
+                                        <i data-lucide="pencil" style="width: 14px; height: 14px;"></i>
+                                    </a>
+                                </div>
+                                <div class="card-body">
+                                    <div class="sub-section-title">Diagnostic & Priorité</div>
+                                    <div class="purpose-quote" style="border-left-color: #059669; color: #065f46;">
+                                        Statut : {{ hd.subtype == 'leverage' ? 'À exploiter / Tirer profit' : (hd.subtype == 'consolidate' ? 'À consolider' : 'À construire') }}
+                                    </div>
+
+                                    <div class="sub-section-title">⚡ Rituels & Habitudes</div>
+                                    <div class="badge-flex" style="margin-top: 0.25rem;">
+                                        {% for h in hd.habits %}
+                                            <span class="ks-badge badge-primary" style="display: inline-flex; align-items: center; gap: 0.35rem; background: #ECFDF5; color: #059669; border: 1px solid rgba(5,150,105,0.15);">
+                                                {{ h.title }} <small style="opacity: 0.85; font-weight: bold; background: white; padding: 0.05rem 0.25rem; border-radius: 4px; border: 1px solid rgba(5,150,105,0.1);">{{ h.frequency.value }}</small>
+                                            </span>
+                                        {% else %}
+                                            <span style="font-size: 0.8rem; color: var(--fg-muted); font-style: italic;">Aucune routine quotidienne.</span>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                            </div>
+                        {% else %}
+                            <div class="plan-card grid-full">
+                                <p style="font-size: 0.9rem; color: var(--fg-muted); font-style: italic; text-align: center; margin: 2rem 0;">Aucun domaine d'hygiène configuré.</p>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+
+            {# ════════════════ 5. TIMELINE TAB ════════════════ #}
+            <div x-show="activeTab === 'TIMELINE'">
+                <div class="cards-grid">
+                    <div class="plan-card grid-full" style="min-height: auto;">
+                        <div class="card-header">
+                            <div class="card-title-group">
+                                <div class="card-icon" style="background: rgba(13, 148, 136, 0.08); color: var(--primary);">
+                                    <i data-lucide="calendar" style="width: 18px; height: 18px;"></i>
+                                </div>
+                                <h2 class="card-title">Échéances & Jalons Chronologiques</h2>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            
+                            <!-- Character Goals Deadlines -->
+                            <div x-show="activePlan === 'CROISSANCE'">
+                                {% set characterGoalsWithDl = [] %}
+                                {% for gg in growthGoals.CHARACTER %}
+                                    {% if gg.deadline %}
+                                        {% set characterGoalsWithDl = characterGoalsWithDl|merge([gg]) %}
+                                    {% endif %}
+                                {% endfor %}
+                                
+                                {% if characterGoalsWithDl|length > 0 %}
+                                    <div class="timeline-container" style="margin-top: 0.5rem;">
+                                        {% set sortedCharacterGoals = characterGoalsWithDl|sort((a, b) => a.deadline <=> b.deadline) %}
+                                        {% set currentYear = null %}
+                                        {% for gg in sortedCharacterGoals %}
+                                            {% set goalYear = gg.deadline|date('Y') %}
+                                            {% if goalYear != currentYear %}
+                                                {% if currentYear is not null %}</div></div>{% endif %}
+                                                {% set currentYear = goalYear %}
+                                                <div class="timeline-year-group">
+                                                    <div class="timeline-year-heading">{{ currentYear }}</div>
+                                                    <div style="display: flex; flex-direction: column; gap: 1rem; width: 100%;">
+                                            {% endif %}
+                                            <div class="timeline-item">
+                                                <div class="timeline-dot" style="background: #D97706; box-shadow: 0 0 0 3px rgba(217,119,6,0.12);"></div>
+                                                <div class="timeline-date-label" style="color: #D97706;">{{ gg.deadline|date('d/m') }}</div>
+                                                <div class="timeline-content">
+                                                    <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 1rem; flex-wrap: wrap; width: 100%;">
+                                                        <div class="timeline-title">{{ gg.title }}</div>
+                                                        <span class="timeline-category" style="background: #FFFBEB; color: #D97706; border: 1px solid rgba(217,119,6,0.15);">
+                                                            Caractère
+                                                        </span>
+                                                    </div>
+                                                    {% if gg.strategy %}
+                                                        <p style="font-size: 0.8rem; color: var(--fg-muted); margin: 0.5rem 0 0 0; line-height: 1.4;">
+                                                            Stratégie : {{ gg.strategy }}
+                                                        </p>
+                                                    {% endif %}
+                                                </div>
+                                            </div>
+                                        {% endfor %}
+                                        {% if currentYear is not null %}</div></div>{% endif %}
+                                    </div>
+                                {% else %}
+                                    <p style="font-size: 0.9rem; color: var(--fg-muted); font-style: italic; text-align: center; margin: 2rem 0;">Aucune échéance définie pour ce plan.</p>
+                                {% endif %}
+                            </div>
+
+                            <!-- Competence Goals Deadlines -->
+                            <div x-show="activePlan === 'DEVELOPPEMENT'">
+                                {% set competenceGoalsWithDl = [] %}
+                                {% for gg in growthGoals.COMPETENCE %}
+                                    {% if gg.deadline %}
+                                        {% set competenceGoalsWithDl = competenceGoalsWithDl|merge([gg]) %}
+                                    {% endif %}
+                                {% endfor %}
+                                
+                                {% if competenceGoalsWithDl|length > 0 %}
+                                    <div class="timeline-container" style="margin-top: 0.5rem;">
+                                        {% set sortedCompetenceGoals = competenceGoalsWithDl|sort((a, b) => a.deadline <=> b.deadline) %}
+                                        {% set currentYear = null %}
+                                        {% for gg in sortedCompetenceGoals %}
+                                            {% set goalYear = gg.deadline|date('Y') %}
+                                            {% if goalYear != currentYear %}
+                                                {% if currentYear is not null %}</div></div>{% endif %}
+                                                {% set currentYear = goalYear %}
+                                                <div class="timeline-year-group">
+                                                    <div class="timeline-year-heading">{{ currentYear }}</div>
+                                                    <div style="display: flex; flex-direction: column; gap: 1rem; width: 100%;">
+                                            {% endif %}
+                                            <div class="timeline-item">
+                                                <div class="timeline-dot" style="background: #2563EB; box-shadow: 0 0 0 3px rgba(37,99,235,0.12);"></div>
+                                                <div class="timeline-date-label" style="color: #2563EB;">{{ gg.deadline|date('d/m') }}</div>
+                                                <div class="timeline-content">
+                                                    <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 1rem; flex-wrap: wrap; width: 100%;">
+                                                        <div class="timeline-title">{{ gg.title }}</div>
+                                                        <span class="timeline-category" style="background: #EFF6FF; color: #2563EB; border: 1px solid rgba(37,99,235,0.15);">
+                                                            Compétence
+                                                        </span>
+                                                    </div>
+                                                    {% if gg.strategy %}
+                                                        <p style="font-size: 0.8rem; color: var(--fg-muted); margin: 0.5rem 0 0 0; line-height: 1.4;">
+                                                            Stratégie : {{ gg.strategy }}
+                                                        </p>
+                                                    {% endif %}
+                                                </div>
+                                            </div>
+                                        {% endfor %}
+                                        {% if currentYear is not null %}</div></div>{% endif %}
+                                    </div>
+                                {% else %}
+                                    <p style="font-size: 0.9rem; color: var(--fg-muted); font-style: italic; text-align: center; margin: 2rem 0;">Aucune échéance définie pour ce plan.</p>
+                                {% endif %}
+                            </div>
+
+                            <!-- Relation Goals Deadlines -->
+                            <div x-show="activePlan === 'CONTRIBUTION'">
+                                {% set relationGoalsWithDl = [] %}
+                                {% for gg in growthGoals.RELATION %}
+                                    {% if gg.deadline %}
+                                        {% set relationGoalsWithDl = relationGoalsWithDl|merge([gg]) %}
+                                    {% endif %}
+                                {% endfor %}
+                                
+                                {% if relationGoalsWithDl|length > 0 %}
+                                    <div class="timeline-container" style="margin-top: 0.5rem;">
+                                        {% set sortedRelationGoals = relationGoalsWithDl|sort((a, b) => a.deadline <=> b.deadline) %}
+                                        {% set currentYear = null %}
+                                        {% for gg in sortedRelationGoals %}
+                                            {% set goalYear = gg.deadline|date('Y') %}
+                                            {% if goalYear != currentYear %}
+                                                {% if currentYear is not null %}</div></div>{% endif %}
+                                                {% set currentYear = goalYear %}
+                                                <div class="timeline-year-group">
+                                                    <div class="timeline-year-heading">{{ currentYear }}</div>
+                                                    <div style="display: flex; flex-direction: column; gap: 1rem; width: 100%;">
+                                            {% endif %}
+                                            <div class="timeline-item">
+                                                <div class="timeline-dot" style="background: #DB2777; box-shadow: 0 0 0 3px rgba(219,39,119,0.12);"></div>
+                                                <div class="timeline-date-label" style="color: #DB2777;">{{ gg.deadline|date('d/m') }}</div>
+                                                <div class="timeline-content">
+                                                    <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 1rem; flex-wrap: wrap; width: 100%;">
+                                                        <div class="timeline-title">{{ gg.title }}</div>
+                                                        <span class="timeline-category" style="background: #FDF2F8; color: #DB2777; border: 1px solid rgba(219,39,119,0.15);">
+                                                            Transmission
+                                                        </span>
+                                                    </div>
+                                                    {% if gg.strategy %}
+                                                        <p style="font-size: 0.8rem; color: var(--fg-muted); margin: 0.5rem 0 0 0; line-height: 1.4;">
+                                                            Stratégie : {{ gg.strategy }}
+                                                        </p>
+                                                    {% endif %}
+                                                </div>
+                                            </div>
+                                        {% endfor %}
+                                        {% if currentYear is not null %}</div></div>{% endif %}
+                                    </div>
+                                {% else %}
+                                    <p style="font-size: 0.9rem; color: var(--fg-muted); font-style: italic; text-align: center; margin: 2rem 0;">Aucune échéance définie pour ce plan.</p>
+                                {% endif %}
+                            </div>
+
+                            <!-- Hygiene (Discipline) - no deadlines -->
+                            <div x-show="activePlan === 'DISCIPLINE'">
+                                <p style="font-size: 0.9rem; color: var(--fg-muted); font-style: italic; text-align: center; margin: 2rem 0;">Aucune échéance temporelle spécifique (les routines d'hygiène s'appliquent de manière permanente).</p>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {# ════════════════ 6. ANALYSIS TAB ════════════════ #}
+            <div x-show="activeTab === 'ANALYSIS'">
+                {# Compute alignment analysis in Twig for each plan separately #}
+                
+                {# 1. CROISSANCE Calculations #}
+                {% set croissanceIssues = [] %}
+                {% set croissanceScoreTotal = 10 %}
+                {% set croissanceScoreCurrent = 0 %}
+                {% if not planDeVie or not planDeVie.vision or planDeVie.vision.content|length < 20 %}
+                    {% set issue = {'type': 'CRITICAL', 'message': "Rédigez votre vision pour orienter vos choix stratégiques.", 'icon': 'alert-circle', 'link': path('app_user_life_plan_wizard', {step: 6, single: 1}) ~ '&plan=CROISSANCE'} %}
+                    {% set croissanceIssues = croissanceIssues|merge([issue]) %}
+                {% else %}
+                    {% set croissanceScoreCurrent = 10 %}
+                {% endif %}
+
+                {% set supportedIds = [] %}
+                {% for gg in growthGoals.CHARACTER %}
+                    {% for sg in gg.supportedLifeGoals %}
+                        {% set supportedIds = supportedIds|merge([sg.id]) %}
+                    {% endfor %}
+                {% endfor %}
+
+                {% for sg in lifeGoals.BE %}
+                    {% set croissanceScoreTotal = croissanceScoreTotal + 10 %}
+                    {% if sg.id not in supportedIds %}
+                        {% set issue = {'type': 'WARNING', 'message': "L'objectif '" ~ sg.title ~ "' n'est soutenu par aucun axe de croissance.", 'icon': 'target', 'link': path('app_user_life_plan_wizard', {step: 7, single: 1}) ~ '&plan=CROISSANCE'} %}
+                        {% set croissanceIssues = croissanceIssues|merge([issue]) %}
+                    {% else %}
+                        {% set croissanceScoreCurrent = croissanceScoreCurrent + 10 %}
+                    {% endif %}
+                {% endfor %}
+
+                {% for gg in growthGoals.CHARACTER %}
+                    {% set croissanceScoreTotal = croissanceScoreTotal + 10 %}
+                    {% if gg.supportedLifeGoals|length == 0 %}
+                        {% set issue = {'type': 'WARNING', 'message': "L'axe de croissance '" ~ gg.title ~ "' ne soutient aucun objectif spécifique.", 'icon': 'trending-up', 'link': path('app_user_life_plan_wizard', {step: 9, single: 1}) ~ '&plan=CROISSANCE'} %}
+                        {% set croissanceIssues = croissanceIssues|merge([issue]) %}
+                    {% else %}
+                        {% set croissanceScoreCurrent = croissanceScoreCurrent + 5 %}
+                    {% endif %}
+
+                    {% if gg.habits|length == 0 %}
+                        {% set issue = {'type': 'CRITICAL', 'message': "L'axe de croissance '" ~ gg.title ~ "' n'a aucun rituel d'habitude configuré.", 'icon': 'zap', 'link': path('app_user_life_plan_wizard', {step: 9, single: 1}) ~ '&plan=CROISSANCE'} %}
+                        {% set croissanceIssues = croissanceIssues|merge([issue]) %}
+                    {% else %}
+                        {% set croissanceScoreCurrent = croissanceScoreCurrent + 5 %}
+                    {% endif %}
+                {% endfor %}
+                {% set croissanceHealthScore = croissanceScoreTotal == 0 ? 0 : ((croissanceScoreCurrent / croissanceScoreTotal) * 100)|round %}
+                {% if croissanceIssues|length > 0 and croissanceHealthScore == 100 %}
+                    {% set croissanceHealthScore = 95 %}
+                {% endif %}
+
+                {# 2. DEVELOPPEMENT Calculations #}
+                {% set developpementIssues = [] %}
+                {% set developpementScoreTotal = 10 %}
+                {% set developpementScoreCurrent = 0 %}
+                {% if not planDeVie or not planDeVie.vision or planDeVie.vision.content|length < 20 %}
+                    {% set issue = {'type': 'CRITICAL', 'message': "Rédigez votre vision pour orienter vos choix stratégiques.", 'icon': 'alert-circle', 'link': path('app_user_life_plan_wizard', {step: 6, single: 1}) ~ '&plan=DEVELOPPEMENT'} %}
+                    {% set developpementIssues = developpementIssues|merge([issue]) %}
+                {% else %}
+                    {% set developpementScoreCurrent = 10 %}
+                {% endif %}
+
+                {% set supportedIds = [] %}
+                {% for gg in growthGoals.COMPETENCE %}
+                    {% for sg in gg.supportedLifeGoals %}
+                        {% set supportedIds = supportedIds|merge([sg.id]) %}
+                    {% endfor %}
+                {% endfor %}
+
+                {% for sg in lifeGoals.DO %}
+                    {% set developpementScoreTotal = developpementScoreTotal + 10 %}
+                    {% if sg.id not in supportedIds %}
+                        {% set issue = {'type': 'WARNING', 'message': "L'objectif '" ~ sg.title ~ "' n'est soutenu par aucun plan de compétences.", 'icon': 'target', 'link': path('app_user_life_plan_wizard', {step: 7, single: 1}) ~ '&plan=DEVELOPPEMENT'} %}
+                        {% set developpementIssues = developpementIssues|merge([issue]) %}
+                    {% else %}
+                        {% set developpementScoreCurrent = developpementScoreCurrent + 10 %}
+                    {% endif %}
+                {% endfor %}
+
+                {% for gg in growthGoals.COMPETENCE %}
+                    {% set developpementScoreTotal = developpementScoreTotal + 10 %}
+                    {% if gg.supportedLifeGoals|length == 0 %}
+                        {% set issue = {'type': 'WARNING', 'message': "La compétence '" ~ gg.title ~ "' ne soutient aucun objectif spécifique.", 'icon': 'trending-up', 'link': path('app_user_life_plan_wizard', {step: 8, single: 1}) ~ '&plan=DEVELOPPEMENT'} %}
+                        {% set developpementIssues = developpementIssues|merge([issue]) %}
+                    {% else %}
+                        {% set developpementScoreCurrent = developpementScoreCurrent + 5 %}
+                    {% endif %}
+
+                    {% if gg.habits|length == 0 %}
+                        {% set issue = {'type': 'CRITICAL', 'message': "La compétence '" ~ gg.title ~ "' n'a aucune routine ou plan de pratique.", 'icon': 'zap', 'link': path('app_user_life_plan_wizard', {step: 8, single: 1}) ~ '&plan=DEVELOPPEMENT'} %}
+                        {% set developpementIssues = developpementIssues|merge([issue]) %}
+                    {% else %}
+                        {% set developpementScoreCurrent = developpementScoreCurrent + 5 %}
+                    {% endif %}
+                {% endfor %}
+                {% set developpementHealthScore = developpementScoreTotal == 0 ? 0 : ((developpementScoreCurrent / developpementScoreTotal) * 100)|round %}
+                {% if developpementIssues|length > 0 and developpementHealthScore == 100 %}
+                    {% set developpementHealthScore = 95 %}
+                {% endif %}
+
+                {# 3. CONTRIBUTION Calculations #}
+                {% set contributionIssues = [] %}
+                {% set contributionScoreTotal = 10 %}
+                {% set contributionScoreCurrent = 0 %}
+                {% if not planDeVie or not planDeVie.vision or planDeVie.vision.content|length < 20 %}
+                    {% set issue = {'type': 'CRITICAL', 'message': "Rédigez votre vision pour orienter vos choix stratégiques.", 'icon': 'alert-circle', 'link': path('app_user_life_plan_wizard', {step: 6, single: 1}) ~ '&plan=CONTRIBUTION'} %}
+                    {% set contributionIssues = contributionIssues|merge([issue]) %}
+                {% else %}
+                    {% set contributionScoreCurrent = 10 %}
+                {% endif %}
+
+                {% set supportedIds = [] %}
+                {% for gg in growthGoals.RELATION %}
+                    {% for sg in gg.supportedLifeGoals %}
+                        {% set supportedIds = supportedIds|merge([sg.id]) %}
+                    {% endfor %}
+                {% endfor %}
+
+                {% for sg in lifeGoals.GIVE %}
+                    {% set contributionScoreTotal = contributionScoreTotal + 10 %}
+                    {% if sg.id not in supportedIds %}
+                        {% set issue = {'type': 'WARNING', 'message': "L'objectif '" ~ sg.title ~ "' n'est soutenu par aucun plan de transmission ou réseau.", 'icon': 'target', 'link': path('app_user_life_plan_wizard', {step: 7, single: 1}) ~ '&plan=CONTRIBUTION'} %}
+                        {% set contributionIssues = contributionIssues|merge([issue]) %}
+                    {% else %}
+                        {% set contributionScoreCurrent = contributionScoreCurrent + 10 %}
+                    {% endif %}
+                {% endfor %}
+
+                {% for gg in growthGoals.RELATION %}
+                    {% set contributionScoreTotal = contributionScoreTotal + 10 %}
+                    {% if gg.supportedLifeGoals|length == 0 %}
+                        {% set issue = {'type': 'WARNING', 'message': "Le réseau '" ~ gg.title ~ "' ne soutient aucun objectif spécifique.", 'icon': 'trending-up', 'link': path('app_user_life_plan_wizard', {step: 10, single: 1}) ~ '&plan=CONTRIBUTION'} %}
+                        {% set contributionIssues = contributionIssues|merge([issue]) %}
+                    {% else %}
+                        {% set contributionScoreCurrent = contributionScoreCurrent + 5 %}
+                    {% endif %}
+
+                    {% if gg.habits|length == 0 %}
+                        {% set issue = {'type': 'CRITICAL', 'message': "La relation/réseau '" ~ gg.title ~ "' n'a aucune routine de suivi d'action.", 'icon': 'zap', 'link': path('app_user_life_plan_wizard', {step: 10, single: 1}) ~ '&plan=CONTRIBUTION'} %}
+                        {% set contributionIssues = contributionIssues|merge([issue]) %}
+                    {% else %}
+                        {% set contributionScoreCurrent = contributionScoreCurrent + 5 %}
+                    {% endif %}
+                {% endfor %}
+                {% set contributionHealthScore = contributionScoreTotal == 0 ? 0 : ((contributionScoreCurrent / contributionScoreTotal) * 100)|round %}
+                {% if contributionIssues|length > 0 and contributionHealthScore == 100 %}
+                    {% set contributionHealthScore = 95 %}
+                {% endif %}
+
+                {# 4. DISCIPLINE Calculations #}
+                {% set disciplineIssues = [] %}
+                {% set disciplineScoreTotal = 10 %}
+                {% set disciplineScoreCurrent = 0 %}
+                {% if not planDeVie or not planDeVie.vision or planDeVie.vision.content|length < 20 %}
+                    {% set issue = {'type': 'CRITICAL', 'message': "Rédigez votre vision pour orienter vos choix stratégiques.", 'icon': 'alert-circle', 'link': path('app_user_life_plan_wizard', {step: 6, single: 1}) ~ '&plan=DISCIPLINE'} %}
+                    {% set disciplineIssues = disciplineIssues|merge([issue]) %}
+                {% else %}
+                    {% set disciplineScoreCurrent = 10 %}
+                {% endif %}
+
+                {% set supportedIds = [] %}
+                {% for hd in hygieneDomains %}
+                    {% for sg in hd.supportedLifeGoals %}
+                        {% set supportedIds = supportedIds|merge([sg.id]) %}
+                    {% endfor %}
+                {% endfor %}
+
+                {% for sg in lifeGoals.HAVE %}
+                    {% set disciplineScoreTotal = disciplineScoreTotal + 10 %}
+                    {% if sg.id not in supportedIds %}
+                        {% set issue = {'type': 'WARNING', 'message': "L'objectif '" ~ sg.title ~ "' n'est soutenu par aucun domaine d'hygiène.", 'icon': 'target', 'link': path('app_user_life_plan_wizard', {step: 7, single: 1}) ~ '&plan=DISCIPLINE'} %}
+                        {% set disciplineIssues = disciplineIssues|merge([issue]) %}
+                    {% else %}
+                        {% set disciplineScoreCurrent = disciplineScoreCurrent + 10 %}
+                    {% endif %}
+                {% endfor %}
+
+                {% for hd in hygieneDomains %}
+                    {% set disciplineScoreTotal = disciplineScoreTotal + 10 %}
+                    {% if hd.supportedLifeGoals|length == 0 %}
+                        {% set issue = {'type': 'WARNING', 'message': "Le domaine d'hygiène '" ~ hd.name ~ "' ne soutient aucun objectif spécifique.", 'icon': 'trending-up', 'link': path('app_user_life_plan_wizard', {step: 12, single: 1}) ~ '&plan=DISCIPLINE'} %}
+                        {% set disciplineIssues = disciplineIssues|merge([issue]) %}
+                    {% else %}
+                        {% set disciplineScoreCurrent = disciplineScoreCurrent + 5 %}
+                    {% endif %}
+
+                    {% if hd.habits|length == 0 %}
+                        {% set issue = {'type': 'CRITICAL', 'message': "Le domaine d'hygiène '" ~ hd.name ~ "' n'a aucune habitude d'ancrage.", 'icon': 'zap', 'link': path('app_user_life_plan_wizard', {step: 12, single: 1}) ~ '&plan=DISCIPLINE'} %}
+                        {% set disciplineIssues = disciplineIssues|merge([issue]) %}
+                    {% else %}
+                        {% set disciplineScoreCurrent = disciplineScoreCurrent + 5 %}
+                    {% endif %}
+                {% endfor %}
+                {% set disciplineHealthScore = disciplineScoreTotal == 0 ? 0 : ((disciplineScoreCurrent / disciplineScoreTotal) * 100)|round %}
+                {% if disciplineIssues|length > 0 and disciplineHealthScore == 100 %}
+                    {% set disciplineHealthScore = 95 %}
+                {% endif %}
+
+                <div class="cards-grid">
+                    <!-- CROISSANCE Analysis Card -->
+                    <div class="plan-card grid-full" x-show="activePlan === 'CROISSANCE'">
+                        <div class="card-header">
+                            <div class="card-title-group">
+                                <div class="card-icon" style="background: rgba(13, 148, 136, 0.08); color: var(--primary);">
+                                    <i data-lucide="bar-chart-2" style="width: 18px; height: 18px;"></i>
+                                </div>
+                                <h2 class="card-title">Analyse d'Alignement du Plan de Croissance</h2>
+                            </div>
+                            {% set scoreColor = croissanceHealthScore > 80 ? '#166534' : (croissanceHealthScore > 50 ? '#854d0e' : '#991b1b') %}
+                            {% set scoreBg = croissanceHealthScore > 80 ? '#dcfce7' : (croissanceHealthScore > 50 ? '#fef9c3' : '#fee2e2') %}
+                            <span class="analysis-score-badge" style="background: {{ scoreBg }}; color: {{ scoreColor }};">
+                                Score : {{ croissanceHealthScore }}/100
+                            </span>
+                        </div>
+                        <div class="card-body">
+                            {% if croissanceIssues|length == 0 %}
+                                <div style="text-align: center; padding: 2rem 0; color: #166534;">
+                                    <i data-lucide="check-circle" style="width: 48px; height: 48px; margin-bottom: 1rem; opacity: 0.5;"></i>
+                                    <p style="font-weight: 700; font-size: 1.1rem; margin-bottom: 0.25rem;">Alignement parfait !</p>
+                                    <p style="font-size: 0.9rem; opacity: 0.8; margin: 0;">Tous vos objectifs sont connectés et soutenus de manière rigoureuse par des stratégies et des habitudes.</p>
+                                </div>
+                            {% else %}
+                                <div style="display: flex; flex-direction: column; gap: 0.75rem; margin-top: 0.5rem;">
+                                    {% for issue in croissanceIssues %}
+                                        {% set rowBg = issue.type == 'CRITICAL' ? '#fef2f2' : (issue.type == 'WARNING' ? '#fffbeb' : '#f8fafc') %}
+                                        {% set rowBorder = issue.type == 'CRITICAL' ? '#ef4444' : (issue.type == 'WARNING' ? '#f59e0b' : '#94a3b8') %}
+                                        <div class="analysis-issue-row" style="background: {{ rowBg }}; border-left: 4px solid {{ rowBorder }};">
+                                            <div class="analysis-issue-content">
+                                                <i data-lucide="{{ issue.icon }}" style="width: 18px; height: 18px; color: {{ rowBorder }}; flex-shrink: 0;"></i>
+                                                <span class="analysis-issue-text">{{ issue.message }}</span>
+                                            </div>
+                                            <a href="{{ issue.link }}" class="btn-analysis-fix" style="border-color: {{ rowBorder }}; color: {{ rowBorder }};">
+                                                Corriger
+                                            </a>
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <!-- DEVELOPPEMENT Analysis Card -->
+                    <div class="plan-card grid-full" x-show="activePlan === 'DEVELOPPEMENT'">
+                        <div class="card-header">
+                            <div class="card-title-group">
+                                <div class="card-icon" style="background: rgba(13, 148, 136, 0.08); color: var(--primary);">
+                                    <i data-lucide="bar-chart-2" style="width: 18px; height: 18px;"></i>
+                                </div>
+                                <h2 class="card-title">Analyse d'Alignement du Plan de Développement</h2>
+                            </div>
+                            {% set scoreColor = developpementHealthScore > 80 ? '#166534' : (developpementHealthScore > 50 ? '#854d0e' : '#991b1b') %}
+                            {% set scoreBg = developpementHealthScore > 80 ? '#dcfce7' : (developpementHealthScore > 50 ? '#fef9c3' : '#fee2e2') %}
+                            <span class="analysis-score-badge" style="background: {{ scoreBg }}; color: {{ scoreColor }};">
+                                Score : {{ developpementHealthScore }}/100
+                            </span>
+                        </div>
+                        <div class="card-body">
+                            {% if developpementIssues|length == 0 %}
+                                <div style="text-align: center; padding: 2rem 0; color: #166534;">
+                                    <i data-lucide="check-circle" style="width: 48px; height: 48px; margin-bottom: 1rem; opacity: 0.5;"></i>
+                                    <p style="font-weight: 700; font-size: 1.1rem; margin-bottom: 0.25rem;">Alignement parfait !</p>
+                                    <p style="font-size: 0.9rem; opacity: 0.8; margin: 0;">Tous vos objectifs sont connectés et soutenus de manière rigoureuse par des stratégies et des habitudes.</p>
+                                </div>
+                            {% else %}
+                                <div style="display: flex; flex-direction: column; gap: 0.75rem; margin-top: 0.5rem;">
+                                    {% for issue in developpementIssues %}
+                                        {% set rowBg = issue.type == 'CRITICAL' ? '#fef2f2' : (issue.type == 'WARNING' ? '#fffbeb' : '#f8fafc') %}
+                                        {% set rowBorder = issue.type == 'CRITICAL' ? '#ef4444' : (issue.type == 'WARNING' ? '#f59e0b' : '#94a3b8') %}
+                                        <div class="analysis-issue-row" style="background: {{ rowBg }}; border-left: 4px solid {{ rowBorder }};">
+                                            <div class="analysis-issue-content">
+                                                <i data-lucide="{{ issue.icon }}" style="width: 18px; height: 18px; color: {{ rowBorder }}; flex-shrink: 0;"></i>
+                                                <span class="analysis-issue-text">{{ issue.message }}</span>
+                                            </div>
+                                            <a href="{{ issue.link }}" class="btn-analysis-fix" style="border-color: {{ rowBorder }}; color: {{ rowBorder }};">
+                                                Corriger
+                                            </a>
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <!-- CONTRIBUTION Analysis Card -->
+                    <div class="plan-card grid-full" x-show="activePlan === 'CONTRIBUTION'">
+                        <div class="card-header">
+                            <div class="card-title-group">
+                                <div class="card-icon" style="background: rgba(13, 148, 136, 0.08); color: var(--primary);">
+                                    <i data-lucide="bar-chart-2" style="width: 18px; height: 18px;"></i>
+                                </div>
+                                <h2 class="card-title">Analyse d'Alignement du Plan de Transmission</h2>
+                            </div>
+                            {% set scoreColor = contributionHealthScore > 80 ? '#166534' : (contributionHealthScore > 50 ? '#854d0e' : '#991b1b') %}
+                            {% set scoreBg = contributionHealthScore > 80 ? '#dcfce7' : (contributionHealthScore > 50 ? '#fef9c3' : '#fee2e2') %}
+                            <span class="analysis-score-badge" style="background: {{ scoreBg }}; color: {{ scoreColor }};">
+                                Score : {{ contributionHealthScore }}/100
+                            </span>
+                        </div>
+                        <div class="card-body">
+                            {% if contributionIssues|length == 0 %}
+                                <div style="text-align: center; padding: 2rem 0; color: #166534;">
+                                    <i data-lucide="check-circle" style="width: 48px; height: 48px; margin-bottom: 1rem; opacity: 0.5;"></i>
+                                    <p style="font-weight: 700; font-size: 1.1rem; margin-bottom: 0.25rem;">Alignement parfait !</p>
+                                    <p style="font-size: 0.9rem; opacity: 0.8; margin: 0;">Tous vos objectifs sont connectés et soutenus de manière rigoureuse par des stratégies et des habitudes.</p>
+                                </div>
+                            {% else %}
+                                <div style="display: flex; flex-direction: column; gap: 0.75rem; margin-top: 0.5rem;">
+                                    {% for issue in contributionIssues %}
+                                        {% set rowBg = issue.type == 'CRITICAL' ? '#fef2f2' : (issue.type == 'WARNING' ? '#fffbeb' : '#f8fafc') %}
+                                        {% set rowBorder = issue.type == 'CRITICAL' ? '#ef4444' : (issue.type == 'WARNING' ? '#f59e0b' : '#94a3b8') %}
+                                        <div class="analysis-issue-row" style="background: {{ rowBg }}; border-left: 4px solid {{ rowBorder }};">
+                                            <div class="analysis-issue-content">
+                                                <i data-lucide="{{ issue.icon }}" style="width: 18px; height: 18px; color: {{ rowBorder }}; flex-shrink: 0;"></i>
+                                                <span class="analysis-issue-text">{{ issue.message }}</span>
+                                            </div>
+                                            <a href="{{ issue.link }}" class="btn-analysis-fix" style="border-color: {{ rowBorder }}; color: {{ rowBorder }};">
+                                                Corriger
+                                            </a>
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <!-- DISCIPLINE Analysis Card -->
+                    <div class="plan-card grid-full" x-show="activePlan === 'DISCIPLINE'">
+                        <div class="card-header">
+                            <div class="card-title-group">
+                                <div class="card-icon" style="background: rgba(13, 148, 136, 0.08); color: var(--primary);">
+                                    <i data-lucide="bar-chart-2" style="width: 18px; height: 18px;"></i>
+                                </div>
+                                <h2 class="card-title">Analyse d'Alignement du Plan d'Hygiène de Vie</h2>
+                            </div>
+                            {% set scoreColor = disciplineHealthScore > 80 ? '#166534' : (disciplineHealthScore > 50 ? '#854d0e' : '#991b1b') %}
+                            {% set scoreBg = disciplineHealthScore > 80 ? '#dcfce7' : (disciplineHealthScore > 50 ? '#fef9c3' : '#fee2e2') %}
+                            <span class="analysis-score-badge" style="background: {{ scoreBg }}; color: {{ scoreColor }};">
+                                Score : {{ disciplineHealthScore }}/100
+                            </span>
+                        </div>
+                        <div class="card-body">
+                            {% if disciplineIssues|length == 0 %}
+                                <div style="text-align: center; padding: 2rem 0; color: #166534;">
+                                    <i data-lucide="check-circle" style="width: 48px; height: 48px; margin-bottom: 1rem; opacity: 0.5;"></i>
+                                    <p style="font-weight: 700; font-size: 1.1rem; margin-bottom: 0.25rem;">Alignement parfait !</p>
+                                    <p style="font-size: 0.9rem; opacity: 0.8; margin: 0;">Tous vos objectifs sont connectés et soutenus de manière rigoureuse par des stratégies et des habitudes.</p>
+                                </div>
+                            {% else %}
+                                <div style="display: flex; flex-direction: column; gap: 0.75rem; margin-top: 0.5rem;">
+                                    {% for issue in disciplineIssues %}
+                                        {% set rowBg = issue.type == 'CRITICAL' ? '#fef2f2' : (issue.type == 'WARNING' ? '#fffbeb' : '#f8fafc') %}
+                                        {% set rowBorder = issue.type == 'CRITICAL' ? '#ef4444' : (issue.type == 'WARNING' ? '#f59e0b' : '#94a3b8') %}
+                                        <div class="analysis-issue-row" style="background: {{ rowBg }}; border-left: 4px solid {{ rowBorder }};">
+                                            <div class="analysis-issue-content">
+                                                <i data-lucide="{{ issue.icon }}" style="width: 18px; height: 18px; color: {{ rowBorder }}; flex-shrink: 0;"></i>
+                                                <span class="analysis-issue-text">{{ issue.message }}</span>
+                                            </div>
+                                            <a href="{{ issue.link }}" class="btn-analysis-fix" style="border-color: {{ rowBorder }}; color: {{ rowBorder }};">
+                                                Corriger
+                                            </a>
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {# ════════════════ 7. MAP TAB ════════════════ #}
+            <div x-show="activeTab === 'MAP'">
+                <div class="cards-grid">
+                    <div class="plan-card grid-full">
+                        <div class="card-header">
+                            <div class="card-title-group">
+                                <div class="card-icon" style="background: rgba(13, 148, 136, 0.08); color: var(--primary);">
+                                    <i data-lucide="map" style="width: 18px; height: 18px;"></i>
+                                </div>
+                                <h2 class="card-title">Cascade Stratégique du Plan</h2>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div style="width:100%; margin-top: 0.5rem;">
+                                <!-- Target pre where Mermaid will render the SVG -->
+                                <pre class="mermaid" id="mermaid-target" style="background: transparent; border: none; margin: 0; padding: 0; width: 100%; text-align: center; display: flex; justify-content: center;"></pre>
+                            </div>
+
+                            <!-- Hidden sources for Mermaid code per plan -->
+                            <div id="mermaid-croissance-src" style="display:none;">
+graph TD
+  Vision["✨ {{ planDeVie.vision.content|default('Ma Vision')|slice(0, 60)|escape('html') }}..."]
+  
+  {# Specific Goals BE #}
+  {% for g in lifeGoals.BE %}
+    Goal{{ g.id }}["🎯 {{ g.title|escape('html') }}"]
+    Vision --> Goal{{ g.id }}
+  {% endfor %}
+
+  {# Growth Goals CHARACTER #}
+  {% for gg in growthGoals.CHARACTER %}
+    GG{{ gg.id }}["💎 {{ gg.title|escape('html') }}"]
+    {% for sg in gg.supportedLifeGoals %}
+      Goal{{ sg.id }} --> GG{{ gg.id }}
+    {% endfor %}
+
+    {# Strategy #}
+    {% if gg.strategy %}
+      Strat{{ gg.id }}["📋 {{ gg.strategy|slice(0, 40)|escape('html') }}..."]
+      GG{{ gg.id }} --> Strat{{ gg.id }}
+      
+      {# Habits #}
+      {% for h in gg.habits %}
+        H{{ gg.id }}_{{ h.id }}["⚡ {{ h.title|escape('html') }}"]
+        Strat{{ gg.id }} --> H{{ gg.id }}_{{ h.id }}
+      {% endfor %}
+    {% endif %}
+  {% endfor %}
+
+  style Vision fill:#fdf4ff,stroke:#d946ef,stroke-width:2px,color:#701a75
+  classDef goal fill:#eff6ff,stroke:#3b82f6,stroke-width:2px,color:#1e40af
+  classDef char fill:#fffbeb,stroke:#f59e0b,stroke-width:1px,color:#92400e
+  classDef strat fill:#f8fafc,stroke:#64748b,stroke-width:1px,color:#334155,stroke-dasharray: 5 5
+  classDef habit fill:#ecfeff,stroke:#06b6d4,stroke-width:1px,color:#083344
+
+  {% for g in lifeGoals.BE %}
+    class Goal{{ g.id }} goal
+  {% endfor %}
+  {% for gg in growthGoals.CHARACTER %}
+    class GG{{ gg.id }} char
+    class Strat{{ gg.id }} strat
+    {% for h in gg.habits %}
+      class H{{ gg.id }}_{{ h.id }} habit
+    {% endfor %}
+  {% endfor %}
+                            </div>
+
+                            <div id="mermaid-developpement-src" style="display:none;">
+graph TD
+  Vision["✨ {{ planDeVie.vision.content|default('Ma Vision')|slice(0, 60)|escape('html') }}..."]
+  
+  {# Specific Goals DO #}
+  {% for g in lifeGoals.DO %}
+    Goal{{ g.id }}["🎯 {{ g.title|escape('html') }}"]
+    Vision --> Goal{{ g.id }}
+  {% endfor %}
+
+  {# Growth Goals COMPETENCE #}
+  {% for gg in growthGoals.COMPETENCE %}
+    GG{{ gg.id }}["📚 {{ gg.title|escape('html') }}"]
+    {% for sg in gg.supportedLifeGoals %}
+      Goal{{ sg.id }} --> GG{{ gg.id }}
+    {% endfor %}
+
+    {# Strategy #}
+    {% if gg.strategy %}
+      Strat{{ gg.id }}["📋 {{ gg.strategy|slice(0, 40)|escape('html') }}..."]
+      GG{{ gg.id }} --> Strat{{ gg.id }}
+      
+      {# Habits #}
+      {% for h in gg.habits %}
+        H{{ gg.id }}_{{ h.id }}["⚡ {{ h.title|escape('html') }}"]
+        Strat{{ gg.id }} --> H{{ gg.id }}_{{ h.id }}
+      {% endfor %}
+    {% endif %}
+  {% endfor %}
+
+  style Vision fill:#fdf4ff,stroke:#d946ef,stroke-width:2px,color:#701a75
+  classDef goal fill:#eff6ff,stroke:#3b82f6,stroke-width:2px,color:#1e40af
+  classDef comp fill:#f0fdf4,stroke:#22c55e,stroke-width:1px,color:#166534
+  classDef strat fill:#f8fafc,stroke:#64748b,stroke-width:1px,color:#334155,stroke-dasharray: 5 5
+  classDef habit fill:#ecfeff,stroke:#06b6d4,stroke-width:1px,color:#083344
+
+  {% for g in lifeGoals.DO %}
+    class Goal{{ g.id }} goal
+  {% endfor %}
+  {% for gg in growthGoals.COMPETENCE %}
+    class GG{{ gg.id }} comp
+    class Strat{{ gg.id }} strat
+    {% for h in gg.habits %}
+      class H{{ gg.id }}_{{ h.id }} habit
+    {% endfor %}
+  {% endfor %}
+                            </div>
+
+                            <div id="mermaid-contribution-src" style="display:none;">
+graph TD
+  Vision["✨ {{ planDeVie.vision.content|default('Ma Vision')|slice(0, 60)|escape('html') }}..."]
+  
+  {# Specific Goals GIVE #}
+  {% for g in lifeGoals.GIVE %}
+    Goal{{ g.id }}["🎯 {{ g.title|escape('html') }}"]
+    Vision --> Goal{{ g.id }}
+  {% endfor %}
+
+  {# Growth Goals RELATION #}
+  {% for gg in growthGoals.RELATION %}
+    GG{{ gg.id }}["🌱 {{ gg.title|escape('html') }}"]
+    {% for sg in gg.supportedLifeGoals %}
+      Goal{{ sg.id }} --> GG{{ gg.id }}
+    {% endfor %}
+
+    {# Strategy #}
+    {% if gg.strategy %}
+      Strat{{ gg.id }}["📋 {{ gg.strategy|slice(0, 40)|escape('html') }}..."]
+      GG{{ gg.id }} --> Strat{{ gg.id }}
+      
+      {# Habits #}
+      {% for h in gg.habits %}
+        H{{ gg.id }}_{{ h.id }}["⚡ {{ h.title|escape('html') }}"]
+        Strat{{ gg.id }} --> H{{ gg.id }}_{{ h.id }}
+      {% endfor %}
+    {% endif %}
+  {% endfor %}
+
+  style Vision fill:#fdf4ff,stroke:#d946ef,stroke-width:2px,color:#701a75
+  classDef goal fill:#eff6ff,stroke:#3b82f6,stroke-width:2px,color:#1e40af
+  classDef trans fill:#e0e7ff,stroke:#6366f1,stroke-width:1px,color:#3730a3
+  classDef strat fill:#f8fafc,stroke:#64748b,stroke-width:1px,color:#334155,stroke-dasharray: 5 5
+  classDef habit fill:#ecfeff,stroke:#06b6d4,stroke-width:1px,color:#083344
+
+  {% for g in lifeGoals.GIVE %}
+    class Goal{{ g.id }} goal
+  {% endfor %}
+  {% for gg in growthGoals.RELATION %}
+    class GG{{ gg.id }} trans
+    class Strat{{ gg.id }} strat
+    {% for h in gg.habits %}
+      class H{{ gg.id }}_{{ h.id }} habit
+    {% endfor %}
+  {% endfor %}
+                            </div>
+
+                            <div id="mermaid-discipline-src" style="display:none;">
+graph TD
+  Vision["✨ {{ planDeVie.vision.content|default('Ma Vision')|slice(0, 60)|escape('html') }}..."]
+  
+  {# Specific Goals HAVE #}
+  {% for g in lifeGoals.HAVE %}
+    Goal{{ g.id }}["🎯 {{ g.title|escape('html') }}"]
+    Vision --> Goal{{ g.id }}
+  {% endfor %}
+
+  {# Hygiene Domains #}
+  {% for hd in hygieneDomains %}
+    GG{{ hd.id }}["⭐ {{ hd.name|escape('html') }}"]
+    {% for sg in hd.supportedLifeGoals %}
+      Goal{{ sg.id }} --> GG{{ hd.id }}
+    {% endfor %}
+    
+    {# Habits #}
+    {% for h in hd.habits %}
+      H{{ hd.id }}_{{ h.id }}["⚡ {{ h.title|escape('html') }}"]
+      GG{{ hd.id }} --> H{{ hd.id }}_{{ h.id }}
+    {% endfor %}
+  {% endfor %}
+
+  style Vision fill:#fdf4ff,stroke:#d946ef,stroke-width:2px,color:#701a75
+  classDef goal fill:#eff6ff,stroke:#3b82f6,stroke-width:2px,color:#1e40af
+  classDef hyg fill:#d1fae5,stroke:#10b981,stroke-width:1px,color:#065f46
+  classDef habit fill:#ecfeff,stroke:#06b6d4,stroke-width:1px,color:#083344
+
+  {% for g in lifeGoals.HAVE %}
+    class Goal{{ g.id }} goal
+  {% endfor %}
+  {% for hd in hygieneDomains %}
+    class GG{{ hd.id }} hyg
+    {% for h in hd.habits %}
+      class H{{ hd.id }}_{{ h.id }} habit
+    {% endfor %}
+  {% endfor %}
+                            </div>
+
+                            <!-- Map Legend -->
+                            <div class="map-legend">
+                                <div class="legend-item">
+                                    <div class="legend-color" style="background: #d946ef;"></div>
+                                    <span class="legend-label">✨ Vision</span>
+                                </div>
+                                <div class="legend-item">
+                                    <div class="legend-color" style="background: #3b82f6;"></div>
+                                    <span class="legend-label">🎯 Objectifs de Vie</span>
+                                </div>
+                                <div class="legend-item" x-show="activePlan === 'DEVELOPPEMENT'">
+                                    <div class="legend-color" style="background: #22c55e;"></div>
+                                    <span class="legend-label">📚 Compétences</span>
+                                </div>
+                                <div class="legend-item" x-show="activePlan === 'CROISSANCE'">
+                                    <div class="legend-color" style="background: #f59e0b;"></div>
+                                    <span class="legend-label">💎 Traits de Caractère</span>
+                                </div>
+                                <div class="legend-item" x-show="activePlan === 'CONTRIBUTION'">
+                                    <div class="legend-color" style="background: #ec4899;"></div>
+                                    <span class="legend-label">🤝 Relation & Réseau</span>
+                                </div>
+                                <div class="legend-item" x-show="activePlan === 'DISCIPLINE'">
+                                    <div class="legend-color" style="background: #10b981;"></div>
+                                    <span class="legend-label">⭐ Domaines d'Hygiène</span>
+                                </div>
+                                <div class="legend-item">
+                                    <div class="legend-color" style="background: #64748b; border: 1px dashed #64748b;"></div>
+                                    <span class="legend-label">📋 Stratégies</span>
+                                </div>
+                                <div class="legend-item">
+                                    <div class="legend-color" style="background: #06b6d4;"></div>
+                                    <span class="legend-label">⚡ Habitudes / Rituels</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <!-- MODALS FOR PLAN DE CROISSANCE CONFIGURATION -->
+            
+            <!-- Modal Axis Configuration -->
+            <div x-show="showAxisModal" 
+                 class="modal-backdrop" 
+                 style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(15, 23, 42, 0.4); backdrop-filter: blur(12px); display: flex; align-items: center; justify-content: center; z-index: 9999; padding: 1.5rem;"
+                 x-transition:enter="transition ease-out duration-300"
+                 x-transition:enter-start="opacity-0"
+                 x-transition:enter-end="opacity-100"
+                 x-transition:leave="transition ease-in duration-200"
+                 x-transition:leave-start="opacity-100"
+                 x-transition:leave-end="opacity-0"
+                 @keydown.escape.window="showAxisModal = false"
+                 style="display: none;">
+                 
+                <div class="modal-container" 
+                     style="background: white; border-radius: 1.5rem; width: 100%; max-width: 650px; max-height: 90vh; overflow-y: auto; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25); border: 1px solid rgba(15, 118, 110, 0.08); display: flex; flex-direction: column;"
+                     @click.away="showAxisModal = false"
+                     x-transition:enter="transition ease-out duration-300"
+                     x-transition:enter-start="scale-95 translate-y-4"
+                     x-transition:enter-end="scale-100 translate-y-0">
+                     
+                     <div style="padding: 1.5rem 2rem; border-bottom: 1px solid rgba(15, 118, 110, 0.06); display: flex; justify-content: space-between; align-items: center;">
+                         <div>
+                             <span style="font-size: 0.7rem; font-weight: 800; text-transform: uppercase; color: #D97706; letter-spacing: 0.05em;">Configuration de l'axe</span>
+                             <h2 style="font-family: var(--font-serif); font-size: 1.35rem; font-weight: 700; color: var(--fg); margin: 2px 0 0 0;" x-text="currentAxis.text"></h2>
+                         </div>
+                         <button type="button" @click="showAxisModal = false" style="background: none; border: none; color: var(--fg-muted); cursor: pointer;">
+                             <i data-lucide="x" style="width: 20px; height: 20px;"></i>
+                         </button>
+                     </div>
+                     
+                     <form :action="'/mes-strategies/croissance/axis/save/' + currentAxis.sourceType + '/' + currentAxis.sourceId" method="POST" style="padding: 2rem; display: flex; flex-direction: column; gap: 1.5rem;">
+                         <!-- Statut -->
+                         <div style="display: flex; flex-direction: column; gap: 0.35rem;">
+                             <label style="font-size: 0.75rem; font-weight: 700; text-transform: uppercase; color: var(--fg-light); letter-spacing: 0.05em;">Statut d'acquisition</label>
+                             <select name="status" x-model="currentAxis.status" class="wiz-select" style="width: 100%;">
+                                 <option value="build">À construire</option>
+                                 <option value="consolidate">À consolider</option>
+                             </select>
+                         </div>
+
+                         <!-- Strategie -->
+                         <div style="display: flex; flex-direction: column; gap: 0.35rem;">
+                             <label style="font-size: 0.75rem; font-weight: 700; text-transform: uppercase; color: var(--fg-light); letter-spacing: 0.05em;">Stratégie de croissance</label>
+                             <textarea name="strategy" x-model="currentAxis.strategy" class="wiz-textarea" rows="3" placeholder="Comment comptez-vous croître sur cet axe ?" required></textarea>
+                         </div>
+
+                         <!-- Objectifs de vie -->
+                         <div style="display: flex; flex-direction: column; gap: 0.35rem;">
+                             <label style="font-size: 0.75rem; font-weight: 700; text-transform: uppercase; color: var(--fg-light); letter-spacing: 0.05em;">Objectifs de vie soutenus</label>
+                             <div class="checkbox-list-container" style="display: flex; flex-direction: column; gap: 0.5rem; background: #F8FAFC; border: 1px solid rgba(15, 118, 110, 0.08); border-radius: 0.75rem; padding: 0.75rem; max-height: 150px; overflow-y: auto;">
+                                 {% if allLifeGoals|length > 0 %}
+                                     {% for lg in allLifeGoals %}
+                                         <label style="display: flex; align-items: flex-start; gap: 0.5rem; font-size: 0.85rem; color: var(--fg-light); cursor: pointer; padding: 0.2rem 0; margin-bottom: 0;">
+                                             <input type="checkbox" name="life_goals[]" value="{{ lg.id }}" :checked="currentAxis.lifeGoals.includes({{ lg.id }})" style="margin-top: 0.2rem; cursor: pointer;">
+                                             <span>[{{ lg.category|upper }}] {{ lg.title }}</span>
+                                         </label>
+                                     {% endfor %}
+                                 {% else %}
+                                     <span style="font-size: 0.85rem; color: var(--fg-muted); font-style: italic;">Aucun objectif spécifique défini.</span>
+                                 {% endif %}
+                             </div>
+                         </div>
+
+                         <!-- Actions -->
+                         <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+                             <div style="display: flex; justify-content: space-between; align-items: center;">
+                                 <label style="font-size: 0.75rem; font-weight: 700; text-transform: uppercase; color: var(--fg-light); letter-spacing: 0.05em;">🎯 Actions spécifiques (avec échéance)</label>
+                                 <button type="button" @click="currentAxis.actions.push({ title: '', deadline: '' })" class="btn-add" style="padding: 0.2rem 0.5rem; font-size: 0.75rem; display: inline-flex; align-items: center; gap: 0.25rem;">
+                                     <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                                     Ajouter
+                                 </button>
+                             </div>
+                             <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+                                 <template x-for="(action, index) in currentAxis.actions" :key="index">
+                                     <div style="display: flex; gap: 0.5rem; align-items: center; background: #F8FAFC; padding: 0.5rem; border-radius: 0.5rem; border: 1px solid rgba(0,0,0,0.03);">
+                                         <input type="text" name="action_titles[]" x-model="action.title" class="wiz-input" placeholder="Ex: Lire tel livre" style="flex: 1; padding: 0.35rem 0.75rem; font-size: 0.85rem;" required>
+                                         <input type="date" name="action_deadlines[]" x-model="action.deadline" class="wiz-input" style="width: 135px; padding: 0.35rem; font-size: 0.8rem;">
+                                         <button type="button" @click="currentAxis.actions.splice(index, 1)" style="background: none; border: none; color: #EF4444; cursor: pointer; padding: 0.25rem;">
+                                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="color:#EF4444;"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg>
+                                         </button>
+                                     </div>
+                                 </template>
+                             </div>
+                         </div>
+
+                         <!-- Habitudes -->
+                         <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+                             <div style="display: flex; justify-content: space-between; align-items: center;">
+                                 <label style="font-size: 0.75rem; font-weight: 700; text-transform: uppercase; color: var(--fg-light); letter-spacing: 0.05em;">⚡ Habitudes & Rituels (avec régularité)</label>
+                                 <button type="button" @click="currentAxis.habits.push({ title: '', frequency: 'DAILY' })" class="btn-add" style="padding: 0.2rem 0.5rem; font-size: 0.75rem; display: inline-flex; align-items: center; gap: 0.25rem;">
+                                     <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                                     Ajouter
+                                 </button>
+                             </div>
+                             <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+                                 <template x-for="(habit, index) in currentAxis.habits" :key="index">
+                                     <div style="display: flex; gap: 0.5rem; align-items: center; background: #F8FAFC; padding: 0.5rem; border-radius: 0.5rem; border: 1px solid rgba(0,0,0,0.03);">
+                                         <input type="text" name="habit_titles[]" x-model="habit.title" class="wiz-input" placeholder="Ex: Méditation de 10 min" style="flex: 1; padding: 0.35rem 0.75rem; font-size: 0.85rem;" required>
+                                         <select name="habit_frequencies[]" x-model="habit.frequency" class="wiz-input" style="width: 110px; padding: 0.35rem; font-size: 0.8rem; height: auto;">
+                                             <option value="DAILY">Quotidien</option>
+                                             <option value="WEEKLY">Hebdomadaire</option>
+                                             <option value="MONTHLY">Mensuel</option>
+                                         </select>
+                                         <button type="button" @click="currentAxis.habits.splice(index, 1)" style="background: none; border: none; color: #EF4444; cursor: pointer; padding: 0.25rem;">
+                                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="color:#EF4444;"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg>
+                                         </button>
+                                     </div>
+                                 </template>
+                             </div>
+                         </div>
+
+                         <!-- Footer Buttons -->
+                         <div style="display: flex; justify-content: flex-end; gap: 0.75rem; margin-top: 1rem; border-top: 1px solid rgba(15, 118, 110, 0.06); padding-top: 1.25rem;">
+                             <button type="button" @click="showAxisModal = false" style="background: #F1F5F9; color: #475569; border: none; padding: 0.5rem 1rem; border-radius: 0.5rem; font-weight: 600; cursor: pointer;">Annuler</button>
+                             <button type="submit" style="background: var(--primary); color: white; border: none; padding: 0.5rem 1.25rem; border-radius: 0.5rem; font-weight: 600; cursor: pointer;">Enregistrer</button>
+                         </div>
+                     </form>
+                </div>
+            </div>
+
+            <!-- Modal Principles Configuration -->
+            <div x-show="showPrinciplesModal" 
+                 class="modal-backdrop" 
+                 style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(15, 23, 42, 0.4); backdrop-filter: blur(12px); display: flex; align-items: center; justify-content: center; z-index: 9999; padding: 1.5rem;"
+                 x-transition:enter="transition ease-out duration-300"
+                 x-transition:enter-start="opacity-0"
+                 x-transition:enter-end="opacity-100"
+                 x-transition:leave="transition ease-in duration-200"
+                 x-transition:leave-start="opacity-100"
+                 x-transition:leave-end="opacity-0"
+                 @keydown.escape.window="showPrinciplesModal = false"
+                 style="display: none;">
+                 
+                <div class="modal-container" 
+                     style="background: white; border-radius: 1.5rem; width: 100%; max-width: 600px; max-height: 90vh; overflow-y: auto; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25); border: 1px solid rgba(15, 118, 110, 0.08); display: flex; flex-direction: column;"
+                     @click.away="showPrinciplesModal = false"
+                     x-transition:enter="transition ease-out duration-300"
+                     x-transition:enter-start="scale-95 translate-y-4"
+                     x-transition:enter-end="scale-100 translate-y-0">
+                     
+                     <div style="padding: 1.5rem 2rem; border-bottom: 1px solid rgba(15, 118, 110, 0.06); display: flex; justify-content: space-between; align-items: center;">
+                         <div>
+                             <span style="font-size: 0.7rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em;"
+                                    :style="{ color: activePlan === 'CROISSANCE' ? '#D97706' : (activePlan === 'DEVELOPPEMENT' ? '#2563EB' : (activePlan === 'CONTRIBUTION' ? '#DB2777' : '#059669')) }"
+                                    x-text="'Lois & Principes de ' + (activePlan === 'CROISSANCE' ? 'Croissance' : (activePlan === 'DEVELOPPEMENT' ? 'Développement' : (activePlan === 'CONTRIBUTION' ? 'Transmission' : 'Vie/Discipline')))">
+                                  Lois & Principes de Croissance
+                              </span>
+                             <h2 style="font-family: var(--font-serif); font-size: 1.35rem; font-weight: 700; color: var(--fg); margin: 2px 0 0 0;">Gérer mes principes</h2>
+                         </div>
+                         <button type="button" @click="showPrinciplesModal = false" style="background: none; border: none; color: var(--fg-muted); cursor: pointer;">
+                             <i data-lucide="x" style="width: 20px; height: 20px;"></i>
+                         </button>
+                     </div>
+                     
+                     <form :action="'/mes-strategies/' + (activePlan || 'croissance').toLowerCase() + '/principles/save'" method="POST" style="padding: 2rem; display: flex; flex-direction: column; gap: 1.5rem;">
+                         <!-- Principles Proposed -->
+                         <div style="display: flex; flex-direction: column; gap: 0.75rem;">
+                             <label style="font-size: 0.75rem; font-weight: 700; text-transform: uppercase; color: var(--fg-light); letter-spacing: 0.05em;">Principes proposés (Cochez pour adopter)</label>
+                             
+                             <div style="display: flex; flex-direction: column; gap: 0.75rem; background: #F8FAFC; border: 1px solid rgba(15, 118, 110, 0.08); border-radius: 0.75rem; padding: 1rem;">
+                                 <!-- Principle 1 -->
+                                 <label style="display: flex; align-items: flex-start; gap: 0.75rem; cursor: pointer; margin: 0;">
+                                     <input type="checkbox" name="proposed_principles[]" value="syst-obj" :checked="hasProposed('Systèmes > Objectifs')" style="margin-top: 0.25rem;">
+                                     <div>
+                                         <strong style="font-size: 0.9rem; color: var(--fg);">Systèmes &gt; Objectifs</strong>
+                                         <p style="font-size: 0.8rem; color: var(--fg-muted); margin: 0.15rem 0 0 0;">Je ne me concentre pas sur les résultats mais sur les systèmes qui les produisent.</p>
+                                     </div>
+                                 </label>
+                                 
+                                 <hr style="border: none; border-top: 1px solid rgba(0,0,0,0.05); margin: 0.25rem 0;">
+
+                                 <!-- Principle 2 -->
+                                 <label style="display: flex; align-items: flex-start; gap: 0.75rem; cursor: pointer; margin: 0;">
+                                     <input type="checkbox" name="proposed_principles[]" value="char-comp" :checked="hasProposed('Caractère avant compétence')" style="margin-top: 0.25rem;">
+                                     <div>
+                                         <strong style="font-size: 0.9rem; color: var(--fg);">Caractère avant compétence</strong>
+                                         <p style="font-size: 0.8rem; color: var(--fg-muted); margin: 0.15rem 0 0 0;">Ce que je deviens est plus important que ce que je sais faire.</p>
+                                     </div>
+                                 </label>
+                                 
+                                 <hr style="border: none; border-top: 1px solid rgba(0,0,0,0.05); margin: 0.25rem 0;">
+
+                                 <!-- Principle 3 -->
+                                 <label style="display: flex; align-items: flex-start; gap: 0.75rem; cursor: pointer; margin: 0;">
+                                     <input type="checkbox" name="proposed_principles[]" value="one-thing" :checked="hasProposed('Une chose à la fois')" style="margin-top: 0.25rem;">
+                                     <div>
+                                         <strong style="font-size: 0.9rem; color: var(--fg);">Une chose à la fois</strong>
+                                         <p style="font-size: 0.8rem; color: var(--fg-muted); margin: 0.15rem 0 0 0;">Je fais peu de choses, mais je les fais profondément.</p>
+                                     </div>
+                                 </label>
+                             </div>
+                         </div>
+
+                         <!-- Principles Custom -->
+                         <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+                             <div style="display: flex; justify-content: space-between; align-items: center;">
+                                 <label style="font-size: 0.75rem; font-weight: 700; text-transform: uppercase; color: var(--fg-light); letter-spacing: 0.05em;">Mes Principes personnalisés</label>
+                                 <button type="button" @click="customPrinciples.push({ title: '', description: '' })" class="btn-add" style="padding: 0.2rem 0.5rem; font-size: 0.75rem; display: inline-flex; align-items: center; gap: 0.25rem;">
+                                     <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                                     Ajouter
+                                 </button>
+                             </div>
+                             <div style="display: flex; flex-direction: column; gap: 0.75rem;">
+                                 <template x-for="(principle, index) in customPrinciples" :key="index">
+                                     <div style="display: flex; flex-direction: column; gap: 0.5rem; background: #F8FAFC; padding: 0.75rem; border-radius: 0.75rem; border: 1px solid rgba(0,0,0,0.03); position: relative;">
+                                         <button type="button" @click="customPrinciples.splice(index, 1)" style="position: absolute; top: 0.5rem; right: 0.5rem; background: none; border: none; color: #EF4444; cursor: pointer; padding: 0.25rem;">
+                                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="color:#EF4444;"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg>
+                                         </button>
+                                         <div style="display: flex; flex-direction: column; gap: 0.25rem; padding-right: 2rem;">
+                                             <label style="font-size: 0.7rem; font-weight: 700; color: var(--fg-light); text-transform: uppercase;">Titre du principe</label>
+                                             <input type="text" name="custom_principle_titles[]" x-model="principle.title" class="wiz-input" placeholder="Ex: Intégrité d'abord" style="padding: 0.35rem 0.75rem; font-size: 0.85rem;" required>
+                                         </div>
+                                         <div style="display: flex; flex-direction: column; gap: 0.25rem;">
+                                             <label style="font-size: 0.7rem; font-weight: 700; color: var(--fg-light); text-transform: uppercase;">Description / Énoncé</label>
+                                             <textarea name="custom_principle_descriptions[]" x-model="principle.description" class="wiz-textarea" rows="2" placeholder="Expliquez ce principe..." style="font-size: 0.85rem;"></textarea>
+                                         </div>
+                                     </div>
+                                 </template>
+                             </div>
+                         </div>
+
+                         <!-- Footer Buttons -->
+                         <div style="display: flex; justify-content: flex-end; gap: 0.75rem; margin-top: 1rem; border-top: 1px solid rgba(15, 118, 110, 0.06); padding-top: 1.25rem;">
+                             <button type="button" @click="showPrinciplesModal = false" style="background: #F1F5F9; color: #475569; border: none; padding: 0.5rem 1rem; border-radius: 0.5rem; font-weight: 600; cursor: pointer;">Annuler</button>
+                             <button type="submit" style="background: var(--primary); color: white; border: none; padding: 0.5rem 1.25rem; border-radius: 0.5rem; font-weight: 600; cursor: pointer;">Enregistrer</button>
+                         </div>
+                     </form>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<div id="toast-strategies" class="toast-notify" style="position: fixed; top: 20px; right: 20px; background: #D97706; color: white; padding: 14px 24px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); font-size: 0.9rem; font-weight: 600; z-index: 9999; transform: translateY(-100px); transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);">Plan de Croissance envoyé avec succès à votre adresse email !</div>
+
+<!-- Load Mermaid.js CDN -->
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+
+<script>
+    function initMermaid(activePlan) {
+        if (!activePlan) return;
+        if (window.mermaid) {
+            const srcEl = document.getElementById(`mermaid-${activePlan.toLowerCase()}-src`);
+            const targetEl = document.getElementById('mermaid-target');
+            if (srcEl && targetEl) {
+                targetEl.removeAttribute('data-processed');
+                targetEl.textContent = srcEl.textContent.trim();
+                
+                try {
+                    window.mermaid.initialize({
+                        startOnLoad: false,
+                        theme: 'neutral',
+                        securityLevel: 'loose',
+                        flowchart: {
+                            useMaxWidth: true,
+                            htmlLabels: true
+                        }
+                    });
+                    window.mermaid.run({
+                        nodes: [targetEl]
+                    });
+                } catch (e) {
+                    console.error("Mermaid run failed", e);
+                }
+            }
+        }
+    }
+
+    async function sendPlanEmail(plan, btn) {
+        if (!plan || !btn) return;
+        btn.disabled = true;
+        btn.style.opacity = '0.7';
+        const originalText = btn.innerHTML;
+        btn.innerHTML = '<span style="margin-right: 5px;">⏳</span> Envoi...';
+
+        let path = '';
+        let toastBg = '#D97706';
+        let planLabel = '';
+        if (plan === 'CROISSANCE') {
+            path = "{{ path('app_user_croissance_plan_send_email') }}";
+            toastBg = '#D97706';
+            planLabel = 'Plan de Croissance';
+        } else if (plan === 'DEVELOPPEMENT') {
+            path = "{{ path('app_user_developpement_plan_send_email') }}";
+            toastBg = '#2563EB';
+            planLabel = 'Plan de Développement';
+        } else if (plan === 'CONTRIBUTION') {
+            path = "{{ path('app_user_contribution_plan_send_email') }}";
+            toastBg = '#DB2777';
+            planLabel = 'Plan de Transmission';
+        } else if (plan === 'DISCIPLINE') {
+            path = "{{ path('app_user_discipline_plan_send_email') }}";
+            toastBg = '#059669';
+            planLabel = "Plan d'Hygiène de Vie";
+        }
+
+        const toast = document.getElementById('toast-strategies');
+
+        try {
+            const response = await fetch(path, { method: "POST" });
+            const result = await response.json();
+            if (result.success) {
+                if (toast) {
+                    toast.style.background = toastBg;
+                    toast.innerText = `${planLabel} envoyé avec succès à ${result.emailSentTo} !`;
+                    toast.style.transform = 'translateY(0)';
+                    setTimeout(() => {
+                        toast.style.transform = 'translateY(-100px)';
+                    }, 4000);
+                }
+            } else {
+                alert("Erreur lors de l'envoi : " + result.error);
+            }
+        } catch (err) {
+            alert("Erreur réseau ou serveur lors de l'envoi.");
+        } finally {
+            btn.disabled = false;
+            btn.style.opacity = '1';
+            btn.innerHTML = originalText;
+        }
+    }
+</script>
+{% endblock %}
+

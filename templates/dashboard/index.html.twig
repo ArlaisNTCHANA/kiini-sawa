@@ -1,0 +1,562 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Accueil{% endblock %}
+
+{% block body %}
+<style>
+    .dash-wrap {
+        max-width: 1000px;
+        margin: 0 auto;
+        padding: 2rem 1.5rem 8rem;
+        display: flex;
+        flex-direction: column;
+        gap: 2.5rem;
+    }
+    @media (min-width: 1024px) {
+        .dash-wrap {
+            padding: 3.5rem 2rem 5rem;
+            gap: 3.5rem;
+        }
+    }
+
+    /* Vibrant Type Pills */
+    .type-pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.375rem;
+        padding: 0.5rem 1.1rem;
+        border-radius: 9999px;
+        font-size: 0.725rem;
+        font-weight: 700;
+        letter-spacing: 0.05em;
+        text-transform: uppercase;
+        white-space: nowrap;
+        cursor: pointer;
+        border: 1.5px solid transparent;
+        transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+        background: rgba(255, 255, 255, 0.85);
+        color: #475569;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.02);
+    }
+    .type-pill:hover {
+        background: #ffffff;
+        color: var(--primary);
+        border-color: rgba(15, 118, 110, 0.15);
+        transform: translateY(-1px);
+    }
+    
+    .type-pill.active-idea { background: #EAB308 !important; color: white !important; box-shadow: 0 4px 14px rgba(234, 179, 8, 0.3) !important; border-color: #EAB308 !important; }
+    .type-pill.active-reflection { background: #10B981 !important; color: white !important; box-shadow: 0 4px 14px rgba(16, 185, 129, 0.3) !important; border-color: #10B981 !important; }
+    .type-pill.active-resolution { background: #6366F1 !important; color: white !important; box-shadow: 0 4px 14px rgba(99, 102, 241, 0.3) !important; border-color: #6366F1 !important; }
+    .type-pill.active-milestone { background: #F43F5E !important; color: white !important; box-shadow: 0 4px 14px rgba(244, 63, 94, 0.3) !important; border-color: #F43F5E !important; }
+    .type-pill.active-temoignage { background: #06B6D4 !important; color: white !important; box-shadow: 0 4px 14px rgba(6, 182, 212, 0.3) !important; border-color: #06B6D4 !important; }
+    .type-pill.active-insight { background: #0D9488 !important; color: white !important; box-shadow: 0 4px 14px rgba(13, 148, 136, 0.3) !important; border-color: #0D9488 !important; }
+
+    /* Textarea Focus glow */
+    .capture-textarea {
+        width: 100%;
+        background: white;
+        border-radius: 1.25rem;
+        padding: 1.25rem 3.5rem 1.25rem 1.25rem;
+        font-family: 'Inter', sans-serif;
+        font-size: 1rem;
+        line-height: 1.75;
+        color: #0F172A;
+        border: 1.5px solid rgba(15, 118, 110, 0.08);
+        resize: none;
+        outline: none;
+        box-shadow: inset 0 2px 4px rgba(0,0,0,0.01), 0 4px 12px rgba(0,0,0,0.01);
+        transition: all 0.25s;
+        min-height: 110px;
+    }
+    .capture-textarea:focus {
+        border-color: var(--primary-light) !important;
+        box-shadow: 0 0 0 4px rgba(13, 148, 136, 0.12), inset 0 2px 4px rgba(0,0,0,0.01) !important;
+        background: #ffffff;
+    }
+
+    /* Habit Cards */
+    .habit-card {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        padding: 1.1rem 1.25rem;
+        border-radius: 1.25rem;
+        background: #ffffff;
+        cursor: pointer;
+        border: 1px solid rgba(15, 118, 110, 0.05);
+        box-shadow: 0 4px 12px rgba(15, 118, 110, 0.02);
+        transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+        overflow: hidden;
+        position: relative;
+    }
+    
+    /* Circular Checkbox */
+    .custom-chk {
+        width: 1.35rem;
+        height: 1.35rem;
+        border-radius: 50%;
+        flex-shrink: 0;
+        border: 2px solid #CBD5E1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.2s ease;
+        background: white;
+    }
+
+    /* Mood buttons */
+    .mood-btn {
+        opacity: 0.45;
+        transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .mood-btn:hover {
+        opacity: 0.9;
+        transform: scale(1.1);
+    }
+    .mood-btn.active-happy { opacity: 1 !important; background: #FEF3C7 !important; border: 1.5px solid #FCD34D !important; transform: scale(1.15); box-shadow: 0 4px 12px rgba(245, 158, 11, 0.15); }
+    .mood-btn.active-energized { opacity: 1 !important; background: #FFEDD5 !important; border: 1.5px solid #FDBA74 !important; transform: scale(1.15); box-shadow: 0 4px 12px rgba(249, 115, 22, 0.15); }
+    .mood-btn.active-neutral { opacity: 1 !important; background: #F1F5F9 !important; border: 1.5px solid #CBD5E1 !important; transform: scale(1.15); box-shadow: 0 4px 12px rgba(100, 116, 139, 0.15); }
+    .mood-btn.active-tired { opacity: 1 !important; background: #EFF6FF !important; border: 1.5px solid #93C5FD !important; transform: scale(1.15); box-shadow: 0 4px 12px rgba(59, 130, 246, 0.15); }
+    .mood-btn.active-sad { opacity: 1 !important; background: #F5F3FF !important; border: 1.5px solid #C4B5FD !important; transform: scale(1.15); box-shadow: 0 4px 12px rgba(139, 92, 246, 0.15); }
+
+    /* Pillar buttons active state */
+    .btn-pillar.active {
+        background: var(--p-color) !important;
+        color: white !important;
+        border-color: var(--p-color) !important;
+        box-shadow: 0 8px 20px -4px var(--p-glow) !important;
+        transform: translateY(-1px);
+    }
+</style>
+<div class="dash-wrap">
+    {% if app.user %}
+
+    {# ══════════════════════════════════════════════════════
+       SECTION 1 — HERO (DashboardSummary)
+       Atmospheric Gradient with mesh glow effects
+     ══════════════════════════════════════════════════════ #}
+    <section style="
+        background: linear-gradient(135deg, #022c22 0%, #0f766e 40%, #0369a1 100%);
+        border-radius: 2.5rem; padding: 2.75rem 3rem; color: white;
+        position: relative; overflow: hidden;
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        box-shadow: 0 25px 60px -15px rgba(15, 118, 110, 0.35), 0 4px 20px rgba(0,0,0,0.15);"
+    >
+        {# Ambient Glows #}
+        <div style="position: absolute; top: -10%; left: -10%; width: 40%; height: 60%; background: radial-gradient(circle, rgba(20, 184, 166, 0.25) 0%, transparent 70%); filter: blur(40px); pointer-events: none;"></div>
+        <div style="position: absolute; bottom: -20%; right: -10%; width: 50%; height: 70%; background: radial-gradient(circle, rgba(245, 158, 11, 0.2) 0%, transparent 70%); filter: blur(50px); pointer-events: none;"></div>
+        <div style="position: absolute; top: 20%; right: 10%; width: 45%; height: 55%; background: radial-gradient(circle, rgba(99, 102, 241, 0.2) 0%, transparent 70%); filter: blur(40px); pointer-events: none;"></div>
+
+        {# Dot Grid Overlay #}
+        <div style="position: absolute; inset: 0; pointer-events: none; opacity: 0.18;
+                    background-image: radial-gradient(circle, rgba(255,255,255,0.15) 1.5px, transparent 1.5px);
+                    background-size: 24px 24px;"></div>
+
+        <div style="position: relative; z-index: 1;">
+            {# Date + Avatar #}
+            <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1rem;">
+                <div>
+                    {# Date badge #}
+                    <div style="display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.35rem 0.85rem; 
+                                background: rgba(255,255,255,0.08); backdrop-filter: blur(10px); 
+                                border: 1px solid rgba(255,255,255,0.1); border-radius: 9999px; 
+                                font-size: 0.725rem; font-weight: 700; color: #ccfbf1; margin-bottom: 0.875rem;
+                                letter-spacing: 0.05em;">
+                        <i data-lucide="calendar" style="width: 12px; height: 12px;"></i>
+                        <span>{{ "now"|date("l j F Y")|upper }}</span>
+                    </div>
+
+                    <h1 style="font-family: 'Playfair Display', serif; font-size: clamp(2rem, 4.5vw, 3rem);
+                               font-weight: 500; color: white; line-height: 1.15;">
+                        Bonjour, <span style="background: linear-gradient(135deg, #FFFFFF 30%, #a5f3fc 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">{{ app.user.email|split('@')|first|capitalize }}</span>
+                    </h1>
+                </div>
+
+                {# Avatar with glow #}
+                <div style="width: 3.25rem; height: 3.25rem; border-radius: 50%; background: rgba(255,255,255,0.12);
+                            border: 2.5px solid rgba(255,255,255,0.25); display: flex; align-items: center;
+                            justify-content: center; flex-shrink: 0; box-shadow: 0 8px 24px rgba(0,0,0,0.2);">
+                    <div style="width: 0.75rem; height: 0.75rem; background: #10B981; border-radius: 50%;
+                                box-shadow: 0 0 14px #10B981;"></div>
+                </div>
+            </div>
+
+            {# Quote in modern styled block #}
+            <div style="position: relative; margin-top: 2rem; padding-left: 1.5rem; border-left: 3px solid #0D9488;">
+                <p style="font-family: 'Playfair Display', serif; font-style: italic;
+                          font-size: clamp(1.15rem, 2.5vw, 1.45rem); line-height: 1.75;
+                          color: rgba(255,255,255,0.92); text-shadow: 0 2px 10px rgba(0,0,0,0.15);">
+                    {% if quote is defined and quote %}
+                        "{{ quote.content }}"
+                    {% else %}
+                        "Le sanctuaire de votre croissance. Construisez la vie que vous méritez, un pas à la fois."
+                    {% endif %}
+                </p>
+                {% if quote is defined and quote and quote.author is defined %}
+                <p style="font-size: 0.8rem; color: #38bdf8; margin-top: 0.75rem;
+                          letter-spacing: 0.12em; font-weight: 700; text-transform: uppercase;">— {{ quote.author }}</p>
+                {% endif %}
+            </div>
+
+            {# Quick Stats #}
+            {% if stats is defined and stats %}
+            <div style="display: flex; gap: 2rem; margin-top: 2.5rem; padding-top: 1.75rem;
+                        border-top: 1px solid rgba(255,255,255,0.12); flex-wrap: wrap;">
+                {% if stats.habitsToday is defined %}
+                <div>
+                    <p style="font-size: 1.75rem; font-weight: 700; color: white; font-family: 'Playfair Display', serif; line-height: 1.2;">
+                        {{ stats.habitsToday.done }}/{{ stats.habitsToday.total }}
+                    </p>
+                    <p style="font-size: 0.65rem; color: rgba(255,255,255,0.5); text-transform: uppercase; letter-spacing: 0.15em; font-weight: 700; margin-top: 2px;">Rituels du jour</p>
+                </div>
+                {% endif %}
+                {% if stats.streak is defined %}
+                <div>
+                    <p style="font-size: 1.75rem; font-weight: 700; color: white; font-family: 'Playfair Display', serif; line-height: 1.2;">
+                        {{ stats.streak }}j
+                    </p>
+                    <p style="font-size: 0.65rem; color: rgba(255,255,255,0.5); text-transform: uppercase; letter-spacing: 0.15em; font-weight: 700; margin-top: 2px;">Série actuelle</p>
+                </div>
+                {% endif %}
+            </div>
+            {% endif %}
+        </div>
+    </section>
+
+    {# ══════════════════════════════════════════════════════
+       SECTION 2 — QUICK CAPTURE (Glassmorphic & Vibrant)
+    ══════════════════════════════════════════════════════ #}
+    <section x-data="{
+        content: '',
+        type: 'IDEA',
+        mood: 'HAPPY',
+        energy: 7,
+        showExtras: false,
+        location: '',
+        placeholders: {
+            IDEA:       'Une idée géniale ? Notez-la avant qu\'elle ne s\'envole...',
+            REFLECTION: 'Qu\'est-ce qui occupe votre esprit en ce moment ?',
+            RESOLUTION: 'Quelle promesse vous faites-vous aujourd\'hui ?',
+            MILESTONE:  'Quelle belle victoire voulez-vous célébrer ?',
+            TEMOIGNAGE: 'Partagez un moment marquant...',
+            INSIGHT:    'Une prise de conscience, une révélation...'
+        },
+        get ph() { return this.placeholders[this.type] || ''; },
+        submitCapture() {
+            if (!this.content.trim()) return;
+            fetch('/api/journal/entries/create', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    content: this.content,
+                    type: this.type,
+                    mood: this.mood,
+                    energy: this.energy,
+                    location: this.location
+                })
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.success) {
+                    this.content = '';
+                    this.location = '';
+                    this.showExtras = false;
+                    alert('Note capturée avec succès dans votre journal !');
+                } else {
+                    alert('Erreur lors de la capture.');
+                }
+            })
+            .catch(() => {
+                alert('Erreur de connexion.');
+            });
+        }
+    }">
+        {# Separator Label #}
+        <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1.25rem;">
+            <div style="width: 6px; height: 12px; background: var(--primary); border-radius: 999px;"></div>
+            <span style="font-size: 0.725rem; font-weight: 800; letter-spacing: 0.15em; text-transform: uppercase;
+                         color: var(--fg-muted); white-space: nowrap;">Quick Capture</span>
+            <div style="height: 1px; flex: 1; background: linear-gradient(to right, rgba(15, 118, 110, 0.15), transparent);"></div>
+        </div>
+
+        {# Capture Card #}
+        <div style="background: rgba(255, 255, 255, 0.75); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+                    border: 1px solid rgba(15, 118, 110, 0.08); border-radius: 2rem;
+                    box-shadow: 0 15px 40px -10px rgba(15, 118, 110, 0.06); overflow: hidden;">
+
+            {# Type Pills #}
+            {% set captureTypes = [
+                { value: 'IDEA',       label: 'Idée',       icon: 'lightbulb' },
+                { value: 'REFLECTION', label: 'Pensée',     icon: 'brain' },
+                { value: 'RESOLUTION', label: 'Résolution', icon: 'target' },
+                { value: 'MILESTONE',  label: 'Victoire',   icon: 'trophy' },
+                { value: 'TEMOIGNAGE', label: 'Témoignage', icon: 'quote' },
+                { value: 'INSIGHT',    label: 'Insight',    icon: 'eye' },
+            ] %}
+            <div style="display: flex; gap: 0.5rem; padding: 1.25rem 1.25rem 0.25rem; overflow-x: auto; scrollbar-width: none;">
+                {% for t in captureTypes %}
+                <button @click="type = '{{ t.value }}'"
+                        class="type-pill"
+                        :class="type === '{{ t.value }}' ? 'active-{{ t.value|lower }}' : ''"
+                        style="--t-color: {% if t.value == 'IDEA' %}#EAB308{% elseif t.value == 'REFLECTION' %}#10B981{% elseif t.value == 'RESOLUTION' %}#6366F1{% elseif t.value == 'MILESTONE' %}#F43F5E{% elseif t.value == 'TEMOIGNAGE' %}#06B6D4{% else %}#0D9488{% endif %};
+                               --t-glow: {% if t.value == 'IDEA' %}rgba(234, 179, 8, 0.25){% elseif t.value == 'REFLECTION' %}rgba(16, 185, 129, 0.25){% elseif t.value == 'RESOLUTION' %}rgba(99, 102, 241, 0.25){% elseif t.value == 'MILESTONE' %}rgba(244, 63, 94, 0.25){% elseif t.value == 'TEMOIGNAGE' %}rgba(6, 182, 212, 0.25){% else %}rgba(13, 148, 136, 0.25){% endif %};">
+                    <i data-lucide="{{ t.icon }}" style="width: 13px; height: 13px;"></i>
+                    <span>{{ t.label }}</span>
+                </button>
+                {% endfor %}
+            </div>
+
+            {# Textarea Input #}
+            <div style="padding: 0.75rem 1.25rem; position: relative;">
+                <textarea x-model="content" :placeholder="ph" rows="3" class="capture-textarea"></textarea>
+                <button @click="showExtras = !showExtras"
+                        style="position: absolute; top: 1.5rem; right: 2rem; width: 2.25rem; height: 2.25rem;
+                               border-radius: 0.75rem; cursor: pointer; transition: all 0.25s var(--ease); border: none;
+                               display: flex; align-items: center; justify-content: center;"
+                        :style="showExtras
+                            ? 'background: rgba(15, 118, 110, 0.08); color: var(--primary);'
+                            : 'background: transparent; color: #94a3b8;'">
+                    <i data-lucide="plus" style="width: 18px; height: 18px; transition: transform 0.25s;"
+                       :style="showExtras ? 'transform: rotate(45deg)' : ''"></i>
+                </button>
+            </div>
+
+            {# Optional Fields (Lieu, etc.) #}
+            <div x-show="showExtras" style="display: none; padding: 0 1.25rem 0.875rem;"
+                 x-transition:enter="transition ease-out duration-200"
+                 x-transition:enter-start="opacity-0 -translate-y-1"
+                 x-transition:enter-end="opacity-100 translate-y-0">
+                <div style="position: relative;">
+                    <i data-lucide="map-pin" style="position: absolute; left: 1rem; top: 50%;
+                                                     transform: translateY(-50%); width: 15px; height: 15px; color: #64748b;"></i>
+                    <input type="text" x-model="location" placeholder="Lieu (ex: Douala, bureau...)"
+                           style="width: 100%; border-radius: 0.875rem; padding: 0.65rem 1rem 0.65rem 2.65rem;
+                                  font-size: 0.875rem; border: 1.5px solid rgba(15, 118, 110, 0.08); background: white;
+                                  color: #0F172A; outline: none; font-family: 'Inter', sans-serif; transition: all 0.25s;"
+                           @focus="$el.style.borderColor='var(--primary-light)'"
+                           @blur="$el.style.borderColor='rgba(15, 118, 110, 0.08)'">
+                </div>
+            </div>
+
+            {# Footer: Mood + Energy + Save button #}
+            <div style="display: flex; align-items: center; justify-content: space-between;
+                        padding: 0.75rem 1.25rem 1.25rem; gap: 1rem; flex-wrap: wrap;">
+                {# Mood selection #}
+                <div style="display: flex; align-items: center; gap: 0.75rem;">
+                    <span style="font-size: 0.65rem; font-weight: 800; letter-spacing: 0.1em; text-transform: uppercase; color: #64748b;">Humeur</span>
+                    {% set moodList = [
+                        { value: 'HAPPY',     icon: '😊' },
+                        { value: 'ENERGIZED', icon: '🔥' },
+                        { value: 'NEUTRAL',   icon: '😐' },
+                        { value: 'TIRED',     icon: '😫' },
+                        { value: 'SAD',       icon: '😔' },
+                    ] %}
+                    <div style="display: flex; gap: 3px; background: white; padding: 0.25rem; border-radius: 1rem;
+                                border: 1px solid rgba(15,118,110,0.06); box-shadow: 0 2px 8px rgba(0,0,0,0.02);">
+                        {% for m in moodList %}
+                        <button @click="mood = '{{ m.value }}'"
+                                class="mood-btn"
+                                :class="mood === '{{ m.value }}' ? 'active-{{ m.value|lower }}' : ''"
+                                style="width: 2.25rem; height: 2.25rem; border-radius: 0.75rem; font-size: 1.25rem;
+                                       display: flex; align-items: center; justify-content: center; cursor: pointer;
+                                       border: none; background: transparent;"
+                                title="{{ m.value }}">
+                            {{ m.icon }}
+                        </button>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <div style="display: flex; align-items: center; gap: 1.25rem; flex-wrap: wrap;">
+                    {# Energy Slider #}
+                    <div style="display: flex; align-items: center; gap: 0.625rem;">
+                        <i data-lucide="zap" style="width: 15px; height: 15px; flex-shrink: 0; transition: color 0.2s;"
+                           :style="energy >= 7 ? 'color: #EAB308; fill: #EAB308' : 'color: #cbd5e1'"></i>
+                        <input type="range" min="1" max="10" x-model.number="energy"
+                               style="width: 6rem; accent-color: var(--primary); height: 4px; cursor: pointer;">
+                        <span style="font-size: 0.875rem; font-weight: 800; color: #0F172A; min-width: 1.25rem;"
+                               x-text="energy"></span>
+                    </div>
+
+                    {# Send button #}
+                    <button :disabled="!content.trim()"
+                            @click="submitCapture()"
+                            :style="content.trim()
+                                ? 'background: var(--primary); box-shadow: 0 4px 14px rgba(15, 118, 110, 0.35); cursor: pointer;'
+                                : 'background: rgba(15, 118, 110, 0.25); cursor: not-allowed;'"
+                            style="display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.7rem 1.5rem;
+                                   border-radius: 0.875rem; font-size: 0.825rem; font-weight: 700; color: white;
+                                   transition: all 0.25s var(--ease); border: none; font-family: 'Inter', sans-serif;">
+                        <i data-lucide="send" style="width: 14px; height: 14px;"></i>
+                        <span>Capturer</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    {# ══════════════════════════════════════════════════════
+       SECTION 3 — VOS RITUELS (HabitTracker with filtering)
+    ══════════════════════════════════════════════════════ #}
+    <section style="background: rgba(255, 255, 255, 0.9); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+                    border-radius: 2.5rem; padding: 2.25rem 2.75rem;
+                    border: 1px solid rgba(15, 118, 110, 0.06); box-shadow: 0 10px 40px rgba(0, 0, 0, 0.03);">
+
+        {# Section Header #}
+        <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 2rem;">
+            <div style="width: 6px; height: 12px; background: var(--primary); border-radius: 999px;"></div>
+            <span style="font-size: 0.725rem; font-weight: 800; letter-spacing: 0.15em; text-transform: uppercase;
+                         color: var(--fg-muted); white-space: nowrap;">Vos Rituels</span>
+            <div style="height: 1px; flex: 1; background: rgba(15, 118, 110, 0.08);"></div>
+            <a href="{{ path('app_user_habits') }}"
+               style="display: flex; align-items: center; gap: 0.375rem; font-size: 0.725rem; font-weight: 700;
+                      color: var(--fg-muted); text-decoration: none; transition: all 0.2s var(--ease); padding: 0.45rem 1rem;
+                      border-radius: 9999px; border: 1.5px solid rgba(15, 118, 110, 0.1); background: white;"
+               onmouseover="this.style.color='var(--primary)'; this.style.borderColor='rgba(15, 118, 110, 0.3)'; this.style.boxShadow='0 4px 12px rgba(15,118,110,0.05)'"
+               onmouseout="this.style.color='var(--fg-muted)'; this.style.borderColor='rgba(15, 118, 110, 0.1)'; this.style.boxShadow='none'">
+                <i data-lucide="settings-2" style="width: 14px; height: 14px;"></i>
+                <span>Configurer</span>
+            </a>
+        </div>
+
+        {% if habits is defined and habits is not empty %}
+        <div x-data="{ pillar: 'ALL' }">
+
+            {# Pillar Filters #}
+            {% set pillars = [
+                { id: 'ALL',          label: 'Tout',          color: '#0F766E', glow: 'rgba(15, 118, 110, 0.15)' },
+                { id: 'CROISSANCE',   label: 'Croissance',    color: '#D97706', glow: 'rgba(217, 119, 6, 0.15)' },
+                { id: 'DEVELOPPEMENT',label: 'Développement', color: '#059669', glow: 'rgba(5, 150, 105, 0.15)' },
+                { id: 'CONTRIBUTION', label: 'Contribution',  color: '#DB2777', glow: 'rgba(219, 39, 119, 0.15)' },
+                { id: 'HYGIENE',      label: 'Hygiène',       color: '#4F46E5', glow: 'rgba(79, 70, 229, 0.15)' },
+            ] %}
+            <div style="display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 2.25rem; justify-content: center;">
+                {% for p in pillars %}
+                <button @click="pillar = '{{ p.id }}'"
+                        class="btn-pillar"
+                        :class="pillar === '{{ p.id }}' ? 'active' : ''"
+                        style="--p-color: {{ p.color }}; --p-glow: {{ p.glow }};
+                               display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.5rem 1.25rem;
+                               border-radius: 9999px; font-size: 0.75rem; font-weight: 750; letter-spacing: 0.05em;
+                               text-transform: uppercase; cursor: pointer; border: 1.5px solid transparent;
+                               transition: all 0.25s var(--ease); font-family: 'Inter', sans-serif;
+                               background: rgba(241, 245, 249, 0.8); color: #475569;
+                               box-shadow: 0 2px 8px rgba(0, 0, 0, 0.02);"
+                        onmouseover="if(this.className.indexOf('active') === -1) { this.style.borderColor='rgba(15,118,110,0.15)'; this.style.color='#0F766E'; }"
+                        onmouseout="if(this.className.indexOf('active') === -1) { this.style.borderColor='transparent'; this.style.color='#475569'; }">
+                    {% if p.id != 'ALL' %}
+                    <span style="width: 0.5rem; height: 0.5rem; border-radius: 50%; background: {{ p.color }}; display: inline-block;"></span>
+                    {% endif %}
+                    {{ p.label }}
+                </button>
+                {% endfor %}
+            </div>
+
+            {# Pillar Config & Colors Metadata mapping #}
+            {% set pillarMeta = {
+                'CROISSANCE':   { color: '#D97706', glow: 'rgba(217, 119, 6, 0.08)', bg: '#FEF3C7', border: '#FCD34D' },
+                'DEVELOPPEMENT':{ color: '#059669', glow: 'rgba(5, 150, 105, 0.08)', bg: '#D1FAE5', border: '#6EE7B7' },
+                'CONTRIBUTION': { color: '#DB2777', glow: 'rgba(219, 39, 119, 0.08)', bg: '#FCE7F3', border: '#FBCFE8' },
+                'HYGIENE':      { color: '#4F46E5', glow: 'rgba(79, 70, 229, 0.08)', bg: '#E0E7FF', border: '#C7D2FE' },
+                'ALL':          { color: '#0F766E', glow: 'rgba(15, 118, 110, 0.08)', bg: '#E6F4F1', border: '#B2DFDB' }
+            } %}
+
+            {# Ritual Groups #}
+            {% set habitGroups = [
+                { key: 'DAILY',   label: 'Ma Journée' },
+                { key: 'WEEKLY',  label: 'Ma Semaine' },
+                { key: 'MONTHLY', label: 'Mon Mois' },
+            ] %}
+
+            {% for group in habitGroups %}
+            {% set groupHabits = habits|filter(h => h.frequency.value == group.key) %}
+            {% if groupHabits is not empty %}
+            <div style="margin-bottom: 2rem;">
+                <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1rem;">
+                    <h2 style="font-family: 'Playfair Display', serif; font-size: 1.25rem; color: var(--primary); font-weight: 500; white-space: nowrap;">{{ group.label }}</h2>
+                    <div style="height: 1px; flex: 1; background: rgba(15, 118, 110, 0.06);"></div>
+                    <span style="font-size: 0.725rem; color: var(--fg-muted); font-weight: 700; background: rgba(15,118,110,0.06); padding: 0.2rem 0.5rem; border-radius: var(--r-sm);">{{ groupHabits|length }}</span>
+                </div>
+
+                <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 0.75rem;">
+                    {% for habit in groupHabits %}
+                        {# Detect Pillar #}
+                        {% set hPillar = 'ALL' %}
+                        {% if habit.growthGoal is not null %}
+                            {% set hPillar = 'CROISSANCE' %}
+                        {% elseif habit.skillGoal is not null %}
+                            {% set hPillar = 'DEVELOPPEMENT' %}
+                        {% elseif habit.legacyGoal is not null %}
+                            {% set hPillar = 'CONTRIBUTION' %}
+                        {% elseif habit.hygieneDomain is not null %}
+                            {% set hPillar = 'HYGIENE' %}
+                        {% endif %}
+                        {% set meta = pillarMeta[hPillar] %}
+
+                        <div class="habit-card"
+                               x-show="pillar === 'ALL' || pillar === '{{ hPillar }}'"
+                               x-data="{ checked: {{ habit.isCompletedForCurrentPeriod() ? 'true' : 'false' }}, isToggling: false }"
+                               style="--pillar-color: {{ meta.color }}; --pillar-glow: {{ meta.glow }};"
+                               onmouseover="this.style.borderColor='{{ meta.color }}'; this.style.boxShadow='0 10px 24px {{ meta.glow }}'; this.style.transform='translateY(-2px)'"
+                               onmouseout="this.style.borderColor='rgba(15, 118, 110, 0.05)'; this.style.boxShadow='0 4px 12px rgba(15, 118, 110, 0.02)'; this.style.transform=''"
+                               @click="if (isToggling) return; isToggling = true; const original = checked; checked = !checked; fetch('/api/habits/{{ habit.id }}/log', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ status: checked }) }).then(res => { if (!res.ok) throw new Error(); return res.json(); }).then(data => { if (data.success) { checked = data.isCompleted; } else { throw new Error(); } }).catch(() => { checked = original; }).finally(() => { isToggling = false; })"
+                        >
+                            {# Left Accent Bar #}
+                            <span style="position: absolute; left: 0; top: 0; bottom: 0; width: 4px; background: {{ meta.color }};"></span>
+
+                            {# Custom Circular Checkbox #}
+                            <span class="custom-chk" :style="checked ? 'border-color: var(--pillar-color); background: var(--pillar-glow);' : 'border-color: {{ meta.color }}50;'">
+                                <span style="width: 0.6rem; height: 0.6rem; background: var(--pillar-color); border-radius: 50%; transition: all 0.25s var(--ease);"
+                                      :style="checked ? 'opacity: 1; transform: scale(1);' : 'opacity: 0; transform: scale(0.5);'"></span>
+                            </span>
+
+                            {# Title #}
+                            <div style="flex: 1; min-width: 0;">
+                                <p style="font-size: 0.95rem; font-weight: 600; transition: color 0.2s;"
+                                   :style="checked ? 'color: var(--fg-muted); text-decoration: line-through;' : 'color: var(--fg);'">
+                                    {{ habit.title }}
+                                </p>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endif %}
+            {% endfor %}
+        </div>
+
+        {% else %}
+        {# Empty State (Luxurious) #}
+        <div style="display: flex; flex-direction: column; align-items: center; text-align: center;
+                    padding: 4rem 2rem; background: rgba(255, 255, 255, 0.5); border-radius: 2rem;
+                    border: 2px dashed rgba(15, 118, 110, 0.15);
+                    box-shadow: inset 0 2px 8px rgba(0,0,0,0.01);">
+            <div style="width: 4.5rem; height: 4.5rem; border-radius: 50%; background: white;
+                        border: 1px solid rgba(15, 118, 110, 0.08); display: flex; align-items: center;
+                        justify-content: center; margin-bottom: 1.5rem;
+                        box-shadow: 0 4px 16px rgba(15, 118, 110, 0.06);">
+                <i data-lucide="compass" style="width: 32px; height: 32px; color: var(--fg-muted);"></i>
+            </div>
+            <h3 style="font-family: 'Playfair Display', serif; font-size: 1.35rem; color: var(--primary);
+                       font-weight: 500; margin-bottom: 0.75rem;">Aucun rituel configuré</h3>
+            <p style="color: var(--fg-muted); font-size: 0.95rem; line-height: 1.7; max-width: 24rem; margin-bottom: 2rem;">
+                Définissez vos objectifs de croissance et de vie dans votre Plan de Vie global pour y associer des rituels quotidiens.
+            </p>
+            <a href="{{ path('app_user_life_plan') }}"
+               style="display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.8rem 1.75rem;
+                      background: var(--primary); color: white; border-radius: 9999px; font-weight: 700;
+                      font-size: 0.875rem; text-decoration: none; transition: all 0.25s var(--ease);
+                      box-shadow: 0 4px 16px rgba(15, 118, 110, 0.35); font-family: 'Inter', sans-serif;"
+               onmouseover="this.style.background='var(--primary-dark)'; this.style.transform='translateY(-1px)'"
+               onmouseout="this.style.background='var(--primary)'; this.style.transform=''">
+                <span>Créer mon Plan de Vie</span>
+                <i data-lucide="arrow-right" style="width: 16px; height: 16px;"></i>
+            </a>
+        </div>
+        {% endif %}
+    </section>
+
+    {% endif %}
+</div>
+{% endblock %}

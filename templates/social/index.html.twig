@@ -1,0 +1,735 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Mon Réseau & Partenaires{% endblock %}
+
+{% block body %}
+<style>
+    .social-wrap {
+        max-width: 900px;
+        margin: 0 auto;
+        padding: 2.5rem 1.5rem 8rem;
+    }
+    @media (min-width: 1024px) {
+        .social-wrap {
+            padding: 3.5rem 2rem 5rem;
+        }
+    }
+
+    /* Section Cards */
+    .social-section {
+        background: rgba(255, 255, 255, 0.85);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        border: 1px solid rgba(15, 118, 110, 0.06);
+        border-radius: 2rem;
+        padding: 2.25rem;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.02);
+    }
+
+    /* Tab buttons */
+    .social-tab {
+        padding: 0.75rem 1.5rem;
+        border-radius: var(--r-md);
+        font-size: 0.875rem;
+        font-weight: 600;
+        transition: all 0.25s var(--ease);
+        cursor: pointer;
+        border: 1px solid transparent;
+        background: transparent;
+        color: var(--fg-muted);
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+    .social-tab.active {
+        background: var(--primary-glow);
+        color: var(--primary);
+        border-color: rgba(15, 118, 110, 0.15);
+    }
+    .social-tab:hover:not(.active) {
+        background: var(--bg-alt);
+        color: var(--fg-light);
+    }
+
+    /* Labels */
+    .social-label {
+        font-size: 0.675rem;
+        font-weight: 800;
+        color: var(--fg-muted);
+        letter-spacing: 0.05em;
+        text-transform: uppercase;
+    }
+
+    /* Inputs */
+    .social-input {
+        width: 100%;
+        padding: 0.85rem 1.1rem;
+        background-color: #ffffff;
+        border: 1.5px solid rgba(15, 118, 110, 0.08);
+        border-radius: 12px;
+        color: var(--fg);
+        font-family: inherit;
+        font-size: 0.95rem;
+        outline: none;
+        box-shadow: inset 0 2px 4px rgba(0,0,0,0.01);
+        transition: all 0.25s;
+    }
+    .social-input:focus {
+        border-color: var(--primary-light);
+        box-shadow: 0 0 0 4px rgba(13, 148, 136, 0.12), inset 0 2px 4px rgba(0,0,0,0.01);
+    }
+
+    /* Buttons */
+    .social-btn {
+        padding: 0.75rem 1.5rem;
+        background: linear-gradient(135deg, #0D9488 0%, #0F766E 100%);
+        border: none;
+        border-radius: 12px;
+        color: #ffffff;
+        font-family: inherit;
+        font-weight: 700;
+        font-size: 0.85rem;
+        cursor: pointer;
+        transition: all 0.25s ease;
+        box-shadow: 0 4px 14px rgba(15, 118, 110, 0.3);
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        white-space: nowrap;
+    }
+    .social-btn:hover {
+        opacity: 0.95;
+        box-shadow: 0 6px 20px rgba(15, 118, 110, 0.45);
+        transform: translateY(-1px);
+    }
+    .social-btn-secondary {
+        padding: 0.6rem 1.25rem;
+        background: var(--bg-alt);
+        border: 1px solid rgba(15, 118, 110, 0.06);
+        border-radius: 12px;
+        color: var(--fg-muted);
+        font-family: inherit;
+        font-weight: 700;
+        font-size: 0.8rem;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    .social-btn-secondary:hover {
+        background: rgba(15, 118, 110, 0.06);
+        color: var(--fg-light);
+    }
+
+    /* Inner cards */
+    .social-card-inner {
+        padding: 1.1rem 1.25rem;
+        border-radius: 1.25rem;
+        background: rgba(248, 250, 252, 0.6);
+        border: 1px solid rgba(15, 118, 110, 0.05);
+        transition: all 0.2s var(--ease);
+    }
+
+    /* Section headings */
+    .social-heading {
+        font-size: 1.05rem;
+        font-weight: 700;
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        margin-bottom: 1.25rem;
+    }
+    .social-heading-icon {
+        padding: 0.55rem;
+        border-radius: 9999px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+</style>
+
+<div class="social-wrap"
+     x-data="socialData()"
+     x-init="initSocial()">
+
+    <!-- Header -->
+    <header style="text-align: center; margin-bottom: 2rem;">
+        <h1 style="font-size: 1.75rem; font-weight: 700; line-height: 1.2;">Mon Réseau & Redevabilité</h1>
+        <p style="color: var(--fg-muted); font-size: 0.875rem; margin-top: 0.5rem;">Partagez votre parcours avec vos mentors et grandissez ensemble.</p>
+    </header>
+
+    <!-- Tabs Navigation -->
+    <nav style="display: flex; gap: 0.5rem; justify-content: center; flex-wrap: wrap; margin-bottom: 2.5rem;">
+        <button @click="activeTab = 'ACTIVITY'"
+                class="social-tab"
+                :class="activeTab === 'ACTIVITY' ? 'active' : ''">
+            <i data-lucide="bell" class="w-4 h-4"></i>
+            <span>Activité</span>
+        </button>
+        <button @click="activeTab = 'PARTNERS'"
+                class="social-tab"
+                :class="activeTab === 'PARTNERS' ? 'active' : ''">
+            <i data-lucide="users" class="w-4 h-4"></i>
+            <span>Partenaires</span>
+        </button>
+        <button @click="activeTab = 'EXPLORE'"
+                class="social-tab"
+                :class="activeTab === 'EXPLORE' ? 'active' : ''">
+            <i data-lucide="search" class="w-4 h-4"></i>
+            <span>Exploration</span>
+        </button>
+        <button @click="activeTab = 'CHALLENGES'"
+                class="social-tab"
+                :class="activeTab === 'CHALLENGES' ? 'active' : ''">
+            <i data-lucide="trophy" class="w-4 h-4"></i>
+            <span>Défis</span>
+        </button>
+    </nav>
+
+    <!-- Main Content -->
+    <div style="display: flex; flex-direction: column; gap: 1.75rem;">
+
+        <div x-show="activeTab === 'ACTIVITY'" style="display: flex; flex-direction: column; gap: 1.5rem;">
+            
+            <!-- Goal Suggestions Section -->
+            <div class="social-section">
+                <h2 class="social-heading">
+                    <span class="social-heading-icon" style="background: rgba(245,158,11,0.08); color: #D97706;"><i data-lucide="sparkles" class="w-5 h-5"></i></span>
+                    Suggestions d'Objectifs reçues
+                </h2>
+                
+                <div class="space-y-4">
+                    <template x-if="suggestions.length === 0">
+                        <p class="text-slate-400 text-xs italic py-2">Aucune suggestion en attente.</p>
+                    </template>
+                    
+                    <template x-for="s in suggestions" :key="s.id">
+                        <div class="social-card-inner" style="display: flex; flex-direction: column; gap: 1rem;" class="md:!flex-row md:!justify-between">
+                            <div style="display: flex; flex-direction: column; gap: 0.35rem;">
+                                <div style="display: flex; align-items: center; gap: 0.5rem;">
+                                    <span style="padding: 0.2rem 0.65rem; border-radius: 9999px; background: var(--primary-glow); color: var(--primary); font-size: 0.7rem; font-weight: 700;" x-text="s.category"></span>
+                                    <span class="social-label" x-text="'Proposé par ' + s.fromEmail"></span>
+                                </div>
+                                <h3 style="font-size: 0.9rem; font-weight: 700; color: var(--fg);" x-text="s.title"></h3>
+                                <p style="color: var(--fg-muted); font-size: 0.8rem; line-height: 1.5;" x-text="s.description"></p>
+                            </div>
+                            <div style="display: flex; align-items: center; gap: 0.5rem; align-self: flex-end;">
+                                <button @click="respondSuggestion(s.id, 'ACCEPT')" class="social-btn" style="padding: 0.5rem 1rem; font-size: 0.8rem;">
+                                    Accepter
+                                </button>
+                                <button @click="respondSuggestion(s.id, 'REJECT')" class="social-btn-secondary">
+                                    Décliner
+                                </button>
+                            </div>
+                        </div>
+                    </template>
+                </div>
+            </div>
+
+            <!-- Comments & Feed Section -->
+            <div class="social-section">
+                <h2 class="social-heading">
+                    <span class="social-heading-icon" style="background: rgba(59,130,246,0.08); color: #2563EB;"><i data-lucide="message-square" class="w-5 h-5"></i></span>
+                    Commentaires récents
+                </h2>
+                
+                <div class="space-y-4">
+                    <template x-if="comments.length === 0">
+                        <p class="text-slate-400 text-xs italic py-2">Aucun commentaire de vos partenaires pour le moment.</p>
+                    </template>
+                    
+                    <template x-for="comment in comments" :key="comment.id">
+                        <div class="social-card-inner" style="display: flex; flex-direction: column; gap: 0.5rem;">
+                            <div style="display: flex; justify-content: space-between; align-items: center;">
+                                <span style="color: var(--primary); font-weight: 700; font-size: 0.75rem;" x-text="comment.authorEmail"></span>
+                                <span class="social-label" x-text="comment.createdAt"></span>
+                            </div>
+                            <p style="color: var(--fg-light); font-size: 0.85rem; line-height: 1.6;" x-text="comment.content"></p>
+                            <template x-if="comment.section">
+                                <span class="social-label" style="display: inline-block; padding: 0.25rem 0.6rem; background: var(--bg-alt); border-radius: 0.5rem;" x-text="'Section: ' + comment.section"></span>
+                            </template>
+                        </div>
+                    </template>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- ──────────────── PARTNERS TAB ──────────────── -->
+        <div x-show="activeTab === 'PARTNERS'" style="display: flex; flex-direction: column; gap: 1.5rem;">
+
+            <!-- Invitation Form -->
+            <div class="social-section">
+                <h2 class="social-heading">
+                    <span class="social-heading-icon" style="background: rgba(13,148,136,0.06); color: var(--primary);"><i data-lucide="user-plus" class="w-5 h-5"></i></span>
+                    Ajouter un partenaire de confiance
+                </h2>
+                <p style="color: var(--fg-muted); font-size: 0.85rem; margin-bottom: 1.25rem;">Entrez l'adresse email d'un utilisateur Kiini Sawa pour l'inviter dans votre réseau.</p>
+                
+                <form @submit.prevent="sendInvitation" style="display: flex; gap: 0.75rem;">
+                    <input type="email" x-model="inviteEmail" required placeholder="partenaire@exemple.com"
+                           class="social-input" style="flex: 1;" />
+                    <button type="submit" class="social-btn">
+                        <span>Inviter</span>
+                        <i data-lucide="send" class="w-3.5 h-3.5"></i>
+                    </button>
+                </form>
+                <p x-show="inviteError" class="text-rose-600 text-xs mt-2" x-text="inviteError"></p>
+                <p x-show="inviteSuccess" class="text-emerald-600 text-xs mt-2">Invitation envoyée avec succès !</p>
+            </div>
+
+            <!-- Pending Invitations -->
+            <div style="display: grid; grid-template-columns: 1fr; gap: 1.25rem;" class="md:!grid-cols-2">
+                <!-- Received requests -->
+                <div class="social-section">
+                    <h3 style="font-size: 0.9rem; font-weight: 700; color: var(--fg); margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;">
+                        <i data-lucide="inbox" class="w-4 h-4" style="color: var(--fg-muted);"></i>
+                        Invitations reçues
+                    </h3>
+                    <div class="space-y-3">
+                        <template x-if="pendingReceived.length === 0">
+                            <p class="text-slate-400 text-xs italic">Aucune invitation reçue.</p>
+                        </template>
+                        <template x-for="req in pendingReceived" :key="req.id">
+                            <div class="social-card-inner" style="display: flex; justify-content: space-between; align-items: center; gap: 0.75rem;">
+                                <div style="min-width: 0;">
+                                    <p style="font-size: 0.85rem; font-weight: 700; color: var(--fg-light); overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" x-text="req.partnerEmail"></p>
+                                    <p class="social-label" x-text="req.createdAt"></p>
+                                </div>
+                                <div class="flex gap-1.5">
+                                    <button @click="respondConnection(req.id, 'ACCEPT')"
+                                            class="p-1.5 bg-teal-50 text-teal-700 hover:bg-teal-100 rounded-lg shadow-sm/5 transition-colors">
+                                        <i data-lucide="check" class="w-4 h-4"></i>
+                                    </button>
+                                    <button @click="respondConnection(req.id, 'REJECT')"
+                                            class="p-1.5 bg-rose-50 text-rose-700 hover:bg-rose-100 rounded-lg transition-colors">
+                                        <i data-lucide="trash" class="w-4 h-4"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </template>
+                    </div>
+                </div>
+
+                <!-- Sent requests -->
+                <div class="social-section">
+                    <h3 style="font-size: 0.9rem; font-weight: 700; color: var(--fg); margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;">
+                        <i data-lucide="navigation" class="w-4 h-4" style="color: var(--fg-muted);"></i>
+                        Invitations envoyées
+                    </h3>
+                    <div class="space-y-3">
+                        <template x-if="pendingSent.length === 0">
+                            <p class="text-slate-400 text-xs italic">Aucune invitation envoyée.</p>
+                        </template>
+                        <template x-for="req in pendingSent" :key="req.id">
+                            <div class="social-card-inner" style="display: flex; justify-content: space-between; align-items: center;">
+                                <div style="min-width: 0;">
+                                    <p style="font-size: 0.85rem; font-weight: 700; color: var(--fg-light); overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" x-text="req.partnerEmail"></p>
+                                    <p class="social-label" x-text="'En attente depuis le ' + req.createdAt"></p>
+                                </div>
+                                <span class="social-label" style="color: #D97706;">En attente</span>
+                            </div>
+                        </template>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Active Partners List -->
+            <div class="social-section">
+                <h2 class="social-heading">
+                    <span class="social-heading-icon" style="background: rgba(99,102,241,0.08); color: #4F46E5;"><i data-lucide="users" class="w-5 h-5"></i></span>
+                    Partenaires actifs
+                </h2>
+
+                <div class="space-y-4">
+                    <template x-if="activePartners.length === 0">
+                        <p class="text-slate-400 text-xs italic py-2">Aucun partenaire actif. Invitez un ami ci-dessus pour commencer.</p>
+                    </template>
+                    
+                    <template x-for="p in activePartners" :key="p.connectionId">
+                        <div class="social-card-inner" style="display: flex; justify-content: space-between; align-items: center; gap: 1rem;">
+                            <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+                                <h3 style="font-size: 0.9rem; font-weight: 700; color: var(--fg);" x-text="p.partnerEmail"></h3>
+                                <div style="display: flex; flex-wrap: wrap; gap: 0.5rem;">
+                                    <span class="social-label" style="padding: 0.2rem 0.6rem; border-radius: 0.5rem; background: var(--primary-glow); color: var(--primary);"
+                                          x-show="p.myShare.lifePlan || p.myShare.growthPlan">Je partage mes plans</span>
+                                    <span class="social-label" style="padding: 0.2rem 0.6rem; border-radius: 0.5rem; background: rgba(99,102,241,0.06); color: #4F46E5;"
+                                          x-show="p.partnerShare.lifePlan || p.partnerShare.growthPlan">Partage ses plans avec moi</span>
+                                </div>
+                            </div>
+                            <button @click="openPermissionsModal(p)" class="social-btn-secondary" style="display: flex; align-items: center; gap: 0.4rem;">
+                                <i data-lucide="settings" class="w-4 h-4"></i>
+                                <span>Partage</span>
+                            </button>
+                        </div>
+                    </template>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- ──────────────── EXPLORE TAB ──────────────── -->
+        <div x-show="activeTab === 'EXPLORE'" class="space-y-6">
+            
+            <!-- Partner Selector -->
+            <div class="social-section" style="display: flex; flex-direction: column; gap: 1.25rem;">
+                <label class="block text-sm font-bold text-slate-700">Consulter un partenaire</label>
+                <div class="flex gap-3">
+                    <select x-model="selectedPartnerId"
+                            class="flex-1 bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-sm text-slate-800 focus:outline-none focus:ring-1 focus:ring-teal-600 focus:border-teal-600">
+                        <option value="">-- Sélectionner un partenaire --</option>
+                        <template x-for="p in activePartners.filter(p => p.partnerShare.lifePlan || p.partnerShare.growthPlan)" :key="p.partnerId">
+                            <option :value="p.partnerId" x-text="p.partnerEmail"></option>
+                        </template>
+                    </select>
+                    <button @click="loadSharedData()"
+                            :disabled="!selectedPartnerId"
+                            class="px-5 py-2.5 bg-teal-700 text-white rounded-xl text-xs font-bold hover:bg-teal-800 disabled:opacity-50 disabled:cursor-not-allowed transition-colors shadow-sm flex items-center gap-1.5">
+                        <i data-lucide="refresh-cw" class="w-4 h-4"></i>
+                        Charger
+                    </button>
+                </div>
+            </div>
+
+            <!-- Loader -->
+            <div x-show="loadingSharedData" class="py-12 text-center text-slate-400">
+                <i data-lucide="loader-2" class="w-8 h-8 animate-spin mx-auto text-teal-700 mb-2"></i>
+                <p class="text-xs">Chargement des données partagées...</p>
+            </div>
+
+            <!-- Shared Content Display -->
+            <div x-show="sharedData && !loadingSharedData" class="space-y-6">
+
+                <!-- Shared Life Plan -->
+                <template x-if="sharedData?.lifePlan">
+                    <div class="social-section" style="display: flex; flex-direction: column; gap: 1.25rem;">
+                        <h2 class="text-lg font-serif font-bold text-slate-800 flex items-center gap-2">
+                            <i data-lucide="compass" class="w-5 h-5 text-teal-700"></i>
+                            Plan de Vie partagé
+                        </h2>
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div class="p-4 bg-slate-50 border border-slate-100 rounded-2xl space-y-1">
+                                <span class="text-[0.6rem] font-bold text-slate-400 uppercase tracking-widest">Raison d'être</span>
+                                <p class="text-xs text-slate-700 font-serif leading-relaxed italic" x-text="sharedData.lifePlan.purpose || 'Non défini'"></p>
+                            </div>
+                            <div class="p-4 bg-slate-50 border border-slate-100 rounded-2xl space-y-1">
+                                <span class="text-[0.6rem] font-bold text-slate-400 uppercase tracking-widest">Vision</span>
+                                <p class="text-xs text-slate-700 font-serif leading-relaxed italic" x-text="sharedData.lifePlan.vision || 'Non défini'"></p>
+                            </div>
+                        </div>
+
+                        <div class="space-y-3">
+                            <span class="text-xs font-bold text-slate-600 block">Jalons majeurs</span>
+                            <div class="space-y-2">
+                                <template x-for="goal in sharedData.lifePlan.goals" :key="goal.id">
+                                    <div class="p-3 bg-white border border-slate-200/80 rounded-xl flex justify-between items-center text-xs">
+                                        <div class="min-w-0">
+                                            <p class="font-semibold text-slate-700 truncate" x-text="goal.title"></p>
+                                            <span class="text-[9px] text-slate-400 uppercase tracking-wider" x-text="goal.category"></span>
+                                        </div>
+                                        <span class="px-2 py-0.5 rounded-full text-[9px] font-bold"
+                                              :class="goal.status === 'COMPLETED' ? 'bg-emerald-50 text-emerald-700' : 'bg-amber-50 text-amber-700'"
+                                              x-text="goal.status"></span>
+                                    </div>
+                                </template>
+                            </div>
+                        </div>
+                    </div>
+                </template>
+
+                <!-- Shared Growth Plan -->
+                <template x-if="sharedData?.growthPlan">
+                    <div class="social-section" style="display: flex; flex-direction: column; gap: 1.25rem;">
+                        <h2 class="text-lg font-serif font-bold text-slate-800 flex items-center gap-2">
+                            <i data-lucide="trending-up" class="w-5 h-5 text-teal-700"></i>
+                            Plan de Croissance partagé
+                        </h2>
+
+                        <div class="space-y-4">
+                            <template x-for="goal in sharedData.growthPlan.goals" :key="goal.id">
+                                <div class="p-4 bg-slate-50 border border-slate-200/60 rounded-2xl space-y-3">
+                                    <div class="flex justify-between items-start">
+                                        <div>
+                                            <span class="text-[9px] px-2 py-0.5 bg-white border border-slate-200 rounded text-slate-500 uppercase tracking-widest font-bold" x-text="goal.axis"></span>
+                                            <h3 class="font-serif font-bold text-slate-800 text-sm mt-1" x-text="goal.title"></h3>
+                                        </div>
+                                        <span class="text-xs font-bold text-teal-700" x-text="goal.progress + '%'"></span>
+                                    </div>
+
+                                    <p class="text-xs text-slate-500" x-text="goal.strategy"></p>
+
+                                    <!-- Progress bar -->
+                                    <div class="w-full h-1 bg-slate-200 rounded-full overflow-hidden">
+                                        <div class="h-full bg-teal-600 transition-all duration-300" :style="'width: ' + goal.progress + '%'"></div>
+                                    </div>
+                                </div>
+                            </template>
+                        </div>
+                    </div>
+                </template>
+
+            </div>
+        </div>
+
+        <!-- ──────────────── CHALLENGES TAB ──────────────── -->
+        <div x-show="activeTab === 'CHALLENGES'" class="space-y-6">
+            
+            <div class="social-section" style="text-align: center; padding: 3rem 2rem; display: flex; flex-direction: column; align-items: center; gap: 1.5rem;">
+                <div class="w-20 h-20 bg-indigo-50 text-indigo-700 rounded-full flex items-center justify-center mx-auto">
+                    <i data-lucide="trophy" class="w-10 h-10"></i>
+                </div>
+                <div class="space-y-2">
+                    <h2 class="text-xl font-serif font-bold text-slate-800">Défis & Challenges Collectifs</h2>
+                    <p class="text-slate-500 text-sm max-w-md mx-auto leading-relaxed">
+                        Cette section accueillera prochainement vos défis partagés, duels de discipline et rituels de groupe pour progresser en communauté.
+                    </p>
+                </div>
+                <div class="pt-2">
+                    <span class="inline-flex items-center gap-1.5 px-3 py-1 bg-amber-50 border border-amber-100 rounded-full text-xs font-bold text-amber-700">
+                        <span class="w-2.5 h-2.5 bg-amber-500 rounded-full animate-pulse"></span>
+                        Bientôt disponible
+                    </span>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- Permission Management Modal -->
+    <div class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4 z-50"
+         x-show="permissionsModalOpen" x-cloak
+         x-transition:enter="transition ease-out duration-200"
+         x-transition:enter-start="opacity-0 scale-95"
+         x-transition:enter-end="opacity-100 scale-100"
+         x-transition:leave="transition ease-in duration-150"
+         x-transition:leave-start="opacity-100 scale-100"
+         x-transition:leave-end="opacity-0 scale-95">
+         
+         <div class="bg-white rounded-3xl border border-slate-200 shadow-2xl max-w-md w-full flex flex-col overflow-hidden">
+             <header class="p-6 border-b border-slate-100 flex justify-between items-center bg-slate-50/50">
+                 <div>
+                     <h3 class="text-sm font-serif font-bold text-slate-800">Paramètres de Partage</h3>
+                     <p class="text-[10px] text-slate-400" x-text="activeEditingPartner?.partnerEmail"></p>
+                 </div>
+                 <button class="text-slate-400 hover:text-slate-600 transition-colors" @click="permissionsModalOpen = false">
+                     <i data-lucide="x" class="w-5 h-5"></i>
+                 </button>
+             </header>
+
+             <div class="p-6 space-y-4">
+                 <p class="text-xs text-slate-500 leading-relaxed mb-2">Configurez précisément ce que vous acceptez de partager avec ce partenaire.</p>
+                 
+                 <div class="space-y-3">
+                     <!-- Life Plan -->
+                     <label class="flex items-center justify-between p-3 bg-slate-50 hover:bg-slate-100/50 border border-slate-200/60 rounded-xl cursor-pointer transition-colors">
+                         <div class="space-y-0.5">
+                             <span class="text-xs font-bold text-slate-700">Plan de Vie</span>
+                             <p class="text-[9px] text-slate-400">Vision, Mission & Rêves majeurs</p>
+                         </div>
+                         <input type="checkbox" x-model="editingPermissions.lifePlan" class="w-4 h-4 accent-teal-700" />
+                     </label>
+
+                     <!-- Growth Plan -->
+                     <label class="flex items-center justify-between p-3 bg-slate-50 hover:bg-slate-100/50 border border-slate-200/60 rounded-xl cursor-pointer transition-colors">
+                         <div class="space-y-0.5">
+                             <span class="text-xs font-bold text-slate-700">Plan de Croissance</span>
+                             <p class="text-[9px] text-slate-400">Objectifs de croissance, axes & stratégies</p>
+                         </div>
+                         <input type="checkbox" x-model="editingPermissions.growthPlan" class="w-4 h-4 accent-teal-700" />
+                     </label>
+
+                     <!-- Habits -->
+                     <label class="flex items-center justify-between p-3 bg-slate-50 hover:bg-slate-100/50 border border-slate-200/60 rounded-xl cursor-pointer transition-colors">
+                         <div class="space-y-0.5">
+                             <span class="text-xs font-bold text-slate-700">Habitudes</span>
+                             <p class="text-[9px] text-slate-400">Visualiser mon taux de régularité</p>
+                         </div>
+                         <input type="checkbox" x-model="editingPermissions.habits" class="w-4 h-4 accent-teal-700" />
+                     </label>
+
+                     <!-- Reviews & Bilans -->
+                     <label class="flex items-center justify-between p-3 bg-slate-50 hover:bg-slate-100/50 border border-slate-200/60 rounded-xl cursor-pointer transition-colors">
+                         <div class="space-y-0.5">
+                             <span class="text-xs font-bold text-slate-700">Bilans & Rétrospectives</span>
+                             <p class="text-[9px] text-slate-400">Historique des scores de sentiment</p>
+                         </div>
+                         <input type="checkbox" x-model="editingPermissions.bilan" class="w-4 h-4 accent-teal-700" />
+                     </label>
+                 </div>
+             </div>
+
+             <footer class="p-6 border-t border-slate-100 bg-slate-50/50 flex justify-end gap-3">
+                 <button class="px-4 py-2 text-xs font-bold text-slate-500 hover:text-slate-700 transition-colors"
+                         @click="permissionsModalOpen = false">Annuler</button>
+                 <button class="bg-teal-700 hover:bg-teal-800 text-white font-semibold py-2 px-5 rounded-xl text-xs shadow-md transition-colors"
+                         @click="savePermissions()">Enregistrer</button>
+             </footer>
+         </div>
+    </div>
+
+</div>
+
+<!-- Interactive management scripts -->
+<script>
+function socialData() {
+    return {
+        // State
+        activeTab: 'ACTIVITY',
+        inviteEmail: '',
+        inviteSuccess: false,
+        inviteError: null,
+        
+        // Data arrays
+        pendingReceived: {{ pendingReceived|json_encode|raw }},
+        pendingSent: {{ pendingSent|json_encode|raw }},
+        activePartners: {{ activePartners|json_encode|raw }},
+        suggestions: {{ suggestions|json_encode|raw }},
+        comments: {{ comments|json_encode|raw }},
+        
+        // Modal State
+        permissionsModalOpen: false,
+        activeEditingPartner: null,
+        editingPermissions: {
+            lifePlan: false,
+            growthPlan: false,
+            habits: false,
+            reviews: false,
+            discovery: false,
+            croissance: false,
+            developpement: false,
+            hygiene: false,
+            transmission: false,
+            bilan: false
+        },
+
+        // Explore state
+        selectedPartnerId: '',
+        loadingSharedData: false,
+        sharedData: null,
+
+        initSocial() {
+            // Lifecycle hooks if any needed
+        },
+
+        sendInvitation() {
+            this.inviteSuccess = false;
+            this.inviteError = null;
+            
+            fetch('/api/social/connection/add', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email: this.inviteEmail })
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.success) {
+                    this.inviteSuccess = true;
+                    // Add dummy pending sent for visual validation
+                    this.pendingSent.push({
+                        id: Date.now(),
+                        partnerId: 9999,
+                        partnerEmail: this.inviteEmail,
+                        createdAt: new Date().toISOString().split('T')[0]
+                    });
+                    this.inviteEmail = '';
+                } else {
+                    this.inviteError = data.error || 'Erreur lors de l\'envoi de la demande.';
+                }
+            })
+            .catch(() => {
+                this.inviteError = 'Une erreur est survenue lors de l\'invitation.';
+            });
+        },
+
+        respondConnection(reqId, action) {
+            fetch(`/api/social/connection/${reqId}/respond`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ action })
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.success) {
+                    // Update state
+                    const found = this.pendingReceived.find(r => r.id === reqId);
+                    this.pendingReceived = this.pendingReceived.filter(r => r.id !== reqId);
+                    
+                    if (action === 'ACCEPT' && found) {
+                        this.activePartners.push({
+                            connectionId: reqId,
+                            partnerId: found.partnerId,
+                            partnerEmail: found.partnerEmail,
+                            myShare: { lifePlan: true, growthPlan: true, habits: true, reviews: false, discovery: false, croissance: true, developpement: true, hygiene: true, transmission: true, bilan: true },
+                            partnerShare: { lifePlan: true, growthPlan: true }
+                        });
+                    }
+                } else {
+                    alert(data.error || 'Erreur lors de la réponse.');
+                }
+            });
+        },
+
+        respondSuggestion(id, action) {
+            fetch(`/api/social/suggestion/${id}/respond`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ action })
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.success) {
+                    this.suggestions = this.suggestions.filter(s => s.id !== id);
+                } else {
+                    alert(data.error || 'Erreur de traitement.');
+                }
+            });
+        },
+
+        openPermissionsModal(partner) {
+            this.activeEditingPartner = partner;
+            this.editingPermissions = { ...partner.myShare };
+            this.permissionsModalOpen = true;
+        },
+
+        savePermissions() {
+            const connId = this.activeEditingPartner.connectionId;
+            fetch(`/api/social/connection/${connId}/permissions`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(this.editingPermissions)
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.success) {
+                    this.activeEditingPartner.myShare = { ...this.editingPermissions };
+                    this.permissionsModalOpen = false;
+                } else {
+                    alert('Erreur lors de la sauvegarde.');
+                }
+            });
+        },
+
+        loadSharedData() {
+            if (!this.selectedPartnerId) return;
+            this.loadingSharedData = true;
+            this.sharedData = null;
+
+            fetch(`/api/social/partner/${this.selectedPartnerId}/shared-data`)
+            .then(res => res.json())
+            .then(data => {
+                this.loadingSharedData = false;
+                if (data.success) {
+                    this.sharedData = data.sharedData;
+                } else {
+                    alert(data.error || 'Impossible de charger les données du partenaire.');
+                }
+            })
+            .catch(() => {
+                this.loadingSharedData = false;
+                alert('Erreur réseau.');
+            });
+        }
+    }
+}
+</script>
+{% endblock %}

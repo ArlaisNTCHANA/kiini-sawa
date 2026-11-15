@@ -1,0 +1,1127 @@
+{% extends 'admin/layout.html.twig' %}
+
+{% block title %}Mon Plan de Vie{% endblock %}
+{% block page_title %}Mon Plan de Vie{% endblock %}
+
+{% block stylesheets %}
+<style>
+    /* ===== Plan de Vie specific styles ===== */
+    .ks-tabs {
+        display: flex;
+        gap: 8px;
+        margin-bottom: 28px;
+        border-bottom: 1px solid var(--border);
+        padding-bottom: 12px;
+    }
+    .ks-tab-link {
+        padding: 10px 20px;
+        border-radius: var(--radius-sm);
+        color: var(--text-secondary);
+        text-decoration: none;
+        font-size: 14px;
+        font-weight: 600;
+        transition: all var(--transition);
+        border: 1px solid transparent;
+        cursor: pointer;
+    }
+    .ks-tab-link:hover {
+        color: var(--text-primary);
+        background: rgba(255, 255, 255, 0.03);
+    }
+    .ks-tab-link.active {
+        color: var(--text-primary);
+        background: rgba(99, 102, 241, 0.12);
+        border-color: var(--border-active);
+        box-shadow: var(--shadow-glow);
+    }
+
+    /* --- Sections & Cards --- */
+    .plan-section-title {
+        font-size: 18px;
+        font-weight: 700;
+        margin-bottom: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+    .plan-section-title span {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+    .plan-section-title i {
+        color: var(--accent-light);
+    }
+
+    .ks-card {
+        background: var(--bg-card);
+        border: 1px solid var(--border);
+        border-radius: var(--radius-lg);
+        padding: 24px;
+        backdrop-filter: blur(8px);
+        margin-bottom: 24px;
+        position: relative;
+        transition: all var(--transition);
+    }
+    .ks-card:hover {
+        border-color: rgba(255, 255, 255, 0.12);
+        background: var(--bg-card-hover);
+    }
+
+    .ks-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 8px 16px;
+        border-radius: var(--radius-sm);
+        font-size: 13px;
+        font-weight: 600;
+        cursor: pointer;
+        border: 1px solid transparent;
+        transition: all var(--transition);
+        text-decoration: none;
+    }
+    .ks-btn--primary {
+        background: var(--accent-gradient);
+        color: #fff;
+    }
+    .ks-btn--primary:hover {
+        opacity: 0.9;
+        transform: translateY(-1px);
+        box-shadow: var(--shadow-glow);
+    }
+    .ks-btn--secondary {
+        background: rgba(255, 255, 255, 0.05);
+        border-color: var(--border);
+        color: var(--text-primary);
+    }
+    .ks-btn--secondary:hover {
+        background: rgba(255, 255, 255, 0.1);
+        border-color: var(--border-active);
+    }
+    .ks-btn--danger {
+        background: rgba(239, 68, 68, 0.1);
+        border-color: rgba(239, 68, 68, 0.2);
+        color: #f87171;
+    }
+    .ks-btn--danger:hover {
+        background: rgba(239, 68, 68, 0.2);
+        border-color: #ef4444;
+    }
+
+    .meta-label {
+        font-size: 11px;
+        font-weight: 600;
+        color: var(--text-muted);
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        margin-bottom: 6px;
+    }
+    .meta-value {
+        font-size: 14px;
+        color: var(--text-secondary);
+        margin-bottom: 18px;
+        line-height: 1.6;
+        white-space: pre-wrap;
+    }
+    .meta-value:last-child {
+        margin-bottom: 0;
+    }
+
+    /* --- Grid layouts --- */
+    .grid-2 {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
+    }
+    .grid-3 {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 16px;
+    }
+    @media (max-width: 768px) {
+        .grid-2 { grid-template-columns: 1fr; }
+    }
+
+    /* --- Modals --- */
+    .ks-modal {
+        display: none;
+        position: fixed;
+        inset: 0;
+        background: rgba(8, 11, 20, 0.85);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        z-index: 1000;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+    }
+    .ks-modal-card {
+        background: #0d1222;
+        border: 1px solid var(--border-active);
+        border-radius: var(--radius-lg);
+        max-width: 600px;
+        width: 100%;
+        max-height: 90vh;
+        overflow-y: auto;
+        box-shadow: 0 10px 50px rgba(0,0,0,0.6);
+        animation: modalFadeIn 0.3s ease;
+    }
+    .ks-modal-header {
+        padding: 20px 24px;
+        border-bottom: 1px solid var(--border);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+    .ks-modal-header h3 {
+        font-size: 16px;
+        font-weight: 700;
+    }
+    .ks-modal-close {
+        background: none;
+        border: none;
+        color: var(--text-secondary);
+        cursor: pointer;
+        font-size: 20px;
+    }
+    .ks-modal-close:hover {
+        color: var(--text-primary);
+    }
+    .ks-modal-body {
+        padding: 24px;
+    }
+    @keyframes modalFadeIn {
+        from { opacity: 0; transform: scale(0.95); }
+        to { opacity: 1; transform: scale(1); }
+    }
+
+    /* --- Forms inside modals --- */
+    .form-group {
+        margin-bottom: 20px;
+    }
+    .form-group label {
+        display: block;
+        font-size: 12px;
+        font-weight: 600;
+        color: var(--text-secondary);
+        margin-bottom: 8px;
+    }
+    .form-control {
+        width: 100%;
+        background: var(--bg-input);
+        border: 1px solid var(--border);
+        border-radius: var(--radius-sm);
+        padding: 10px 14px;
+        color: var(--text-primary);
+        font-family: inherit;
+        font-size: 14px;
+        transition: all var(--transition);
+    }
+    .form-control:focus {
+        border-color: var(--accent);
+        outline: none;
+        box-shadow: 0 0 10px rgba(99, 102, 241, 0.15);
+    }
+
+    /* --- Goals and Milestones --- */
+    .priority-badge {
+        display: inline-block;
+        padding: 2px 8px;
+        border-radius: 20px;
+        font-size: 10px;
+        font-weight: 700;
+        text-transform: uppercase;
+    }
+    .priority--HIGH { background: rgba(239, 68, 68, 0.15); color: #f87171; }
+    .priority--MEDIUM { background: rgba(245, 158, 11, 0.15); color: #fbbf24; }
+    .priority--LOW { background: rgba(99, 102, 241, 0.15); color: #818cf8; }
+
+    .goal-card__header {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        margin-bottom: 12px;
+        gap: 12px;
+    }
+    .goal-card__title {
+        font-size: 15px;
+        font-weight: 600;
+        color: var(--text-primary);
+    }
+    .progress-bar-container {
+        width: 100%;
+        height: 6px;
+        background: rgba(255,255,255,0.05);
+        border-radius: 10px;
+        overflow: hidden;
+        margin: 12px 0 18px;
+    }
+    .progress-bar-fill {
+        height: 100%;
+        background: var(--accent-gradient);
+        border-radius: 10px;
+        transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .milestones-title {
+        font-size: 12px;
+        font-weight: 700;
+        color: var(--text-secondary);
+        margin-bottom: 8px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+    .milestone-item {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 6px 0;
+        border-bottom: 1px solid rgba(255,255,255,0.03);
+    }
+    .milestone-item:last-child {
+        border-bottom: none;
+    }
+    .milestone-item label {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        font-size: 13px;
+        color: var(--text-secondary);
+        cursor: pointer;
+        flex: 1;
+        min-width: 0;
+    }
+    .milestone-item label.completed span {
+        text-decoration: line-through;
+        color: var(--text-muted);
+    }
+    .milestone-item input[type="checkbox"] {
+        width: 16px; height: 16px;
+        border-radius: 4px;
+        border: 1px solid var(--border);
+        accent-color: var(--accent);
+        cursor: pointer;
+    }
+    .milestone-date {
+        font-size: 10px;
+        color: var(--text-muted);
+        margin-left: 26px;
+        display: block;
+        margin-top: 2px;
+    }
+
+    .value-card__actions {
+        position: absolute;
+        top: 16px; right: 16px;
+        display: flex;
+        gap: 6px;
+    }
+    .action-btn {
+        background: none;
+        border: none;
+        color: var(--text-muted);
+        cursor: pointer;
+        padding: 4px;
+        border-radius: var(--radius-sm);
+        transition: all var(--transition);
+        display: flex;
+        align-items: center;
+    }
+    .action-btn:hover {
+        color: var(--text-primary);
+        background: rgba(255, 255, 255, 0.05);
+    }
+    .action-btn--danger:hover {
+        color: #f87171;
+        background: rgba(239, 68, 68, 0.1);
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div data-controller="plan-de-vie">
+    {# ===== Navigation par onglets ===== #}
+    <nav class="ks-tabs" aria-label="Sections du plan de vie">
+        <button class="ks-tab-link active" data-plan-de-vie-target="tabLink" data-action="click->plan-de-vie#switchTab" data-tab="mission">
+            <span class="flex items-center gap-2"><i data-lucide="compass" class="inline w-4 h-4"></i> Mission & Vision</span>
+        </button>
+        <button class="ks-tab-link" data-plan-de-vie-target="tabLink" data-action="click->plan-de-vie#switchTab" data-tab="valeurs">
+            <span class="flex items-center gap-2"><i data-lucide="heart" class="inline w-4 h-4"></i> Balance Interne & Passions</span>
+        </button>
+        <button class="ks-tab-link" data-plan-de-vie-target="tabLink" data-action="click->plan-de-vie#switchTab" data-tab="objectifs">
+            <span class="flex items-center gap-2"><i data-lucide="target" class="inline w-4 h-4"></i> Objectifs de Vie</span>
+        </button>
+    </nav>
+
+    {# ===== ONGLET 1 : MISSION & VISION ===== #}
+    <section id="tab-mission" data-plan-de-vie-target="tabContent" style="display: block;">
+        <div class="grid-2">
+            {# --- Mission (Purpose) --- #}
+            <div class="ks-card">
+                <div class="plan-section-title">
+                    <span><i data-lucide="feather"></i> Ma Mission de Vie</span>
+                    <button class="ks-btn ks-btn--secondary" data-action="click->plan-de-vie#openModal" data-modal-id="modal-purpose-edit">
+                        <i data-lucide="edit-3"></i> Modifier
+                    </button>
+                </div>
+
+                <div class="meta-label">Énoncé de mission</div>
+                <div class="meta-value" style="font-size: 16px; font-weight: 500; color: var(--text-primary); font-style: italic;">
+                    {{ planDeVie.purpose.statement ?: "Aucun énoncé défini. Cliquez sur modifier pour écrire votre mission." }}
+                </div>
+
+                <div class="meta-label">Énoncé détaillé</div>
+                <div class="meta-value">{{ planDeVie.purpose.longStatement ?: "Non spécifié." }}</div>
+
+                <div class="meta-label">Hypothèses de base</div>
+                <div class="meta-value">{{ planDeVie.purpose.hypotheses ?: "Non spécifié." }}</div>
+
+                <div class="meta-label">Détails de réalisation</div>
+                <div class="meta-value">{{ planDeVie.purpose.detail ?: "Non spécifié." }}</div>
+
+                <div class="meta-label">Preuves factuelles</div>
+                <div class="meta-value">{{ planDeVie.purpose.proofs ?: "Non spécifié." }}</div>
+            </div>
+
+            {# --- Vision --- #}
+            <div class="ks-card">
+                <div class="plan-section-title">
+                    <span><i data-lucide="eye"></i> Ma Vision</span>
+                    <button class="ks-btn ks-btn--secondary" data-action="click->plan-de-vie#openModal" data-modal-id="modal-vision-edit">
+                        <i data-lucide="edit-3"></i> Modifier
+                    </button>
+                </div>
+
+                <div class="meta-label">Horizon temporel</div>
+                <div class="meta-value" style="font-weight: 600; color: var(--text-primary);">
+                    {{ planDeVie.vision.horizon ?: "Non spécifié." }}
+                </div>
+
+                <div class="meta-label">Énoncé de vision</div>
+                <div class="meta-value">{{ planDeVie.vision.content ?: "Aucune vision définie. Cliquez sur modifier pour configurer votre vision d'avenir." }}</div>
+
+                <div class="meta-label">Bénéficiaires de la vision</div>
+                <div class="meta-value">{{ planDeVie.vision.beneficiaries ?: "Non spécifié." }}</div>
+
+                <div class="meta-label">Indicateurs de succès</div>
+                <div class="meta-value">{{ planDeVie.vision.indicators ?: "Non spécifié." }}</div>
+            </div>
+        </div>
+    </section>
+
+    {# ===== ONGLET 2 : VALEURS & PASSIONS ===== #}
+    <section id="tab-valeurs" data-plan-de-vie-target="tabContent" style="display: none;">
+        {# --- Valeurs --- #}
+        <div class="plan-section-title">
+            <span><i data-lucide="shield"></i> Mes Valeurs Fondamentales</span>
+            <button class="ks-btn ks-btn--primary" data-action="click->plan-de-vie#openModal" data-modal-id="modal-value-add">
+                <i data-lucide="plus"></i> Ajouter une valeur
+            </button>
+        </div>
+        <div class="grid-3" style="margin-bottom: 40px;">
+            {% for val in planDeVie.values %}
+                <div class="ks-card" style="margin-bottom: 0;">
+                    <div class="value-card__actions">
+                        <button class="action-btn" data-action="click->plan-de-vie#openModal" data-modal-id="modal-value-edit-{{ val.id }}" title="Modifier">
+                            <i data-lucide="edit-2" style="width:14px;height:14px;"></i>
+                        </button>
+                        <form action="{{ path('admin_plan_de_vie_delete_value', {id: val.id}) }}" method="POST" style="display:inline;" onsubmit="return confirm('Confirmer la suppression ?');">
+                            <input type="hidden" name="_csrf_token" value="{{ csrf_token('delete_value_' ~ val.id) }}">
+                            <button type="submit" class="action-btn action-btn--danger" title="Supprimer">
+                                <i data-lucide="trash-2" style="width:14px;height:14px;"></i>
+                            </button>
+                        </form>
+                    </div>
+                    <div class="meta-label">Valeur</div>
+                    <div class="meta-value" style="font-size: 15px; font-weight: 700; color: var(--text-primary); margin-bottom: 10px;">
+                        {{ val.name }}
+                        <span style="font-size: 11px; font-weight: 500; margin-left: 6px; padding: 2px 8px; border-radius: 9999px; {{ val.category == 'declared' ? 'background:rgba(16, 185, 129, 0.08); color:#10b981;' : (val.category == 'counter' ? 'background:rgba(239, 68, 68, 0.08); color:#ef4444;' : 'background:rgba(99, 102, 241, 0.08); color:#6366f1;') }}">
+                            {{ val.category == 'declared' ? 'Déclarée & Admirée' : (val.category == 'counter' ? 'Contre-valeur' : 'Réelle & Vécue') }}
+                        </span>
+                    </div>
+                    <div class="meta-label">Comportement associé / Description</div>
+                    <div class="meta-value" style="font-size: 13px; margin-bottom: 0;">{{ val.behavior ?: 'Aucun comportement décrit.' }}</div>
+                </div>
+
+                {# --- Modal Édition Valeur --- #}
+                <div class="ks-modal" id="modal-value-edit-{{ val.id }}">
+                    <div class="ks-modal-card">
+                        <div class="ks-modal-header">
+                            <h3>Modifier la valeur</h3>
+                            <button class="ks-modal-close" data-action="click->plan-de-vie#closeModal" data-modal-id="modal-value-edit-{{ val.id }}">&times;</button>
+                        </div>
+                        <form action="{{ path('admin_plan_de_vie_edit_value', {id: val.id}) }}" method="POST">
+                            <div class="ks-modal-body">
+                                <input type="hidden" name="_csrf_token" value="{{ csrf_token('edit_value_' ~ val.id) }}">
+                                <div class="form-group">
+                                    <label for="val-name-{{ val.id }}">Nom de la valeur</label>
+                                    <input type="text" id="val-name-{{ val.id }}" name="name" class="form-control" value="{{ val.name }}" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="val-category-{{ val.id }}">Catégorie</label>
+                                    <select id="val-category-{{ val.id }}" name="category" class="form-control" required>
+                                        <option value="real" {% if val.category == 'real' or val.category is null %}selected{% endif %}>Réelle & Vécue</option>
+                                        <option value="declared" {% if val.category == 'declared' %}selected{% endif %}>Déclarée & Admirée (alimente le plan de croissance)</option>
+                                        <option value="counter" {% if val.category == 'counter' %}selected{% endif %}>Contre-valeur observée (alimente le plan de croissance)</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="val-behav-{{ val.id }}">Description / Comportement traduisant cette valeur</label>
+                                    <textarea id="val-behav-{{ val.id }}" name="behavior" rows="3" class="form-control">{{ val.behavior }}</textarea>
+                                </div>
+                                <div style="display:flex; justify-content:flex-end; gap:10px; margin-top:24px;">
+                                    <button type="button" class="ks-btn ks-btn--secondary" data-action="click->plan-de-vie#closeModal" data-modal-id="modal-value-edit-{{ val.id }}">Annuler</button>
+                                    <button type="submit" class="ks-btn ks-btn--primary">Sauvegarder</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            {% else %}
+                <div class="ks-card" style="grid-column: 1 / -1; text-align: center; color: var(--text-muted); padding: 40px 0;">
+                    <i data-lucide="shield" style="width:36px; height:36px; margin: 0 auto 12px; opacity:0.4;"></i>
+                    Aucune valeur définie. Créez votre première valeur fondamentale pour orienter vos choix.
+                </div>
+            {% endfor %}
+        </div>
+
+        {# --- Passions --- #}
+        <div class="plan-section-title">
+            <span><i data-lucide="flame"></i> Mes Passions</span>
+            <button class="ks-btn ks-btn--primary" data-action="click->plan-de-vie#openModal" data-modal-id="modal-passion-add">
+                <i data-lucide="plus"></i> Ajouter une passion
+            </button>
+        </div>
+        <div class="grid-3">
+            {% for pass in planDeVie.passions %}
+                <div class="ks-card" style="margin-bottom: 0;">
+                    <div class="value-card__actions">
+                        <button class="action-btn" data-action="click->plan-de-vie#openModal" data-modal-id="modal-passion-edit-{{ pass.id }}" title="Modifier">
+                            <i data-lucide="edit-2" style="width:14px;height:14px;"></i>
+                        </button>
+                        <form action="{{ path('admin_plan_de_vie_delete_passion', {id: pass.id}) }}" method="POST" style="display:inline;" onsubmit="return confirm('Confirmer la suppression ?');">
+                            <input type="hidden" name="_csrf_token" value="{{ csrf_token('delete_passion_' ~ pass.id) }}">
+                            <button type="submit" class="action-btn action-btn--danger" title="Supprimer">
+                                <i data-lucide="trash-2" style="width:14px;height:14px;"></i>
+                            </button>
+                        </form>
+                    </div>
+                    <div class="meta-label">Passion</div>
+                    <div class="meta-value" style="font-size: 15px; font-weight: 700; color: var(--text-primary); margin-bottom: 10px;">{{ pass.name }}</div>
+                    <div class="meta-label">Contexte / Usage</div>
+                    <div class="meta-value" style="font-size: 13px; margin-bottom: 0;">{{ pass.context ?: "Non spécifié." }}</div>
+                </div>
+
+                {# --- Modal Édition Passion --- #}
+                <div class="ks-modal" id="modal-passion-edit-{{ pass.id }}">
+                    <div class="ks-modal-card">
+                        <div class="ks-modal-header">
+                            <h3>Modifier la passion</h3>
+                            <button class="ks-modal-close" data-action="click->plan-de-vie#closeModal" data-modal-id="modal-passion-edit-{{ pass.id }}">&times;</button>
+                        </div>
+                        <form action="{{ path('admin_plan_de_vie_edit_passion', {id: pass.id}) }}" method="POST">
+                            <div class="ks-modal-body">
+                                <input type="hidden" name="_csrf_token" value="{{ csrf_token('edit_passion_' ~ pass.id) }}">
+                                <div class="form-group">
+                                    <label for="passion-name-{{ pass.id }}">Nom de la passion</label>
+                                    <input type="text" id="passion-name-{{ pass.id }}" name="name" class="form-control" value="{{ pass.name }}" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="passion-context-{{ pass.id }}">Contexte / Fréquence / Moyen de la nourrir</label>
+                                    <textarea id="passion-context-{{ pass.id }}" name="context" rows="3" class="form-control">{{ pass.context }}</textarea>
+                                </div>
+                                <div style="display:flex; justify-content:flex-end; gap:10px; margin-top:24px;">
+                                    <button type="button" class="ks-btn ks-btn--secondary" data-action="click->plan-de-vie#closeModal" data-modal-id="modal-passion-edit-{{ pass.id }}">Annuler</button>
+                                    <button type="submit" class="ks-btn ks-btn--primary">Sauvegarder</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            {% else %}
+                <div class="ks-card" style="grid-column: 1 / -1; text-align: center; color: var(--text-muted); padding: 40px 0;">
+                    <i data-lucide="flame" style="width:36px; height:36px; margin: 0 auto 12px; opacity:0.4;"></i>
+                    Aucune passion renseignée. Ajoutez ce qui vous anime au quotidien.
+                </div>
+            {% endfor %}
+        </div>
+
+        {# --- Convictions --- #}
+        <div class="plan-section-title" style="margin-top: 40px;">
+            <span><i data-lucide="shield-alert"></i> Mes Convictions</span>
+            <button class="ks-btn ks-btn--primary" data-action="click->plan-de-vie#openModal" data-modal-id="modal-conviction-add">
+                <i data-lucide="plus"></i> Ajouter une conviction
+            </button>
+        </div>
+        <div class="grid-3" style="margin-bottom: 40px;">
+            {% set allConvictions = convictionsDeep|merge(convictionsMedium)|merge(convictionsLight) %}
+            {% for c in allConvictions %}
+                <div class="ks-card" style="margin-bottom: 0;">
+                    <div class="value-card__actions">
+                        <button class="action-btn" data-action="click->plan-de-vie#openModal" data-modal-id="modal-conviction-edit-{{ c.id }}" title="Modifier">
+                            <i data-lucide="edit-2" style="width:14px;height:14px;"></i>
+                        </button>
+                        <form action="{{ path('admin_plan_de_vie_delete_internal_balance', {id: c.id}) }}" method="POST" style="display:inline;" onsubmit="return confirm('Confirmer la suppression ?');">
+                            <input type="hidden" name="_csrf_token" value="{{ csrf_token('delete_internal_balance_' ~ c.id) }}">
+                            <button type="submit" class="action-btn action-btn--danger" title="Supprimer">
+                                <i data-lucide="trash-2" style="width:14px;height:14px;"></i>
+                            </button>
+                        </form>
+                    </div>
+                    <div class="meta-label">Conviction</div>
+                    <div class="meta-value" style="font-size: 14px; font-weight: 600; color: var(--text-primary); margin-bottom: 10px;">
+                        {{ c.text }}
+                    </div>
+                    <div class="meta-label">Degré</div>
+                    <div class="meta-value" style="font-size: 13px; margin-bottom: 0;">
+                        <span style="font-size: 11px; font-weight: 500; padding: 2px 8px; border-radius: 9999px; {{ c.subtype == 'deep' ? 'background:rgba(99, 102, 241, 0.08); color:#6366f1;' : (c.subtype == 'medium' ? 'background:rgba(245, 158, 11, 0.08); color:#f59e0b;' : 'background:rgba(16, 185, 129, 0.08); color:#10b981;') }}">
+                            {{ c.subtype == 'deep' ? 'Profonde ou dogmatique' : (c.subtype == 'medium' ? 'Médiane ou raisonnée' : 'Légère ou circonstancielle') }}
+                        </span>
+                    </div>
+                </div>
+
+                {# --- Modal Édition Conviction --- #}
+                <div class="ks-modal" id="modal-conviction-edit-{{ c.id }}">
+                    <div class="ks-modal-card">
+                        <div class="ks-modal-header">
+                            <h3>Modifier la conviction</h3>
+                            <button class="ks-modal-close" data-action="click->plan-de-vie#closeModal" data-modal-id="modal-conviction-edit-{{ c.id }}">&times;</button>
+                        </div>
+                        <form action="{{ path('admin_plan_de_vie_edit_internal_balance', {id: c.id}) }}" method="POST">
+                            <div class="ks-modal-body">
+                                <input type="hidden" name="_csrf_token" value="{{ csrf_token('edit_internal_balance_' ~ c.id) }}">
+                                <div class="form-group">
+                                    <label for="conv-text-{{ c.id }}">Texte de la conviction</label>
+                                    <textarea id="conv-text-{{ c.id }}" name="text" rows="3" class="form-control" required>{{ c.text }}</textarea>
+                                </div>
+                                <div class="form-group">
+                                    <label for="conv-subtype-{{ c.id }}">Degré / Type de conviction</label>
+                                    <select id="conv-subtype-{{ c.id }}" name="subtype" class="form-control" required>
+                                        <option value="deep" {% if c.subtype == 'deep' %}selected{% endif %}>Profonde ou dogmatique</option>
+                                        <option value="medium" {% if c.subtype == 'medium' %}selected{% endif %}>Médiane ou raisonnée</option>
+                                        <option value="light" {% if c.subtype == 'light' %}selected{% endif %}>Légère ou circonstancielle</option>
+                                    </select>
+                                </div>
+                                <div style="display:flex; justify-content:flex-end; gap:10px; margin-top:24px;">
+                                    <button type="button" class="ks-btn ks-btn--secondary" data-action="click->plan-de-vie#closeModal" data-modal-id="modal-conviction-edit-{{ c.id }}">Annuler</button>
+                                    <button type="submit" class="ks-btn ks-btn--primary">Sauvegarder</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            {% else %}
+                <div class="ks-card" style="grid-column: 1 / -1; text-align: center; color: var(--text-muted); padding: 40px 0;">
+                    <i data-lucide="shield-alert" style="width:36px; height:36px; margin: 0 auto 12px; opacity:0.4;"></i>
+                    Aucune conviction renseignée.
+                </div>
+            {% endfor %}
+        </div>
+
+        {# --- Croyances Limitantes --- #}
+        <div class="plan-section-title" style="margin-top: 40px;">
+            <span><i data-lucide="lock"></i> Mes Croyances Limitantes</span>
+            <button class="ks-btn ks-btn--primary" data-action="click->plan-de-vie#openModal" data-modal-id="modal-limiting-belief-add">
+                <i data-lucide="plus"></i> Ajouter une croyance
+            </button>
+        </div>
+        <div class="grid-3" style="margin-bottom: 40px;">
+            {% for lb in limitingBeliefs %}
+                <div class="ks-card" style="margin-bottom: 0;">
+                    <div class="value-card__actions">
+                        <button class="action-btn" data-action="click->plan-de-vie#openModal" data-modal-id="modal-limiting-belief-edit-{{ lb.id }}" title="Modifier">
+                            <i data-lucide="edit-2" style="width:14px;height:14px;"></i>
+                        </button>
+                        <form action="{{ path('admin_plan_de_vie_delete_internal_balance', {id: lb.id}) }}" method="POST" style="display:inline;" onsubmit="return confirm('Confirmer la suppression ?');">
+                            <input type="hidden" name="_csrf_token" value="{{ csrf_token('delete_internal_balance_' ~ lb.id) }}">
+                            <button type="submit" class="action-btn action-btn--danger" title="Supprimer">
+                                <i data-lucide="trash-2" style="width:14px;height:14px;"></i>
+                            </button>
+                        </form>
+                    </div>
+                    <div class="meta-label">Croyance Limitante (alimente la croissance)</div>
+                    <div class="meta-value" style="font-size: 14px; font-weight: 600; color: var(--text-primary); margin-bottom: 0;">
+                        {{ lb.text }}
+                    </div>
+                </div>
+
+                {# --- Modal Édition Croyance --- #}
+                <div class="ks-modal" id="modal-limiting-belief-edit-{{ lb.id }}">
+                    <div class="ks-modal-card">
+                        <div class="ks-modal-header">
+                            <h3>Modifier la croyance limitante</h3>
+                            <button class="ks-modal-close" data-action="click->plan-de-vie#closeModal" data-modal-id="modal-limiting-belief-edit-{{ lb.id }}">&times;</button>
+                        </div>
+                        <form action="{{ path('admin_plan_de_vie_edit_internal_balance', {id: lb.id}) }}" method="POST">
+                            <div class="ks-modal-body">
+                                <input type="hidden" name="_csrf_token" value="{{ csrf_token('edit_internal_balance_' ~ lb.id) }}">
+                                <div class="form-group">
+                                    <label for="lb-text-{{ lb.id }}">Texte de la croyance</label>
+                                    <textarea id="lb-text-{{ lb.id }}" name="text" rows="3" class="form-control" required>{{ lb.text }}</textarea>
+                                </div>
+                                <div style="display:flex; justify-content:flex-end; gap:10px; margin-top:24px;">
+                                    <button type="button" class="ks-btn ks-btn--secondary" data-action="click->plan-de-vie#closeModal" data-modal-id="modal-limiting-belief-edit-{{ lb.id }}">Annuler</button>
+                                    <button type="submit" class="ks-btn ks-btn--primary">Sauvegarder</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            {% else %}
+                <div class="ks-card" style="grid-column: 1 / -1; text-align: center; color: var(--text-muted); padding: 40px 0;">
+                    <i data-lucide="lock" style="width:36px; height:36px; margin: 0 auto 12px; opacity:0.4;"></i>
+                    Aucune croyance limitante renseignée.
+                </div>
+            {% endfor %}
+        </div>
+    </section>
+
+    {# ===== ONGLET 3 : OBJECTIFS DE VIE ===== #}
+    <section id="tab-objectifs" data-plan-de-vie-target="tabContent" style="display: none;">
+        <div class="plan-section-title">
+            <span><i data-lucide="target"></i> Mes Objectifs Stratégiques Long-Terme</span>
+            <button class="ks-btn ks-btn--primary" data-action="click->plan-de-vie#openModal" data-modal-id="modal-goal-add">
+                <i data-lucide="plus"></i> Nouvel objectif de vie
+            </button>
+        </div>
+
+        {# --- Grouping Goals --- #}
+        {% set categories = {
+            'BE': { 'name': 'Être (Be)', 'desc': 'Identité, caractère, spiritualité, mental', 'icon': 'user' },
+            'DO': { 'name': 'Faire (Do)', 'desc': 'Projets, réalisations, activités, aventures', 'icon': 'briefcase' },
+            'HAVE': { 'name': 'Avoir (Have)', 'desc': 'Finances, possessions, ressources matérielles', 'icon': 'wallet' },
+            'GIVE': { 'name': 'Contribuer (Give)', 'desc': 'Legs, dons, partage, impact social', 'icon': 'gift' }
+        } %}
+
+        {% for cat_key, cat_info in categories %}
+            <div style="margin-bottom: 36px;">
+                <h3 style="font-size: 15px; font-weight: 700; color: var(--text-primary); margin-bottom: 4px; display: flex; align-items: center; gap: 8px;">
+                    <i data-lucide="{{ cat_info.icon }}" style="width:16px;height:16px;color:var(--accent-light);"></i>
+                    {{ cat_info.name }}
+                </h3>
+                <p style="font-size: 12px; color: var(--text-muted); margin-bottom: 16px;">{{ cat_info.desc }}</p>
+
+                <div class="grid-2">
+                    {% set cat_goals = [] %}
+                    {% for g in planDeVie.lifeGoals %}
+                        {% if g.category == cat_key %}
+                            {% set cat_goals = cat_goals|merge([g]) %}
+                        {% endif %}
+                    {% endfor %}
+
+                    {% for goal in cat_goals %}
+                        <div class="ks-card" style="margin-bottom: 0;">
+                            <div class="goal-card__header">
+                                <div>
+                                    <span class="priority-badge priority--{{ goal.priority }}">{{ goal.priority }}</span>
+                                    <h4 class="goal-card__title" style="margin-top: 6px;">{{ goal.title }}</h4>
+                                </div>
+                                <div style="display:flex; gap: 4px;">
+                                    <button class="action-btn" data-action="click->plan-de-vie#openModal" data-modal-id="modal-goal-edit-{{ goal.id }}" title="Modifier">
+                                        <i data-lucide="edit-2" style="width:13px;height:13px;"></i>
+                                    </button>
+                                    <button class="action-btn" data-action="click->plan-de-vie#openModal" data-modal-id="modal-milestone-add-{{ goal.id }}" title="Ajouter un jalon">
+                                        <i data-lucide="check-square" style="width:13px;height:13px;"></i>
+                                    </button>
+                                    <form action="{{ path('admin_plan_de_vie_delete_goal', {id: goal.id}) }}" method="POST" style="display:inline;" onsubmit="return confirm('Confirmer la suppression de l\'objectif et de tous ses jalons associés ?');">
+                                        <input type="hidden" name="_csrf_token" value="{{ csrf_token('delete_goal_' ~ goal.id) }}">
+                                        <button type="submit" class="action-btn action-btn--danger" title="Supprimer">
+                                            <i data-lucide="trash-2" style="width:13px;height:13px;"></i>
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
+
+                            {# Progression #}
+                            <div style="display:flex; justify-content:space-between; font-size:12px; color: var(--text-secondary);">
+                                <span>Progression</span>
+                                <span style="font-weight: 700; color:var(--text-primary);" data-plan-de-vie-target="goalPercent" data-goal-id="{{ goal.id }}">{{ goal.progress }}%</span>
+                            </div>
+                            <div class="progress-bar-container">
+                                <div class="progress-bar-fill" style="width: {{ goal.progress }}%;" data-plan-de-vie-target="goalProgress" data-goal-id="{{ goal.id }}"></div>
+                            </div>
+
+                            {% if goal.metric %}
+                                <div style="font-size: 11px; margin-bottom: 12px; color: var(--text-secondary);">
+                                    <strong style="color:var(--text-muted);">Indicateur (Métrique) :</strong> {{ goal.metric }}
+                                </div>
+                            {% endif %}
+                            {% if goal.deadline %}
+                                <div style="font-size: 11px; margin-bottom: 12px; color: var(--text-secondary);">
+                                    <strong style="color:var(--text-muted);">Échéance cible :</strong> {{ goal.deadline|date('d F Y') }}
+                                </div>
+                            {% endif %}
+
+                            {# Milestones #}
+                            <div class="milestones-title">Jalons & Étapes</div>
+                            <div style="max-height: 160px; overflow-y: auto;">
+                                {% for ms in goal.milestones %}
+                                    <div class="milestone-item">
+                                        <label class="{% if ms.completed %}completed{% endif %}">
+                                            <input type="checkbox"
+                                                   data-milestone-id="{{ ms.id }}"
+                                                   data-action="change->plan-de-vie#toggleMilestone"
+                                                   {% if ms.completed %}checked{% endif %}>
+                                            <span>{{ ms.title }}</span>
+                                        </label>
+                                        <div style="display:flex; align-items:center; gap:6px;">
+                                            <span style="font-size: 10px; color:var(--text-muted);">{{ ms.dueDate|date('d/m/Y') }}</span>
+                                            <form action="{{ path('admin_plan_de_vie_delete_milestone', {id: ms.id}) }}" method="POST" style="display:inline;">
+                                                <input type="hidden" name="_csrf_token" value="{{ csrf_token('delete_milestone_' ~ ms.id) }}">
+                                                <button type="submit" class="action-btn action-btn--danger" style="padding:2px;" title="Supprimer le jalon">
+                                                    <i data-lucide="x" style="width:11px;height:11px;"></i>
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                {% else %}
+                                    <div style="font-size: 11px; color: var(--text-muted); font-style: italic; padding: 4px 0;">
+                                        Aucun jalon configuré. Cliquez sur l'icône de liste pour en ajouter.
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+
+                        {# --- Modal Édition Objectif --- #}
+                        <div class="ks-modal" id="modal-goal-edit-{{ goal.id }}">
+                            <div class="ks-modal-card">
+                                <div class="ks-modal-header">
+                                    <h3>Modifier l'objectif</h3>
+                                    <button class="ks-modal-close" data-action="click->plan-de-vie#closeModal" data-modal-id="modal-goal-edit-{{ goal.id }}">&times;</button>
+                                </div>
+                                <form action="{{ path('admin_plan_de_vie_edit_goal', {id: goal.id}) }}" method="POST">
+                                    <div class="ks-modal-body">
+                                        <input type="hidden" name="_csrf_token" value="{{ csrf_token('edit_goal_' ~ goal.id) }}">
+                                        <div class="form-group">
+                                            <label for="goal-title-{{ goal.id }}">Objectif</label>
+                                            <input type="text" id="goal-title-{{ goal.id }}" name="title" class="form-control" value="{{ goal.title }}" required>
+                                        </div>
+                                        <div class="grid-2">
+                                            <div class="form-group">
+                                                <label for="goal-cat-{{ goal.id }}">Catégorie</label>
+                                                <select id="goal-cat-{{ goal.id }}" name="category" class="form-control" required>
+                                                    <option value="BE" {% if goal.category == 'BE' %}selected{% endif %}>Être (Be)</option>
+                                                    <option value="DO" {% if goal.category == 'DO' %}selected{% endif %}>Faire (Do)</option>
+                                                    <option value="HAVE" {% if goal.category == 'HAVE' %}selected{% endif %}>Avoir (Have)</option>
+                                                    <option value="GIVE" {% if goal.category == 'GIVE' %}selected{% endif %}>Contribuer (Give)</option>
+                                                </select>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="goal-prio-{{ goal.id }}">Priorité</label>
+                                                <select id="goal-prio-{{ goal.id }}" name="priority" class="form-control" required>
+                                                    <option value="LOW" {% if goal.priority == 'LOW' %}selected{% endif %}>Basse</option>
+                                                    <option value="MEDIUM" {% if goal.priority == 'MEDIUM' %}selected{% endif %}>Moyenne</option>
+                                                    <option value="HIGH" {% if goal.priority == 'HIGH' %}selected{% endif %}>Haute</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="goal-metric-{{ goal.id }}">Indicateur de réussite (ex: Faire 3 voyages, Économiser 5K€...)</label>
+                                            <input type="text" id="goal-metric-{{ goal.id }}" name="metric" class="form-control" value="{{ goal.metric }}">
+                                        </div>
+                                        <div class="grid-2">
+                                            <div class="form-group">
+                                                <label for="goal-deadline-{{ goal.id }}">Échéance cible</label>
+                                                <input type="date" id="goal-deadline-{{ goal.id }}" name="deadline" class="form-control" value="{{ goal.deadline ? goal.deadline|date('Y-m-d') : '' }}">
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="goal-prog-{{ goal.id }}">Progression manuelle (en %)</label>
+                                                <input type="number" id="goal-prog-{{ goal.id }}" name="progress" min="0" max="100" class="form-control" value="{{ goal.progress }}" {% if goal.milestones|length > 0 %}disabled title="Géré automatiquement par les jalons."{% endif %}>
+                                                {% if goal.milestones|length > 0 %}
+                                                    <span style="font-size:10px; color:var(--text-muted);">Calculé d'après les jalons.</span>
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                        <div style="display:flex; justify-content:flex-end; gap:10px; margin-top:24px;">
+                                            <button type="button" class="ks-btn ks-btn--secondary" data-action="click->plan-de-vie#closeModal" data-modal-id="modal-goal-edit-{{ goal.id }}">Annuler</button>
+                                            <button type="submit" class="ks-btn ks-btn--primary">Sauvegarder</button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+
+                        {# --- Modal Ajouter Jalon --- #}
+                        <div class="ks-modal" id="modal-milestone-add-{{ goal.id }}">
+                            <div class="ks-modal-card">
+                                <div class="ks-modal-header">
+                                    <h3>Ajouter un jalon intermédiaire</h3>
+                                    <button class="ks-modal-close" data-action="click->plan-de-vie#closeModal" data-modal-id="modal-milestone-add-{{ goal.id }}">&times;</button>
+                                </div>
+                                <form action="{{ path('admin_plan_de_vie_add_milestone', {goalId: goal.id}) }}" method="POST">
+                                    <div class="ks-modal-body">
+                                        <input type="hidden" name="_csrf_token" value="{{ csrf_token('add_milestone_' ~ goal.id) }}">
+                                        <div class="form-group">
+                                            <label for="ms-title-{{ goal.id }}">Étape / Action à accomplir</label>
+                                            <input type="text" id="ms-title-{{ goal.id }}" name="title" class="form-control" placeholder="Ex: Réserver les billets d'avion..." required>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="ms-date-{{ goal.id }}">Date d'échéance du jalon</label>
+                                            <input type="date" id="ms-date-{{ goal.id }}" name="dueDate" class="form-control" required value="{{ "now"|date("Y-m-d") }}">
+                                        </div>
+                                        <div style="display:flex; justify-content:flex-end; gap:10px; margin-top:24px;">
+                                            <button type="button" class="ks-btn ks-btn--secondary" data-action="click->plan-de-vie#closeModal" data-modal-id="modal-milestone-add-{{ goal.id }}">Annuler</button>
+                                            <button type="submit" class="ks-btn ks-btn--primary">Créer le jalon</button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    {% else %}
+                        <div class="ks-card" style="grid-column: 1 / -1; text-align: center; color: var(--text-muted); padding: 20px 0;">
+                            Aucun objectif défini dans cette catégorie.
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        {% endfor %}
+    </section>
+
+    {# ========================================== #}
+    {# ============= FENÊTRES MODALES =========== #}
+    {# ========================================== #}
+
+    {# --- Modal Édition Mission (Purpose) --- #}
+    <div class="ks-modal" id="modal-purpose-edit">
+        <div class="ks-modal-card">
+            <div class="ks-modal-header">
+                <h3>Modifier ma mission de vie</h3>
+                <button class="ks-modal-close" data-action="click->plan-de-vie#closeModal" data-modal-id="modal-purpose-edit">&times;</button>
+            </div>
+            {{ form_start(purposeForm) }}
+                <div class="ks-modal-body">
+                    <div class="form-group">
+                        {{ form_label(purposeForm.statement) }}
+                        {{ form_widget(purposeForm.statement, { 'attr': {'class': 'form-control'} }) }}
+                    </div>
+                    <div class="form-group">
+                        {{ form_label(purposeForm.longStatement) }}
+                        {{ form_widget(purposeForm.longStatement, { 'attr': {'class': 'form-control'} }) }}
+                    </div>
+                    <div class="form-group">
+                        {{ form_label(purposeForm.hypotheses) }}
+                        {{ form_widget(purposeForm.hypotheses, { 'attr': {'class': 'form-control'} }) }}
+                    </div>
+                    <div class="form-group">
+                        {{ form_label(purposeForm.detail) }}
+                        {{ form_widget(purposeForm.detail, { 'attr': {'class': 'form-control'} }) }}
+                    </div>
+                    <div class="form-group">
+                        {{ form_label(purposeForm.proofs) }}
+                        {{ form_widget(purposeForm.proofs, { 'attr': {'class': 'form-control'} }) }}
+                    </div>
+
+                    <div style="display:flex; justify-content:flex-end; gap:10px; margin-top:24px;">
+                        <button type="button" class="ks-btn ks-btn--secondary" data-action="click->plan-de-vie#closeModal" data-modal-id="modal-purpose-edit">Annuler</button>
+                        <button type="submit" class="ks-btn ks-btn--primary">Enregistrer la mission</button>
+                    </div>
+                </div>
+            {{ form_end(purposeForm) }}
+        </div>
+    </div>
+
+    {# --- Modal Édition Vision --- #}
+    <div class="ks-modal" id="modal-vision-edit">
+        <div class="ks-modal-card">
+            <div class="ks-modal-header">
+                <h3>Modifier ma vision</h3>
+                <button class="ks-modal-close" data-action="click->plan-de-vie#closeModal" data-modal-id="modal-vision-edit">&times;</button>
+            </div>
+            {{ form_start(visionForm) }}
+                <div class="ks-modal-body">
+                    <div class="form-group">
+                        {{ form_label(visionForm.horizon) }}
+                        {{ form_widget(visionForm.horizon, { 'attr': {'class': 'form-control'} }) }}
+                    </div>
+                    <div class="form-group">
+                        {{ form_label(visionForm.content) }}
+                        {{ form_widget(visionForm.content, { 'attr': {'class': 'form-control'} }) }}
+                    </div>
+                    <div class="form-group">
+                        {{ form_label(visionForm.beneficiaries) }}
+                        {{ form_widget(visionForm.beneficiaries, { 'attr': {'class': 'form-control'} }) }}
+                    </div>
+                    <div class="form-group">
+                        {{ form_label(visionForm.indicators) }}
+                        {{ form_widget(visionForm.indicators, { 'attr': {'class': 'form-control'} }) }}
+                    </div>
+
+                    <div style="display:flex; justify-content:flex-end; gap:10px; margin-top:24px;">
+                        <button type="button" class="ks-btn ks-btn--secondary" data-action="click->plan-de-vie#closeModal" data-modal-id="modal-vision-edit">Annuler</button>
+                        <button type="submit" class="ks-btn ks-btn--primary">Enregistrer la vision</button>
+                    </div>
+                </div>
+            {{ form_end(visionForm) }}
+        </div>
+    </div>
+
+    {# --- Modal Ajouter Valeur --- #}
+    <div class="ks-modal" id="modal-value-add">
+        <div class="ks-modal-card">
+            <div class="ks-modal-header">
+                <h3>Ajouter une nouvelle valeur</h3>
+                <button class="ks-modal-close" data-action="click->plan-de-vie#closeModal" data-modal-id="modal-value-add">&times;</button>
+            </div>
+            <form action="{{ path('admin_plan_de_vie_add_value') }}" method="POST">
+                <div class="ks-modal-body">
+                    <input type="hidden" name="_csrf_token" value="{{ csrf_token('add_value') }}">
+                    <div class="form-group">
+                        <label for="new-val-name">Nom de la valeur</label>
+                        <input type="text" id="new-val-name" name="name" class="form-control" placeholder="Ex: Intégrité, Liberté, Excellence..." required>
+                    </div>
+                    <div class="form-group">
+                        <label for="new-val-category">Catégorie</label>
+                        <select id="new-val-category" name="category" class="form-control" required>
+                            <option value="real">Réelle & Vécue</option>
+                            <option value="declared">Déclarée & Admirée (alimente le plan de croissance)</option>
+                            <option value="counter">Contre-valeur observée (alimente le plan de croissance)</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="new-val-behav">Description / Comportement traduisant cette valeur</label>
+                        <textarea id="new-val-behav" name="behavior" rows="3" class="form-control" placeholder="Décrivez comment vous appliquez cette valeur au quotidien..."></textarea>
+                    </div>
+                    <div style="display:flex; justify-content:flex-end; gap:10px; margin-top:24px;">
+                        <button type="button" class="ks-btn ks-btn--secondary" data-action="click->plan-de-vie#closeModal" data-modal-id="modal-value-add">Annuler</button>
+                        <button type="submit" class="ks-btn ks-btn--primary">Créer la valeur</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    {# --- Modal Ajouter Passion --- #}
+    <div class="ks-modal" id="modal-passion-add">
+        <div class="ks-modal-card">
+            <div class="ks-modal-header">
+                <h3>Ajouter une nouvelle passion</h3>
+                <button class="ks-modal-close" data-action="click->plan-de-vie#closeModal" data-modal-id="modal-passion-add">&times;</button>
+            </div>
+            <form action="{{ path('admin_plan_de_vie_add_passion') }}" method="POST">
+                <div class="ks-modal-body">
+                    <input type="hidden" name="_csrf_token" value="{{ csrf_token('add_passion') }}">
+                    <div class="form-group">
+                        <label for="new-passion-name">Nom de la passion</label>
+                        <input type="text" id="new-passion-name" name="name" class="form-control" placeholder="Ex: Musique, Écriture, Randonnée..." required>
+                    </div>
+                    <div class="form-group">
+                        <label for="new-passion-context">Contexte / Fréquence / Moyen de la nourrir</label>
+                        <textarea id="new-passion-context" name="context" rows="3" class="form-control" placeholder="Décrivez comment ou quand vous pratiquez cette passion..."></textarea>
+                    </div>
+                    <div style="display:flex; justify-content:flex-end; gap:10px; margin-top:24px;">
+                        <button type="button" class="ks-btn ks-btn--secondary" data-action="click->plan-de-vie#closeModal" data-modal-id="modal-passion-add">Annuler</button>
+                        <button type="submit" class="ks-btn ks-btn--primary">Créer la passion</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    {# --- Modal Ajouter Conviction --- #}
+    <div class="ks-modal" id="modal-conviction-add">
+        <div class="ks-modal-card">
+            <div class="ks-modal-header">
+                <h3>Ajouter une nouvelle conviction</h3>
+                <button class="ks-modal-close" data-action="click->plan-de-vie#closeModal" data-modal-id="modal-conviction-add">&times;</button>
+            </div>
+            <form action="{{ path('admin_plan_de_vie_add_internal_balance') }}" method="POST">
+                <div class="ks-modal-body">
+                    <input type="hidden" name="_csrf_token" value="{{ csrf_token('add_internal_balance') }}">
+                    <input type="hidden" name="type" value="CONVICTION">
+                    <div class="form-group">
+                        <label for="new-conv-text">Texte de la conviction</label>
+                        <textarea id="new-conv-text" name="text" rows="3" class="form-control" placeholder="Saisissez votre conviction..." required></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="new-conv-subtype">Degré de conviction</label>
+                        <select id="new-conv-subtype" name="subtype" class="form-control" required>
+                            <option value="deep">Profonde ou dogmatique</option>
+                            <option value="medium">Médiane ou raisonnée</option>
+                            <option value="light">Légère ou circonstancielle</option>
+                        </select>
+                    </div>
+                    <div style="display:flex; justify-content:flex-end; gap:10px; margin-top:24px;">
+                        <button type="button" class="ks-btn ks-btn--secondary" data-action="click->plan-de-vie#closeModal" data-modal-id="modal-conviction-add">Annuler</button>
+                        <button type="submit" class="ks-btn ks-btn--primary">Créer la conviction</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    {# --- Modal Ajouter Croyance Limitante --- #}
+    <div class="ks-modal" id="modal-limiting-belief-add">
+        <div class="ks-modal-card">
+            <div class="ks-modal-header">
+                <h3>Ajouter une croyance limitante</h3>
+                <button class="ks-modal-close" data-action="click->plan-de-vie#closeModal" data-modal-id="modal-limiting-belief-add">&times;</button>
+            </div>
+            <form action="{{ path('admin_plan_de_vie_add_internal_balance') }}" method="POST">
+                <div class="ks-modal-body">
+                    <input type="hidden" name="_csrf_token" value="{{ csrf_token('add_internal_balance') }}">
+                    <input type="hidden" name="type" value="LIMITING_BELIEF">
+                    <div class="form-group">
+                        <label for="new-lb-text">Texte de la croyance limitante</label>
+                        <textarea id="new-lb-text" name="text" rows="3" class="form-control" placeholder="Décrivez votre croyance limitante..." required></textarea>
+                    </div>
+                    <div style="display:flex; justify-content:flex-end; gap:10px; margin-top:24px;">
+                        <button type="button" class="ks-btn ks-btn--secondary" data-action="click->plan-de-vie#closeModal" data-modal-id="modal-limiting-belief-add">Annuler</button>
+                        <button type="submit" class="ks-btn ks-btn--primary">Créer la croyance</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    {# --- Modal Ajouter Objectif de Vie --- #}
+    <div class="ks-modal" id="modal-goal-add">
+        <div class="ks-modal-card">
+            <div class="ks-modal-header">
+                <h3>Nouvel objectif de vie stratégique</h3>
+                <button class="ks-modal-close" data-action="click->plan-de-vie#closeModal" data-modal-id="modal-goal-add">&times;</button>
+            </div>
+            <form action="{{ path('admin_plan_de_vie_add_goal') }}" method="POST">
+                <div class="ks-modal-body">
+                    <input type="hidden" name="_csrf_token" value="{{ csrf_token('add_goal') }}">
+                    <div class="form-group">
+                        <label for="new-goal-title">Intitulé de l'objectif</label>
+                        <input type="text" id="new-goal-title" name="title" class="form-control" placeholder="Ex: Devenir financièrement indépendant..." required>
+                    </div>
+                    <div class="grid-2">
+                        <div class="form-group">
+                            <label for="new-goal-cat">Catégorie d'objectif</label>
+                            <select id="new-goal-cat" name="category" class="form-control" required>
+                                <option value="BE">Être (Be) - Identité, esprit</option>
+                                <option value="DO" selected>Faire (Do) - Projets, expériences</option>
+                                <option value="HAVE">Avoir (Have) - Finances, matériel</option>
+                                <option value="GIVE">Contribuer (Give) - Legs, partage</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="new-goal-prio">Priorité</label>
+                            <select id="new-goal-prio" name="priority" class="form-control" required>
+                                <option value="LOW">Basse</option>
+                                <option value="MEDIUM" selected>Moyenne</option>
+                                <option value="HIGH">Haute</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="new-goal-metric">Indicateur / Métrique (Comment mesurez-vous l'atteinte ?)</label>
+                        <input type="text" id="new-goal-metric" name="metric" class="form-control" placeholder="Ex: Avoir 100K€ de côté, Faire 10 sessions de mentorat...">
+                    </div>
+                    <div class="form-group">
+                        <label for="new-goal-deadline">Échéance cible</label>
+                        <input type="date" id="new-goal-deadline" name="deadline" class="form-control">
+                    </div>
+                    <div style="display:flex; justify-content:flex-end; gap:10px; margin-top:24px;">
+                        <button type="button" class="ks-btn ks-btn--secondary" data-action="click->plan-de-vie#closeModal" data-modal-id="modal-goal-add">Annuler</button>
+                        <button type="submit" class="ks-btn ks-btn--primary">Créer l'objectif</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

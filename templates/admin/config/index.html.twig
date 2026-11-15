@@ -1,0 +1,109 @@
+{% extends 'admin/layout.html.twig' %}
+
+{% block title %}Configuration Système{% endblock %}
+{% block page_title %}Configuration Système{% endblock %}
+
+{% block content %}
+<div class="ks-card" style="max-width: 800px; margin: 0 auto;">
+    <h2 style="font-size: 18px; font-weight: 700; margin-bottom: 24px; display: flex; align-items: center; gap: 8px;">
+        <i data-lucide="settings" style="color: var(--accent-light);"></i>
+        Paramètres de la Plateforme
+    </h2>
+
+    {% for label, messages in app.flashes %}
+        {% for message in messages %}
+            <div style="padding: 12px 16px; border-radius: var(--radius-sm); margin-bottom: 20px; font-size: 14px; 
+                {% if label == 'success' %}
+                    background: rgba(16, 185, 129, 0.1); border: 1px solid rgba(16, 185, 129, 0.2); color: #34d399;
+                {% else %}
+                    background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.2); color: #f87171;
+                {% endif %}
+            ">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endfor %}
+
+    {{ form_start(form) }}
+        <div style="display: flex; flex-direction: column; gap: 20px;">
+            <div class="form-group">
+                {{ form_label(form.defaultPurposeStatement, null, {'label_attr': {'style': 'display: block; font-size: 12px; font-weight: 600; color: var(--text-secondary); margin-bottom: 8px;'}}) }}
+                {{ form_widget(form.defaultPurposeStatement, {'attr': {'class': 'form-control', 'style': 'width: 100%; min-height: 120px;'}}) }}
+                <div style="font-size: 11px; color: var(--text-muted); margin-top: 4px;">{{ form_help(form.defaultPurposeStatement) }}</div>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                <div class="form-group">
+                    {{ form_label(form.proMonthlyPrice, null, {'label_attr': {'style': 'display: block; font-size: 12px; font-weight: 600; color: var(--text-secondary); margin-bottom: 8px;'}}) }}
+                    {{ form_widget(form.proMonthlyPrice, {'attr': {'class': 'form-control'}}) }}
+                </div>
+                <div class="form-group">
+                    {{ form_label(form.proYearlyPrice, null, {'label_attr': {'style': 'display: block; font-size: 12px; font-weight: 600; color: var(--text-secondary); margin-bottom: 8px;'}}) }}
+                    {{ form_widget(form.proYearlyPrice, {'attr': {'class': 'form-control'}}) }}
+                </div>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                <div class="form-group">
+                    {{ form_label(form.trialDurationDays, null, {'label_attr': {'style': 'display: block; font-size: 12px; font-weight: 600; color: var(--text-secondary); margin-bottom: 8px;'}}) }}
+                    {{ form_widget(form.trialDurationDays, {'attr': {'class': 'form-control'}}) }}
+                </div>
+                <div class="form-group">
+                    {{ form_label(form.demoPassword, null, {'label_attr': {'style': 'display: block; font-size: 12px; font-weight: 600; color: var(--text-secondary); margin-bottom: 8px;'}}) }}
+                    {{ form_widget(form.demoPassword, {'attr': {'class': 'form-control'}}) }}
+                </div>
+            </div>
+
+            <div style="display: flex; justify-content: flex-end; margin-top: 10px;">
+                <button type="submit" class="ks-btn ks-btn--primary">
+                    <i data-lucide="save"></i> Enregistrer les modifications
+                </button>
+            </div>
+        </div>
+    {{ form_end(form) }}
+</div>
+
+<style>
+    .form-group {
+        margin-bottom: 0px;
+    }
+    .form-control {
+        width: 100%;
+        background: var(--bg-input);
+        border: 1px solid var(--border);
+        border-radius: var(--radius-sm);
+        padding: 10px 14px;
+        color: var(--text-primary);
+        font-family: inherit;
+        font-size: 14px;
+        transition: all var(--transition);
+    }
+    .form-control:focus {
+        border-color: var(--accent);
+        outline: none;
+        box-shadow: 0 0 10px rgba(99, 102, 241, 0.15);
+    }
+    .ks-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 10px 20px;
+        border-radius: var(--radius-sm);
+        font-size: 14px;
+        font-weight: 600;
+        cursor: pointer;
+        border: 1px solid transparent;
+        transition: all var(--transition);
+        text-decoration: none;
+    }
+    .ks-btn--primary {
+        background: var(--accent-gradient);
+        color: #fff;
+    }
+    .ks-btn--primary:hover {
+        opacity: 0.9;
+        transform: translateY(-1px);
+        box-shadow: var(--shadow-glow);
+    }
+</style>
+{% endblock %}

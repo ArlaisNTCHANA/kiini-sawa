@@ -1,0 +1,1213 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Mon Agenda & Organisation{% endblock %}
+
+{% block body %}
+<style>
+    .planner-wrap {
+        max-width: 1100px;
+        margin: 0 auto;
+        padding: 2.5rem 1.5rem 8rem;
+        display: flex;
+        flex-direction: column;
+        gap: 2.5rem;
+    }
+    @media (min-width: 1024px) {
+        .planner-wrap {
+            padding: 3.5rem 2rem 5rem;
+            gap: 3.5rem;
+        }
+    }
+
+    .back-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.375rem;
+        font-size: 0.8rem;
+        font-weight: 700;
+        color: rgba(255, 255, 255, 0.7);
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        transition: color 0.2s;
+        text-decoration: none;
+        margin-bottom: 1rem;
+    }
+    .back-btn:hover {
+        color: white;
+    }
+
+    /* Filters Group */
+    .filter-pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.375rem;
+        padding: 0.4rem 0.95rem;
+        border-radius: 9999px;
+        font-size: 0.7rem;
+        font-weight: 700;
+        letter-spacing: 0.05em;
+        text-transform: uppercase;
+        cursor: pointer;
+        border: 1px solid rgba(15, 118, 110, 0.08);
+        transition: all 0.2s;
+        background: white;
+        color: #64748b;
+    }
+    .filter-pill.active-task { background: #eff6ff !important; color: #1e40af !important; border-color: #bfdbfe !important; }
+    .filter-pill.active-habit { background: #ecfdf5 !important; color: #065f46 !important; border-color: #a7f3d0 !important; }
+    .filter-pill.active-milestone { background: #f3e8ff !important; color: #6b21a8 !important; border-color: #e9d5ff !important; }
+    .filter-pill.active-challenge { background: #fff7ed !important; color: #9a3412 !important; border-color: #ffedd5 !important; }
+
+    .shadow-sm\/5 {
+        box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    }
+
+    /* Outlook-style Event Bars */
+    .event-bar {
+        font-family: var(--font-sans);
+        font-size: 0.625rem;
+        font-weight: 700;
+        line-height: 1.35;
+        padding: 0.2rem 0.4rem;
+        border-radius: 6px;
+        border-left: 2.5px solid transparent;
+        margin-bottom: 0.25rem;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-width: 100%;
+        transition: all 0.15s ease;
+        text-align: left;
+        display: block;
+    }
+    .event-bar:hover {
+        transform: translateY(-0.5px);
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
+    }
+    .event-bar.task-bar {
+        background: #eff6ff;
+        color: #1e40af;
+        border-left-color: #3b82f6;
+    }
+    .event-bar.milestone-bar {
+        background: #f3e8ff;
+        color: #6b21a8;
+        border-left-color: #a855f7;
+    }
+    .event-bar.challenge-bar {
+        background: #fff7ed;
+        color: #c2410c;
+        border-left-color: #f97316;
+    }
+    .event-bar.completed {
+        opacity: 0.5;
+        text-decoration: line-through;
+        background: #f1f5f9;
+        color: #64748b;
+        border-left-color: #cbd5e1;
+    }
+
+    /* Gantt 14 Column Layout */
+    .grid-cols-14 {
+        display: grid;
+        grid-template-columns: repeat(14, minmax(0, 1fr));
+    }
+
+    /* Section Container — aligned with ritual-section */
+    .planner-section {
+        background: rgba(255, 255, 255, 0.85);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        border: 1px solid rgba(15, 118, 110, 0.06);
+        border-radius: 2rem;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.02);
+        overflow: hidden;
+    }
+
+    /* Planner labels */
+    .planner-label {
+        font-size: 0.675rem;
+        font-weight: 800;
+        color: var(--fg-muted);
+        letter-spacing: 0.05em;
+        text-transform: uppercase;
+    }
+</style>
+
+<div class="planner-wrap" 
+     x-data="plannerData()" 
+     x-init="initPlanner()">
+     
+
+    {# ══════════════════════════════════════════════════════
+       FILTERS ROW
+     ══════════════════════════════════════════════════════ #}
+    <div class="flex flex-wrap gap-4 items-center justify-between">
+        <div class="flex flex-wrap gap-2.5 items-center">
+            <span class="planner-label" style="margin-right: 0.5rem;">Filtres :</span>
+            <button class="filter-pill" :class="filters.task ? 'active-task' : ''" @click="filters.task = !filters.task; fetchEvents();">
+                <span class="w-2 h-2 rounded-full bg-blue-500" x-show="!filters.task"></span> Tâches
+            </button>
+            <button class="filter-pill" :class="filters.habit ? 'active-habit' : ''" @click="filters.habit = !filters.habit; fetchEvents();">
+                <span class="w-2 h-2 rounded-full bg-emerald-500" x-show="!filters.habit"></span> Rituels
+            </button>
+            <button class="filter-pill" :class="filters.milestone ? 'active-milestone' : ''" @click="filters.milestone = !filters.milestone; fetchEvents();">
+                <span class="w-2 h-2 rounded-full bg-purple-500" x-show="!filters.milestone"></span> Jalons
+            </button>
+            <button class="filter-pill" :class="filters.challenge ? 'active-challenge' : ''" @click="filters.challenge = !filters.challenge; fetchEvents();">
+                <span class="w-2 h-2 rounded-full bg-orange-500" x-show="!filters.challenge"></span> Défis
+            </button>
+        </div>
+
+        {# View Switcher (Jour, Semaine, Mois, Gantt) #}
+        <div class="flex items-center gap-1 bg-slate-100/80 border border-slate-200/60 rounded-xl p-0.5 shadow-sm">
+            <button class="px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer border-0"
+                    :class="currentView === 'day' ? 'bg-teal-700 text-white shadow-sm font-black' : 'bg-transparent hover:bg-slate-200/50 text-slate-600'"
+                    @click="currentView = 'day'">
+                Jour
+            </button>
+            <button class="px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer border-0"
+                    :class="currentView === 'week' ? 'bg-teal-700 text-white shadow-sm font-black' : 'bg-transparent hover:bg-slate-200/50 text-slate-600'"
+                    @click="currentView = 'week'">
+                Semaine
+            </button>
+            <button class="px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer border-0"
+                    :class="currentView === 'month' ? 'bg-teal-700 text-white shadow-sm font-black' : 'bg-transparent hover:bg-slate-200/50 text-slate-600'"
+                    @click="currentView = 'month'">
+                Mois
+            </button>
+            <button class="px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer border-0"
+                    :class="currentView === 'gantt' ? 'bg-teal-700 text-white shadow-sm font-black' : 'bg-transparent hover:bg-slate-200/50 text-slate-600'"
+                    @click="currentView = 'gantt'">
+                Gantt
+            </button>
+        </div>
+    </div>
+
+    <div class="mt-8">
+        <main class="planner-section" style="display: flex; flex-direction: column; min-height: 640px; min-width: 0;">
+            {# Month Navigation & View Switcher #}
+            <div style="padding: 1.75rem 2.25rem; border-bottom: 1px solid rgba(15,118,110,0.06); display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 1rem; background: rgba(248,250,252,0.5); backdrop-filter: blur(8px);">
+                <h2 style="font-size: 1.5rem; font-weight: 800; font-family: var(--font-sans); color: var(--fg); letter-spacing: -0.02em;" x-text="viewTitle"></h2>
+                
+                <div class="flex flex-wrap items-center gap-3 w-full md:w-auto justify-start md:justify-end">
+                    {# Navigation controls #}
+                    <div class="flex items-center gap-1 bg-white border border-slate-200 rounded-xl p-1 shadow-sm">
+                        <button class="p-2 rounded-lg hover:bg-slate-100 transition-colors text-slate-700 cursor-pointer border-0 bg-transparent" @click="prev()">
+                            <i data-lucide="chevron-left" class="w-4.5 h-4.5"></i>
+                        </button>
+                        <button class="px-4 py-2 rounded-lg hover:bg-slate-100 transition-colors text-sm font-bold text-slate-800 cursor-pointer border-0 bg-transparent" @click="today()">
+                            Aujourd'hui
+                        </button>
+                        <button class="p-2 rounded-lg hover:bg-slate-100 transition-colors text-slate-700 cursor-pointer border-0 bg-transparent" @click="next()">
+                            <i data-lucide="chevron-right" class="w-4.5 h-4.5"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+        {# ══════════════════════════════════════════════════════
+           VIEW 1 — MONTH VIEW
+         ══════════════════════════════════════════════════════ #}
+        <div x-show="currentView === 'month'" x-transition class="flex flex-col flex-1 w-full">
+            {# Week Days Header #}
+            <div class="border-b border-slate-100 text-center text-xs font-extrabold text-slate-500 uppercase tracking-widest bg-slate-50/20 py-3 grid grid-cols-7 w-full">
+                <div>LUN</div>
+                <div>MAR</div>
+                <div>MER</div>
+                <div>JEU</div>
+                <div>VEN</div>
+                <div>SAM</div>
+                <div>DIM</div>
+            </div>
+
+            {# Calendar Grid Cells #}
+            <div class="flex-1 bg-slate-100/70 gap-[1px] grid grid-cols-7 w-full border border-slate-100/80 rounded-b-2xl overflow-hidden">
+                <template x-for="day in calendarDays" :key="day.date.getTime()">
+                    <div class="bg-white p-3 min-h-[120px] flex flex-col justify-between transition-all cursor-pointer hover:bg-slate-50/60 relative group min-w-0"
+                         :class="[
+                             !day.isCurrentMonth ? 'opacity-40 bg-slate-50/10' : '',
+                             isToday(day.date) ? 'bg-teal-50/10' : '',
+                             isSelected(day.date) ? 'ring-2 ring-teal-700 z-10' : ''
+                         ]"
+                         @click="selectedDate = day.date"
+                         @dblclick.stop="openAddTaskModal(day.date)"
+                         :title="getCellTooltip(day.date)">
+                         
+                         {# Cell Header #}
+                         <div class="flex justify-between items-center">
+                             <span class="text-sm font-extrabold w-7 h-7 rounded-full flex items-center justify-center transition-all duration-200"
+                                   :class="[
+                                       isToday(day.date) ? 'bg-teal-700 text-white font-black shadow-sm' : 'text-slate-800',
+                                       !day.isCurrentMonth ? 'text-slate-400' : '',
+                                       isSelected(day.date) && !isToday(day.date) ? 'bg-slate-100 text-slate-900 font-bold' : ''
+                                   ]"
+                                   x-text="day.date.getDate()"></span>
+                             
+                             {# Quick Add Button #}
+                             <button class="opacity-0 group-hover:opacity-100 text-slate-450 hover:text-teal-700 p-0.5 rounded transition-opacity cursor-pointer border-0 bg-transparent"
+                                     @click.stop="openAddTaskModal(day.date)">
+                                 <i data-lucide="plus" class="w-3.5 h-3.5"></i>
+                             </button>
+                         </div>
+
+                         {# Events Container (Outlook style on desktop, dots on mobile) #}
+                         <div class="flex-1 flex flex-col justify-start my-2 min-w-0">
+                             {# Desktop event list #}
+                             <div class="hidden sm:flex flex-col gap-1 w-full overflow-hidden">
+                                 <template x-for="event in getUniqueEvents(day.date).slice(0, 2)" :key="event.id">
+                                     <div class="event-bar"
+                                          :class="[
+                                              event.type === 'TASK' ? 'event-bar task-bar' :
+                                              event.type === 'MILESTONE' ? 'event-bar milestone-bar' : 'event-bar challenge-bar',
+                                              event.isCompleted ? 'completed' : ''
+                                          ]"
+                                          :title="event.title"
+                                          @click.stop="openEventModal(event)">
+                                         <span class="truncate" x-text="event.title"></span>
+                                     </div>
+                                 </template>
+                                 <template x-if="getUniqueEvents(day.date).length > 2">
+                                     <div class="text-[8px] text-slate-455 font-bold px-1.5 py-0.5 bg-slate-50 border border-slate-100 rounded text-center"
+                                          x-text="'+ ' + (getUniqueEvents(day.date).length - 2) + ' autres...'"></div>
+                                 </template>
+                             </div>
+
+                             {# Mobile dots #}
+                             <div class="sm:hidden flex gap-1 justify-center items-center my-1.5 flex-wrap min-w-0">
+                                 <template x-if="hasEventType(day.date, 'TASK')">
+                                     <span class="w-1.5 h-1.5 rounded-full bg-blue-500 shadow-sm shadow-blue-500/50"></span>
+                                 </template>
+                                 <template x-if="hasEventType(day.date, 'HABIT')">
+                                     <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 shadow-sm shadow-emerald-500/50"></span>
+                                 </template>
+                                 <template x-if="hasEventType(day.date, 'MILESTONE')">
+                                     <span class="w-1.5 h-1.5 rounded-full bg-purple-500 shadow-sm shadow-purple-500/50"></span>
+                                 </template>
+                                 <template x-if="hasEventType(day.date, 'CHALLENGE')">
+                                     <span class="w-1.5 h-1.5 rounded-full bg-orange-500 shadow-sm shadow-orange-500/50"></span>
+                                 </template>
+                             </div>
+                         </div>
+
+                         {# Minimalist Habits Progress Bar #}
+                         <div class="w-full mt-auto" x-show="getHabitsProgress(day.date)">
+                             <div class="w-full h-1 bg-slate-100/80 rounded-full overflow-hidden border border-slate-200/10"
+                                  :title="getHabitsProgress(day.date)?.completed + '/' + getHabitsProgress(day.date)?.total + ' rituels'">
+                                  <div class="h-full rounded-full transition-all duration-300"
+                                       :class="getHabitsProgress(day.date)?.pct === 100 ? 'bg-emerald-500' : 'bg-slate-300'"
+                                       :style="'width: ' + (getHabitsProgress(day.date)?.pct || 0) + '%'"></div>
+                             </div>
+                         </div>
+                    </div>
+                </template>
+            </div>
+        </div>
+
+        {# ══════════════════════════════════════════════════════
+           VIEW 2 — WEEK VIEW
+         ══════════════════════════════════════════════════════ #}
+        <div x-show="currentView === 'week'" x-transition class="flex-1 bg-slate-100/70 gap-[1px] grid grid-cols-7 w-full border border-slate-100/80 rounded-b-2xl overflow-hidden">
+            <template x-for="day in weekDays" :key="day.getTime()">
+                <div class="bg-white p-3 min-h-[500px] flex flex-col justify-between hover:bg-slate-50/60 cursor-pointer relative group"
+                     :class="[
+                         isToday(day) ? 'bg-teal-50/10' : '',
+                         isSelected(day) ? 'ring-2 ring-teal-700 z-10' : ''
+                     ]"
+                     @click="selectedDate = day"
+                     @dblclick.stop="openAddTaskModal(day)"
+                     :title="getCellTooltip(day)">
+                     
+                     {# Cell Header #}
+                     <div class="flex justify-between items-center pb-2 border-b border-slate-100/50">
+                         <div class="flex flex-col">
+                             <span class="text-xs uppercase font-extrabold text-slate-500 tracking-wider" x-text="day.toLocaleDateString('fr-FR', { weekday: 'short' })"></span>
+                             <span class="text-xl font-black mt-1 text-slate-900" x-text="day.getDate()"></span>
+                         </div>
+                         
+                         <button class="opacity-0 group-hover:opacity-100 text-slate-450 hover:text-teal-700 p-0.5 rounded transition-opacity cursor-pointer border-0 bg-transparent"
+                                 @click.stop="openAddTaskModal(day)">
+                             <i data-lucide="plus" class="w-3.5 h-3.5"></i>
+                         </button>
+                     </div>
+                     
+                     {# Events List #}
+                     <div class="flex-1 flex flex-col gap-1.5 my-3 overflow-y-auto ks-scroll pr-0.5 max-h-[380px]">
+                         <template x-for="event in getUniqueEvents(day)" :key="event.id">
+                             <div class="event-bar"
+                                  :class="[
+                                      event.type === 'TASK' ? 'event-bar task-bar' :
+                                      event.type === 'MILESTONE' ? 'event-bar milestone-bar' : 'event-bar challenge-bar',
+                                      event.isCompleted ? 'completed' : ''
+                                  ]"
+                                  :title="event.title"
+                                  @click.stop="openEventModal(event)">
+                                 <span class="truncate" x-text="event.title"></span>
+                             </div>
+                         </template>
+                     </div>
+                     
+                     {# Habits Progress Bar #}
+                     <div class="w-full mt-auto pt-2 border-t border-slate-100/40" x-show="getHabitsProgress(day)">
+                         <div class="w-full h-1 bg-slate-100/80 rounded-full overflow-hidden border border-slate-200/10"
+                              :title="getHabitsProgress(day)?.completed + '/' + getHabitsProgress(day)?.total + ' rituels'">
+                              <div class="h-full rounded-full transition-all duration-300"
+                                   :class="getHabitsProgress(day)?.pct === 100 ? 'bg-emerald-500' : 'bg-slate-300'"
+                                   :style="'width: ' + (getHabitsProgress(day)?.pct || 0) + '%'"></div>
+                         </div>
+                     </div>
+                </div>
+            </template>
+        </div>
+
+        {# ══════════════════════════════════════════════════════
+           VIEW 3 — DAY VIEW
+         ══════════════════════════════════════════════════════ #}
+        <div x-show="currentView === 'day'" x-transition class="flex-1 p-6 bg-slate-50/30 grid grid-cols-1 md:grid-cols-12 gap-8 w-full border-t border-slate-100 animate-fade-in">
+            {# Left column: Rituels #}
+            <div class="col-span-12 md:col-span-5 bg-white rounded-2xl border border-slate-200/60 p-5 shadow-sm">
+                <h3 class="text-sm !font-sans font-extrabold text-slate-500 uppercase tracking-wider mb-4">Rituels du Jour</h3>
+                <div class="space-y-3 max-h-[480px] overflow-y-auto pr-1 ks-scroll">
+                    <template x-if="filteredEventsByDate(selectedDate).filter(e => e.type === 'HABIT').length === 0">
+                        <div class="text-center py-12">
+                            <i data-lucide="sparkles" class="w-8 h-8 text-slate-300 mx-auto mb-2 opacity-50"></i>
+                            <p class="text-slate-400 text-xs italic">Aucun rituel programmé.</p>
+                        </div>
+                    </template>
+                    <template x-for="event in filteredEventsByDate(selectedDate).filter(e => e.type === 'HABIT')" :key="event.id">
+                        <div class="p-3 border border-slate-100 rounded-xl flex gap-3 items-center"
+                             :class="event.isCompleted ? 'bg-slate-50/50 opacity-60' : 'bg-white shadow-sm/5 hover:bg-slate-50/40'">
+                            <button class="w-5 h-5 rounded-full border flex items-center justify-center flex-shrink-0 transition-all duration-200 cursor-pointer active:scale-95 bg-transparent"
+                                    :class="event.isCompleted ? 'bg-teal-600 border-teal-600 text-white' : 'border-slate-300 hover:border-teal-600 hover:bg-teal-50/20'"
+                                    @click="toggleEventStatus(event)">
+                                <i data-lucide="check" class="w-3 h-3 text-white" x-show="event.isCompleted"></i>
+                            </button>
+                            <span class="text-sm font-semibold text-slate-800 truncate"
+                                  :class="event.isCompleted ? 'line-through text-slate-400 font-medium' : ''"
+                                  x-text="event.title"></span>
+                        </div>
+                    </template>
+                </div>
+            </div>
+
+            {# Right column: Tasks & Milestones #}
+            <div class="col-span-12 md:col-span-7 bg-white rounded-2xl border border-slate-200/60 p-5 shadow-sm flex flex-col gap-4">
+                <div class="flex justify-between items-center border-b border-slate-100 pb-3">
+                    <h3 class="text-sm !font-sans font-extrabold text-slate-500 uppercase tracking-wider">Tâches & Jalons</h3>
+                    <button class="px-3 py-1 bg-teal-50 hover:bg-teal-100 text-teal-700 text-xs font-bold rounded-xl transition-colors flex items-center gap-1.5 cursor-pointer border-0"
+                            @click="openAddTaskModal(selectedDate)">
+                        <i data-lucide="plus" class="w-3.5 h-3.5"></i>
+                        <span>Nouvelle Tâche</span>
+                    </button>
+                </div>
+                
+                <div class="space-y-3 max-h-[480px] overflow-y-auto pr-1 ks-scroll">
+                    <template x-if="getUniqueEvents(selectedDate).length === 0">
+                        <div class="text-center py-16">
+                            <i data-lucide="calendar-check" class="w-10 h-10 text-slate-300 mx-auto mb-2 opacity-50"></i>
+                            <p class="text-slate-400 text-xs italic">Aucune tâche ou jalon pour ce jour.</p>
+                        </div>
+                    </template>
+                    
+                    <template x-for="event in getUniqueEvents(selectedDate)" :key="event.id">
+                        <div class="p-3 border border-slate-100 rounded-xl flex gap-3 items-start hover:bg-slate-50/20"
+                             :class="[
+                                 event.type === 'TASK' ? 'border-l-4 border-l-blue-500' : 'border-l-4 border-l-purple-500',
+                                 event.isCompleted ? 'bg-slate-50/50 opacity-60 border-slate-200/50' : 'bg-white shadow-sm/5 border-slate-200/60'
+                             ]">
+                            <button class="mt-0.5 w-4.5 h-4.5 rounded-full border flex items-center justify-center flex-shrink-0 transition-all duration-200 cursor-pointer active:scale-95 bg-transparent"
+                                    :class="event.isCompleted ? 'bg-teal-600 border-teal-600 text-white' : 'border-slate-300 hover:border-teal-600 hover:bg-teal-50/20'"
+                                    @click="toggleEventStatus(event)">
+                                <i data-lucide="check" class="w-2.5 h-2.5 text-white" x-show="event.isCompleted"></i>
+                            </button>
+                            <div class="flex-1 min-w-0 cursor-pointer" @click="openEventModal(event)">
+                                <h4 class="text-sm !font-sans font-semibold text-slate-800 leading-snug break-words"
+                                    :class="event.isCompleted ? 'line-through text-slate-400 font-medium' : ''"
+                                    x-text="event.title"></h4>
+                                <div class="flex items-center gap-2 mt-1.5 text-[9px] text-slate-455 font-bold uppercase tracking-wider">
+                                    <span class="px-1.5 py-0.5 rounded-md font-bold"
+                                          :class="getBadgeClass(event.type)"
+                                          x-text="event.type === 'TASK' ? 'Tâche' : 'Jalon'"></span>
+                                    <span x-show="event.startTime" class="text-slate-500" x-text="event.startTime"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </template>
+                </div>
+            </div>
+        </div>
+
+        {# ══════════════════════════════════════════════════════
+           VIEW 4 — GANTT VIEW
+         ══════════════════════════════════════════════════════ #}
+        <div x-show="currentView === 'gantt'" x-transition class="flex-1 flex flex-col w-full bg-white rounded-b-2xl border-t border-slate-100 overflow-hidden">
+            {# Gantt Timeline Header #}
+            <div class="grid grid-cols-12 border-b border-slate-100 bg-slate-50/50 py-3 text-center text-[10px] font-bold text-slate-400 uppercase tracking-wider">
+                <div class="col-span-3 text-left pl-6 text-xs font-extrabold text-slate-500 uppercase tracking-wider">Activité / Jalon</div>
+                <div class="col-span-9 grid grid-cols-14 text-center">
+                    <template x-for="day in ganttDates" :key="day.getTime()">
+                        <div class="flex flex-col items-center justify-center border-r border-slate-100/50 last:border-0 py-1"
+                             :class="isToday(day) ? 'bg-teal-50/15 text-teal-700' : ''">
+                            <span class="text-[10px] font-extrabold uppercase text-slate-500 tracking-wider" x-text="day.toLocaleDateString('fr-FR', { weekday: 'short' })"></span>
+                            <span class="text-sm font-black mt-1 text-slate-800" x-text="day.getDate()"></span>
+                        </div>
+                    </template>
+                </div>
+            </div>
+            
+            {# Gantt Rows #}
+            <div class="divide-y divide-slate-100/60 max-h-[600px] overflow-y-auto ks-scroll">
+                <template x-if="ganttEvents.length === 0">
+                    <div class="text-center py-16 text-slate-400 text-sm italic">
+                        Aucune activité ou jalon sur cette période.
+                    </div>
+                </template>
+                
+                <template x-for="event in ganttEvents" :key="event.id">
+                    <div class="grid grid-cols-12 items-center hover:bg-slate-50/30 transition-colors min-h-[52px]">
+                        {# Left detail #}
+                        <div class="col-span-3 pl-6 pr-4 py-2 min-w-0 cursor-pointer" @click="openEventModal(event)">
+                            <h4 class="text-sm !font-sans font-bold text-slate-800 truncate" :class="event.isCompleted ? 'line-through text-slate-400 font-medium' : ''" x-text="event.title"></h4>
+                            <span class="text-[8px] font-bold px-1 py-0.5 rounded uppercase mt-1 inline-block"
+                                  :class="getBadgeClass(event.type)"
+                                  x-text="event.type === 'TASK' ? 'Tâche' : 'Jalon'"></span>
+                        </div>
+                        
+                        {# Right Timeline grid #}
+                        <div class="col-span-9 h-full grid grid-cols-14 relative items-center">
+                            {# Grid column lines background #}
+                            <div class="absolute inset-0 grid grid-cols-14 pointer-events-none">
+                                <template x-for="i in 14">
+                                    <div class="border-r border-slate-100/30 h-full last:border-0"></div>
+                                </template>
+                            </div>
+                            
+                            {# Event Span Bar #}
+                            <div class="h-7 rounded-lg flex items-center px-3 text-[10px] font-bold shadow-sm/5 cursor-pointer relative z-10 mx-1 border"
+                                 :style="getGanttStyle(event)"
+                                 :class="[
+                                     event.type === 'TASK' ? 'bg-blue-50/60 text-blue-800 border-blue-200/50 border-l-[3px] border-l-blue-500' : 
+                                     'bg-purple-50/60 text-purple-800 border-purple-200/50 border-l-[3px] border-l-purple-500',
+                                     event.isCompleted ? 'opacity-55 line-through bg-slate-50 text-slate-400 border-slate-200 border-l-slate-300' : ''
+                                 ]"
+                                 @click="openEventModal(event)">
+                                 <span class="truncate" x-text="event.title"></span>
+                            </div>
+                        </div>
+                    </div>
+                </template>
+            </div>
+        </div>
+    </main>
+    </div>
+
+    {# ══════════════════════════════════════════════════════
+       MODALS
+     ══════════════════════════════════════════════════════ #}
+    
+    {# 1. Task Create/Edit Dialog #}
+    <div class="fixed inset-0 bg-slate-900/40 backdrop-blur-md flex items-center justify-center p-4 z-50"
+         x-show="taskModalOpen" x-cloak
+         x-transition:enter="transition ease-out duration-300"
+         x-transition:enter-start="opacity-0 scale-95"
+         x-transition:enter-end="opacity-100 scale-100"
+         x-transition:leave="transition ease-in duration-200"
+         x-transition:leave-start="opacity-100 scale-100"
+         x-transition:leave-end="opacity-0 scale-95"
+         @click.self="taskModalOpen = false">
+         
+         <div class="bg-white rounded-3xl border border-slate-200 shadow-2xl max-w-md w-full overflow-hidden">
+              <header class="p-6 border-b border-slate-100 flex justify-between items-center bg-slate-50/50">
+                  <h3 class="text-lg font-serif font-bold text-slate-800 flex items-center gap-2">
+                      <i data-lucide="check-square" class="w-5 h-5 text-teal-700"></i>
+                      <span x-text="isEditMode ? 'Modifier la tâche' : 'Nouvelle Tâche'"></span>
+                  </h3>
+                  <button class="text-slate-400 hover:text-slate-650 transition-colors cursor-pointer border-0 bg-transparent" @click="taskModalOpen = false">
+                      <i data-lucide="x" class="w-5 h-5"></i>
+                  </button>
+              </header>
+              
+              <div class="p-6 space-y-4 max-h-[65vh] overflow-y-auto ks-scroll">
+                  <!-- Info Banner (Difference between Ritual and Task) -->
+                  <div class="p-3.5 bg-blue-50/60 border border-blue-100 rounded-2xl flex gap-3 text-xs text-blue-700 leading-relaxed shadow-sm">
+                      <i data-lucide="info" class="w-4 h-4 shrink-0 mt-0.5 text-blue-500"></i>
+                      <div>
+                          <span class="font-bold">Aide :</span> Les <strong>tâches</strong> sont des actions uniques et ponctuelles. Pour vos actions récurrentes (ex: sport, lecture), utilisez l'onglet <strong>Habit-Rituels</strong>.
+                      </div>
+                  </div>
+
+                  <!-- Title -->
+                  <div>
+                      <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-1.5">Titre de la tâche</label>
+                      <div class="relative">
+                          <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
+                              <i data-lucide="type" class="w-4 h-4"></i>
+                          </div>
+                          <input type="text" x-model="modalTask.title"
+                                 style="padding-left: 2.5rem !important;"
+                                 class="w-full bg-slate-50 border border-slate-200 rounded-xl pr-4 py-2.5 text-sm text-slate-800 focus:outline-none focus:ring-2 focus:ring-teal-700/20 focus:border-teal-700 focus:bg-white transition-all duration-200"
+                                 placeholder="ex: Préparer la réunion avec Alice..." />
+                      </div>
+                  </div>
+                  
+                  <!-- Date -->
+                  <div>
+                      <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-1.5">Date</label>
+                      <div class="relative">
+                          <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
+                              <i data-lucide="calendar" class="w-4 h-4"></i>
+                          </div>
+                          <input type="date" x-model="modalTask.date"
+                                 style="padding-left: 2.5rem !important;"
+                                 class="w-full bg-slate-50 border border-slate-200 rounded-xl pr-4 py-2.5 text-sm text-slate-800 focus:outline-none focus:ring-2 focus:ring-teal-700/20 focus:border-teal-700 focus:bg-white transition-all duration-200" />
+                      </div>
+                  </div>
+                  
+                  <!-- Time Slots -->
+                  <div class="grid grid-cols-2 gap-4">
+                      <div>
+                          <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-1.5">Début (Optionnel)</label>
+                          <div class="relative">
+                              <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
+                                  <i data-lucide="clock" class="w-4 h-4"></i>
+                              </div>
+                              <input type="time" x-model="modalTask.startTime"
+                                     style="padding-left: 2.5rem !important;"
+                                     class="w-full bg-slate-50 border border-slate-200 rounded-xl pr-4 py-2.5 text-sm text-slate-800 focus:outline-none focus:ring-2 focus:ring-teal-700/20 focus:border-teal-700 focus:bg-white transition-all duration-200" />
+                          </div>
+                      </div>
+                      <div>
+                          <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-1.5">Fin (Optionnel)</label>
+                          <div class="relative">
+                              <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
+                                  <i data-lucide="clock-4" class="w-4 h-4"></i>
+                              </div>
+                              <input type="time" x-model="modalTask.endTime"
+                                     style="padding-left: 2.5rem !important;"
+                                     class="w-full bg-slate-50 border border-slate-200 rounded-xl pr-4 py-2.5 text-sm text-slate-800 focus:outline-none focus:ring-2 focus:ring-teal-700/20 focus:border-teal-700 focus:bg-white transition-all duration-200" />
+                          </div>
+                      </div>
+                  </div>
+                  
+                  <!-- Goal Selection -->
+                  <div>
+                      <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-1.5">Associer à un objectif de croissance</label>
+                      <div class="relative">
+                          <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
+                              <i data-lucide="target" class="w-4 h-4"></i>
+                          </div>
+                          <select x-model="modalTask.growthGoalId"
+                                  style="padding-left: 2.5rem !important;"
+                                  class="w-full bg-slate-50 border border-slate-200 rounded-xl pr-4 py-2.5 text-sm text-slate-800 focus:outline-none focus:ring-2 focus:ring-teal-700/20 focus:border-teal-700 focus:bg-white transition-all duration-200">
+                              <option value="">Aucun objectif lié (Tâche libre)</option>
+                              {% for goal in growthGoals %}
+                                  <option value="{{ goal.id }}">{{ goal.title }}</option>
+                              {% endfor %}
+                          </select>
+                      </div>
+                  </div>
+ 
+                  <!-- Description -->
+                  <div>
+                      <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-1.5">Description</label>
+                      <div class="relative">
+                          <div class="absolute top-3 left-3.5 pointer-events-none text-slate-400">
+                              <i data-lucide="align-left" class="w-4 h-4"></i>
+                          </div>
+                          <textarea x-model="modalTask.description" rows="3"
+                                    style="padding-left: 2.5rem !important; padding-top: 0.6rem !important;"
+                                    class="w-full bg-slate-50 border border-slate-200 rounded-xl pr-4 py-2.5 text-sm text-slate-800 focus:outline-none focus:ring-2 focus:ring-teal-700/20 focus:border-teal-700 focus:bg-white transition-all duration-200"
+                                    placeholder="Détails supplémentaires..."></textarea>
+                      </div>
+                  </div>
+              </div>
+              
+              <!-- Footer Actions -->
+              <footer class="p-6 border-t border-slate-100 bg-slate-50/50 flex justify-between items-center">
+                  <div>
+                      <button class="text-red-650 hover:text-red-800 text-sm font-semibold flex items-center gap-1.5 cursor-pointer border-0 bg-transparent"
+                              x-show="isEditMode" @click="deleteTask()">
+                          <i data-lucide="trash-2" class="w-4 h-4"></i> Supprimer
+                      </button>
+                  </div>
+                  <div class="flex gap-3">
+                      <button class="px-4 py-2 text-sm font-semibold text-slate-500 hover:text-slate-700 transition-colors cursor-pointer border-0 bg-transparent"
+                              @click="taskModalOpen = false">Annuler</button>
+                      <button class="bg-teal-700 hover:bg-teal-800 text-white font-semibold py-2 px-5 rounded-xl shadow-md transition-colors cursor-pointer border-0"
+                              x-text="isEditMode ? 'Mettre à jour' : 'Enregistrer'"
+                              @click="saveTask()"></button>
+                  </div>
+              </footer>
+         </div>
+     </div>
+
+     {# 2. Event Detailed Read-Only View Dialog #}
+     <div class="fixed inset-0 bg-slate-900/40 backdrop-blur-md flex items-center justify-center p-4 z-50"
+          x-show="eventModalOpen" x-cloak
+          x-transition:enter="transition ease-out duration-300"
+          x-transition:enter-start="opacity-0 scale-95"
+          x-transition:enter-end="opacity-100 scale-100"
+          x-transition:leave="transition ease-in duration-200"
+          x-transition:leave-start="opacity-100 scale-100"
+          x-transition:leave-end="opacity-0 scale-95"
+          @click.self="eventModalOpen = false">
+          
+          <div class="bg-white rounded-3xl border border-slate-200 shadow-2xl max-w-md w-full overflow-hidden">
+              <header class="p-6 border-b border-slate-100 flex justify-between items-center bg-slate-50/50">
+                  <div class="flex items-center gap-2">
+                      <span class="px-2 py-0.5 rounded text-[9px] uppercase tracking-wide font-bold" 
+                            :class="getBadgeClass(selectedEvent.type)"
+                            x-text="selectedEvent.type"></span>
+                      <h3 class="text-xs font-bold text-slate-455 uppercase tracking-wider">Détails de l'élément</h3>
+                  </div>
+                  <button class="text-slate-400 hover:text-slate-655 transition-colors cursor-pointer border-0 bg-transparent" @click="eventModalOpen = false">
+                      <i data-lucide="x" class="w-5 h-5"></i>
+                  </button>
+              </header>
+              
+              <div class="p-6 space-y-4">
+                  <h2 class="text-xl font-serif font-bold text-slate-800 leading-tight" x-text="selectedEvent.title"></h2>
+                  
+                  <!-- Date details -->
+                  <div class="flex items-center gap-2 text-sm text-slate-500">
+                      <i data-lucide="calendar" class="w-4 h-4 text-slate-400"></i>
+                      <span x-text="formatDateFull(selectedEvent.date)"></span>
+                      <span x-show="selectedEvent.startTime" x-text="' de ' + selectedEvent.startTime + ' à ' + selectedEvent.endTime"></span>
+                  </div>
+
+                  <!-- Goal details -->
+                  <div x-show="selectedEvent.linkedGoal" class="p-4 bg-slate-50 border border-slate-200/50 rounded-2xl">
+                      <div class="text-[0.65rem] text-slate-400 font-bold uppercase tracking-wider mb-1">Objectif Lié</div>
+                      <p class="text-teal-700 text-sm font-semibold" x-text="selectedEvent.linkedGoal"></p>
+                  </div>
+
+                  <!-- Description -->
+                  <div x-show="selectedEvent.description">
+                      <div class="text-[0.65rem] text-slate-400 font-bold uppercase tracking-wider mb-1">Description</div>
+                      <p class="text-slate-600 text-sm leading-relaxed" x-text="selectedEvent.description"></p>
+                  </div>
+                  
+                  <!-- Realization Toggle -->
+                  <div class="pt-4 flex items-center justify-between border-t border-slate-100">
+                      <span class="text-sm font-bold text-slate-700">État de réalisation</span>
+                      <button class="font-semibold py-2 px-5 rounded-xl border flex items-center gap-2 transition-all active:scale-95 text-sm cursor-pointer"
+                              :class="selectedEvent.isCompleted ? 'bg-green-50 border-green-200 text-green-700' : 'bg-slate-50 border-slate-200 text-slate-600 hover:bg-slate-100'"
+                              @click="toggleEventStatus(selectedEvent); eventModalOpen = false;">
+                          <i data-lucide="check-circle-2" class="w-4 h-4"></i>
+                          <span x-text="selectedEvent.isCompleted ? 'Validé' : 'Marquer comme validé'"></span>
+                      </button>
+                  </div>
+              </div>
+              
+              <!-- Footer actions for tasks -->
+              <footer class="p-6 border-t border-slate-100 bg-slate-50/50 flex justify-end gap-3" x-show="selectedEvent.type === 'TASK'">
+                  <button class="px-5 py-2 text-sm font-bold border border-slate-200 hover:bg-slate-100 text-slate-600 rounded-xl transition-colors cursor-pointer bg-transparent"
+                          @click="eventModalOpen = false; openEditTaskModal(selectedEvent);">
+                      <i data-lucide="edit-3" class="w-3.5 h-3.5 inline mr-1"></i> Modifier
+                  </button>
+              </footer>
+           </div>
+      </div>
+
+</div>
+
+<!-- Interactive Alpine Logic -->
+<script>
+function plannerData() {
+    return {
+        // States
+        year: new Date().getFullYear(),
+        month: new Date().getMonth(),
+        events: [],
+        dailyIntention: '',
+        tempIntention: '',
+        editingIntention: false,
+        selectedDate: new Date(),
+        currentView: 'month',
+        filters: {
+            task: true,
+            habit: true,
+            milestone: true,
+            challenge: true
+        },
+        
+        // Modals
+        taskModalOpen: false,
+        eventModalOpen: false,
+        isEditMode: false,
+        modalTask: {
+            id: null,
+            title: '',
+            date: '',
+            startTime: '',
+            endTime: '',
+            growthGoalId: '',
+            description: ''
+        },
+        selectedEvent: {},
+
+        initPlanner() {
+            this.fetchEvents();
+            this.fetchDailyIntention();
+        },
+
+        get currentMonthName() {
+            const months = ["Janvier", "Février", "Mars", "Avril", "Mai", "Juin", "Juillet", "Août", "Septembre", "Octobre", "Novembre", "Décembre"];
+            return `${months[this.month]} ${this.year}`;
+        },
+
+        get calendarDays() {
+            let d = new Date(this.year, this.month, 1);
+            let dayOfWeek = d.getDay(); // 0 (Sun) - 6 (Sat)
+            // Mon = 0, ..., Sun = 6
+            let offset = dayOfWeek === 0 ? 6 : dayOfWeek - 1;
+            
+            let days = [];
+            
+            // Prev month padding
+            let prevMonthEnd = new Date(this.year, this.month, 0).getDate();
+            for (let i = offset - 1; i >= 0; i--) {
+                days.push({
+                    date: new Date(this.year, this.month - 1, prevMonthEnd - i),
+                    isCurrentMonth: false
+                });
+            }
+            
+            // Current month
+            let currentMonthEnd = new Date(this.year, this.month + 1, 0).getDate();
+            for (let i = 1; i <= currentMonthEnd; i++) {
+                days.push({
+                    date: new Date(this.year, this.month, i),
+                    isCurrentMonth: true
+                });
+            }
+            
+            // Next month padding
+            let totalCells = 42;
+            let remaining = totalCells - days.length;
+            for (let i = 1; i <= remaining; i++) {
+                days.push({
+                    date: new Date(this.year, this.month + 1, i),
+                    isCurrentMonth: false
+                });
+            }
+            
+            return days;
+        },
+
+        get upcomingEvents() {
+            const today = new Date();
+            today.setHours(0,0,0,0);
+            
+            const nextWeek = new Date(today);
+            nextWeek.setDate(today.getDate() + 7);
+            
+            return this.events
+                .filter(e => {
+                    const eDate = new Date(e.date);
+                    return eDate >= today && eDate <= nextWeek;
+                })
+                .filter(e => e.type !== 'HABIT')
+                .filter(e => this.matchesFilter(e.type))
+                .sort((a, b) => new Date(a.date) - new Date(b.date));
+        },
+
+        matchesFilter(type) {
+            if (type === 'TASK') return this.filters.task;
+            if (type === 'HABIT') return this.filters.habit;
+            if (type === 'MILESTONE') return this.filters.milestone;
+            if (type === 'CHALLENGE') return this.filters.challenge;
+            return false;
+        },
+
+        filteredEventsByDate(date) {
+            const dateStr = this.formatDateIso(date);
+            const priority = { 'MILESTONE': 1, 'TASK': 2, 'CHALLENGE': 3, 'HABIT': 4 };
+            return this.events
+                .filter(e => e.date.substring(0, 10) === dateStr)
+                .filter(e => this.matchesFilter(e.type))
+                .sort((a, b) => (priority[a.type] || 99) - (priority[b.type] || 99));
+        },
+
+        hasEventType(date, type) {
+            return this.filteredEventsByDate(date).some(e => e.type === type);
+        },
+
+        getUniqueEvents(date) {
+            return this.filteredEventsByDate(date).filter(e => e.type !== 'HABIT');
+        },
+
+        getCellTooltip(date) {
+            const events = this.filteredEventsByDate(date);
+            if (events.length === 0) return "Double-cliquer pour ajouter une tâche";
+            
+            const lines = events.map(e => {
+                const time = e.startTime ? `[${e.startTime}] ` : '';
+                const typeStr = e.type === 'TASK' ? 'Tâche' : e.type === 'HABIT' ? 'Rituel' : e.type === 'MILESTONE' ? 'Jalon' : 'Défi';
+                const status = e.isCompleted ? '✓' : '◯';
+                return `${status} ${time}${e.title} (${typeStr})`;
+            });
+            return `Double-cliquer pour ajouter une tâche\n\nActivités :\n${lines.join('\n')}`;
+        },
+
+        getHabitsProgress(date) {
+            if (!this.filters.habit) return null;
+            const habits = this.filteredEventsByDate(date).filter(e => e.type === 'HABIT');
+            if (habits.length === 0) return null;
+            
+            const completed = habits.filter(e => e.isCompleted).length;
+            return {
+                completed,
+                total: habits.length,
+                pct: Math.round((completed / habits.length) * 100)
+            };
+        },
+
+        get currentWeekName() {
+            const days = this.weekDays;
+            if (!days || days.length === 0) return '';
+            const start = days[0];
+            const end = days[6];
+            const options = { day: 'numeric', month: 'short' };
+            const startStr = start.toLocaleDateString('fr-FR', options);
+            const endStr = end.toLocaleDateString('fr-FR', { day: 'numeric', month: 'short', year: 'numeric' });
+            return `Semaine du ${startStr} au ${endStr}`;
+        },
+
+        get weekDays() {
+            const current = new Date(this.selectedDate);
+            const day = current.getDay();
+            const diff = current.getDate() - day + (day === 0 ? -6 : 1);
+            const monday = new Date(current.setDate(diff));
+            
+            const days = [];
+            for (let i = 0; i < 7; i++) {
+                const date = new Date(monday);
+                date.setDate(monday.getDate() + i);
+                days.push(date);
+            }
+            return days;
+        },
+
+        get ganttDates() {
+            const current = new Date(this.selectedDate);
+            const day = current.getDay();
+            const diff = current.getDate() - day + (day === 0 ? -6 : 1);
+            const monday = new Date(current.setDate(diff));
+            
+            const dates = [];
+            for (let i = 0; i < 14; i++) {
+                const date = new Date(monday);
+                date.setDate(monday.getDate() + i);
+                dates.push(date);
+            }
+            return dates;
+        },
+
+        get ganttEvents() {
+            const dates = this.ganttDates;
+            if (!dates || dates.length === 0) return [];
+            const startStr = this.formatDateIso(dates[0]);
+            const endStr = this.formatDateIso(dates[dates.length - 1]);
+            
+            return this.events.filter(e => {
+                if (e.type === 'HABIT') return false;
+                const eDate = e.date.substring(0, 10);
+                return eDate >= startStr && eDate <= endStr;
+            });
+        },
+
+        getGanttStyle(event) {
+            const dates = this.ganttDates;
+            if (!dates || dates.length === 0) return 'display: none';
+            const startStr = this.formatDateIso(dates[0]);
+            const endStr = this.formatDateIso(dates[dates.length - 1]);
+            
+            const eStart = (event.startDate || event.date).substring(0, 10);
+            const eEnd = event.date.substring(0, 10);
+            
+            let startIdx = dates.findIndex(d => this.formatDateIso(d) === eStart);
+            let endIdx = dates.findIndex(d => this.formatDateIso(d) === eEnd);
+            
+            if (startIdx === -1) {
+                if (eStart < startStr) startIdx = 0;
+                else return 'display: none';
+            }
+            if (endIdx === -1) {
+                if (eEnd > endStr) endIdx = dates.length - 1;
+                else return 'display: none';
+            }
+            
+            const colStart = startIdx + 1;
+            const colSpan = Math.max(1, endIdx - startIdx + 1);
+            
+            return `grid-column: ${colStart} / span ${colSpan};`;
+        },
+
+        get viewTitle() {
+            if (this.currentView === 'month') {
+                return this.currentMonthName;
+            } else if (this.currentView === 'week') {
+                return this.currentWeekName;
+            } else if (this.currentView === 'day') {
+                return this.formatDateFull(this.selectedDate);
+            } else if (this.currentView === 'gantt') {
+                return `Planification Gantt — ${this.currentMonthName}`;
+            }
+            return '';
+        },
+
+        prev() {
+            if (this.currentView === 'month') {
+                this.prevMonth();
+            } else if (this.currentView === 'week' || this.currentView === 'gantt') {
+                this.prevWeek();
+            } else if (this.currentView === 'day') {
+                this.prevDay();
+            }
+        },
+
+        next() {
+            if (this.currentView === 'month') {
+                this.nextMonth();
+            } else if (this.currentView === 'week' || this.currentView === 'gantt') {
+                this.nextWeek();
+            } else if (this.currentView === 'day') {
+                this.nextDay();
+            }
+        },
+
+        prevWeek() {
+            const current = new Date(this.selectedDate);
+            current.setDate(current.getDate() - 7);
+            this.selectedDate = current;
+            this.year = current.getFullYear();
+            this.month = current.getMonth();
+            this.fetchEvents();
+        },
+
+        nextWeek() {
+            const current = new Date(this.selectedDate);
+            current.setDate(current.getDate() + 7);
+            this.selectedDate = current;
+            this.year = current.getFullYear();
+            this.month = current.getMonth();
+            this.fetchEvents();
+        },
+
+        prevDay() {
+            const current = new Date(this.selectedDate);
+            current.setDate(current.getDate() - 1);
+            this.selectedDate = current;
+            this.year = current.getFullYear();
+            this.month = current.getMonth();
+            this.fetchEvents();
+        },
+
+        nextDay() {
+            const current = new Date(this.selectedDate);
+            current.setDate(current.getDate() + 1);
+            this.selectedDate = current;
+            this.year = current.getFullYear();
+            this.month = current.getMonth();
+            this.fetchEvents();
+        },
+
+        // Network interactions
+        fetchEvents() {
+            const startDate = new Date(this.year, this.month, 1);
+            startDate.setDate(startDate.getDate() - 7);
+            const endDate = new Date(this.year, this.month + 1, 0);
+            endDate.setDate(endDate.getDate() + 14);
+
+            const startStr = startDate.toISOString().split('T')[0];
+            const endStr = endDate.toISOString().split('T')[0];
+
+            fetch(`/api/planner/events?start=${startStr}&end=${endStr}`)
+                .then(res => res.json())
+                .then(data => {
+                    this.events = data;
+                });
+        },
+
+        fetchDailyIntention() {
+            fetch('/api/planner/daily-intention')
+                .then(res => res.json())
+                .then(data => {
+                    this.dailyIntention = data.intention;
+                    this.tempIntention = data.intention;
+                });
+        },
+
+        saveIntention() {
+            fetch('/api/planner/intention', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ intention: this.tempIntention })
+            })
+            .then(res => res.json())
+            .then(data => {
+                this.dailyIntention = data.intention;
+                this.editingIntention = false;
+            });
+        },
+
+        toggleEventStatus(event) {
+            const dateStr = new Date(event.date).toISOString().split('T')[0];
+            fetch(`/api/planner/toggle/${event.type}/${event.sourceId}`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ date: dateStr })
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.success) {
+                    event.isCompleted = data.isCompleted;
+                    this.fetchEvents(); // Re-sync logs and indicators
+                }
+            });
+        },
+
+        // Tasks operations
+        openAddTaskModal(date) {
+            this.isEditMode = false;
+            this.modalTask = {
+                id: null,
+                title: '',
+                date: this.formatDateIso(date),
+                startTime: '',
+                endTime: '',
+                growthGoalId: '',
+                description: ''
+            };
+            this.taskModalOpen = true;
+        },
+
+        openEditTaskModal(event) {
+            this.isEditMode = true;
+            this.modalTask = {
+                id: event.sourceId,
+                title: event.title,
+                date: this.formatDateIso(new Date(event.startDate || event.date)),
+                startTime: event.startTime || '',
+                endTime: event.endTime || '',
+                growthGoalId: event.linkedGoalId || '',
+                description: event.description || ''
+            };
+            this.taskModalOpen = true;
+        },
+
+        openEventModal(event) {
+            this.selectedEvent = event;
+            this.eventModalOpen = true;
+        },
+
+        saveTask() {
+            if (!this.modalTask.title || !this.modalTask.date) {
+                alert("Veuillez saisir un titre et une date.");
+                return;
+            }
+
+            const url = this.isEditMode 
+                ? `/api/planner/task/${this.modalTask.id}/update` 
+                : '/api/planner/task/create';
+
+            fetch(url, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(this.modalTask)
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.success) {
+                    this.taskModalOpen = false;
+                    this.fetchEvents();
+                } else {
+                    alert(data.error || "Une erreur est survenue.");
+                }
+            });
+        },
+
+        deleteTask() {
+            if (!confirm("Voulez-vous vraiment supprimer cette tâche ?")) return;
+
+            fetch(`/api/planner/task/${this.modalTask.id}/delete`, {
+                method: 'DELETE'
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.success) {
+                    this.taskModalOpen = false;
+                    this.fetchEvents();
+                }
+            });
+        },
+
+        // Month Switching navigation
+        prevMonth() {
+            if (this.month === 0) {
+                this.month = 11;
+                this.year--;
+            } else {
+                this.month--;
+            }
+            this.selectedDate = new Date(this.year, this.month, 1);
+            this.fetchEvents();
+        },
+
+        nextMonth() {
+            if (this.month === 11) {
+                this.month = 0;
+                this.year++;
+            } else {
+                this.month++;
+            }
+            this.selectedDate = new Date(this.year, this.month, 1);
+            this.fetchEvents();
+        },
+
+        today() {
+            const today = new Date();
+            this.year = today.getFullYear();
+            this.month = today.getMonth();
+            this.selectedDate = today;
+            this.fetchEvents();
+        },
+
+        // Utils
+        isToday(date) {
+            return date.toDateString() === new Date().toDateString();
+        },
+
+        isSelected(date) {
+            return date.toDateString() === this.selectedDate.toDateString();
+        },
+
+        // Safely converts Date to ISO YYYY-MM-DD local string
+        formatDateIso(date) {
+            const offset = date.getTimezoneOffset();
+            const localDate = new Date(date.getTime() - (offset*60*1000));
+            return localDate.toISOString().split('T')[0];
+        },
+
+        formatDateShort(dateStr) {
+            const date = new Date(dateStr);
+            return date.toLocaleDateString('fr-FR', { day: 'numeric', month: 'short' });
+        },
+
+        formatDateFull(dateStr) {
+            const date = new Date(dateStr);
+            return date.toLocaleDateString('fr-FR', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
+        },
+
+        getBadgeClass(type) {
+            if (type === 'TASK') return 'bg-blue-100 text-blue-700 border-blue-200';
+            if (type === 'HABIT') return 'bg-emerald-100 text-emerald-700 border-emerald-200';
+            if (type === 'MILESTONE') return 'bg-purple-100 text-purple-700 border-purple-200';
+            if (type === 'CHALLENGE') return 'bg-orange-100 text-orange-700 border-orange-200';
+            return 'bg-slate-100 text-slate-700 border-slate-200';
+        }
+    }
+}
+</script>
+{% endblock %}
