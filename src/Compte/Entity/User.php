@@ -80,6 +80,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(nullable: true)]
     private ?\DateTimeImmutable $termsAcceptedAt = null;
 
+    /** Dernière activité dans l'application (mise à jour au plus une fois par heure). */
+    #[ORM\Column(nullable: true)]
+    private ?\DateTimeImmutable $lastActiveAt = null;
+
     public function __construct()
     {
         $this->createdAt = new \DateTimeImmutable();
@@ -1466,6 +1470,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setTermsAcceptedAt(?\DateTimeImmutable $termsAcceptedAt): static
     {
         $this->termsAcceptedAt = $termsAcceptedAt;
+
+        return $this;
+    }
+
+    public function getLastActiveAt(): ?\DateTimeImmutable
+    {
+        return $this->lastActiveAt;
+    }
+
+    public function setLastActiveAt(?\DateTimeImmutable $lastActiveAt): static
+    {
+        $this->lastActiveAt = $lastActiveAt;
 
         return $this;
     }

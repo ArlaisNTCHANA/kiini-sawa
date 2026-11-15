@@ -25,6 +25,7 @@ class SecurityGuardsTest extends WebTestCase
         'app_login', 'app_logout',
         'app_register', 'app_forgot_password', 'app_reset_password', 'app_reset_password_form',
         'app_legal',
+        'app_notification_unsubscribe', // lien signé reçu par email
     ];
 
     public function testEveryPageRequiresAuthenticationExceptPublicOnes(): void

@@ -11,4 +11,24 @@ enum NotificationType: string
     case FEEDBACK_RECEIVED = 'FEEDBACK_RECEIVED';
     case SUGGESTION_RECEIVED = 'SUGGESTION_RECEIVED';
     case COMMENT_RECEIVED = 'COMMENT_RECEIVED';
+    // Rappels (phase 4)
+    case WEEKLY_REVIEW_REMINDER = 'WEEKLY_REVIEW_REMINDER';
+    case MONTHLY_REVIEW_REMINDER = 'MONTHLY_REVIEW_REMINDER';
+    case HABIT_REMINDER = 'HABIT_REMINDER';
+    case GOAL_DEADLINE = 'GOAL_DEADLINE';
+    case PARTNER_INACTIVE = 'PARTNER_INACTIVE';
+
+    /** Icône Lucide affichée dans le centre de notifications. */
+    public function icon(): string
+    {
+        return match ($this) {
+            self::CONNECTION_REQUEST, self::CONNECTION_ACCEPTED, self::PARTNER_INACTIVE => 'users',
+            self::CHALLENGE_INVITE, self::CHALLENGE_ACCEPTED => 'trophy',
+            self::FEEDBACK_RECEIVED, self::COMMENT_RECEIVED => 'message-circle',
+            self::SUGGESTION_RECEIVED => 'lightbulb',
+            self::WEEKLY_REVIEW_REMINDER, self::MONTHLY_REVIEW_REMINDER => 'calendar-check',
+            self::HABIT_REMINDER => 'repeat',
+            self::GOAL_DEADLINE => 'flag',
+        };
+    }
 }

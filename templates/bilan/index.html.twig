@@ -239,6 +239,9 @@
         <a href="{{ path('app_weekly_review') }}" class="bilan-btn" style="margin-top: 1.25rem; display: inline-flex; align-items: center; gap: .5rem; text-decoration: none;">
             <i data-lucide="calendar-check" class="w-4 h-4"></i> Faire ma revue de la semaine
         </a>
+        <a href="{{ path('app_monthly_review') }}" class="bilan-btn" style="margin-top: 1.25rem; margin-left: .5rem; display: inline-flex; align-items: center; gap: .5rem; text-decoration: none; background: var(--bg-alt); color: var(--fg);">
+            <i data-lucide="calendar-range" class="w-4 h-4"></i> Revue du mois
+        </a>
     </header>
     <div style="max-width: 760px; margin: 0 auto 1.5rem;">{{ book_panel('bilan') }}</div>
 

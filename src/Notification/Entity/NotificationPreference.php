@@ -59,8 +59,13 @@ class NotificationPreference
     #[ORM\Column]
     private bool $notifyWeeklyReview = true;
 
+    /** Jour du rappel de revue hebdomadaire : 0 = dimanche … 6 = samedi. */
     #[ORM\Column]
     private int $weeklyReviewDay = 0;
+
+    /** Prévenir quand un partenaire de redevabilité est inactif depuis une semaine. */
+    #[ORM\Column(options: ['default' => true])]
+    private bool $notifyPartnerInactive = true;
 
     #[ORM\Column(length: 50)]
     private string $digestFrequency = 'WEEKLY';
@@ -262,6 +267,18 @@ class NotificationPreference
     public function setNotifyWeeklyReview(bool $notifyWeeklyReview): static
     {
         $this->notifyWeeklyReview = $notifyWeeklyReview;
+
+        return $this;
+    }
+
+    public function isNotifyPartnerInactive(): bool
+    {
+        return $this->notifyPartnerInactive;
+    }
+
+    public function setNotifyPartnerInactive(bool $notifyPartnerInactive): static
+    {
+        $this->notifyPartnerInactive = $notifyPartnerInactive;
 
         return $this;
     }

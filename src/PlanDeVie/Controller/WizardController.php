@@ -5,6 +5,7 @@ namespace App\PlanDeVie\Controller;
 use App\PlanDeVie\Entity\PlanDeVie;
 use App\PlanDeVie\Service\LifePlanWizardSaver;
 use App\PlanDeVie\Service\PlanCatalog;
+use App\PlanDeVie\Service\PlanSnapshotService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -22,7 +23,7 @@ use Symfony\Component\Routing\Attribute\Route;
 class WizardController extends AbstractPlanController
 {
     #[Route('/plan-de-vie/assistant', name: 'app_plan_wizard', methods: ['GET', 'POST'])]
-    public function wizard(Request $request, LifePlanWizardSaver $saver, EntityManagerInterface $em): Response
+    public function wizard(Request $request, LifePlanWizardSaver $saver, EntityManagerInterface $em, PlanSnapshotService $snapshots): Response
     {
         $user = $this->user();
         $plan = strtoupper($request->query->getString('plan'));
@@ -47,6 +48,9 @@ class WizardController extends AbstractPlanController
             }
 
             $saver->save($user, $request->request, $single ? [$step] : $allowedSteps);
+            if (!$single) {
+                $snapshots->snapshotOncePerDay($user, 'Après l\'assistant · '.PlanCatalog::label($plan ?: 'VIE'));
+            }
             $this->addFlash('success', 'Votre plan a été enregistré.');
 
             if ('' !== $plan) {

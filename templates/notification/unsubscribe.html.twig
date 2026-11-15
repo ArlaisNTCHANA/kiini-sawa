@@ -1,0 +1,18 @@
+{% extends 'compte/_auth_layout.html.twig' %}
+
+{% block title %}KIINI SAWA — Désabonnement{% endblock %}
+
+{% block content %}
+    {% if not valid %}
+        <h1 class="auth-title">Lien invalide</h1>
+        <p class="auth-text">Ce lien de désabonnement n'est pas valable. Vous pouvez régler vos rappels depuis votre profil.</p>
+    {% elseif done %}
+        <h1 class="auth-title">C'est noté</h1>
+        <p class="auth-text">Vous ne recevrez plus ce type de rappel. Vous pouvez le réactiver à tout moment dans votre profil.</p>
+    {% else %}
+        <h1 class="auth-title">Se désabonner</h1>
+        <p class="auth-text">Ne plus recevoir ce type de rappel ?</p>
+        <form method="post"><button type="submit">Confirmer</button></form>
+    {% endif %}
+    <div class="auth-links"><a href="{{ path('app_login') }}">Aller à KIINI SAWA</a></div>
+{% endblock %}

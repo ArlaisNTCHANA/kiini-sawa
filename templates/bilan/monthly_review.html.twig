@@ -1,0 +1,62 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Revue du mois{% endblock %}
+
+{% block body %}
+<div style="max-width: 820px; margin: 0 auto; padding: 2.5rem 1.25rem 8rem;">
+    <a href="{{ path('app_bilan') }}" style="font-size: .8rem; font-weight: 700; color: var(--fg-muted); text-transform: uppercase; letter-spacing: .05em; text-decoration: none;">← Bilan</a>
+    <h1 style="font-family: var(--font-serif); color: var(--primary); font-size: 2rem; margin-top: .4rem;">Revue de {{ monthLabel }}</h1>
+    <p style="color: var(--fg-muted); margin: .35rem 0 1.5rem;">Prendre de la hauteur une fois par mois : regarder le chemin parcouru et décider de la suite.{% if review %}<br><strong>Revue déjà faite</strong> : vous pouvez la compléter.{% endif %}</p>
+
+    {{ book_panel('bilan') }}
+
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: .75rem; margin-bottom: 1.5rem;">
+        {% for stat in [
+            [weekly|length, 'revue' ~ (weekly|length > 1 ? 's' : '') ~ ' hebdomadaire' ~ (weekly|length > 1 ? 's' : '')],
+            [averageScore is not null ? averageScore|number_format(1, ',') ~ '/10' : '—', 'engagement moyen'],
+            [averageProgress is not null ? averageProgress ~ ' %' : '—', 'avancement des objectifs'],
+            [goalsDone ~ '/' ~ goalsCount, 'objectifs atteints'],
+        ] %}
+            <div style="background: var(--card-bg); box-shadow: var(--card-shadow); border-radius: var(--r-lg); padding: 1rem 1.1rem;">
+                <div style="font-family: var(--font-serif); font-size: 1.5rem; color: var(--primary); font-weight: 600;">{{ stat[0] }}</div>
+                <div style="font-size: .78rem; color: var(--fg-muted);">{{ stat[1] }}</div>
+            </div>
+        {% endfor %}
+    </div>
+
+    {% if weekly|length %}
+        <div style="background: var(--card-bg); box-shadow: var(--card-shadow); border-radius: var(--r-lg); padding: 1.1rem 1.3rem; margin-bottom: 1.5rem; font-size: .9rem;">
+            <strong>Vos priorités et leçons de ce mois</strong>
+            <ul style="padding-left: 1.2rem; margin-top: .5rem; color: var(--fg-light);">
+                {% for w in weekly %}
+                    {% if w.lesson %}<li>Semaine du {{ w.weekStart|date('d/m') }} : {{ w.lesson }}</li>{% endif %}
+                {% endfor %}
+            </ul>
+        </div>
+    {% endif %}
+
+    <form method="post" style="background: var(--card-bg); box-shadow: var(--card-shadow); border-radius: var(--r-lg); padding: 1.5rem;">
+        {% for field, meta in fields %}
+            <div style="display: flex; flex-direction: column; gap: .3rem; margin-bottom: 1.1rem;">
+                <label for="{{ field }}" style="font-weight: 700;">{{ meta[0] }}</label>
+                <span style="font-size: .8rem; color: var(--fg-muted);">{{ meta[1] }}</span>
+                <textarea id="{{ field }}" name="{{ field }}" rows="3" style="padding: .65rem .85rem; border: 1.5px solid #E2E8F0; border-radius: var(--r-md); font: inherit;">{{ attribute(review, field) ?? '' }}</textarea>
+            </div>
+        {% endfor %}
+        <input type="hidden" name="_csrf_token" value="{{ csrf_token('monthly_review') }}">
+        <div style="text-align: right;"><button type="submit" style="padding: .85rem 1.5rem; border: none; border-radius: var(--r-md); background: var(--primary); color: #fff; font: inherit; font-weight: 700; cursor: pointer;">Enregistrer ma revue du mois</button></div>
+    </form>
+
+    {% if history|length > 1 or (history|length == 1 and not review) %}
+        <div style="margin-top: 2rem;">
+            <h2 style="font-family: var(--font-serif); font-size: 1.2rem; margin-bottom: .6rem;">Mes décisions des mois précédents</h2>
+            {% for h in history %}
+                {% if not review or h.id != review.id %}
+                    <p style="padding: .5rem 0; border-top: 1px solid #F1F5F9; font-size: .9rem;"><strong>{{ h.month|format_date(pattern: 'MMMM y', locale: 'fr')|capitalize }}</strong> : {{ h.decision ?? '—' }}</p>
+                {% endif %}
+            {% endfor %}
+        </div>
+    {% endif %}
+    <p style="margin-top: 1.5rem; font-size: .85rem;"><a href="{{ path('app_plan_history') }}" style="color: var(--primary); font-weight: 600;">🕰️ Historique de mes plans</a></p>
+</div>
+{% endblock %}

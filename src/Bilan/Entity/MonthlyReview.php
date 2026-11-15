@@ -8,6 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
 use App\Compte\Entity\User;
 
 #[ORM\Entity(repositoryClass: MonthlyReviewRepository::class)]
+#[ORM\UniqueConstraint(name: 'uniq_monthly_review_user_month', columns: ['user_id', 'month'])]
 #[ORM\HasLifecycleCallbacks]
 class MonthlyReview
 {

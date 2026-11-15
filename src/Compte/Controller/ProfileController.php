@@ -12,6 +12,7 @@ use App\Compte\Service\AccountMailer;
 use App\Compte\Service\AccountTokenService;
 use App\Compte\Service\PasswordPolicy;
 use App\Compte\Service\UserDataExporter;
+use App\Notification\Service\Notifier;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\SecurityBundle\Security;
@@ -48,8 +49,21 @@ class ProfileController extends AbstractController
     ) {
     }
 
+    /** Préférences de notification modifiables depuis le profil : champ du formulaire => setter. */
+    public const NOTIFICATION_FLAGS = [
+        'enableInApp' => 'setEnableInApp',
+        'enableEmailDigest' => 'setEnableEmailDigest',
+        'enableEmailInstant' => 'setEnableEmailInstant',
+        'notifyWeeklyReview' => 'setNotifyWeeklyReview',
+        'notifyMonthlyReview' => 'setNotifyMonthlyReview',
+        'notifyHabitReminder' => 'setNotifyHabitReminder',
+        'notifyGoalDeadline' => 'setNotifyGoalDeadline',
+        'notifyPartnerInactive' => 'setNotifyPartnerInactive',
+        'notifyConnection' => 'setNotifyConnection',
+    ];
+
     #[Route('', name: '', methods: ['GET'])]
-    public function index(): Response
+    public function index(Notifier $notifier): Response
     {
         $user = $this->currentUser();
 
@@ -57,6 +71,7 @@ class ProfileController extends AbstractController
             'profile' => $user->getUserProfile(),
             'pendingEmail' => $this->em->getRepository(AccountToken::class)->findOneBy(['user' => $user, 'purpose' => AccountToken::CHANGE_EMAIL], ['id' => 'DESC'])?->getPayload(),
             'minPasswordLength' => PasswordPolicy::MIN_LENGTH,
+            'prefs' => $notifier->preferences($user),
         ]);
     }
 
@@ -87,6 +102,24 @@ class ProfileController extends AbstractController
         $this->addFlash('success', 'Vos informations ont été enregistrées.');
 
         return $this->redirectToRoute('app_profile');
+    }
+
+    #[Route('/notifications', name: '_notifications', methods: ['POST'])]
+    public function updateNotifications(Request $request, Notifier $notifier): Response
+    {
+        $payload = $request->getPayload();
+        if (!$this->isCsrfTokenValid('profile_notifications', $payload->getString('_csrf_token'))) {
+            return $this->expired();
+        }
+        $prefs = $notifier->preferences($this->currentUser());
+        foreach (self::NOTIFICATION_FLAGS as $field => $setter) {
+            $prefs->{$setter}($payload->getBoolean($field));
+        }
+        $prefs->setWeeklyReviewDay(max(0, min(6, $payload->getInt('weeklyReviewDay'))));
+        $this->em->flush();
+        $this->addFlash('success', 'Vos préférences de notification ont été enregistrées.');
+
+        return $this->redirectToRoute('app_profile', ['_fragment' => 'notifications']);
     }
 
     #[Route('/mot-de-passe', name: '_password', methods: ['POST'])]

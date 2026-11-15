@@ -107,6 +107,49 @@
         </details>
     </section>
 
+    {# ── Notifications et rappels ───────────────────────────── #}
+    <section class="p-card" id="notifications">
+        <h2><i data-lucide="bell" style="width:20px;height:20px;"></i> Notifications et rappels</h2>
+        <p class="p-sub">Des rappels doux pour garder le cap. Chaque email contient aussi un lien de désabonnement.</p>
+        <form method="post" action="{{ path('app_profile_notifications') }}">
+            {% set toggles = [
+                ['enableInApp', prefs.enableInApp, 'Afficher les notifications dans l\'application', 'La cloche en haut de l\'écran'],
+                ['enableEmailDigest', prefs.enableEmailDigest, 'Recevoir les rappels par email', 'Revues, rituels, échéances, partenaires'],
+                ['enableEmailInstant', prefs.enableEmailInstant, 'Recevoir par email les demandes de partenaires', 'Dès qu\'elles arrivent'],
+            ] %}
+            {% for t in toggles %}
+                <label style="display:flex;justify-content:space-between;align-items:center;gap:1rem;padding:.6rem 0;border-top:1px solid #F1F5F9;cursor:pointer;">
+                    <span><span style="font-weight:600;">{{ t[2] }}</span><br><span class="p-hint">{{ t[3] }}</span></span>
+                    <input type="checkbox" name="{{ t[0] }}" value="1" {{ t[1] ? 'checked' }} style="width:1.1rem;height:1.1rem;accent-color:var(--primary);">
+                </label>
+            {% endfor %}
+            <p class="wr-label" style="margin:1.25rem 0 .25rem;font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--fg-muted);">Me rappeler</p>
+            {% set reminders = [
+                ['notifyWeeklyReview', prefs.notifyWeeklyReview, 'Ma revue de la semaine'],
+                ['notifyMonthlyReview', prefs.notifyMonthlyReview, 'Ma revue du mois (début de mois)'],
+                ['notifyHabitReminder', prefs.notifyHabitReminder, 'Mes rituels, après 3 jours sans les cocher'],
+                ['notifyGoalDeadline', prefs.notifyGoalDeadline, 'Mes échéances, 7 jours avant'],
+                ['notifyPartnerInactive', prefs.notifyPartnerInactive, 'D\'encourager un partenaire inactif depuis une semaine'],
+                ['notifyConnection', prefs.notifyConnection, 'Les demandes de partenariat'],
+            ] %}
+            {% for r in reminders %}
+                <label style="display:flex;align-items:center;gap:.6rem;padding:.35rem 0;cursor:pointer;">
+                    <input type="checkbox" name="{{ r[0] }}" value="1" {{ r[1] ? 'checked' }} style="accent-color:var(--primary);"> {{ r[2] }}
+                </label>
+            {% endfor %}
+            <div class="p-field" style="max-width:260px;margin-top:1rem;">
+                <label for="weeklyReviewDay">Jour de ma revue hebdomadaire</label>
+                <select id="weeklyReviewDay" name="weeklyReviewDay" style="padding:.65rem .9rem;border:1.5px solid #E2E8F0;border-radius:var(--r-md);font:inherit;">
+                    {% for i, d in ['Dimanche', 'Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi'] %}
+                        <option value="{{ i }}" {{ prefs.weeklyReviewDay == i ? 'selected' }}>{{ d }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <input type="hidden" name="_csrf_token" value="{{ csrf_token('profile_notifications') }}">
+            <div class="p-actions"><button type="submit" class="p-btn">Enregistrer mes préférences</button></div>
+        </form>
+    </section>
+
     {# ── Données personnelles (RGPD) ────────────────────────── #}
     <section class="p-card" id="donnees">
         <h2><i data-lucide="database" style="width:20px;height:20px;"></i> Mes données</h2>

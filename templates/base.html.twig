@@ -393,6 +393,14 @@
 
         {# User Zone #}
         <div class="topnav-user-zone">
+            {% set unread = unread_notifications() %}
+            <a href="{{ path('app_notifications') }}" title="Notifications{{ unread ? ' (' ~ unread ~ ' non lue' ~ (unread > 1 ? 's') ~ ')' }}" aria-label="Notifications"
+               style="position: relative; display: inline-flex; align-items: center; justify-content: center; width: 2.4rem; height: 2.4rem; border-radius: 50%; color: var(--fg-light); margin-right: .25rem;">
+                <i data-lucide="bell" style="width: 19px; height: 19px;"></i>
+                {% if unread %}
+                    <span style="position: absolute; top: 2px; right: 2px; min-width: 1.05rem; height: 1.05rem; padding: 0 .25rem; border-radius: 999px; background: var(--danger); color: #fff; font-size: .62rem; font-weight: 800; display: flex; align-items: center; justify-content: center;">{{ unread > 9 ? '9+' : unread }}</span>
+                {% endif %}
+            </a>
             <div class="topnav-user">
                 {# Bouton trigger #}
                 <button class="topnav-user-trigger" @click="userOpen = !userOpen">
@@ -448,7 +456,7 @@
                         {% endfor %}
                     </div>
 
-                    {# Groupe « Réseau & Alertes » (Notifications) : à réactiver en phase 4. #}
+                    {# Notifications : cloche dans la barre du haut et page /notifications #}
 
                     {% if is_granted('ROLE_ADMIN') %}
                     <div class="dd-divider"></div>
@@ -520,6 +528,7 @@
                         border-radius:1.25rem;padding:0.5rem;
                         box-shadow:0 16px 40px rgba(44,85,89,0.15),0 0 0 1px rgba(44,85,89,0.06);">
                 {% set mobileMore = [
+                    { label: 'Notifications' ~ (unread_notifications() ? ' (' ~ unread_notifications() ~ ')' : ''), path: path('app_notifications'), icon: 'bell' },
                     { label: 'Mes Découvertes', path: path('app_personality_index'), icon: 'sparkles' },
                     { label: 'Stratégies',   path: path('app_strategies'),  icon: 'trending-up' },
                     { label: 'Organisation', path: path('app_planner'),        icon: 'calendar' },

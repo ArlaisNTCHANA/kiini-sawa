@@ -8,7 +8,7 @@ Le code de KIINI SAWA est rangé **par module métier**. Chaque module regroupe 
 |---|---|---|---|---|
 | [Abonnement](modules/abonnement.md) | Abonnements et transactions (Stripe à venir) | 2 | 0 | Non |
 | [Admin](modules/admin.md) | Back-office | 2 | 3 | Partielle |
-| [Bilan](modules/bilan.md) | Bilans et revues : revue hebdomadaire sur les 4 plans, scores de croissance, revue mensuelle | 3 | 3 | Oui |
+| [Bilan](modules/bilan.md) | Bilans et revues : revue hebdomadaire sur les 4 plans, revue mensuelle, scores de croissance | 3 | 4 | Oui |
 | [Coaching](modules/coaching.md) | Mentorat | 4 | 0 | Non |
 | [Compte](modules/compte.md) | Identité et accès : inscription, vérification email, profil, RGPD, onboarding, pages légales | 4 | 18 | Oui |
 | [Dashboard](modules/dashboard.md) | Accueil (citation du jour, raison d'être, échéances) et administration des citations | 1 | 6 | Oui |
@@ -17,7 +17,7 @@ Le code de KIINI SAWA est rangé **par module métier**. Chaque module regroupe 
 | [Journal](modules/journal.md) | Journal de réflexion et collections | 2 | 6 | Oui |
 | [Listes](modules/listes.md) | Listes personnelles (UserList / ListItem) | 2 | 0 | Non |
 | [Methode](modules/methode.md) | La méthode : chapitres du livre et encarts « Comprendre cette étape » | 0 | 2 | Oui |
-| [Notification](modules/notification.md) | Notifications, préférences, modèles d'email | 3 | 0 | Non |
+| [Notification](modules/notification.md) | Centre de notifications, préférences, rappels par email | 3 | 5 | Oui |
 | [Personnalite](modules/personnalite.md) | Tests de personnalité (DISC, MBTI, Ennéagramme, Big 5…), calcul des scores et administration du référentiel | 4 | 11 | Oui |
 | [PlanDHygiene](modules/plan_d_hygiene.md) | Plan d'Hygiène de Vie | 3 | 3 | Oui |
 | [PlanDeCroissance](modules/plan_de_croissance.md) | Plan de Croissance : Caractère & Conviction, Relation & Réseau, principes, export PDF | 7 | 6 | Oui |

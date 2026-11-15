@@ -268,9 +268,10 @@ Les estimations sont des jours de développement pour une personne. Les phases 0
 
 ### Phase 4 — Rétention (5–7 j)
 
-- [ ] Centre de notifications (cloche + page), préférences.
-- [ ] Rappels par email : revue hebdomadaire, rituels oubliés, partenaire inactif (Messenger + tâche planifiée).
-- [ ] Revue mensuelle et historique des plans (versions datées).
+- [x] Centre de notifications (cloche + page), préférences dans le profil, désabonnement en un clic.
+- [x] Rappels : revue hebdomadaire, revue mensuelle, rituels oubliés, échéances à 7 jours, partenaire inactif (`app:reminders:send`, à planifier chaque jour ; voir docs/modules/notification.md).
+- [x] Revue mensuelle (`/bilan/revue-mensuelle`) et historique des plans (versions datées, `/plan-de-vie/historique`).
+- [ ] À la mise en ligne : tâche planifiée quotidienne et worker Messenger chez l'hébergeur.
 
 ### Phase 5 — Monétisation (6–8 j)
 

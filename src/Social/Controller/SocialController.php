@@ -5,7 +5,7 @@ namespace App\Social\Controller;
 use App\Compte\Entity\User;
 use App\Social\Entity\Connection;
 use App\Coaching\Entity\GoalSuggestion;
-use App\Notification\Entity\Notification;
+use App\Notification\Service\Notifier;
 use App\Social\Entity\Comment;
 use App\PlanDeCroissance\Entity\GrowthGoal;
 use App\PlanDeCroissance\Entity\PlanDeCroissance;
@@ -116,7 +116,7 @@ class SocialController extends AbstractController
     }
 
     #[Route('/api/social/connection/add', name: 'api_social_connection_add', methods: ['POST'])]
-    public function addConnection(Request $request, EntityManagerInterface $em): JsonResponse
+    public function addConnection(Request $request, EntityManagerInterface $em, Notifier $notifier): JsonResponse
     {
         /** @var User $user */
         $user = $this->getUser();
@@ -159,22 +159,16 @@ class SocialController extends AbstractController
 
         $em->persist($connection);
 
-        // Notification for receiver
-        $notif = new Notification();
-        $notif->setUser($receiver);
-        $notif->setType(NotificationType::CONNECTION_REQUEST);
-        $notif->setTitle('Nouvelle demande de connexion');
-        $notif->setMessage(sprintf('%s vous a envoyé une demande de connexion.', $user->getEmail()));
-        $notif->setActionUrl('/social');
-        $em->persist($notif);
-
         $em->flush();
+
+        $notifier->notify($receiver, NotificationType::CONNECTION_REQUEST, 'Nouvelle demande de partenariat',
+            sprintf('%s souhaite devenir votre partenaire de redevabilité.', $user->getDisplayName()), '/social');
 
         return new JsonResponse(['success' => true]);
     }
 
     #[Route('/api/social/connection/{id}/respond', name: 'api_social_connection_respond', methods: ['POST'])]
-    public function respondConnection(int $id, Request $request, EntityManagerInterface $em): JsonResponse
+    public function respondConnection(int $id, Request $request, EntityManagerInterface $em, Notifier $notifier): JsonResponse
     {
         /** @var User $user */
         $user = $this->getUser();
@@ -190,16 +184,10 @@ class SocialController extends AbstractController
         if ($action === 'ACCEPT') {
             $connection->setStatus('ACCEPTED');
 
-            // Notify requester
-            $notif = new Notification();
-            $notif->setUser($connection->getRequester());
-            $notif->setType(NotificationType::CONNECTION_ACCEPTED);
-            $notif->setTitle('Demande de connexion acceptée');
-            $notif->setMessage(sprintf('%s a accepté votre demande de connexion.', $user->getEmail()));
-            $notif->setActionUrl('/social');
-            $em->persist($notif);
-
             $em->flush();
+
+            $notifier->notify($connection->getRequester(), NotificationType::CONNECTION_ACCEPTED, 'Partenariat accepté',
+                sprintf('%s a accepté votre demande : vous êtes maintenant partenaires.', $user->getDisplayName()), '/social');
             return new JsonResponse(['success' => true]);
         } elseif ($action === 'REJECT') {
             $em->remove($connection);

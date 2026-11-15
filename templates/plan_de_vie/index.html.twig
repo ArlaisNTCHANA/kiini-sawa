@@ -964,7 +964,10 @@
     </header>
 
     <!-- Tab navigation -->
-    <div style="max-width: 1100px; margin: 0 auto; padding: 0 1rem;">{{ book_panel('plan_de_vie') }}</div>
+    <div style="max-width: 1100px; margin: 0 auto; padding: 0 1rem;">
+        {{ book_panel('plan_de_vie') }}
+        <p style="text-align: right; font-size: .85rem; margin: -.5rem 0 1rem;"><a href="{{ path('app_plan_history') }}" style="color: var(--primary); font-weight: 600; text-decoration: none;">🕰️ Historique de mes plans</a> · <a href="{{ path('app_plan_de_vie_pdf') }}" data-turbo="false" style="color: var(--primary); font-weight: 600; text-decoration: none;">Télécharger en PDF</a></p>
+    </div>
     <div id="rubrics-start">
         <nav class="tabs-nav">
             <button class="tab-btn active" data-tab="foundations">
