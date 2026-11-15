@@ -1,0 +1,184 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ org.name }}{% endblock %}
+
+{% block body %}
+<style>
+    .og-wrap { max-width: 1000px; margin: 0 auto; padding: 2.5rem 1.25rem 8rem; }
+    .og-card { background: var(--card-bg); border-radius: var(--r-lg); box-shadow: var(--card-shadow); padding: 1.5rem; margin-bottom: 1.25rem; }
+    .og-card h2 { font-family: var(--font-serif); font-size: 1.25rem; margin-bottom: .75rem; }
+    .og-kpis { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: .75rem; margin-bottom: 1.25rem; }
+    .og-kpi { background: var(--card-bg); box-shadow: var(--card-shadow); border-radius: var(--r-lg); padding: 1rem 1.1rem; }
+    .og-kpi b { display: block; font-family: var(--font-serif); font-size: 1.6rem; color: var(--primary); }
+    .og-kpi span { font-size: .78rem; color: var(--fg-muted); }
+    .og-table { width: 100%; border-collapse: collapse; font-size: .88rem; }
+    .og-table th { text-align: left; color: var(--fg-muted); font-weight: 600; font-size: .75rem; text-transform: uppercase; letter-spacing: .04em; padding: .5rem .4rem; }
+    .og-table td { padding: .65rem .4rem; border-top: 1px solid #F1F5F9; vertical-align: top; }
+    .og-pill { display: inline-block; padding: .1rem .5rem; border-radius: 999px; font-size: .72rem; font-weight: 700; background: var(--bg-alt); color: var(--fg-light); margin: 0 .2rem .2rem 0; }
+    .og-input { padding: .55rem .75rem; border: 1.5px solid #E2E8F0; border-radius: var(--r-md); font: inherit; font-size: .88rem; background: #fff; }
+    .og-btn { padding: .6rem 1.1rem; border: none; border-radius: var(--r-md); background: var(--primary); color: #fff; font: inherit; font-weight: 700; font-size: .88rem; cursor: pointer; }
+    .og-btn.sec { background: var(--bg-alt); color: var(--fg); }
+    .og-mini { font-size: .78rem; color: var(--fg-muted); }
+</style>
+
+<div class="og-wrap">
+    {% if memberships|length > 1 %}
+        <p class="og-mini" style="margin-bottom: .5rem;">Mes organisations :
+            {% for m in memberships %}<a href="{{ path('app_organisation_index', {org: m.organisation.id}) }}" style="margin-right: .6rem; {{ m.organisation == org ? 'font-weight: 700; color: var(--primary);' }}">{{ m.organisation.name }}</a>{% endfor %}
+        </p>
+    {% endif %}
+    <h1 style="font-family: var(--font-serif); color: var(--primary); font-size: 2rem;">{{ org.name }}</h1>
+    <p style="color: var(--fg-muted); margin: .25rem 0 1.5rem;">{{ org.typeLabel }} · vous êtes <strong>{{ me.roleLabel|lower }}</strong>
+        {% if org.licenseValid %} · {{ org.usedSeats }}/{{ org.seats }} places, valables jusqu'au {{ org.seatsValidUntil|format_date(pattern: 'd MMMM y', locale: 'fr') }}{% else %} · <span style="color: var(--accent); font-weight: 600;">places non actives</span>{% endif %}
+    </p>
+
+    {% if me.manager %}
+        <div class="og-kpis">
+            <div class="og-kpi"><b>{{ summary.members }}</b><span>membres suivis</span></div>
+            <div class="og-kpi"><b>{{ summary.onboarded }} %</b><span>ont posé leurs fondations</span></div>
+            <div class="og-kpi"><b>{{ summary.active }} %</b><span>actifs cette semaine</span></div>
+            <div class="og-kpi"><b>{{ summary.reviewers }} %</b><span>ont fait une revue (4 sem.)</span></div>
+        </div>
+    {% endif %}
+
+    {# ── Membres ─────────────────────────────────────── #}
+    {% if me.manager or me.role == 'MENTOR' %}
+        <section class="og-card">
+            <h2>{{ me.manager ? 'Membres' : 'Les membres qui me sont confiés' }}</h2>
+            <p class="og-mini" style="margin-bottom: .75rem;">Indicateurs d'engagement uniquement. Le contenu des plans n'est lisible que si le membre l'a accepté ; le journal reste toujours privé.</p>
+            <div style="overflow-x: auto;">
+            <table class="og-table">
+                <tr><th>Membre</th><th>Engagement</th><th>Plans</th><th>Revues</th><th>Rituels 7 j</th>{% if me.manager %}<th>Rôle et accompagnateur</th>{% endif %}</tr>
+                {% for m in members %}
+                    {% set s = stats[m.id] %}
+                    <tr>
+                        <td><strong>{{ m.user.displayName }}</strong>{% if m == me %} <span class="og-mini">(vous)</span>{% endif %}<br><span class="og-mini">{{ m.roleLabel }}{{ m.mentor ? ' · suivi par ' ~ m.mentor.user.displayName }}</span>
+                            {% if m != me and m.sharePlans %}<br><a href="{{ path('app_organisation_member_plan', {id: org.id, memberId: m.id}) }}" style="font-size: .8rem; color: var(--primary); font-weight: 600;">Lire ses plans →</a>{% elseif m != me %}<br><span class="og-mini">🔒 plans non partagés</span>{% endif %}
+                        </td>
+                        <td>{% if not s.onboarded %}<span class="og-pill" style="background: #FEF3C7; color: #92400E;">Pas démarré</span>{% elseif s.activeThisWeek %}<span class="og-pill" style="background: #DCFCE7; color: #166534;">Actif</span>{% else %}<span class="og-pill">Inactif</span>{% endif %}
+                            <br><span class="og-mini">{{ s.lastActive ? 'vu le ' ~ s.lastActive|date('d/m') : 'jamais connecté' }}</span></td>
+                        <td>{% for p in s.plans %}<span class="og-pill">{{ p }}</span>{% else %}<span class="og-mini">—</span>{% endfor %}</td>
+                        <td>{{ s.reviews4w }}/4</td>
+                        <td>{{ s.habitRate is not null ? s.habitRate ~ ' %' : '—' }}</td>
+                        {% if me.manager %}
+                            <td style="min-width: 230px;">
+                                <form method="post" action="{{ path('app_organisation_member_update', {id: org.id, memberId: m.id}) }}" style="display: flex; gap: .3rem; margin-bottom: .3rem;">
+                                    <input type="hidden" name="action" value="role"><input type="hidden" name="_csrf_token" value="{{ csrf_token('org_manage') }}">
+                                    <select name="role" class="og-input" style="padding: .35rem;" aria-label="Rôle de {{ m.user.displayName }}">
+                                        {% for k, label in {MEMBER: 'Membre', MENTOR: 'Accompagnateur', LEADER: 'Responsable', OWNER: 'Responsable principal'} %}<option value="{{ k }}" {{ m.role == k ? 'selected' }}>{{ label }}</option>{% endfor %}
+                                    </select>
+                                    <button class="og-btn sec" style="padding: .35rem .6rem;" type="submit">OK</button>
+                                </form>
+                                {% if m.role == 'MEMBER' %}
+                                <form method="post" action="{{ path('app_organisation_member_update', {id: org.id, memberId: m.id}) }}" style="display: flex; gap: .3rem; margin-bottom: .3rem;">
+                                    <input type="hidden" name="action" value="mentor"><input type="hidden" name="_csrf_token" value="{{ csrf_token('org_manage') }}">
+                                    <select name="mentor" class="og-input" style="padding: .35rem;" aria-label="Accompagnateur de {{ m.user.displayName }}">
+                                        <option value="">Aucun accompagnateur</option>
+                                        {% for x in mentors %}{% if x != m %}<option value="{{ x.id }}" {{ m.mentor == x ? 'selected' }}>{{ x.user.displayName }}</option>{% endif %}{% endfor %}
+                                    </select>
+                                    <button class="og-btn sec" style="padding: .35rem .6rem;" type="submit">OK</button>
+                                </form>
+                                {% endif %}
+                                {% if m != me %}
+                                <form method="post" action="{{ path('app_organisation_member_update', {id: org.id, memberId: m.id}) }}" onsubmit="return confirm('Retirer {{ m.user.displayName|e('js') }} de l\'organisation ? Sa place sera libérée.')">
+                                    <input type="hidden" name="action" value="remove"><input type="hidden" name="_csrf_token" value="{{ csrf_token('org_manage') }}">
+                                    <button class="og-btn sec" style="padding: .3rem .6rem; font-size: .78rem; color: var(--danger);" type="submit">Retirer</button>
+                                </form>
+                                {% endif %}
+                            </td>
+                        {% endif %}
+                    </tr>
+                {% else %}
+                    <tr><td colspan="6" class="og-mini">Aucun membre pour l'instant.</td></tr>
+                {% endfor %}
+            </table>
+            </div>
+        </section>
+    {% endif %}
+
+    {# ── Inviter ─────────────────────────────────────── #}
+    {% if me.manager %}
+        <section class="og-card">
+            <h2>Inviter des membres</h2>
+            <p class="og-mini" style="margin-bottom: .5rem;">Partagez ce lien (WhatsApp, email, annonce au culte…). Chaque personne crée son compte puis rejoint l'organisation.</p>
+            <div style="display: flex; gap: .5rem; flex-wrap: wrap; margin-bottom: 1rem;">
+                <input class="og-input" value="{{ inviteUrl }}" readonly style="flex: 1; min-width: 260px;" onclick="this.select()" aria-label="Lien d'invitation">
+                <button type="button" class="og-btn" onclick="navigator.clipboard.writeText('{{ inviteUrl|e('js') }}'); this.textContent = 'Copié ✓'">Copier</button>
+                <a class="og-btn sec" style="text-decoration: none;" target="_blank" rel="noopener" href="https://wa.me/?text={{ ('Rejoins ' ~ org.name ~ ' sur KIINI SAWA pour bâtir ton Plan de Vie : ' ~ inviteUrl)|url_encode }}">WhatsApp</a>
+            </div>
+            <form method="post" action="{{ path('app_organisation_invite', {id: org.id}) }}">
+                <textarea name="emails" class="og-input" rows="3" style="width: 100%;" placeholder="Ou collez des adresses email (séparées par des virgules ou des retours à la ligne)" aria-label="Adresses email"></textarea>
+                <input name="message" class="og-input" style="width: 100%; margin-top: .5rem;" maxlength="1000" placeholder="Petit mot personnel (facultatif)" aria-label="Message">
+                <input type="hidden" name="_csrf_token" value="{{ csrf_token('org_manage') }}">
+                <div style="display: flex; justify-content: space-between; gap: .5rem; margin-top: .6rem; flex-wrap: wrap;">
+                    <button class="og-btn" type="submit">Envoyer les invitations</button>
+                    <button class="og-btn sec" type="submit" name="action" value="regenerate" formnovalidate onclick="return confirm('Créer un nouveau lien ? L\'ancien ne fonctionnera plus.')">Changer de lien</button>
+                </div>
+            </form>
+        </section>
+    {% endif %}
+
+    {# ── Places ─────────────────────────────────────── #}
+    {% if me.owner %}
+        <section class="og-card" x-data="{ seats: {{ (org.seats in packs|map(p => p.seats)) ? org.seats : 25 }}, currency: 'EUR', method: '{{ bankInstructions ? 'BANK_TRANSFER' : 'MOBILE_MONEY' }}' }">
+            <h2>{{ org.licenseValid ? 'Renouveler ou changer de pack' : 'Activer les places' }}</h2>
+            {% if pendingOrder %}
+                <p style="border-left: 4px solid #F59E0B; padding-left: .75rem;">⏳ Commande de {{ pendingOrder.seats }} places ({{ pendingOrder.amount|money(pendingOrder.currency) }}) en cours de vérification.</p>
+            {% elseif not bankInstructions and not mobileMoneyInstructions %}
+                <p class="og-mini">Le paiement en ligne n'est pas encore ouvert : écrivez-nous pour activer vos places.</p>
+            {% else %}
+                <p class="og-mini" style="margin-bottom: .75rem;">Un pack donne ses places pour un an{{ org.licenseValid ? ', à partir de la fin de la période en cours' }}.</p>
+                <div style="display: flex; gap: .5rem; flex-wrap: wrap; margin-bottom: .75rem;">
+                    {% for p in packs %}
+                        <button type="button" class="og-btn sec" :style="seats === {{ p.seats }} ? 'outline: 2px solid var(--primary)' : ''" @click="seats = {{ p.seats }}">{{ p.seats }} places{{ p.discount ? ' (−' ~ p.discount ~ ' %)' }}</button>
+                    {% endfor %}
+                </div>
+                <div style="display: flex; gap: .5rem; margin-bottom: .75rem;">
+                    <button type="button" class="og-btn sec" :style="currency === 'EUR' ? 'outline: 2px solid var(--primary)' : ''" @click="currency = 'EUR'">€</button>
+                    <button type="button" class="og-btn sec" :style="currency === 'XAF' ? 'outline: 2px solid var(--primary)' : ''" @click="currency = 'XAF'">FCFA</button>
+                </div>
+                <p style="font-size: 1.1rem; margin-bottom: .75rem;">Montant :
+                    {% for p in packs %}{% for cur in ['EUR', 'XAF'] %}<strong x-show="seats === {{ p.seats }} && currency === '{{ cur }}'" x-cloak>{{ p[cur]|money(cur) }}</strong>{% endfor %}{% endfor %}
+                </p>
+                {% if bankInstructions %}<div x-show="method === 'BANK_TRANSFER'" style="white-space: pre-line; background: #F8FAFC; border: 1px dashed #CBD5E1; border-radius: var(--r-md); padding: .9rem; font-size: .9rem; margin-bottom: .75rem;">{{ bankInstructions }}</div>{% endif %}
+                {% if mobileMoneyInstructions %}<div x-show="method === 'MOBILE_MONEY'" x-cloak style="white-space: pre-line; background: #F8FAFC; border: 1px dashed #CBD5E1; border-radius: var(--r-md); padding: .9rem; font-size: .9rem; margin-bottom: .75rem;">{{ mobileMoneyInstructions }}</div>{% endif %}
+                <form method="post" action="{{ path('app_organisation_order', {id: org.id}) }}" style="display: flex; gap: .5rem; flex-wrap: wrap;">
+                    <input type="hidden" name="seats" :value="seats"><input type="hidden" name="currency" :value="currency">
+                    <select name="method" x-model="method" class="og-input" aria-label="Moyen de paiement">
+                        {% if bankInstructions %}<option value="BANK_TRANSFER">Virement</option>{% endif %}
+                        {% if mobileMoneyInstructions %}<option value="MOBILE_MONEY">Mobile Money</option>{% endif %}
+                    </select>
+                    <input name="reference" class="og-input" required placeholder="Référence du paiement" style="flex: 1; min-width: 200px;" aria-label="Référence">
+                    <input type="hidden" name="_csrf_token" value="{{ csrf_token('org_manage') }}">
+                    <button class="og-btn" type="submit">J'ai payé : déclarer</button>
+                </form>
+            {% endif %}
+            {% if orders|length %}
+                <table class="og-table" style="margin-top: 1rem;">
+                    {% for o in orders %}
+                        <tr><td>{{ o.createdAt|date('d/m/Y') }}</td><td>{{ o.seats }} places</td><td>{{ o.amount|money(o.currency) }}</td>
+                            <td>{% if o.status == 'VALIDATED' %}<a href="{{ path('app_organisation_receipt', {id: org.id, orderId: o.id}) }}" data-turbo="false" style="color: var(--primary);">Reçu {{ o.receiptNumber }}</a>{% elseif o.status == 'PENDING' %}En vérification{% else %}Refusée : {{ o.adminNote }}{% endif %}</td></tr>
+                    {% endfor %}
+                </table>
+            {% endif %}
+        </section>
+    {% endif %}
+
+    {# ── Moi dans l'organisation ─────────────────────── #}
+    <section class="og-card">
+        <h2>Ma place dans {{ org.name }}</h2>
+        {% if me.mentor %}<p style="margin-bottom: .75rem;">Votre accompagnateur : <strong>{{ me.mentor.user.displayName }}</strong>.</p>{% endif %}
+        <form method="post" action="{{ path('app_organisation_self', {id: org.id}) }}">
+            <label style="display: flex; gap: .6rem; align-items: flex-start; cursor: pointer;">
+                <input type="checkbox" name="sharePlans" value="1" {{ me.sharePlans ? 'checked' }} style="margin-top: .3rem; accent-color: var(--primary);">
+                <span>Je partage mes plans (lecture seule) avec les responsables{{ me.mentor ? ' et mon accompagnateur' }}.<br><span class="og-mini">Votre journal reste toujours privé. Vous pouvez changer d'avis à tout moment.</span></span>
+            </label>
+            <input type="hidden" name="_csrf_token" value="{{ csrf_token('org_self') }}">
+            <div style="display: flex; gap: .5rem; margin-top: .75rem; flex-wrap: wrap;">
+                <button class="og-btn" type="submit">Enregistrer</button>
+                <button class="og-btn sec" type="submit" name="action" value="leave" onclick="return confirm('Quitter {{ org.name|e('js') }} ?')">Quitter l'organisation</button>
+            </div>
+        </form>
+    </section>
+</div>
+{% endblock %}

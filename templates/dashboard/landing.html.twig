@@ -162,7 +162,12 @@
                 <p style="color: var(--muted); font-size: .8rem; margin-top: .75rem;">Paiement par virement, Mobile Money ou espèces. Sans renouvellement automatique.</p>
             </div>
         </div>
-        <p style="margin-top: 2rem; color: var(--muted);">Église, association ou entreprise ? Nous accompagnons quelques structures pilotes : <a href="mailto:?subject=KIINI%20SAWA%20pour%20mon%20organisation" style="color: var(--primary); font-weight: 600;">écrivez-nous</a>.</p>
+        <div class="card" style="margin-top: 2rem; max-width: 860px; border: 2px dashed #99F6E4;">
+            <h3 style="font-size: 1.3rem;">⛪ Église, association, entreprise : l'offre Organisation</h3>
+            <p style="margin: .4rem 0 1rem;">Offrez KIINI SAWA PRO à tous vos membres. Vous suivez l'engagement du groupe, vous confiez chacun à un accompagnateur ; chaque membre choisit ce qu'il partage, et son journal reste toujours privé.</p>
+            <p style="color: var(--fg); font-weight: 600;">Dès {{ orgSeatEur|money('EUR') }} ou {{ orgSeatXaf|money('XAF') }} par membre et par an, jusqu'à −35 % selon le nombre de places.</p>
+            <a href="{{ path('app_register') }}" class="btn btn-primary" style="margin-top: 1rem;">Créer l'espace de mon organisation</a>
+        </div>
     </div>
 </section>
 

@@ -1,0 +1,53 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Organisation{% endblock %}
+
+{% block body %}
+<div style="max-width: 860px; margin: 0 auto; padding: 2.5rem 1.25rem 8rem;">
+    <h1 style="font-family: var(--font-serif); color: var(--primary); font-size: 2rem;">KIINI SAWA pour votre organisation</h1>
+    <p style="color: var(--fg-muted); font-size: 1.05rem; margin: .4rem 0 2rem;">Église, association, entreprise ou cabinet de coaching : accompagnez vos membres dans la durée. Chacun bâtit son Plan de Vie ; vous suivez l'engagement du groupe et confiez chacun à un accompagnateur.</p>
+
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem; margin-bottom: 2rem;">
+        {% for f in [
+            ['👥', 'Chaque membre devient PRO', 'Tous les plans, la carte, le PDF, les revues, sans limite.'],
+            ['📊', 'Un tableau de bord d\'engagement', 'Qui a démarré, qui fait ses revues, qui est actif cette semaine.'],
+            ['🤝', 'Des accompagnateurs', 'Responsables de cellule ou mentors : chacun suit les membres qui lui sont confiés.'],
+            ['🔒', 'Le respect de l\'intimité', 'Les plans ne sont visibles qu\'avec l\'accord du membre. Le journal, jamais.'],
+        ] %}
+            <div style="background: var(--card-bg); box-shadow: var(--card-shadow); border-radius: var(--r-lg); padding: 1.25rem;">
+                <div style="font-size: 1.5rem;">{{ f[0] }}</div>
+                <div style="font-weight: 700; margin: .35rem 0 .2rem;">{{ f[1] }}</div>
+                <div style="color: var(--fg-muted); font-size: .9rem;">{{ f[2] }}</div>
+            </div>
+        {% endfor %}
+    </div>
+
+    <div style="background: var(--card-bg); box-shadow: var(--card-shadow); border-radius: var(--r-lg); padding: 1.5rem; margin-bottom: 1.5rem;">
+        <h2 style="font-family: var(--font-serif); font-size: 1.3rem; margin-bottom: .75rem;">Packs de places, pour un an</h2>
+        <table style="width: 100%; border-collapse: collapse; font-size: .92rem;">
+            <tr style="text-align: left; color: var(--fg-muted);"><th style="padding: .5rem;">Places</th><th style="padding: .5rem;">Remise</th><th style="padding: .5rem;">Euros</th><th style="padding: .5rem;">Francs CFA</th></tr>
+            {% for p in packs %}
+                <tr style="border-top: 1px solid #F1F5F9;">
+                    <td style="padding: .5rem; font-weight: 700;">{{ p.seats }}</td>
+                    <td style="padding: .5rem;">{{ p.discount ? '−' ~ p.discount ~ ' %' : '—' }}</td>
+                    <td style="padding: .5rem;">{{ p.EUR|money('EUR') }} <small style="color: var(--fg-muted);">({{ (p.EUR / p.seats)|money('EUR') }} / pers.)</small></td>
+                    <td style="padding: .5rem;">{{ p.XAF|money('XAF') }} <small style="color: var(--fg-muted);">({{ (p.XAF / p.seats)|money('XAF') }} / pers.)</small></td>
+                </tr>
+            {% endfor %}
+        </table>
+    </div>
+
+    <form method="post" action="{{ path('app_organisation_create') }}" style="background: var(--card-bg); box-shadow: var(--card-shadow); border-radius: var(--r-lg); padding: 1.5rem;">
+        <h2 style="font-family: var(--font-serif); font-size: 1.3rem; margin-bottom: 1rem;">Créer l'espace de mon organisation</h2>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
+            <input name="name" required maxlength="150" placeholder="Nom (ex. Église Évangélique de Bonapriso)" aria-label="Nom de l'organisation" style="padding: .75rem .9rem; border: 1.5px solid #E2E8F0; border-radius: var(--r-md); font: inherit;">
+            <select name="type" aria-label="Type" style="padding: .75rem .9rem; border: 1.5px solid #E2E8F0; border-radius: var(--r-md); font: inherit;">
+                {% for k, label in types %}<option value="{{ k }}">{{ label }}</option>{% endfor %}
+            </select>
+        </div>
+        <input type="hidden" name="_csrf_token" value="{{ csrf_token('org_create') }}">
+        <p style="color: var(--fg-muted); font-size: .85rem; margin: .75rem 0 1rem;">La création est gratuite. Vous pourrez inviter vos membres dès maintenant ; ils deviennent PRO une fois les places activées.</p>
+        <button type="submit" style="padding: .85rem 1.5rem; border: none; border-radius: var(--r-md); background: var(--primary); color: #fff; font: inherit; font-weight: 700; cursor: pointer;">Créer l'organisation</button>
+    </form>
+</div>
+{% endblock %}

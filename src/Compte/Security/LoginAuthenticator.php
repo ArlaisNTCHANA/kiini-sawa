@@ -2,6 +2,7 @@
 
 namespace App\Compte\Security;
 
+use App\Organisation\Service\PendingInvitation;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -46,6 +47,10 @@ class LoginAuthenticator extends AbstractLoginFormAuthenticator
 
     public function onAuthenticationSuccess(Request $request, TokenInterface $token, string $firewallName): ?Response
     {
+        // Invitation d'organisation ouverte avant la connexion
+        if ($invite = PendingInvitation::redirectPath($request->getSession())) {
+            return new RedirectResponse($invite);
+        }
         if ($targetPath = $this->getTargetPath($request->getSession(), $firewallName)) {
             return new RedirectResponse($targetPath);
         }

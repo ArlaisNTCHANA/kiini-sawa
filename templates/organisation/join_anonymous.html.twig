@@ -1,0 +1,13 @@
+{% extends 'compte/_auth_layout.html.twig' %}
+
+{% block title %}KIINI SAWA — Invitation de {{ org.name }}{% endblock %}
+
+{% block content %}
+    <h1 class="auth-title">{{ org.name }} vous invite</h1>
+    <p class="auth-text">Rejoignez votre communauté sur KIINI SAWA pour discerner votre raison d'être, bâtir votre Plan de Vie et le vivre au quotidien.{% if org.licenseValid %} L'accès PRO vous est offert.{% endif %}</p>
+    <a href="{{ path('app_register') }}" style="display: block; text-decoration: none;"><button type="button">Créer mon compte</button></a>
+    <div class="auth-links">
+        <span>Déjà un compte ? <a href="{{ path('app_login') }}">Se connecter</a></span>
+        <span style="font-size: .8rem;">Vous reviendrez automatiquement sur cette invitation.</span>
+    </div>
+{% endblock %}

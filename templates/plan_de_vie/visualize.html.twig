@@ -372,7 +372,7 @@
 {% endif %}
 
     {# Variables communes #}
-    {% set displayName = app.user.userProfile and app.user.userProfile.firstName and app.user.userProfile.lastName ? app.user.userProfile.firstName ~ ' ' ~ app.user.userProfile.lastName : app.user.email|split('@')|first|capitalize %}
+    {% set displayName = ownerName ?? (app.user.userProfile and app.user.userProfile.firstName and app.user.userProfile.lastName ? app.user.userProfile.firstName ~ ' ' ~ app.user.userProfile.lastName : app.user.email|split('@')|first|capitalize) %}
     {% set currentDate = "now"|date("d F Y", "Europe/Paris")|replace({
         'January': 'janvier', 'February': 'février', 'March': 'mars', 'April': 'avril',
         'May': 'mai', 'June': 'juin', 'July': 'juillet', 'August': 'août',
@@ -942,6 +942,12 @@
     </div> {# Container end #}
 
     {# Fixed print toolbar at the bottom #}
+    {% if variant == 'SHARED' %}
+    <div class="toolbar no-print">
+        <a href="{{ backUrl }}" class="btn-toolbar btn-toolbar-secondary"><i data-lucide="arrow-left" style="width: 16px; height: 16px;"></i> Retour à l'organisation</a>
+        <span style="font-size: .85rem; color: #64748b;">Plan partagé par {{ displayName }}, en lecture seule</span>
+    </div>
+    {% else %}
     <div class="toolbar no-print">
         <a href="{{ path('app_plan_de_vie') }}" class="btn-toolbar btn-toolbar-secondary">
             <i data-lucide="arrow-left" style="width: 16px; height: 16px;"></i>
@@ -960,6 +966,7 @@
             M'envoyer par email
         </button>
     </div>
+    {% endif %}
 
     {# Toast Notification #}
     <div id="toast" class="toast-notify">Plan de Vie envoyé avec succès à votre adresse email !</div>

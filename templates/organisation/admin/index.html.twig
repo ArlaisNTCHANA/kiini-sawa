@@ -1,0 +1,43 @@
+{% extends 'admin/layout.html.twig' %}
+
+{% block title %}Organisations{% endblock %}
+{% block page_title %}Organisations{% endblock %}
+
+{% block content %}
+{% for label, messages in app.flashes %}{% for m in messages %}<div style="padding: 12px 16px; border-radius: 8px; margin-bottom: 16px; {{ label == 'success' ? 'background: rgba(16,185,129,.1); color: #34d399;' : 'background: rgba(239,68,68,.1); color: #f87171;' }}">{{ m }}</div>{% endfor %}{% endfor %}
+{% set inp = 'padding: 8px; border-radius: 8px; background: rgba(0,0,0,.2); color: inherit; border: 1px solid rgba(255,255,255,.12);' %}
+
+<form method="post" action="{{ path('admin_organisations_create') }}" class="ks-card" style="margin-bottom: 24px; display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; align-items: end;">
+    <h2 style="grid-column: 1 / -1; font-size: 16px; font-weight: 700;">Créer une organisation (pilote, contrat négocié)</h2>
+    <input name="name" required placeholder="Nom" style="{{ inp }}">
+    <select name="type" style="{{ inp }}">{% for k, l in types %}<option value="{{ k }}">{{ l }}</option>{% endfor %}</select>
+    <input name="ownerEmail" type="email" required placeholder="Email du responsable" style="{{ inp }}">
+    <input name="seats" type="number" min="0" value="25" title="Places" style="{{ inp }}">
+    <input name="validUntil" type="date" value="{{ 'now'|date_modify('+1 year')|date('Y-m-d') }}" title="Valable jusqu'au" style="{{ inp }}">
+    <input type="hidden" name="_csrf_token" value="{{ csrf_token('admin_org') }}">
+    <button type="submit" style="padding: 9px 14px; border-radius: 8px; border: none; background: var(--accent-gradient); color: #fff; font-weight: 600; cursor: pointer;">Créer</button>
+</form>
+
+<div class="ks-card">
+    <table style="width: 100%; border-collapse: collapse; font-size: 14px;">
+        <tr style="text-align: left; color: var(--text-secondary);"><th style="padding: 8px;">Organisation</th><th style="padding: 8px;">Membres</th><th style="padding: 8px;">Licence</th><th style="padding: 8px;">Modifier la licence</th></tr>
+        {% for o in organisations %}
+            <tr style="border-top: 1px solid rgba(255,255,255,.06);">
+                <td style="padding: 8px;"><strong>{{ o.name }}</strong><br><span style="font-size: 12px; color: var(--text-secondary);">{{ o.typeLabel }} · créée le {{ o.createdAt|date('d/m/Y') }}{{ o.createdBy ? ' par ' ~ o.createdBy.email }}</span></td>
+                <td style="padding: 8px;">{{ o.usedSeats }}</td>
+                <td style="padding: 8px;">{% if o.licenseValid %}<span style="color: #34d399;">{{ o.seats }} places</span> → {{ o.seatsValidUntil|date('d/m/Y') }}{% else %}<span style="color: var(--text-secondary);">inactive</span>{% endif %}</td>
+                <td style="padding: 8px;">
+                    <form method="post" action="{{ path('admin_organisations_license', {id: o.id}) }}" style="display: flex; gap: 6px;">
+                        <input name="seats" type="number" min="0" value="{{ o.seats }}" style="{{ inp }} width: 80px;" aria-label="Places">
+                        <input name="validUntil" type="date" value="{{ o.seatsValidUntil ? o.seatsValidUntil|date('Y-m-d') }}" style="{{ inp }}" aria-label="Valable jusqu'au">
+                        <input type="hidden" name="_csrf_token" value="{{ csrf_token('admin_org') }}">
+                        <button type="submit" style="padding: 6px 10px; border-radius: 6px; border: 1px solid rgba(255,255,255,.15); background: transparent; color: inherit; cursor: pointer;">OK</button>
+                    </form>
+                </td>
+            </tr>
+        {% else %}
+            <tr><td colspan="4" style="padding: 16px; color: var(--text-secondary);">Aucune organisation.</td></tr>
+        {% endfor %}
+    </table>
+</div>
+{% endblock %}

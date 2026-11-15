@@ -12,7 +12,7 @@ use Symfony\Component\DependencyInjection\Attribute\Autowire;
  */
 final class PdfFactory
 {
-    public function __construct(#[Autowire('%kernel.cache_dir%/dompdf')] private readonly string $cacheDir)
+    public function __construct(#[Autowire('%kernel.project_dir%/var/dompdf')] private readonly string $cacheDir)
     {
     }
 

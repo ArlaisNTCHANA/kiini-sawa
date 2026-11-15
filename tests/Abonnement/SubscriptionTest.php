@@ -90,15 +90,16 @@ class SubscriptionTest extends WebTestCase
         $this->client->loginUser($user);
 
         // 1. Le client déclare un virement annuel en FCFA
+        $ref = 'MP'.uniqid();
         $crawler = $this->client->request('GET', '/abonnement?devise=XAF');
         $this->assertSelectorTextContains('#payer', 'IBAN FR76');
         $token = $crawler->filter('form[action="/abonnement/declarer"] input[name=_csrf_token]')->attr('value');
-        $this->client->request('POST', '/abonnement/declarer', ['period' => 'YEARLY', 'currency' => 'XAF', 'method' => 'MOBILE_MONEY', 'reference' => 'MP2611.1234.A', 'paidAt' => date('Y-m-d'), '_csrf_token' => $token]);
+        $this->client->request('POST', '/abonnement/declarer', ['period' => 'YEARLY', 'currency' => 'XAF', 'method' => 'MOBILE_MONEY', 'reference' => $ref, 'paidAt' => date('Y-m-d'), '_csrf_token' => $token]);
         $this->assertResponseRedirects('/abonnement');
         $this->client->followRedirect();
         $this->assertSelectorTextContains('main', 'Paiement en cours de vérification');
 
-        $t = $this->em()->getRepository(Transaction::class)->findOneBy(['reference' => 'MP2611.1234.A']);
+        $t = $this->em()->getRepository(Transaction::class)->findOneBy(['reference' => $ref]);
         $this->assertSame(25000.0, $t->getAmount());
         $this->assertSame('XAF', $t->getCurrency());
         $this->assertFalse($this->entitlements()->isPro($this->findUser($user->getEmail())), 'Pas de PRO avant validation');
@@ -110,7 +111,7 @@ class SubscriptionTest extends WebTestCase
         // 2. L'administrateur valide
         $this->client->loginUser($admin);
         $crawler = $this->client->request('GET', '/admin/paiements');
-        $this->assertSelectorTextContains('body', 'MP2611.1234.A');
+        $this->assertSelectorTextContains('body', $ref);
         $this->client->submit($crawler->filter('form[action="/admin/paiements/'.$t->getId().'/valider"]')->form());
         $this->assertResponseRedirects('/admin/paiements');
 

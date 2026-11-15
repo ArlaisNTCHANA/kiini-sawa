@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<title>Reçu {{ order.receiptNumber }}</title>
+<style>
+    @page { margin: 22mm 20mm; }
+    body { font-family: 'DejaVu Sans', sans-serif; font-size: 10pt; color: #1e293b; }
+    .brand { color: #0f766e; font-size: 16pt; font-weight: bold; font-family: 'DejaVu Serif', serif; }
+    table { width: 100%; border-collapse: collapse; margin-top: 6mm; }
+    th, td { padding: 2.5mm 3mm; border-bottom: 0.5pt solid #e2e8f0; text-align: left; }
+    th { background: #f0fdfa; font-size: 8.5pt; text-transform: uppercase; color: #0f766e; }
+    .muted { color: #64748b; font-size: 8.5pt; }
+</style>
+</head>
+<body>
+    <div class="brand">KIINI SAWA</div>
+    <div class="muted">[À COMPLÉTER : raison sociale, adresse, n° d'immatriculation]</div>
+    <h1 style="font-size: 15pt; margin: 8mm 0 2mm;">Reçu de paiement n° {{ order.receiptNumber }}</h1>
+    <p class="muted">Émis le {{ order.processedAt|format_date(pattern: 'd MMMM y', locale: 'fr') }}</p>
+    <p><strong>Client :</strong> {{ order.organisation.name }} ({{ order.organisation.typeLabel }}){% if order.orderedBy %}, commandé par {{ order.orderedBy.displayName }} — {{ order.orderedBy.email }}{% endif %}</p>
+    <table>
+        <tr><th>Désignation</th><th>Durée</th><th>Paiement</th><th style="text-align: right;">Montant</th></tr>
+        <tr><td>KIINI SAWA Organisation : {{ order.seats }} places PRO</td><td>12 mois</td><td>{{ order.methodLabel }}{% if order.reference %}<br><span class="muted">réf. {{ order.reference }}</span>{% endif %}</td><td style="text-align: right;">{{ amount }}</td></tr>
+        <tr><td colspan="3"><strong>Total payé</strong></td><td style="text-align: right;"><strong>{{ amount }}</strong></td></tr>
+    </table>
+    <p class="muted" style="margin-top: 10mm;">[À COMPLÉTER avant la mise en ligne : mention de TVA applicable ; une facture conforme sera émise dès l'immatriculation.]</p>
+</body>
+</html>

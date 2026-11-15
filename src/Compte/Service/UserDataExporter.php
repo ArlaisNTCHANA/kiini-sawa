@@ -22,6 +22,16 @@ final class UserDataExporter
     /** Entités techniques exclues de l'export. */
     private const EXCLUDED = [AccountToken::class];
 
+    /**
+     * Relations à ne pas suivre : elles mèneraient aux données d'autres personnes
+     * (membres d'une organisation créée ou accompagnée par l'utilisateur).
+     */
+    private const SKIPPED_ASSOCIATIONS = [
+        \App\Organisation\Entity\Membership::class.'::mentor',
+        \App\Organisation\Entity\Membership::class.'::organisation',
+        \App\Organisation\Entity\SeatOrder::class.'::organisation',
+    ];
+
     public function __construct(private readonly EntityManagerInterface $em)
     {
     }
@@ -39,7 +49,8 @@ final class UserDataExporter
             $found = 0;
             foreach ($metas as $meta) {
                 foreach ($meta->getAssociationMappings() as $field => $assoc) {
-                    if (!$meta->isAssociationWithSingleJoinColumn($field) || empty($owned[$assoc['targetEntity']])) {
+                    if (!$meta->isAssociationWithSingleJoinColumn($field) || empty($owned[$assoc['targetEntity']])
+                        || \in_array($meta->getName().'::'.$field, self::SKIPPED_ASSOCIATIONS, true)) {
                         continue;
                     }
                     $rows = $this->em->createQueryBuilder()

@@ -38,6 +38,7 @@ final class SubscriptionManager
         private readonly Notifier $notifier,
         private readonly MailerInterface $mailer,
         private readonly LoggerInterface $logger,
+        private readonly ReceiptNumberGenerator $receipts,
         #[Autowire('%app.mailer_from%')] private readonly string $from,
     ) {
     }
@@ -113,7 +114,7 @@ final class SubscriptionManager
         }
         $user = $transaction->getSubscription()->getUser();
         $transaction->setStatus(Transaction::STATUS_VALIDATED)->setProcessedAt(new \DateTimeImmutable())
-            ->setAdminNote($note)->setReceiptNumber($this->nextReceiptNumber());
+            ->setAdminNote($note)->setReceiptNumber($this->receipts->next());
         $end = $this->extend($user, $transaction->getPeriod());
         $this->em->flush();
 
@@ -157,7 +158,7 @@ final class SubscriptionManager
     private function extend(User $user, ?string $period, int $months = 0): \DateTime
     {
         $sub = $this->subscription($user);
-        $currentEnd = $this->entitlements->proUntil($user);
+        $currentEnd = $this->entitlements->personalProUntil($user); // une place d'organisation ne compte pas
         // Pendant l'essai, la période payée commence à la fin de l'essai : le client ne perd aucun jour
         $start = $currentEnd ? \DateTime::createFromInterface($currentEnd) : new \DateTime();
         $end = (clone $start)->modify(match (true) {
@@ -172,14 +173,6 @@ final class SubscriptionManager
         return $end;
     }
 
-    private function nextReceiptNumber(): string
-    {
-        $year = date('Y');
-        $last = $this->em->getConnection()->fetchOne("SELECT receipt_number FROM transaction WHERE receipt_number LIKE ? ORDER BY receipt_number DESC LIMIT 1", ["KS-$year-%"]);
-        $next = $last ? ((int) substr($last, -5)) + 1 : 1;
-
-        return sprintf('KS-%s-%05d', $year, $next);
-    }
 
     private function alertAdmins(User $customer, Transaction $t): void
     {

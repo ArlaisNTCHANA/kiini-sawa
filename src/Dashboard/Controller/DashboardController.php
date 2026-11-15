@@ -27,6 +27,9 @@ class DashboardController extends AbstractController
             ],
             'trialDays' => $entitlements->config()->getTrialDurationDays(),
             'freeHabits' => $entitlements->config()->getMaxHabitsFree(),
+            // Prix d'une place au plus grand pack (remise maximale)
+            'orgSeatEur' => round($entitlements->config()->getOrgSeatYearlyPriceEur() * (1 - max(\App\Organisation\Service\OrganisationService::PACKS)), 2),
+            'orgSeatXaf' => round($entitlements->config()->getOrgSeatYearlyPriceXaf() * (1 - max(\App\Organisation\Service\OrganisationService::PACKS)), -2),
         ]);
     }
 

@@ -8,6 +8,7 @@ use App\Abonnement\Enum\SubscriptionTier;
 use App\Abonnement\Exception\ProRequiredException;
 use App\Admin\Entity\AppConfig;
 use App\Compte\Entity\User;
+use App\Organisation\Entity\Membership;
 use Doctrine\ORM\EntityManagerInterface;
 
 /**
@@ -88,8 +89,41 @@ final class Entitlements
         return null !== $this->proUntil($user);
     }
 
-    /** Date de fin des droits PRO (essai ou période payée), ou null si l'utilisateur est en gratuit. */
+    /**
+     * Date de fin des droits PRO, ou null si l'utilisateur est en gratuit.
+     * Le plus favorable de : son essai ou sa période payée, ou une place dans une organisation valide.
+     */
     public function proUntil(User $user): ?\DateTimeInterface
+    {
+        $personal = $this->personalProUntil($user);
+        $org = $this->organisationProUntil($user);
+
+        return match (true) {
+            null === $personal => $org,
+            null === $org => $personal,
+            default => $org > $personal ? $org : $personal,
+        };
+    }
+
+    /** Fin des droits apportés par une organisation (place active, licence valide). */
+    public function organisationProUntil(User $user): ?\DateTimeInterface
+    {
+        if (null === $user->getId()) {
+            return null;
+        }
+        $best = null;
+        foreach ($this->em->getRepository(Membership::class)->findBy(['user' => $user, 'active' => true]) as $m) {
+            $org = $m->getOrganisation();
+            if ($org->isLicenseValid()) {
+                $end = $org->getSeatsValidUntil()->setTime(23, 59, 59);
+                $best = null === $best || $end > $best ? $end : $best;
+            }
+        }
+
+        return $best;
+    }
+
+    public function personalProUntil(User $user): ?\DateTimeInterface
     {
         $sub = $user->getSubscription();
         if (null === $sub || SubscriptionTier::FREE === $sub->getTier()) {
@@ -108,7 +142,7 @@ final class Entitlements
     {
         $sub = $user->getSubscription();
 
-        return null !== $sub && SubscriptionStatus::TRIAL === $sub->getStatus() && null !== $this->proUntil($user);
+        return null !== $sub && SubscriptionStatus::TRIAL === $sub->getStatus() && null !== $this->personalProUntil($user) && null === $this->organisationProUntil($user);
     }
 
     public function can(?User $user, string $feature): bool

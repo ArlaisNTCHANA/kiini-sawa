@@ -55,6 +55,25 @@
 </div>
 
 <div class="ks-card" style="margin-bottom: 24px;">
+    <h2 style="font-size: 16px; font-weight: 700; margin-bottom: 12px;">Commandes de places (organisations)</h2>
+    <table class="k-table">
+        {% for o in pendingOrders %}
+            <tr>
+                <td><strong>{{ o.organisation.name }}</strong><br><span class="k-label">{{ o.orderedBy ? o.orderedBy.email }}</span></td>
+                <td><strong>{{ o.amount|money(o.currency) }}</strong><br><span class="k-label">{{ o.seats }} places, 1 an</span></td>
+                <td>{{ o.methodLabel }}<br><span class="k-label">réf. <strong>{{ o.reference ?: '—' }}</strong></span></td>
+                <td style="white-space: nowrap;">
+                    <form method="post" action="{{ path('admin_seat_order', {id: o.id, decision: 'valider'}) }}" style="margin-bottom: 6px;"><input type="hidden" name="_csrf_token" value="{{ csrf_token('admin_payment') }}"><button class="k-btn k-btn--ok" type="submit">✓ Reçu, activer</button></form>
+                    <form method="post" action="{{ path('admin_seat_order', {id: o.id, decision: 'refuser'}) }}" style="display: flex; gap: 6px;"><input class="k-input" name="reason" placeholder="Motif du refus" required><input type="hidden" name="_csrf_token" value="{{ csrf_token('admin_payment') }}"><button class="k-btn" type="submit">Refuser</button></form>
+                </td>
+            </tr>
+        {% else %}
+            <tr><td class="k-label">Aucune commande en attente.</td></tr>
+        {% endfor %}
+    </table>
+</div>
+
+<div class="ks-card" style="margin-bottom: 24px;">
     <h2 style="font-size: 16px; font-weight: 700; margin-bottom: 12px;">Revenus par mois</h2>
     <table class="k-table">
         <tr><th>Mois</th><th>Devise</th><th>Paiements</th><th>Total</th></tr>

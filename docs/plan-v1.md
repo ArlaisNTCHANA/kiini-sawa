@@ -290,7 +290,7 @@ Les estimations sont des jours de développement pour une personne. Les phases 0
 - [ ] Coaching / mentorat : consentement, messages, suggestions d'objectifs.
 - [ ] Feedback 360° par lien externe et feedback de l'entourage sur la personnalité.
 - [ ] Défis collectifs.
-- [ ] Si l'offre Organisation est retenue : espace organisation, invitations groupées, tableau de bord des membres, licences.
+- [x] Offre Organisation : espace, lien d'invitation et emails groupés, consentement au partage, rôles responsable / accompagnateur, tableau de bord d'engagement, packs de places, validation admin, reçus (voir docs/modules/organisation.md).
 
 ### Phase 7 — Mobile (6–8 j)
 

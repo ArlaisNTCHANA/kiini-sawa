@@ -4,6 +4,7 @@ namespace App\Compte\Controller;
 
 use App\Abonnement\Service\Entitlements;
 use App\Compte\Entity\AccountToken;
+use App\Organisation\Service\PendingInvitation;
 use App\Compte\Entity\User;
 use App\Compte\Entity\UserProfile;
 use App\Compte\Repository\UserRepository;
@@ -141,7 +142,7 @@ class RegistrationController extends AbstractController
                 $em->flush();
                 $this->addFlash('success', 'Votre adresse email est vérifiée. Bienvenue !');
 
-                return $this->redirectToRoute('app_onboarding');
+                return ($invite = PendingInvitation::redirectPath($request->getSession())) ? $this->redirect($invite) : $this->redirectToRoute('app_onboarding');
             } else {
                 $this->addFlash('error', 'Code incorrect ou expiré. Après 5 essais, demandez un nouveau code.');
             }

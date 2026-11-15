@@ -118,6 +118,13 @@ class AppConfig
     #[ORM\Column(options: ['default' => false])]
     private bool $enableDevelopmentFree = false;
 
+    /** Prix annuel d'une place dans l'offre Organisation (avant remise de volume). */
+    #[ORM\Column(options: ['default' => 30])]
+    private float $orgSeatYearlyPriceEur = 30;
+
+    #[ORM\Column(options: ['default' => 10000])]
+    private int $orgSeatYearlyPriceXaf = 10000;
+
     /** Coordonnées et consignes affichées au client pour un virement (IBAN, RIB, libellé à indiquer…). */
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $bankTransferInstructions = null;
@@ -618,4 +625,8 @@ class AppConfig
     public function setMobileMoneyInstructions(?string $v): static { $this->mobileMoneyInstructions = $v; return $this; }
     public function getPaymentNotificationEmail(): ?string { return $this->paymentNotificationEmail; }
     public function setPaymentNotificationEmail(?string $v): static { $this->paymentNotificationEmail = $v; return $this; }
+    public function getOrgSeatYearlyPriceEur(): float { return $this->orgSeatYearlyPriceEur; }
+    public function setOrgSeatYearlyPriceEur(float $v): static { $this->orgSeatYearlyPriceEur = $v; return $this; }
+    public function getOrgSeatYearlyPriceXaf(): int { return $this->orgSeatYearlyPriceXaf; }
+    public function setOrgSeatYearlyPriceXaf(int $v): static { $this->orgSeatYearlyPriceXaf = $v; return $this; }
 }

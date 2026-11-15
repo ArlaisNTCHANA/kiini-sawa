@@ -18,6 +18,7 @@ Le code de KIINI SAWA est rangé **par module métier**. Chaque module regroupe 
 | [Listes](modules/listes.md) | Listes personnelles (UserList / ListItem) | 2 | 0 | Non |
 | [Methode](modules/methode.md) | La méthode : chapitres du livre et encarts « Comprendre cette étape » | 0 | 2 | Oui |
 | [Notification](modules/notification.md) | Centre de notifications, préférences, rappels par email | 3 | 5 | Oui |
+| [Organisation](modules/organisation.md) | Offre B2B : églises, associations, entreprises ; places, rôles, accompagnateurs, engagement | 3 | 11 | Oui |
 | [Personnalite](modules/personnalite.md) | Tests de personnalité (DISC, MBTI, Ennéagramme, Big 5…), calcul des scores et administration du référentiel | 4 | 11 | Oui |
 | [PlanDHygiene](modules/plan_d_hygiene.md) | Plan d'Hygiène de Vie | 3 | 3 | Oui |
 | [PlanDeCroissance](modules/plan_de_croissance.md) | Plan de Croissance : Caractère & Conviction, Relation & Réseau, principes, export PDF | 7 | 6 | Oui |

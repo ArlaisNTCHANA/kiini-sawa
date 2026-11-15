@@ -1,0 +1,26 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Rejoindre {{ org.name }}{% endblock %}
+
+{% block body %}
+<div style="max-width: 560px; margin: 0 auto; padding: 3rem 1.25rem 8rem;">
+    <div style="background: var(--card-bg); box-shadow: var(--card-shadow); border-radius: var(--r-lg); padding: 2rem;">
+        <p style="font-size: .75rem; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; color: var(--primary);">Invitation</p>
+        <h1 style="font-family: var(--font-serif); font-size: 1.8rem; margin: .4rem 0 .6rem;">Rejoindre {{ org.name }}</h1>
+        {% if alreadyMember %}
+            <p style="color: var(--fg-light);">Vous faites déjà partie de cette organisation.</p>
+            <a href="{{ path('app_organisation_index', {org: org.id}) }}" style="display: inline-block; margin-top: 1rem; color: var(--primary); font-weight: 700;">Ouvrir l'espace →</a>
+        {% else %}
+            <p style="color: var(--fg-light); margin-bottom: 1.25rem;">{{ org.typeLabel }}. {% if org.licenseValid %}En rejoignant, vous bénéficiez de <strong>KIINI SAWA PRO</strong> offert par l'organisation.{% endif %} Vos responsables verront votre engagement (fondations posées, revues faites, régularité), jamais votre journal.</p>
+            <form method="post">
+                <label style="display: flex; gap: .6rem; align-items: flex-start; cursor: pointer; background: #F8FAFC; border-radius: var(--r-md); padding: 1rem;">
+                    <input type="checkbox" name="sharePlans" value="1" style="margin-top: .3rem; accent-color: var(--primary);">
+                    <span><strong>Je partage aussi mes plans</strong> (lecture seule) avec les responsables et mon accompagnateur, pour être mieux accompagné(e).<br><span style="font-size: .8rem; color: var(--fg-muted);">Facultatif, modifiable à tout moment.</span></span>
+                </label>
+                <input type="hidden" name="_csrf_token" value="{{ csrf_token('org_join') }}">
+                <button type="submit" style="margin-top: 1.25rem; width: 100%; padding: .9rem; border: none; border-radius: var(--r-md); background: var(--primary); color: #fff; font: inherit; font-weight: 700; cursor: pointer;">Rejoindre {{ org.name }}</button>
+            </form>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

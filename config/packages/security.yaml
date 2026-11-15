@@ -55,6 +55,7 @@ security:
         - { path: ^/mot-de-passe/, roles: PUBLIC_ACCESS }
         - { path: ^/(mentions-legales|confidentialite|cgu|cgv)$, roles: PUBLIC_ACCESS }
         - { path: ^/notifications/desabonnement/, roles: PUBLIC_ACCESS }
+        - { path: ^/rejoindre/, roles: PUBLIC_ACCESS }
         - { path: ^/admin, roles: ROLE_ADMIN }
         - { path: ^/, roles: ROLE_USER }
 

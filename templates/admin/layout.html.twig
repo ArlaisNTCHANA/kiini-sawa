@@ -352,6 +352,10 @@
                     <i data-lucide="credit-card"></i>
                     <span>Paiements</span>
                 </a>
+                <a href="{{ path('admin_organisations') }}" class="ks-sidebar__link {{ app.request.attributes.get('_route') starts with 'admin_organisations' ? 'active' }}" id="nav-orgs">
+                    <i data-lucide="building-2"></i>
+                    <span>Organisations</span>
+                </a>
                 <a href="{{ path('admin_users') }}" class="ks-sidebar__link {{ app.request.attributes.get('_route') starts with 'admin_users' ? 'active' }}" id="nav-users">
                     <i data-lucide="users"></i>
                     <span>Utilisateurs</span>

@@ -51,7 +51,7 @@
             </div>
 
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
-                {% for f in ['proMonthlyPriceXaf', 'proYearlyPriceXaf', 'maxHabitsFree', 'maxConnectionsFree'] %}
+                {% for f in ['proMonthlyPriceXaf', 'proYearlyPriceXaf', 'orgSeatYearlyPriceEur', 'orgSeatYearlyPriceXaf', 'maxHabitsFree', 'maxConnectionsFree'] %}
                     <div class="form-group">{{ form_label(form[f], null, {'label_attr': {'style': 'display: block; font-size: 12px; font-weight: 600; color: var(--text-secondary); margin-bottom: 8px;'}}) }}{{ form_widget(form[f], {'attr': {'class': 'form-control'}}) }}</div>
                 {% endfor %}
             </div>
