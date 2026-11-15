@@ -44,8 +44,21 @@ class SecurityGuardsTest extends WebTestCase
             // Paramètre remplacé par une valeur acceptée par ses contraintes (première alternative, sinon 1)
             $path = preg_replace_callback('/\{([^}]+)\}/', function ($m) use ($route) {
                 $requirement = $route->getRequirement($m[1]);
+                if (!$requirement) {
+                    return '1';
+                }
+                // Première valeur simple acceptée par la contrainte
+                $candidates = ['1', 'a', 'abcdef0123456789'];
+                if (preg_match('/^[A-Za-z_\-]+/', $requirement, $alt)) {
+                    array_unshift($candidates, $alt[0]);
+                }
+                foreach ($candidates as $c) {
+                    if (preg_match('#^(?:'.$requirement.')$#', $c)) {
+                        return $c;
+                    }
+                }
 
-                return $requirement && preg_match('/^[A-Za-z_\-]+/', $requirement, $alt) ? $alt[0] : '1';
+                return '1';
             }, $route->getPath());
             $client->request($methods[0], $path);
             $status = $client->getResponse()->getStatusCode();

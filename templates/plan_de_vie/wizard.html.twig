@@ -556,31 +556,18 @@
 
                         {# MBTI #}
                         <div style="display: flex; flex-direction: column; gap: 0.375rem;">
-                            <label style="font-size: 0.75rem; font-weight: 700; color: var(--fg-light); letter-spacing: 0.05em; text-transform: uppercase;">Profil MBTI</label>
+                            <label style="font-size: 0.75rem; font-weight: 700; color: var(--fg-light); letter-spacing: 0.05em; text-transform: uppercase;">Type de fonctionnement (4 lettres)</label>
                             <select name="profile_mbti" class="wiz-select">
                                 <option value="">Je ne sais pas...</option>
-                                <option value="INTJ" {% if mbtiVal == 'INTJ' %}selected{% endif %}>INTJ (Architecte)</option>
-                                <option value="INTP" {% if mbtiVal == 'INTP' %}selected{% endif %}>INTP (Logicien)</option>
-                                <option value="ENTJ" {% if mbtiVal == 'ENTJ' %}selected{% endif %}>ENTJ (Commandant)</option>
-                                <option value="ENTP" {% if mbtiVal == 'ENTP' %}selected{% endif %}>ENTP (Innovateur)</option>
-                                <option value="INFJ" {% if mbtiVal == 'INFJ' %}selected{% endif %}>INFJ (Avocat)</option>
-                                <option value="INFP" {% if mbtiVal == 'INFP' %}selected{% endif %}>INFP (Médiateur)</option>
-                                <option value="ENFJ" {% if mbtiVal == 'ENFJ' %}selected{% endif %}>ENFJ (Protagoniste)</option>
-                                <option value="ENFP" {% if mbtiVal == 'ENFP' %}selected{% endif %}>ENFP (Inspirateur)</option>
-                                <option value="ISTJ" {% if mbtiVal == 'ISTJ' %}selected{% endif %}>ISTJ (Logisticien)</option>
-                                <option value="ISFJ" {% if mbtiVal == 'ISFJ' %}selected{% endif %}>ISFJ (Défenseur)</option>
-                                <option value="ESTJ" {% if mbtiVal == 'ESTJ' %}selected{% endif %}>ESTJ (Directeur)</option>
-                                <option value="ESFJ" {% if mbtiVal == 'ESFJ' %}selected{% endif %}>ESFJ (Consul)</option>
-                                <option value="ISTP" {% if mbtiVal == 'ISTP' %}selected{% endif %}>ISTP (Virtuose)</option>
-                                <option value="ISFP" {% if mbtiVal == 'ISFP' %}selected{% endif %}>ISFP (Aventurier)</option>
-                                <option value="ESTP" {% if mbtiVal == 'ESTP' %}selected{% endif %}>ESTP (Entrepreneur)</option>
-                                <option value="ESFP" {% if mbtiVal == 'ESFP' %}selected{% endif %}>ESFP (Amuseur)</option>
+                                {% for code, t in constant('App\\Personnalite\\Psychometrie\\Interpretations::TYPES') %}
+                                <option value="{{ code }}" {% if mbtiVal == code %}selected{% endif %}>{{ code }} ({{ t[0] }})</option>
+                                {% endfor %}
                             </select>
                         </div>
 
                         {# DISC #}
                         <div style="display: flex; flex-direction: column; gap: 0.375rem;">
-                            <label style="font-size: 0.75rem; font-weight: 700; color: var(--fg-light); letter-spacing: 0.05em; text-transform: uppercase;">Profil DISC</label>
+                            <label style="font-size: 0.75rem; font-weight: 700; color: var(--fg-light); letter-spacing: 0.05em; text-transform: uppercase;">Style comportemental</label>
                             <select name="profile_disc" class="wiz-select">
                                 <option value="">Je ne sais pas...</option>
                                 <option value="D" {% if discVal == 'D' %}selected{% endif %}>D — Dominant (Direct, Décidé)</option>
@@ -599,15 +586,9 @@
                             <label style="font-size: 0.75rem; font-weight: 700; color: var(--fg-light); letter-spacing: 0.05em; text-transform: uppercase;">Type Ennéagramme</label>
                             <select name="profile_enneagram" class="wiz-select">
                                 <option value="">Je ne sais pas...</option>
-                                <option value="1" {% if enneagramVal == '1' %}selected{% endif %}>Type 1 (Perfectionniste / Réformateur)</option>
-                                <option value="2" {% if enneagramVal == '2' %}selected{% endif %}>Type 2 (Altruiste / Aidant)</option>
-                                <option value="3" {% if enneagramVal == '3' %}selected{% endif %}>Type 3 (Battant / Réalisateur)</option>
-                                <option value="4" {% if enneagramVal == '4' %}selected{% endif %}>Type 4 (Individualiste / Romantique)</option>
-                                <option value="5" {% if enneagramVal == '5' %}selected{% endif %}>Type 5 (Investigateur / Observateur)</option>
-                                <option value="6" {% if enneagramVal == '6' %}selected{% endif %}>Type 6 (Loyaliste / Sceptique)</option>
-                                <option value="7" {% if enneagramVal == '7' %}selected{% endif %}>Type 7 (Enthousiaste / Épicurien)</option>
-                                <option value="8" {% if enneagramVal == '8' %}selected{% endif %}>Type 8 (Challenger / Chef)</option>
-                                <option value="9" {% if enneagramVal == '9' %}selected{% endif %}>Type 9 (Pacificateur / Médiateur)</option>
+                                {% for n, t in constant('App\\Personnalite\\Psychometrie\\EnneagramBank::TYPES') %}
+                                <option value="{{ n }}" {% if enneagramVal == n ~ '' %}selected{% endif %}>Type {{ n }} ({{ t.name }})</option>
+                                {% endfor %}
                             </select>
                         </div>
 

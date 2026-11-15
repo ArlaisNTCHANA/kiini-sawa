@@ -17,10 +17,6 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 class PersonalityAdminController extends AbstractController
 {
     private const TESTS = [
-        'MBTI'          => ['name' => 'MBTI', 'subtitle' => '16 Personnalités', 'color' => '#6366f1', 'bg' => '#eef2ff'],
-        'DISC'          => ['name' => 'DISC', 'subtitle' => 'Styles Comportementaux', 'color' => '#f43f5e', 'bg' => '#fff1f2'],
-        'ENNEAGRAMME'   => ['name' => 'Ennéagramme', 'subtitle' => '9 Archétypes', 'color' => '#f59e0b', 'bg' => '#fffbeb'],
-        'BIG5'          => ['name' => 'Big Five (OCEAN)', 'subtitle' => 'Psychologie Scientifique', 'color' => '#10b981', 'bg' => '#ecfdf5'],
         'INTELLIGENCES' => ['name' => 'Intelligences Multiples', 'subtitle' => 'Théorie de Gardner', 'color' => '#06b6d4', 'bg' => '#ecfeff'],
         'TALENT'        => ['name' => 'Architecture des Talents', 'subtitle' => 'Zones de Génie', 'color' => '#f97316', 'bg' => '#fff7ed'],
         'EQUILIBRE'     => ['name' => 'Équilibre de Vie', 'subtitle' => 'Wheel of Life', 'color' => '#3b82f6', 'bg' => '#eff6ff'],

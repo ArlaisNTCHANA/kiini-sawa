@@ -95,8 +95,8 @@ final class PlanDataProvider
         // Build latest tests dashboard array for all 8 test types
         $latestTests = [];
         $testTypesMeta = [
-            'MBTI'          => ['name' => 'MBTI', 'icon' => 'brain', 'color' => '#6366f1', 'bg' => '#eef2ff', 'url_key' => 'mbti'],
-            'DISC'          => ['name' => 'DISC', 'icon' => 'zap', 'color' => '#f43f5e', 'bg' => '#fff1f2', 'url_key' => 'disc'],
+            'MBTI'          => ['name' => 'Type de fonctionnement', 'icon' => 'brain', 'color' => '#6366f1', 'bg' => '#eef2ff', 'url_key' => 'mbti'],
+            'DISC'          => ['name' => 'Style comportemental', 'icon' => 'zap', 'color' => '#f43f5e', 'bg' => '#fff1f2', 'url_key' => 'disc'],
             'ENNEAGRAM'     => ['name' => 'Ennéagramme', 'icon' => 'target', 'color' => '#f59e0b', 'bg' => '#fffbeb', 'url_key' => 'enneagramme'],
             'BIG5'          => ['name' => 'Big Five', 'icon' => 'sparkles', 'color' => '#10b981', 'bg' => '#ecfdf5', 'url_key' => 'big5'],
             'INTELLIGENCES' => ['name' => 'Intelligences Multiples', 'icon' => 'compass', 'color' => '#06b6d4', 'bg' => '#ecfeff', 'url_key' => 'intelligences'],

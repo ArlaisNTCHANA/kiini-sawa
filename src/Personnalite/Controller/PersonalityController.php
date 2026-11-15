@@ -15,11 +15,10 @@ use Symfony\Component\Routing\Attribute\Route;
 #[Route('/mes-tests', name: 'app_personality_')]
 class PersonalityController extends AbstractController
 {
+    /** Anciens tests courts remplacés par les questionnaires psychométriques (AssessmentController). */
+    private const REPLACED = ['MBTI' => 'type', 'DISC' => 'style', 'ENNEAGRAMME' => 'enneagramme', 'BIG5' => 'profil-complet'];
+
     private const TESTS = [
-        'MBTI'          => ['name' => 'MBTI', 'subtitle' => '16 Personnalités', 'description' => 'Comment vous traitez l\'information, prenez des décisions et vous énergisez.', 'color' => '#6366f1', 'bg' => '#eef2ff', 'icon' => 'brain', 'questions' => 10],
-        'DISC'          => ['name' => 'DISC', 'subtitle' => 'Styles Comportementaux', 'description' => 'Votre style dominant : Dominant, Influent, Stable ou Consciencieux.', 'color' => '#f43f5e', 'bg' => '#fff1f2', 'icon' => 'zap', 'questions' => 8],
-        'ENNEAGRAMME'   => ['name' => 'Ennéagramme', 'subtitle' => '9 Archétypes', 'description' => 'Les 9 types de motivation — la peur et le désir profonds qui guident vos choix.', 'color' => '#f59e0b', 'bg' => '#fffbeb', 'icon' => 'target', 'questions' => 10],
-        'BIG5'          => ['name' => 'Big Five (OCEAN)', 'subtitle' => 'Psychologie Scientifique', 'description' => 'Les 5 grandes dimensions de la personnalité validées scientifiquement.', 'color' => '#10b981', 'bg' => '#ecfdf5', 'icon' => 'sparkles', 'questions' => 10],
         'INTELLIGENCES' => ['name' => 'Intelligences Multiples', 'subtitle' => 'Théorie de Gardner', 'description' => 'Identifiez vos 8 formes d\'intelligence dominantes.', 'color' => '#06b6d4', 'bg' => '#ecfeff', 'icon' => 'compass', 'questions' => 8],
         'TALENT'        => ['name' => 'Architecture des Talents', 'subtitle' => 'Zones de Génie', 'description' => 'Diagnostiquer vos zones de génie naturel, sous pression et de plaisir.', 'color' => '#f97316', 'bg' => '#fff7ed', 'icon' => 'star', 'questions' => 6],
         'EQUILIBRE'     => ['name' => 'Équilibre de Vie', 'subtitle' => 'Wheel of Life', 'description' => 'Mesurez vos 8 domaines de vie et identifiez les zones à rééquilibrer.', 'color' => '#3b82f6', 'bg' => '#eff6ff', 'icon' => 'activity', 'questions' => 8],
@@ -31,6 +30,7 @@ class PersonalityController extends AbstractController
         private readonly PersonalityProfileRepository  $profileRepo,
         private readonly PersonalityScoreService       $scoreService,
         private readonly EntityManagerInterface        $em,
+        private readonly \App\Personnalite\Repository\AssessmentRepository $assessments,
     ) {}
 
     // ─────────────────────────────────────────────────────────────────────────
@@ -57,9 +57,16 @@ class PersonalityController extends AbstractController
             }
         }
 
+        $assessments = [];
+        foreach ($this->assessments->findForUser($user) as $a) {
+            $assessments[$a->getInstrument()] ??= $a;
+        }
+
         return $this->render('personnalite/index.html.twig', [
             'tests'       => self::TESTS,
             'latestTests' => $latestByType,
+            'instruments' => \App\Personnalite\Psychometrie\Instruments::CATALOG,
+            'assessments' => $assessments,
         ]);
     }
 
@@ -70,6 +77,9 @@ class PersonalityController extends AbstractController
     public function take(string $type): Response
     {
         $type = strtoupper($type);
+        if (isset(self::REPLACED[$type])) {
+            return $this->redirectToRoute('app_assessment_take', ['slug' => self::REPLACED[$type]], 301);
+        }
         if (!isset(self::TESTS[$type])) {
             throw $this->createNotFoundException("Test inconnu : $type");
         }

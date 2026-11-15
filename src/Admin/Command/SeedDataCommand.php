@@ -565,7 +565,7 @@ class SeedDataCommand extends Command
                 'type' => 'MBTI',
                 'result' => json_encode(['type' => 'ENFJ']),
                 'date' => '2025-01-15',
-                'insights' => 'Profil "Le Protagoniste" - Leadership naturel, empathie forte, vision claire.',
+                'insights' => 'Le Mentor — Leadership naturel, empathie forte, vision claire.',
             ],
             [
                 'type' => 'DISC',

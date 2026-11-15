@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<title>{{ instrument.name }}</title>
+<style>
+    @page { margin: 20mm 18mm; }
+    body { font-family: 'DejaVu Sans', sans-serif; font-size: 10pt; color: #1e293b; line-height: 1.45; }
+    .brand { color: #0f766e; font-size: 9pt; font-weight: bold; letter-spacing: 2pt; }
+    h1 { font-family: 'DejaVu Serif', serif; color: {{ instrument.color }}; font-size: 20pt; margin: 2mm 0; }
+    h2 { font-family: 'DejaVu Serif', serif; font-size: 13pt; color: #0f172a; margin: 6mm 0 2mm; }
+    .r-section { margin-bottom: 4mm; }
+    ul { padding-left: 5mm; }
+    .footer { position: fixed; bottom: -10mm; left: 0; right: 0; font-size: 7.5pt; color: #94a3b8; }
+</style>
+</head>
+<body>
+    <div class="footer">{{ instrument.name }} · {{ name }} · KIINI SAWA — outil de connaissance de soi, pas un diagnostic.</div>
+    <div class="brand">KIINI SAWA</div>
+    <h1>{{ instrument.name }}</h1>
+    <p style="color: #64748B;">{{ name }} · {{ assessment.takenAt|format_date(pattern: 'd MMMM y', locale: 'fr') }} · {{ instrument.level }}</p>
+    {% include 'personnalite/assessment/_report_body.html.twig' %}
+    {% if slug in ['profil-complet', 'big-five', 'type', 'style'] %}<p style="font-size: 8pt; color: #64748B; margin-top: 6mm;">Questions : International Personality Item Pool (IPIP-NEO, Johnson 2014, domaine public). Type inspiré de la typologie de Carl Jung (popularisée par le MBTI®), style inspiré du modèle DISC de William Marston ; sans affiliation.</p>{% endif %}
+</body>
+</html>

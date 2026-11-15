@@ -1,0 +1,92 @@
+<?php
+
+namespace App\Personnalite\Psychometrie;
+
+/**
+ * Dons spirituels : 15 dons tirés des listes bibliques (Rm 12:6-8, 1 Co 12:8-10 et 28, Ep 4:11, 1 P 4:9-11).
+ * 60 affirmations originales (4 par don), sur ce que la personne vit et ce que les autres confirment.
+ * Outil de discernement, à confirmer par l'expérience et la communauté (chap. 7 du livre, « Confirmations »).
+ */
+final class SpiritualGiftsBank
+{
+    public const GIFTS = [
+        'ENSEIGNEMENT' => ['name' => 'Enseignement', 'ref' => 'Rm 12:7', 'desc' => 'Expliquer la vérité avec clarté pour que d\'autres comprennent et grandissent.', 'serve' => 'Animer un groupe d\'étude, former, écrire, transmettre.'],
+        'EXHORTATION' => ['name' => 'Exhortation', 'ref' => 'Rm 12:8', 'desc' => 'Encourager, consoler et pousser les autres à avancer.', 'serve' => 'Accompagnement, mentorat, visites, messages d\'encouragement.'],
+        'SERVICE' => ['name' => 'Service', 'ref' => 'Rm 12:7', 'desc' => 'Voir ce qui doit être fait et le faire, souvent dans l\'ombre.', 'serve' => 'Logistique, accueil, entraide pratique.'],
+        'LIBERALITE' => ['name' => 'Libéralité', 'ref' => 'Rm 12:8', 'desc' => 'Donner ses ressources avec joie et générosité pour l\'œuvre de Dieu.', 'serve' => 'Soutien de projets, bourses, générosité réfléchie.'],
+        'PRESIDENCE' => ['name' => 'Présidence', 'ref' => 'Rm 12:8', 'desc' => 'Donner une direction, rassembler et conduire un groupe vers un but.', 'serve' => 'Diriger une équipe, un ministère, un projet.'],
+        'MISERICORDE' => ['name' => 'Miséricorde', 'ref' => 'Rm 12:8', 'desc' => 'Ressentir la souffrance des autres et les secourir avec douceur.', 'serve' => 'Visites aux malades, aide aux personnes fragiles, écoute.'],
+        'PROPHETIE' => ['name' => 'Prophétie', 'ref' => 'Rm 12:6', 'desc' => 'Recevoir et transmettre une parole qui édifie, exhorte et console.', 'serve' => 'Parole, intercession, discernement des temps, dans le cadre de l\'Église.'],
+        'SAGESSE' => ['name' => 'Sagesse', 'ref' => '1 Co 12:8', 'desc' => 'Appliquer la vérité avec justesse aux situations concrètes.', 'serve' => 'Conseil, médiation, aide à la décision.'],
+        'CONNAISSANCE' => ['name' => 'Connaissance', 'ref' => '1 Co 12:8', 'desc' => 'Chercher, comprendre et mettre en lumière la vérité.', 'serve' => 'Recherche, études bibliques approfondies, préparation de contenus.'],
+        'FOI' => ['name' => 'Foi', 'ref' => '1 Co 12:9', 'desc' => 'Croire avec assurance que Dieu agira, et entraîner les autres dans cette confiance.', 'serve' => 'Projets pionniers, prière, lancement d\'œuvres nouvelles.'],
+        'DISCERNEMENT' => ['name' => 'Discernement', 'ref' => '1 Co 12:10', 'desc' => 'Distinguer le vrai du faux, ce qui vient de Dieu et ce qui n\'en vient pas.', 'serve' => 'Conseil, protection d\'une communauté, évaluation de projets.'],
+        'HOSPITALITE' => ['name' => 'Hospitalité', 'ref' => '1 P 4:9', 'desc' => 'Accueillir chaleureusement et faire que chacun se sente chez soi.', 'serve' => 'Accueil, repas, groupes de maison, intégration des nouveaux.'],
+        'EVANGELISATION' => ['name' => 'Évangélisation', 'ref' => 'Ep 4:11', 'desc' => 'Partager la foi avec naturel et conduire d\'autres à la découvrir.', 'serve' => 'Témoignage, actions de proximité, parcours de découverte.'],
+        'PASTORAT' => ['name' => 'Pastorat', 'ref' => 'Ep 4:11', 'desc' => 'Prendre soin d\'un groupe dans la durée, le nourrir et le protéger.', 'serve' => 'Responsable de cellule, accompagnement d\'un groupe.'],
+        'INTERCESSION' => ['name' => 'Intercession', 'ref' => '1 Tm 2:1', 'desc' => 'Prier avec persévérance pour les autres et pour l\'œuvre de Dieu.', 'serve' => 'Équipes de prière, soutien spirituel de projets et de personnes.'],
+    ];
+
+    public const ITEMS = [
+        1 => ['ENSEIGNEMENT', 'J\'aime expliquer des choses complexes de façon simple.'],
+        2 => ['EXHORTATION', 'Les gens viennent souvent me voir pour être encouragés.'],
+        3 => ['SERVICE', 'Je remarque facilement ce qui doit être fait et je m\'y mets.'],
+        4 => ['LIBERALITE', 'Donner de mon argent ou de mes biens me procure une vraie joie.'],
+        5 => ['PRESIDENCE', 'Dans un groupe, on se tourne naturellement vers moi pour décider.'],
+        6 => ['MISERICORDE', 'Je suis profondément touché(e) par ceux qui souffrent.'],
+        7 => ['PROPHETIE', 'Il m\'arrive de recevoir une parole claire pour encourager ou avertir quelqu\'un.'],
+        8 => ['SAGESSE', 'On me demande souvent conseil pour des décisions difficiles.'],
+        9 => ['CONNAISSANCE', 'J\'aime étudier en profondeur la Bible ou un sujet pour en saisir la vérité.'],
+        10 => ['FOI', 'Je crois fermement que Dieu va agir, même quand tout semble impossible.'],
+        11 => ['DISCERNEMENT', 'Je perçois vite quand quelque chose sonne faux.'],
+        12 => ['HOSPITALITE', 'J\'aime accueillir des gens chez moi.'],
+        13 => ['EVANGELISATION', 'Je parle facilement de ma foi à des personnes qui ne croient pas.'],
+        14 => ['PASTORAT', 'Je me sens responsable du bien-être spirituel d\'un groupe de personnes.'],
+        15 => ['INTERCESSION', 'Je peux prier longtemps pour quelqu\'un sans me lasser.'],
+        16 => ['ENSEIGNEMENT', 'Quand j\'enseigne, les gens me disent qu\'ils ont compris.'],
+        17 => ['EXHORTATION', 'Je sais trouver les mots qui redonnent courage.'],
+        18 => ['SERVICE', 'Je préfère aider concrètement plutôt qu\'être sur le devant de la scène.'],
+        19 => ['LIBERALITE', 'Je gère mes ressources pour pouvoir donner davantage.'],
+        20 => ['PRESIDENCE', 'J\'aime fixer un cap et organiser les gens pour l\'atteindre.'],
+        21 => ['MISERICORDE', 'Je prends le temps d\'être présent(e) auprès des personnes fragiles.'],
+        22 => ['PROPHETIE', 'Je ressens le besoin de dire la vérité, même quand elle dérange.'],
+        23 => ['SAGESSE', 'Je vois souvent la solution pratique à un problème compliqué.'],
+        24 => ['CONNAISSANCE', 'J\'aime rassembler des informations et les organiser pour les autres.'],
+        25 => ['FOI', 'Je suis prêt(e) à me lancer dans un projet si je crois que Dieu le veut, même sans garanties.'],
+        26 => ['DISCERNEMENT', 'Je sens si un enseignement ou une intention est juste ou non.'],
+        27 => ['HOSPITALITE', 'Je veille à ce que les nouveaux venus se sentent bienvenus.'],
+        28 => ['EVANGELISATION', 'J\'ai à cœur que les autres découvrent Dieu.'],
+        29 => ['PASTORAT', 'J\'aime accompagner des personnes dans la durée.'],
+        30 => ['INTERCESSION', 'Je prie spontanément pour les besoins que l\'on me confie.'],
+        31 => ['ENSEIGNEMENT', 'Je prends plaisir à préparer un enseignement.'],
+        32 => ['EXHORTATION', 'J\'aime aider les gens à faire le pas suivant dans leur croissance.'],
+        33 => ['SERVICE', 'Je me sens utile quand je rends service, même pour de petites tâches.'],
+        34 => ['LIBERALITE', 'Je donne discrètement, sans attendre de reconnaissance.'],
+        35 => ['PRESIDENCE', 'Je sais déléguer et coordonner une équipe.'],
+        36 => ['MISERICORDE', 'J\'ai de la patience pour ceux que d\'autres trouvent difficiles.'],
+        37 => ['PROPHETIE', 'Il m\'arrive de percevoir ce que Dieu veut dire à une situation.'],
+        38 => ['SAGESSE', 'Mes conseils se révèlent souvent justes avec le temps.'],
+        39 => ['CONNAISSANCE', 'Je retiens et relie facilement de nombreuses vérités entre elles.'],
+        40 => ['FOI', 'Ma confiance en Dieu aide les autres à croire.'],
+        41 => ['DISCERNEMENT', 'Je distingue souvent les motivations réelles derrière les apparences.'],
+        42 => ['HOSPITALITE', 'Je sais créer une atmosphère chaleureuse où chacun se sent à l\'aise.'],
+        43 => ['EVANGELISATION', 'Des personnes ont découvert la foi grâce à mon témoignage.'],
+        44 => ['PASTORAT', 'Je remarque quand quelqu\'un s\'éloigne et je vais vers lui.'],
+        45 => ['INTERCESSION', 'J\'ai vu des réponses concrètes à mes prières pour les autres.'],
+        46 => ['ENSEIGNEMENT', 'Je repère quand une idée est mal comprise et je la clarifie.'],
+        47 => ['EXHORTATION', 'Je crois au potentiel des gens, même quand ils doutent d\'eux-mêmes.'],
+        48 => ['SERVICE', 'Je suis disponible quand on a besoin d\'un coup de main.'],
+        49 => ['LIBERALITE', 'Je suis sensible aux besoins matériels des autres et j\'y réponds.'],
+        50 => ['PRESIDENCE', 'Les autres me suivent volontiers quand je propose une direction.'],
+        51 => ['MISERICORDE', 'Je cherche à soulager concrètement ceux qui sont dans la détresse.'],
+        52 => ['PROPHETIE', 'Les paroles que je partage touchent souvent les gens en profondeur.'],
+        53 => ['SAGESSE', 'Je sais apaiser une situation tendue par une parole juste.'],
+        54 => ['CONNAISSANCE', 'On vient me voir pour comprendre un passage ou un sujet difficile.'],
+        55 => ['FOI', 'Je garde l\'espérance quand d\'autres se découragent.'],
+        56 => ['DISCERNEMENT', 'Mes impressions sur les personnes ou les situations se confirment souvent.'],
+        57 => ['HOSPITALITE', 'Ouvrir ma porte est pour moi une manière de servir Dieu.'],
+        58 => ['EVANGELISATION', 'Je cherche les occasions de parler de l\'Évangile.'],
+        59 => ['PASTORAT', 'Je suis prêt(e) à porter les fardeaux d\'un groupe que je conduis.'],
+        60 => ['INTERCESSION', 'La prière pour les autres occupe une place centrale dans ma vie.'],
+    ];
+}

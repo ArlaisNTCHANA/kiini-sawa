@@ -14,10 +14,6 @@ class PersonalityScoreService
     {
         $type = strtoupper($type);
         return match ($type) {
-            'MBTI'          => $this->calcMbti($answers),
-            'DISC'          => $this->calcDisc($answers),
-            'ENNEAGRAMME'   => $this->calcEnneagramme($answers),
-            'BIG5'          => $this->calcBig5($answers),
             'INTELLIGENCES' => $this->calcIntelligences($answers),
             'TALENT'        => $this->calcTalent($answers),
             'EQUILIBRE'     => $this->calcEquilibre($answers),
@@ -26,153 +22,9 @@ class PersonalityScoreService
         };
     }
 
-    // ─────────────────────────────────────────────────────────────────────────
-    // MBTI — 4 dimensions binaires
-    // Chaque question a une catégorie (E/I, S/N, T/F, J/P) et une valeur (1 ou 2)
-    // ─────────────────────────────────────────────────────────────────────────
-    private function calcMbti(array $answers): array
-    {
-        $scores = ['E' => 0, 'I' => 0, 'S' => 0, 'N' => 0, 'T' => 0, 'F' => 0, 'J' => 0, 'P' => 0];
 
-        foreach ($answers as $dim => $val) {
-            if (isset($scores[$dim])) {
-                $scores[$dim] += (int)$val;
-            }
-        }
 
-        $type =
-            ($scores['E'] >= $scores['I'] ? 'E' : 'I') .
-            ($scores['S'] >= $scores['N'] ? 'S' : 'N') .
-            ($scores['T'] >= $scores['F'] ? 'T' : 'F') .
-            ($scores['J'] >= $scores['P'] ? 'J' : 'P');
 
-        $labels = [
-            'INTJ' => 'Architecte — Stratège visionnaire et indépendant.',
-            'INTP' => 'Logicien — Penseur innovant et analytique.',
-            'ENTJ' => 'Commandant — Leader naturel, déterminé et ambitieux.',
-            'ENTP' => 'Innovateur — Débatteur curieux et ingénieux.',
-            'INFJ' => 'Avocat — Idéaliste doux mais déterminé.',
-            'INFP' => 'Médiateur — Idéaliste, créatif et empathique.',
-            'ENFJ' => 'Protagoniste — Leader charismatique et inspirant.',
-            'ENFP' => 'Inspirateur — Enthousiaste, créatif, sociable.',
-            'ISTJ' => 'Logisticien — Fiable, méthodique et discipliné.',
-            'ISFJ' => 'Défenseur — Protecteur chaleureux et dévoué.',
-            'ESTJ' => 'Directeur — Administrateur efficace et pragmatique.',
-            'ESFJ' => 'Consul — Attentionné et très sociable.',
-            'ISTP' => 'Virtuose — Expérimentateur pragmatique.',
-            'ISFP' => 'Aventurier — Artiste flexible et charmant.',
-            'ESTP' => 'Entrepreneur — Dynamo perspicace et direct.',
-            'ESFP' => 'Amuseur — Spontané, énergie, sens du jeu.',
-        ];
-
-        return [
-            'result'   => $type,
-            'insights' => $labels[$type] ?? "Profil MBTI : $type",
-        ];
-    }
-
-    // ─────────────────────────────────────────────────────────────────────────
-    // DISC — 4 styles comportementaux
-    // Chaque réponse porte un score pour D, I, S ou C
-    // ─────────────────────────────────────────────────────────────────────────
-    private function calcDisc(array $answers): array
-    {
-        $scores = ['D' => 0, 'I' => 0, 'S' => 0, 'C' => 0];
-        foreach ($answers as $dim => $val) {
-            if (isset($scores[$dim])) {
-                $scores[$dim] += (int)$val;
-            }
-        }
-
-        arsort($scores);
-        $top = array_keys($scores)[0];
-        $second = array_keys($scores)[1];
-        $result = $scores[$top] === $scores[$second] ? $top . $second : $top;
-
-        $max = max($scores);
-        $total = array_sum($scores) ?: 1;
-        $pct = array_map(fn($v) => round(($v / $total) * 100), $scores);
-
-        $labels = [
-            'D'  => 'Dominant — Direct, décidé, orienté résultats.',
-            'I'  => 'Influent — Enthousiaste, sociable, communicant.',
-            'S'  => 'Stable — Patient, fiable, diplomate.',
-            'C'  => 'Consciencieux — Analytique, précis, perfectionniste.',
-            'DI' => 'Dominant/Influent — Leader charismatique orienté action.',
-            'DC' => 'Dominant/Consciencieux — Stratège rigoureux.',
-            'IS' => 'Influent/Stable — Communicant empathique.',
-            'SC' => 'Stable/Consciencieux — Perfectionniste méthodique.',
-            'ID' => 'Influent/Dominant — Entrepreneur enthousiaste.',
-            'CD' => 'Consciencieux/Dominant — Analyste décideur.',
-            'SI' => 'Stable/Influent — Médiateur chaleureux.',
-            'CS' => 'Consciencieux/Stable — Expert fiable et précis.',
-        ];
-
-        return [
-            'result'   => json_encode($pct),
-            'insights' => $labels[$result] ?? "Profil DISC : $result",
-        ];
-    }
-
-    // ─────────────────────────────────────────────────────────────────────────
-    // ENNEAGRAMME — 9 types
-    // ─────────────────────────────────────────────────────────────────────────
-    private function calcEnneagramme(array $answers): array
-    {
-        $scores = array_fill(1, 9, 0);
-        foreach ($answers as $type => $val) {
-            if (is_numeric($type) && isset($scores[(int)$type])) {
-                $scores[(int)$type] += (int)$val;
-            }
-        }
-
-        arsort($scores);
-        $topType = (string)array_key_first($scores);
-
-        $labels = [
-            '1' => 'Type 1 — Le Réformateur. Perfectionniste, idéaliste, éthique.',
-            '2' => 'Type 2 — L\'Altruiste. Généreux, caring, cherche à être aimé.',
-            '3' => 'Type 3 — Le Battant. Ambitieux, performant, orienté succès.',
-            '4' => 'Type 4 — L\'Individualiste. Créatif, romantique, introspectif.',
-            '5' => 'Type 5 — L\'Investigateur. Analytique, observateur, réservé.',
-            '6' => 'Type 6 — Le Loyaliste. Engagé, anxieux, cherche la sécurité.',
-            '7' => 'Type 7 — L\'Enthousiaste. Spontané, curieux, positif.',
-            '8' => 'Type 8 — Le Challenger. Puissant, décisif, protecteur.',
-            '9' => 'Type 9 — Le Pacificateur. Accommodant, stable, médiateur.',
-        ];
-
-        return [
-            'result'   => $topType,
-            'insights' => $labels[$topType] ?? "Type Ennéagramme : $topType",
-        ];
-    }
-
-    // ─────────────────────────────────────────────────────────────────────────
-    // BIG5 — 5 dimensions OCEAN (scores de 0 à 10)
-    // ─────────────────────────────────────────────────────────────────────────
-    private function calcBig5(array $answers): array
-    {
-        $dims = ['O' => [], 'C' => [], 'E' => [], 'A' => [], 'N' => []];
-        foreach ($answers as $dim => $val) {
-            if (isset($dims[$dim])) {
-                $dims[$dim][] = (int)$val;
-            }
-        }
-
-        $scores = [];
-        foreach ($dims as $k => $vals) {
-            $scores[$k] = count($vals) > 0 ? round(array_sum($vals) / count($vals) * 10) : 50;
-        }
-
-        arsort($scores);
-        $dominant = array_key_first($scores);
-        $pct = array_map(fn($v) => min(100, max(0, $v)), $scores);
-
-        return [
-            'result'   => json_encode($pct),
-            'insights' => "Profil Big Five — Dominante : $dominant (" . $this->big5Label($dominant) . ")",
-        ];
-    }
 
     private function big5Label(string $dim): string
     {

@@ -1,0 +1,25 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ instrument.name }} : mes résultats{% endblock %}
+
+{% block body %}
+<style>
+    .r-wrap { max-width: 820px; margin: 0 auto; padding: 2rem 1.25rem 8rem; line-height: 1.6; }
+    .r-section { background: var(--card-bg); border-radius: var(--r-lg); box-shadow: var(--card-shadow); padding: 1.5rem; margin-bottom: 1.25rem; }
+    .r-section h2 { font-family: var(--font-serif); color: var(--fg); font-size: 1.3rem; margin-bottom: .6rem; }
+    .r-section p { margin-bottom: .5rem; }
+    .r-section ul { padding-left: 1.2rem; }
+</style>
+<div class="r-wrap">
+    <a href="{{ path('app_personality_index') }}" style="font-size: .8rem; font-weight: 700; color: var(--fg-muted); text-transform: uppercase; letter-spacing: .05em; text-decoration: none;">← Mes tests</a>
+    <h1 style="font-family: var(--font-serif); color: {{ instrument.color }}; font-size: 2rem; margin: .4rem 0 .25rem;">{{ instrument.name }}</h1>
+    <p style="color: var(--fg-muted); margin-bottom: 1.25rem;">Passé le {{ assessment.takenAt|format_date(pattern: 'd MMMM y', locale: 'fr') }} · {{ instrument.level }}</p>
+    <div style="display: flex; gap: .6rem; flex-wrap: wrap; margin-bottom: 1.25rem;">
+        <a href="{{ path('app_assessment_report_pdf', {id: assessment.id}) }}" data-turbo="false" style="padding: .65rem 1.1rem; border-radius: var(--r-md); background: var(--primary); color: #fff; font-weight: 700; text-decoration: none;">Télécharger le rapport PDF</a>
+        <a href="{{ path('app_assessment_take', {slug: slug}) }}" style="padding: .65rem 1.1rem; border-radius: var(--r-md); background: var(--bg-alt); color: var(--fg); font-weight: 600; text-decoration: none;">Repasser le test</a>
+    </div>
+    {{ book_panel('personnalite') }}
+    {% include 'personnalite/assessment/_report_body.html.twig' %}
+    <p style="font-size: .78rem; color: var(--fg-muted);">Ce rapport est un outil de connaissance de soi, pas un diagnostic. {% if slug in ['profil-complet', 'big-five', 'type', 'style'] %}Questions : International Personality Item Pool (IPIP-NEO, Johnson 2014, domaine public). Le type de fonctionnement s'inspire de la typologie de Carl Jung (popularisée par le MBTI®) et le style du modèle DISC de William Marston ; KIINI SAWA n'est affilié à aucune de ces marques.{% endif %}</p>
+</div>
+{% endblock %}

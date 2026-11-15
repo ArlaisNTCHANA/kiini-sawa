@@ -1,0 +1,123 @@
+{# Corps du rapport, commun à l'écran et au PDF (styles simples, compatibles Dompdf). #}
+{% macro bar(score, color) %}
+    <div style="background: #E2E8F0; border-radius: 4px; height: 8px; width: 100%;"><div style="background: {{ color }}; height: 8px; border-radius: 4px; width: {{ max(2, score) }}%;"></div></div>
+{% endmacro %}
+{% set color = instrument.color %}
+
+{% if quality.warnings is defined and quality.warnings|length %}
+    <div style="background: #FEF3C7; border: 1px solid #FDE68A; color: #92400E; border-radius: 10px; padding: 10px 14px; margin-bottom: 16px; font-size: 13px;">
+        {% for w in quality.warnings %}<div>⚠ {{ w }}</div>{% endfor %}
+    </div>
+{% endif %}
+
+{# ── Type de fonctionnement ─────────────────────────────── #}
+{% if type is defined and type %}
+    <div class="r-section">
+        <h2>Votre type de fonctionnement : {{ type.code }} · {{ type.name }}</h2>
+        <p style="font-size: 15px;">{{ type.desc }}</p>
+        <table style="width: 100%; border-collapse: collapse; margin-top: 8px;">
+            {% for axis in type.axes %}
+                <tr><td style="padding: 6px 0; width: 46%; font-size: 13px;">{{ axis.text }}</td>
+                    <td style="padding: 6px 8px;">{{ _self.bar(axis.clarity, '#6366F1') }}</td>
+                    <td style="padding: 6px 0; width: 90px; font-size: 12px; color: #64748B;">netteté {{ axis.clarity }}/100</td></tr>
+            {% endfor %}
+        </table>
+        <p style="font-size: 12px; color: #64748B;">Une préférence peu nette (moins de 20) signifie que vous êtes à l'aise des deux côtés : c'est une richesse, pas une indécision.</p>
+    </div>
+{% endif %}
+
+{# ── Style comportemental ───────────────────────────────── #}
+{% if style is defined and style %}
+    <div class="r-section">
+        <h2>Votre style comportemental : {{ style.profile.name }}{% if style.secondaryProfile %} et {{ style.secondaryProfile.name }}{% endif %}</h2>
+        <p>{{ style.profile.essence }}</p>
+        <table style="width: 100%; border-collapse: collapse; margin: 8px 0;">
+            {% for key, s in style.scores %}
+                <tr><td style="padding: 5px 0; width: 30%; font-size: 13px;"><strong>{{ key }}</strong> · {{ constant('App\\Personnalite\\Psychometrie\\Interpretations::STYLES')[key].name }}</td>
+                    <td style="padding: 5px 8px;">{{ _self.bar(s, '#F43F5E') }}</td><td style="width: 40px; font-size: 12px; color: #64748B;">{{ s|round }}</td></tr>
+            {% endfor %}
+        </table>
+        <p><strong>Vos forces :</strong> {{ style.profile.strengths }}</p>
+        <p><strong>Points de vigilance :</strong> {{ style.profile.watch }}</p>
+        <p><strong>Pour bien communiquer avec vous :</strong> {{ style.profile.communicate }}</p>
+    </div>
+{% endif %}
+
+{# ── Big Five ───────────────────────────────────────────── #}
+{% if domains is defined and domains|length %}
+    <div class="r-section">
+        <h2>Vos cinq grandes dimensions</h2>
+        <p style="font-size: 12px; color: #64748B;">{% if normsAvailable %}Le percentile indique votre position par rapport aux utilisateurs de KIINI SAWA (50 = la moyenne).{% else %}Scores de 0 à 100. La comparaison avec la population (percentiles) apparaîtra dès que suffisamment de personnes auront répondu.{% endif %}</p>
+        {% for d, dom in domains %}
+            <div style="margin: 14px 0 6px; page-break-inside: avoid;">
+                <table style="width: 100%; border-collapse: collapse;"><tr>
+                    <td style="width: 34%; font-weight: bold; font-size: 15px;">{{ dom.label }}</td>
+                    <td style="padding: 0 8px;">{{ _self.bar(dom.percentile ?? dom.score, color) }}</td>
+                    <td style="width: 90px; font-size: 12px; color: #64748B;">{{ dom.percentile is not null ? dom.percentile ~ 'e percentile' : dom.score|round ~ '/100' }}</td>
+                </tr></table>
+                <p style="font-size: 12px; color: #64748B; margin: 4px 0;">{{ dom.what }}</p>
+                <p style="margin: 4px 0 8px;">{{ dom.text }}</p>
+                <table style="width: 100%; border-collapse: collapse; font-size: 12px;">
+                    {% for f in dom.facets %}
+                        <tr><td style="padding: 3px 0; width: 30%;">{{ f.label }}</td>
+                            <td style="padding: 3px 8px; width: 30%;">{{ _self.bar(f.percentile ?? f.score, color) }}</td>
+                            <td style="padding: 3px 0; color: #475569;">{{ f.text ?? '' }}</td></tr>
+                    {% endfor %}
+                </table>
+            </div>
+        {% endfor %}
+    </div>
+{% endif %}
+
+{% if strengths is defined and strengths|length %}
+    <div class="r-section">
+        <h2>Vos points d'appui</h2>
+        <ul>{% for f in strengths %}<li><strong>{{ f.label }}</strong> : {{ f.text }}</li>{% endfor %}</ul>
+    </div>
+{% endif %}
+{% if vigilance is defined and vigilance|length %}
+    <div class="r-section">
+        <h2>Vos terrains de croissance</h2>
+        <ul>{% for f in vigilance %}<li><strong>{{ f.label }}</strong> : {{ f.text }}</li>{% endfor %}</ul>
+        <p style="font-size: 12px; color: #64748B;">Ces pistes peuvent nourrir votre Plan de Croissance (axe Caractère & Conviction) et votre Plan d'Hygiène de Vie.</p>
+    </div>
+{% endif %}
+
+{# ── Ennéagramme ────────────────────────────────────────── #}
+{% if enneagram is defined %}
+    {% set p = enneagram.profile %}
+    <div class="r-section">
+        <h2>Type {{ enneagram.type }} · {{ p.name }} <span style="font-weight: normal; font-size: 14px; color: #64748B;">(aile {{ enneagram.wing }} · {{ enneagram.wingProfile.name }})</span></h2>
+        <p><strong>Ce qui vous motive :</strong> {{ p.motivation }}</p>
+        <p><strong>Ce que vous craignez :</strong> {{ p.fear }}</p>
+        <p><strong>Votre don :</strong> {{ p.gift }}</p>
+        <p><strong>Votre vigilance :</strong> {{ p.watch }}</p>
+        <p><strong>Votre chemin de croissance :</strong> {{ p.growth }}</p>
+        {% if enneagram.clarity < 8 %}<p style="font-size: 12px; color: #92400E;">Plusieurs types sont proches dans vos réponses : lisez aussi les profils suivants et retenez celui dont la peur profonde vous parle le plus.</p>{% endif %}
+        <table style="width: 100%; border-collapse: collapse; margin-top: 8px; font-size: 13px;">
+            {% for t, b in enneagram.bars %}
+                <tr><td style="padding: 3px 0; width: 38%;">{{ t }} · {{ b.name }}</td><td style="padding: 3px 8px;">{{ _self.bar(b.score, '#F59E0B') }}</td><td style="width: 40px; color: #64748B;">{{ b.score|round }}</td></tr>
+            {% endfor %}
+        </table>
+    </div>
+{% endif %}
+
+{# ── Dons spirituels ────────────────────────────────────── #}
+{% if gifts is defined %}
+    <div class="r-section">
+        <h2>Vos dons les plus marqués</h2>
+        {% for g in gifts.top %}
+            <div style="margin-bottom: 10px; page-break-inside: avoid;">
+                <p style="margin: 0;"><strong>{{ g.name }}</strong> <span style="color: #64748B; font-size: 12px;">({{ g.ref }})</span></p>
+                <p style="margin: 2px 0;">{{ g.desc }}</p>
+                <p style="margin: 2px 0; font-size: 13px; color: #475569;">Pistes de service : {{ g.serve }}</p>
+            </div>
+        {% endfor %}
+        <p style="font-size: 12px; color: #64748B;">Un don se confirme dans l'expérience et par la communauté : servez, demandez un retour à vos responsables, et reprenez ce test dans quelques mois.</p>
+        <table style="width: 100%; border-collapse: collapse; margin-top: 8px; font-size: 13px;">
+            {% for code, b in gifts.bars %}
+                <tr><td style="padding: 3px 0; width: 30%;">{{ b.name }}</td><td style="padding: 3px 8px;">{{ _self.bar(b.score, '#B45309') }}</td><td style="width: 40px; color: #64748B;">{{ b.score|round }}</td></tr>
+            {% endfor %}
+        </table>
+    </div>
+{% endif %}

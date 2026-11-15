@@ -1,0 +1,71 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ def.name }}{% endblock %}
+
+{% block body %}
+<style>
+    .as-wrap { max-width: 760px; margin: 0 auto; padding: 2rem 1.25rem 8rem; }
+    .as-progress { position: sticky; top: 0; z-index: 5; background: var(--bg); padding: .75rem 0; }
+    .as-bar { height: 6px; background: #E2E8F0; border-radius: 6px; overflow: hidden; }
+    .as-bar span { display: block; height: 100%; background: {{ def.color }}; transition: width .3s; }
+    .as-q { background: var(--card-bg); border-radius: var(--r-lg); box-shadow: var(--card-shadow); padding: 1.1rem 1.25rem; margin-bottom: .75rem; }
+    .as-q p { font-weight: 600; margin-bottom: .75rem; color: var(--fg); }
+    .as-scale { display: grid; grid-template-columns: repeat(5, 1fr); gap: .35rem; }
+    .as-scale label { text-align: center; font-size: .72rem; line-height: 1.2; padding: .55rem .2rem; border: 1.5px solid #E2E8F0; border-radius: .7rem; cursor: pointer; color: var(--fg-light); }
+    .as-scale input { position: absolute; opacity: 0; pointer-events: none; }
+    .as-scale label:has(input:checked) { background: {{ def.color }}; border-color: {{ def.color }}; color: #fff; font-weight: 700; }
+    .as-scale label:has(input:focus-visible) { outline: 2px solid {{ def.color }}; outline-offset: 2px; }
+    .as-nav { display: flex; justify-content: space-between; gap: 1rem; margin-top: 1.25rem; }
+    .as-btn { padding: .85rem 1.5rem; border-radius: var(--r-md); border: none; background: {{ def.color }}; color: #fff; font: inherit; font-weight: 700; cursor: pointer; }
+    .as-btn:disabled { opacity: .4; cursor: not-allowed; }
+    .as-btn.sec { background: var(--bg-alt); color: var(--fg); }
+    @media (max-width: 480px) { .as-scale label { font-size: .64rem; } }
+</style>
+
+{% set perPage = 12 %}
+{% set pages = (items|length / perPage)|round(0, 'ceil') %}
+<div class="as-wrap" x-data="{ page: 0, pages: {{ pages }}, answered: {}, total: {{ items|length }},
+        count() { return Object.keys(this.answered).length },
+        pageDone(p) { return [...document.querySelectorAll('[data-page=\'' + p + '\'] [data-key]')].every(el => this.answered[el.dataset.key]) } }">
+    <a href="{{ path('app_personality_index') }}" style="font-size: .8rem; font-weight: 700; color: var(--fg-muted); text-transform: uppercase; letter-spacing: .05em; text-decoration: none;">← Mes tests</a>
+    <h1 style="font-family: var(--font-serif); color: {{ def.color }}; font-size: 1.9rem; margin: .4rem 0 .25rem;">{{ def.name }}</h1>
+    <p style="color: var(--fg-muted); margin-bottom: .5rem;">{{ items|length }} affirmations · environ {{ def.minutes }} minutes. Répondez spontanément, selon ce que vous êtes vraiment (et non ce que vous aimeriez être). Il n'y a pas de bonne ou de mauvaise réponse.</p>
+
+    <div class="as-progress">
+        <div style="display: flex; justify-content: space-between; font-size: .8rem; color: var(--fg-muted); margin-bottom: .35rem;">
+            <span x-text="'Page ' + (page + 1) + ' sur ' + pages"></span>
+            <span x-text="count() + ' / ' + total"></span>
+        </div>
+        <div class="as-bar"><span :style="'width:' + (count() / total * 100) + '%'"></span></div>
+    </div>
+
+    <form method="post" @submit="if (count() < total) { $event.preventDefault(); alert('Il reste ' + (total - count()) + ' question(s) sans réponse.'); }">
+        {% for chunk in items|batch(perPage) %}
+            {% set p = loop.index0 %}
+            <div data-page="{{ p }}" x-show="page === {{ p }}" {{ p > 0 ? 'x-cloak' }}>
+                {% for item in chunk %}
+                    <fieldset class="as-q" data-key="{{ item.key }}">
+                        <legend class="sr-only" style="position: absolute; left: -9999px;">{{ item.text }}</legend>
+                        <p>{{ item.text }}</p>
+                        <div class="as-scale">
+                            {% for value, label in scale %}
+                                <label><input type="radio" name="answers[{{ item.key }}]" value="{{ value }}" required @change="answered['{{ item.key }}'] = true">{{ label }}</label>
+                            {% endfor %}
+                        </div>
+                    </fieldset>
+                {% endfor %}
+            </div>
+        {% endfor %}
+
+        <input type="hidden" name="startedAt" value="{{ startedAt }}">
+        <input type="hidden" name="_csrf_token" value="{{ csrf_token('assessment_' ~ slug) }}">
+        <div class="as-nav">
+            <button type="button" class="as-btn sec" x-show="page > 0" @click="page--; window.scrollTo(0, 0)">← Précédent</button>
+            <span x-show="page === 0"></span>
+            <button type="button" class="as-btn" x-show="page < pages - 1" :disabled="!pageDone(page)" @click="page++; window.scrollTo(0, 0)">Suivant →</button>
+            <button type="submit" class="as-btn" x-show="page === pages - 1" x-cloak :disabled="count() < total">Voir mes résultats</button>
+        </div>
+    </form>
+    <p style="font-size: .75rem; color: var(--fg-muted); margin-top: 1.5rem;">{{ def.level }}. {% if slug in ['profil-complet', 'big-five', 'type', 'style'] %}Questions issues de l'International Personality Item Pool (IPIP-NEO, Johnson 2014, domaine public), traduction KIINI SAWA.{% endif %}</p>
+</div>
+{% endblock %}
