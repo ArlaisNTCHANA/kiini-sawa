@@ -5,6 +5,7 @@ namespace App\PlanDeVie\Controller;
 use App\Rituels\Entity\Habit;
 use App\Rituels\Form\HabitType;
 use Doctrine\ORM\EntityManagerInterface;
+use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -15,6 +16,9 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 
 class UserPlanController extends AbstractController
 {
+    public function __construct(private readonly LoggerInterface $logger)
+    {
+    }
 
 
     private function getLifePlanData(EntityManagerInterface $em): array
@@ -392,7 +396,7 @@ class UserPlanController extends AbstractController
         return $this->render('plan_de_vie/visualize.html.twig', $data);
     }
 
-    #[Route('/mes-plans/vie/email', name: 'app_user_life_plan_send_email', methods: ['POST', 'GET'])]
+    #[Route('/mes-plans/vie/email', name: 'app_user_life_plan_send_email', methods: ['POST'])]
     public function lifePlanSendEmail(EntityManagerInterface $em, MailerInterface $mailer): Response
     {
         $user = $this->getUser();
@@ -418,7 +422,9 @@ class UserPlanController extends AbstractController
 
             return new JsonResponse(['success' => true, 'emailSentTo' => $user->getEmail()]);
         } catch (\Throwable $e) {
-            return new JsonResponse(['success' => false, 'error' => 'Erreur lors de l\'envoi de l\'email : ' . $e->getMessage()], 500);
+            $this->logger->error('Échec de l\'envoi du plan par email', ['exception' => $e]);
+
+            return new JsonResponse(['success' => false, 'error' => 'L\'email n\'a pas pu être envoyé. Réessayez dans quelques minutes.'], 500);
         }
     }
 
@@ -453,7 +459,7 @@ class UserPlanController extends AbstractController
         return $this->render('plan_de_croissance/visualize.html.twig', $data);
     }
 
-    #[Route('/mes-strategies/croissance/email', name: 'app_user_croissance_plan_send_email', methods: ['POST', 'GET'])]
+    #[Route('/mes-strategies/croissance/email', name: 'app_user_croissance_plan_send_email', methods: ['POST'])]
     public function croissancePlanSendEmail(EntityManagerInterface $em, MailerInterface $mailer): Response
     {
         $user = $this->getUser();
@@ -495,7 +501,9 @@ class UserPlanController extends AbstractController
 
             return new JsonResponse(['success' => true, 'emailSentTo' => $user->getEmail()]);
         } catch (\Throwable $e) {
-            return new JsonResponse(['success' => false, 'error' => 'Erreur lors de l\'envoi de l\'email : ' . $e->getMessage()], 500);
+            $this->logger->error('Échec de l\'envoi du plan par email', ['exception' => $e]);
+
+            return new JsonResponse(['success' => false, 'error' => 'L\'email n\'a pas pu être envoyé. Réessayez dans quelques minutes.'], 500);
         }
     }
 
@@ -530,7 +538,7 @@ class UserPlanController extends AbstractController
         return $this->render('plan_de_developpement/visualize.html.twig', $data);
     }
 
-    #[Route('/mes-strategies/developpement/email', name: 'app_user_developpement_plan_send_email', methods: ['POST', 'GET'])]
+    #[Route('/mes-strategies/developpement/email', name: 'app_user_developpement_plan_send_email', methods: ['POST'])]
     public function developpementPlanSendEmail(EntityManagerInterface $em, MailerInterface $mailer): Response
     {
         $user = $this->getUser();
@@ -570,7 +578,9 @@ class UserPlanController extends AbstractController
 
             return new JsonResponse(['success' => true, 'emailSentTo' => $user->getEmail()]);
         } catch (\Throwable $e) {
-            return new JsonResponse(['success' => false, 'error' => 'Erreur lors de l\'envoi de l\'email : ' . $e->getMessage()], 500);
+            $this->logger->error('Échec de l\'envoi du plan par email', ['exception' => $e]);
+
+            return new JsonResponse(['success' => false, 'error' => 'L\'email n\'a pas pu être envoyé. Réessayez dans quelques minutes.'], 500);
         }
     }
 
@@ -604,7 +614,7 @@ class UserPlanController extends AbstractController
         return $this->render('plan_de_transmission/visualize.html.twig', $data);
     }
 
-    #[Route('/mes-strategies/contribution/email', name: 'app_user_contribution_plan_send_email', methods: ['POST', 'GET'])]
+    #[Route('/mes-strategies/contribution/email', name: 'app_user_contribution_plan_send_email', methods: ['POST'])]
     public function contributionPlanSendEmail(EntityManagerInterface $em, MailerInterface $mailer): Response
     {
         $user = $this->getUser();
@@ -644,7 +654,9 @@ class UserPlanController extends AbstractController
 
             return new JsonResponse(['success' => true, 'emailSentTo' => $user->getEmail()]);
         } catch (\Throwable $e) {
-            return new JsonResponse(['success' => false, 'error' => 'Erreur lors de l\'envoi de l\'email : ' . $e->getMessage()], 500);
+            $this->logger->error('Échec de l\'envoi du plan par email', ['exception' => $e]);
+
+            return new JsonResponse(['success' => false, 'error' => 'L\'email n\'a pas pu être envoyé. Réessayez dans quelques minutes.'], 500);
         }
     }
 
@@ -678,7 +690,7 @@ class UserPlanController extends AbstractController
         return $this->render('plan_dhygiene/visualize.html.twig', $data);
     }
 
-    #[Route('/mes-strategies/discipline/email', name: 'app_user_discipline_plan_send_email', methods: ['POST', 'GET'])]
+    #[Route('/mes-strategies/discipline/email', name: 'app_user_discipline_plan_send_email', methods: ['POST'])]
     public function disciplinePlanSendEmail(EntityManagerInterface $em, MailerInterface $mailer): Response
     {
         $user = $this->getUser();
@@ -718,7 +730,9 @@ class UserPlanController extends AbstractController
 
             return new JsonResponse(['success' => true, 'emailSentTo' => $user->getEmail()]);
         } catch (\Throwable $e) {
-            return new JsonResponse(['success' => false, 'error' => 'Erreur lors de l\'envoi de l\'email : ' . $e->getMessage()], 500);
+            $this->logger->error('Échec de l\'envoi du plan par email', ['exception' => $e]);
+
+            return new JsonResponse(['success' => false, 'error' => 'L\'email n\'a pas pu être envoyé. Réessayez dans quelques minutes.'], 500);
         }
     }
 

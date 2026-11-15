@@ -1,0 +1,113 @@
+<?php
+
+namespace App\Tests\Shared\Security;
+
+use App\Compte\Repository\UserRepository;
+use Symfony\Bundle\FrameworkBundle\KernelBrowser;
+use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+
+/**
+ * Garde-fous transverses : contrôle d'accès, protection CSRF par l'origine,
+ * réponses JSON des API, limitation des tentatives de connexion.
+ */
+class SecurityGuardsTest extends WebTestCase
+{
+    private function loggedClient(): KernelBrowser
+    {
+        $client = static::createClient();
+        $client->loginUser(static::getContainer()->get(UserRepository::class)->findOneByEmail('admin@kiinisawa.com'));
+
+        return $client;
+    }
+
+    public function testEveryPageRequiresAuthenticationExceptLogin(): void
+    {
+        $client = static::createClient();
+        $routes = static::getContainer()->get('router')->getRouteCollection();
+        $checked = 0;
+
+        foreach ($routes as $name => $route) {
+            if (str_starts_with($name, '_') || \in_array($name, ['app_login', 'app_logout'], true)) {
+                continue;
+            }
+            $methods = $route->getMethods() ?: ['GET'];
+            $path = preg_replace('/\{[^}]+\}/', '1', $route->getPath());
+            $client->request($methods[0], $path);
+            $status = $client->getResponse()->getStatusCode();
+
+            if (str_starts_with($path, '/api/')) {
+                $this->assertSame(401, $status, "$name ($path) doit répondre 401 sans connexion");
+            } else {
+                $this->assertTrue(
+                    $client->getResponse()->isRedirect('http://localhost/login') || $client->getResponse()->isRedirect('/login'),
+                    "$name ($path) doit rediriger vers /login sans connexion (reçu $status)"
+                );
+            }
+            ++$checked;
+        }
+
+        $this->assertGreaterThan(40, $checked);
+    }
+
+    public function testLoginPageIsPublic(): void
+    {
+        $client = static::createClient();
+        $client->request('GET', '/login');
+
+        $this->assertResponseIsSuccessful();
+    }
+
+    public function testCrossSitePostIsRejected(): void
+    {
+        $client = $this->loggedClient();
+        $client->request('POST', '/api/journal/entries/create', server: [
+            'HTTP_ORIGIN' => 'https://site-malveillant.example',
+            'CONTENT_TYPE' => 'application/json',
+        ], content: json_encode(['content' => 'Injection']));
+
+        $this->assertResponseStatusCodeSame(403);
+    }
+
+    public function testCrossSiteFetchMetadataIsRejected(): void
+    {
+        $client = $this->loggedClient();
+        $client->request('DELETE', '/api/habits/1', server: ['HTTP_SEC_FETCH_SITE' => 'cross-site']);
+
+        $this->assertResponseStatusCodeSame(403);
+    }
+
+    public function testSameOriginPostIsAccepted(): void
+    {
+        $client = $this->loggedClient();
+        $client->request('POST', '/api/journal/entries/create', server: [
+            'HTTP_ORIGIN' => 'http://localhost',
+            'HTTP_SEC_FETCH_SITE' => 'same-origin',
+            'CONTENT_TYPE' => 'application/json',
+        ], content: json_encode(['content' => 'Note de test même origine']));
+
+        $this->assertResponseIsSuccessful();
+    }
+
+    public function testEmailRoutesRefuseGet(): void
+    {
+        $client = $this->loggedClient();
+        $client->request('GET', '/mes-plans/vie/email');
+
+        $this->assertResponseStatusCodeSame(405);
+    }
+
+    public function testLoginIsThrottledAfterFiveFailures(): void
+    {
+        $client = static::createClient();
+        for ($i = 0; $i < 6; ++$i) {
+            $crawler = $client->request('GET', '/login');
+            $client->submit($crawler->selectButton('Se connecter')->form([
+                'email' => 'throttle-'.getmypid().'@kiinisawa.com',
+                'password' => 'mauvais-mot-de-passe',
+            ]));
+            $client->followRedirect();
+        }
+
+        $this->assertSelectorTextContains('.alert', 'Trop de tentatives de connexion échouées');
+    }
+}
