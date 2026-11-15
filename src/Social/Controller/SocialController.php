@@ -122,7 +122,7 @@ class SocialController extends AbstractController
         $user = $this->getUser();
         
         $data = json_decode($request->getContent(), true);
-        $email = $data['email'] ?? null;
+        $email = mb_strtolower(trim((string) ($data['email'] ?? '')));
 
         if (!$email) {
             return new JsonResponse(['success' => false, 'error' => 'L\'adresse email est manquante.'], Response::HTTP_BAD_REQUEST);
@@ -134,7 +134,8 @@ class SocialController extends AbstractController
 
         $receiver = $em->getRepository(User::class)->findOneBy(['email' => $email]);
         if (!$receiver) {
-            return new JsonResponse(['success' => false, 'error' => 'Aucun utilisateur trouvé avec cette adresse email.'], Response::HTTP_NOT_FOUND);
+            // Même réponse qu'en cas de succès : on ne révèle pas si un compte existe pour cet email
+            return new JsonResponse(['success' => true]);
         }
 
         // Check if connection already exists

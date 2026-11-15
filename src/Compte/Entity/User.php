@@ -116,7 +116,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function setEmail(string $email): static
     {
-        $this->email = $email;
+        // Emails insensibles à la casse : toujours stockés en minuscules
+        $this->email = mb_strtolower(trim($email));
 
         return $this;
     }

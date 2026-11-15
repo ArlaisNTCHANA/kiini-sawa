@@ -7,7 +7,6 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -34,10 +33,6 @@ class AppConfigType extends AbstractType
             ])
             ->add('trialDurationDays', IntegerType::class, [
                 'label' => 'Durée de la période d\'essai (jours)',
-                'required' => true,
-            ])
-            ->add('demoPassword', TextType::class, [
-                'label' => 'Mot de passe utilisateur démo',
                 'required' => true,
             ])
         ;

@@ -749,7 +749,7 @@
                             {% endif %}
                             {% if goal.deadline %}
                                 <div style="font-size: 11px; margin-bottom: 12px; color: var(--text-secondary);">
-                                    <strong style="color:var(--text-muted);">Échéance cible :</strong> {{ goal.deadline|date('d F Y') }}
+                                    <strong style="color:var(--text-muted);">Échéance cible :</strong> {{ goal.deadline|format_date(pattern: 'd MMMM y', locale: 'fr') }}
                                 </div>
                             {% endif %}
 

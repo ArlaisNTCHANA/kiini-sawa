@@ -45,7 +45,6 @@ class ConfigurationControllerTest extends WebTestCase
         $form['app_config[proMonthlyPrice]'] = 19.99;
         $form['app_config[proYearlyPrice]'] = 179.99;
         $form['app_config[trialDurationDays]'] = 30;
-        $form['app_config[demoPassword]'] = 'secret123';
 
         $client->submit($form);
         $this->assertResponseRedirects('/admin/config');
@@ -60,6 +59,5 @@ class ConfigurationControllerTest extends WebTestCase
         $this->assertEquals(19.99, $config->getProMonthlyPrice());
         $this->assertEquals(179.99, $config->getProYearlyPrice());
         $this->assertEquals(30, $config->getTrialDurationDays());
-        $this->assertEquals('secret123', $config->getDemoPassword());
     }
 }

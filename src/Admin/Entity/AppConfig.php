@@ -107,9 +107,6 @@ class AppConfig
     #[ORM\Column(options: ['default' => true])]
     private bool $enableMethodFree = true;
 
-    #[ORM\Column(length: 255, options: ['default' => 'password123'])]
-    private string $demoPassword = 'password123';
-
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $defaultPurposeStatement = 'En attendant de discerner plus clairement le but de Dieu pour ma vie, je choisis de faire fructifier fidèlement les capacités qu’Il m’a déjà confiées afin d’apporter soutien, valeur et impact positif aux personnes placées sur mon chemin';
 
@@ -522,18 +519,6 @@ class AppConfig
     public function setEnableMethodFree(bool $enableMethodFree): static
     {
         $this->enableMethodFree = $enableMethodFree;
-
-        return $this;
-    }
-
-    public function getDemoPassword(): string
-    {
-        return $this->demoPassword;
-    }
-
-    public function setDemoPassword(string $demoPassword): static
-    {
-        $this->demoPassword = $demoPassword;
 
         return $this;
     }

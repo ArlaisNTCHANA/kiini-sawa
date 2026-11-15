@@ -164,7 +164,7 @@
                                 font-size: 0.725rem; font-weight: 700; color: #ccfbf1; margin-bottom: 0.875rem;
                                 letter-spacing: 0.05em;">
                         <i data-lucide="calendar" style="width: 12px; height: 12px;"></i>
-                        <span>{{ "now"|date("l j F Y")|upper }}</span>
+                        <span>{{ "now"|format_date(pattern: "EEEE d MMMM y", locale: "fr")|upper }}</span>
                     </div>
 
                     <h1 style="font-family: 'Playfair Display', serif; font-size: clamp(2rem, 4.5vw, 3rem);

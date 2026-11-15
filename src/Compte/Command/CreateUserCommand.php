@@ -18,6 +18,7 @@ use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
@@ -40,13 +41,14 @@ class CreateUserCommand extends Command
         $this
             ->addArgument('email', InputArgument::REQUIRED, 'Adresse email de l\'utilisateur')
             ->addArgument('password', InputArgument::REQUIRED, 'Mot de passe de l\'utilisateur')
+            ->addOption('admin', null, InputOption::VALUE_NONE, 'Donner le rôle administrateur (ROLE_ADMIN)')
         ;
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $io = new SymfonyStyle($input, $output);
-        $email = $input->getArgument('email');
+        $email = mb_strtolower(trim($input->getArgument('email')));
         $password = $input->getArgument('password');
 
         // Check if user already exists
@@ -60,7 +62,7 @@ class CreateUserCommand extends Command
 
         $user = new User();
         $user->setEmail($email);
-        $user->setRoles(['ROLE_ADMIN']);
+        $user->setRoles($input->getOption('admin') ? ['ROLE_ADMIN'] : []);
 
         // Hash the password
         $hashedPassword = $this->passwordHasher->hashPassword($user, $password);
