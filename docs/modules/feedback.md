@@ -1,5 +1,8 @@
 # Module Feedback
 
+> ⚠️ État au 16/11/2026 : Module **dormant** : entités présentes, aucune route.
+
+
 **Interface utilisateur** : Non
 
 ## Rôle

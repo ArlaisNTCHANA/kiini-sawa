@@ -1,5 +1,8 @@
 # Système d'Abonnement (Billing & Subscriptions)
 
+> ⚠️ **État au 16/11/2026** : pas de Stripe pour l'instant. Les paiements sont **manuels** (virement, Mobile Money) et validés dans l'administration ; voir `docs/modules/abonnement.md`. Les colonnes Stripe de `Subscription` sont gardées pour plus tard.
+
+
 Ce document détaille le fonctionnement technique, le schéma de base de données et les processus métiers du système d'abonnement et de facturation de **KIINI SAWA**.
 
 ---

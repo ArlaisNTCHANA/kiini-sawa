@@ -1,5 +1,8 @@
 # Architecture & Sécurité des API (Mobile)
 
+> ⚠️ **État au 16/11/2026** : cette page décrit l'API **prévue** pour l'application mobile (phase 7). Elle n'existe pas encore : pas de JWT, pas de NelmioApiDoc, pas de `/api/sync`. Les routes `/api/…` actuelles sont internes aux pages web (session). Voir `AGENTS.md` §8.
+
+
 Toutes les interactions avec l'application mobile passent par des points d'accès (endpoints) API REST retournant du JSON.
 
 ---

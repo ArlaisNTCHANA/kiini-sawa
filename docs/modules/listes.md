@@ -1,5 +1,8 @@
 # Module Listes
 
+> ⚠️ État au 16/11/2026 : Module **dormant** : entités présentes, aucune route (l'application mobile historique avait des listes).
+
+
 **Interface utilisateur** : Non
 
 ## Rôle

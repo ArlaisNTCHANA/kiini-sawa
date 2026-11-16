@@ -105,13 +105,14 @@
             {% for row in [
                 ['Plan de Vie complet et analyse de cohérence', true, true],
                 ['Rituels', freeHabits ~ ' max.', 'Illimités'],
-                ['Journal, planner, revue de la semaine, méthode', true, true],
+                ['Journal, agenda, revue de la semaine, méthode', true, true],
+                ['Tous les tests de personnalité et leurs rapports', true, true],
                 ['Partenaires de redevabilité', freeConnections ~ ' max.', 'Illimités'],
                 ['Plans de Croissance, Développement, Transmission, Hygiène', false, true],
                 ['Carte stratégique', false, true],
                 ['Export PDF de vos plans', false, true],
                 ['Revue du mois et historique de vos plans', false, true],
-                ['Espace couple (offre Duo)', false, 'Avec Duo'],
+                ['Espace couple (les deux conjoints en PRO, ou l\'offre Duo)', false, true],
             ] %}
                 <tr><td>{{ row[0] }}</td>
                     {% for v in [row[1], row[2]] %}<td>{% if v is same as(true) %}<span style="color: var(--primary); font-weight: 800;">✓</span>{% elseif v is same as(false) %}<span style="color: var(--border-strong);">—</span>{% else %}<span style="font-size: .82rem;">{{ v }}</span>{% endif %}</td>{% endfor %}

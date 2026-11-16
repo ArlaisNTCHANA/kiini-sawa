@@ -13,11 +13,11 @@ Ce portail est accessible directement depuis le back-end de l'application et com
 2. **[Structure de la Base de Données (MySQL)](database.md)**
    * Détail des entités, relations, et les tables des 5 plans fondamentaux.
 3. **[Système d'Abonnement & Facturation](subscription.md)**
-   * Gestion du modèle de facturation, des niveaux d'abonnement (tiers), des transactions et de l'intégration Stripe.
+   * Gestion du modèle de facturation, des niveaux d'abonnement (tiers), des transactions (paiements manuels ; Stripe prévu plus tard).
 4. **[Architecture des API (Mobile)](api.md)**
    * Spécifications techniques pour le dialogue avec l'application mobile.
 5. **[Architecture & Stratégie d'Administration](admin.md)**
-   * Comparatif, stratégie d'administration hybride (Symfony UX & EasyAdmin) et gestion des assets.
+   * Comparatif, administration en contrôleurs Symfony (EasyAdmin écarté) et gestion des assets.
 6. **[Organisation par module](modules.md)**
    * Carte des modules, structure des dossiers, ajout d'un module ou d'une entité.
 7. **[Audit technique & fonctionnel — novembre 2026](audit-2026-11.md)**

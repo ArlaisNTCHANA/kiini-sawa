@@ -1,5 +1,8 @@
 # Architecture & Stratégie d'Administration
 
+> ⚠️ **État au 16/11/2026** : EasyAdmin n'est pas utilisé ; l'administration est faite de contrôleurs Symfony et de gabarits `templates/admin/` (layout `admin/layout.html.twig`). Ce document garde la réflexion d'origine.
+
+
 Pour le projet **KIINI SAWA**, le choix a été fait de ne pas se limiter à un générateur d'administration rigide comme EasyAdmin, mais d'adopter une **approche hybride moderne** qui concilie gain de temps et liberté totale sur l'expérience visuelle (UI/UX).
 
 ---

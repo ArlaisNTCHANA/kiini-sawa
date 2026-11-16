@@ -1,5 +1,8 @@
 # Module Defis
 
+> ⚠️ État au 16/11/2026 : Module **dormant** : entités présentes, aucune route. Candidat prioritaire pour les défis collectifs du média (voir docs/media/brief-lancement-media.md).
+
+
 **Interface utilisateur** : Partielle (validation via le Planner)
 
 ## Rôle

@@ -54,6 +54,11 @@ Un **module par dossier** : `src/<Module>/{Controller,Entity,Repository,Service,
   l'email obligatoire, **connexion en deux étapes des administrateurs** (`Compte/Security/AdminSecondFactorSubscriber`),
   protection CSRF par l'origine, en-têtes de sécurité (`Shared/EventSubscriber/SecurityHeadersSubscriber`).
 
+Modules **dormants** (entités et tables, sans page ni route) : `Coaching`, `Defis`, `Feedback`, `Listes`. Ne pas les
+exposer sans décision du fondateur ; `Defis` est le candidat prioritaire (défis collectifs du média).
+Certaines colonnes de `AppConfig` ne sont lues nulle part (limites et interrupteurs historiques) : seuls les champs du
+formulaire d'administration comptent.
+
 Documentation détaillée : `docs/index.md`, `docs/architecture.md`, `docs/database.md`, `docs/modules/*.md`.
 Historique des décisions et chantiers : `docs/plan-v1.md`, `docs/audit-2026-11-16.md`.
 
