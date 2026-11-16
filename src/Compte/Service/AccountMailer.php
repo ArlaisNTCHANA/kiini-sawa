@@ -39,6 +39,16 @@ final class AccountMailer
         $this->devHint('Code envoyé : '.$code);
     }
 
+    /** Code de connexion en deux étapes (comptes administrateurs). */
+    public function sendAdminLoginCode(User $user, string $code): void
+    {
+        $this->send($user->getEmail(), 'Code de connexion administrateur : '.$code, 'compte/email/admin_login_code.html.twig', [
+            'name' => $user->getDisplayName(),
+            'code' => $code,
+        ]);
+        $this->devHint('Code de connexion : '.$code);
+    }
+
     public function sendPasswordReset(User $user, string $selector, string $secret): void
     {
         $url = $this->urls->generate('app_reset_password', ['selector' => $selector, 'secret' => $secret], UrlGeneratorInterface::ABSOLUTE_URL);

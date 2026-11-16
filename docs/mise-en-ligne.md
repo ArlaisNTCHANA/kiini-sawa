@@ -112,13 +112,22 @@ $PHP bin/console app:launch:check
 
 ### 3.4 Tâches planifiées (hPanel › Avancé › Tâches Cron)
 
+`crontab` n'est pas disponible en SSH chez Hostinger : les tâches se créent dans hPanel. L'heure du serveur est UTC.
+
 | Quoi | Commande | Fréquence |
 |---|---|---|
-| Rappels du jour | `cd /home/u340339661/kiini && /opt/alt/php85/usr/bin/php bin/console app:reminders:send` | Chaque jour à 8 h (vérifier le fuseau horaire affiché par hPanel) |
-| Sauvegarde supplémentaire (30 jours) | `cd /home/u340339661/kiini && PATH=/opt/alt/php85/usr/bin:$PATH bin/ops/sauvegarde.sh /home/u340339661/sauvegardes` | Chaque nuit à 3 h |
+| Rappels du jour | `bash /home/u340339661/kiini/bin/ops/cron-rappels.sh` | Chaque jour à 7 h UTC (8 h à Paris et Douala en hiver) |
+| Sauvegarde de la base (30 jours gardés dans `~/sauvegardes`) | `bash /home/u340339661/kiini/bin/ops/cron-sauvegarde.sh` | Chaque nuit à 2 h UTC |
 
-Hostinger fait déjà une sauvegarde quotidienne (hPanel › Fichiers › Sauvegardes). Télécharger aussi
-régulièrement une copie sur votre ordinateur : une sauvegarde chez le même hébergeur ne protège pas de tout.
+Journaux : `~/kiini/var/log/rappels.log` et `~/kiini/var/log/sauvegarde.log`.
+
+Copie des sauvegardes sur votre ordinateur (à faire au moins chaque semaine) : `bin/ops/rapatrier-sauvegardes.sh`
+(dossier `~/KIINI-SAWA-sauvegardes`). Hostinger fait aussi sa propre sauvegarde quotidienne (hPanel › Fichiers › Sauvegardes).
+
+### 3.4 bis Connexion des administrateurs
+
+Un compte administrateur se connecte en deux étapes : mot de passe, puis un code reçu par email (valable 15 minutes,
+5 essais), demandé à chaque nouvelle session.
 
 ### 3.5 Mettre à jour une version en ligne
 

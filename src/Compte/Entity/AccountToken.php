@@ -19,6 +19,8 @@ class AccountToken
     public const VERIFY_EMAIL = 'VERIFY_EMAIL';
     public const CHANGE_EMAIL = 'CHANGE_EMAIL';
     public const RESET_PASSWORD = 'RESET_PASSWORD';
+    /** Code de connexion en deux étapes des administrateurs. */
+    public const ADMIN_LOGIN = 'ADMIN_LOGIN';
 
     #[ORM\Id]
     #[ORM\GeneratedValue]

@@ -1,0 +1,7 @@
+{% extends 'compte/email/_layout.html.twig' %}
+{% block content %}
+  <p>Bonjour {{ name }},</p>
+  <p>Une connexion à votre compte administrateur KIINI SAWA est en cours. Pour la terminer, saisissez ce code :</p>
+  <p style="font-size:32px;font-weight:bold;letter-spacing:8px;text-align:center;background:#f0fdfa;color:#0f766e;padding:16px;border-radius:12px;margin:24px 0;">{{ code }}</p>
+  <p>Ce code est valable 15 minutes. <strong>Si vous n'êtes pas en train de vous connecter</strong>, quelqu'un connaît votre mot de passe : changez-le tout de suite depuis « Mot de passe oublié ».</p>
+{% endblock %}

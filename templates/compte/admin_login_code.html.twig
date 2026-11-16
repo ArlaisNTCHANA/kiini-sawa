@@ -1,0 +1,25 @@
+{% extends 'compte/_auth_layout.html.twig' %}
+
+{% block title %}KIINI SAWA — Code de connexion{% endblock %}
+
+{% block content %}
+    <h1 class="auth-title">Confirmez votre connexion</h1>
+    <p class="auth-text">Votre compte est administrateur : par sécurité, un code à 6 chiffres vient d'être envoyé à <strong>{{ email }}</strong>. Il est valable 15 minutes.</p>
+
+    <form method="post" action="{{ path('app_admin_login_code') }}">
+        <div class="form-group">
+            <label for="code">Code de connexion</label>
+            <input type="text" name="code" id="code" class="code-input" inputmode="numeric" pattern="[0-9 ]*" maxlength="7" autocomplete="one-time-code" required autofocus>
+        </div>
+        <input type="hidden" name="_csrf_token" value="{{ csrf_token('admin_login_code') }}">
+        <button type="submit">Valider</button>
+    </form>
+
+    <div class="auth-links">
+        <form method="post" action="{{ path('app_admin_login_code_resend') }}" style="display: block;">
+            <input type="hidden" name="_csrf_token" value="{{ csrf_token('admin_login_code_resend') }}">
+            <button type="submit" class="link-button">Renvoyer un code</button>
+        </form>
+        <a href="{{ path('app_logout') }}">Se déconnecter</a>
+    </div>
+{% endblock %}
