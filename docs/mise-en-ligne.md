@@ -59,39 +59,36 @@ Tout est préparé dans le projet :
 
 ### 3.2 Sur le serveur, par SSH (une seule fois)
 
+Organisation retenue (16/11/2026) : le code est dans `~/kiini`, hors de tout dossier public, et le dossier
+public du site pointe vers `~/kiini/public` :
+
 ```bash
-ssh -p 65002 u123456789@IP
-cd domains/app.kiinisawa.com
-mkdir kiini
+ssh -p 65002 u340339661@194.36.184.161
+cd ~/domains/app.kiinisawa.com
+mv public_html public_html.origine
+ln -s /home/u340339661/kiini/public public_html
 ```
+
+En ligne de commande, `php` est en 8.3 : utiliser `/opt/alt/php85/usr/bin/php` (même version que celle
+choisie dans hPanel pour le site).
 
 Créer les secrets à partir du modèle (après le premier envoi, étape 3.3) :
 
 ```bash
-cd ~/domains/app.kiinisawa.com/kiini
+cd ~/kiini
 cp bin/ops/env.prod.local.exemple .env.prod.local
 nano .env.prod.local     # APP_SECRET, DEFAULT_URI, DATABASE_URL (avec la version relevée), MAILER_DSN
 ```
-
-Faire servir le dossier `public/` du projet à la place de `public_html` :
-
-```bash
-cd ~/domains/app.kiinisawa.com
-mv public_html public_html.origine
-ln -s kiini/public public_html
-```
-
-Si ce lien n'est pas accepté, demander au support Hostinger de pointer la racine du site vers `kiini/public`.
 
 ### 3.3 Depuis votre ordinateur : premier envoi
 
 Dans le dossier `web/`, créer `bin/ops/hostinger.local` (jamais versionné) :
 
 ```bash
-HOSTINGER_SSH="u123456789@IP"
+HOSTINGER_SSH="u340339661@194.36.184.161"
 HOSTINGER_PORT=65002
-HOSTINGER_DIR="domains/app.kiinisawa.com/kiini"
-HOSTINGER_PHP=""        # si « php » n'est pas en 8.4 : /opt/alt/php84/usr/bin/php
+HOSTINGER_DIR="kiini"
+HOSTINGER_PHP="/opt/alt/php85/usr/bin/php"
 ```
 
 Puis :
@@ -104,10 +101,11 @@ Le premier envoi s'arrête en demandant `.env.prod.local` : le créer (étape 3.
 Ensuite, sur le serveur, créer le compte administrateur (mot de passe demandé sans être affiché) :
 
 ```bash
-cd ~/domains/app.kiinisawa.com/kiini
-php bin/console app:install --admin-email=vous@domaine.com
-php bin/console doctrine:schema:validate
-php bin/console app:launch:check
+cd ~/kiini
+PHP=/opt/alt/php85/usr/bin/php
+$PHP bin/console app:install --admin-email=vous@domaine.com
+$PHP bin/console doctrine:schema:validate
+$PHP bin/console app:launch:check
 ```
 
 `doctrine:schema:validate` confirme que la base MariaDB d'Hostinger correspond bien au modèle.
@@ -116,8 +114,8 @@ php bin/console app:launch:check
 
 | Quoi | Commande | Fréquence |
 |---|---|---|
-| Rappels du jour | `cd ~/domains/app.kiinisawa.com/kiini && php bin/console app:reminders:send` | Chaque jour à 8 h (vérifier le fuseau horaire affiché par hPanel) |
-| Sauvegarde supplémentaire (30 jours) | `cd ~/domains/app.kiinisawa.com/kiini && bin/ops/sauvegarde.sh ~/sauvegardes` | Chaque nuit à 3 h |
+| Rappels du jour | `cd /home/u340339661/kiini && /opt/alt/php85/usr/bin/php bin/console app:reminders:send` | Chaque jour à 8 h (vérifier le fuseau horaire affiché par hPanel) |
+| Sauvegarde supplémentaire (30 jours) | `cd /home/u340339661/kiini && PATH=/opt/alt/php85/usr/bin:$PATH bin/ops/sauvegarde.sh /home/u340339661/sauvegardes` | Chaque nuit à 3 h |
 
 Hostinger fait déjà une sauvegarde quotidienne (hPanel › Fichiers › Sauvegardes). Télécharger aussi
 régulièrement une copie sur votre ordinateur : une sauvegarde chez le même hébergeur ne protège pas de tout.
@@ -134,7 +132,7 @@ d'abord la sauvegarde (`bin/ops/sauvegarde.sh ~/sauvegardes` sur le serveur).
 
 ### 3.6 Si quelque chose ne va pas
 
-- **Page blanche ou erreur 500** : hPanel › Avancé › Journaux d'erreurs, ou `tail ~/domains/app.kiinisawa.com/kiini/var/log/*`.
+- **Page blanche ou erreur 500** : hPanel › Avancé › Journaux d'erreurs, ou `tail ~/kiini/var/log/*`.
 - **Formulaires refusés après connexion** (HTTPS mal reconnu) : mettre `TRUSTED_PROXIES=REMOTE_ADDR` dans `.env.prod.local`, puis relancer `bin/ops/mise-a-jour.sh`.
 - **Emails** : ils partent pendant la requête ; si le fournisseur est en panne, l'action échoue avec un message d'erreur. Vérifier `MAILER_DSN` et le tableau de bord du fournisseur.
 - **Quand le trafic grandira** : passer à un VPS (sections 4 à 6) pour avoir un worker d'envoi permanent et plus de puissance.
