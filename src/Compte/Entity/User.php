@@ -1487,11 +1487,20 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     }
 
     /** Prénom affiché, ou la partie avant @ de l'email. */
+    /** Prénom et nom pour les documents (plans imprimés, PDF) ; à défaut, le prénom seul. */
+    public function getFullName(): string
+    {
+        $p = $this->getUserProfile();
+        $full = trim(($p?->getFirstName() ?? '').' '.($p?->getLastName() ?? ''));
+
+        return '' !== $full ? $full : $this->getDisplayName();
+    }
+
     public function getDisplayName(): string
     {
         $firstName = $this->getUserProfile()?->getFirstName();
 
-        return $firstName ?: explode('@', (string) $this->email)[0];
+        return $firstName ?: ucfirst(explode('@', (string) $this->email)[0]);
     }
 
     /**

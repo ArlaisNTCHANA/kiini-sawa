@@ -169,7 +169,7 @@
 
                     <h1 style="font-family: 'Playfair Display', serif; font-size: clamp(2rem, 4.5vw, 3rem);
                                font-weight: 500; color: white; line-height: 1.15;">
-                        Bonjour, <span style="background: linear-gradient(135deg, #FFFFFF 30%, #a5f3fc 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">{{ app.user.email|split('@')|first|capitalize }}</span>
+                        Bonjour, <span style="background: linear-gradient(135deg, #FFFFFF 30%, #a5f3fc 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">{{ app.user.displayName }}</span>
                     </h1>
                 </div>
 
@@ -223,6 +223,37 @@
             {% endif %}
         </div>
     </section>
+
+    {# Premiers pas : guide l'utilisateur après l'onboarding, disparaît quand tout est fait #}
+    {% if nextSteps|length %}
+        {% set doneCount = nextSteps|filter(s => s.done)|length %}
+        {% set nextStep = nextSteps|filter(s => not s.done)|first %}
+        <section style="margin-top: 1.5rem; background: var(--card-bg); border-radius: var(--r-lg); box-shadow: var(--card-shadow); padding: 1.5rem;">
+            <div style="display: flex; justify-content: space-between; align-items: baseline; gap: 1rem; flex-wrap: wrap;">
+                <h2 style="font-family: var(--font-serif); font-size: 1.3rem; color: var(--fg);">Vos premiers pas</h2>
+                <span style="font-size: .8rem; color: var(--fg-muted); font-weight: 600;">{{ doneCount }} sur {{ nextSteps|length }}</span>
+            </div>
+            <div style="height: 6px; background: #E2E8F0; border-radius: 99px; margin: .75rem 0 1.25rem; overflow: hidden;"><div style="height: 6px; width: {{ (doneCount / nextSteps|length * 100)|round }}%; background: var(--primary);"></div></div>
+            <ol style="list-style: none; padding: 0; margin: 0; display: grid; gap: .5rem;">
+                {% for step in nextSteps %}
+                    {% set isNext = step == nextStep %}
+                    <li>
+                        <a href="{{ step.url }}" style="display: flex; align-items: center; gap: .85rem; padding: .7rem .9rem; border-radius: var(--r-md); text-decoration: none; {{ isNext ? 'background: #F0FDFA; border: 1px solid #99F6E4;' : 'border: 1px solid transparent;' }}">
+                            <span style="flex-shrink: 0; width: 26px; height: 26px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: .8rem; font-weight: 700; {{ step.done ? 'background: var(--primary); color: #fff;' : 'border: 2px solid #CBD5E1; color: var(--fg-muted);' }}">{{ step.done ? '✓' : loop.index }}</span>
+                            <span style="flex: 1;">
+                                <span style="display: block; font-weight: 600; color: {{ step.done ? 'var(--fg-muted)' : 'var(--fg)' }}; {{ step.done ? 'text-decoration: line-through;' : '' }}">{{ step.label }}</span>
+                                {% if isNext %}<span style="display: block; font-size: .85rem; color: var(--fg-light);">{{ step.hint }}</span>{% endif %}
+                            </span>
+                            {% if isNext %}<span style="flex-shrink: 0; font-size: .85rem; font-weight: 700; color: var(--primary);">Commencer →</span>{% endif %}
+                        </a>
+                    </li>
+                {% endfor %}
+            </ol>
+            {% if is_trialing() and pro_until() %}
+                <p style="margin-top: 1rem; font-size: .85rem; color: var(--fg-light); background: #FFFBEB; border-radius: var(--r-md); padding: .6rem .9rem;">✨ Votre essai PRO est actif jusqu'au <strong>{{ pro_until()|date('d/m/Y') }}</strong> : profitez-en pour bâtir aussi vos plans de Croissance, Développement, Transmission et Hygiène. <a href="{{ path('app_subscription') }}" style="color: var(--primary); font-weight: 600;">En savoir plus</a></p>
+            {% endif %}
+        </section>
+    {% endif %}
 
     {# ══════════════════════════════════════════════════════
        SECTION 1 bis — MA BOUSSOLE : raison d'être et prochaines échéances
@@ -571,18 +602,18 @@
                 <i data-lucide="compass" style="width: 32px; height: 32px; color: var(--fg-muted);"></i>
             </div>
             <h3 style="font-family: 'Playfair Display', serif; font-size: 1.35rem; color: var(--primary);
-                       font-weight: 500; margin-bottom: 0.75rem;">Aucun rituel configuré</h3>
+                       font-weight: 500; margin-bottom: 0.75rem;">Aucun rituel pour l'instant</h3>
             <p style="color: var(--fg-muted); font-size: 0.95rem; line-height: 1.7; max-width: 24rem; margin-bottom: 2rem;">
-                Définissez vos objectifs de croissance et de vie dans votre Plan de Vie global pour y associer des rituels quotidiens.
+                Un rituel est une petite action régulière (prière du matin, lecture, sport…) qui nourrit vos objectifs. Commencez par un seul.
             </p>
-            <a href="{{ path('app_plan_de_vie') }}"
+            <a href="{{ path('app_user_habits') }}"
                style="display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.8rem 1.75rem;
                       background: var(--primary); color: white; border-radius: 9999px; font-weight: 700;
                       font-size: 0.875rem; text-decoration: none; transition: all 0.25s var(--ease);
                       box-shadow: 0 4px 16px rgba(15, 118, 110, 0.35); font-family: 'Inter', sans-serif;"
                onmouseover="this.style.background='var(--primary-dark)'; this.style.transform='translateY(-1px)'"
                onmouseout="this.style.background='var(--primary)'; this.style.transform=''">
-                <span>Créer mon Plan de Vie</span>
+                <span>Créer mon premier rituel</span>
                 <i data-lucide="arrow-right" style="width: 16px; height: 16px;"></i>
             </a>
         </div>

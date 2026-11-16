@@ -371,8 +371,8 @@
                 { label: 'Mon Plan de Vie', path: path('app_plan_de_vie'),  icon: 'compass' },
                 { label: 'Mes Stratégies',  path: path('app_strategies'), icon: 'trending-up' },
                 { label: 'Mon Journal',   path: path('app_journal'),      icon: 'book-open' },
-                { label: 'Habitudes',     path: path('app_user_habits'),       icon: 'activity' },
-                { label: 'Organisation',  path: path('app_planner'),      icon: 'calendar' },
+                { label: 'Rituels',       path: path('app_user_habits'),       icon: 'activity' },
+                { label: 'Agenda',        path: path('app_planner'),      icon: 'calendar' },
                 { label: 'Bilan',        path: path('app_bilan'),   icon: 'bar-chart-2' },
                 { label: 'Partenaires',  path: path('app_social'),  icon: 'users' },
             ] %}
@@ -405,7 +405,7 @@
                         <div style="width:0.55rem;height:0.55rem;background:#10B981;border-radius:50%;
                                     box-shadow:0 0 8px rgba(16,185,129,0.5); position: absolute; bottom: 0; right: 0; border: 1.5px solid white;"></div>
                     </div>
-                    <span class="topnav-user-name">{{ app.user.email|split('@')|first|capitalize }}</span>
+                    <span class="topnav-user-name">{{ app.user.displayName }}</span>
                     <i data-lucide="chevron-down" style="width:14px;height:14px;color:var(--fg-muted);flex-shrink:0;"></i>
                 </button>
 
@@ -438,7 +438,6 @@
                             { label: 'Mon Profil',      icon: 'user',          href: path('app_profile'),                desc: 'Compte & données' },
                             { label: is_pro() ? (is_trialing() ? 'Essai PRO' : 'Mon abonnement') : 'Passer à PRO', icon: 'crown', href: path('app_subscription'), desc: is_trialing() ? 'Jusqu\'au ' ~ pro_until()|date('d/m') : (is_pro() ? 'Offre PRO' : 'Débloquer les 4 plans') },
                             { label: 'Mes Découvertes', icon: 'sparkles',      href: path('app_personality_index'),      desc: 'Tests & valeurs' },
-                            { label: 'Calendrier',      icon: 'calendar',      href: path('app_planner'), desc: 'Planning' },
                             { label: 'Notre couple',    icon: 'heart',         href: path('app_couple'), desc: 'Vision et projets à deux' },
                             { label: 'Mon organisation', icon: 'building-2',  href: path('app_organisation_index'), desc: 'Église, association…' },
                             { label: 'La Méthode',      icon: 'book-open',     href: path('app_methode_index'), desc: 'Les chapitres du livre' },
@@ -523,17 +522,21 @@
                  x-transition:enter="transition ease-out duration-200"
                  x-transition:enter-start="opacity-0 scale-95 translate-y-2"
                  x-transition:enter-end="opacity-100 scale-100 translate-y-0"
-                 style="position:absolute;bottom:calc(100% + 1rem);right:0;width:13rem;
+                 style="position:absolute;bottom:calc(100% + 1rem);right:0;width:13rem;max-height:calc(100vh - 7rem);overflow-y:auto;
                         background:rgba(255,255,255,0.97);backdrop-filter:blur(24px);
                         border-radius:1.25rem;padding:0.5rem;
                         box-shadow:0 16px 40px rgba(44,85,89,0.15),0 0 0 1px rgba(44,85,89,0.06);">
                 {% set mobileMore = [
                     { label: 'Notifications' ~ (unread_notifications() ? ' (' ~ unread_notifications() ~ ')' : ''), path: path('app_notifications'), icon: 'bell' },
-                    { label: 'Mes Découvertes', path: path('app_personality_index'), icon: 'sparkles' },
-                    { label: 'Stratégies',   path: path('app_strategies'),  icon: 'trending-up' },
-                    { label: 'Organisation', path: path('app_planner'),        icon: 'calendar' },
+                    { label: 'Mes Stratégies', path: path('app_strategies'),  icon: 'trending-up' },
+                    { label: 'Agenda',       path: path('app_planner'),        icon: 'calendar' },
                     { label: 'Bilan',        path: path('app_bilan'),          icon: 'bar-chart-2' },
                     { label: 'Partenaires',  path: path('app_social'),         icon: 'users' },
+                    { label: 'Mes Découvertes', path: path('app_personality_index'), icon: 'sparkles' },
+                    { label: 'Notre couple', path: path('app_couple'),         icon: 'heart' },
+                    { label: 'Mon organisation', path: path('app_organisation_index'), icon: 'building-2' },
+                    { label: 'La Méthode',   path: path('app_methode_index'),  icon: 'book-open' },
+                    { label: is_pro() ? (is_trialing() ? 'Essai PRO' : 'Mon abonnement') : 'Passer à PRO', path: path('app_subscription'), icon: 'crown' },
                 ] %}
                 {% for mm in mobileMore %}
                 <a href="{{ mm.path }}" @click="o = false"

@@ -2,6 +2,8 @@
 
 namespace App\Shared\Controller;
 
+use App\Methode\Service\BookLibrary;
+
 use Doctrine\DBAL\Connection;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -31,7 +33,7 @@ class PublicController extends AbstractController
     #[Route('/robots.txt', name: 'app_robots', methods: ['GET'])]
     public function robots(): Response
     {
-        $public = ['/', '/inscription', '/mentions-legales', '/confidentialite', '/cgu', '/cgv'];
+        $public = ['/', '/inscription', '/methode', '/mentions-legales', '/confidentialite', '/cgu', '/cgv'];
         $lines = ['User-agent: *'];
         foreach ($public as $p) {
             $lines[] = 'Allow: '.$p.('/' === $p ? '$' : '');
@@ -46,7 +48,10 @@ class PublicController extends AbstractController
     #[Route('/sitemap.xml', name: 'app_sitemap', methods: ['GET'])]
     public function sitemap(): Response
     {
-        $urls = [['app_home', [], '1.0'], ['app_register', [], '0.8']];
+        $urls = [['app_home', [], '1.0'], ['app_register', [], '0.8'], ['app_methode_index', [], '0.7']];
+        foreach (\array_slice(array_values(BookLibrary::CHAPTERS), 0, BookLibrary::PUBLIC_CHAPTERS) as $slug) {
+            $urls[] = ['app_methode_chapter', ['slug' => $slug], '0.6'];
+        }
         foreach (['mentions-legales', 'confidentialite', 'cgu', 'cgv'] as $page) {
             $urls[] = ['app_legal', ['page' => $page], '0.3'];
         }

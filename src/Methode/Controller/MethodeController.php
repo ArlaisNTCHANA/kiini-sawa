@@ -6,19 +6,22 @@ use App\Methode\Service\BookLibrary;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
-use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 /**
  * La méthode : les chapitres du livre, lisibles dans l'application.
+ * Les premiers chapitres sont ouverts aux visiteurs (découvrir avant de s'inscrire) ; les suivants
+ * demandent un compte, gratuit.
  */
 #[Route('/methode', name: 'app_methode_')]
-#[IsGranted('ROLE_USER')]
 class MethodeController extends AbstractController
 {
     #[Route('', name: 'index', methods: ['GET'])]
     public function index(BookLibrary $book): Response
     {
-        return $this->render('methode/index.html.twig', ['chapters' => $book->all()]);
+        return $this->render('methode/index.html.twig', [
+            'chapters' => $book->all(),
+            'publicCount' => BookLibrary::PUBLIC_CHAPTERS,
+        ]);
     }
 
     #[Route('/{slug}', name: 'chapter', requirements: ['slug' => '[a-z0-9-]+'], methods: ['GET'])]
@@ -28,6 +31,7 @@ class MethodeController extends AbstractController
 
         return $this->render('methode/chapter.html.twig', [
             'chapter' => $chapter,
+            'locked' => null === $this->getUser() && !$book->isPublic($slug),
             'previous' => $chapter['previous'] ? $book->get($chapter['previous']) : null,
             'next' => $chapter['next'] ? $book->get($chapter['next']) : null,
         ]);

@@ -58,6 +58,7 @@ security:
         - { path: ^/notifications/desabonnement/, roles: PUBLIC_ACCESS }
         - { path: ^/rejoindre/, roles: PUBLIC_ACCESS }
         - { path: ^/couple/rejoindre/, roles: PUBLIC_ACCESS }
+        - { path: ^/methode, roles: PUBLIC_ACCESS }
         - { path: ^/admin, roles: ROLE_ADMIN }
         - { path: ^/, roles: ROLE_USER }
 

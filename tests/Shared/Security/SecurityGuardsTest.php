@@ -27,6 +27,7 @@ class SecurityGuardsTest extends WebTestCase
         'app_login', 'app_logout',
         'app_register', 'app_forgot_password', 'app_reset_password', 'app_reset_password_form',
         'app_legal',
+        'app_methode_index', 'app_methode_chapter', // premiers chapitres en libre lecture, la suite verrouillée dans la page
         'app_notification_unsubscribe', // lien signé reçu par email
         'app_organisation_join', // lien d'invitation d'une organisation
         'app_couple_join', // lien d'invitation du conjoint

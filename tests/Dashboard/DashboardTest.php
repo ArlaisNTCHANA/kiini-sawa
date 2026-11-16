@@ -48,4 +48,26 @@ class DashboardTest extends WebTestCase
         $this->assertResponseIsSuccessful();
         $this->assertStringNotContainsString('activeTab = \'CHALLENGES\'', $client->getResponse()->getContent());
     }
+
+    /** Le prénom (jamais l'email) dans l'accueil et le menu, et les premiers pas guident la suite. */
+    public function testGreetsByFirstNameAndShowsFirstSteps(): void
+    {
+        $client = static::createClient();
+        $em = $this->em();
+        $user = $this->createUser();
+        $user->setIsOnboardingCompleted(true);
+        $profile = $user->getUserProfile() ?? (new \App\Compte\Entity\UserProfile())->setUser($user);
+        $profile->setFirstName('Esther');
+        $em->persist($profile);
+        $em->flush();
+        $client->loginUser($user);
+        $client->request('POST', '/plan-de-vie/assistant?step=1&single=1', ['purpose_statement' => 'Servir ma ville.']);
+
+        $client->request('GET', '/dashboard');
+        $this->assertSelectorTextContains('main h1', 'Bonjour, Esther');
+        $this->assertSelectorTextContains('.topnav-user-name', 'Esther');
+        $this->assertStringNotContainsString(ucfirst(explode('@', $user->getEmail())[0]), $client->getResponse()->getContent());
+        $this->assertSelectorTextContains('main', 'Vos premiers pas');
+        $this->assertSelectorTextContains('main', 'Écrire votre vision');
+    }
 }

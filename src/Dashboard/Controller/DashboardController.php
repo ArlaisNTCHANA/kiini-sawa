@@ -55,6 +55,7 @@ class DashboardController extends AbstractController
             'stats' => $dashboard->stats($habits),
             'deadlines' => $dashboard->upcomingDeadlines($user),
             'habits' => $habits,
+            'nextSteps' => $dashboard->nextSteps($user, $habits),
             'growthGoal' => $user->getPlanDeCroissance(),
             'planDeVie' => $user->getPlanDeVie(),
         ]);

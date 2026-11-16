@@ -37,6 +37,8 @@ DirectoryIndex index.php
 
 # Assets compilés (nom versionné par empreinte) : mis en cache un an.
 <IfModule mod_headers.c>
+    Header always unset X-Powered-By
+    Header unset X-Powered-By
     <FilesMatch "\.(css|js|woff2|svg|png|jpg|jpeg|webp|ico)$">
         Header set Cache-Control "public, max-age=31536000, immutable"
     </FilesMatch>

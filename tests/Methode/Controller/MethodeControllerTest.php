@@ -7,12 +7,22 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 class MethodeControllerTest extends WebTestCase
 {
-    public function testAnonymousIsRedirectedToLogin(): void
+    /** Visiteur : sommaire et premiers chapitres lisibles, la suite invite à créer un compte. */
+    public function testVisitorReadsFirstChaptersOnly(): void
     {
         $client = static::createClient();
         $client->request('GET', '/methode');
+        $this->assertResponseIsSuccessful();
 
-        $this->assertResponseRedirects('/login');
+        $client->request('GET', '/methode/introduction');
+        $this->assertResponseIsSuccessful();
+        $this->assertSelectorExists('.book-body h3, .book-body p');
+        $this->assertSelectorTextNotContains('article', 'La suite de ce chapitre');
+
+        $client->request('GET', '/methode/balance-interne');
+        $this->assertResponseIsSuccessful();
+        $this->assertSelectorTextContains('article', 'La suite de ce chapitre');
+        $this->assertSelectorExists('article a[href="/inscription"]');
     }
 
     public function testIndexRendersForLoggedUser(): void

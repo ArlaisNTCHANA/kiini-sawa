@@ -247,7 +247,7 @@
 {% endif %}
 
     {# Common Variables #}
-    {% set displayName = app.user.userProfile and app.user.userProfile.firstName and app.user.userProfile.lastName ? app.user.userProfile.firstName ~ ' ' ~ app.user.userProfile.lastName : app.user.email|split('@')|first|capitalize %}
+    {% set displayName = app.user.fullName %}
     {% set currentDate = "now"|date("d F Y", "Europe/Paris")|replace({
         'January': 'janvier', 'February': 'février', 'March': 'mars', 'April': 'avril',
         'May': 'mai', 'June': 'juin', 'July': 'juillet', 'August': 'août',

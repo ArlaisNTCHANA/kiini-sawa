@@ -44,6 +44,10 @@ final class SecurityHeadersSubscriber implements EventSubscriberInterface
         }
 
         $headers = $event->getResponse()->headers;
+        // Ne pas révéler la version de PHP (en-tête ajouté par PHP lui-même, hors de l'objet Response)
+        if (!headers_sent()) {
+            header_remove('X-Powered-By');
+        }
         $headers->set('X-Content-Type-Options', 'nosniff');
         $headers->set('X-Frame-Options', 'DENY');
         $headers->set('Referrer-Policy', 'strict-origin-when-cross-origin');

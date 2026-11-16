@@ -4,6 +4,10 @@ namespace App\Dashboard\Service;
 
 use App\Compte\Entity\User;
 use App\Dashboard\Repository\QuoteRepository;
+use App\Personnalite\Entity\Assessment;
+use App\Social\Entity\Connection;
+use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use App\Rituels\Entity\Habit;
 use App\Rituels\Enum\HabitFrequency;
 
@@ -15,8 +19,44 @@ final class DashboardData
     /** Phrase affichée quand aucune citation n'est enregistrée. */
     public const FALLBACK_QUOTE = ['content' => 'Recommande à l\'Éternel tes œuvres, et tes projets réussiront.', 'author' => 'Proverbes 16:3'];
 
-    public function __construct(private readonly QuoteRepository $quotes)
+    public function __construct(
+        private readonly QuoteRepository $quotes,
+        private readonly EntityManagerInterface $em,
+        private readonly UrlGeneratorInterface $urls,
+    ) {
+    }
+
+    /**
+     * Premiers pas après l'onboarding : ce qui est fait, et la prochaine chose à faire.
+     * Retourne une liste vide quand tout est fait (la carte disparaît).
+     *
+     * @param Habit[] $habits
+     *
+     * @return list<array{label: string, hint: string, url: string, done: bool}>
+     */
+    public function nextSteps(User $user, array $habits): array
     {
+        $plan = $user->getPlanDeVie();
+        $steps = [
+            ['label' => 'Poser vos fondations', 'hint' => 'Raison d\'être, valeurs et premier objectif.', 'url' => $this->urls->generate('app_plan_de_vie'),
+                'done' => null !== $plan?->getPurpose()?->getStatement()],
+            ['label' => 'Écrire votre vision', 'hint' => 'À quoi ressemblera votre vie quand elle sera alignée ? L\'assistant vous guide.', 'url' => $this->urls->generate('app_plan_wizard'),
+                'done' => '' !== trim((string) $plan?->getVision()?->getContent())],
+            ['label' => 'Choisir un premier rituel', 'hint' => 'Une petite action régulière qui nourrit votre objectif.', 'url' => $this->urls->generate('app_user_habits'),
+                'done' => [] !== $habits],
+            ['label' => 'Découvrir votre personnalité', 'hint' => 'Le profil complet : 15 minutes pour mieux vous connaître.', 'url' => $this->urls->generate('app_assessment_take', ['slug' => 'profil-complet']),
+                'done' => $this->em->getRepository(Assessment::class)->count(['user' => $user]) > 0],
+            ['label' => 'Inviter un partenaire de redevabilité', 'hint' => 'Quelqu\'un qui vous encourage et vous aide à tenir.', 'url' => $this->urls->generate('app_social'),
+                'done' => $this->em->getRepository(Connection::class)->count(['requester' => $user]) + $this->em->getRepository(Connection::class)->count(['receiver' => $user]) > 0],
+        ];
+
+        foreach ($steps as $s) {
+            if (!$s['done']) {
+                return $steps;
+            }
+        }
+
+        return [];
     }
 
     public function quote(): array

@@ -13,6 +13,9 @@ use Symfony\Component\DependencyInjection\Attribute\Autowire;
 final class BookLibrary
 {
     /** Ordre de lecture : fichier => identifiant d'URL. */
+    /** Nombre de premiers chapitres lisibles sans compte (introduction, synthèse, chapitre 1). */
+    public const PUBLIC_CHAPTERS = 3;
+
     public const CHAPTERS = [
         'INTRO.md' => 'introduction',
         'SUMMARY_PLANS.md' => 'synthese',
@@ -66,6 +69,14 @@ final class BookLibrary
     public function all(): array
     {
         return array_values(array_filter(array_map(fn (string $slug) => $this->get($slug), self::CHAPTERS)));
+    }
+
+    /** Chapitre lisible par un visiteur non inscrit ? */
+    public function isPublic(string $slug): bool
+    {
+        $i = array_search($slug, array_values(self::CHAPTERS), true);
+
+        return false !== $i && $i < self::PUBLIC_CHAPTERS;
     }
 
     /** @return array{slug: string, title: string, excerpt: string, html: string, minutes: int, previous: ?string, next: ?string}|null */
