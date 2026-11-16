@@ -1,0 +1,23 @@
+{% extends 'base.html.twig' %}
+{% block title %}Donner mon avis{% endblock %}
+{% block body %}
+<div class="ks-page ks-page--narrow">
+    {% include 'shared/_page_header.html.twig' with {eyebrow: 'Votre avis compte', icon: 'message-square', title: 'Donner mon avis', lead: 'Une idée, un souci, une remarque ? L\'équipe lit chaque message. C\'est grâce à vous que KIINI SAWA s\'améliore.'} %}
+    {% if error %}<p class="ks-alert ks-alert--danger" style="margin-bottom: .75rem;">{{ error }}</p>{% endif %}
+    <form method="post" class="ks-card">
+        <input type="hidden" name="_csrf_token" value="{{ csrf_token('app_feedback') }}">
+        <input type="hidden" name="page" value="{{ from }}">
+        <p class="ks-label" style="margin-bottom: .5rem;">Il s'agit de…</p>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: .5rem; margin-bottom: 1.25rem;">
+            {% for k, v in categories %}
+                <label class="ks-card ks-card--flat" style="padding: .7rem .9rem; display: flex; gap: .5rem; align-items: center; cursor: pointer;"><input type="radio" name="category" value="{{ k }}" {{ loop.first ? 'checked' }} style="accent-color: var(--primary);"> {{ v }}</label>
+            {% endfor %}
+        </div>
+        <div class="ks-field" style="margin-bottom: 1.25rem;">
+            <label class="ks-label" for="content">Votre message</label>
+            <textarea class="ks-input" id="content" name="content" rows="6" required placeholder="Dites-nous tout, même en quelques mots."></textarea>
+        </div>
+        <button type="submit" class="ks-btn ks-btn--primary">Envoyer</button>
+    </form>
+</div>
+{% endblock %}

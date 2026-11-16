@@ -257,6 +257,15 @@
         {% for typeKey, meta in tests %}
             {% include 'personnalite/_card.html.twig' with {typeKey: typeKey, meta: meta, done: latestTests[typeKey] is defined} %}
         {% endfor %}
+        <div class="test-card">
+            <div class="test-card-header">
+                <div class="test-card-icon" style="background:var(--couple-soft);color:var(--couple);"><i data-lucide="users" style="width:22px;height:22px;"></i></div>
+                <div class="test-card-meta"><div class="subtitle">Le regard des autres</div><h3>Feedback nourricier</h3></div>
+            </div>
+            <div class="test-card-body"><p>Demandez à vos proches les qualités qu'ils voient en vous, ce que vous faites de mieux et où vous pourriez grandir. Anonyme si vous le souhaitez.</p></div>
+            <div class="questions-count" style="color:var(--couple);">⏱ 3 min pour chaque proche · Regard extérieur</div>
+            <div class="test-card-footer"><a href="{{ path('app_feedback') }}" class="btn-take" style="background:var(--couple);">Demander un feedback</a></div>
+        </div>
     </div>
 
 </div>

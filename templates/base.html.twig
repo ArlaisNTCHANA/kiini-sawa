@@ -502,6 +502,14 @@
                     </div>
                     {% endif %}
 
+                    {# Avis sur l'application #}
+                    <div style="padding: 0.375rem 0; border-top: 1px solid rgba(15,76,110,0.06);">
+                        <a href="{{ path('app_app_feedback', {page: app.request.pathInfo}) }}" @click="userOpen = false" class="dd-item">
+                            <div class="dd-item-icon"><i data-lucide="message-square" style="width:15px;height:15px;color:var(--fg-muted);"></i></div>
+                            <div style="line-height:1.2;">Donner mon avis</div>
+                        </a>
+                    </div>
+
                     {# Logout #}
                     <div style="padding: 0.375rem 0; border-top: 1px solid rgba(15,76,110,0.06); margin-top: 0.25rem;">
                         <a href="{{ path('app_logout') }}" class="dd-item danger">
@@ -566,6 +574,7 @@
                     { label: 'Partenaires',  path: path('app_social'),         icon: 'users' },
                     { label: 'Défis',        path: path('app_challenges'),     icon: 'trophy' },
                     { label: 'Inviter mes proches', path: path('app_referral'), icon: 'gift' },
+                    { label: 'Donner mon avis', path: path('app_app_feedback'), icon: 'message-square' },
                     { label: 'Mes tests', path: path('app_personality_index'), icon: 'sparkles' },
                     { label: 'Notre couple', path: path('app_couple'),         icon: 'heart' },
                     { label: 'Mon organisation', path: path('app_organisation_index'), icon: 'building-2' },

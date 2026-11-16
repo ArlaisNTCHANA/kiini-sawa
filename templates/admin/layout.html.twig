@@ -350,6 +350,10 @@
                     <i data-lucide="trophy"></i>
                     <span>Défis</span>
                 </a>
+                <a href="{{ path('admin_app_feedback') }}" class="ks-sidebar__link {{ app.request.attributes.get('_route') starts with 'admin_app_feedback' ? 'active' }}" id="nav-feedback">
+                    <i data-lucide="message-square"></i>
+                    <span>Avis des utilisateurs</span>
+                </a>
                 <a href="{{ path('admin_origins') }}" class="ks-sidebar__link {{ app.request.attributes.get('_route') starts with 'admin_origins' ? 'active' }}" id="nav-origins">
                     <i data-lucide="radar"></i>
                     <span>Provenance des inscrits</span>

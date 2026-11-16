@@ -54,8 +54,8 @@ Un **module par dossier** : `src/<Module>/{Controller,Entity,Repository,Service,
   l'email obligatoire, **connexion en deux étapes des administrateurs** (`Compte/Security/AdminSecondFactorSubscriber`),
   protection CSRF par l'origine, en-têtes de sécurité (`Shared/EventSubscriber/SecurityHeadersSubscriber`).
 
-Modules **dormants** (entités et tables, sans page ni route) : `Coaching`, `Feedback`, `Listes`. Ne pas les exposer
-sans décision du fondateur. `Defis` est actif pour les défis collectifs publics (voir `docs/modules/defis.md`).
+Modules **dormants** (entités et tables, sans page ni route) : `Coaching` (sauf les suggestions d'objectifs, utilisées par Partenaires), `Listes`. Ne pas les exposer
+sans décision du fondateur. `Defis` (défis collectifs) et `Feedback` (feedback nourricier, avis sur l'application) sont actifs : voir `docs/modules/`.
 Certaines colonnes de `AppConfig` ne sont lues nulle part (limites et interrupteurs historiques) : seuls les champs du
 formulaire d'administration comptent.
 

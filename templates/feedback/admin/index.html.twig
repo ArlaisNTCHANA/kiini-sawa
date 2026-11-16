@@ -1,0 +1,21 @@
+{% extends 'admin/layout.html.twig' %}
+{% block title %}Avis des utilisateurs{% endblock %}
+{% block page_title %}Avis des utilisateurs{% endblock %}
+{% block content %}
+<div style="display: flex; gap: 8px; margin-bottom: 16px;">
+    <a href="{{ path('admin_app_feedback') }}" style="padding: 6px 12px; border-radius: 99px; text-decoration: none; color: inherit; border: 1px solid rgba(255,255,255,.12); {{ status == 'PENDING' ? 'background: #0f766e; border-color: #0f766e; color: #fff;' }}">À traiter ({{ pendingCount }})</a>
+    <a href="{{ path('admin_app_feedback', {vue: 'traites'}) }}" style="padding: 6px 12px; border-radius: 99px; text-decoration: none; color: inherit; border: 1px solid rgba(255,255,255,.12); {{ status == 'DONE' ? 'background: #0f766e; border-color: #0f766e; color: #fff;' }}">Traités</a>
+</div>
+{% for i in items %}
+    <div class="ks-card" style="margin-bottom: 12px;">
+        <div style="display: flex; justify-content: space-between; gap: 12px; font-size: 13px; color: var(--text-secondary); margin-bottom: 6px;">
+            <span><strong style="color: inherit;">{{ categories[i.category] ?? i.category }}</strong> · {{ i.user.displayName }} ({{ i.user.email }}) · {{ i.createdAt|date('d/m/Y H:i') }}</span>
+            <form method="post" action="{{ path('admin_app_feedback_done', {id: i.id}) }}"><input type="hidden" name="_csrf_token" value="{{ csrf_token('admin_feedback') }}"><button type="submit" style="background: none; border: 1px solid rgba(255,255,255,.15); color: inherit; border-radius: 8px; padding: 4px 10px; cursor: pointer;">{{ i.status == 'PENDING' ? 'Marquer traité' : 'Remettre à traiter' }}</button></form>
+        </div>
+        <p style="white-space: pre-line; font-size: 14px;">{{ i.content }}</p>
+        <p style="margin-top: 8px; font-size: 13px;"><a href="mailto:{{ i.user.email }}?subject={{ 'Votre avis sur KIINI SAWA'|url_encode }}" style="color: #2dd4bf;">Répondre par email</a></p>
+    </div>
+{% else %}
+    <div class="ks-card"><p style="color: var(--text-secondary);">Aucun message {{ status == 'PENDING' ? 'à traiter' : 'traité' }}.</p></div>
+{% endfor %}
+{% endblock %}
