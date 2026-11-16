@@ -206,7 +206,7 @@
     ══════════════════════════════════════════════════════ #}
     <section style="display: flex; flex-direction: column; gap: 1rem; margin-bottom: 2.5rem;">
         <div style="display: flex; justify-content: space-between; align-items: center; padding: 0 0.5rem;">
-            <span style="font-size: 0.65rem; font-weight: 800; letter-spacing: 0.15em; text-transform: uppercase; color: var(--fg-muted);">Collections</span>
+            <span style="font-size: 0.65rem; font-weight: 800; letter-spacing: 0.15em; text-transform: uppercase; color: var(--fg-muted);">Carnets</span>
             <button @click="showAddCollection = true"
                     style="display: flex; align-items: center; gap: 0.25rem; font-size: 0.7rem; font-weight: 700;
                            color: var(--fg-muted); text-transform: uppercase; letter-spacing: 0.05em; padding: 0.4rem 0.85rem;
@@ -249,7 +249,7 @@
                    font-weight: 500; color: var(--primary); line-height: 1.25;" x-text="activeCollectionName()">
         </h1>
         <p style="color: var(--fg-muted); font-size: 0.95rem; margin-top: 0.35rem; font-style: italic; max-width: 26rem;">
-            Capturez vos pensées, construisez votre second cerveau.
+            Notez vos pensées, vos prières et vos victoires pour les retrouver quand vous en aurez besoin.
         </p>
     </header>
 
@@ -267,7 +267,7 @@
                 { value: 'RESOLUTION', label: 'Résolution', icon: 'target' },
                 { value: 'MILESTONE',  label: 'Victoire',   icon: 'trophy' },
                 { value: 'TEMOIGNAGE', label: 'Témoignage', icon: 'quote' },
-                { value: 'INSIGHT',    label: 'Insight',    icon: 'eye' },
+                { value: 'INSIGHT',    label: 'Déclic',     icon: 'eye' },
             ] %}
             <div style="display: flex; gap: 0.5rem; padding: 1.25rem 1.25rem 0.25rem; overflow-x: auto; scrollbar-width: none;">
                 {% for t in captureTypes %}
@@ -312,7 +312,7 @@
                         <i data-lucide="folder" style="position: absolute; left: 1rem; top: 50%;
                                                          transform: translateY(-50%); width: 14px; height: 14px; color: #64748b;"></i>
                         <select x-model="capture.collectionId" class="collection-input" style="padding-left: 2.5rem; font-size: 0.85rem; appearance: none;">
-                            <option value="">Collection (Optionnel)</option>
+                            <option value="">Carnet (facultatif)</option>
                             <template x-for="c in collections" :key="c.id">
                                 <option :value="c.id" x-text="c.name" :selected="capture.collectionId == c.id"></option>
                             </template>
@@ -681,7 +681,7 @@
                     REFLECTION: 'Pensée',
                     RESOLUTION: 'Résolution',
                     MILESTONE: 'Victoire',
-                    INSIGHT: 'Insight',
+                    INSIGHT: 'Déclic',
                     TEMOIGNAGE: 'Témoignage'
                 };
                 return labelMap[type] || 'Pensée';

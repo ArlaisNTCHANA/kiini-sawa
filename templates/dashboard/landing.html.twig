@@ -46,7 +46,10 @@
         .step-num { width: 2.2rem; height: 2.2rem; border-radius: 50%; background: #CCFBF1; color: var(--primary); font-weight: 800; display: flex; align-items: center; justify-content: center; }
         .verse { font-family: var(--serif); font-style: italic; font-size: clamp(1.2rem, 2.6vw, 1.6rem); text-align: center; color: var(--primary-dark); max-width: 760px; margin: 0 auto; }
         .verse small { display: block; font-style: normal; font-family: 'Inter', sans-serif; font-size: .85rem; color: var(--muted); margin-top: .75rem; letter-spacing: .08em; text-transform: uppercase; }
-        .pricing { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.25rem; max-width: 860px; }
+        .pricing { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1.25rem; }
+        .tag { display: inline-block; font-size: .72rem; font-weight: 700; color: var(--primary); background: #CCFBF1; border-radius: 999px; padding: .15rem .6rem; margin-top: .6rem; }
+        .split { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2.5rem; align-items: center; }
+        .duo-box { background: linear-gradient(135deg, #FDF2F8, #FFF1F2); border-radius: 22px; padding: 2rem; }
         .price-card { background: #fff; border-radius: 20px; padding: 2rem; box-shadow: 0 4px 20px -4px rgba(15,118,110,.1); border: 2px solid transparent; }
         .price-card.featured { border-color: var(--primary); }
         .price { font-family: var(--serif); font-size: 2.4rem; margin: .5rem 0 0; }
@@ -75,6 +78,8 @@
             <a href="{{ path('app_home') }}" class="logo">KIINI SAWA</a>
             <div class="nav-links">
                 <a href="#methode" class="hide-sm">La méthode</a>
+                <a href="#tests" class="hide-sm">Tests</a>
+                <a href="#couple" class="hide-sm">Couple</a>
                 <a href="#prix" class="hide-sm">Prix</a>
                 <a href="{{ path('app_login') }}">Se connecter</a>
             </div>
@@ -126,6 +131,44 @@
     </div>
 </section>
 
+<section id="tests" style="background: #fff;">
+    <div class="wrap">
+        <h2>Se connaître, avec des outils sérieux</h2>
+        <p class="sub">Pour bâtir sur ce que Dieu a mis en vous, il faut d'abord le discerner. Les tests de KIINI SAWA reposent sur des questionnaires utilisés en recherche, avec un rapport détaillé et des pistes concrètes.</p>
+        <div class="grid" style="grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));">
+            <div class="card"><div class="icon">🧬</div><h3>Profil complet</h3><p>116 questions, vos 5 grandes dimensions de personnalité en 29 facettes. Questionnaire de référence IPIP-NEO.</p><span class="tag">15 min</span></div>
+            <div class="card"><div class="icon">🧠</div><h3>Type de fonctionnement</h3><p>16 types, d'après la typologie de Carl Jung : comment vous puisez votre énergie, décidez et vous organisez.</p><span class="tag">7 min</span></div>
+            <div class="card"><div class="icon">⚡</div><h3>Style comportemental</h3><p>Meneur, Rayonnant, Constant ou Méthodique : votre manière d'agir et de communiquer en équipe et en couple.</p><span class="tag">7 min</span></div>
+            <div class="card"><div class="icon">🎯</div><h3>Ennéagramme</h3><p>Vos motivations profondes et vos peurs, avec votre chemin de croissance.</p><span class="tag">10 min</span></div>
+            <div class="card"><div class="icon">🔥</div><h3>Dons spirituels</h3><p>15 dons bibliques (Romains 12, 1 Corinthiens 12, Éphésiens 4) pour discerner comment servir.</p><span class="tag">8 min</span></div>
+            <div class="card"><div class="icon">📄</div><h3>Un vrai rapport</h3><p>Forces, points de vigilance, pistes pour votre Plan de Vie, et un PDF à garder ou à partager avec votre mentor.</p></div>
+        </div>
+    </div>
+</section>
+
+<section id="couple">
+    <div class="wrap split">
+        <div>
+            <h2>Bâtir votre couple, ensemble</h2>
+            <p class="sub" style="margin-bottom: 1.25rem;">« Deux valent mieux qu'un » (Ecclésiaste 4:9). Un espace commun pour poser votre vision de couple, vos valeurs, vos projets et vos thèmes de croissance, et faire le point chaque mois. Vos espaces personnels restent privés.</p>
+            <ul class="check" style="margin-top: 0;">
+                <li>Une vision et un verset pour votre couple</li>
+                <li>Vos projets communs, avec échéances</li>
+                <li>10 thèmes de croissance : communication, finances, spiritualité, intimité…</li>
+                <li>Vos rituels de couple et une revue mensuelle à deux</li>
+                <li>Un rapport croisé de vos personnalités, pour mieux vous comprendre</li>
+            </ul>
+        </div>
+        <div class="duo-box">
+            <p style="font-weight: 800; color: #BE185D; letter-spacing: .08em; text-transform: uppercase; font-size: .8rem;">Offre Duo</p>
+            <p class="price" style="color: var(--fg);"><span class="price-EUR">{{ prices.EUR.DUO|money('EUR') }}</span><span class="price-XAF" hidden>{{ prices.XAF.DUO|money('XAF') }}</span> <small>/ an pour deux</small></p>
+            <p class="alt-price">Les deux conjoints en PRO, plus l'espace couple. Moins cher que deux abonnements.</p>
+            <a href="{{ path('app_register') }}" class="btn btn-primary">Commencer à deux</a>
+            <p style="color: var(--muted); font-size: .8rem; margin-top: .75rem;">Créez votre compte, puis invitez votre conjoint depuis l'espace couple.</p>
+        </div>
+    </div>
+</section>
+
 <section id="prix" style="background: #fff;">
     <div class="wrap">
         <h2>Un prix juste, en euros ou en francs CFA</h2>
@@ -141,7 +184,8 @@
                 <p class="alt-price">Pour poser vos fondations</p>
                 <ul class="check">
                     <li>Plan de Vie complet et score de cohérence</li>
-                    <li>{{ freeHabits }} rituels, journal, planner</li>
+                    <li>{{ freeHabits }} rituels, journal, agenda</li>
+                    <li>Tous les tests de personnalité</li>
                     <li>Revue de la semaine et rappels</li>
                     <li>Un partenaire de redevabilité</li>
                     <li>La méthode : tous les chapitres du livre</li>

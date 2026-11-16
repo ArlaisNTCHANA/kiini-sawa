@@ -15,7 +15,7 @@
     {% if planDeVie and planDeVie.purpose and planDeVie.purpose.statement %}
         <div class="quote">{{ planDeVie.purpose.statement|nl2br }}</div>
     {% else %}<p class="empty">Raison d'être non définie.</p>{% endif %}
-    <p class="muted">Ce que je vais DEVENIR (BE) : mon caractère, mes convictions et mes relations au service de ma raison d'être.</p>
+    <p class="muted">Ce que je vais DEVENIR (Être) : mon caractère, mes convictions et mes relations au service de ma raison d'être.</p>
 
     <h2>Caractère &amp; Conviction</h2>
     {% for gg in growthGoals.CHARACTER %}{{ _self.goal_card(gg) }}{% else %}<p class="empty">Aucun axe défini.</p>{% endfor %}

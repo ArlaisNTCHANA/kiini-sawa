@@ -26,4 +26,4 @@ Bienvenue dans le sanctuaire de votre propre croissance.
 
 ---
 > [!IMPORTANT]
-> **Action Immédiate** : Avant de passer au chapitre 1, assurez-vous d'avoir créé votre compte sur l'application KIINI ALIGN. Votre voyage commence par ce premier acte d'intention.
+> **Action Immédiate** : Avant de passer au chapitre 1, assurez-vous d'avoir créé votre compte sur l'application KIINI SAWA. Votre voyage commence par ce premier acte d'intention.

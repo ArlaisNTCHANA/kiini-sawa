@@ -2,7 +2,7 @@
 
 > "Il y a un temps pour tout, un temps pour toute chose sous les cieux." 
 
-Le temps n'est pas une ligne droite et monotone ; c'est un cycle de rythmes et de **Saisons**. L'une des erreurs les plus courantes dans la croissance personnelle est de vouloir tout faire, tout de suite. KIINI ALIGN vous apprend à respecter le "temps de la graine" et le "temps de la moisson".
+Le temps n'est pas une ligne droite et monotone ; c'est un cycle de rythmes et de **Saisons**. L'une des erreurs les plus courantes dans la croissance personnelle est de vouloir tout faire, tout de suite. KIINI SAWA vous apprend à respecter le "temps de la graine" et le "temps de la moisson".
 
 ### 1. Le Concept de Saison
 Une saison est une période (souvent de 3 mois) définie par un **thème** dominant.

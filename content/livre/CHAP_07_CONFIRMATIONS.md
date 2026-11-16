@@ -5,7 +5,7 @@
 C'est ici que se joue la bataille finale de l'identité. Vous pouvez *vouloir* être persévérant, mais tant que vous n'avez pas de **preuves**, votre cerveau doutera. Le système de **Confirmations** est le laboratoire où vous transformez vos convictions intérieures en certitudes d'acier.
 
 ### 1. Le Pouvoir de la Preuve
-Une affirmation ("Je suis courageux") sans preuve est une simple pensée positive. Dans KIINI ALIGN, nous vous demandons d'accumuler des **Preuves** pour chaque trait d'identité que vous souhaitez confirmer.
+Une affirmation ("Je suis courageux") sans preuve est une simple pensée positive. Dans KIINI SAWA, nous vous demandons d'accumuler des **Preuves** pour chaque trait d'identité que vous souhaitez confirmer.
 - **Preuve Personnelle** : Un acte concret que vous avez posé.
 - **Résultat de Test** : Une donnée objective issue d'un outil de mesure.
 - **Feedback Extérieur** : Ce que les autres ont vu et confirmé chez vous.

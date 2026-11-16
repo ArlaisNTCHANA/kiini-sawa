@@ -2,7 +2,7 @@
 
 > "L'enracinement est le processus secret qui transforme l'effort en nature."
 
-Créer une habitude est une science. Dans KIINI ALIGN, nous utilisons la méthode de l'**Enracinement** pour s'assurer que vos rituels de croissance ne s'évaporent pas après trois jours de ferveur.
+Créer une habitude est une science. Dans KIINI SAWA, nous utilisons la méthode de l'**Enracinement** pour s'assurer que vos rituels de croissance ne s'évaporent pas après trois jours de ferveur.
 
 ### 1. La Loi de l'Action Minimale
 L'erreur classique est de commencer trop fort (ex: "Je vais courir 1h tous les matins"). Commencez si petit que c'est ridicule de ne pas le faire.

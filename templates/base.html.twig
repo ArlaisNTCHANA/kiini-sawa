@@ -437,7 +437,7 @@
                         {% set ddItems1 = [
                             { label: 'Mon Profil',      icon: 'user',          href: path('app_profile'),                desc: 'Compte & données' },
                             { label: is_pro() ? (is_trialing() ? 'Essai PRO' : 'Mon abonnement') : 'Passer à PRO', icon: 'crown', href: path('app_subscription'), desc: is_trialing() ? 'Jusqu\'au ' ~ pro_until()|date('d/m') : (is_pro() ? 'Offre PRO' : 'Débloquer les 4 plans') },
-                            { label: 'Mes Découvertes', icon: 'sparkles',      href: path('app_personality_index'),      desc: 'Tests & valeurs' },
+                            { label: 'Mes tests',       icon: 'sparkles',      href: path('app_personality_index'),      desc: 'Tests & valeurs' },
                             { label: 'Notre couple',    icon: 'heart',         href: path('app_couple'), desc: 'Vision et projets à deux' },
                             { label: 'Mon organisation', icon: 'building-2',  href: path('app_organisation_index'), desc: 'Église, association…' },
                             { label: 'La Méthode',      icon: 'book-open',     href: path('app_methode_index'), desc: 'Les chapitres du livre' },
@@ -532,7 +532,7 @@
                     { label: 'Agenda',       path: path('app_planner'),        icon: 'calendar' },
                     { label: 'Bilan',        path: path('app_bilan'),          icon: 'bar-chart-2' },
                     { label: 'Partenaires',  path: path('app_social'),         icon: 'users' },
-                    { label: 'Mes Découvertes', path: path('app_personality_index'), icon: 'sparkles' },
+                    { label: 'Mes tests', path: path('app_personality_index'), icon: 'sparkles' },
                     { label: 'Notre couple', path: path('app_couple'),         icon: 'heart' },
                     { label: 'Mon organisation', path: path('app_organisation_index'), icon: 'building-2' },
                     { label: 'La Méthode',   path: path('app_methode_index'),  icon: 'book-open' },

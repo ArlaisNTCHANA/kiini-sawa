@@ -18,7 +18,7 @@ C'est ici que l'honnêteté devient chirurgicale.
 L'alignement commence au moment où vous réduisez l'écart entre ces deux colonnes.
 
 ### 3. Le Frein Invisible : Croyances Limitantes
-"Je ne suis pas assez...", "C'est trop tard pour moi...", "L'argent est sale...". Ces phrases tournent en boucle dans l'ombre de votre inconscient. Dans KIINI ALIGN, nous apprenons à les débusquer pour pratiquer le **Recadrage**. Une croyance limitante identifiée est un obstacle à moitié franchi.
+"Je ne suis pas assez...", "C'est trop tard pour moi...", "L'argent est sale...". Ces phrases tournent en boucle dans l'ombre de votre inconscient. Dans KIINI SAWA, nous apprenons à les débusquer pour pratiquer le **Recadrage**. Une croyance limitante identifiée est un obstacle à moitié franchi.
 
 ### 4. Le Sanctuaire : Exercice d'Alignement
 Listez vos 5 valeurs principales. Pour chacune, notez sur 10 votre niveau d'incarnation réelle au cours des 7 derniers jours.

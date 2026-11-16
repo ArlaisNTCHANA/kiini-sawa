@@ -19,7 +19,7 @@ class PersonalityAdminController extends AbstractController
     private const TESTS = [
         'INTELLIGENCES' => ['name' => 'Intelligences Multiples', 'subtitle' => 'Théorie de Gardner', 'color' => '#06b6d4', 'bg' => '#ecfeff'],
         'TALENT'        => ['name' => 'Architecture des Talents', 'subtitle' => 'Zones de Génie', 'color' => '#f97316', 'bg' => '#fff7ed'],
-        'EQUILIBRE'     => ['name' => 'Équilibre de Vie', 'subtitle' => 'Wheel of Life', 'color' => '#3b82f6', 'bg' => '#eff6ff'],
+        'EQUILIBRE'     => ['name' => 'Équilibre de Vie', 'subtitle' => 'Roue de la vie', 'color' => '#3b82f6', 'bg' => '#eff6ff'],
         'HYGIENE'       => ['name' => 'Hygiène de Vie', 'subtitle' => '6 Axes Vitaux', 'color' => '#ec4899', 'bg' => '#fdf2f8'],
     ];
 

@@ -2,7 +2,7 @@
 
 > "Pour avoir ce que vous n'avez jamais eu, vous devez devenir quelqu'un que vous n'avez jamais été."
 
-La transformation holistique chez KIINI ALIGN repose sur un trépied indissociable. Si vous manquez l'un de ces axes, votre croissance sera bancale, fragile ou déséquilibrée.
+La transformation holistique chez KIINI SAWA repose sur un trépied indissociable. Si vous manquez l'un de ces axes, votre croissance sera bancale, fragile ou déséquilibrée.
 
 ### Axe 1 : Compétence & Connaissance (Le Savoir-Faire)
 C'est l'axe le plus visible. Il s'agit de muscler vos aptitudes techniques. 

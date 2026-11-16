@@ -11,7 +11,7 @@ Nous avons tendance à minimiser ce que nous faisons naturellement bien ("Oh, c'
 - Un **Don** est une aptitude innée (ex: l'empathie, la vision spatiale, la capacité à simplifier le complexe).
 - Une **Compétence** est un talent que vous avez travaillé et structuré (ex: le management, l'architecture, la pédagogie).
 
-Dans KIINI ALIGN, nous mettons l'accent sur les points forts. Pourquoi passer des années à essayer de corriger une faiblesse pour devenir "moyen", alors que vous pourriez investir ce temps sur un talent pour devenir "exceptionnel" ?
+Dans KIINI SAWA, nous mettons l'accent sur les points forts. Pourquoi passer des années à essayer de corriger une faiblesse pour devenir "moyen", alors que vous pourriez investir ce temps sur un talent pour devenir "exceptionnel" ?
 
 ### 3. Les Signes d'un Talent
 Comment identifier un talent caché ?

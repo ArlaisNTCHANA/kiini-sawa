@@ -931,7 +931,7 @@
             <i data-lucide="compass" style="width: 14px; height: 14px;"></i>
             Espace Plan de Vie
         </div>
-        <h1 class="hero-title">Visualisez et forgez votre destinée</h1>
+        <h1 class="hero-title">Mon Plan de Vie</h1>
         <p class="hero-desc">
             Construisez un plan d'alignement personnel complet. Choisissez l'assistant pas à pas pour être guidé à chaque étape, ou modifiez librement chaque rubrique ci-dessous.
         </p>
@@ -1330,7 +1330,7 @@
                                 <div class="goal-cat-card">
                                     <div class="goal-cat-header">
                                         <div class="goal-cat-dot" style="background: #6366f1;"></div>
-                                        <span class="goal-cat-label" style="color: #6366f1;">BE (Qui je veux être)</span>
+                                        <span class="goal-cat-label" style="color: #6366f1;">Être (Qui je veux être)</span>
                                     </div>
                                     {% for goal in lifeGoals.BE %}
                                         <div class="goal-item" style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
@@ -1352,7 +1352,7 @@
                                 <div class="goal-cat-card">
                                     <div class="goal-cat-header">
                                         <div class="goal-cat-dot" style="background: #3b82f6;"></div>
-                                        <span class="goal-cat-label" style="color: #3b82f6;">DO (Ce que je veux accomplir)</span>
+                                        <span class="goal-cat-label" style="color: #3b82f6;">Faire (Ce que je veux accomplir)</span>
                                     </div>
                                     {% for goal in lifeGoals.DO %}
                                         <div class="goal-item" style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
@@ -1374,7 +1374,7 @@
                                 <div class="goal-cat-card">
                                     <div class="goal-cat-header">
                                         <div class="goal-cat-dot" style="background: #10b981;"></div>
-                                        <span class="goal-cat-label" style="color: #10b981;">HAVE (Ce que je veux posséder)</span>
+                                        <span class="goal-cat-label" style="color: #10b981;">Avoir (Ce que je veux posséder)</span>
                                     </div>
                                     {% for goal in lifeGoals.HAVE %}
                                         <div class="goal-item" style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
@@ -1396,7 +1396,7 @@
                                 <div class="goal-cat-card">
                                     <div class="goal-cat-header">
                                         <div class="goal-cat-dot" style="background: #ec4899;"></div>
-                                        <span class="goal-cat-label" style="color: #ec4899;">GIVE (Ce que je veux transmettre)</span>
+                                        <span class="goal-cat-label" style="color: #ec4899;">Donner (Ce que je veux transmettre)</span>
                                     </div>
                                     {% for goal in lifeGoals.GIVE %}
                                         <div class="goal-item" style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
@@ -1535,7 +1535,7 @@
                                                     <div style="display: flex; flex-wrap: wrap; gap: 0.25rem; margin-top: 0.5rem;">
                                                         {% for lg in goal.supportedLifeGoals %}
                                                             <span style="font-size: 0.65rem; padding: 2px 6px; border-radius: 4px; background: rgba(13, 148, 136, 0.05); color: var(--primary); border: 1px solid rgba(13, 148, 136, 0.1);">
-                                                                [{{ lg.category }}] {{ lg.title }}
+                                                                [{{ lg.category|categorie_objectif }}] {{ lg.title }}
                                                             </span>
                                                         {% endfor %}
                                                     </div>
@@ -1567,7 +1567,7 @@
                                                     <div style="display: flex; flex-wrap: wrap; gap: 0.25rem; margin-top: 0.5rem;">
                                                         {% for lg in goal.supportedLifeGoals %}
                                                             <span style="font-size: 0.65rem; padding: 2px 6px; border-radius: 4px; background: rgba(13, 148, 136, 0.05); color: var(--primary); border: 1px solid rgba(13, 148, 136, 0.1);">
-                                                                [{{ lg.category }}] {{ lg.title }}
+                                                                [{{ lg.category|categorie_objectif }}] {{ lg.title }}
                                                             </span>
                                                         {% endfor %}
                                                     </div>
@@ -1626,7 +1626,7 @@
                                             <div style="display: flex; flex-wrap: wrap; gap: 0.25rem; margin-top: 0.5rem;">
                                                 {% for lg in goal.supportedLifeGoals %}
                                                     <span style="font-size: 0.65rem; padding: 2px 6px; border-radius: 4px; background: rgba(217, 119, 6, 0.05); color: #d97706; border: 1px solid rgba(217, 119, 6, 0.1);">
-                                                        [{{ lg.category }}] {{ lg.title }}
+                                                        [{{ lg.category|categorie_objectif }}] {{ lg.title }}
                                                     </span>
                                                 {% endfor %}
                                             </div>
@@ -1725,7 +1725,7 @@
                                                             <div style="display: flex; flex-wrap: wrap; gap: 0.25rem; margin-top: 0.5rem;">
                                                                 {% for lg in goal.supportedLifeGoals %}
                                                                     <span style="font-size: 0.65rem; padding: 2px 6px; border-radius: 4px; background: rgba(99, 102, 241, 0.05); color: #6366f1; border: 1px solid rgba(99, 102, 241, 0.1);">
-                                                                        [{{ lg.category }}] {{ lg.title }}
+                                                                        [{{ lg.category|categorie_objectif }}] {{ lg.title }}
                                                                     </span>
                                                                 {% endfor %}
                                                             </div>
@@ -1794,7 +1794,7 @@
                                             <div style="display: flex; flex-wrap: wrap; gap: 0.25rem; margin-top: 0.5rem;">
                                                 {% for lg_item in lg.supportedLifeGoals %}
                                                     <span style="font-size: 0.65rem; padding: 2px 6px; border-radius: 4px; background: rgba(99, 102, 241, 0.05); color: #6366f1; border: 1px solid rgba(99, 102, 241, 0.1);">
-                                                        [{{ lg_item.category }}] {{ lg_item.title }}
+                                                        [{{ lg_item.category|categorie_objectif }}] {{ lg_item.title }}
                                                     </span>
                                                 {% endfor %}
                                             </div>
@@ -1859,7 +1859,7 @@
                                                             <div style="display: flex; flex-wrap: wrap; gap: 0.25rem; margin-top: 0.4rem;">
                                                                 {% for lg in hd.supportedLifeGoals %}
                                                                     <span style="font-size: 0.65rem; padding: 1px 5px; border-radius: 4px; background: rgba(99, 102, 241, 0.05); color: #6366f1; border: 1px solid rgba(99, 102, 241, 0.1);">
-                                                                        [{{ lg.category }}] {{ lg.title }}
+                                                                        [{{ lg.category|categorie_objectif }}] {{ lg.title }}
                                                                     </span>
                                                                 {% endfor %}
                                                             </div>
@@ -1903,10 +1903,10 @@
                     <div style="display: flex; flex-wrap: wrap; gap: 0.5rem; align-items: center;">
                         <span style="font-size: 0.8rem; font-weight: 700; color: var(--fg-light); text-transform: uppercase; margin-right: 0.5rem; font-family: 'Inter', sans-serif;">Filtrer :</span>
                         <button @click="activeCategory = 'ALL'" :class="activeCategory === 'ALL' ? 'active' : ''" class="btn-filter-pill">Tout</button>
-                        <button @click="activeCategory = 'BE'" :class="activeCategory === 'BE' ? 'active' : ''" class="btn-filter-pill pill-be">Devenir (Be)</button>
-                        <button @click="activeCategory = 'DO'" :class="activeCategory === 'DO' ? 'active' : ''" class="btn-filter-pill pill-do">Accomplir (Do)</button>
-                        <button @click="activeCategory = 'HAVE'" :class="activeCategory === 'HAVE' ? 'active' : ''" class="btn-filter-pill pill-have">Posséder (Have)</button>
-                        <button @click="activeCategory = 'GIVE'" :class="activeCategory === 'GIVE' ? 'active' : ''" class="btn-filter-pill pill-give">Léguer (Give)</button>
+                        <button @click="activeCategory = 'BE'" :class="activeCategory === 'BE' ? 'active' : ''" class="btn-filter-pill pill-be">Être</button>
+                        <button @click="activeCategory = 'DO'" :class="activeCategory === 'DO' ? 'active' : ''" class="btn-filter-pill pill-do">Faire</button>
+                        <button @click="activeCategory = 'HAVE'" :class="activeCategory === 'HAVE' ? 'active' : ''" class="btn-filter-pill pill-have">Avoir</button>
+                        <button @click="activeCategory = 'GIVE'" :class="activeCategory === 'GIVE' ? 'active' : ''" class="btn-filter-pill pill-give">Donner</button>
                     </div>
                     <div style="display: flex; flex-wrap: wrap; gap: 0.5rem; align-items: center;">
                         <span style="font-size: 0.8rem; font-weight: 700; color: var(--fg-light); text-transform: uppercase; margin-right: 0.5rem; font-family: 'Inter', sans-serif;">Année :</span>
@@ -1941,10 +1941,10 @@
 
                             {% for goal in goals %}
                                 {% set catMap = {
-                                    'BE': {'label': 'Devenir', 'bg': 'rgba(79, 70, 229, 0.08)', 'color': '#4f46e5'},
-                                    'DO': {'label': 'Accomplir', 'bg': 'rgba(37, 99, 235, 0.08)', 'color': '#2563eb'},
-                                    'HAVE': {'label': 'Posséder', 'bg': 'rgba(5, 150, 105, 0.08)', 'color': '#059669'},
-                                    'GIVE': {'label': 'Léguer', 'bg': 'rgba(225, 29, 72, 0.08)', 'color': '#e11d48'}
+                                    'BE': {'label': 'Être', 'bg': 'rgba(79, 70, 229, 0.08)', 'color': '#4f46e5'},
+                                    'DO': {'label': 'Faire', 'bg': 'rgba(37, 99, 235, 0.08)', 'color': '#2563eb'},
+                                    'HAVE': {'label': 'Avoir', 'bg': 'rgba(5, 150, 105, 0.08)', 'color': '#059669'},
+                                    'GIVE': {'label': 'Donner', 'bg': 'rgba(225, 29, 72, 0.08)', 'color': '#e11d48'}
                                 } %}
                                 {% set cInfo = catMap[goal.category]|default({'label': goal.category, 'bg': 'rgba(15, 118, 110, 0.08)', 'color': 'var(--primary)'}) %}
 
@@ -2332,7 +2332,7 @@ graph TD
                 {% set scoreColor = healthScore > 80 ? '#166534' : (healthScore > 50 ? '#854d0e' : '#991b1b') %}
                 {% set scoreBg = healthScore > 80 ? '#dcfce7' : (healthScore > 50 ? '#fef9c3' : '#fee2e2') %}
                 <div class="analysis-score-badge" style="background: {{ scoreBg }}; color: {{ scoreColor }};">
-                    Score d'Alignement : {{ healthScore }}/100
+                    Score de cohérence : {{ healthScore }}/100
                 </div>
             </div>
 

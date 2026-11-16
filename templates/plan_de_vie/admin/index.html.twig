@@ -688,10 +688,10 @@
 
         {# --- Grouping Goals --- #}
         {% set categories = {
-            'BE': { 'name': 'Être (Be)', 'desc': 'Identité, caractère, spiritualité, mental', 'icon': 'user' },
-            'DO': { 'name': 'Faire (Do)', 'desc': 'Projets, réalisations, activités, aventures', 'icon': 'briefcase' },
-            'HAVE': { 'name': 'Avoir (Have)', 'desc': 'Finances, possessions, ressources matérielles', 'icon': 'wallet' },
-            'GIVE': { 'name': 'Contribuer (Give)', 'desc': 'Legs, dons, partage, impact social', 'icon': 'gift' }
+            'BE': { 'name': 'Être', 'desc': 'Identité, caractère, spiritualité, mental', 'icon': 'user' },
+            'DO': { 'name': 'Faire', 'desc': 'Projets, réalisations, activités, aventures', 'icon': 'briefcase' },
+            'HAVE': { 'name': 'Avoir', 'desc': 'Finances, possessions, ressources matérielles', 'icon': 'wallet' },
+            'GIVE': { 'name': 'Donner', 'desc': 'Legs, dons, partage, impact social', 'icon': 'gift' }
         } %}
 
         {% for cat_key, cat_info in categories %}
@@ -1092,10 +1092,10 @@
                         <div class="form-group">
                             <label for="new-goal-cat">Catégorie d'objectif</label>
                             <select id="new-goal-cat" name="category" class="form-control" required>
-                                <option value="BE">Être (Be) - Identité, esprit</option>
-                                <option value="DO" selected>Faire (Do) - Projets, expériences</option>
-                                <option value="HAVE">Avoir (Have) - Finances, matériel</option>
-                                <option value="GIVE">Contribuer (Give) - Legs, partage</option>
+                                <option value="BE">Être - Identité, esprit</option>
+                                <option value="DO" selected>Faire - Projets, expériences</option>
+                                <option value="HAVE">Avoir - Finances, matériel</option>
+                                <option value="GIVE">Donner - Legs, partage</option>
                             </select>
                         </div>
                         <div class="form-group">

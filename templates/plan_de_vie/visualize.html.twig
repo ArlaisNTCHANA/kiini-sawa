@@ -617,10 +617,10 @@
         {% if hasLifeGoals %}
             <div class="grid-blocks-2">
                 {% set categoriesMap = {
-                    'BE': { 'label': 'DEVENIR (Caractère, identité)', 'bg': '#eef2ff', 'text': '#4f46e5', 'border': '#e0e7ff' },
-                    'DO': { 'label': 'ACCOMPLIR (Actions, projets)', 'bg': '#eff6ff', 'text': '#2563eb', 'border': '#dbeafe' },
-                    'HAVE': { 'label': 'POSSÉDER (Ressources, matériel)', 'bg': '#ecfdf5', 'text': '#059669', 'border': '#d1fae5' },
-                    'GIVE': { 'label': 'LÉGUER (Transmission, héritage)', 'bg': '#fff1f2', 'text': '#e11d48', 'border': '#fecdd3' }
+                    'BE': { 'label': 'ÊTRE (caractère, identité)', 'bg': '#eef2ff', 'text': '#4f46e5', 'border': '#e0e7ff' },
+                    'DO': { 'label': 'FAIRE (actions, projets)', 'bg': '#eff6ff', 'text': '#2563eb', 'border': '#dbeafe' },
+                    'HAVE': { 'label': 'AVOIR (ressources, biens)', 'bg': '#ecfdf5', 'text': '#059669', 'border': '#d1fae5' },
+                    'GIVE': { 'label': 'DONNER (transmission, héritage)', 'bg': '#fff1f2', 'text': '#e11d48', 'border': '#fecdd3' }
                 } %}
                 {% for cat, catInfo in categoriesMap %}
                     {% if lifeGoals[cat] is defined and lifeGoals[cat]|length > 0 %}

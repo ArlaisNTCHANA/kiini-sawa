@@ -128,7 +128,7 @@ class SeedPersonalityCommand extends Command
     }
 
     // ─────────────────────────────────────────────────────────────────────────
-    // EQUILIBRE DE VIE (Wheel of Life)
+    // EQUILIBRE DE VIE (Roue de la vie)
     // ─────────────────────────────────────────────────────────────────────────
     private function seedEquilibre(SymfonyStyle $io): void
     {

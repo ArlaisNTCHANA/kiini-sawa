@@ -104,7 +104,7 @@ class PersonalityScoreService
     }
 
     // ─────────────────────────────────────────────────────────────────────────
-    // EQUILIBRE DE VIE — 8 domaines (Wheel of Life)
+    // EQUILIBRE DE VIE — 8 domaines (Roue de la vie)
     // ─────────────────────────────────────────────────────────────────────────
     private function calcEquilibre(array $answers): array
     {

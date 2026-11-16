@@ -11,7 +11,7 @@ Le **Défi de Croissance** est un catalyseur. C'est une action limitée dans le 
 - **La Célébration** : Partager la victoire multiplie la dopamine.
 
 ### 2. Devenir un Modèle
-En vivant selon les principes de ce livre et en utilisant l'outil KIINI ALIGN, vous devenez vous-même une source d'inspiration. Votre alignement crée une aura de paix et d'efficacité qui attire les autres Acteurs.
+En vivant selon les principes de ce livre et en utilisant l'outil KIINI SAWA, vous devenez vous-même une source d'inspiration. Votre alignement crée une aura de paix et d'efficacité qui attire les autres Acteurs.
 
 ### 3. Conclusion : Le Cycle Infini
 L'alignement n'est pas un état statique que l'on atteint une fois pour toutes. C'est une danse quotidienne. Votre but s'affinera, vos valeurs s'approfondiront, vos habitudes changeront. Mais le **Système KIINI** sera toujours là pour vous offrir le sanctuaire nécessaire à ce réalignement perpétuel.

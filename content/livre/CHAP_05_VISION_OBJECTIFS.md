@@ -5,7 +5,7 @@
 C'est ici que l'abstraction commence à se cristalliser en réalité. La **Vision** est l'image mentale de votre avenir idéal. Elle doit être assez grande pour vous effrayer et assez belle pour vous attirer.
 
 ### 1. La Matrice de l'Intention : BE-DO-HAVE-GIVE
-Pour que votre vision soit équilibrée et puissante, nous utilisons dans KIINI ALIGN une matrice à quatre piliers :
+Pour que votre vision soit équilibrée et puissante, nous utilisons dans KIINI SAWA une matrice à quatre piliers :
 - **BE (ÊTRE)** : Qui devez-vous devenir ? Quel caractère devez-vous forger ? (Ex: "Être une personne de paix et de résolution").
 - **DO (FAIRE)** : Quelles actions concrètes allez-vous accomplir ? (Ex: "Lancer mon entreprise de conseil").
 - **HAVE (AVOIR)** : De quelles ressources avez-vous besoin ? (Ex: "Posséder ma propre maison", "Avoir la liberté financière").

@@ -22,8 +22,8 @@ class DashboardController extends AbstractController
 
         return $this->render('dashboard/landing.html.twig', [
             'prices' => [
-                'EUR' => ['MONTHLY' => $prices->price('MONTHLY', 'EUR'), 'YEARLY' => $prices->price('YEARLY', 'EUR')],
-                'XAF' => ['MONTHLY' => $prices->price('MONTHLY', 'XAF'), 'YEARLY' => $prices->price('YEARLY', 'XAF')],
+                'EUR' => ['MONTHLY' => $prices->price('MONTHLY', 'EUR'), 'YEARLY' => $prices->price('YEARLY', 'EUR'), 'DUO' => $prices->price('DUO', 'EUR')],
+                'XAF' => ['MONTHLY' => $prices->price('MONTHLY', 'XAF'), 'YEARLY' => $prices->price('YEARLY', 'XAF'), 'DUO' => $prices->price('DUO', 'XAF')],
             ],
             'trialDays' => $entitlements->config()->getTrialDurationDays(),
             'freeHabits' => $entitlements->config()->getMaxHabitsFree(),

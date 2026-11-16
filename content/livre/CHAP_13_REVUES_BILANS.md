@@ -2,7 +2,7 @@
 
 > "Une vie non examinée ne vaut pas la peine d'être vécue." — Socrate
 
-Nous entrons dans la **Partie IV : Bilan & Résonance**. Si vous n'évaluez pas vos progrès, vous finirez par naviguer à l'aveugle. KIINI ALIGN a fait de la "Revue" un rituel sacré de réalignement.
+Nous entrons dans la **Partie IV : Bilan & Résonance**. Si vous n'évaluez pas vos progrès, vous finirez par naviguer à l'aveugle. KIINI SAWA a fait de la "Revue" un rituel sacré de réalignement.
 
 ### 1. Le Moment de Vérité (Revue Hebdomadaire)
 Chaque semaine, l'application vous invite à évaluer vos progrès sur vos objectifs de croissance. Ce n'est pas un exercice de comptabilité, c'est un rendez-vous avec votre vérité.

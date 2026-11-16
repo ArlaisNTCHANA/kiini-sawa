@@ -657,7 +657,7 @@
                         {# BE #}
                         <div>
                             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
-                                <label style="font-size: 0.75rem; font-weight: 700; color: var(--fg-light); letter-spacing: 0.05em; text-transform: uppercase;">BE (Qui je veux être)</label>
+                                <label style="font-size: 0.75rem; font-weight: 700; color: var(--fg-light); letter-spacing: 0.05em; text-transform: uppercase;">Être (Qui je veux être)</label>
                                 <button type="button" class="btn-add" onclick="addLifeGoal('be')">
                                     <i data-lucide="plus" style="width: 12px; height: 12px;"></i> Ajouter
                                 </button>
@@ -693,7 +693,7 @@
                         {# DO #}
                         <div>
                             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
-                                <label style="font-size: 0.75rem; font-weight: 700; color: var(--fg-light); letter-spacing: 0.05em; text-transform: uppercase;">DO (Ce que je veux accomplir)</label>
+                                <label style="font-size: 0.75rem; font-weight: 700; color: var(--fg-light); letter-spacing: 0.05em; text-transform: uppercase;">Faire (Ce que je veux accomplir)</label>
                                 <button type="button" class="btn-add" onclick="addLifeGoal('do')">
                                     <i data-lucide="plus" style="width: 12px; height: 12px;"></i> Ajouter
                                 </button>
@@ -729,7 +729,7 @@
                         {# HAVE #}
                         <div>
                             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
-                                <label style="font-size: 0.75rem; font-weight: 700; color: var(--fg-light); letter-spacing: 0.05em; text-transform: uppercase;">HAVE (Ce que je veux posséder)</label>
+                                <label style="font-size: 0.75rem; font-weight: 700; color: var(--fg-light); letter-spacing: 0.05em; text-transform: uppercase;">Avoir (Ce que je veux posséder)</label>
                                 <button type="button" class="btn-add" onclick="addLifeGoal('have')">
                                     <i data-lucide="plus" style="width: 12px; height: 12px;"></i> Ajouter
                                 </button>
@@ -765,7 +765,7 @@
                         {# GIVE #}
                         <div>
                             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
-                                <label style="font-size: 0.75rem; font-weight: 700; color: var(--fg-light); letter-spacing: 0.05em; text-transform: uppercase;">GIVE (Ce que je veux transmettre)</label>
+                                <label style="font-size: 0.75rem; font-weight: 700; color: var(--fg-light); letter-spacing: 0.05em; text-transform: uppercase;">Donner (Ce que je veux transmettre)</label>
                                 <button type="button" class="btn-add" onclick="addLifeGoal('give')">
                                     <i data-lucide="plus" style="width: 12px; height: 12px;"></i> Ajouter
                                 </button>
@@ -851,7 +851,7 @@
                                                     {% for lg in allLifeGoals %}
                                                         <label style="display: flex; align-items: flex-start; gap: 0.5rem; font-size: 0.85rem; color: var(--fg-light); cursor: pointer; padding: 0.25rem 0; margin-bottom: 0;">
                                                             <input type="checkbox" name="growth_competence_goals[{{ loop.parent.loop.index0 }}][]" value="{{ lg.id }}" {% if goal.supportedLifeGoals.contains(lg) %}checked{% endif %} style="margin-top: 0.2rem; cursor: pointer;">
-                                                            <span>[{{ lg.category|upper }}] {{ lg.title }}</span>
+                                                            <span>[{{ lg.category|categorie_objectif }}] {{ lg.title }}</span>
                                                         </label>
                                                     {% endfor %}
                                                 {% else %}
@@ -884,7 +884,7 @@
                                                 {% for lg in allLifeGoals %}
                                                     <label style="display: flex; align-items: flex-start; gap: 0.5rem; font-size: 0.85rem; color: var(--fg-light); cursor: pointer; padding: 0.25rem 0; margin-bottom: 0;">
                                                         <input type="checkbox" name="growth_competence_goals[0][]" value="{{ lg.id }}" style="margin-top: 0.2rem; cursor: pointer;">
-                                                        <span>[{{ lg.category|upper }}] {{ lg.title }}</span>
+                                                        <span>[{{ lg.category|categorie_objectif }}] {{ lg.title }}</span>
                                                     </label>
                                                 {% endfor %}
                                             {% else %}
@@ -933,7 +933,7 @@
                                                     {% for lg in allLifeGoals %}
                                                         <label style="display: flex; align-items: flex-start; gap: 0.5rem; font-size: 0.85rem; color: var(--fg-light); cursor: pointer; padding: 0.25rem 0; margin-bottom: 0;">
                                                             <input type="checkbox" name="growth_connaissance_goals[{{ loop.parent.loop.index0 }}][]" value="{{ lg.id }}" {% if goal.supportedLifeGoals.contains(lg) %}checked{% endif %} style="margin-top: 0.2rem; cursor: pointer;">
-                                                            <span>[{{ lg.category|upper }}] {{ lg.title }}</span>
+                                                            <span>[{{ lg.category|categorie_objectif }}] {{ lg.title }}</span>
                                                         </label>
                                                     {% endfor %}
                                                 {% else %}
@@ -966,7 +966,7 @@
                                                 {% for lg in allLifeGoals %}
                                                     <label style="display: flex; align-items: flex-start; gap: 0.5rem; font-size: 0.85rem; color: var(--fg-light); cursor: pointer; padding: 0.25rem 0; margin-bottom: 0;">
                                                         <input type="checkbox" name="growth_connaissance_goals[0][]" value="{{ lg.id }}" style="margin-top: 0.2rem; cursor: pointer;">
-                                                        <span>[{{ lg.category|upper }}] {{ lg.title }}</span>
+                                                        <span>[{{ lg.category|categorie_objectif }}] {{ lg.title }}</span>
                                                     </label>
                                                 {% endfor %}
                                             {% else %}
@@ -1029,7 +1029,7 @@
                                                     {% for lg in allLifeGoals %}
                                                         <label style="display: flex; align-items: flex-start; gap: 0.5rem; font-size: 0.85rem; color: var(--fg-light); cursor: pointer; padding: 0.25rem 0; margin-bottom: 0;">
                                                             <input type="checkbox" name="growth_character_goals[{{ loop.parent.loop.index0 }}][]" value="{{ lg.id }}" {% if goal.supportedLifeGoals.contains(lg) %}checked{% endif %} style="margin-top: 0.2rem; cursor: pointer;">
-                                                            <span>[{{ lg.category|upper }}] {{ lg.title }}</span>
+                                                            <span>[{{ lg.category|categorie_objectif }}] {{ lg.title }}</span>
                                                         </label>
                                                     {% endfor %}
                                                 {% else %}
@@ -1061,7 +1061,7 @@
                                                 {% for lg in allLifeGoals %}
                                                     <label style="display: flex; align-items: flex-start; gap: 0.5rem; font-size: 0.85rem; color: var(--fg-light); cursor: pointer; padding: 0.25rem 0; margin-bottom: 0;">
                                                         <input type="checkbox" name="growth_character_goals[0][]" value="{{ lg.id }}" style="margin-top: 0.2rem; cursor: pointer;">
-                                                        <span>[{{ lg.category|upper }}] {{ lg.title }}</span>
+                                                        <span>[{{ lg.category|categorie_objectif }}] {{ lg.title }}</span>
                                                     </label>
                                                 {% endfor %}
                                             {% else %}
@@ -1134,7 +1134,7 @@
                                                     {% for lg in allLifeGoals %}
                                                         <label style="display: flex; align-items: flex-start; gap: 0.5rem; font-size: 0.85rem; color: var(--fg-light); cursor: pointer; padding: 0.25rem 0; margin-bottom: 0;">
                                                             <input type="checkbox" name="growth_relation_goals[{{ loop.parent.loop.index0 }}][]" value="{{ lg.id }}" {% if goal.supportedLifeGoals.contains(lg) %}checked{% endif %} style="margin-top: 0.2rem; cursor: pointer;">
-                                                            <span>[{{ lg.category|upper }}] {{ lg.title }}</span>
+                                                            <span>[{{ lg.category|categorie_objectif }}] {{ lg.title }}</span>
                                                         </label>
                                                     {% endfor %}
                                                 {% else %}
@@ -1176,7 +1176,7 @@
                                                 {% for lg in allLifeGoals %}
                                                     <label style="display: flex; align-items: flex-start; gap: 0.5rem; font-size: 0.85rem; color: var(--fg-light); cursor: pointer; padding: 0.25rem 0; margin-bottom: 0;">
                                                         <input type="checkbox" name="growth_relation_goals[0][]" value="{{ lg.id }}" style="margin-top: 0.2rem; cursor: pointer;">
-                                                        <span>[{{ lg.category|upper }}] {{ lg.title }}</span>
+                                                        <span>[{{ lg.category|categorie_objectif }}] {{ lg.title }}</span>
                                                     </label>
                                                 {% endfor %}
                                             {% else %}
@@ -1239,7 +1239,7 @@
                                                     {% for lgGoal in allLifeGoals %}
                                                         <label style="display: flex; align-items: flex-start; gap: 0.5rem; font-size: 0.85rem; color: var(--fg-light); cursor: pointer; padding: 0.25rem 0; margin-bottom: 0;">
                                                             <input type="checkbox" name="legacy_goals[{{ loop.parent.loop.index0 }}][]" value="{{ lgGoal.id }}" {% if lg.supportedLifeGoals.contains(lgGoal) %}checked{% endif %} style="margin-top: 0.2rem; cursor: pointer;">
-                                                            <span>[{{ lgGoal.category|upper }}] {{ lgGoal.title }}</span>
+                                                            <span>[{{ lgGoal.category|categorie_objectif }}] {{ lgGoal.title }}</span>
                                                         </label>
                                                     {% endfor %}
                                                 {% else %}
@@ -1271,7 +1271,7 @@
                                                 {% for lgGoal in allLifeGoals %}
                                                     <label style="display: flex; align-items: flex-start; gap: 0.5rem; font-size: 0.85rem; color: var(--fg-light); cursor: pointer; padding: 0.25rem 0; margin-bottom: 0;">
                                                         <input type="checkbox" name="legacy_goals[0][]" value="{{ lgGoal.id }}" style="margin-top: 0.2rem; cursor: pointer;">
-                                                        <span>[{{ lgGoal.category|upper }}] {{ lgGoal.title }}</span>
+                                                        <span>[{{ lgGoal.category|categorie_objectif }}] {{ lgGoal.title }}</span>
                                                     </label>
                                                 {% endfor %}
                                             {% else %}
@@ -1396,7 +1396,7 @@
                                                     {% for lgGoal in allLifeGoals %}
                                                         <label style="display: flex; align-items: flex-start; gap: 0.5rem; font-size: 0.85rem; color: var(--fg-light); cursor: pointer; padding: 0.25rem 0; margin-bottom: 0;">
                                                             <input type="checkbox" name="hygiene_goals[{{ loop.parent.loop.index0 }}][]" value="{{ lgGoal.id }}" {% if hd.supportedLifeGoals.contains(lgGoal) %}checked{% endif %} style="margin-top: 0.2rem; cursor: pointer;">
-                                                            <span>[{{ lgGoal.category|upper }}] {{ lgGoal.title }}</span>
+                                                            <span>[{{ lgGoal.category|categorie_objectif }}] {{ lgGoal.title }}</span>
                                                         </label>
                                                     {% endfor %}
                                                 {% else %}
@@ -1428,7 +1428,7 @@
                                                 {% for lgGoal in allLifeGoals %}
                                                     <label style="display: flex; align-items: flex-start; gap: 0.5rem; font-size: 0.85rem; color: var(--fg-light); cursor: pointer; padding: 0.25rem 0; margin-bottom: 0;">
                                                         <input type="checkbox" name="hygiene_goals[0][]" value="{{ lgGoal.id }}" style="margin-top: 0.2rem; cursor: pointer;">
-                                                        <span>[{{ lgGoal.category|upper }}] {{ lgGoal.title }}</span>
+                                                        <span>[{{ lgGoal.category|categorie_objectif }}] {{ lgGoal.title }}</span>
                                                     </label>
                                                 {% endfor %}
                                             {% else %}

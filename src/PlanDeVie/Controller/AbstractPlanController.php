@@ -56,6 +56,7 @@ abstract class AbstractPlanController extends AbstractController
         }
         $data = $this->plans->getStrategiesData($this->user());
         $data['initialPlan'] = $planKey;
+        $data['pageTitle'] = null !== $planKey ? PlanCatalog::label($planKey) : 'Mes stratégies';
         $data['lockedPlans'] = $this->entitlements->lockedPlans($this->user());
 
         return $this->render('plan_de_vie/strategies.html.twig', $data);

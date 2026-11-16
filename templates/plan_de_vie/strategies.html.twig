@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Mes Plans Stratégiques{% endblock %}
+{% block title %}{{ pageTitle ?? 'Mes stratégies' }}{% endblock %}
 
 {% block body %}
 <style>
@@ -716,9 +716,9 @@
             <div class="strat-header-icon">
                 <i data-lucide="sparkles" style="width: 24px; height: 24px;"></i>
             </div>
-            <h1 class="strat-title">Plans Stratégiques</h1>
+            <h1 class="strat-title">Mes stratégies</h1>
             <p class="strat-desc">
-                Pilotez votre évolution à travers quatre piliers fondamentaux. Vos objectifs de vie sont ici transformés en systèmes concrets d'exécution.
+                Vos quatre plans stratégiques : Croissance, Développement, Transmission et Hygiène de vie. C'est ici que vos objectifs de vie deviennent des actions concrètes.
             </p>
         </header>
 
@@ -730,7 +730,7 @@
                     <i data-lucide="zap" style="width: 22px; height: 22px;"></i>
                 </div>
                 <div>
-                    <div class="plan-card-subtitle">L'Évolution (BE)</div>
+                    <div class="plan-card-subtitle">L'Évolution (Être)</div>
                     <h2 class="plan-card-title">Croissance</h2>{% if 'CROISSANCE' in (lockedPlans ?? []) %}<span style="display:inline-block;margin-top:.25rem;font-size:.68rem;font-weight:800;letter-spacing:.06em;padding:.15rem .5rem;border-radius:999px;background:#FEF3C7;color:#92400E;">🔒 PRO</span>{% endif %}
                     <p class="plan-card-desc">Caractère & Conviction, Relation & Réseau, Valeurs d'alignement.</p>
                 </div>
@@ -752,7 +752,7 @@
                     <i data-lucide="graduation-cap" style="width: 22px; height: 22px;"></i>
                 </div>
                 <div>
-                    <div class="plan-card-subtitle">L'Exécution (DO)</div>
+                    <div class="plan-card-subtitle">L'Exécution (Faire)</div>
                     <h2 class="plan-card-title">Développement</h2>{% if 'DEVELOPPEMENT' in (lockedPlans ?? []) %}<span style="display:inline-block;margin-top:.25rem;font-size:.68rem;font-weight:800;letter-spacing:.06em;padding:.15rem .5rem;border-radius:999px;background:#FEF3C7;color:#92400E;">🔒 PRO</span>{% endif %}
                     <p class="plan-card-desc">Compétences à acquérir, Formations & Livres d'étude.</p>
                 </div>
@@ -774,7 +774,7 @@
                     <i data-lucide="heart" style="width: 22px; height: 22px;"></i>
                 </div>
                 <div>
-                    <div class="plan-card-subtitle">L'Impact (GIVE)</div>
+                    <div class="plan-card-subtitle">L'Impact (Donner)</div>
                     <h2 class="plan-card-title">Transmission</h2>{% if 'TRANSMISSION' in (lockedPlans ?? []) %}<span style="display:inline-block;margin-top:.25rem;font-size:.68rem;font-weight:800;letter-spacing:.06em;padding:.15rem .5rem;border-radius:999px;background:#FEF3C7;color:#92400E;">🔒 PRO</span>{% endif %}
                     <p class="plan-card-desc">Projets de legs, Mentorat & Service.</p>
                 </div>
@@ -836,9 +836,9 @@
                          (activePlan === 'TRANSMISSION' ? 'Plan de Transmission' : 'Plan d\'Hygiène de Vie'))">
             </h1>
             <p class="hero-desc"
-               x-text="activePlan === 'CROISSANCE' ? 'Pilotez l\'évolution de votre Être (BE). Alignez votre caractère, vos convictions et vos valeurs.' : 
-                       (activePlan === 'DEVELOPPEMENT' ? 'Pilotez l\'exécution de votre Talent (DO). Développez vos compétences et vos connaissances.' : 
-                        (activePlan === 'TRANSMISSION' ? 'Pilotez l\'impact de votre Vision (GIVE). Organisez votre mentorat, service et projets de legs.' : 
+               x-text="activePlan === 'CROISSANCE' ? 'Pilotez l\'évolution de votre Être (Être). Alignez votre caractère, vos convictions et vos valeurs.' : 
+                       (activePlan === 'DEVELOPPEMENT' ? 'Pilotez l\'exécution de votre Talent (Faire). Développez vos compétences et vos connaissances.' : 
+                        (activePlan === 'TRANSMISSION' ? 'Pilotez l\'impact de votre Vision (Donner). Organisez votre mentorat, service et projets de legs.' : 
                          'Gériez vos systèmes quotidiens : sommeil, nutrition, sport et environnement vital.'))">
             </p>
             <div class="hero-actions">
@@ -1018,7 +1018,7 @@
                         </div>
                         <div class="card-body">
                             <div style="display: flex; flex-direction: column; gap: 0.5rem; margin-top: 0.5rem;">
-                                {# Loop on goals character (BE) #}
+                                {# Loop on goals character (Être) #}
                                 <div x-show="activePlan === 'CROISSANCE'" style="display: flex; flex-direction: column; gap: 0.5rem;">
                                     {% for goal in lifeGoals.BE %}
                                         <div style="display: flex; align-items: center; gap: 0.75rem; padding: 0.75rem 1rem; background: #F8FAFC; border-radius: 0.75rem; border-left: 3px solid #D97706;">
@@ -1026,10 +1026,10 @@
                                             <span style="font-size: 0.9rem; color: var(--fg-light); font-weight: 600;">{{ goal.title }}</span>
                                         </div>
                                     {% else %}
-                                        <p style="font-size: 0.85rem; color: var(--fg-muted); font-style: italic;">Aucun objectif spécifique de type 'BE' lié.</p>
+                                        <p style="font-size: 0.85rem; color: var(--fg-muted); font-style: italic;">Aucun objectif spécifique de type « Être » lié.</p>
                                     {% endfor %}
                                 </div>
-                                {# Loop on competence goals (DO) #}
+                                {# Loop on competence goals (Faire) #}
                                 <div x-show="activePlan === 'DEVELOPPEMENT'" style="display: flex; flex-direction: column; gap: 0.5rem;">
                                     {% for goal in lifeGoals.DO %}
                                         <div style="display: flex; align-items: center; gap: 0.75rem; padding: 0.75rem 1rem; background: #F8FAFC; border-radius: 0.75rem; border-left: 3px solid #2563EB;">
@@ -1037,10 +1037,10 @@
                                             <span style="font-size: 0.9rem; color: var(--fg-light); font-weight: 600;">{{ goal.title }}</span>
                                         </div>
                                     {% else %}
-                                        <p style="font-size: 0.85rem; color: var(--fg-muted); font-style: italic;">Aucun objectif spécifique de type 'DO' lié.</p>
+                                        <p style="font-size: 0.85rem; color: var(--fg-muted); font-style: italic;">Aucun objectif spécifique de type « Faire » lié.</p>
                                     {% endfor %}
                                 </div>
-                                {# Loop on transmission goals (GIVE) #}
+                                {# Loop on transmission goals (Donner) #}
                                 <div x-show="activePlan === 'TRANSMISSION'" style="display: flex; flex-direction: column; gap: 0.5rem;">
                                     {% for goal in lifeGoals.GIVE %}
                                         <div style="display: flex; align-items: center; gap: 0.75rem; padding: 0.75rem 1rem; background: #F8FAFC; border-radius: 0.75rem; border-left: 3px solid #DB2777;">
@@ -1048,10 +1048,10 @@
                                             <span style="font-size: 0.9rem; color: var(--fg-light); font-weight: 600;">{{ goal.title }}</span>
                                         </div>
                                     {% else %}
-                                        <p style="font-size: 0.85rem; color: var(--fg-muted); font-style: italic;">Aucun objectif spécifique de type 'GIVE' lié.</p>
+                                        <p style="font-size: 0.85rem; color: var(--fg-muted); font-style: italic;">Aucun objectif spécifique de type « Donner » lié.</p>
                                     {% endfor %}
                                 </div>
-                                {# Loop on hygiene goals (HAVE) #}
+                                {# Loop on hygiene goals (Avoir) #}
                                 <div x-show="activePlan === 'HYGIENE'" style="display: flex; flex-direction: column; gap: 0.5rem;">
                                     {% for goal in lifeGoals.HAVE %}
                                         <div style="display: flex; align-items: center; gap: 0.75rem; padding: 0.75rem 1rem; background: #F8FAFC; border-radius: 0.75rem; border-left: 3px solid #059669;">
@@ -1059,7 +1059,7 @@
                                             <span style="font-size: 0.9rem; color: var(--fg-light); font-weight: 600;">{{ goal.title }}</span>
                                         </div>
                                     {% else %}
-                                        <p style="font-size: 0.85rem; color: var(--fg-muted); font-style: italic;">Aucun objectif spécifique de type 'HAVE' lié.</p>
+                                        <p style="font-size: 0.85rem; color: var(--fg-muted); font-style: italic;">Aucun objectif spécifique de type « Avoir » lié.</p>
                                     {% endfor %}
                                 </div>
                             </div>
@@ -1301,7 +1301,7 @@
                                                                 <div style="display: flex; flex-wrap: wrap; gap: 0.35rem; margin-top: 0.15rem;">
                                                                     {% for lg in hd.supportedLifeGoals %}
                                                                         <span style="background: rgba(59, 130, 246, 0.06); color: #1e3a8a; border: 1px solid rgba(59, 130, 246, 0.15); padding: 0.15rem 0.45rem; border-radius: 5px; font-size: 0.72rem; font-weight: 500;">
-                                                                            [{{ lg.category|upper }}] {{ lg.title }}
+                                                                            [{{ lg.category|categorie_objectif }}] {{ lg.title }}
                                                                         </span>
                                                                     {% endfor %}
                                                                 </div>
@@ -1487,7 +1487,7 @@
                                         {% endfor %}
                                     </div>
 
-                                    <div class="sub-section-title">⚡ Rituels & Habitudes</div>
+                                    <div class="sub-section-title">⚡ Rituels</div>
                                     <div class="badge-flex" style="margin-top: 0.25rem;">
                                         {% for h in gg.habits %}
                                             <span class="ks-badge badge-primary" style="display: inline-flex; align-items: center; gap: 0.35rem; background: #FFFBEB; color: #D97706; border: 1px solid rgba(217,119,6,0.15);">
@@ -1529,7 +1529,7 @@
                                         "{{ gg.strategy|default('Aucune stratégie définie.') }}"
                                     </div>
 
-                                    <div class="sub-section-title">⚡ Rituels & Habitudes</div>
+                                    <div class="sub-section-title">⚡ Rituels</div>
                                     <div class="badge-flex" style="margin-top: 0.25rem;">
                                         {% for h in gg.habits %}
                                             <span class="ks-badge badge-primary" style="display: inline-flex; align-items: center; gap: 0.35rem; background: #EFF6FF; color: #2563EB; border: 1px solid rgba(37,99,235,0.15);">
@@ -1571,7 +1571,7 @@
                                         "{{ gg.strategy|default('Aucune stratégie définie.') }}"
                                     </div>
 
-                                    <div class="sub-section-title">⚡ Rituels & Habitudes</div>
+                                    <div class="sub-section-title">⚡ Rituels</div>
                                     <div class="badge-flex" style="margin-top: 0.25rem;">
                                         {% for h in gg.habits %}
                                             <span class="ks-badge badge-primary" style="display: inline-flex; align-items: center; gap: 0.35rem; background: #FDF2F8; color: #DB2777; border: 1px solid rgba(219,39,119,0.15);">
@@ -1622,7 +1622,7 @@
                                         {% endfor %}
                                     </div>
 
-                                    <div class="sub-section-title">⚡ Rituels & Habitudes</div>
+                                    <div class="sub-section-title">⚡ Rituels</div>
                                     <div class="badge-flex" style="margin-top: 0.25rem;">
                                         {% for h in lg.habits %}
                                             <span class="ks-badge badge-primary" style="background: #FDF2F8; color: #DB2777; border: 1px solid rgba(219,39,119,0.15);">{{ h.title }}</span>
@@ -1662,7 +1662,7 @@
                                         Statut : {{ hd.subtype == 'leverage' ? 'À exploiter / Tirer profit' : (hd.subtype == 'consolidate' ? 'À consolider' : 'À construire') }}
                                     </div>
 
-                                    <div class="sub-section-title">⚡ Rituels & Habitudes</div>
+                                    <div class="sub-section-title">⚡ Rituels</div>
                                     <div class="badge-flex" style="margin-top: 0.25rem;">
                                         {% for h in hd.habits %}
                                             <span class="ks-badge badge-primary" style="display: inline-flex; align-items: center; gap: 0.35rem; background: #ECFDF5; color: #059669; border: 1px solid rgba(5,150,105,0.15);">
@@ -2448,7 +2448,7 @@ graph TD
                                 </div>
                                 <div class="legend-item">
                                     <div class="legend-color" style="background: #06b6d4;"></div>
-                                    <span class="legend-label">⚡ Habitudes / Rituels</span>
+                                    <span class="legend-label">⚡ Rituels</span>
                                 </div>
                             </div>
                         </div>
@@ -2513,7 +2513,7 @@ graph TD
                                      {% for lg in allLifeGoals %}
                                          <label style="display: flex; align-items: flex-start; gap: 0.5rem; font-size: 0.85rem; color: var(--fg-light); cursor: pointer; padding: 0.2rem 0; margin-bottom: 0;">
                                              <input type="checkbox" name="life_goals[]" value="{{ lg.id }}" :checked="currentAxis.lifeGoals.includes({{ lg.id }})" style="margin-top: 0.2rem; cursor: pointer;">
-                                             <span>[{{ lg.category|upper }}] {{ lg.title }}</span>
+                                             <span>[{{ lg.category|categorie_objectif }}] {{ lg.title }}</span>
                                          </label>
                                      {% endfor %}
                                  {% else %}
@@ -2548,7 +2548,7 @@ graph TD
                          <!-- Habitudes -->
                          <div style="display: flex; flex-direction: column; gap: 0.5rem;">
                              <div style="display: flex; justify-content: space-between; align-items: center;">
-                                 <label style="font-size: 0.75rem; font-weight: 700; text-transform: uppercase; color: var(--fg-light); letter-spacing: 0.05em;">⚡ Habitudes & Rituels (avec régularité)</label>
+                                 <label style="font-size: 0.75rem; font-weight: 700; text-transform: uppercase; color: var(--fg-light); letter-spacing: 0.05em;">⚡ Rituels (avec régularité)</label>
                                  <button type="button" @click="currentAxis.habits.push({ title: '', frequency: 'DAILY' })" class="btn-add" style="padding: 0.2rem 0.5rem; font-size: 0.75rem; display: inline-flex; align-items: center; gap: 0.25rem;">
                                      <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
                                      Ajouter

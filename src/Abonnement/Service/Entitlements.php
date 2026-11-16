@@ -36,9 +36,9 @@ final class Entitlements
         'coherence' => ['isEnableCoherenceAnalysisFree', 'Analyse de cohérence'],
         'journal' => ['isEnableJournalFree', 'Journal'],
         'habits' => ['isEnableHabitsFree', 'Rituels'],
-        'planner' => ['isEnablePlannerFree', 'Planner'],
+        'planner' => ['isEnablePlannerFree', 'Agenda'],
         'social' => ['isEnableSocialFree', 'Partenaires'],
-        'discovery' => ['isEnableDiscoveryFree', 'Découverte de soi'],
+        'discovery' => ['isEnableDiscoveryFree', 'Tests'],
         'method' => ['isEnableMethodFree', 'La méthode'],
     ];
 

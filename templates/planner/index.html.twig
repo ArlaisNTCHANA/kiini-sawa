@@ -179,7 +179,7 @@
             <button class="px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer border-0"
                     :class="currentView === 'gantt' ? 'bg-teal-700 text-white shadow-sm font-black' : 'bg-transparent hover:bg-slate-200/50 text-slate-600'"
                     @click="currentView = 'gantt'">
-                Gantt
+                Frise
             </button>
         </div>
     </div>
@@ -952,7 +952,7 @@ function plannerData() {
             } else if (this.currentView === 'day') {
                 return this.formatDateFull(this.selectedDate);
             } else if (this.currentView === 'gantt') {
-                return `Planification Gantt — ${this.currentMonthName}`;
+                return `Frise du mois — ${this.currentMonthName}`;
             }
             return '';
         },

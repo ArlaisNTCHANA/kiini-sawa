@@ -97,7 +97,7 @@ class RegistrationTest extends WebTestCase
         // Le premier moment de valeur : l'analyse de cohérence avec un score
         $this->client->followRedirect();
         $this->assertResponseIsSuccessful();
-        $this->assertSelectorTextContains('#tab-analysis .analysis-score-badge', 'Score d\'Alignement');
+        $this->assertSelectorTextContains('#tab-analysis .analysis-score-badge', 'Score de cohérence');
     }
 
     public function testOnboardingCanBeSkipped(): void
