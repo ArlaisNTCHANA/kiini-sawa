@@ -26,3 +26,4 @@ Ce portail est accessible directement depuis le back-end de l'application et com
    * Parité avec la version précédente, cohérence de l'offre, vendabilité, phases et décisions.
 9. **[Dépendances JavaScript](dependances-front.md)**
    * Bibliothèques servies par l'application, versions, mise à jour.
+10. [Mise en ligne](mise-en-ligne.md) : choix à faire, variables, déploiement, tâches planifiées, sauvegardes, contrôle `app:launch:check`.

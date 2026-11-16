@@ -8,6 +8,12 @@ framework:
         cookie_samesite: lax
         cookie_httponly: true
 
+    # Derrière l'hébergeur (proxy, répartiteur de charge) : sans cela, HTTPS et l'adresse IP réelle
+    # ne sont pas reconnus, et la protection CSRF par l'origine refuserait des formulaires légitimes.
+    # TRUSTED_PROXIES : adresses du proxy, ou « REMOTE_ADDR » si l'hébergeur le recommande.
+    trusted_proxies: '%env(TRUSTED_PROXIES)%'
+    trusted_headers: ['x-forwarded-for', 'x-forwarded-host', 'x-forwarded-proto', 'x-forwarded-port', 'x-forwarded-prefix']
+
     #esi: true
     #fragments: true
 

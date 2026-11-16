@@ -18,7 +18,7 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 #[AsCommand(name: 'app:reminders:send', description: 'Envoie les rappels du jour (revues, rituels, échéances, partenaires)')]
 class SendRemindersCommand extends Command
 {
-    public function __construct(private readonly ReminderService $reminders)
+    public function __construct(private readonly ReminderService $reminders, private readonly \Psr\Cache\CacheItemPoolInterface $cacheApp)
     {
         parent::__construct();
     }
@@ -39,6 +39,8 @@ class SendRemindersCommand extends Command
         }
 
         $sent = $this->reminders->sendAll($date);
+        // Trace de la dernière exécution, vérifiée par app:launch:check (tâche planifiée bien en place ?)
+        $this->cacheApp->save($this->cacheApp->getItem('reminders_last_run')->set(time()));
         $io->table(['Rappel', 'Envoyés'], array_map(fn ($k, $v) => [$k, $v], array_keys($sent), $sent));
         $io->success(array_sum($sent).' rappel(s) envoyé(s) pour le '.$date->format('d/m/Y').'.');
 

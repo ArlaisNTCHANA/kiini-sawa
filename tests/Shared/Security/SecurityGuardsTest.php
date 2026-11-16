@@ -23,6 +23,7 @@ class SecurityGuardsTest extends WebTestCase
     /** Pages volontairement publiques : toute nouvelle entrée doit être justifiée. */
     private const PUBLIC_ROUTES = [
         'app_home', // page de présentation publique
+        'app_health', 'app_robots', 'app_sitemap', // pages techniques publiques
         'app_login', 'app_logout',
         'app_register', 'app_forgot_password', 'app_reset_password', 'app_reset_password_form',
         'app_legal',

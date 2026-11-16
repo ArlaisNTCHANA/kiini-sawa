@@ -9,8 +9,8 @@ use Symfony\Component\HttpKernel\KernelEvents;
 /**
  * En-têtes de sécurité ajoutés à toutes les réponses.
  *
- * La CSP limite les scripts, styles et polices à l'application elle-même
- * et aux quelques origines nécessaires. 'unsafe-inline' et 'unsafe-eval'
+ * La CSP limite les scripts, styles et polices à l'application elle-même :
+ * polices et bibliothèques sont auto-hébergées (aucun appel à Google ou à un CDN, RGPD). 'unsafe-inline' et 'unsafe-eval'
  * restent requis tant que les templates contiennent des scripts inline et
  * qu'Alpine.js est utilisé dans sa version standard. À durcir quand le JS
  * sera sorti dans des contrôleurs Stimulus (voir docs/plan-v1.md, phase 3).
@@ -21,9 +21,9 @@ final class SecurityHeadersSubscriber implements EventSubscriberInterface
 {
     private const CSP = [
         "default-src 'self'",
-        "script-src 'self' data: 'unsafe-inline' 'unsafe-eval' https://cdnjs.cloudflare.com", // data: = modules CSS vides générés par AssetMapper
-        "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com",
-        "font-src 'self' data: https://fonts.gstatic.com",
+        "script-src 'self' data: 'unsafe-inline' 'unsafe-eval'", // data: = modules CSS vides générés par AssetMapper
+        "style-src 'self' 'unsafe-inline'",
+        "font-src 'self' data:",
         "img-src 'self' data: blob: https:",
         "connect-src 'self'",
         "frame-ancestors 'none'",
@@ -48,6 +48,10 @@ final class SecurityHeadersSubscriber implements EventSubscriberInterface
         $headers->set('X-Frame-Options', 'DENY');
         $headers->set('Referrer-Policy', 'strict-origin-when-cross-origin');
         $headers->set('Permissions-Policy', 'camera=(), microphone=(), geolocation=(), payment=()');
+        // HTTPS imposé au navigateur pendant un an, uniquement quand la page est déjà servie en HTTPS
+        if ($event->getRequest()->isSecure()) {
+            $headers->set('Strict-Transport-Security', 'max-age=31536000; includeSubDomains');
+        }
 
         // Le profiler Symfony (dev) gère sa propre page : on ne la contraint pas
         if (!str_starts_with($event->getRequest()->getPathInfo(), '/_profiler')) {

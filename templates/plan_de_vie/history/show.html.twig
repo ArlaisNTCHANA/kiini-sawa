@@ -2,8 +2,10 @@
 
 {% block title %}{{ version.title }}{% endblock %}
 
-{% block body %}
 {% macro list(items) %}{% if items|length %}<ul style="padding-left: 1.2rem; margin: .3rem 0 1rem;">{% for i in items %}<li>{{ i }}</li>{% endfor %}</ul>{% else %}<p style="color: var(--fg-muted); font-style: italic;">—</p>{% endif %}{% endmacro %}
+
+{% block body %}
+{% import _self as macros %}
 <div style="max-width: 760px; margin: 0 auto; padding: 2.5rem 1.25rem 8rem; line-height: 1.6;">
     <a href="{{ path('app_plan_history') }}" style="font-size: .8rem; font-weight: 700; color: var(--fg-muted); text-transform: uppercase; letter-spacing: .05em; text-decoration: none;">← Historique</a>
     <h1 style="font-family: var(--font-serif); color: var(--primary); font-size: 1.9rem; margin-top: .4rem;">{{ version.title }}</h1>
@@ -17,25 +19,25 @@
         <h2 style="font-family: var(--font-serif); font-size: 1.2rem;">Valeurs</h2>
         <p style="margin-bottom: 1rem;">{{ ((data.values.real ?? [])|merge(data.values.declared ?? []))|join(' · ') ?: '—' }}</p>
         <h2 style="font-family: var(--font-serif); font-size: 1.2rem;">Convictions</h2>
-        {{ _self.list(data.convictions ?? []) }}
+        {{ macros.list(data.convictions ?? []) }}
         <h2 style="font-family: var(--font-serif); font-size: 1.2rem;">Objectifs</h2>
         {% for cat, label in {BE: 'Être', DO: 'Faire', HAVE: 'Avoir', GIVE: 'Donner'} %}
             {% if data.lifeGoals[cat] ?? false %}
                 <h3 style="font-size: .95rem; margin-top: .5rem;">{{ label }}</h3>
-                {{ _self.list((data.lifeGoals[cat])|map(g => g.title ~ ' (' ~ g.progress ~ ' %' ~ (g.deadline ? ', ' ~ g.deadline|date('m/Y') : '') ~ ')')) }}
+                {{ macros.list((data.lifeGoals[cat])|map(g => g.title ~ ' (' ~ g.progress ~ ' %' ~ (g.deadline ? ', ' ~ g.deadline|date('m/Y') : '') ~ ')')) }}
             {% endif %}
         {% endfor %}
         <h2 style="font-family: var(--font-serif); font-size: 1.2rem; margin-top: 1rem;">Axes de croissance et de développement</h2>
         {% for axis, label in {CHARACTER: 'Caractère & Conviction', RELATION: 'Relation & Réseau', COMPETENCE: 'Compétence & Connaissance'} %}
             {% if data.growth[axis] ?? false %}
                 <h3 style="font-size: .95rem; margin-top: .5rem;">{{ label }}</h3>
-                {{ _self.list((data.growth[axis])|map(g => g.title ~ ' (' ~ g.progress ~ ' %)')) }}
+                {{ macros.list((data.growth[axis])|map(g => g.title ~ ' (' ~ g.progress ~ ' %)')) }}
             {% endif %}
         {% endfor %}
         <h2 style="font-family: var(--font-serif); font-size: 1.2rem; margin-top: 1rem;">Transmission</h2>
-        {{ _self.list((data.legacy ?? [])|map(l => l.title ~ ' (' ~ l.progress ~ ' %)')) }}
+        {{ macros.list((data.legacy ?? [])|map(l => l.title ~ ' (' ~ l.progress ~ ' %)')) }}
         <h2 style="font-family: var(--font-serif); font-size: 1.2rem;">Hygiène de vie</h2>
-        {{ _self.list(data.hygiene ?? []) }}
+        {{ macros.list(data.hygiene ?? []) }}
     </div>
 </div>
 {% endblock %}

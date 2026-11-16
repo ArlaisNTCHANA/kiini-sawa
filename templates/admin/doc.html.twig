@@ -6,12 +6,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
     <!-- Google Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="{{ asset('styles/fonts.css') }}" rel="stylesheet">
     
     <!-- HighlightJS for Code Highlighting -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
+    <link rel="stylesheet" href="{{ asset('lib/highlight-github-dark-11.9.0.min.css') }}">
     
     <style>
         :root {
@@ -195,7 +193,7 @@
         }
 
         .markdown-body code {
-            font-family: 'Fira Code', monospace;
+            font-family: ui-monospace, 'SF Mono', Menlo, monospace;
             background-color: rgba(255, 255, 255, 0.06);
             padding: 0.2rem 0.4rem;
             border-radius: 6px;
@@ -288,7 +286,7 @@
     </main>
 
     <!-- Syntax Highlighting Scripts -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <script src="{{ asset('lib/highlight-11.9.0.min.js') }}"></script>
     <script>hljs.highlightAll();</script>
 </body>
 </html>

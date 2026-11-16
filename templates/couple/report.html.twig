@@ -2,10 +2,12 @@
 
 {% block title %}Notre rapport croisé{% endblock %}
 
+{% macro bar(score, color) %}<div style="background: #E2E8F0; border-radius: 4px; height: 8px;"><div style="background: {{ color }}; height: 8px; border-radius: 4px; width: {{ max(2, score) }}%;"></div></div>{% endmacro %}
+
 {% block body %}
+{% import _self as macros %}
 {% set a = report.people[0] %}
 {% set b = report.people[1] %}
-{% macro bar(score, color) %}<div style="background: #E2E8F0; border-radius: 4px; height: 8px;"><div style="background: {{ color }}; height: 8px; border-radius: 4px; width: {{ max(2, score) }}%;"></div></div>{% endmacro %}
 <div style="max-width: 860px; margin: 0 auto; padding: 2rem 1.25rem 8rem; line-height: 1.6;">
     <a href="{{ path('app_couple') }}" style="font-size: .8rem; font-weight: 700; color: var(--fg-muted); text-transform: uppercase; letter-spacing: .05em; text-decoration: none;">← Notre couple</a>
     <h1 style="font-family: var(--font-serif); color: var(--primary); font-size: 2rem; margin: .4rem 0 .3rem;">Notre rapport croisé</h1>
@@ -26,8 +28,8 @@
             {% for d in report.domains %}
                 <div style="margin-bottom: 1rem;">
                     <div style="font-weight: 700;">{{ d.label }}</div>
-                    <div style="margin: .25rem 0;">{{ _self.bar(d.a, 'var(--primary)') }}</div>
-                    <div>{{ _self.bar(d.b, '#DB2777') }}</div>
+                    <div style="margin: .25rem 0;">{{ macros.bar(d.a, 'var(--primary)') }}</div>
+                    <div>{{ macros.bar(d.b, '#DB2777') }}</div>
                     {% if d.tip %}<p style="font-size: .88rem; color: var(--fg-light); margin-top: .4rem;">💡 {{ d.tip }}</p>{% endif %}
                 </div>
             {% endfor %}

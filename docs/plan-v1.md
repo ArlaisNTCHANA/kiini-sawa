@@ -252,7 +252,8 @@ Les estimations sont des jours de développement pour une personne. Les phases 0
 - [x] RGPD : export des données, suppression du compte, consentement.
 - [x] Pages CGU, CGV, confidentialité, mentions légales : **versions de travail**, passages `[À COMPLÉTER]` (société, hébergeur, médiateur) et relecture par un juriste avant la mise en ligne.
 - [x] Onboarding court en 3 minutes, qui aboutit au premier score de cohérence (§3.3) : 40/100 avec deux actions proposées.
-- [ ] Avant la mise en ligne : choisir le fournisseur d'emails (`MAILER_DSN`, `MAILER_FROM`), lancer un worker Messenger, auto-héberger les Google Fonts, mettre en place la suppression des comptes inactifs annoncée dans la politique de confidentialité.
+- [x] Google Fonts et scripts auto-hébergés, CSP sans origine externe.
+- [ ] Avant la mise en ligne : choisir le fournisseur d'emails (`MAILER_DSN`, `MAILER_FROM`), lancer le worker Messenger, mettre en place la suppression des comptes inactifs annoncée dans la politique de confidentialité.
 
 ### Phase 3 — Un cœur cohérent (10–14 j)
 
@@ -271,7 +272,7 @@ Les estimations sont des jours de développement pour une personne. Les phases 0
 - [x] Centre de notifications (cloche + page), préférences dans le profil, désabonnement en un clic.
 - [x] Rappels : revue hebdomadaire, revue mensuelle, rituels oubliés, échéances à 7 jours, partenaire inactif (`app:reminders:send`, à planifier chaque jour ; voir docs/modules/notification.md).
 - [x] Revue mensuelle (`/bilan/revue-mensuelle`) et historique des plans (versions datées, `/plan-de-vie/historique`).
-- [ ] À la mise en ligne : tâche planifiée quotidienne et worker Messenger chez l'hébergeur.
+- [ ] À la mise en ligne : tâche planifiée quotidienne et worker Messenger chez l'hébergeur (guide : docs/mise-en-ligne.md).
 
 ### Phase 5 — Monétisation (6–8 j)
 
