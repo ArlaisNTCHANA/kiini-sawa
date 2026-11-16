@@ -1,0 +1,42 @@
+{% extends 'admin/layout.html.twig' %}
+{% block title %}Défis{% endblock %}
+{% block page_title %}Défis collectifs{% endblock %}
+{% block stylesheets %}
+<style>
+    .k-table { width: 100%; border-collapse: collapse; font-size: 14px; }
+    .k-table th, .k-table td { padding: 10px 8px; border-top: 1px solid rgba(255,255,255,.06); text-align: left; }
+    .k-table th { font-size: 12px; color: var(--text-secondary); }
+    .k-btn { display: inline-flex; padding: 8px 14px; border-radius: 8px; font-size: 13px; font-weight: 600; border: 1px solid #0f766e; background: #0f766e; color: #fff; text-decoration: none; }
+    .k-pill { font-size: 12px; padding: 2px 8px; border-radius: 99px; background: rgba(255,255,255,.08); }
+    .k-pill.on { background: rgba(16,185,129,.15); color: #34d399; }
+</style>
+{% endblock %}
+{% block content %}
+{% for label, messages in app.flashes %}{% for m in messages %}<div style="padding: 12px 16px; border-radius: 8px; margin-bottom: 16px; background: rgba(16,185,129,.1); color: #34d399;">{{ m }}</div>{% endfor %}{% endfor %}
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+    <p style="color: var(--text-secondary); font-size: 14px;">Un défi collectif a une page publique à partager sur les réseaux : chacun s'inscrit en un clic et valide sa journée.</p>
+    <a href="{{ path('admin_challenges_new') }}" class="k-btn">+ Nouveau défi</a>
+</div>
+<div class="ks-card">
+    {% if rows is empty %}
+        <p style="color: var(--text-secondary);">Aucun défi pour l'instant. Créez le premier, par exemple « 21 jours de discipline ».</p>
+    {% else %}
+        <table class="k-table">
+            <thead><tr><th>Défi</th><th>Dates</th><th>État</th><th>Inscrits</th><th>Validé aujourd'hui</th><th>Relevé</th><th></th></tr></thead>
+            <tbody>
+            {% for r in rows %}
+                <tr>
+                    <td><strong>{{ r.c.title }}</strong><br><span style="font-size: 12px; color: var(--text-secondary);">/defi/{{ r.c.slug }}</span></td>
+                    <td>{{ r.c.startDate|date('d/m/Y') }} → {{ r.c.endDate|date('d/m/Y') }}<br><span style="font-size: 12px; color: var(--text-secondary);">{{ r.c.durationDays }} jours</span></td>
+                    <td><span class="k-pill {{ r.c.published ? 'on' }}">{{ r.c.published ? {upcoming: 'Publié · à venir', running: 'Publié · en cours', ended: 'Terminé'}[r.phase] : 'Brouillon' }}</span></td>
+                    <td>{{ r.stats.participants }}</td>
+                    <td>{{ r.phase == 'running' ? r.stats.checkedToday : '—' }}</td>
+                    <td>{{ r.stats.successful }}</td>
+                    <td><a href="{{ path('admin_challenges_edit', {id: r.c.id}) }}" style="color: #2dd4bf;">Modifier</a></td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    {% endif %}
+</div>
+{% endblock %}

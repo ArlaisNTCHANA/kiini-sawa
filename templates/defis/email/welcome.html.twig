@@ -1,0 +1,11 @@
+{% extends 'compte/email/_layout.html.twig' %}
+{% block content %}
+  <p>Bonjour {{ name }},</p>
+  <p style="font-size:17px;font-weight:bold;color:#0f766e;margin:18px 0 8px;">Vous relevez le défi « {{ challenge.title }} »</p>
+  <p>Bravo pour ce choix. {% if phase == 'upcoming' %}Le défi commence le <strong>{{ challenge.startDate|date('d/m/Y') }}</strong> : vous recevrez ce jour-là votre première action.{% else %}Le défi a commencé : nous sommes au <strong>jour {{ day }}</strong>. Votre action d'aujourd'hui vous attend.{% endif %}</p>
+  <p><strong>Comment ça marche :</strong> chaque jour, une action simple. Faites-la, puis touchez « J'ai fait ma part aujourd'hui » sur la page du défi. Le défi est relevé avec au moins <strong>{{ threshold }} jours</strong> validés sur {{ challenge.durationDays }}.</p>
+  <p>Un conseil : invitez une personne à le relever avec vous. À deux, on tient bien plus longtemps.</p>
+  {% if actionUrl %}<p style="text-align:center;margin:28px 0;"><a href="{{ actionUrl }}" style="background:#0f766e;color:#ffffff;text-decoration:none;padding:14px 28px;border-radius:10px;font-weight:bold;display:inline-block;">Ouvrir le défi</a></p>{% endif %}
+  <p style="font-family:Georgia,serif;font-style:italic;color:#115e59;border-left:3px solid #f59e0b;padding-left:12px;">« Ne nous lassons pas de faire le bien ; car nous moissonnerons au temps convenable, si nous ne nous relâchons pas. » Galates 6:9</p>
+{% endblock %}
+{% block footer %}Vous recevez cet email car vous participez à un défi KIINI SAWA. <a href="{{ unsubscribeUrl }}" style="color:#64748b;">Ne plus recevoir les emails des défis</a>.{% endblock %}

@@ -25,6 +25,8 @@ enum NotificationType: string
     case SUBSCRIPTION_ENDING = 'SUBSCRIPTION_ENDING';
     // Accueil : conseils des deux premières semaines (désactivables)
     case ONBOARDING = 'ONBOARDING';
+    // Défis collectifs : inscription et action du jour (désactivables avec les autres notifications de défis)
+    case CHALLENGE_DAY = 'CHALLENGE_DAY';
 
     /** Icône Lucide affichée dans le centre de notifications. */
     public function icon(): string
@@ -40,6 +42,7 @@ enum NotificationType: string
             self::PAYMENT_DECLARED, self::PAYMENT_VALIDATED, self::PAYMENT_REJECTED => 'credit-card',
             self::TRIAL_ENDING, self::SUBSCRIPTION_ENDING => 'hourglass',
             self::ONBOARDING => 'sparkles',
+            self::CHALLENGE_DAY => 'trophy',
         };
     }
 

@@ -36,7 +36,7 @@ class DashboardController extends AbstractController
     }
 
     #[Route('/dashboard', name: 'app_dashboard')]
-    public function index(EntityManagerInterface $entityManager, DashboardData $dashboard): Response
+    public function index(EntityManagerInterface $entityManager, DashboardData $dashboard, \App\Defis\Service\ChallengeService $challenges): Response
     {
         /** @var User $user */
         $user = $this->getUser();
@@ -58,6 +58,11 @@ class DashboardController extends AbstractController
             'deadlines' => $dashboard->upcomingDeadlines($user),
             'habits' => $habits,
             'nextSteps' => $dashboard->nextSteps($user, $habits),
+            'challenges' => array_map(fn ($p) => [
+                'p' => $p, 'c' => $p->getChallenge(), 'phase' => $challenges->phase($p->getChallenge(), new \DateTimeImmutable('today')),
+                'day' => $challenges->dayNumber($p->getChallenge(), new \DateTimeImmutable('today')),
+                'checked' => $challenges->hasCheckedIn($p, new \DateTimeImmutable('today')),
+            ], $challenges->activeParticipations($user, new \DateTimeImmutable('today'))),
             'growthGoal' => $user->getPlanDeCroissance(),
             'planDeVie' => $user->getPlanDeVie(),
         ]);

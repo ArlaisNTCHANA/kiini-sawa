@@ -33,7 +33,7 @@ class PublicController extends AbstractController
     #[Route('/robots.txt', name: 'app_robots', methods: ['GET'])]
     public function robots(): Response
     {
-        $public = ['/', '/inscription', '/methode', '/installer', '/manifest.webmanifest', '/sw.js', '/icons/', '/mentions-legales', '/confidentialite', '/cgu', '/cgv'];
+        $public = ['/', '/inscription', '/methode', '/installer', '/defis', '/defi/', '/manifest.webmanifest', '/sw.js', '/icons/', '/mentions-legales', '/confidentialite', '/cgu', '/cgv'];
         $lines = ['User-agent: *'];
         foreach ($public as $p) {
             $lines[] = 'Allow: '.$p.('/' === $p ? '$' : '');
@@ -48,7 +48,7 @@ class PublicController extends AbstractController
     #[Route('/sitemap.xml', name: 'app_sitemap', methods: ['GET'])]
     public function sitemap(): Response
     {
-        $urls = [['app_home', [], '1.0'], ['app_register', [], '0.8'], ['app_methode_index', [], '0.7'], ['app_install', [], '0.5']];
+        $urls = [['app_home', [], '1.0'], ['app_register', [], '0.8'], ['app_methode_index', [], '0.7'], ['app_install', [], '0.5'], ['app_challenges', [], '0.6']];
         foreach (\array_slice(array_values(BookLibrary::CHAPTERS), 0, BookLibrary::PUBLIC_CHAPTERS) as $slug) {
             $urls[] = ['app_methode_chapter', ['slug' => $slug], '0.6'];
         }

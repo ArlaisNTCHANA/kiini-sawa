@@ -1,0 +1,50 @@
+{% extends 'admin/layout.html.twig' %}
+{% block title %}{{ challenge ? challenge.title : 'Nouveau défi' }}{% endblock %}
+{% block page_title %}{{ challenge ? challenge.title : 'Nouveau défi' }}{% endblock %}
+{% block javascripts %}{{ parent() }}<script defer src="{{ asset('lib/alpinejs-3.17.5.min.js') }}"></script>{% endblock %}
+{% block stylesheets %}
+<style>
+    .k-form { display: grid; gap: 16px; max-width: 760px; }
+    .k-form label { display: block; font-size: 12px; color: var(--text-secondary); margin-bottom: 4px; font-weight: 600; }
+    .k-input { width: 100%; padding: 9px 11px; border-radius: 8px; background: rgba(0,0,0,.2); color: inherit; border: 1px solid rgba(255,255,255,.12); font: inherit; font-size: 14px; }
+    .k-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; }
+    .k-hint { font-size: 12px; color: var(--text-secondary); margin-top: 4px; }
+    .k-btn { display: inline-flex; padding: 10px 16px; border-radius: 8px; font-size: 14px; font-weight: 600; border: 1px solid #0f766e; background: #0f766e; color: #fff; cursor: pointer; text-decoration: none; }
+</style>
+{% endblock %}
+{% block content %}
+{% for label, messages in app.flashes %}{% for m in messages %}<div style="padding: 12px 16px; border-radius: 8px; margin-bottom: 16px; background: rgba(16,185,129,.1); color: #34d399;">{{ m }}</div>{% endfor %}{% endfor %}
+{% for e in errors %}<div style="padding: 10px 14px; border-radius: 8px; margin-bottom: 10px; background: rgba(239,68,68,.1); color: #f87171;">{{ e }}</div>{% endfor %}
+<p style="margin-bottom: 16px;"><a href="{{ path('admin_challenges') }}" style="color: var(--text-secondary);">← Tous les défis</a></p>
+
+{% if challenge and publicUrl %}
+    <div class="ks-card" style="margin-bottom: 20px;" x-data="{ copied: '' }">
+        <p style="font-weight: 700; margin-bottom: 8px;">Page publique {{ challenge.published ? '(en ligne)' : '(brouillon : visible seulement une fois publié)' }}</p>
+        <p style="font-size: 14px;"><a href="{{ publicUrl }}" target="_blank" style="color: #2dd4bf;">{{ publicUrl }}</a></p>
+        <p style="font-size: 13px; color: var(--text-secondary); margin: 10px 0 6px;">Liens suivis à publier (les inscriptions apparaîtront dans « Provenance des inscrits », campagne defi-{{ challenge.slug }}) :</p>
+        <div style="display: flex; flex-wrap: wrap; gap: 8px;">
+            {% for src in ['tiktok', 'instagram', 'facebook', 'youtube', 'whatsapp', 'newsletter'] %}
+                {% set link = publicUrl ~ '?utm_source=' ~ src ~ '&utm_medium=' ~ (src == 'newsletter' ? 'email' : 'bio') ~ '&utm_campaign=defi-' ~ challenge.slug %}
+                <button type="button" class="k-btn" style="background: transparent; font-size: 12px; padding: 6px 10px;" @click="navigator.clipboard.writeText('{{ link|e('js') }}'); copied = '{{ src }}'; setTimeout(() => copied = '', 2000)"><span x-text="copied === '{{ src }}' ? 'Copié ✓' : '{{ src|capitalize }}'">{{ src|capitalize }}</span></button>
+            {% endfor %}
+        </div>
+        {% if stats %}<p style="font-size: 13px; color: var(--text-secondary); margin-top: 12px;">{{ stats.participants }} inscrit(s) · {{ stats.checkedToday }} validation(s) aujourd'hui · {{ stats.successful }} l'ont relevé</p>{% endif %}
+    </div>
+{% endif %}
+
+<form method="post" class="k-form ks-card">
+    <input type="hidden" name="_csrf_token" value="{{ csrf_token('admin_challenge') }}">
+    <div><label for="title">Titre</label><input class="k-input" id="title" name="title" value="{{ data.title }}" placeholder="21 jours de discipline" required></div>
+    <div class="k-row">
+        <div><label for="slug">Adresse (après /defi/)</label><input class="k-input" id="slug" name="slug" value="{{ data.slug }}" placeholder="21-jours-de-discipline"><p class="k-hint">Laissez vide pour la créer à partir du titre.</p></div>
+        <div><label for="startDate">Premier jour</label><input class="k-input" type="date" id="startDate" name="startDate" value="{{ data.startDate }}" required></div>
+        <div><label for="duration">Durée (jours)</label><input class="k-input" type="number" min="3" max="100" id="duration" name="duration" value="{{ data.duration }}" required></div>
+    </div>
+    <div><label for="tagline">Accroche</label><input class="k-input" id="tagline" name="tagline" value="{{ data.tagline }}" maxlength="255" placeholder="Une petite victoire par jour, pour reprendre la main sur ta vie."></div>
+    <div><label for="description">Présentation</label><textarea class="k-input" id="description" name="description" rows="5" placeholder="Pourquoi ce défi, ce qu'il va changer, comment ça marche.">{{ data.description }}</textarea></div>
+    <div><label for="habitTitle">Action de chaque jour</label><input class="k-input" id="habitTitle" name="habitTitle" value="{{ data.habitTitle }}" placeholder="Me lever à l'heure prévue et prier 10 minutes"><p class="k-hint">Utilisée les jours sans action particulière ci-dessous.</p></div>
+    <div><label for="dailyActions">Actions jour par jour (facultatif : une ligne = un jour)</label><textarea class="k-input" id="dailyActions" name="dailyActions" rows="10" placeholder="Jour 1 : écrire pourquoi je veux devenir plus discipliné&#10;Jour 2 : préparer la journée de demain avant de dormir&#10;…">{{ data.dailyActions }}</textarea></div>
+    <label style="display: flex; gap: 8px; align-items: center; font-size: 14px; color: inherit;"><input type="checkbox" name="published" value="1" {{ data.published ? 'checked' }}> Publié : page visible et inscriptions ouvertes</label>
+    <div><button type="submit" class="k-btn">Enregistrer</button></div>
+</form>
+{% endblock %}

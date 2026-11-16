@@ -61,6 +61,7 @@ class ProfileController extends AbstractController
         'notifyPartnerInactive' => 'setNotifyPartnerInactive',
         'notifyConnection' => 'setNotifyConnection',
         'notifyOnboarding' => 'setNotifyOnboarding',
+        'notifyChallenge' => 'setNotifyChallenge',
     ];
 
     #[Route('', name: '', methods: ['GET'])]

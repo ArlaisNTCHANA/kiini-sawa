@@ -73,6 +73,22 @@ class Challenge
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $createdAt = null;
 
+    /** Adresse publique : /defi/{slug} (défis collectifs ouverts à tous). */
+    #[ORM\Column(length: 80, unique: true, nullable: true)]
+    private ?string $slug = null;
+
+    /** Phrase d'accroche affichée sous le titre. */
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $tagline = null;
+
+    /** Action de chaque jour (index 0 = jour 1) ; à défaut, l'action commune (habitTitle). */
+    #[ORM\Column(type: Types::JSON)]
+    private array $dailyActions = [];
+
+    /** Visible et ouvert aux inscriptions. */
+    #[ORM\Column(options: ['default' => false])]
+    private bool $published = false;
+
     public function __construct()
     {
         $this->startDate = new \DateTime();
@@ -351,5 +367,33 @@ class Challenge
     public function getCreatedAt(): ?\DateTimeInterface
     {
         return $this->createdAt;
+    }
+
+    public function getSlug(): ?string { return $this->slug; }
+    public function setSlug(?string $slug): static { $this->slug = $slug; return $this; }
+    public function getTagline(): ?string { return $this->tagline; }
+    public function setTagline(?string $tagline): static { $this->tagline = $tagline; return $this; }
+    /** @return list<string> */
+    public function getDailyActions(): array { return array_values($this->dailyActions); }
+    /** @param list<string> $actions */
+    public function setDailyActions(array $actions): static { $this->dailyActions = array_values(array_filter(array_map('trim', $actions), fn ($a) => '' !== $a)); return $this; }
+    public function isPublished(): bool { return $this->published; }
+    public function setPublished(bool $published): static { $this->published = $published; return $this; }
+
+    /** Durée en jours (dates incluses). */
+    public function getDurationDays(): int
+    {
+        if (null === $this->startDate || null === $this->endDate) {
+            return 0;
+        }
+
+        return (int) \DateTimeImmutable::createFromInterface($this->startDate)->setTime(0, 0)
+            ->diff(\DateTimeImmutable::createFromInterface($this->endDate)->setTime(0, 0))->days + 1;
+    }
+
+    /** Action du jour n (1 = premier jour). */
+    public function actionForDay(int $day): string
+    {
+        return $this->getDailyActions()[$day - 1] ?? (string) $this->habitTitle;
     }
 }

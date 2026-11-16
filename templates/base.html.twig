@@ -8,6 +8,7 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <title>{% block title %}KIINI SAWA{% endblock %} — KIINI SAWA</title>
+    {% block head_meta %}{% endblock %}
     <link href="{{ asset('styles/fonts.css') }}" rel="stylesheet">
 
     {% block stylesheets %}
@@ -465,6 +466,7 @@
                             { label: is_pro() ? (is_trialing() ? 'Essai PRO' : 'Mon abonnement') : 'Passer à PRO', icon: 'crown', href: path('app_subscription'), desc: is_trialing() ? 'Jusqu\'au ' ~ pro_until()|date('d/m') : (is_pro() ? 'Offre PRO' : 'Débloquer les 4 plans') },
                             { label: 'Agenda',          icon: 'calendar',      href: path('app_planner'),                desc: 'Tâches, jalons, frise' },
                             { label: 'Partenaires',     icon: 'users',         href: path('app_social'),                 desc: 'Redevabilité et partages' },
+                            { label: 'Défis',           icon: 'trophy',        href: path('app_challenges'),             desc: 'Avancer ensemble' },
                             { label: 'Mes tests',       icon: 'sparkles',      href: path('app_personality_index'),      desc: 'Personnalité, dons, bilans' },
                             { label: 'Notre couple',    icon: 'heart',         href: path('app_couple'), desc: 'Vision et projets à deux' },
                             { label: 'Mon organisation', icon: 'building-2',  href: path('app_organisation_index'), desc: 'Église, association…' },
@@ -561,6 +563,7 @@
                     { label: 'Agenda',       path: path('app_planner'),        icon: 'calendar' },
                     { label: 'Bilan',        path: path('app_bilan'),          icon: 'bar-chart-2' },
                     { label: 'Partenaires',  path: path('app_social'),         icon: 'users' },
+                    { label: 'Défis',        path: path('app_challenges'),     icon: 'trophy' },
                     { label: 'Mes tests', path: path('app_personality_index'), icon: 'sparkles' },
                     { label: 'Notre couple', path: path('app_couple'),         icon: 'heart' },
                     { label: 'Mon organisation', path: path('app_organisation_index'), icon: 'building-2' },

@@ -27,16 +27,18 @@ final class ReminderService
         private readonly Notifier $notifier,
         private readonly WeeklyReviewRepository $weeklyReviews,
         private readonly OnboardingSequence $onboarding,
+        private readonly \App\Defis\Service\ChallengeService $challenges,
     ) {
     }
 
     /** @return array<string, int> nombre de rappels envoyés par type */
     public function sendAll(\DateTimeImmutable $today): array
     {
-        $sent = array_fill_keys(['accueil', 'revue hebdomadaire', 'revue mensuelle', 'rituels', 'échéances', 'partenaires', 'fin d\'essai ou d\'abonnement'], 0);
+        $sent = array_fill_keys(['défis', 'accueil', 'revue hebdomadaire', 'revue mensuelle', 'rituels', 'échéances', 'partenaires', 'fin d\'essai ou d\'abonnement'], 0);
         $users = $this->em->getRepository(User::class)->findBy(['isVerified' => true]);
         foreach ($users as $user) {
             $sent['accueil'] += (int) $this->onboarding->sendFor($user, $today);
+            $sent['défis'] += $this->challengeDay($user, $today);
             $sent['revue hebdomadaire'] += (int) $this->weeklyReview($user, $today);
             $sent['revue mensuelle'] += (int) $this->monthlyReview($user, $today);
             $sent['rituels'] += (int) $this->habits($user, $today);
@@ -186,6 +188,24 @@ final class ReminderService
             : $this->notifier->notify($user, NotificationType::SUBSCRIPTION_ENDING, 'Votre abonnement PRO se termine dans 7 jours',
                 'Votre accès PRO se termine le '.$end->format('d/m/Y').'. Pour continuer sans interruption, renouvelez dès maintenant : les jours restants sont conservés.',
                 '/abonnement', 'fin '.$end->format('Y-m-d'));
+    }
+
+    /** Action du jour des défis en cours, chaque matin (une fois par jour et par défi). */
+    public function challengeDay(User $user, \DateTimeImmutable $today): int
+    {
+        $sent = 0;
+        foreach ($this->challenges->activeParticipations($user, $today) as $p) {
+            $c = $p->getChallenge();
+            if ('running' !== $this->challenges->phase($c, $today)) {
+                continue;
+            }
+            $day = $this->challenges->dayNumber($c, $today);
+            $sent += (int) $this->notifier->notify($user, NotificationType::CHALLENGE_DAY, $c->getTitle().' · jour '.$day.' : '.mb_strimwidth($c->actionForDay($day), 0, 70, '…'),
+                $c->actionForDay($day), '/defi/'.$c->getSlug(), 'defi '.$c->getId().' J'.$day,
+                ['template' => 'defis/email/day.html.twig', 'context' => ['challenge' => $c, 'day' => $day, 'action' => $c->actionForDay($day), 'progress' => $p->getProgress()]]);
+        }
+
+        return $sent;
     }
 
     private function monthName(\DateTimeImmutable $date): string

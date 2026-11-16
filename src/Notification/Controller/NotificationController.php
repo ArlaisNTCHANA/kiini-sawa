@@ -74,6 +74,7 @@ class NotificationController extends AbstractController
                 NotificationType::GOAL_DEADLINE => $prefs->setNotifyGoalDeadline(false),
                 NotificationType::PARTNER_INACTIVE => $prefs->setNotifyPartnerInactive(false),
                 NotificationType::ONBOARDING => $prefs->setNotifyOnboarding(false),
+                NotificationType::CHALLENGE_DAY => $prefs->setNotifyChallenge(false),
                 default => $prefs->setEnableEmailInstant(false),
             };
             $em->flush();

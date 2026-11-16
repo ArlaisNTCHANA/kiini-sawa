@@ -1,0 +1,30 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Les défis{% endblock %}
+
+{% block body %}
+{% if not app.user %}{% include 'shared/_public_header.html.twig' %}{% endif %}
+<div class="ks-page ks-page--narrow">
+    {% include 'shared/_page_header.html.twig' with {
+        eyebrow: 'Défis collectifs', icon: 'trophy', title: 'Les défis',
+        lead: 'Quelques jours pour ancrer une bonne habitude, ensemble : une action par jour, une communauté qui avance avec vous.'
+    } %}
+    {% for c in open %}
+        {% set phase = service.phase(c, today) %}
+        <a href="{{ path('app_challenge', {slug: c.slug}) }}" class="ks-card ks-card--link" style="margin-bottom: .9rem;">
+            <div style="display: flex; justify-content: space-between; gap: 1rem; align-items: baseline;">
+                <h2 style="font-family: var(--font-serif); font-size: 1.2rem; color: var(--fg);">{{ c.title }}</h2>
+                <span class="ks-badge {{ phase == 'running' ? '' : 'ks-badge--muted' }}">{{ c.id in mine ? 'Inscrit' : (phase == 'running' ? 'En cours' : 'Bientôt') }}</span>
+            </div>
+            {% if c.tagline %}<p style="color: var(--fg-muted); margin-top: .3rem;">{{ c.tagline }}</p>{% endif %}
+            <p style="color: var(--fg-muted); font-size: .85rem; margin-top: .5rem;">{{ c.durationDays }} jours · du {{ c.startDate|format_date(pattern: 'd MMMM', locale: 'fr') }} au {{ c.endDate|format_date(pattern: 'd MMMM', locale: 'fr') }}</p>
+        </a>
+    {% else %}
+        <div class="ks-card ks-empty">
+            <div class="ks-empty__icon"><i data-lucide="trophy" style="width: 26px; height: 26px;"></i></div>
+            <h2 class="ks-empty__title">Aucun défi ouvert pour l'instant</h2>
+            <p class="ks-empty__text">Le prochain défi sera annoncé sur nos réseaux et par email. Revenez bientôt !</p>
+        </div>
+    {% endfor %}
+</div>
+{% endblock %}

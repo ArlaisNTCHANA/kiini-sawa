@@ -233,6 +233,33 @@
         </div>
     </section>
 
+    {# Défis collectifs en cours #}
+    {% for ch in challenges %}
+        <section class="ks-card ks-card--accent" style="margin-top: 1.5rem; display: flex; flex-wrap: wrap; gap: 1rem; align-items: center; justify-content: space-between;">
+            <div style="flex: 1; min-width: 220px;">
+                <p class="ks-eyebrow">🏆 {{ ch.c.title }}{% if ch.phase == 'running' %} · jour {{ ch.day }} sur {{ ch.c.durationDays }}{% endif %}</p>
+                {% if ch.phase == 'running' %}
+                    <p style="font-family: var(--font-serif); font-size: 1.15rem; color: var(--fg); margin-top: .3rem;">{{ ch.c.actionForDay(ch.day) }}</p>
+                {% else %}
+                    <p style="color: var(--fg-muted); margin-top: .3rem;">Commence le {{ ch.c.startDate|format_date(pattern: 'd MMMM', locale: 'fr') }}.</p>
+                {% endif %}
+            </div>
+            {% if ch.phase == 'running' %}
+                {% if ch.checked %}
+                    <span class="ks-badge">✓ Journée validée</span>
+                {% else %}
+                    <form method="post" action="{{ path('app_challenge_checkin', {slug: ch.c.slug}) }}">
+                        <input type="hidden" name="_csrf_token" value="{{ csrf_token('challenge_checkin') }}">
+                        <input type="hidden" name="from" value="dashboard">
+                        <button type="submit" class="ks-btn ks-btn--primary">J'ai fait ma part ✓</button>
+                    </form>
+                {% endif %}
+            {% else %}
+                <a href="{{ path('app_challenge', {slug: ch.c.slug}) }}" class="ks-btn ks-btn--secondary">Voir le défi</a>
+            {% endif %}
+        </section>
+    {% endfor %}
+
     {# Premiers pas : guide l'utilisateur après l'onboarding, disparaît quand tout est fait #}
     {% if nextSteps|length %}
         {% set doneCount = nextSteps|filter(s => s.done)|length %}

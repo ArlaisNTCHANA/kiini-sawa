@@ -275,7 +275,7 @@ source et l'appel à l'action.
 |---|---|---|
 | **Semaine 1** | Fondations | Comptes créés par le fondateur, identité visuelle, 30 scripts, calendrier du mois |
 | **Semaines 2–4** | Trouver ce qui marche | 1 vidéo/jour sur TikTok + Reels + Shorts, WhatsApp quotidien, tests d'accroches ; garder les 3 piliers qui performent |
-| **Semaine 5** | Annonce du défi | Teasing « Défi 21 jours de discipline », page d'inscription suivie (UTM) |
+| **Semaine 5** | Annonce du défi | Teasing « Défi 21 jours de discipline ». Le fondateur crée le défi dans l'admin (Croissance › Défis) : page publique `app.kiinisawa.com/defi/…` et liens suivis prêts à copier pour chaque plateforme |
 | **Semaines 6–8** | **Défi 21 jours** | 1 épisode/jour, rituels suivis dans l'application, direct hebdomadaire, témoignages réels (avec accord écrit) |
 | **Semaine 9** | Bilan et preuve sociale | Résultats du défi, newsletter lancée, 1re vidéo longue YouTube |
 | **Semaines 10–12** | Élargir | Série couple (Duo), série leadership (Églises), 2e défi, prise de contact avec 10 Églises (messages rédigés par l'IA, envoyés par le fondateur) |
