@@ -13,6 +13,7 @@ espace couple et organisations. En ligne sur **https://app.kiinisawa.com**.
   [`docs/design.md`](docs/design.md), [`docs/glossaire.md`](docs/glossaire.md).
 - Mise en ligne et exploitation : [`docs/mise-en-ligne.md`](docs/mise-en-ligne.md).
 - Le livre de la méthode : [`docs/livre/`](docs/livre/).
+- Lancement du média (réseaux sociaux) : [`docs/media/brief-lancement-media.md`](docs/media/brief-lancement-media.md).
 
 ## Démarrage rapide
 
