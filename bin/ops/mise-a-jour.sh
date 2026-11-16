@@ -13,6 +13,9 @@ export APP_ENV=prod
 # Les hébergeurs mutualisés désactivent proc_open, exec… (Hostinger : disable_functions). Les commandes
 # d'installation en ont besoin (ex. Tailwind) : on les réautorise pour ces commandes seulement, en ligne de
 # commande. Le site lui-même garde les restrictions de l'hébergeur.
+# /tmp est souvent non exécutable en mutualisé : Tailwind a besoin d'un dossier temporaire exécutable.
+mkdir -p "$HOME/tmp"
+export TMPDIR="$HOME/tmp"
 run() { "$PHP" -d disable_functions= -d memory_limit=1G "$@"; }
 
 if [[ ! -f .env.prod.local ]]; then
