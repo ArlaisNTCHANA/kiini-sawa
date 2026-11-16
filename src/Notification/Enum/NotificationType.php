@@ -27,6 +27,8 @@ enum NotificationType: string
     case ONBOARDING = 'ONBOARDING';
     // Défis collectifs : inscription et action du jour (désactivables avec les autres notifications de défis)
     case CHALLENGE_DAY = 'CHALLENGE_DAY';
+    // Parrainage : un ami parrainé a rejoint KIINI SAWA (message de service : un mois PRO offert)
+    case REFERRAL_REWARD = 'REFERRAL_REWARD';
 
     /** Icône Lucide affichée dans le centre de notifications. */
     public function icon(): string
@@ -43,12 +45,13 @@ enum NotificationType: string
             self::TRIAL_ENDING, self::SUBSCRIPTION_ENDING => 'hourglass',
             self::ONBOARDING => 'sparkles',
             self::CHALLENGE_DAY => 'trophy',
+            self::REFERRAL_REWARD => 'gift',
         };
     }
 
     /** Messages de service (paiement, fin d'essai) : envoyés quelles que soient les préférences. */
     public function isTransactional(): bool
     {
-        return \in_array($this, [self::PAYMENT_DECLARED, self::PAYMENT_VALIDATED, self::PAYMENT_REJECTED, self::TRIAL_ENDING, self::SUBSCRIPTION_ENDING], true);
+        return \in_array($this, [self::PAYMENT_DECLARED, self::PAYMENT_VALIDATED, self::PAYMENT_REJECTED, self::TRIAL_ENDING, self::SUBSCRIPTION_ENDING, self::REFERRAL_REWARD], true);
     }
 }

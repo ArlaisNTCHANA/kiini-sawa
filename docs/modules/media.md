@@ -18,3 +18,15 @@ Croissance et acquisition : d'où viennent les inscrits, et (à venir) le pilota
 Convention des liens : voir `docs/media/brief-lancement-media.md` (§10).
 
 Tests : `tests/Media/SignupOriginTest.php`.
+
+## Parrainage (17/11/2026)
+
+- Lien personnel `/i/{code}` (code = signature + identifiant, calculé, rien à stocker ; `ReferralService::codeFor()`).
+  Le lien pose le cookie `ks_parrain` (30 jours) et ouvre l'accueil avec la provenance « parrainage ».
+- À l'inscription : `Referral` créé, essai PRO du filleul porté à 30 jours.
+- À la vérification de l'email du filleul : le parrain reçoit 1 mois PRO (`SubscriptionManager::gift`, sans le message
+  générique) et l'email `REFERRAL_REWARD` ; 12 récompenses par an au plus ; jamais deux fois.
+- Page « Inviter mes proches » (`/parrainage`) : lien, WhatsApp, Facebook, email, invitations et mois gagnés.
+- Les cadeaux (montant 0) ne comptent pas comme « payants » dans Provenance des inscrits.
+
+Tests : `tests/Media/ReferralTest.php`.

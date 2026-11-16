@@ -51,6 +51,7 @@ class RegistrationController extends AbstractController
         Entitlements $entitlements,
         #[Autowire(service: 'limiter.registration')] RateLimiterFactoryInterface $registrationLimiter,
         \App\Media\Service\OriginTracker $origins,
+        \App\Media\Service\ReferralService $referrals,
     ): Response {
         if ($this->getUser()) {
             return $this->redirectToRoute('app_dashboard');
@@ -111,6 +112,7 @@ class RegistrationController extends AbstractController
                 $em->persist($user);
                 $em->persist($origins->originFor($user, $request));
                 $entitlements->startTrial($user);
+                $referrals->attach($user, $request);
                 $em->flush();
 
                 $this->mailer->sendVerificationCode($user, $this->tokens->createCode($user, AccountToken::VERIFY_EMAIL));
@@ -118,6 +120,7 @@ class RegistrationController extends AbstractController
 
                 $response = $this->redirectToRoute('app_verify_email');
                 $origins->forget($response);
+                $referrals->forget($response);
 
                 return $response;
             }
@@ -130,7 +133,7 @@ class RegistrationController extends AbstractController
     }
 
     #[Route('/verification-email', name: 'app_verify_email', methods: ['GET', 'POST'])]
-    public function verifyEmail(Request $request, EntityManagerInterface $em, \App\Notification\Service\OnboardingSequence $onboarding): Response
+    public function verifyEmail(Request $request, EntityManagerInterface $em, \App\Notification\Service\OnboardingSequence $onboarding, \App\Media\Service\ReferralService $referrals): Response
     {
         /** @var User $user */
         $user = $this->getUser();
@@ -146,6 +149,7 @@ class RegistrationController extends AbstractController
                 $user->setIsVerified(true);
                 $em->flush();
                 $onboarding->welcome($user);
+                $referrals->reward($user);
                 $this->addFlash('success', 'Votre adresse email est vérifiée. Bienvenue !');
 
                 return ($invite = PendingInvitation::redirectPath($request->getSession())) ? $this->redirect($invite) : $this->redirectToRoute('app_onboarding');

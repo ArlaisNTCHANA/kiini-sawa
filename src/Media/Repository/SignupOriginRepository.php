@@ -37,7 +37,7 @@ class SignupOriginRepository extends ServiceEntityRepository
         $paying = $this->createQueryBuilder('o')
             ->select($field.' AS label', 'COUNT(DISTINCT u.id) AS paying')
             ->join('o.user', 'u')->join('u.subscription', 's')->join('s.transactions', 't')
-            ->where('t.status = :validated')->setParameter('validated', Transaction::STATUS_VALIDATED)
+            ->where('t.status = :validated')->andWhere('t.amount > 0')->setParameter('validated', Transaction::STATUS_VALIDATED)
             ->groupBy('label');
         if ($since) {
             $qb->where('o.createdAt >= :since')->setParameter('since', $since);

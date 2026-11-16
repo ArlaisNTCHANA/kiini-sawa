@@ -61,6 +61,8 @@ security:
         - { path: ^/methode, roles: PUBLIC_ACCESS }
         - { path: ^/(installer|hors-ligne)$, roles: PUBLIC_ACCESS }
         - { path: ^/(defis$|defi/), roles: PUBLIC_ACCESS }
+        - { path: ^/i/, roles: PUBLIC_ACCESS }
+        - { path: ^/resultat/, roles: PUBLIC_ACCESS }
         - { path: ^/admin, roles: ROLE_ADMIN }
         - { path: ^/, roles: ROLE_USER }
 

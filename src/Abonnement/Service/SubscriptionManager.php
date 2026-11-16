@@ -151,7 +151,8 @@ final class SubscriptionManager
     }
 
     /** PRO offert (pilotes, partenaires, églises…), tracé comme un paiement de 0. */
-    public function gift(User $user, int $months, ?string $note): Transaction
+    /** @param bool $notify false si l'appelant envoie son propre message (ex. parrainage) */
+    public function gift(User $user, int $months, ?string $note, bool $notify = true): Transaction
     {
         $transaction = (new Transaction())->setAmount(0)->setCurrency('EUR')->setPeriod('MONTHLY')->setMethod('GIFT')
             ->setStatus(Transaction::STATUS_VALIDATED)->setProcessedAt(new \DateTimeImmutable())
@@ -160,6 +161,9 @@ final class SubscriptionManager
         $this->em->persist($transaction);
         $end = $this->extend($user, null, $months);
         $this->em->flush();
+        if (!$notify) {
+            return $transaction;
+        }
         $this->notifier->notify($user, NotificationType::PAYMENT_VALIDATED, 'Un accès PRO vous est offert',
             sprintf('Vous bénéficiez de KIINI SAWA PRO jusqu\'au %s. Profitez-en pour bâtir vos quatre plans stratégiques !', $end->format('d/m/Y')),
             '/mes-strategies', 'cadeau '.$transaction->getId());

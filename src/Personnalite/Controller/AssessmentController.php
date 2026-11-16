@@ -64,7 +64,22 @@ class AssessmentController extends AbstractController
     {
         $this->denyUnlessOwner($assessment);
 
-        return $this->render('personnalite/assessment/report.html.twig', $this->reports->build($assessment));
+        $data = $this->reports->build($assessment);
+
+        return $this->render('personnalite/assessment/report.html.twig', $data + ['shareCard' => \App\Personnalite\Psychometrie\ShareCard::from($data)]);
+    }
+
+    /** Partager le résultat (page publique : prénom + résultat principal) ou arrêter le partage. */
+    #[Route('/rapport/{id}/partage', name: 'report_share', requirements: ['id' => '\d+'], methods: ['POST'])]
+    public function share(Assessment $assessment, \Symfony\Component\HttpFoundation\Request $request, \Doctrine\ORM\EntityManagerInterface $em): Response
+    {
+        $this->denyUnlessOwner($assessment);
+        if ($this->isCsrfTokenValid('assessment_share', $request->request->getString('_csrf_token'))) {
+            'stop' === $request->request->getString('action') ? $assessment->stopSharing() : $assessment->share();
+            $em->flush();
+        }
+
+        return $this->redirectToRoute('app_assessment_report', ['id' => $assessment->getId(), '_fragment' => 'partage']);
     }
 
     #[Route('/rapport/{id}/pdf', name: 'report_pdf', requirements: ['id' => '\d+'], methods: ['GET'])]

@@ -1,0 +1,27 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ firstName }} : {{ card.title }}{% endblock %}
+
+{% block head_meta %}
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="{{ firstName }} : {{ card.title }} — et toi ?">
+    <meta property="og:description" content="{{ card.kicker }} découvert avec le test « {{ card.testName }} » de KIINI SAWA. Découvre le tien gratuitement.">
+    <meta property="og:image" content="{{ absolute_url('/icons/icon-512.png') }}">
+    <meta name="robots" content="noindex">
+{% endblock %}
+
+{% block body %}
+{% if not app.user %}{% include 'shared/_public_header.html.twig' %}{% endif %}
+<div class="ks-page ks-page--narrow">
+    <div style="background: linear-gradient(135deg, #134E4A, #0F766E); color: #fff; border-radius: var(--r-xl); padding: 2.25rem 1.75rem; margin-bottom: 1.25rem;">
+        <p style="font-size: .78rem; font-weight: 800; letter-spacing: .14em; text-transform: uppercase; color: #CCFBF1;">{{ firstName }} · {{ card.kicker }}</p>
+        <h1 style="font-family: var(--font-serif); font-size: clamp(1.9rem, 6vw, 2.8rem); line-height: 1.15; margin: .6rem 0 .8rem; color: #fff;">{{ card.title }}</h1>
+        <p style="color: rgba(255,255,255,.88); line-height: 1.6;">{{ card.desc }}</p>
+    </div>
+    <div class="ks-card" style="text-align: center;">
+        <h2 class="ks-section-title" style="margin-top: 0;">Et vous, quel est votre résultat ?</h2>
+        <p style="color: var(--fg-muted); margin-bottom: 1.25rem;">Le test « {{ card.testName }} » fait partie des tests gratuits de KIINI SAWA : des questionnaires sérieux, un rapport détaillé, et des pistes pour bâtir une vie alignée sur le but de Dieu.</p>
+        <a href="{{ path(app.user ? 'app_assessment_take' : 'app_register', app.user ? {slug: card.slug} : {}) }}" class="ks-btn ks-btn--primary" style="font-size: 1rem; padding: .9rem 1.6rem;">Découvrir le mien gratuitement</a>
+    </div>
+</div>
+{% endblock %}

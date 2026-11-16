@@ -43,6 +43,10 @@ class Assessment
     #[ORM\Column]
     private \DateTimeImmutable $takenAt;
 
+    /** Jeton de la page publique du résultat (null = non partagé). Seuls le prénom et le résultat principal y figurent. */
+    #[ORM\Column(length: 32, unique: true, nullable: true)]
+    private ?string $shareToken = null;
+
     public function __construct(User $user, string $instrument, array $answers, ?int $durationSeconds)
     {
         $this->user = $user;
@@ -62,4 +66,19 @@ class Assessment
     public function setQuality(array $quality): static { $this->quality = $quality; return $this; }
     public function getDurationSeconds(): ?int { return $this->durationSeconds; }
     public function getTakenAt(): \DateTimeImmutable { return $this->takenAt; }
+
+    public function getShareToken(): ?string
+    {
+        return $this->shareToken;
+    }
+
+    public function share(): string
+    {
+        return $this->shareToken ??= bin2hex(random_bytes(12));
+    }
+
+    public function stopSharing(): void
+    {
+        $this->shareToken = null;
+    }
 }

@@ -72,3 +72,11 @@ Tests de personnalité (DISC, MBTI, Ennéagramme, Big 5…), calcul des scores e
 ## Templates
 
 `personnalite/_card.html.twig`, `personnalite/_radar_chart.html.twig`, `personnalite/admin/index.html.twig`, `personnalite/admin/profiles.html.twig`, `personnalite/admin/questions.html.twig`, `personnalite/index.html.twig`, `personnalite/result.html.twig`, `personnalite/test.html.twig`
+
+## Résultat partageable (17/11/2026)
+
+Privé par défaut. Depuis le rapport, « Partager mon résultat » crée un jeton (`Assessment::share()`) : la page publique
+`/resultat/{jeton}` montre seulement le prénom et le résultat principal (`Psychometrie/ShareCard`), avec un bouton
+« Découvrir le mien gratuitement » et des balises d'aperçu pour les réseaux. Une image (1080×1350) est dessinée dans le
+navigateur et partagée avec le partage natif du téléphone (ou téléchargée). « Arrêter le partage » supprime le jeton.
+Liens suivis : `utm_source=partage-test`, campagne `test-{questionnaire}`. Tests : `tests/Personnalite/SharedResultTest.php`.

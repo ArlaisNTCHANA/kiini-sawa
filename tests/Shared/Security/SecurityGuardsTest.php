@@ -28,6 +28,8 @@ class SecurityGuardsTest extends WebTestCase
         'app_register', 'app_forgot_password', 'app_reset_password', 'app_reset_password_form',
         'app_legal',
         'app_install', 'app_offline', // application installable
+        'app_referral_link', // lien de parrainage partagé
+        'app_shared_result', // résultat de test partagé par son auteur
         'app_challenges', 'app_challenge', 'app_challenge_join', // défis collectifs : pages publiques ; inscription sans compte (renvoie vers la création de compte)
         'app_methode_index', 'app_methode_chapter', // premiers chapitres en libre lecture, la suite verrouillée dans la page
         'app_notification_unsubscribe', // lien signé reçu par email
