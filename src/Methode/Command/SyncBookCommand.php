@@ -24,7 +24,7 @@ class SyncBookCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $io = new SymfonyStyle($input, $output);
-        $source = \dirname($this->projectDir).'/docs/livre';
+        $source = $this->projectDir.'/docs/livre';
         if (!is_dir($source)) {
             $io->error("Manuscrit introuvable : $source");
 
