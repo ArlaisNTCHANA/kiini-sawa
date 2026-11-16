@@ -252,8 +252,10 @@ source et l'appel à l'action.
 - `utm_medium` : bio, video, story, message, email
 - `utm_campaign` : defi21-discipline, plan-de-vie, test-personnalite, couple, eglises…
 
-> Note : l'enregistrement de ces paramètres dans l'application sera ajouté côté produit ; utilise-les dès le premier
-> jour pour que l'historique soit propre.
+> L'application enregistre ces paramètres pour chaque inscrit. Le fondateur voit les résultats dans l'administration
+> (**Croissance › Provenance des inscrits**), qui contient aussi un **générateur de liens suivis** : utilise-le (ou
+> respecte exactement la convention ci-dessus) pour chaque lien publié. Demande au fondateur une capture ou les
+> chiffres de cette page pour le rapport hebdomadaire.
 
 **Rapport hebdomadaire au fondateur** (une page) :
 - abonnés par plateforme (et évolution) ; vues ; taux de visionnage complet des vidéos courtes ;

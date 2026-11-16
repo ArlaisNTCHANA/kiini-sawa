@@ -46,7 +46,7 @@ Un **module par dossier** : `src/<Module>/{Controller,Entity,Repository,Service,
 - Modules principaux : `Compte`, `Dashboard`, `PlanDeVie` (+ `PlanDeCroissance`, `PlanDeDeveloppement`,
   `PlanDeTransmission`, `PlanDHygiene`), `Rituels`, `Journal`, `Planner` (agenda), `Bilan`, `Social` (partenaires),
   `Personnalite` (tests, dont `Psychometrie/` : banque IPIP-NEO, scores, normes), `Couple`, `Organisation`,
-  `Abonnement`, `Notification`, `Methode` (livre), `Admin`, `Shared`.
+  `Abonnement`, `Notification`, `Methode` (livre), `Media` (provenance des inscrits, liens suivis), `Admin`, `Shared`.
 - Droits PRO : `App\Abonnement\Service\Entitlements` (`can`, `require`, `requireBelowLimit`) ; une exception
   `ProRequiredException` redirige vers `/abonnement`.
 - Notifications et emails : `App\Notification\Service\Notifier` (préférences, anti-doublon, désabonnement signé).

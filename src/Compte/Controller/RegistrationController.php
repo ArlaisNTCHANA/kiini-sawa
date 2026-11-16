@@ -50,6 +50,7 @@ class RegistrationController extends AbstractController
         Security $security,
         Entitlements $entitlements,
         #[Autowire(service: 'limiter.registration')] RateLimiterFactoryInterface $registrationLimiter,
+        \App\Media\Service\OriginTracker $origins,
     ): Response {
         if ($this->getUser()) {
             return $this->redirectToRoute('app_dashboard');
@@ -108,13 +109,17 @@ class RegistrationController extends AbstractController
                 $user->setPassword($hasher->hashPassword($user, $password));
                 $user->setUserProfile((new UserProfile())->setFirstName($data['firstName']));
                 $em->persist($user);
+                $em->persist($origins->originFor($user, $request));
                 $entitlements->startTrial($user);
                 $em->flush();
 
                 $this->mailer->sendVerificationCode($user, $this->tokens->createCode($user, AccountToken::VERIFY_EMAIL));
                 $security->login($user, LoginAuthenticator::class, 'main');
 
-                return $this->redirectToRoute('app_verify_email');
+                $response = $this->redirectToRoute('app_verify_email');
+                $origins->forget($response);
+
+                return $response;
             }
         }
 

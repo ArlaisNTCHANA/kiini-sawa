@@ -1,0 +1,130 @@
+{% extends 'admin/layout.html.twig' %}
+
+{% macro pct(a, b) %}{{ b > 0 ? ((a / b * 100)|round) ~ ' %' : '—' }}{% endmacro %}
+
+{% block title %}Provenance des inscrits{% endblock %}
+{% block page_title %}Provenance des inscrits{% endblock %}
+
+{% block javascripts %}{{ parent() }}<script defer src="{{ asset('lib/alpinejs-3.17.5.min.js') }}"></script>{% endblock %}
+
+{% block stylesheets %}
+<style>
+    .k-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 16px; margin-bottom: 24px; }
+    .k-stat { font-size: 26px; font-weight: 800; }
+    .k-label { font-size: 12px; color: var(--text-secondary); }
+    .k-table { width: 100%; border-collapse: collapse; font-size: 14px; }
+    .k-table th, .k-table td { padding: 10px 8px; border-top: 1px solid rgba(255,255,255,.06); text-align: left; vertical-align: middle; }
+    .k-table th { font-size: 12px; color: var(--text-secondary); font-weight: 600; }
+    .k-num { text-align: right !important; font-variant-numeric: tabular-nums; }
+    .k-bar { height: 6px; border-radius: 3px; background: #14b8a6; min-width: 2px; }
+    .k-tabs { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 20px; }
+    .k-tab { padding: 6px 12px; border-radius: 999px; font-size: 13px; text-decoration: none; color: inherit; border: 1px solid rgba(255,255,255,.12); }
+    .k-tab.on { background: #0f766e; border-color: #0f766e; color: #fff; }
+    .k-input { padding: 8px 10px; border-radius: 8px; background: rgba(0,0,0,.2); color: inherit; border: 1px solid rgba(255,255,255,.12); font-size: 13px; width: 100%; }
+    .k-form { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; align-items: end; }
+    .k-form label { font-size: 12px; color: var(--text-secondary); display: block; margin-bottom: 4px; }
+    .k-btn { display: inline-flex; padding: 8px 14px; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer; border: 1px solid #0f766e; background: #0f766e; color: #fff; }
+    .k-muted { color: var(--text-secondary); font-size: 13px; }
+    h2.k-h { font-size: 16px; font-weight: 700; margin-bottom: 12px; }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="k-tabs">
+    {% for key, label in periods %}
+        <a href="{{ path('admin_origins', {periode: key}) }}" class="k-tab {{ key == period ? 'on' }}">{{ label }}</a>
+    {% endfor %}
+</div>
+
+{% import _self as m %}
+<div class="k-grid">
+    <div class="ks-card"><div class="k-stat">{{ totals.signups }}</div><div class="k-label">inscrits</div></div>
+    <div class="ks-card"><div class="k-stat">{{ m.pct(totals.verified, totals.signups) }}</div><div class="k-label">ont vérifié leur email</div></div>
+    <div class="ks-card"><div class="k-stat">{{ m.pct(totals.onboarded, totals.signups) }}</div><div class="k-label">ont posé leurs fondations</div></div>
+    <div class="ks-card"><div class="k-stat">{{ totals.paying }}</div><div class="k-label">devenus payants</div></div>
+</div>
+
+<div class="ks-card" style="margin-bottom: 24px;">
+    <h2 class="k-h">Par canal</h2>
+    {% if bySource is empty %}
+        <p class="k-muted">Aucun inscrit sur cette période. Les inscriptions sont rattachées à leur canal depuis le 16/11/2026.</p>
+    {% else %}
+        {% set max = bySource|map(r => r.signups)|reduce((a, b) => max(a, b), 1) %}
+        <table class="k-table">
+            <thead><tr><th>Canal</th><th style="width: 30%;"></th><th class="k-num">Inscrits</th><th class="k-num">Email vérifié</th><th class="k-num">Fondations posées</th><th class="k-num">Payants</th><th class="k-num">Conversion</th></tr></thead>
+            <tbody>
+            {% for r in bySource %}
+                <tr>
+                    <td><strong>{{ sources[r.label] ?? r.label|capitalize }}</strong></td>
+                    <td><div class="k-bar" style="width: {{ (r.signups / max * 100)|round }}%;"></div></td>
+                    <td class="k-num">{{ r.signups }}</td>
+                    <td class="k-num">{{ r.verified }}</td>
+                    <td class="k-num">{{ r.onboarded }}</td>
+                    <td class="k-num">{{ r.paying }}</td>
+                    <td class="k-num">{{ m.pct(r.paying, r.signups) }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+        <p class="k-muted" style="margin-top: 10px;">« Direct » : arrivée sans lien suivi ni site d'origine (adresse tapée, favori, application de messagerie qui masque l'origine). « Invitation » : conjoint ou membre d'organisation invité.</p>
+    {% endif %}
+</div>
+
+<div class="ks-card" style="margin-bottom: 24px;">
+    <h2 class="k-h">Par campagne</h2>
+    {% if byCampaign is empty %}
+        <p class="k-muted">Aucune campagne pour l'instant.</p>
+    {% else %}
+        <table class="k-table">
+            <thead><tr><th>Campagne</th><th class="k-num">Inscrits</th><th class="k-num">Email vérifié</th><th class="k-num">Fondations posées</th><th class="k-num">Payants</th></tr></thead>
+            <tbody>
+            {% for r in byCampaign %}
+                <tr><td>{{ r.label }}</td><td class="k-num">{{ r.signups }}</td><td class="k-num">{{ r.verified }}</td><td class="k-num">{{ r.onboarded }}</td><td class="k-num">{{ r.paying }}</td></tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    {% endif %}
+</div>
+
+<div class="ks-card" style="margin-bottom: 24px;" x-data="{ source: 'tiktok', medium: 'bio', campaign: '', content: '', page: '/', copied: false,
+    get url() { const p = new URLSearchParams({ utm_source: this.source, utm_medium: this.medium }); if (this.campaign.trim()) p.set('utm_campaign', this.slug(this.campaign)); if (this.content.trim()) p.set('utm_content', this.slug(this.content)); return '{{ baseUrl }}' + this.page + '?' + p.toString(); },
+    slug(v) { return v.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, ''); } }">
+    <h2 class="k-h">Créer un lien suivi</h2>
+    <p class="k-muted" style="margin-bottom: 12px;">Utilisez un lien différent par plateforme et par campagne : les inscriptions apparaîtront dans les tableaux ci-dessus.</p>
+    <div class="k-form">
+        <div><label>Plateforme</label><select class="k-input" x-model="source">{% for k, v in sources %}<option value="{{ k }}">{{ v }}</option>{% endfor %}</select></div>
+        <div><label>Emplacement</label><select class="k-input" x-model="medium">{% for k, v in mediums %}<option value="{{ k }}">{{ v }}</option>{% endfor %}</select></div>
+        <div><label>Campagne (facultatif)</label><input class="k-input" x-model="campaign" placeholder="ex. defi21-discipline"></div>
+        <div><label>Contenu (facultatif)</label><input class="k-input" x-model="content" placeholder="ex. video-12"></div>
+        <div><label>Page d'arrivée</label><select class="k-input" x-model="page"><option value="/">Page d'accueil</option><option value="/inscription">Inscription directe</option><option value="/methode/introduction">Introduction du livre</option></select></div>
+    </div>
+    <div style="display: flex; gap: 10px; margin-top: 14px; align-items: center; flex-wrap: wrap;">
+        <input class="k-input" style="flex: 1; min-width: 260px;" :value="url" readonly>
+        <button type="button" class="k-btn" @click="navigator.clipboard.writeText(url); copied = true; setTimeout(() => copied = false, 2000)" x-text="copied ? 'Copié ✓' : 'Copier'"></button>
+    </div>
+</div>
+
+<div class="ks-card">
+    <h2 class="k-h">Derniers inscrits</h2>
+    {% if latest is empty %}
+        <p class="k-muted">Pas encore d'inscrit rattaché à un canal.</p>
+    {% else %}
+        <table class="k-table">
+            <thead><tr><th>Date</th><th>Prénom</th><th>Canal</th><th>Emplacement</th><th>Campagne</th><th>Contenu</th><th>Site d'origine</th></tr></thead>
+            <tbody>
+            {% for o in latest %}
+                <tr>
+                    <td>{{ o.createdAt|date('d/m/Y H:i') }}</td>
+                    <td>{{ o.user.displayName }}</td>
+                    <td>{{ sources[o.source] ?? o.source|capitalize }}</td>
+                    <td>{{ mediums[o.medium] ?? o.medium ?? '—' }}</td>
+                    <td>{{ o.campaign ?? '—' }}</td>
+                    <td>{{ o.content ?? '—' }}</td>
+                    <td>{{ o.referrer ?? '—' }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    {% endif %}
+</div>
+{% endblock %}
