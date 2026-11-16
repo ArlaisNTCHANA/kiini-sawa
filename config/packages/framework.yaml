@@ -22,3 +22,16 @@ when@test:
         test: true
         session:
             storage_factory_id: session.storage.factory.mock_file
+
+# Production : sessions en base de données. Les fichiers locaux sont effacés à chaque déploiement
+# (et ne sont pas partagés entre plusieurs instances) : sans cela, tout le monde serait déconnecté.
+when@prod:
+    framework:
+        session:
+            handler_id: Symfony\Component\HttpFoundation\Session\Storage\Handler\PdoSessionHandler
+
+    services:
+        Symfony\Component\HttpFoundation\Session\Storage\Handler\PdoSessionHandler:
+            arguments:
+                - '%env(DATABASE_URL)%'
+                - { db_table: 'sessions', lock_mode: 1 }

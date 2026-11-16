@@ -59,4 +59,22 @@ class LaunchReadinessTest extends WebTestCase
         $this->assertStringContainsString('Mode production', $tester->getDisplay());
         $this->assertStringContainsString('[À COMPLÉTER]', $tester->getDisplay());
     }
+
+    /** Fichiers de déploiement Clever Cloud : présents, exécutables, valides. */
+    public function testCleverCloudDeploymentFiles(): void
+    {
+        $root = \dirname(__DIR__, 2);
+        foreach (['clevercloud/post_build.sh', 'clevercloud/cron_reminders.sh', 'bin/ops/sauvegarde.sh'] as $script) {
+            $this->assertFileExists($root.'/'.$script);
+            $this->assertTrue(is_executable($root.'/'.$script), $script.' doit être exécutable');
+        }
+        $cron = json_decode((string) file_get_contents($root.'/clevercloud/cron.json'), true, flags: \JSON_THROW_ON_ERROR);
+        $this->assertContains('CRON_TZ=Europe/Paris', $cron);
+        $this->assertStringContainsString('doctrine:migrations:migrate', (string) file_get_contents($root.'/clevercloud/post_build.sh'));
+        $this->assertFileExists($root.'/public/.htaccess');
+
+        $envProd = (string) file_get_contents($root.'/.env.prod');
+        $this->assertStringContainsString('MYSQL_ADDON_HOST', $envProd);
+        $this->assertDoesNotMatchRegularExpression('/^APP_SECRET=./m', $envProd, 'Aucun secret dans .env.prod (fichier versionné)');
+    }
 }

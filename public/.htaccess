@@ -1,0 +1,43 @@
+# Apache (Clever Cloud et la plupart des hébergeurs PHP) : toutes les requêtes passent par index.php,
+# sauf les fichiers qui existent vraiment (assets compilés, robots…).
+DirectoryIndex index.php
+
+<IfModule mod_negotiation.c>
+    Options -MultiViews
+</IfModule>
+
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+
+    # Détermine la base de réécriture (fonctionne aussi dans un sous-dossier).
+    RewriteCond %{REQUEST_URI}::$0 ^(/.+)/(.*)::\2$
+    RewriteRule .* - [E=BASE:%1]
+
+    # Transmet l'en-tête Authorization à PHP.
+    RewriteCond %{HTTP:Authorization} .+
+    RewriteRule ^ - [E=HTTP_AUTHORIZATION:%0]
+
+    # /index.php/xxx -> /xxx (évite les URL en double).
+    RewriteCond %{ENV:REDIRECT_STATUS} =""
+    RewriteRule ^index\.php(?:/(.*)|$) %{ENV:BASE}/$1 [R=301,L]
+
+    # Fichier existant : servi directement.
+    RewriteCond %{REQUEST_FILENAME} -f
+    RewriteRule ^ - [L]
+
+    # Tout le reste : l'application.
+    RewriteRule ^ %{ENV:BASE}/index.php [L]
+</IfModule>
+
+<IfModule !mod_rewrite.c>
+    <IfModule mod_alias.c>
+        RedirectMatch 307 ^/$ /index.php/
+    </IfModule>
+</IfModule>
+
+# Assets compilés (nom versionné par empreinte) : mis en cache un an.
+<IfModule mod_headers.c>
+    <FilesMatch "\.(css|js|woff2|svg|png|jpg|jpeg|webp|ico)$">
+        Header set Cache-Control "public, max-age=31536000, immutable"
+    </FilesMatch>
+</IfModule>
