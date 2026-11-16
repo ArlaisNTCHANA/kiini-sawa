@@ -14,13 +14,15 @@ class DashboardController extends AbstractController
 {
     /** Page d'accueil publique (présentation et prix) ; un utilisateur connecté va à son tableau de bord. */
     #[Route('/', name: 'app_home', methods: ['GET'])]
-    public function home(\App\Abonnement\Service\SubscriptionManager $prices, \App\Abonnement\Service\Entitlements $entitlements): Response
+    public function home(\App\Abonnement\Service\SubscriptionManager $prices, \App\Abonnement\Service\Entitlements $entitlements, \App\Abonnement\Service\CurrencyResolver $currencies, \Symfony\Component\HttpFoundation\Request $request): Response
     {
         if ($this->getUser()) {
             return $this->redirectToRoute('app_dashboard');
         }
 
         return $this->render('dashboard/landing.html.twig', [
+            'defaultCurrency' => $currencies->resolve($request),
+            'cfaTimezones' => \App\Abonnement\Service\CurrencyResolver::CFA_TIMEZONES,
             'prices' => [
                 'EUR' => ['MONTHLY' => $prices->price('MONTHLY', 'EUR'), 'YEARLY' => $prices->price('YEARLY', 'EUR'), 'DUO' => $prices->price('DUO', 'EUR')],
                 'XAF' => ['MONTHLY' => $prices->price('MONTHLY', 'XAF'), 'YEARLY' => $prices->price('YEARLY', 'XAF'), 'DUO' => $prices->price('DUO', 'XAF')],

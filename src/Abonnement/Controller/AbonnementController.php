@@ -25,7 +25,7 @@ class AbonnementController extends AbstractController
     }
 
     #[Route('', name: '', methods: ['GET'])]
-    public function index(Request $request): Response
+    public function index(Request $request, \App\Abonnement\Service\CurrencyResolver $currencies): Response
     {
         $user = $this->user();
         $config = $this->entitlements->config();
@@ -49,7 +49,7 @@ class AbonnementController extends AbstractController
             ],
             'duoPrices' => ['EUR' => $this->manager->price('DUO', 'EUR'), 'XAF' => $this->manager->price('DUO', 'XAF')],
             'hasCouple' => (bool) $this->couples->findFor($user)?->isActive(),
-            'defaultCurrency' => $request->query->getString('devise') ?: (str_starts_with((string) $request->getPreferredLanguage(['fr_CM', 'fr_FR']), 'fr_CM') ? 'XAF' : 'EUR'),
+            'defaultCurrency' => $currencies->resolve($request, $user),
             'bankInstructions' => $config->getBankTransferInstructions(),
             'mobileMoneyInstructions' => $config->getMobileMoneyInstructions(),
             'pending' => $this->manager->pendingFor($user),

@@ -841,95 +841,28 @@
                         (activePlan === 'TRANSMISSION' ? 'Pilotez l\'impact de votre Vision (Donner). Organisez votre mentorat, service et projets de legs.' : 
                          'Gériez vos systèmes quotidiens : sommeil, nutrition, sport et environnement vital.'))">
             </p>
-            <div class="hero-actions">
-                <button @click="activePlan = null" class="btn-hero-secondary">
-                    <i data-lucide="layout-dashboard" style="width: 18px; height: 18px;"></i>
-                    Retour aux Plans
-                </button>
+            {# Une action principale ; le reste dans « Plus » (audit du 16/11/2026) #}
+            {% set visualizeUrls = {CROISSANCE: path('app_plan_de_croissance_visualize'), DEVELOPPEMENT: path('app_plan_de_developpement_visualize'), TRANSMISSION: path('app_plan_de_transmission_visualize'), HYGIENE: path('app_plan_d_hygiene_visualize')} %}
+            <div class="hero-actions" x-data="{ more: false }">
                 <a :href="activePlan ? '{{ path('app_plan_wizard') }}?plan=' + activePlan : '{{ path('app_plan_wizard') }}'" class="btn-hero-primary">
                     <i data-lucide="sparkles" style="width: 18px; height: 18px;"></i>
-                    Lancer l'Assistant Guidé
+                    Continuer avec l'assistant
                 </a>
-                <template x-if="activePlan === 'CROISSANCE'">
-                    <span style="display: inline-flex; gap: 1rem; flex-wrap: wrap;">
-                        <a href="{{ path('app_plan_de_croissance_visualize') }}" target="_blank" class="btn-hero-secondary">
-                            <i data-lucide="printer" style="width: 18px; height: 18px;"></i>
-                            Visualiser & Imprimer
-                        </a>
-                        <button @click="sendPlanEmail('CROISSANCE', $event.currentTarget)" class="btn-hero-secondary">
-                            <i data-lucide="mail" style="width: 18px; height: 18px;"></i>
-                            M'envoyer par email
-                        </button>
-                        <button class="btn-hero-secondary" @click="activeTab = 'MAP'; $nextTick(() => initMermaid('CROISSANCE'))">
-                            <i data-lucide="map" style="width: 18px; height: 18px;"></i>
-                            Carte
-                        </button>
-                        <button class="btn-hero-secondary" @click="activeTab = 'ANALYSIS'">
-                            <i data-lucide="activity" style="width: 18px; height: 18px;"></i>
-                            Analyse
-                        </button>
-                    </span>
-                </template>
-                <template x-if="activePlan === 'DEVELOPPEMENT'">
-                    <span style="display: inline-flex; gap: 1rem; flex-wrap: wrap;">
-                        <a href="{{ path('app_plan_de_developpement_visualize') }}" target="_blank" class="btn-hero-secondary">
-                            <i data-lucide="printer" style="width: 18px; height: 18px;"></i>
-                            Visualiser & Imprimer
-                        </a>
-                        <button @click="sendPlanEmail('DEVELOPPEMENT', $event.currentTarget)" class="btn-hero-secondary">
-                            <i data-lucide="mail" style="width: 18px; height: 18px;"></i>
-                            M'envoyer par email
-                        </button>
-                        <button class="btn-hero-secondary" @click="activeTab = 'MAP'; $nextTick(() => initMermaid('DEVELOPPEMENT'))">
-                            <i data-lucide="map" style="width: 18px; height: 18px;"></i>
-                            Carte
-                        </button>
-                        <button class="btn-hero-secondary" @click="activeTab = 'ANALYSIS'">
-                            <i data-lucide="activity" style="width: 18px; height: 18px;"></i>
-                            Analyse
-                        </button>
-                    </span>
-                </template>
-                <template x-if="activePlan === 'TRANSMISSION'">
-                    <span style="display: inline-flex; gap: 1rem; flex-wrap: wrap;">
-                        <a href="{{ path('app_plan_de_transmission_visualize') }}" target="_blank" class="btn-hero-secondary">
-                            <i data-lucide="printer" style="width: 18px; height: 18px;"></i>
-                            Visualiser & Imprimer
-                        </a>
-                        <button @click="sendPlanEmail('TRANSMISSION', $event.currentTarget)" class="btn-hero-secondary">
-                            <i data-lucide="mail" style="width: 18px; height: 18px;"></i>
-                            M'envoyer par email
-                        </button>
-                        <button class="btn-hero-secondary" @click="activeTab = 'MAP'; $nextTick(() => initMermaid('TRANSMISSION'))">
-                            <i data-lucide="map" style="width: 18px; height: 18px;"></i>
-                            Carte
-                        </button>
-                        <button class="btn-hero-secondary" @click="activeTab = 'ANALYSIS'">
-                            <i data-lucide="activity" style="width: 18px; height: 18px;"></i>
-                            Analyse
-                        </button>
-                    </span>
-                </template>
-                <template x-if="activePlan === 'HYGIENE'">
-                    <span style="display: inline-flex; gap: 1rem; flex-wrap: wrap;">
-                        <a href="{{ path('app_plan_d_hygiene_visualize') }}" target="_blank" class="btn-hero-secondary">
-                            <i data-lucide="printer" style="width: 18px; height: 18px;"></i>
-                            Visualiser & Imprimer
-                        </a>
-                        <button @click="sendPlanEmail('HYGIENE', $event.currentTarget)" class="btn-hero-secondary">
-                            <i data-lucide="mail" style="width: 18px; height: 18px;"></i>
-                            M'envoyer par email
-                        </button>
-                        <button class="btn-hero-secondary" @click="activeTab = 'MAP'; $nextTick(() => initMermaid('HYGIENE'))">
-                            <i data-lucide="map" style="width: 18px; height: 18px;"></i>
-                            Carte
-                        </button>
-                        <button class="btn-hero-secondary" @click="activeTab = 'ANALYSIS'">
-                            <i data-lucide="activity" style="width: 18px; height: 18px;"></i>
-                            Analyse
-                        </button>
-                    </span>
-                </template>
+                <button class="btn-hero-secondary" @click="activeTab = 'ANALYSIS'">
+                    <i data-lucide="activity" style="width: 18px; height: 18px;"></i>
+                    Analyse
+                </button>
+                <div class="hero-more" @click.outside="more = false">
+                    <button type="button" class="btn-hero-secondary" @click="more = !more" :aria-expanded="more">
+                        Plus <i data-lucide="chevron-down" style="width: 16px; height: 16px;"></i>
+                    </button>
+                    <div class="hero-more-menu" x-show="more" x-cloak x-transition>
+                        <a :href="{{ visualizeUrls|json_encode|e('html_attr') }}[activePlan]" target="_blank" @click="more = false"><i data-lucide="printer"></i> Visualiser et imprimer</a>
+                        <button type="button" @click="more = false; sendPlanEmail(activePlan, $event.currentTarget)"><i data-lucide="mail"></i> M'envoyer par email</button>
+                        <button type="button" @click="more = false; activeTab = 'MAP'; $nextTick(() => initMermaid(activePlan))"><i data-lucide="map"></i> Voir la carte</button>
+                        <button type="button" @click="more = false; activePlan = null"><i data-lucide="layout-dashboard"></i> Toutes mes stratégies</button>
+                    </div>
+                </div>
             </div>
         </header>
 

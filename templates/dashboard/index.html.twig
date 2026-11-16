@@ -292,8 +292,8 @@
     ══════════════════════════════════════════════════════ #}
     <section x-data="{
         content: '',
-        type: 'IDEA',
-        mood: 'HAPPY',
+        type: 'REFLECTION',
+        mood: 'NEUTRAL',
         energy: 7,
         showExtras: false,
         location: '',
@@ -357,7 +357,8 @@
                 { value: 'TEMOIGNAGE', label: 'Témoignage', icon: 'quote' },
                 { value: 'INSIGHT',    label: 'Déclic',     icon: 'eye' },
             ] %}
-            <div style="display: flex; gap: 0.5rem; padding: 1.25rem 1.25rem 0.25rem; overflow-x: auto; scrollbar-width: none;">
+            {# Simple par défaut : le type, l'humeur, l'énergie et le lieu sont des options (bouton +) #}
+            <div x-show="showExtras" x-cloak style="display: flex; gap: 0.5rem; padding: 1.25rem 1.25rem 0.25rem; overflow-x: auto; scrollbar-width: none;">
                 {% for t in captureTypes %}
                 <button @click="type = '{{ t.value }}'"
                         class="type-pill"
@@ -373,7 +374,7 @@
             {# Textarea Input #}
             <div style="padding: 0.75rem 1.25rem; position: relative;">
                 <textarea x-model="content" :placeholder="ph" rows="3" class="capture-textarea"></textarea>
-                <button @click="showExtras = !showExtras"
+                <button @click="showExtras = !showExtras" title="Plus d'options : type de note, humeur, énergie, lieu" aria-label="Plus d'options"
                         style="position: absolute; top: 1.5rem; right: 2rem; width: 2.25rem; height: 2.25rem;
                                border-radius: 0.75rem; cursor: pointer; transition: all 0.25s var(--ease); border: none;
                                display: flex; align-items: center; justify-content: center;"
@@ -405,8 +406,9 @@
             {# Footer: Mood + Energy + Save button #}
             <div style="display: flex; align-items: center; justify-content: space-between;
                         padding: 0.75rem 1.25rem 1.25rem; gap: 1rem; flex-wrap: wrap;">
+                <span x-show="!showExtras" style="font-size: .8rem; color: var(--fg-muted);">Une pensée, une prière, une victoire… retrouvez-la dans votre journal.</span>
                 {# Mood selection #}
-                <div style="display: flex; align-items: center; gap: 0.75rem;">
+                <div x-show="showExtras" x-cloak style="display: flex; align-items: center; gap: 0.75rem;">
                     <span style="font-size: 0.65rem; font-weight: 800; letter-spacing: 0.1em; text-transform: uppercase; color: #64748b;">Humeur</span>
                     {% set moodList = [
                         { value: 'HAPPY',     icon: '😊' },
@@ -433,7 +435,7 @@
 
                 <div style="display: flex; align-items: center; gap: 1.25rem; flex-wrap: wrap;">
                     {# Energy Slider #}
-                    <div style="display: flex; align-items: center; gap: 0.625rem;">
+                    <div x-show="showExtras" x-cloak style="display: flex; align-items: center; gap: 0.625rem;">
                         <i data-lucide="zap" style="width: 15px; height: 15px; flex-shrink: 0; transition: color 0.2s;"
                            :style="energy >= 7 ? 'color: #EAB308; fill: #EAB308' : 'color: #cbd5e1'"></i>
                         <input type="range" min="1" max="10" x-model.number="energy"
@@ -448,11 +450,11 @@
                             :style="content.trim()
                                 ? 'background: var(--primary); box-shadow: 0 4px 14px rgba(15, 118, 110, 0.35); cursor: pointer;'
                                 : 'background: rgba(15, 118, 110, 0.25); cursor: not-allowed;'"
-                            style="display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.7rem 1.5rem;
+                            style="display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.7rem 1.5rem; white-space: nowrap; margin-left: auto;
                                    border-radius: 0.875rem; font-size: 0.825rem; font-weight: 700; color: white;
                                    transition: all 0.25s var(--ease); border: none; font-family: 'Inter', sans-serif;">
                         <i data-lucide="send" style="width: 14px; height: 14px;"></i>
-                        <span>Capturer</span>
+                        <span>Enregistrer</span>
                     </button>
                 </div>
             </div>

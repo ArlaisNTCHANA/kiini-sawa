@@ -141,7 +141,18 @@
             gap: 0.375rem;
             height: 100%;
         }
+        /* Menu « Plus » des pages de plans */
+        .hero-more { position: relative; display: inline-block; }
+        .hero-choice:has(.hero-more) { overflow: visible !important; }
+        .hero-more-menu { position: absolute; top: calc(100% + .5rem); left: 50%; transform: translateX(-50%); z-index: 40; min-width: 15rem;
+            background: #fff; border-radius: 14px; padding: .4rem; box-shadow: 0 16px 40px rgba(15,23,42,.14), 0 0 0 1px rgba(15,23,42,.05); text-align: left; }
+        .hero-more-menu a, .hero-more-menu button { display: flex; align-items: center; gap: .6rem; width: 100%; padding: .6rem .75rem; border: none; background: none;
+            border-radius: 10px; font: inherit; font-size: .9rem; color: var(--fg); text-decoration: none; cursor: pointer; }
+        .hero-more-menu a:hover, .hero-more-menu button:hover { background: var(--bg-alt, #F1F5F9); }
+        .hero-more-menu svg { width: 16px; height: 16px; color: var(--fg-muted); flex-shrink: 0; }
+        [x-cloak] { display: none !important; }
         .topnav-item {
+            white-space: nowrap;
             display: flex;
             align-items: center;
             gap: 0.5rem;
@@ -366,15 +377,14 @@
 
         {# Navigation Links #}
         <nav class="topnav-links">
+        {# 6 entrées au plus (audit du 16/11/2026) ; le reste est dans le menu du compte #}
         {% set mainNav = [
-                { label: 'Accueil',       path: path('app_dashboard'),   icon: 'home' },
-                { label: 'Mon Plan de Vie', path: path('app_plan_de_vie'),  icon: 'compass' },
-                { label: 'Mes Stratégies',  path: path('app_strategies'), icon: 'trending-up' },
-                { label: 'Mon Journal',   path: path('app_journal'),      icon: 'book-open' },
-                { label: 'Rituels',       path: path('app_user_habits'),       icon: 'activity' },
-                { label: 'Agenda',        path: path('app_planner'),      icon: 'calendar' },
-                { label: 'Bilan',        path: path('app_bilan'),   icon: 'bar-chart-2' },
-                { label: 'Partenaires',  path: path('app_social'),  icon: 'users' },
+                { label: 'Accueil',     path: path('app_dashboard'),   icon: 'home' },
+                { label: 'Plan de Vie', path: path('app_plan_de_vie'), icon: 'compass' },
+                { label: 'Stratégies',  path: path('app_strategies'),  icon: 'trending-up' },
+                { label: 'Rituels',     path: path('app_user_habits'), icon: 'activity' },
+                { label: 'Journal',     path: path('app_journal'),     icon: 'book-open' },
+                { label: 'Bilan',       path: path('app_bilan'),       icon: 'bar-chart-2' },
             ] %}
 
             {% for item in mainNav %}
@@ -437,7 +447,9 @@
                         {% set ddItems1 = [
                             { label: 'Mon Profil',      icon: 'user',          href: path('app_profile'),                desc: 'Compte & données' },
                             { label: is_pro() ? (is_trialing() ? 'Essai PRO' : 'Mon abonnement') : 'Passer à PRO', icon: 'crown', href: path('app_subscription'), desc: is_trialing() ? 'Jusqu\'au ' ~ pro_until()|date('d/m') : (is_pro() ? 'Offre PRO' : 'Débloquer les 4 plans') },
-                            { label: 'Mes tests',       icon: 'sparkles',      href: path('app_personality_index'),      desc: 'Tests & valeurs' },
+                            { label: 'Agenda',          icon: 'calendar',      href: path('app_planner'),                desc: 'Tâches, jalons, frise' },
+                            { label: 'Partenaires',     icon: 'users',         href: path('app_social'),                 desc: 'Redevabilité et partages' },
+                            { label: 'Mes tests',       icon: 'sparkles',      href: path('app_personality_index'),      desc: 'Personnalité, dons, bilans' },
                             { label: 'Notre couple',    icon: 'heart',         href: path('app_couple'), desc: 'Vision et projets à deux' },
                             { label: 'Mon organisation', icon: 'building-2',  href: path('app_organisation_index'), desc: 'Église, association…' },
                             { label: 'La Méthode',      icon: 'book-open',     href: path('app_methode_index'), desc: 'Les chapitres du livre' },

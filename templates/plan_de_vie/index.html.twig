@@ -935,31 +935,27 @@
         <p class="hero-desc">
             Construisez un plan d'alignement personnel complet. Choisissez l'assistant pas à pas pour être guidé à chaque étape, ou modifiez librement chaque rubrique ci-dessous.
         </p>
-        <div class="hero-actions">
+        {# Une action principale ; le reste dans « Plus » (audit du 16/11/2026) #}
+        <div class="hero-actions" x-data="{ more: false }">
             <a href="{{ path('app_plan_wizard') }}" class="btn-hero-primary">
                 <i data-lucide="sparkles" style="width: 18px; height: 18px;"></i>
-                Lancer l'Assistant Guidé
+                Continuer avec l'assistant
             </a>
-            <a href="{{ path('app_plan_de_vie_visualize') }}" target="_blank" class="btn-hero-secondary">
-                <i data-lucide="printer" style="width: 18px; height: 18px;"></i>
-                Visualiser & Imprimer
-            </a>
-            <button id="dashboard-send-email" class="btn-hero-secondary">
-                <i data-lucide="mail" style="width: 18px; height: 18px;"></i>
-                M'envoyer par email
-            </button>
-            <button class="btn-hero-secondary tab-trigger" data-tab="map">
-                <i data-lucide="map" style="width: 18px; height: 18px;"></i>
-                Carte
-            </button>
             <button class="btn-hero-secondary tab-trigger" data-tab="analysis">
                 <i data-lucide="activity" style="width: 18px; height: 18px;"></i>
                 Analyse
             </button>
-            <button class="btn-hero-secondary" onclick="document.getElementById('rubrics-start').scrollIntoView({ behavior: 'smooth' })">
-                <i data-lucide="layout-grid" style="width: 18px; height: 18px;"></i>
-                Remplir par Rubrique
-            </button>
+            <div class="hero-more" @click.outside="more = false">
+                <button type="button" class="btn-hero-secondary" @click="more = !more" :aria-expanded="more">
+                    Plus <i data-lucide="chevron-down" style="width: 16px; height: 16px;"></i>
+                </button>
+                <div class="hero-more-menu" x-show="more" x-cloak x-transition>
+                    <a href="{{ path('app_plan_de_vie_visualize') }}" target="_blank" @click="more = false"><i data-lucide="printer"></i> Visualiser et imprimer</a>
+                    <button type="button" id="dashboard-send-email" @click="more = false"><i data-lucide="mail"></i> M'envoyer par email</button>
+                    <button type="button" class="tab-trigger" data-tab="map" @click="more = false"><i data-lucide="map"></i> Voir la carte</button>
+                    <button type="button" @click="more = false; document.getElementById('rubrics-start').scrollIntoView({ behavior: 'smooth' })"><i data-lucide="layout-grid"></i> Remplir par rubrique</button>
+                </div>
+            </div>
         </div>
     </header>
 

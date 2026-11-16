@@ -253,6 +253,15 @@
         document.querySelectorAll('[data-cur]').forEach(b => b.classList.toggle('on', b.dataset.cur === cur));
         ['EUR', 'XAF'].forEach(c => document.querySelectorAll('.price-' + c).forEach(el => el.hidden = c !== cur));
     }
+    // Devise par défaut : celle du serveur (langue du navigateur), sinon le fuseau horaire (zone CFA → francs CFA)
+    (function () {
+        let cur = {{ defaultCurrency|json_encode|raw }};
+        try {
+            const tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
+            if (cur === 'EUR' && {{ cfaTimezones|json_encode|raw }}.includes(tz)) { cur = 'XAF'; }
+        } catch (e) {}
+        if (cur !== 'EUR') { setCur(cur); }
+    })();
 </script>
 </body>
 </html>
