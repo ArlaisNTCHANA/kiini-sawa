@@ -30,8 +30,6 @@ class SeedPersonalityCommand extends Command
         $this->em->createQuery('DELETE FROM App\Personnalite\Entity\PersonalityQuestion')->execute();
         $this->em->createQuery('DELETE FROM App\Personnalite\Entity\PersonalityProfile')->execute();
 
-        $this->seedIntelligences($io);
-        $this->seedTalent($io);
         $this->seedEquilibre($io);
         $this->seedHygiene($io);
 
@@ -39,92 +37,6 @@ class SeedPersonalityCommand extends Command
         $io->success('Personality questions and profiles seeded successfully!');
 
         return Command::SUCCESS;
-    }
-
-    // ─────────────────────────────────────────────────────────────────────────
-    // INTELLIGENCES MULTIPLES
-    // ─────────────────────────────────────────────────────────────────────────
-    private function seedIntelligences(SymfonyStyle $io): void
-    {
-        $io->section('Intelligences Multiples Questions...');
-        $questions = [
-            ['J\'apprends mieux en lisant et en écrivant plutôt qu\'en regardant ou en faisant.', 'linguistique',
-                [['text' => 'Tout à fait', 'value' => '5'], ['text' => 'Souvent', 'value' => '4'], ['text' => 'Parfois', 'value' => '3'], ['text' => 'Rarement', 'value' => '2'], ['text' => 'Jamais', 'value' => '1']]],
-            ['Je pense souvent en nombres et en schémas logiques.', 'logique',
-                [['text' => 'Tout à fait', 'value' => '5'], ['text' => 'Souvent', 'value' => '4'], ['text' => 'Parfois', 'value' => '3'], ['text' => 'Rarement', 'value' => '2'], ['text' => 'Jamais', 'value' => '1']]],
-            ['Je visualise facilement les objets dans l\'espace.', 'spatiale',
-                [['text' => 'Tout à fait', 'value' => '5'], ['text' => 'Souvent', 'value' => '4'], ['text' => 'Parfois', 'value' => '3'], ['text' => 'Rarement', 'value' => '2'], ['text' => 'Jamais', 'value' => '1']]],
-            ['Je retiens facilement les mélodies et je remarque les sons environnants.', 'musicale',
-                [['text' => 'Tout à fait', 'value' => '5'], ['text' => 'Souvent', 'value' => '4'], ['text' => 'Parfois', 'value' => '3'], ['text' => 'Rarement', 'value' => '2'], ['text' => 'Jamais', 'value' => '1']]],
-            ['J\'apprends mieux en faisant — manipulation, sport, mouvement.', 'kinesthesique',
-                [['text' => 'Tout à fait', 'value' => '5'], ['text' => 'Souvent', 'value' => '4'], ['text' => 'Parfois', 'value' => '3'], ['text' => 'Rarement', 'value' => '2'], ['text' => 'Jamais', 'value' => '1']]],
-            ['Je suis sensible à la nature, aux animaux et à l\'environnement.', 'naturaliste',
-                [['text' => 'Tout à fait', 'value' => '5'], ['text' => 'Souvent', 'value' => '4'], ['text' => 'Parfois', 'value' => '3'], ['text' => 'Rarement', 'value' => '2'], ['text' => 'Jamais', 'value' => '1']]],
-            ['Je comprends facilement les motivations et les émotions des autres.', 'interpersonnelle',
-                [['text' => 'Tout à fait', 'value' => '5'], ['text' => 'Souvent', 'value' => '4'], ['text' => 'Parfois', 'value' => '3'], ['text' => 'Rarement', 'value' => '2'], ['text' => 'Jamais', 'value' => '1']]],
-            ['Je me connais très bien et je comprends ce qui me motive.', 'intrapersonnelle',
-                [['text' => 'Tout à fait', 'value' => '5'], ['text' => 'Souvent', 'value' => '4'], ['text' => 'Parfois', 'value' => '3'], ['text' => 'Rarement', 'value' => '2'], ['text' => 'Jamais', 'value' => '1']]],
-        ];
-
-        foreach ($questions as $i => [$text, $cat, $answers]) {
-            $q = (new PersonalityQuestion())->setTestType('INTELLIGENCES')->setCategory($cat)->setQuestion($text)->setSortOrder($i + 1);
-            $this->em->persist($q);
-            foreach ($answers as $j => $a) {
-                $ans = (new PersonalityAnswer())->setQuestion($q)->setText($a['text'])->setValue($a['value'])->setSortOrder($j);
-                $this->em->persist($ans);
-            }
-        }
-
-        $profiles = [
-            ['LINGUISTIQUE', 'Dominante Intelligence Linguistique', 'Sensibilité accrue aux mots, à la grammaire, au rythme des phrases et à la narration écrite et parlée.', 'Expression verbale, écriture, mémoire des mots, argumentation', 'Tendance à trop rationaliser ou sur-analyser verbalement', 'Amour profond des histoires, de la lecture et du débat d\'idées.', 'Clair, à l\'écoute des mots choisis, aime convaincre', 'Écriture, journalisme, enseignement, droit, traduction', 'Calme son mental en mettant ses pensées par écrit', 'Développer sa capacité d\'écoute non-verbale et observer le langage corporel.'],
-            ['LOGIQUE', 'Dominante Intelligence Logique', 'Capacité à analyser logiquement les problèmes, à résoudre des équations complexes et à raisonner scientifiquement.', 'Raisonnement abstrait, analyse de données, résolution de problèmes', 'Manque de patience face à l\'illogisme ou aux émotions irrationnelles', 'Recherche de la cause logique et de la vérité derrière chaque fait.', 'Factuel, rationnel, argumenté, cherche la cohérence', 'Ingénierie, finance, développement informatique, sciences exactes', 'Canalise ses ressentis sous forme d\'analyse structurelle', 'Apprendre à accueillir le flou, le non-rationnel et l\'expression émotionnelle.'],
-            ['SPATIALE', 'Dominante Intelligence Spatiale', 'Aptitude à se représenter mentalement l\'espace, à manipuler des images en trois dimensions et à s\'orienter.', 'Visualisation mentale, orientation géographique, conception graphique, créativité visuelle', 'Difficulté à expliquer verbalement des concepts visuels complexes', 'Penser en images et percevoir les architectures subtiles de l\'espace.', 'Préfère les supports visuels et les métaphores graphiques', 'Architecture, design, cartographie, arts plastiques, chirurgie', 'Se ressource en créant ou en modifiant son environnement visuel', 'Pratiquer la verbalisation méthodique de ses représentations intérieures.'],
-            ['MUSICALE', 'Dominante Intelligence Musicale', 'Sensibilité innée aux sons, au rythme, aux mélodies et à la structure harmonique de l\'environnement.', 'Sens du rythme, oreille musicale développée, expression par le son', 'Surcharge émotionnelle ou cognitive en milieu bruyant', 'Vibrer en harmonie avec les sons et ressentir l\'univers sur le plan acoustique.', 'Sensible aux intonations de voix, aux silences et à l\'harmonie sonore', 'Musique, composition, ingénierie du son, thérapie par l\'art', 'Régule ses humeurs et ses émotions par l\'écoute ou la pratique musicale', 'Intégrer le silence conscient et le repos acoustique dans sa journée.'],
-            ['KINESTHESIQUE', 'Dominante Intelligence Corporelle', 'Capacité à utiliser son corps pour exprimer des idées ou des sentiments, et habileté dans le travail manuel.', 'Coordination motrice, dextérité manuelle, mémoire corporelle physique', 'Besoin de bouger constamment, inconfort dans la passivité assise', 'Se connecter au monde et intégrer les concepts par le toucher et le mouvement.', 'Expressif physiquement, a besoin de proximité spatiale', 'Métiers manuels, chirurgie, sport, danse, artisanat d\'art', 'Régule son stress par le mouvement physique et le sport', 'Pratiquer la méditation de pleine conscience ancrée dans les sensations du corps.'],
-            ['NATURALISTE', 'Dominante Intelligence Naturaliste', 'Sensibilité forte à la nature, capacité à classifier les espèces et à comprendre les équilibres écologiques.', 'Observation fine, classification, patience, harmonie avec le vivant', 'Se sent étouffé ou stressé en milieu urbain dense et déconnecté', 'Recherche constante de communion et d\'immersion dans le monde vivant.', 'Simple, authentique, connecté aux besoins fondamentaux', 'Agriculture, écologie, biologie, métiers animaliers, herboristerie', 'Trouve l\'apaisement immédiat au contact des arbres et des espaces naturels', 'Apprendre à transposer la patience naturelle à la gestion des relations humaines.'],
-            ['INTERPERSONNELLE', 'Dominante Intelligence Interpersonnelle', 'Capacité à comprendre les autres, à percevoir leurs intentions, leurs émotions et à interagir avec fluidité.', 'Empathie active, leadership bienveillant, communication, médiation de conflits', 'Tendance à s\'oublier au profit du groupe ou à être influencé', 'Créer de l\'harmonie, du lien et de l\'unité entre les individus.', 'Chaleureux, diplomate, à l\'écoute des besoins profonds d\'autrui', 'Ressources humaines, psychologie, vente, éducation, management', 'S\'apaise en échangeant avec ses pairs et en aidant autrui', 'Se réserver des moments de solitude pour se reconnecter à son propre centre.'],
-            ['INTRAPERSONNELLE', 'Dominante Intelligence Intrapersonnelle', 'Connaissance approfondie de soi-même, de ses forces, de ses limites, de ses valeurs et de ses motivations.', 'Autonomie décisionnelle, introspection, alignement de valeurs, résilience', 'Tendance à l\'isolement ou au repli sur soi en cas de crise', 'Vivre en parfaite cohérence avec son intériorité profonde.', 'Indépendant, sincère, peu enclin aux artifices sociaux', 'Philosophie, psychologie, recherche, entrepreneuriat individuel', 'Gère les crises en s\'isolant pour analyser ses émotions en profondeur', 'S\'ouvrir davantage aux partages authentiques avec son entourage proche.']
-        ];
-
-        foreach ($profiles as [$code, $title, $desc, $strengths, $weaknesses, $essence, $relationships, $career, $emotionalDynamics, $growthAxes]) {
-            $p = (new PersonalityProfile())
-                ->setTestType('INTELLIGENCES')->setCode($code)->setTitle($title)
-                ->setDescription($desc)->setStrengths($strengths)->setWeaknesses($weaknesses)
-                ->setEssence($essence)->setRelationships($relationships)->setCareer($career)
-                ->setEmotionalDynamics($emotionalDynamics)->setGrowthAxes($growthAxes);
-            $this->em->persist($p);
-        }
-    }
-
-    // ─────────────────────────────────────────────────────────────────────────
-    // TALENT
-    // ─────────────────────────────────────────────────────────────────────────
-    private function seedTalent(SymfonyStyle $io): void
-    {
-        $io->section('Talent Questions...');
-        $questions = [
-            ['Quand vous démarrez quelque chose de nouveau, vous le faites naturellement et sans effort.', 'spontane',
-                [['text' => 'Tout à fait — cela coule de source', 'value' => '5'], ['text' => 'Souvent', 'value' => '4'], ['text' => 'Parfois', 'value' => '3'], ['text' => 'Rarement', 'value' => '2'], ['text' => 'Jamais', 'value' => '1']]],
-            ['Sous pression, vous trouvez des solutions créatives rapidement.', 'pression',
-                [['text' => 'Tout à fait', 'value' => '5'], ['text' => 'Souvent', 'value' => '4'], ['text' => 'Parfois', 'value' => '3'], ['text' => 'Rarement', 'value' => '2'], ['text' => 'Jamais', 'value' => '1']]],
-            ['Certaines activités vous donnent de l\'énergie même après des heures de travail.', 'plaisir',
-                [['text' => 'Oui, clairement', 'value' => '5'], ['text' => 'Souvent', 'value' => '4'], ['text' => 'Parfois', 'value' => '3'], ['text' => 'Rarement', 'value' => '2'], ['text' => 'Rarement ou jamais', 'value' => '1']]],
-            ['Vos proches vous font souvent remarquer que vous êtes particulièrement doué pour quelque chose.', 'spontane',
-                [['text' => 'Souvent et sur plusieurs points', 'value' => '5'], ['text' => 'Quelquefois', 'value' => '3'], ['text' => 'Rarement', 'value' => '1']]],
-            ['Quand tout semble s\'effondrer autour de vous, vous restez centré et efficace.', 'pression',
-                [['text' => 'Toujours — la pression me libère', 'value' => '5'], ['text' => 'Souvent', 'value' => '4'], ['text' => 'Parfois', 'value' => '3'], ['text' => 'Rarement', 'value' => '2'], ['text' => 'Je me décompose sous la pression', 'value' => '1']]],
-            ['Il y a des domaines où vous entrez dans un état de "flow" total.', 'plaisir',
-                [['text' => 'Oui, régulièrement', 'value' => '5'], ['text' => 'Parfois', 'value' => '3'], ['text' => 'Très rarement', 'value' => '1']]],
-        ];
-
-        foreach ($questions as $i => [$text, $cat, $answers]) {
-            $q = (new PersonalityQuestion())->setTestType('TALENT')->setCategory($cat)->setQuestion($text)->setSortOrder($i + 1);
-            $this->em->persist($q);
-            foreach ($answers as $j => $a) {
-                $ans = (new PersonalityAnswer())->setQuestion($q)->setText($a['text'])->setValue($a['value'])->setSortOrder($j);
-                $this->em->persist($ans);
-            }
-        }
     }
 
     // ─────────────────────────────────────────────────────────────────────────

@@ -16,13 +16,18 @@ use Symfony\Component\Routing\Attribute\Route;
 class PersonalityController extends AbstractController
 {
     /** Anciens tests courts remplacés par les questionnaires psychométriques (AssessmentController). */
-    private const REPLACED = ['MBTI' => 'type', 'DISC' => 'style', 'ENNEAGRAMME' => 'enneagramme', 'BIG5' => 'profil-complet'];
+    private const REPLACED = ['MBTI' => 'type', 'DISC' => 'style', 'ENNEAGRAMME' => 'enneagramme', 'ENNEAGRAM' => 'enneagramme', 'BIG5' => 'profil-complet', 'DONS' => 'dons-spirituels'];
+
+    /** Questionnaires où l'on cherche le dernier rapport d'un ancien type (le profil complet couvre type, style et Big Five). */
+    private const REPORT_SOURCES = ['MBTI' => ['type', 'profil-complet'], 'DISC' => ['style', 'profil-complet'], 'BIG5' => ['profil-complet', 'big-five'],
+        'ENNEAGRAMME' => ['enneagramme'], 'ENNEAGRAM' => ['enneagramme'], 'DONS' => ['dons-spirituels']];
+
+    /** Tests retirés (trop peu de questions pour un résultat fiable) : leurs anciennes adresses ramènent au catalogue. */
+    private const REMOVED = ['INTELLIGENCES', 'TALENT'];
 
     private const TESTS = [
-        'INTELLIGENCES' => ['name' => 'Intelligences Multiples', 'subtitle' => 'Théorie de Gardner', 'description' => 'Identifiez vos 8 formes d\'intelligence dominantes.', 'color' => '#06b6d4', 'bg' => '#ecfeff', 'icon' => 'compass', 'questions' => 8],
-        'TALENT'        => ['name' => 'Architecture des Talents', 'subtitle' => 'Zones de Génie', 'description' => 'Diagnostiquer vos zones de génie naturel, sous pression et de plaisir.', 'color' => '#f97316', 'bg' => '#fff7ed', 'icon' => 'star', 'questions' => 6],
-        'EQUILIBRE'     => ['name' => 'Équilibre de Vie', 'subtitle' => 'Roue de la vie', 'description' => 'Mesurez vos 8 domaines de vie et identifiez les zones à rééquilibrer.', 'color' => '#3b82f6', 'bg' => '#eff6ff', 'icon' => 'activity', 'questions' => 8],
-        'HYGIENE'       => ['name' => 'Hygiène de Vie', 'subtitle' => '6 Axes Vitaux', 'description' => 'Audit en 6 axes (physique, mental, relationnel, spirituel, ressources, environnement).', 'color' => '#ec4899', 'bg' => '#fdf2f8', 'icon' => 'heart', 'questions' => 30],
+        'EQUILIBRE'     => ['name' => 'Équilibre de Vie', 'subtitle' => 'Roue de la vie', 'description' => 'Mesurez vos 8 domaines de vie et identifiez les zones à rééquilibrer.', 'color' => '#3b82f6', 'bg' => '#eff6ff', 'icon' => 'activity', 'questions' => 8, 'level' => 'Auto-évaluation'],
+        'HYGIENE'       => ['name' => 'Hygiène de Vie', 'subtitle' => '6 Axes Vitaux', 'description' => 'Audit en 6 axes (physique, mental, relationnel, spirituel, ressources, environnement).', 'color' => '#ec4899', 'bg' => '#fdf2f8', 'icon' => 'heart', 'questions' => 30, 'level' => 'Auto-évaluation'],
     ];
 
     public function __construct(
@@ -66,6 +71,8 @@ class PersonalityController extends AbstractController
             'tests'       => self::TESTS,
             'latestTests' => $latestByType,
             'instruments' => \App\Personnalite\Psychometrie\Instruments::CATALOG,
+            'groups'      => \App\Personnalite\Psychometrie\Instruments::GROUPS,
+            'levels'      => \App\Personnalite\Psychometrie\Instruments::LEVELS,
             'assessments' => $assessments,
         ]);
     }
@@ -79,6 +86,9 @@ class PersonalityController extends AbstractController
         $type = strtoupper($type);
         if (isset(self::REPLACED[$type])) {
             return $this->redirectToRoute('app_assessment_take', ['slug' => self::REPLACED[$type]], 301);
+        }
+        if (\in_array($type, self::REMOVED, true)) {
+            return $this->redirectToRoute('app_personality_index', [], 301);
         }
         if (!isset(self::TESTS[$type])) {
             throw $this->createNotFoundException("Test inconnu : $type");
@@ -150,6 +160,18 @@ class PersonalityController extends AbstractController
     public function result(string $type): Response
     {
         $type = strtoupper($type);
+        if (isset(self::REPORT_SOURCES[$type]) && ($user = $this->getUser()) instanceof \App\Compte\Entity\User) {
+            foreach ($this->assessments->findForUser($user) as $a) {
+                if (\in_array($a->getInstrument(), self::REPORT_SOURCES[$type], true)) {
+                    return $this->redirectToRoute('app_assessment_report', ['id' => $a->getId()]);
+                }
+            }
+
+            return $this->redirectToRoute('app_assessment_take', ['slug' => self::REPLACED[$type]]);
+        }
+        if (\in_array($type, self::REMOVED, true)) {
+            return $this->redirectToRoute('app_personality_index', [], 301);
+        }
         if (!isset(self::TESTS[$type])) {
             throw $this->createNotFoundException("Test inconnu : $type");
         }

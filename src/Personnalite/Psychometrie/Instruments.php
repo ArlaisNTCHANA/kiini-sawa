@@ -26,30 +26,47 @@ final class Instruments
         'C' => ['C2', 'C6', 'C3'],
     ];
 
+    /**
+     * Niveaux de fiabilité : une seule mention par test, expliquée dans la légende du catalogue.
+     */
+    public const LEVELS = [
+        'Questionnaire scientifique' => 'Questions et échelles validées par la recherche ; leur fiabilité est mesurée.',
+        'Issu d\'un questionnaire scientifique' => 'Questions validées ; le classement en types ou en styles en est une lecture simplifiée.',
+        'Outil d\'introspection' => 'Pour réfléchir à vos motivations ; à confirmer par l\'expérience et le regard de vos proches.',
+        'Outil de discernement' => 'À confirmer dans le service, la prière et le regard de votre communauté.',
+        'Auto-évaluation' => 'Votre propre regard sur votre situation aujourd\'hui ; à refaire régulièrement pour mesurer le chemin.',
+    ];
+
+    /** Regroupement du catalogue. */
+    public const GROUPS = [
+        'Personnalité' => ['profil-complet', 'big-five', 'type', 'style'],
+        'Motivations et dons' => ['enneagramme', 'dons-spirituels'],
+    ];
+
     public const CATALOG = [
         'profil-complet' => [
             'name' => 'Profil complet', 'subtitle' => 'Big Five en 29 facettes, type et style',
             'description' => 'Le questionnaire de référence (IPIP-NEO, domaine public, utilisé en recherche). Il produit votre Big Five détaillé, votre type de fonctionnement et votre style comportemental.',
             'bank' => 'ipip', 'facets' => 'all', 'perFacet' => 4, 'minutes' => 15,
-            'icon' => 'layers', 'color' => '#0F766E', 'bg' => '#F0FDFA', 'level' => 'Validé scientifiquement',
+            'icon' => 'layers', 'color' => '#0F766E', 'bg' => '#F0FDFA', 'level' => 'Questionnaire scientifique',
         ],
         'big-five' => [
             'name' => 'Big Five essentiel', 'subtitle' => 'Les 5 grandes dimensions',
             'description' => 'Version courte du profil (2 questions par facette) : vos 5 grandes dimensions de personnalité.',
             'bank' => 'ipip', 'facets' => 'all', 'perFacet' => 2, 'minutes' => 8,
-            'icon' => 'sparkles', 'color' => '#10B981', 'bg' => '#ECFDF5', 'level' => 'Validé scientifiquement',
+            'icon' => 'sparkles', 'color' => '#10B981', 'bg' => '#ECFDF5', 'level' => 'Questionnaire scientifique',
         ],
         'type' => [
             'name' => 'Type de fonctionnement', 'subtitle' => '16 types, approche de Carl Jung',
             'description' => 'Comment vous puisez votre énergie, percevez, décidez et vous organisez. Inspiré de la typologie de Jung (popularisée par le MBTI®, sans affiliation).',
             'bank' => 'ipip', 'facets' => ['E1', 'E2', 'E6', 'O1', 'O4', 'O5', 'A3', 'A6', 'O3', 'C2', 'C5', 'C6'], 'perFacet' => 4, 'minutes' => 7,
-            'icon' => 'brain', 'color' => '#6366F1', 'bg' => '#EEF2FF', 'level' => 'Questions validées',
+            'icon' => 'brain', 'color' => '#6366F1', 'bg' => '#EEF2FF', 'level' => 'Issu d\'un questionnaire scientifique',
         ],
         'style' => [
             'name' => 'Style comportemental', 'subtitle' => '4 styles : Meneur, Rayonnant, Constant, Méthodique',
             'description' => 'Votre manière d\'agir et de communiquer, d\'après le modèle DISC de William Marston (1928). Idéal pour mieux travailler en équipe et en couple.',
             'bank' => 'ipip', 'facets' => ['E3', 'E4', 'A4', 'A5', 'E1', 'E2', 'E6', 'E5', 'A1', 'N2', 'C2', 'C6', 'C3'], 'perFacet' => 4, 'minutes' => 7,
-            'icon' => 'zap', 'color' => '#F43F5E', 'bg' => '#FFF1F2', 'level' => 'Questions validées',
+            'icon' => 'zap', 'color' => '#F43F5E', 'bg' => '#FFF1F2', 'level' => 'Issu d\'un questionnaire scientifique',
         ],
         'enneagramme' => [
             'name' => 'Ennéagramme', 'subtitle' => '9 motivations profondes',
