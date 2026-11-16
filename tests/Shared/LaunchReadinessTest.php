@@ -60,21 +60,24 @@ class LaunchReadinessTest extends WebTestCase
         $this->assertStringContainsString('[À COMPLÉTER]', $tester->getDisplay());
     }
 
-    /** Fichiers de déploiement Clever Cloud : présents, exécutables, valides. */
-    public function testCleverCloudDeploymentFiles(): void
+    /** Fichiers de déploiement (Hostinger) : présents, exécutables, sans secret versionné. */
+    public function testDeploymentFiles(): void
     {
         $root = \dirname(__DIR__, 2);
-        foreach (['clevercloud/post_build.sh', 'clevercloud/cron_reminders.sh', 'bin/ops/sauvegarde.sh'] as $script) {
+        foreach (['bin/ops/mise-a-jour.sh', 'bin/ops/envoyer-hostinger.sh', 'bin/ops/sauvegarde.sh'] as $script) {
             $this->assertFileExists($root.'/'.$script);
             $this->assertTrue(is_executable($root.'/'.$script), $script.' doit être exécutable');
         }
-        $cron = json_decode((string) file_get_contents($root.'/clevercloud/cron.json'), true, flags: \JSON_THROW_ON_ERROR);
-        $this->assertContains('CRON_TZ=Europe/Paris', $cron);
-        $this->assertStringContainsString('doctrine:migrations:migrate', (string) file_get_contents($root.'/clevercloud/post_build.sh'));
+        $update = (string) file_get_contents($root.'/bin/ops/mise-a-jour.sh');
+        foreach (['dump-env prod', 'doctrine:migrations:migrate', 'asset-map:compile', 'tailwind:build'] as $step) {
+            $this->assertStringContainsString($step, $update);
+        }
         $this->assertFileExists($root.'/public/.htaccess');
+        $this->assertFileExists($root.'/bin/ops/env.prod.local.exemple');
 
         $envProd = (string) file_get_contents($root.'/.env.prod');
-        $this->assertStringContainsString('MYSQL_ADDON_HOST', $envProd);
-        $this->assertDoesNotMatchRegularExpression('/^APP_SECRET=./m', $envProd, 'Aucun secret dans .env.prod (fichier versionné)');
+        $this->assertStringContainsString('MESSENGER_TRANSPORT_DSN=sync://', $envProd, 'Pas de worker permanent en mutualisé');
+        $this->assertDoesNotMatchRegularExpression('/^(APP_SECRET|DATABASE_URL|MAILER_DSN)=./m', $envProd, 'Aucun secret dans .env.prod (fichier versionné)');
+        $this->assertStringContainsString('/bin/ops/hostinger.local', (string) file_get_contents($root.'/.gitignore'));
     }
 }

@@ -8,12 +8,14 @@ Ce guide décrit la mise en ligne de la version web (Symfony). Le contrôle
 | Décision | Recommandation | Pourquoi |
 |---|---|---|
 | **Société** | Immatriculer la structure qui encaisse | Obligatoire pour les mentions légales, les reçus puis les factures, et plus tard le paiement par carte ou Mobile Money automatique. |
-| **Hébergement** | **Retenu : Clever Cloud** (section 3). Sinon, un hébergeur en Europe, avec PHP 8.4 ou plus, MySQL 8 et tâches planifiées : une plateforme managée (ex. Clever Cloud, Platform.sh) ou un serveur privé (ex. OVHcloud, Scaleway, Hetzner, Infomaniak) | Données en Europe (RGPD). La plateforme managée évite d'administrer un serveur. |
+| **Hébergement** | **Retenu : Hostinger Business Web Hosting** (section 3). Sinon, un hébergeur en Europe, avec PHP 8.4 ou plus, MySQL 8 et tâches planifiées : une plateforme managée (ex. Clever Cloud, Platform.sh) ou un serveur privé (ex. OVHcloud, Scaleway, Hetzner, Infomaniak) | Données en Europe (RGPD). La plateforme managée évite d'administrer un serveur. |
 | **Nom de domaine** | Ex. `kiinisawa.com` pour la présentation et `app.kiinisawa.com` pour l'application | Le domaine sert aussi à l'adresse d'envoi des emails. |
 | **Envoi d'emails** | Un fournisseur transactionnel européen (ex. Brevo, Mailjet) ou Postmark | Codes de vérification, mots de passe oubliés, rappels, reçus : indispensable dès le premier jour. |
 | **Paiements** | Renseigner virement et/ou Mobile Money dans l'administration | Sinon le paiement reste masqué. |
 
 ## 2. Variables d'environnement (serveur)
+
+Sur Hostinger, elles vont dans le fichier `.env.prod.local` du serveur (modèle : `bin/ops/env.prod.local.exemple`).
 
 | Variable | Exemple | Rôle |
 |---|---|---|
@@ -21,85 +23,123 @@ Ce guide décrit la mise en ligne de la version web (Symfony). Le contrôle
 | `APP_DEBUG` | `0` | Pas d'outils de débogage. |
 | `APP_SECRET` | 64 caractères aléatoires | `php -r "echo bin2hex(random_bytes(32));"`. Ne jamais la partager. |
 | `DEFAULT_URI` | `https://app.kiinisawa.com` | Liens absolus dans les emails et les tâches planifiées. |
-| `DATABASE_URL` | `mysql://user:motdepasse@hote:3306/kiini?serverVersion=8.4.0&charset=utf8mb4` | Base de données (automatique sur Clever Cloud). |
+| `DATABASE_URL` | `mysql://user:motdepasse@hote:3306/kiini?serverVersion=8.4.0&charset=utf8mb4` | Base de données. Sur MariaDB : `serverVersion=11.8.2-MariaDB` (la version réelle). |
 | `MAILER_DSN` | fourni par le prestataire d'emails | Envoi des emails. |
 | `MAILER_FROM` | `"KIINI SAWA <bonjour@kiinisawa.com>"` | Expéditeur (domaine vérifié chez le prestataire : SPF, DKIM). |
-| `MESSENGER_TRANSPORT_DSN` | `doctrine://default?auto_setup=0` | File d'attente des emails. |
+| `MESSENGER_TRANSPORT_DSN` | `sync://` en mutualisé, `doctrine://default?auto_setup=0` avec un worker | Envoi immédiat, ou file d'attente des emails. |
 | `TRUSTED_PROXIES` | adresse du proxy de l'hébergeur, ou `REMOTE_ADDR` | Reconnaissance de HTTPS et des vraies adresses IP. |
 
-## 3. Hébergement retenu : Clever Cloud (pas à pas)
+## 3. Hébergement retenu : Hostinger Business Web Hosting (pas à pas)
 
-Plateforme managée française (données en France) : pas de serveur à administrer, HTTPS automatique,
-redémarrage automatique. Tout est déjà préparé dans le projet :
+Hébergement mutualisé géré depuis hPanel : pas de serveur à administrer, HTTPS gratuit,
+sauvegardes quotidiennes. Choisir un **centre de données en Europe** (France ou Pays-Bas) pour le RGPD.
+
+Tout est préparé dans le projet :
 
 | Fichier | Rôle |
 |---|---|
-| `clevercloud/post_build.sh` | Après chaque déploiement : assets, cache, migrations de la base. |
-| `clevercloud/cron.json` + `cron_reminders.sh` | Rappels chaque jour à 8 h (heure de Paris). |
-| `.env.prod` | Construit `DATABASE_URL` à partir de l'add-on MySQL ; proxys de confiance. |
-| `public/.htaccess` | Routage Apache vers l'application. |
-| Sessions en base (table `sessions`) | Les utilisateurs restent connectés après un déploiement. |
+| `bin/ops/envoyer-hostinger.sh` | Depuis votre ordinateur : envoie le code puis lance la mise à jour sur le serveur. |
+| `bin/ops/mise-a-jour.sh` | Sur le serveur : dépendances, assets, migrations, cache. |
+| `bin/ops/env.prod.local.exemple` | Modèle du fichier de secrets du serveur (`.env.prod.local`). |
+| `.env.prod` | Réglages de production sans secret : emails envoyés immédiatement (pas de worker possible en mutualisé). |
+| `public/.htaccess` | Routage vers l'application (LiteSpeed lit ce fichier). |
+| Sessions en base (table `sessions`) | Les utilisateurs restent connectés après une mise à jour. |
 
-### 3.1 Ce que vous faites une seule fois
+### 3.1 Dans hPanel (une seule fois)
 
-1. **Créer le compte** sur clever-cloud.com (vous-même) et ajouter un moyen de paiement.
-2. **Installer l'outil en ligne de commande** puis vous connecter :
-   ```bash
-   npm install -g clever-tools
-   clever login
-   ```
-3. **Créer l'application et la base**, depuis le dossier `web/` :
-   ```bash
-   clever create --type php kiini-sawa --region par
-   clever addon create mysql-addon kiini-sawa-db --plan xs_sml --region par --link kiini-sawa
-   ```
-   Le plan `xs_sml` (dédié) inclut une **sauvegarde quotidienne** conservée 7 jours. Le plan `dev`
-   (gratuit) est réservé aux essais : pas de sauvegarde, ne jamais y mettre de vrais utilisateurs.
-   Les noms exacts des plans et la cible DNS sont donnés par `clever addon providers show mysql-addon`
-   et par la console Clever Cloud (onglet « Domain names ») : ils priment sur ce guide.
-4. **Variables d'environnement** :
-   ```bash
-   clever env set CC_PHP_VERSION 8.5
-   clever env set CC_WEBROOT /public
-   clever env set CC_POST_BUILD_HOOK ./clevercloud/post_build.sh
-   clever env set CC_WORKER_COMMAND "php bin/console messenger:consume async --time-limit=3600 --memory-limit=128M"
-   clever env set CC_WORKER_RESTART always
-   clever env set APP_ENV prod
-   clever env set APP_DEBUG 0
-   clever env set APP_SECRET "$(openssl rand -hex 32)"
-   clever env set DEFAULT_URI https://app.kiinisawa.com
-   clever env set MAILER_DSN "…fourni par le prestataire d'emails…"
-   clever env set MAILER_FROM "KIINI SAWA <bonjour@kiinisawa.com>"
-   ```
-   Vérifier que les variables de l'add-on (`MYSQL_ADDON_HOST`, `MYSQL_ADDON_DB`…) apparaissent bien
-   avec `clever env`. Si leurs noms diffèrent, définir directement `DATABASE_URL`
-   (`mysql://utilisateur:motdepasse@hote:port/base?serverVersion=8.4.0&charset=utf8mb4`).
-5. **Premier déploiement** (le code doit être commité) :
-   ```bash
-   clever deploy
-   clever logs          # suivre la construction
-   ```
-6. **Créer le compte administrateur** (le mot de passe est demandé sans être affiché) :
-   ```bash
-   clever ssh
-   cd $APP_HOME && php bin/console app:install --admin-email=vous@domaine.com
-   php bin/console app:launch:check
-   ```
-7. **Nom de domaine** : `clever domain add app.kiinisawa.com`, puis chez le registraire un
-   enregistrement CNAME `app` vers `domain.par.clever-cloud.com.` Le certificat HTTPS est automatique.
-8. **Surveillance** : faire vérifier `https://app.kiinisawa.com/sante` toutes les 5 minutes (UptimeRobot, Better Stack).
+1. **Site web** : ajouter le domaine (ou un sous-domaine, ex. `app.kiinisawa.com`).
+2. **Avancé › Configuration PHP** : choisir **PHP 8.4** (ou plus) ; vérifier que `intl`, `pdo_mysql`, `gd`,
+   `zip`, `mbstring` sont cochées ; `memory_limit` à 256M au moins.
+3. **Bases de données › MySQL** : créer la base et son utilisateur. Noter le nom, l'utilisateur, le mot de passe.
+   Dans phpMyAdmin, onglet « Serveur », relever la **version** (ex. `11.8.2-MariaDB`).
+4. **Avancé › Accès SSH** : activer SSH, noter l'utilisateur (`u123456789`), l'adresse IP et le port (souvent 65002).
+   Ajouter votre clé SSH publique (`cat ~/.ssh/id_ed25519.pub` sur votre Mac ; sinon `ssh-keygen -t ed25519`).
+5. **Sécurité › SSL** : installer le certificat gratuit puis activer « Forcer HTTPS ».
+6. Ne pas activer le CDN Hostinger au début (il faudrait alors changer `TRUSTED_PROXIES`).
 
-### 3.2 Mettre à jour une version en ligne
+### 3.2 Sur le serveur, par SSH (une seule fois)
+
+```bash
+ssh -p 65002 u123456789@IP
+cd domains/app.kiinisawa.com
+mkdir kiini
+```
+
+Créer les secrets à partir du modèle (après le premier envoi, étape 3.3) :
+
+```bash
+cd ~/domains/app.kiinisawa.com/kiini
+cp bin/ops/env.prod.local.exemple .env.prod.local
+nano .env.prod.local     # APP_SECRET, DEFAULT_URI, DATABASE_URL (avec la version relevée), MAILER_DSN
+```
+
+Faire servir le dossier `public/` du projet à la place de `public_html` :
+
+```bash
+cd ~/domains/app.kiinisawa.com
+mv public_html public_html.origine
+ln -s kiini/public public_html
+```
+
+Si ce lien n'est pas accepté, demander au support Hostinger de pointer la racine du site vers `kiini/public`.
+
+### 3.3 Depuis votre ordinateur : premier envoi
+
+Dans le dossier `web/`, créer `bin/ops/hostinger.local` (jamais versionné) :
+
+```bash
+HOSTINGER_SSH="u123456789@IP"
+HOSTINGER_PORT=65002
+HOSTINGER_DIR="domains/app.kiinisawa.com/kiini"
+HOSTINGER_PHP=""        # si « php » n'est pas en 8.4 : /opt/alt/php84/usr/bin/php
+```
+
+Puis :
+
+```bash
+bin/ops/envoyer-hostinger.sh
+```
+
+Le premier envoi s'arrête en demandant `.env.prod.local` : le créer (étape 3.2) puis relancer.
+Ensuite, sur le serveur, créer le compte administrateur (mot de passe demandé sans être affiché) :
+
+```bash
+cd ~/domains/app.kiinisawa.com/kiini
+php bin/console app:install --admin-email=vous@domaine.com
+php bin/console doctrine:schema:validate
+php bin/console app:launch:check
+```
+
+`doctrine:schema:validate` confirme que la base MariaDB d'Hostinger correspond bien au modèle.
+
+### 3.4 Tâches planifiées (hPanel › Avancé › Tâches Cron)
+
+| Quoi | Commande | Fréquence |
+|---|---|---|
+| Rappels du jour | `cd ~/domains/app.kiinisawa.com/kiini && php bin/console app:reminders:send` | Chaque jour à 8 h (vérifier le fuseau horaire affiché par hPanel) |
+| Sauvegarde supplémentaire (30 jours) | `cd ~/domains/app.kiinisawa.com/kiini && bin/ops/sauvegarde.sh ~/sauvegardes` | Chaque nuit à 3 h |
+
+Hostinger fait déjà une sauvegarde quotidienne (hPanel › Fichiers › Sauvegardes). Télécharger aussi
+régulièrement une copie sur votre ordinateur : une sauvegarde chez le même hébergeur ne protège pas de tout.
+
+### 3.5 Mettre à jour une version en ligne
 
 ```bash
 git commit -am "…"
-clever deploy
+bin/ops/envoyer-hostinger.sh
 ```
 
-Les migrations s'appliquent toutes seules ; le worker d'envoi des emails redémarre avec le nouveau code.
-En cas de souci : `clever restart --commit <commit-précédent>` revient à la version précédente.
+Les migrations s'appliquent toutes seules. Avant une mise à jour qui contient des migrations, lancer
+d'abord la sauvegarde (`bin/ops/sauvegarde.sh ~/sauvegardes` sur le serveur).
 
-## 4. Autre hébergeur : déploiement manuel (première fois)
+### 3.6 Si quelque chose ne va pas
+
+- **Page blanche ou erreur 500** : hPanel › Avancé › Journaux d'erreurs, ou `tail ~/domains/app.kiinisawa.com/kiini/var/log/*`.
+- **Formulaires refusés après connexion** (HTTPS mal reconnu) : mettre `TRUSTED_PROXIES=REMOTE_ADDR` dans `.env.prod.local`, puis relancer `bin/ops/mise-a-jour.sh`.
+- **Emails** : ils partent pendant la requête ; si le fournisseur est en panne, l'action échoue avec un message d'erreur. Vérifier `MAILER_DSN` et le tableau de bord du fournisseur.
+- **Quand le trafic grandira** : passer à un VPS (sections 4 à 6) pour avoir un worker d'envoi permanent et plus de puissance.
+
+## 4. VPS ou serveur dédié : déploiement manuel (première fois)
 
 ```bash
 composer install --no-dev --optimize-autoloader
@@ -113,7 +153,7 @@ php bin/console app:launch:check
 
 Le serveur web doit servir le dossier `public/` en HTTPS (certificat Let's Encrypt, souvent automatique chez l'hébergeur).
 
-## 5. Processus permanents et tâches planifiées (hors Clever Cloud)
+## 5. Processus permanents et tâches planifiées (VPS ou serveur dédié)
 
 | Quoi | Commande | Fréquence |
 |---|---|---|
@@ -145,7 +185,7 @@ User=www-data
 WantedBy=multi-user.target
 ```
 
-## 6. Mettre à jour une version déjà en ligne (hors Clever Cloud)
+## 6. Mettre à jour une version déjà en ligne (VPS ou serveur dédié)
 
 ```bash
 git pull

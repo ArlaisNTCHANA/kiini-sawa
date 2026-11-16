@@ -29,6 +29,8 @@ when@prod:
     framework:
         session:
             handler_id: Symfony\Component\HttpFoundation\Session\Storage\Handler\PdoSessionHandler
+            # Nettoyage des sessions expirées (environ 1 requête sur 100), souvent désactivé chez les hébergeurs.
+            gc_probability: 1
 
     services:
         Symfony\Component\HttpFoundation\Session\Storage\Handler\PdoSessionHandler:

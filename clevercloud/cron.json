@@ -1,4 +1,0 @@
-[
-  "CRON_TZ=Europe/Paris",
-  "0 8 * * * $ROOT/clevercloud/cron_reminders.sh"
-]

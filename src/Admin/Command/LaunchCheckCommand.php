@@ -78,7 +78,8 @@ class LaunchCheckCommand extends Command
         $from = $env('MAILER_FROM');
         $check('Expéditeur des emails (MAILER_FROM)', '' !== $from, 'Définir MAILER_FROM avec une adresse de votre domaine, vérifiée chez le fournisseur.', false);
         $transport = $env('MESSENGER_TRANSPORT_DSN');
-        $check('File d\'envoi des emails', '' !== $transport && !str_starts_with($transport, 'sync://'), 'Garder MESSENGER_TRANSPORT_DSN=doctrine://default et lancer le worker : php bin/console messenger:consume async', false);
+        // sync:// (envoi immédiat) convient à un hébergement mutualisé ; doctrine:// demande un worker permanent.
+        $check('Mode d\'envoi des emails (MESSENGER_TRANSPORT_DSN)', '' !== $transport, 'sync:// sur un hébergement mutualisé, ou doctrine://default avec le worker : php bin/console messenger:consume async', false);
 
         // Tâches planifiées
         $lastRun = $this->cacheApp->getItem('reminders_last_run')->get();

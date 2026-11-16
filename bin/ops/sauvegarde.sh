@@ -8,6 +8,10 @@ DEST="${1:-./sauvegardes}"
 mkdir -p "$DEST"
 
 # Décompose DATABASE_URL (mysql://utilisateur:motdepasse@hote:port/base?options)
+# Sur l'hébergement, l'adresse est lue dans la configuration compilée (.env.local.php).
+if [[ -z "${DATABASE_URL:-}" && -f "$(dirname "$0")/../../.env.local.php" ]]; then
+  DATABASE_URL="$(php -r 'echo (require $argv[1])["DATABASE_URL"] ?? "";' "$(dirname "$0")/../../.env.local.php")"
+fi
 url="${DATABASE_URL:?DATABASE_URL manquante}"
 proto_removed="${url#*://}"
 creds="${proto_removed%%@*}"
