@@ -6,12 +6,12 @@
 <style>
     .as-wrap { max-width: 760px; margin: 0 auto; padding: 2rem 1.25rem 8rem; }
     .as-progress { position: sticky; top: 0; z-index: 5; background: var(--bg); padding: .75rem 0; }
-    .as-bar { height: 6px; background: #E2E8F0; border-radius: 6px; overflow: hidden; }
+    .as-bar { height: 6px; background: var(--border); border-radius: 6px; overflow: hidden; }
     .as-bar span { display: block; height: 100%; background: {{ def.color }}; transition: width .3s; }
     .as-q { background: var(--card-bg); border-radius: var(--r-lg); box-shadow: var(--card-shadow); padding: 1.1rem 1.25rem; margin-bottom: .75rem; }
     .as-q p { font-weight: 600; margin-bottom: .75rem; color: var(--fg); }
     .as-scale { display: grid; grid-template-columns: repeat(5, 1fr); gap: .35rem; }
-    .as-scale label { text-align: center; font-size: .72rem; line-height: 1.2; padding: .55rem .2rem; border: 1.5px solid #E2E8F0; border-radius: .7rem; cursor: pointer; color: var(--fg-light); }
+    .as-scale label { text-align: center; font-size: .72rem; line-height: 1.2; padding: .55rem .2rem; border: 1.5px solid var(--border); border-radius: .7rem; cursor: pointer; color: var(--fg-light); }
     .as-scale input { position: absolute; opacity: 0; pointer-events: none; }
     .as-scale label:has(input:checked) { background: {{ def.color }}; border-color: {{ def.color }}; color: #fff; font-weight: 700; }
     .as-scale label:has(input:focus-visible) { outline: 2px solid {{ def.color }}; outline-offset: 2px; }

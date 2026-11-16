@@ -12,6 +12,15 @@
         flex-direction: column;
         gap: 2.5rem;
     }
+    /* Mobile : carte d'accueil compacte, pour voir les premiers pas et les rituels sans faire défiler */
+    @media (max-width: 640px) {
+        .dash-hero { padding: 1.5rem 1.35rem !important; border-radius: 1.75rem !important; }
+        .dash-hero h1 { font-size: 1.75rem !important; }
+        .dash-hero-quote { margin-top: 1rem !important; padding-left: 1rem !important; }
+        .dash-hero-quote p { font-size: 1rem !important; line-height: 1.55 !important; }
+        .dash-wrap { gap: 1.5rem; padding-top: 1rem; }
+        .dash-step-cta { display: none; }
+    }
     @media (min-width: 1024px) {
         .dash-wrap {
             padding: 3.5rem 2rem 5rem;
@@ -35,7 +44,7 @@
         border: 1.5px solid transparent;
         transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
         background: rgba(255, 255, 255, 0.85);
-        color: #475569;
+        color: var(--fg-light);
         box-shadow: 0 2px 6px rgba(0, 0, 0, 0.02);
     }
     .type-pill:hover {
@@ -46,11 +55,11 @@
     }
     
     .type-pill.active-idea { background: #EAB308 !important; color: white !important; box-shadow: 0 4px 14px rgba(234, 179, 8, 0.3) !important; border-color: #EAB308 !important; }
-    .type-pill.active-reflection { background: #10B981 !important; color: white !important; box-shadow: 0 4px 14px rgba(16, 185, 129, 0.3) !important; border-color: #10B981 !important; }
+    .type-pill.active-reflection { background: var(--success) !important; color: white !important; box-shadow: 0 4px 14px rgba(16, 185, 129, 0.3) !important; border-color: var(--success) !important; }
     .type-pill.active-resolution { background: #6366F1 !important; color: white !important; box-shadow: 0 4px 14px rgba(99, 102, 241, 0.3) !important; border-color: #6366F1 !important; }
     .type-pill.active-milestone { background: #F43F5E !important; color: white !important; box-shadow: 0 4px 14px rgba(244, 63, 94, 0.3) !important; border-color: #F43F5E !important; }
     .type-pill.active-temoignage { background: #06B6D4 !important; color: white !important; box-shadow: 0 4px 14px rgba(6, 182, 212, 0.3) !important; border-color: #06B6D4 !important; }
-    .type-pill.active-insight { background: #0D9488 !important; color: white !important; box-shadow: 0 4px 14px rgba(13, 148, 136, 0.3) !important; border-color: #0D9488 !important; }
+    .type-pill.active-insight { background: var(--primary-light) !important; color: white !important; box-shadow: 0 4px 14px rgba(13, 148, 136, 0.3) !important; border-color: var(--primary-light) !important; }
 
     /* Textarea Focus glow */
     .capture-textarea {
@@ -58,10 +67,10 @@
         background: white;
         border-radius: 1.25rem;
         padding: 1.25rem 3.5rem 1.25rem 1.25rem;
-        font-family: 'Inter', sans-serif;
+        font-family: var(--font-sans);
         font-size: 1rem;
         line-height: 1.75;
-        color: #0F172A;
+        color: var(--fg);
         border: 1.5px solid rgba(15, 118, 110, 0.08);
         resize: none;
         outline: none;
@@ -97,7 +106,7 @@
         height: 1.35rem;
         border-radius: 50%;
         flex-shrink: 0;
-        border: 2px solid #CBD5E1;
+        border: 2px solid var(--border-strong);
         display: flex;
         align-items: center;
         justify-content: center;
@@ -116,8 +125,8 @@
     }
     .mood-btn.active-happy { opacity: 1 !important; background: #FEF3C7 !important; border: 1.5px solid #FCD34D !important; transform: scale(1.15); box-shadow: 0 4px 12px rgba(245, 158, 11, 0.15); }
     .mood-btn.active-energized { opacity: 1 !important; background: #FFEDD5 !important; border: 1.5px solid #FDBA74 !important; transform: scale(1.15); box-shadow: 0 4px 12px rgba(249, 115, 22, 0.15); }
-    .mood-btn.active-neutral { opacity: 1 !important; background: #F1F5F9 !important; border: 1.5px solid #CBD5E1 !important; transform: scale(1.15); box-shadow: 0 4px 12px rgba(100, 116, 139, 0.15); }
-    .mood-btn.active-tired { opacity: 1 !important; background: #EFF6FF !important; border: 1.5px solid #93C5FD !important; transform: scale(1.15); box-shadow: 0 4px 12px rgba(59, 130, 246, 0.15); }
+    .mood-btn.active-neutral { opacity: 1 !important; background: var(--bg-alt) !important; border: 1.5px solid var(--border-strong) !important; transform: scale(1.15); box-shadow: 0 4px 12px rgba(100, 116, 139, 0.15); }
+    .mood-btn.active-tired { opacity: 1 !important; background: var(--info-soft) !important; border: 1.5px solid #93C5FD !important; transform: scale(1.15); box-shadow: 0 4px 12px rgba(59, 130, 246, 0.15); }
     .mood-btn.active-sad { opacity: 1 !important; background: #F5F3FF !important; border: 1.5px solid #C4B5FD !important; transform: scale(1.15); box-shadow: 0 4px 12px rgba(139, 92, 246, 0.15); }
 
     /* Pillar buttons active state */
@@ -136,8 +145,8 @@
        SECTION 1 — HERO (DashboardSummary)
        Atmospheric Gradient with mesh glow effects
      ══════════════════════════════════════════════════════ #}
-    <section style="
-        background: linear-gradient(135deg, #022c22 0%, #0f766e 40%, #0369a1 100%);
+    <section class="dash-hero" style="
+        background: linear-gradient(135deg, #022c22 0%, var(--primary) 40%, #0369a1 100%);
         border-radius: 2.5rem; padding: 2.75rem 3rem; color: white;
         position: relative; overflow: hidden;
         border: 1px solid rgba(255, 255, 255, 0.08);
@@ -161,13 +170,13 @@
                     <div style="display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.35rem 0.85rem; 
                                 background: rgba(255,255,255,0.08); backdrop-filter: blur(10px); 
                                 border: 1px solid rgba(255,255,255,0.1); border-radius: 9999px; 
-                                font-size: 0.725rem; font-weight: 700; color: #ccfbf1; margin-bottom: 0.875rem;
+                                font-size: 0.725rem; font-weight: 700; color: var(--primary-tint); margin-bottom: 0.875rem;
                                 letter-spacing: 0.05em;">
                         <i data-lucide="calendar" style="width: 12px; height: 12px;"></i>
                         <span>{{ "now"|format_date(pattern: "EEEE d MMMM y", locale: "fr")|upper }}</span>
                     </div>
 
-                    <h1 style="font-family: 'Playfair Display', serif; font-size: clamp(2rem, 4.5vw, 3rem);
+                    <h1 style="font-family: var(--font-serif); font-size: clamp(2rem, 4.5vw, 3rem);
                                font-weight: 500; color: white; line-height: 1.15;">
                         Bonjour, <span style="background: linear-gradient(135deg, #FFFFFF 30%, #a5f3fc 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">{{ app.user.displayName }}</span>
                     </h1>
@@ -177,14 +186,14 @@
                 <div style="width: 3.25rem; height: 3.25rem; border-radius: 50%; background: rgba(255,255,255,0.12);
                             border: 2.5px solid rgba(255,255,255,0.25); display: flex; align-items: center;
                             justify-content: center; flex-shrink: 0; box-shadow: 0 8px 24px rgba(0,0,0,0.2);">
-                    <div style="width: 0.75rem; height: 0.75rem; background: #10B981; border-radius: 50%;
-                                box-shadow: 0 0 14px #10B981;"></div>
+                    <div style="width: 0.75rem; height: 0.75rem; background: var(--success); border-radius: 50%;
+                                box-shadow: 0 0 14px var(--success);"></div>
                 </div>
             </div>
 
             {# Quote in modern styled block #}
-            <div style="position: relative; margin-top: 2rem; padding-left: 1.5rem; border-left: 3px solid #0D9488;">
-                <p style="font-family: 'Playfair Display', serif; font-style: italic;
+            <div class="dash-hero-quote" style="position: relative; margin-top: 2rem; padding-left: 1.5rem; border-left: 3px solid var(--primary-light);">
+                <p style="font-family: var(--font-serif); font-style: italic;
                           font-size: clamp(1.15rem, 2.5vw, 1.45rem); line-height: 1.75;
                           color: rgba(255,255,255,0.92); text-shadow: 0 2px 10px rgba(0,0,0,0.15);">
                     {% if quote is defined and quote %}
@@ -205,7 +214,7 @@
                         border-top: 1px solid rgba(255,255,255,0.12); flex-wrap: wrap;">
                 {% if stats.habitsToday is defined %}
                 <div>
-                    <p style="font-size: 1.75rem; font-weight: 700; color: white; font-family: 'Playfair Display', serif; line-height: 1.2;">
+                    <p style="font-size: 1.75rem; font-weight: 700; color: white; font-family: var(--font-serif); line-height: 1.2;">
                         {{ stats.habitsToday.done }}/{{ stats.habitsToday.total }}
                     </p>
                     <p style="font-size: 0.65rem; color: rgba(255,255,255,0.5); text-transform: uppercase; letter-spacing: 0.15em; font-weight: 700; margin-top: 2px;">Rituels du jour</p>
@@ -213,7 +222,7 @@
                 {% endif %}
                 {% if stats.streak is defined %}
                 <div>
-                    <p style="font-size: 1.75rem; font-weight: 700; color: white; font-family: 'Playfair Display', serif; line-height: 1.2;">
+                    <p style="font-size: 1.75rem; font-weight: 700; color: white; font-family: var(--font-serif); line-height: 1.2;">
                         {{ stats.streak }}j
                     </p>
                     <p style="font-size: 0.65rem; color: rgba(255,255,255,0.5); text-transform: uppercase; letter-spacing: 0.15em; font-weight: 700; margin-top: 2px;">Série actuelle</p>
@@ -233,24 +242,24 @@
                 <h2 style="font-family: var(--font-serif); font-size: 1.3rem; color: var(--fg);">Vos premiers pas</h2>
                 <span style="font-size: .8rem; color: var(--fg-muted); font-weight: 600;">{{ doneCount }} sur {{ nextSteps|length }}</span>
             </div>
-            <div style="height: 6px; background: #E2E8F0; border-radius: 99px; margin: .75rem 0 1.25rem; overflow: hidden;"><div style="height: 6px; width: {{ (doneCount / nextSteps|length * 100)|round }}%; background: var(--primary);"></div></div>
+            <div style="height: 6px; background: var(--border); border-radius: 99px; margin: .75rem 0 1.25rem; overflow: hidden;"><div style="height: 6px; width: {{ (doneCount / nextSteps|length * 100)|round }}%; background: var(--primary);"></div></div>
             <ol style="list-style: none; padding: 0; margin: 0; display: grid; gap: .5rem;">
                 {% for step in nextSteps %}
                     {% set isNext = step == nextStep %}
                     <li>
-                        <a href="{{ step.url }}" style="display: flex; align-items: center; gap: .85rem; padding: .7rem .9rem; border-radius: var(--r-md); text-decoration: none; {{ isNext ? 'background: #F0FDFA; border: 1px solid #99F6E4;' : 'border: 1px solid transparent;' }}">
-                            <span style="flex-shrink: 0; width: 26px; height: 26px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: .8rem; font-weight: 700; {{ step.done ? 'background: var(--primary); color: #fff;' : 'border: 2px solid #CBD5E1; color: var(--fg-muted);' }}">{{ step.done ? '✓' : loop.index }}</span>
+                        <a href="{{ step.url }}" style="display: flex; align-items: center; gap: .85rem; padding: .7rem .9rem; border-radius: var(--r-md); text-decoration: none; {{ isNext ? 'background: var(--primary-soft); border: 1px solid #99F6E4;' : 'border: 1px solid transparent;' }}">
+                            <span style="flex-shrink: 0; width: 26px; height: 26px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: .8rem; font-weight: 700; {{ step.done ? 'background: var(--primary); color: #fff;' : 'border: 2px solid var(--border-strong); color: var(--fg-muted);' }}">{{ step.done ? '✓' : loop.index }}</span>
                             <span style="flex: 1;">
                                 <span style="display: block; font-weight: 600; color: {{ step.done ? 'var(--fg-muted)' : 'var(--fg)' }}; {{ step.done ? 'text-decoration: line-through;' : '' }}">{{ step.label }}</span>
                                 {% if isNext %}<span style="display: block; font-size: .85rem; color: var(--fg-light);">{{ step.hint }}</span>{% endif %}
                             </span>
-                            {% if isNext %}<span style="flex-shrink: 0; font-size: .85rem; font-weight: 700; color: var(--primary);">Commencer →</span>{% endif %}
+                            {% if isNext %}<span class="dash-step-cta" style="flex-shrink: 0; font-size: .85rem; font-weight: 700; color: var(--primary);">Commencer →</span>{% endif %}
                         </a>
                     </li>
                 {% endfor %}
             </ol>
             {% if is_trialing() and pro_until() %}
-                <p style="margin-top: 1rem; font-size: .85rem; color: var(--fg-light); background: #FFFBEB; border-radius: var(--r-md); padding: .6rem .9rem;">✨ Votre essai PRO est actif jusqu'au <strong>{{ pro_until()|date('d/m/Y') }}</strong> : profitez-en pour bâtir aussi vos plans de Croissance, Développement, Transmission et Hygiène. <a href="{{ path('app_subscription') }}" style="color: var(--primary); font-weight: 600;">En savoir plus</a></p>
+                <p style="margin-top: 1rem; font-size: .85rem; color: var(--fg-light); background: var(--warning-soft); border-radius: var(--r-md); padding: .6rem .9rem;">✨ Votre essai PRO est actif jusqu'au <strong>{{ pro_until()|date('d/m/Y') }}</strong> : profitez-en pour bâtir aussi vos plans de Croissance, Développement, Transmission et Hygiène. <a href="{{ path('app_subscription') }}" style="color: var(--primary); font-weight: 600;">En savoir plus</a></p>
             {% endif %}
         </section>
     {% endif %}
@@ -275,7 +284,7 @@
                 <i data-lucide="flag" style="width: 14px; height: 14px;"></i> Prochaines échéances
             </p>
             {% for d in deadlines %}
-                <a href="{{ path(d.route) }}" style="display: flex; justify-content: space-between; gap: 0.75rem; padding: 0.5rem 0; border-top: {{ loop.first ? 'none' : '1px solid #F1F5F9' }}; text-decoration: none;">
+                <a href="{{ path(d.route) }}" style="display: flex; justify-content: space-between; gap: 0.75rem; padding: 0.5rem 0; border-top: {{ loop.first ? 'none' : '1px solid var(--bg-alt)' }}; text-decoration: none;">
                     <span style="color: var(--fg); font-size: 0.9rem; font-weight: 500; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">{{ d.title }}
                         <small style="display: block; color: var(--fg-muted); font-size: 0.72rem; font-weight: 400;">{{ d.plan }}</small>
                     </span>
@@ -363,7 +372,7 @@
                 <button @click="type = '{{ t.value }}'"
                         class="type-pill"
                         :class="type === '{{ t.value }}' ? 'active-{{ t.value|lower }}' : ''"
-                        style="--t-color: {% if t.value == 'IDEA' %}#EAB308{% elseif t.value == 'REFLECTION' %}#10B981{% elseif t.value == 'RESOLUTION' %}#6366F1{% elseif t.value == 'MILESTONE' %}#F43F5E{% elseif t.value == 'TEMOIGNAGE' %}#06B6D4{% else %}#0D9488{% endif %};
+                        style="--t-color: {% if t.value == 'IDEA' %}#EAB308{% elseif t.value == 'REFLECTION' %}var(--success){% elseif t.value == 'RESOLUTION' %}#6366F1{% elseif t.value == 'MILESTONE' %}#F43F5E{% elseif t.value == 'TEMOIGNAGE' %}#06B6D4{% else %}var(--primary-light){% endif %};
                                --t-glow: {% if t.value == 'IDEA' %}rgba(234, 179, 8, 0.25){% elseif t.value == 'REFLECTION' %}rgba(16, 185, 129, 0.25){% elseif t.value == 'RESOLUTION' %}rgba(99, 102, 241, 0.25){% elseif t.value == 'MILESTONE' %}rgba(244, 63, 94, 0.25){% elseif t.value == 'TEMOIGNAGE' %}rgba(6, 182, 212, 0.25){% else %}rgba(13, 148, 136, 0.25){% endif %};">
                     <i data-lucide="{{ t.icon }}" style="width: 13px; height: 13px;"></i>
                     <span>{{ t.label }}</span>
@@ -393,11 +402,11 @@
                  x-transition:enter-end="opacity-100 translate-y-0">
                 <div style="position: relative;">
                     <i data-lucide="map-pin" style="position: absolute; left: 1rem; top: 50%;
-                                                     transform: translateY(-50%); width: 15px; height: 15px; color: #64748b;"></i>
+                                                     transform: translateY(-50%); width: 15px; height: 15px; color: var(--fg-muted);"></i>
                     <input type="text" x-model="location" placeholder="Lieu (ex: Douala, bureau...)"
                            style="width: 100%; border-radius: 0.875rem; padding: 0.65rem 1rem 0.65rem 2.65rem;
                                   font-size: 0.875rem; border: 1.5px solid rgba(15, 118, 110, 0.08); background: white;
-                                  color: #0F172A; outline: none; font-family: 'Inter', sans-serif; transition: all 0.25s;"
+                                  color: var(--fg); outline: none; font-family: var(--font-sans); transition: all 0.25s;"
                            @focus="$el.style.borderColor='var(--primary-light)'"
                            @blur="$el.style.borderColor='rgba(15, 118, 110, 0.08)'">
                 </div>
@@ -409,7 +418,7 @@
                 <span x-show="!showExtras" style="font-size: .8rem; color: var(--fg-muted);">Une pensée, une prière, une victoire… retrouvez-la dans votre journal.</span>
                 {# Mood selection #}
                 <div x-show="showExtras" x-cloak style="display: flex; align-items: center; gap: 0.75rem;">
-                    <span style="font-size: 0.65rem; font-weight: 800; letter-spacing: 0.1em; text-transform: uppercase; color: #64748b;">Humeur</span>
+                    <span style="font-size: 0.65rem; font-weight: 800; letter-spacing: 0.1em; text-transform: uppercase; color: var(--fg-muted);">Humeur</span>
                     {% set moodList = [
                         { value: 'HAPPY',     icon: '😊' },
                         { value: 'ENERGIZED', icon: '🔥' },
@@ -440,7 +449,7 @@
                            :style="energy >= 7 ? 'color: #EAB308; fill: #EAB308' : 'color: #cbd5e1'"></i>
                         <input type="range" min="1" max="10" x-model.number="energy"
                                style="width: 6rem; accent-color: var(--primary); height: 4px; cursor: pointer;">
-                        <span style="font-size: 0.875rem; font-weight: 800; color: #0F172A; min-width: 1.25rem;"
+                        <span style="font-size: 0.875rem; font-weight: 800; color: var(--fg); min-width: 1.25rem;"
                                x-text="energy"></span>
                     </div>
 
@@ -452,7 +461,7 @@
                                 : 'background: rgba(15, 118, 110, 0.25); cursor: not-allowed;'"
                             style="display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.7rem 1.5rem; white-space: nowrap; margin-left: auto;
                                    border-radius: 0.875rem; font-size: 0.825rem; font-weight: 700; color: white;
-                                   transition: all 0.25s var(--ease); border: none; font-family: 'Inter', sans-serif;">
+                                   transition: all 0.25s var(--ease); border: none; font-family: var(--font-sans);">
                         <i data-lucide="send" style="width: 14px; height: 14px;"></i>
                         <span>Enregistrer</span>
                     </button>
@@ -505,8 +514,8 @@
                                display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.5rem 1.25rem;
                                border-radius: 9999px; font-size: 0.75rem; font-weight: 750; letter-spacing: 0.05em;
                                text-transform: uppercase; cursor: pointer; border: 1.5px solid transparent;
-                               transition: all 0.25s var(--ease); font-family: 'Inter', sans-serif;
-                               background: rgba(241, 245, 249, 0.8); color: #475569;
+                               transition: all 0.25s var(--ease); font-family: var(--font-sans);
+                               background: rgba(241, 245, 249, 0.8); color: var(--fg-light);
                                box-shadow: 0 2px 8px rgba(0, 0, 0, 0.02);"
                         onmouseover="if(this.className.indexOf('active') === -1) { this.style.borderColor='rgba(15,118,110,0.15)'; this.style.color='#0F766E'; }"
                         onmouseout="if(this.className.indexOf('active') === -1) { this.style.borderColor='transparent'; this.style.color='#475569'; }">
@@ -539,7 +548,7 @@
             {% if groupHabits is not empty %}
             <div style="margin-bottom: 2rem;">
                 <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1rem;">
-                    <h2 style="font-family: 'Playfair Display', serif; font-size: 1.25rem; color: var(--primary); font-weight: 500; white-space: nowrap;">{{ group.label }}</h2>
+                    <h2 style="font-family: var(--font-serif); font-size: 1.25rem; color: var(--primary); font-weight: 500; white-space: nowrap;">{{ group.label }}</h2>
                     <div style="height: 1px; flex: 1; background: rgba(15, 118, 110, 0.06);"></div>
                     <span style="font-size: 0.725rem; color: var(--fg-muted); font-weight: 700; background: rgba(15,118,110,0.06); padding: 0.2rem 0.5rem; border-radius: var(--r-sm);">{{ groupHabits|length }}</span>
                 </div>
@@ -603,7 +612,7 @@
                         box-shadow: 0 4px 16px rgba(15, 118, 110, 0.06);">
                 <i data-lucide="compass" style="width: 32px; height: 32px; color: var(--fg-muted);"></i>
             </div>
-            <h3 style="font-family: 'Playfair Display', serif; font-size: 1.35rem; color: var(--primary);
+            <h3 style="font-family: var(--font-serif); font-size: 1.35rem; color: var(--primary);
                        font-weight: 500; margin-bottom: 0.75rem;">Aucun rituel pour l'instant</h3>
             <p style="color: var(--fg-muted); font-size: 0.95rem; line-height: 1.7; max-width: 24rem; margin-bottom: 2rem;">
                 Un rituel est une petite action régulière (prière du matin, lecture, sport…) qui nourrit vos objectifs. Commencez par un seul.
@@ -612,7 +621,7 @@
                style="display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.8rem 1.75rem;
                       background: var(--primary); color: white; border-radius: 9999px; font-weight: 700;
                       font-size: 0.875rem; text-decoration: none; transition: all 0.25s var(--ease);
-                      box-shadow: 0 4px 16px rgba(15, 118, 110, 0.35); font-family: 'Inter', sans-serif;"
+                      box-shadow: 0 4px 16px rgba(15, 118, 110, 0.35); font-family: var(--font-sans);"
                onmouseover="this.style.background='var(--primary-dark)'; this.style.transform='translateY(-1px)'"
                onmouseout="this.style.background='var(--primary)'; this.style.transform=''">
                 <span>Créer mon premier rituel</span>

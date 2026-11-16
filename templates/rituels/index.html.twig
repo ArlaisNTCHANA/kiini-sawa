@@ -82,7 +82,7 @@
         height: 1.35rem;
         border-radius: 50%;
         flex-shrink: 0;
-        border: 2px solid #CBD5E1;
+        border: 2px solid var(--border-strong);
         display: flex;
         align-items: center;
         justify-content: center;
@@ -103,9 +103,9 @@
         cursor: pointer;
         border: 1.5px solid transparent;
         transition: all 0.25s var(--ease);
-        font-family: 'Inter', sans-serif;
+        font-family: var(--font-sans);
         background: rgba(241, 245, 249, 0.8);
-        color: #475569;
+        color: var(--fg-light);
     }
     .pill-btn-filter.active {
         background: var(--p-color) !important;
@@ -135,7 +135,7 @@
 
     .btn-submit {
         padding: 0.9rem;
-        background: linear-gradient(135deg, #0D9488 0%, #0F766E 100%);
+        background: linear-gradient(135deg, var(--primary-light) 0%, var(--primary) 100%);
         border: none;
         border-radius: 12px;
         color: #ffffff;
@@ -163,7 +163,7 @@
         position: fixed;
         bottom: 2rem;
         right: 2rem;
-        background: #0F172A;
+        background: var(--fg);
         color: white;
         padding: 1rem 1.5rem;
         border-radius: 1rem;
@@ -220,7 +220,7 @@
     }
     .rooting-field-card input::placeholder, 
     .rooting-field-card textarea::placeholder {
-        color: #94A3B8;
+        color: var(--fg-subtle);
         opacity: 0.6;
     }
     .ritual-pill-select {
@@ -286,15 +286,12 @@
     <header style="margin-bottom: 2rem;">
         <a href="{{ path('app_dashboard') }}" class="back-btn">
             <i data-lucide="arrow-left" style="width: 14px; height: 14px; stroke-width: 2.5px;"></i>
-            <span>Dashboard</span>
+            <span>Accueil</span>
         </a>
         <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 0.5rem; flex-wrap: wrap; gap: 1rem;">
             <div>
-                <h1 style="font-family: 'Playfair Display', serif; font-size: clamp(2rem, 4.5vw, 2.75rem);
-                           font-weight: 500; color: var(--primary); line-height: 1.25;">
-                    Mes Rituels
-                </h1>
-                <p style="color: var(--fg-muted); font-size: 0.95rem; margin-top: 0.35rem;">
+                <h1 class="ks-header__title">Mes rituels</h1>
+                <p class="ks-header__lead">
                     Vos petites actions régulières, pour ancrer vos objectifs dans le quotidien.
                 </p>
             </div>
@@ -352,10 +349,10 @@
                     {% set hasAnyHabit = habits is not empty %}
                     
                     {% if not hasAnyHabit %}
-                        <div style="display: flex; flex-direction: column; align-items: center; text-align: center; padding: 4rem 1.5rem; background: rgba(255,255,255,0.4); border-radius: 1.5rem; border: 1.5px dashed rgba(15,118,110,0.12);">
-                            <i data-lucide="info" style="width: 32px; height: 32px; color: var(--fg-muted); margin-bottom: 0.75rem;"></i>
-                            <h3 style="font-family: 'Playfair Display', serif; font-size: 1.25rem; color: var(--primary); margin-bottom: 0.5rem;">Aucun rituel configuré</h3>
-                            <p style="color: var(--fg-muted); font-size: 0.95rem; line-height: 1.6; max-width: 20rem;">Ajoutez votre premier rituel à l'aide du formulaire sur la droite pour commencer.</p>
+                        <div class="ks-card ks-empty">
+                            <div class="ks-empty__icon"><i data-lucide="sprout" style="width: 26px; height: 26px;"></i></div>
+                            <h3 class="ks-empty__title">Aucun rituel pour l'instant</h3>
+                            <p class="ks-empty__text">Un rituel est une petite action régulière (prière du matin, lecture, sport…) qui nourrit vos objectifs. Ajoutez le premier avec le formulaire « Nouveau rituel ».</p>
                         </div>
                     {% else %}
                         {% for group in habitGroups %}
@@ -363,7 +360,7 @@
                             
                             <div x-show="hasVisibleHabits('{{ group.key }}')" style="display: flex; flex-direction: column; gap: 1rem;">
                                 <div style="display: flex; align-items: center; gap: 0.75rem;">
-                                    <h2 style="font-family: 'Playfair Display', serif; font-size: 1.25rem; color: var(--primary); font-weight: 500; white-space: nowrap;">
+                                    <h2 style="font-family: var(--font-serif); font-size: 1.25rem; color: var(--primary); font-weight: 500; white-space: nowrap;">
                                         {{ group.label }}
                                     </h2>
                                     <div style="height: 1px; flex: 1; background: rgba(15, 118, 110, 0.08);"></div>
@@ -438,7 +435,7 @@
                 <section class="ritual-section" style="position: sticky; top: 96px; padding: 2rem 1.75rem;">
                     <div style="display: flex; align-items: center; gap: 0.625rem; margin-bottom: 1.5rem;">
                         <div style="width: 6px; height: 12px; background: var(--primary); border-radius: 999px;"></div>
-                        <h2 style="font-family: 'Playfair Display', serif; font-size: 1.2rem; color: var(--primary); font-weight: 500;">
+                        <h2 style="font-family: var(--font-serif); font-size: 1.2rem; color: var(--primary); font-weight: 500;">
                             Nouveau Rituel
                         </h2>
                     </div>
@@ -552,7 +549,7 @@
                     <div style="position: relative; flex-shrink: 0; margin-top: 2px; padding-left: 4px;">
                         <i data-lucide="zap" :class="selectedHabitId === {{ habit.id }} ? 'text-primary' : '{{ isRooted ? 'text-emerald-500' : 'text-slate-300' }}'" style="width: 18px; height: 18px;"></i>
                         {% if isRooted %}
-                        <span style="position: absolute; top: -2px; right: -2px; width: 6px; height: 6px; border-radius: 50%; background: #10B981; border: 1px solid white;"></span>
+                        <span style="position: absolute; top: -2px; right: -2px; width: 6px; height: 6px; border-radius: 50%; background: var(--success); border: 1px solid white;"></span>
                         {% endif %}
                     </div>
                     <div style="flex: 1; min-width: 0; text-align: left !important;">
@@ -569,7 +566,7 @@
                                 {{ pText }}
                             </span>
                             {% if isRooted %}
-                            <span style="font-size: 0.65rem; color: #10B981; font-weight: 700;">• ANCRÉ</span>
+                            <span style="font-size: 0.65rem; color: var(--success); font-weight: 700;">• ANCRÉ</span>
                             {% endif %}
                         </div>
                     </div>
@@ -599,7 +596,7 @@
                             </div>
                         </div>
 
-                        <button @click="deleteHabit()" style="border: none; background: transparent; cursor: pointer; padding: 0.5rem; border-radius: 0.5rem; color: #94a3b8;"
+                        <button @click="deleteHabit()" style="border: none; background: transparent; cursor: pointer; padding: 0.5rem; border-radius: 0.5rem; color: var(--fg-subtle);"
                                 onmouseover="this.style.color='var(--danger)'; this.style.background='var(--danger-light)'"
                                 onmouseout="this.style.color='#94a3b8'; this.style.background='transparent'">
                             <i data-lucide="trash-2" style="width: 18px; height: 18px;"></i>
@@ -621,11 +618,11 @@
                             <span style="display: block; font-size: 0.725rem; font-weight: 800; color: var(--fg-muted); letter-spacing: 0.05em; text-transform: uppercase; margin-bottom: 0.5rem;">
                                 Formule d'Ancrage Mental
                             </span>
-                            <p style="font-family: 'Playfair Display', serif; font-size: 1.15rem; line-height: 1.6; color: var(--fg); margin: 0;">
-                                Quand je <span style="border-bottom: 2px dashed #0D9488; padding: 0 4px; font-weight: 600;" :style="rooting.rootingAnchor ? 'color: #0D9488; border-bottom-style: solid;' : 'color: #94A3B8;'" x-text="rooting.rootingAnchor || '... routine ancre ...'"></span>, 
-                                je vais <span style="border-bottom: 2px dashed #D97706; padding: 0 4px; font-weight: 600;" :style="rooting.rootingAction ? 'color: #D97706; border-bottom-style: solid;' : 'color: #94A3B8;'" x-text="rooting.rootingAction || '... action minimale ...'"></span> 
+                            <p style="font-family: var(--font-serif); font-size: 1.15rem; line-height: 1.6; color: var(--fg); margin: 0;">
+                                Quand je <span style="border-bottom: 2px dashed var(--primary-light); padding: 0 4px; font-weight: 600;" :style="rooting.rootingAnchor ? 'color: #0D9488; border-bottom-style: solid;' : 'color: #94A3B8;'" x-text="rooting.rootingAnchor || '... routine ancre ...'"></span>, 
+                                je vais <span style="border-bottom: 2px dashed var(--warning); padding: 0 4px; font-weight: 600;" :style="rooting.rootingAction ? 'color: #D97706; border-bottom-style: solid;' : 'color: #94A3B8;'" x-text="rooting.rootingAction || '... action minimale ...'"></span> 
                                 à/en <span style="border-bottom: 2px dashed #4F46E5; padding: 0 4px; font-weight: 600;" :style="rooting.rootingMoment ? 'color: #4F46E5; border-bottom-style: solid;' : 'color: #94A3B8;'" x-text="rooting.rootingMoment || '... moment ...'"></span> 
-                                pour obtenir <span style="border-bottom: 2px dashed #DB2777; padding: 0 4px; font-weight: 600;" :style="rooting.rootingBenefit ? 'color: #DB2777; border-bottom-style: solid;' : 'color: #94A3B8;'" x-text="rooting.rootingBenefit || '... récompense ...'"></span>.
+                                pour obtenir <span style="border-bottom: 2px dashed var(--couple); padding: 0 4px; font-weight: 600;" :style="rooting.rootingBenefit ? 'color: #DB2777; border-bottom-style: solid;' : 'color: #94A3B8;'" x-text="rooting.rootingBenefit || '... récompense ...'"></span>.
                             </p>
                         </div>
                     </div>
@@ -762,7 +759,7 @@
                         <div style="grid-column: span 2;" class="rooting-field-card">
                             <label>Objectif de croissance associé</label>
                             <select x-model="rooting.growthGoalId">
-                                <option value="">Aucun objectif lié (Habitude libre)</option>
+                                <option value="">Aucun objectif lié (rituel libre)</option>
                                 <template x-for="gg in growthGoals" :key="gg.id">
                                     <option :value="gg.id" x-text="`[${gg.axis}] ${gg.title}`" :selected="rooting.growthGoalId == gg.id"></option>
                                 </template>
@@ -782,7 +779,7 @@
             <template x-if="selectedHabitId === null">
                 <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 400px; color: var(--fg-muted);">
                     <i data-lucide="zap" style="width: 48px; height: 48px; opacity: 0.2; margin-bottom: 1rem;"></i>
-                    <p style="font-size: 0.95rem;">Sélectionnez une habitude dans la colonne de gauche pour l'ancrer.</p>
+                    <p style="font-size: 0.95rem;">Choisissez un rituel dans la colonne de gauche pour l'enraciner.</p>
                 </div>
             </template>
         </main>

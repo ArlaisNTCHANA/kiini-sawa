@@ -5,7 +5,6 @@
 {% block body %}
 <style>
     .profile-wrap { max-width: 760px; margin: 0 auto; padding: 2.5rem 1.25rem 8rem; }
-    .profile-wrap h1 { font-family: var(--font-serif); color: var(--primary); font-size: 2rem; margin-bottom: .25rem; }
     .profile-intro { color: var(--fg-muted); margin-bottom: 2rem; }
     .p-card { background: var(--card-bg); border-radius: var(--r-lg); box-shadow: var(--card-shadow); padding: 1.75rem; margin-bottom: 1.5rem; }
     .p-card h2 { font-family: var(--font-serif); font-size: 1.3rem; color: var(--fg); margin-bottom: .25rem; display: flex; align-items: center; gap: .5rem; }
@@ -15,20 +14,20 @@
     .p-field { display: flex; flex-direction: column; gap: .35rem; }
     .p-field.full { grid-column: 1 / -1; }
     .p-field label { font-size: .75rem; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; color: var(--fg-muted); }
-    .p-field input, .p-field textarea { padding: .7rem .9rem; border: 1.5px solid #E2E8F0; border-radius: var(--r-md); font: inherit; font-size: .95rem; background: #fff; color: var(--fg); }
+    .p-field input, .p-field textarea { padding: .7rem .9rem; border: 1.5px solid var(--border); border-radius: var(--r-md); font: inherit; font-size: .95rem; background: #fff; color: var(--fg); }
     .p-field input:focus, .p-field textarea:focus { outline: none; border-color: var(--primary-light); box-shadow: 0 0 0 3px var(--primary-glow); }
     .p-hint { font-size: .75rem; color: var(--fg-muted); }
     .p-actions { margin-top: 1.25rem; display: flex; gap: .75rem; flex-wrap: wrap; align-items: center; }
     .p-btn { display: inline-flex; align-items: center; gap: .4rem; padding: .7rem 1.25rem; border-radius: var(--r-md); border: none; font: inherit; font-weight: 600; font-size: .9rem; cursor: pointer; text-decoration: none; background: var(--primary); color: #fff; }
     .p-btn:hover { background: var(--primary-dark); }
     .p-btn.secondary { background: var(--bg-alt); color: var(--fg); }
-    .p-btn.secondary:hover { background: #E2E8F0; }
+    .p-btn.secondary:hover { background: var(--border); }
     .p-btn.danger { background: var(--danger); }
-    .p-btn.danger:hover { background: #DC2626; }
+    .p-btn.danger:hover { background: var(--danger); }
     .p-btn.link { background: none; color: var(--fg-muted); padding: .7rem .25rem; }
-    .p-sep { height: 1px; background: #F1F5F9; margin: 1.5rem 0; }
+    .p-sep { height: 1px; background: var(--bg-alt); margin: 1.5rem 0; }
     .p-current { font-size: .95rem; margin-bottom: 1rem; }
-    .p-pending { background: #F0FDFA; border: 1px solid #99F6E4; border-radius: var(--r-md); padding: 1rem; margin-bottom: 1rem; }
+    .p-pending { background: var(--primary-soft); border: 1px solid #99F6E4; border-radius: var(--r-md); padding: 1rem; margin-bottom: 1rem; }
     .p-danger-zone { border: 1.5px solid #FECACA; }
     .p-danger-zone h2 { color: #991B1B; }
     .p-legal { font-size: .8rem; color: var(--fg-muted); text-align: center; }
@@ -36,8 +35,8 @@
 </style>
 
 <div class="profile-wrap" x-data="{ deleteOpen: false }">
-    <h1>Mon Profil</h1>
-    <p class="profile-intro">{{ app.user.email }}{% if app.user.createdAt %} · membre depuis {{ app.user.createdAt|format_date(pattern: 'MMMM y', locale: 'fr') }}{% endif %}</p>
+    <header class="ks-header"><h1 class="ks-header__title">Mon profil</h1>
+    <p class="ks-header__lead">{{ app.user.email }}{% if app.user.createdAt %} · membre depuis {{ app.user.createdAt|format_date(pattern: 'MMMM y', locale: 'fr') }}{% endif %}</p></header>
 
     {# ── Informations ───────────────────────────────────────── #}
     <section class="p-card" id="informations">
@@ -69,7 +68,7 @@
                 <p style="margin-bottom:.75rem;">Un code a été envoyé à <strong>{{ pendingEmail }}</strong>. Saisissez-le pour confirmer le changement.</p>
                 <form method="post" action="{{ path('app_profile_email_confirm') }}" class="p-actions" style="margin-top:0;">
                     <input name="code" inputmode="numeric" maxlength="7" autocomplete="one-time-code" placeholder="123456" required aria-label="Code reçu"
-                           style="padding:.65rem .9rem;border:1.5px solid #E2E8F0;border-radius:var(--r-md);font-size:1.1rem;letter-spacing:.3rem;width:9rem;text-align:center;">
+                           style="padding:.65rem .9rem;border:1.5px solid var(--border);border-radius:var(--r-md);font-size:1.1rem;letter-spacing:.3rem;width:9rem;text-align:center;">
                     <input type="hidden" name="_csrf_token" value="{{ csrf_token('profile_email_confirm') }}">
                     <button type="submit" class="p-btn">Confirmer</button>
                 </form>
@@ -118,7 +117,7 @@
                 ['enableEmailInstant', prefs.enableEmailInstant, 'Recevoir par email les demandes de partenaires', 'Dès qu\'elles arrivent'],
             ] %}
             {% for t in toggles %}
-                <label style="display:flex;justify-content:space-between;align-items:center;gap:1rem;padding:.6rem 0;border-top:1px solid #F1F5F9;cursor:pointer;">
+                <label style="display:flex;justify-content:space-between;align-items:center;gap:1rem;padding:.6rem 0;border-top:1px solid var(--bg-alt);cursor:pointer;">
                     <span><span style="font-weight:600;">{{ t[2] }}</span><br><span class="p-hint">{{ t[3] }}</span></span>
                     <input type="checkbox" name="{{ t[0] }}" value="1" {{ t[1] ? 'checked' }} style="width:1.1rem;height:1.1rem;accent-color:var(--primary);">
                 </label>
@@ -139,7 +138,7 @@
             {% endfor %}
             <div class="p-field" style="max-width:260px;margin-top:1rem;">
                 <label for="weeklyReviewDay">Jour de ma revue hebdomadaire</label>
-                <select id="weeklyReviewDay" name="weeklyReviewDay" style="padding:.65rem .9rem;border:1.5px solid #E2E8F0;border-radius:var(--r-md);font:inherit;">
+                <select id="weeklyReviewDay" name="weeklyReviewDay" style="padding:.65rem .9rem;border:1.5px solid var(--border);border-radius:var(--r-md);font:inherit;">
                     {% for i, d in ['Dimanche', 'Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi'] %}
                         <option value="{{ i }}" {{ prefs.weeklyReviewDay == i ? 'selected' }}>{{ d }}</option>
                     {% endfor %}

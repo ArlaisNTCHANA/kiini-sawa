@@ -44,3 +44,90 @@
 .calendar-cell-transition {
     transition: background-color 0.2s cubic-bezier(0.16, 1, 0.3, 1), transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
 }
+
+/* ══════════════════════════════════════════════════════
+   Composants communs (docs/design.md)
+   Les couleurs, rayons et polices viennent des variables de templates/base.html.twig.
+   ══════════════════════════════════════════════════════ */
+
+/* Page */
+.ks-page { max-width: 1100px; margin: 0 auto; padding: 2.25rem 1.25rem 7rem; }
+.ks-page--narrow { max-width: 820px; }
+.ks-page--reading { max-width: 720px; }
+
+/* En-tête de page : surtitre, titre, introduction, actions */
+.ks-header { margin-bottom: 2rem; }
+.ks-header__back { display: inline-block; font-size: .78rem; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; color: var(--fg-muted); text-decoration: none; margin-bottom: .6rem; }
+.ks-header__back:hover { color: var(--primary); }
+.ks-header__eyebrow { display: inline-flex; align-items: center; gap: .4rem; font-size: .72rem; font-weight: 800; letter-spacing: .14em; text-transform: uppercase; color: var(--primary); margin-bottom: .5rem; }
+.ks-header__title { font-family: var(--font-serif); font-weight: 600; color: var(--primary); font-size: clamp(1.75rem, 4vw, 2.25rem); line-height: 1.2; }
+.ks-header__lead { color: var(--fg-muted); font-size: 1rem; line-height: 1.6; max-width: 680px; margin-top: .5rem; }
+.ks-header__actions { display: flex; flex-wrap: wrap; gap: .6rem; margin-top: 1.25rem; align-items: center; }
+.ks-header--center { text-align: center; }
+.ks-header--center .ks-header__lead { margin-left: auto; margin-right: auto; }
+.ks-header--center .ks-header__actions { justify-content: center; }
+
+/* Titre de section */
+.ks-section-title { font-family: var(--font-serif); font-size: 1.3rem; font-weight: 600; color: var(--fg); margin: 2rem 0 .9rem; }
+.ks-eyebrow { font-size: .72rem; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; color: var(--fg-muted); }
+
+/* Carte */
+.ks-card { background: var(--card-bg); border-radius: var(--r-lg); box-shadow: var(--card-shadow); padding: 1.5rem; }
+.ks-card--flat { box-shadow: none; border: 1px solid var(--border); }
+.ks-card--accent { border-left: 4px solid var(--primary); }
+.ks-card--link { display: block; text-decoration: none; color: inherit; transition: box-shadow .2s var(--ease), transform .2s var(--ease); }
+.ks-card--link:hover { box-shadow: var(--card-shadow-hover); transform: translateY(-1px); }
+.ks-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1rem; }
+
+/* Boutons */
+.ks-btn { display: inline-flex; align-items: center; justify-content: center; gap: .5rem; padding: .7rem 1.25rem; border-radius: var(--r-md);
+    font-family: var(--font-sans); font-size: .9rem; font-weight: 700; line-height: 1.2; white-space: nowrap; text-decoration: none; cursor: pointer;
+    border: 1.5px solid transparent; transition: background .2s var(--ease), box-shadow .2s var(--ease), transform .2s var(--ease); }
+.ks-btn:hover { transform: translateY(-1px); }
+.ks-btn:disabled, .ks-btn[aria-disabled="true"] { opacity: .5; cursor: not-allowed; transform: none; }
+.ks-btn svg { width: 16px; height: 16px; }
+.ks-btn--primary { background: var(--primary); color: #fff; box-shadow: 0 4px 14px rgba(15, 118, 110, .25); }
+.ks-btn--primary:hover { background: var(--primary-dark); }
+.ks-btn--secondary { background: var(--card-bg); color: var(--fg); border-color: var(--border); }
+.ks-btn--secondary:hover { border-color: var(--primary); color: var(--primary); }
+.ks-btn--ghost { background: transparent; color: var(--primary); padding-left: .5rem; padding-right: .5rem; }
+.ks-btn--danger { background: var(--card-bg); color: var(--danger); border-color: #FECACA; }
+.ks-btn--sm { padding: .45rem .9rem; font-size: .8rem; }
+
+/* Onglets */
+.ks-tabs { display: flex; gap: .35rem; flex-wrap: wrap; background: var(--bg-alt); padding: .3rem; border-radius: var(--r-full); width: fit-content; }
+.ks-tab { padding: .5rem 1rem; border-radius: var(--r-full); font-size: .85rem; font-weight: 600; color: var(--fg-muted); background: none; border: none; cursor: pointer; text-decoration: none; }
+.ks-tab.is-active, .ks-tab[aria-selected="true"] { background: var(--card-bg); color: var(--primary); box-shadow: 0 1px 4px rgba(15, 23, 42, .08); }
+
+/* État vide */
+.ks-empty { text-align: center; padding: 2.5rem 1.5rem; color: var(--fg-muted); }
+.ks-empty__icon { width: 3.5rem; height: 3.5rem; border-radius: var(--r-lg); background: var(--primary-soft); color: var(--primary); display: inline-flex; align-items: center; justify-content: center; margin-bottom: 1rem; }
+.ks-empty__title { font-family: var(--font-serif); font-size: 1.25rem; color: var(--fg); margin-bottom: .4rem; }
+.ks-empty__text { max-width: 26rem; margin: 0 auto 1.25rem; line-height: 1.6; }
+
+/* Alertes et pastilles */
+.ks-alert { border-radius: var(--r-md); padding: .8rem 1rem; font-size: .9rem; line-height: 1.5; }
+.ks-alert--info { background: var(--info-soft); color: #1E3A8A; }
+.ks-alert--success { background: var(--success-soft); color: #065F46; }
+.ks-alert--warning { background: var(--warning-soft); color: #78350F; }
+.ks-alert--danger { background: var(--danger-soft); color: #991B1B; }
+.ks-badge { display: inline-flex; align-items: center; gap: .3rem; font-size: .72rem; font-weight: 700; padding: .2rem .6rem; border-radius: var(--r-full); background: var(--primary-tint); color: var(--primary-dark); }
+.ks-badge--muted { background: var(--bg-alt); color: var(--fg-muted); }
+
+/* Formulaires */
+.ks-field { display: flex; flex-direction: column; gap: .35rem; }
+.ks-label { font-size: .75rem; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; color: var(--fg-muted); }
+.ks-input { width: 100%; padding: .7rem .9rem; border: 1.5px solid var(--border); border-radius: var(--r-md); background: #fff; font: inherit; font-size: .95rem; color: var(--fg); }
+.ks-input:focus { outline: none; border-color: var(--primary-light); box-shadow: 0 0 0 3px var(--primary-glow); }
+
+@media (max-width: 640px) {
+    .ks-page { padding-top: 1.5rem; }
+    .ks-card { padding: 1.15rem; }
+}
+
+/* Harmonisation des boutons propres à chaque page : même forme et même police partout. */
+.btn-hero-primary, .btn-hero-secondary, .btn-take, .btn-result, .btn-catalogue, .btn-retake, .test-action-btn,
+.bilan-btn, .ab-btn, .as-btn, .wr-btn, .p-btn, .cp-btn, .ob-btn, .og-btn, .wiz-btn {
+    border-radius: var(--r-md) !important;
+    font-family: var(--font-sans) !important;
+}

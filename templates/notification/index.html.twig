@@ -5,7 +5,7 @@
 {% block body %}
 <div style="max-width: 720px; margin: 0 auto; padding: 2.5rem 1.25rem 8rem;">
     <div style="display: flex; justify-content: space-between; align-items: center; gap: 1rem; flex-wrap: wrap; margin-bottom: 1.5rem;">
-        <h1 style="font-family: var(--font-serif); color: var(--primary); font-size: 2rem;">Notifications</h1>
+        <h1 class="ks-header__title">Notifications</h1>
         <div style="display: flex; gap: .75rem; align-items: center;">
             <a href="{{ path('app_profile') }}#notifications" style="font-size: .85rem; color: var(--fg-muted);">Préférences</a>
             {% if notifications|filter(n => not n.read)|length > 0 %}
@@ -20,7 +20,7 @@
     {% for n in notifications %}
         <form method="post" action="{{ path('app_notification_open', {id: n.id}) }}" style="margin: 0 0 .6rem;">
             <input type="hidden" name="_csrf_token" value="{{ csrf_token('notification') }}">
-            <button type="submit" style="width: 100%; text-align: left; display: flex; gap: .9rem; align-items: flex-start; background: {{ n.read ? 'var(--card-bg)' : '#F0FDFA' }}; border: 1px solid {{ n.read ? '#F1F5F9' : '#99F6E4' }}; border-radius: var(--r-lg); padding: 1rem 1.1rem; font: inherit; cursor: pointer; color: inherit;">
+            <button type="submit" style="width: 100%; text-align: left; display: flex; gap: .9rem; align-items: flex-start; background: {{ n.read ? 'var(--card-bg)' : 'var(--primary-soft)' }}; border: 1px solid {{ n.read ? 'var(--bg-alt)' : '#99F6E4' }}; border-radius: var(--r-lg); padding: 1rem 1.1rem; font: inherit; cursor: pointer; color: inherit;">
                 <span style="flex-shrink: 0; width: 2.2rem; height: 2.2rem; border-radius: 50%; background: {{ n.read ? 'var(--bg-alt)' : 'var(--primary)' }}; color: {{ n.read ? 'var(--fg-muted)' : '#fff' }}; display: flex; align-items: center; justify-content: center;">
                     <i data-lucide="{{ n.type.icon }}" style="width: 16px; height: 16px;"></i>
                 </span>

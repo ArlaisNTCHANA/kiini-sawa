@@ -5,40 +5,39 @@
 {% block body %}
 <style>
     .wr-wrap { max-width: 860px; margin: 0 auto; padding: 2.5rem 1.25rem 8rem; }
-    .wr-wrap h1 { font-family: var(--font-serif); color: var(--primary); font-size: 2rem; }
     .wr-intro { color: var(--fg-muted); margin: .25rem 0 2rem; }
     .wr-card { background: var(--card-bg); border-radius: var(--r-lg); box-shadow: var(--card-shadow); padding: 1.5rem; margin-bottom: 1.25rem; }
     .wr-card h2 { font-family: var(--font-serif); font-size: 1.25rem; display: flex; align-items: center; gap: .5rem; margin-bottom: .25rem; }
     .wr-sub { color: var(--fg-muted); font-size: .85rem; margin-bottom: 1rem; }
     .wr-field { display: flex; flex-direction: column; gap: .35rem; margin-bottom: 1rem; }
     .wr-field label, .wr-label { font-size: .72rem; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; color: var(--fg-muted); }
-    .wr-field textarea, .wr-field input[type=text] { padding: .65rem .85rem; border: 1.5px solid #E2E8F0; border-radius: var(--r-md); font: inherit; font-size: .95rem; background: #fff; }
+    .wr-field textarea, .wr-field input[type=text] { padding: .65rem .85rem; border: 1.5px solid var(--border); border-radius: var(--r-md); font: inherit; font-size: .95rem; background: #fff; }
     .wr-field textarea:focus, .wr-field input:focus { outline: none; border-color: var(--primary-light); box-shadow: 0 0 0 3px var(--primary-glow); }
-    .wr-item { border-top: 1px solid #F1F5F9; padding: 1rem 0; }
+    .wr-item { border-top: 1px solid var(--bg-alt); padding: 1rem 0; }
     .wr-item:first-of-type { border-top: none; }
     .wr-item-title { font-weight: 700; margin-bottom: .6rem; }
     .wr-scores { display: flex; gap: .3rem; flex-wrap: wrap; margin-bottom: .6rem; }
     .wr-scores input { position: absolute; opacity: 0; pointer-events: none; }
-    .wr-scores label { width: 2.2rem; height: 2.2rem; display: flex; align-items: center; justify-content: center; border: 1.5px solid #E2E8F0; border-radius: .6rem; font-weight: 700; font-size: .85rem; cursor: pointer; color: var(--fg-light); }
+    .wr-scores label { width: 2.2rem; height: 2.2rem; display: flex; align-items: center; justify-content: center; border: 1.5px solid var(--border); border-radius: .6rem; font-weight: 700; font-size: .85rem; cursor: pointer; color: var(--fg-light); }
     .wr-scores label:has(input:checked) { background: var(--primary); border-color: var(--primary); color: #fff; }
     .wr-row { display: grid; grid-template-columns: 1fr; gap: .6rem; }
     @media (min-width: 640px) { .wr-row { grid-template-columns: 220px 1fr; align-items: center; } }
     .wr-row input[type=range] { width: 100%; accent-color: var(--primary); }
-    .wr-row input[type=text] { padding: .5rem .75rem; border: 1.5px solid #E2E8F0; border-radius: var(--r-md); font: inherit; font-size: .9rem; }
-    .wr-habit { display: flex; justify-content: space-between; gap: 1rem; padding: .4rem 0; font-size: .9rem; border-top: 1px solid #F8FAFC; }
-    .wr-bar { height: 6px; background: #F1F5F9; border-radius: 6px; overflow: hidden; width: 120px; flex-shrink: 0; align-self: center; }
+    .wr-row input[type=text] { padding: .5rem .75rem; border: 1.5px solid var(--border); border-radius: var(--r-md); font: inherit; font-size: .9rem; }
+    .wr-habit { display: flex; justify-content: space-between; gap: 1rem; padding: .4rem 0; font-size: .9rem; border-top: 1px solid var(--bg); }
+    .wr-bar { height: 6px; background: var(--bg-alt); border-radius: 6px; overflow: hidden; width: 120px; flex-shrink: 0; align-self: center; }
     .wr-bar span { display: block; height: 100%; background: var(--primary-light); }
     .wr-submit { display: flex; justify-content: flex-end; gap: .75rem; margin-top: 1.5rem; }
     .wr-btn { padding: .85rem 1.5rem; border-radius: var(--r-md); border: none; background: var(--primary); color: #fff; font: inherit; font-weight: 700; cursor: pointer; }
     .wr-btn:hover { background: var(--primary-dark); }
     .wr-history { display: flex; flex-direction: column; gap: .4rem; font-size: .9rem; }
-    .wr-history div { display: flex; justify-content: space-between; padding: .4rem 0; border-top: 1px solid #F1F5F9; }
+    .wr-history div { display: flex; justify-content: space-between; padding: .4rem 0; border-top: 1px solid var(--bg-alt); }
 </style>
 
 <div class="wr-wrap">
-    <a href="{{ path('app_bilan') }}" style="font-size: .8rem; font-weight: 700; color: var(--fg-muted); text-transform: uppercase; letter-spacing: .05em; text-decoration: none;">← Bilan</a>
-    <h1>Revue de la semaine</h1>
-    <p class="wr-intro">
+    <a href="{{ path('app_bilan') }}" class="ks-header__back">← Mon bilan</a>
+    <h1 class="ks-header__title">Revue de la semaine</h1>
+    <p class="wr-intro ks-header__lead">
         Semaine du {{ week|format_date(pattern: 'd MMMM y', locale: 'fr') }}.
         Quinze minutes pour regarder en arrière, ajuster, et choisir ce qui compte vraiment la semaine prochaine.
         {% if review %}<br><strong>Revue déjà faite le {{ review.completedAt|format_date(pattern: 'EEEE d MMMM', locale: 'fr') }}</strong> : vous pouvez la compléter.{% endif %}

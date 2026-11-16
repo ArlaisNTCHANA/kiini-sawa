@@ -8,23 +8,23 @@
     .cp-card { background: var(--card-bg); border-radius: var(--r-lg); box-shadow: var(--card-shadow); padding: 1.5rem; margin-bottom: 1.25rem; }
     .cp-card h2 { font-family: var(--font-serif); font-size: 1.3rem; margin-bottom: .3rem; display: flex; align-items: center; gap: .5rem; }
     .cp-sub { color: var(--fg-muted); font-size: .88rem; margin-bottom: 1rem; }
-    .cp-input { padding: .6rem .8rem; border: 1.5px solid #E2E8F0; border-radius: var(--r-md); font: inherit; font-size: .9rem; background: #fff; }
+    .cp-input { padding: .6rem .8rem; border: 1.5px solid var(--border); border-radius: var(--r-md); font: inherit; font-size: .9rem; background: #fff; }
     .cp-btn { padding: .6rem 1.1rem; border: none; border-radius: var(--r-md); background: var(--primary); color: #fff; font: inherit; font-weight: 700; font-size: .88rem; cursor: pointer; }
     .cp-btn.sec { background: var(--bg-alt); color: var(--fg); }
-    .cp-item { border-top: 1px solid #F1F5F9; padding: .75rem 0; display: flex; justify-content: space-between; gap: 1rem; align-items: flex-start; }
+    .cp-item { border-top: 1px solid var(--bg-alt); padding: .75rem 0; display: flex; justify-content: space-between; gap: 1rem; align-items: flex-start; }
     .cp-item:first-child { border-top: none; }
-    .cp-pill { display: inline-block; font-size: .7rem; font-weight: 700; padding: .1rem .5rem; border-radius: 999px; background: #FDF2F8; color: #BE185D; margin-right: .3rem; }
+    .cp-pill { display: inline-block; font-size: .7rem; font-weight: 700; padding: .1rem .5rem; border-radius: 999px; background: var(--couple-soft); color: #BE185D; margin-right: .3rem; }
     .cp-mini { font-size: .78rem; color: var(--fg-muted); }
-    .cp-x { background: none; border: none; color: #CBD5E1; cursor: pointer; font-size: 1rem; }
+    .cp-x { background: none; border: none; color: var(--border-strong); cursor: pointer; font-size: 1rem; }
     .cp-x:hover { color: var(--danger); }
     .cp-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: .75rem; }
-    .cp-theme { border: 1.5px solid #F1F5F9; border-radius: var(--r-md); padding: .9rem; }
+    .cp-theme { border: 1.5px solid var(--bg-alt); border-radius: var(--r-md); padding: .9rem; }
 </style>
 {% set token = csrf_token('couple') %}
 
 <div class="cp-wrap">
-    <p style="font-size: .75rem; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; color: #DB2777;">Notre couple</p>
-    <h1 style="font-family: var(--font-serif); color: var(--primary); font-size: 2rem; margin: .2rem 0 .3rem;">{{ couple.partnerA.displayName }} &amp; {{ couple.partnerB.displayName }}</h1>
+    <p class="ks-header__eyebrow" style="color: var(--couple);">Notre couple</p>
+    <h1 class="ks-header__title">{{ couple.partnerA.displayName }} &amp; {{ couple.partnerB.displayName }}</h1>
     <p class="cp-mini" style="margin-bottom: 1.25rem;">Ensemble sur KIINI SAWA depuis {{ couple.joinedAt|format_date(pattern: 'MMMM y', locale: 'fr') }} · <a href="{{ path('app_couple_report') }}" style="color: var(--primary); font-weight: 700;">🔍 Notre rapport croisé</a></p>
 
     {# ── Vision ───────────────────────────── #}
@@ -45,7 +45,7 @@
         <p class="cp-sub">Ce qui guide nos décisions de couple, même quand c'est difficile.</p>
         <div style="display: flex; flex-wrap: wrap; gap: .5rem; margin-bottom: .75rem;">
             {% for v in couple.itemsOfKind('VALUE') %}
-                <form method="post" action="{{ path('app_couple_item_update', {id: v.id}) }}" style="display: inline-flex; align-items: center; gap: .2rem; background: #F0FDFA; border-radius: 999px; padding: .3rem .4rem .3rem .8rem;">
+                <form method="post" action="{{ path('app_couple_item_update', {id: v.id}) }}" style="display: inline-flex; align-items: center; gap: .2rem; background: var(--primary-soft); border-radius: 999px; padding: .3rem .4rem .3rem .8rem;">
                     <span style="font-weight: 600; color: var(--primary);">{{ v.title }}</span>
                     <input type="hidden" name="action" value="delete"><input type="hidden" name="_csrf_token" value="{{ token }}">
                     <button class="cp-x" type="submit" title="Retirer" aria-label="Retirer {{ v.title }}">×</button>
@@ -124,7 +124,7 @@
                 {% if key not in chosenKeys %}
                     <form method="post" action="{{ path('app_couple_item_add') }}" class="cp-theme">
                         <input type="hidden" name="kind" value="THEME"><input type="hidden" name="category" value="{{ key }}"><input type="hidden" name="_csrf_token" value="{{ token }}">
-                        <div style="font-weight: 700; display: flex; gap: .4rem; align-items: center;"><i data-lucide="{{ meta[1] }}" style="width: 16px; height: 16px; color: #DB2777;"></i> {{ meta[0] }}</div>
+                        <div style="font-weight: 700; display: flex; gap: .4rem; align-items: center;"><i data-lucide="{{ meta[1] }}" style="width: 16px; height: 16px; color: var(--couple);"></i> {{ meta[0] }}</div>
                         <p class="cp-mini" style="margin: .3rem 0 .6rem;">{{ meta[2] }}</p>
                         <button class="cp-btn sec" type="submit" style="padding: .35rem .7rem;">Choisir</button>
                     </form>
@@ -175,7 +175,7 @@
         {% if past|length %}
             <div style="margin-top: 1.25rem;">
                 <p style="font-weight: 700; margin-bottom: .4rem;">Nos décisions des mois précédents</p>
-                {% for r in past %}<p class="cp-mini" style="padding: .3rem 0; border-top: 1px solid #F1F5F9;"><strong>{{ r.month|format_date(pattern: 'MMMM y', locale: 'fr')|capitalize }}</strong> : {{ r.answers.decision ?? '—' }}</p>{% endfor %}
+                {% for r in past %}<p class="cp-mini" style="padding: .3rem 0; border-top: 1px solid var(--bg-alt);"><strong>{{ r.month|format_date(pattern: 'MMMM y', locale: 'fr')|capitalize }}</strong> : {{ r.answers.decision ?? '—' }}</p>{% endfor %}
             </div>
         {% endif %}
     </section>

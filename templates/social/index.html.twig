@@ -82,7 +82,7 @@
     /* Buttons */
     .social-btn {
         padding: 0.75rem 1.5rem;
-        background: linear-gradient(135deg, #0D9488 0%, #0F766E 100%);
+        background: linear-gradient(135deg, var(--primary-light) 0%, var(--primary) 100%);
         border: none;
         border-radius: 12px;
         color: #ffffff;
@@ -151,13 +151,13 @@
      x-init="initSocial()">
 
     <!-- Header -->
-    <header style="text-align: center; margin-bottom: 2rem;">
-        <h1 style="font-size: 1.75rem; font-weight: 700; line-height: 1.2;">Mes partenaires</h1>
-        <p style="color: var(--fg-muted); font-size: 0.875rem; margin-top: 0.5rem;">Partagez votre parcours avec vos mentors et grandissez ensemble.</p>
+    <header class="ks-header">
+        <h1 class="ks-header__title">Mes partenaires</h1>
+        <p class="ks-header__lead">Les personnes qui vous encouragent et vous aident à tenir vos engagements. Vous choisissez ce que vous partagez avec chacune.</p>
     </header>
 
     <!-- Tabs Navigation -->
-    <nav style="display: flex; gap: 0.5rem; justify-content: center; flex-wrap: wrap; margin-bottom: 2.5rem;">
+    <nav style="display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 2.5rem;">
         <button @click="activeTab = 'ACTIVITY'"
                 class="social-tab"
                 :class="activeTab === 'ACTIVITY' ? 'active' : ''">
@@ -188,13 +188,13 @@
             <!-- Goal Suggestions Section -->
             <div class="social-section">
                 <h2 class="social-heading">
-                    <span class="social-heading-icon" style="background: rgba(245,158,11,0.08); color: #D97706;"><i data-lucide="sparkles" class="w-5 h-5"></i></span>
+                    <span class="social-heading-icon" style="background: rgba(245,158,11,0.08); color: var(--warning);"><i data-lucide="sparkles" class="w-5 h-5"></i></span>
                     Suggestions d'Objectifs reçues
                 </h2>
                 
                 <div class="space-y-4">
                     <template x-if="suggestions.length === 0">
-                        <p class="text-slate-400 text-xs italic py-2">Aucune suggestion en attente.</p>
+                        <p class="ks-alert ks-alert--info">Aucune suggestion pour l'instant. Quand un partenaire vous proposera un objectif, il apparaîtra ici.</p>
                     </template>
                     
                     <template x-for="s in suggestions" :key="s.id">
@@ -223,13 +223,13 @@
             <!-- Comments & Feed Section -->
             <div class="social-section">
                 <h2 class="social-heading">
-                    <span class="social-heading-icon" style="background: rgba(59,130,246,0.08); color: #2563EB;"><i data-lucide="message-square" class="w-5 h-5"></i></span>
+                    <span class="social-heading-icon" style="background: rgba(59,130,246,0.08); color: var(--info);"><i data-lucide="message-square" class="w-5 h-5"></i></span>
                     Commentaires récents
                 </h2>
                 
                 <div class="space-y-4">
                     <template x-if="comments.length === 0">
-                        <p class="text-slate-400 text-xs italic py-2">Aucun commentaire de vos partenaires pour le moment.</p>
+                        <p class="ks-alert ks-alert--info">Aucun commentaire pour l'instant. Invitez un partenaire dans l'onglet « Partenaires » pour être encouragé.</p>
                     </template>
                     
                     <template x-for="comment in comments" :key="comment.id">
@@ -321,7 +321,7 @@
                                     <p style="font-size: 0.85rem; font-weight: 700; color: var(--fg-light); overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" x-text="req.partnerEmail"></p>
                                     <p class="social-label" x-text="'En attente depuis le ' + req.createdAt"></p>
                                 </div>
-                                <span class="social-label" style="color: #D97706;">En attente</span>
+                                <span class="social-label" style="color: var(--warning);">En attente</span>
                             </div>
                         </template>
                     </div>

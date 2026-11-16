@@ -12,8 +12,8 @@
         /* Custom scrollbar for inner container */
         .custom-scrollbar::-webkit-scrollbar { width: 6px; }
         .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
-        .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
-        .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: var(--border-strong); border-radius: 10px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: var(--fg-subtle); }
         
         .wizard-body {
             display: flex;
@@ -22,7 +22,7 @@
             justify-content: flex-start;
             min-height: calc(100vh - 72px);
             position: relative;
-            background: linear-gradient(135deg, #022c22 0%, #0f766e 50%, #014751 100%);
+            background: linear-gradient(135deg, #022c22 0%, var(--primary) 50%, #014751 100%);
             padding: 2.5rem 1.5rem;
         }
 
@@ -56,7 +56,7 @@
         .wiz-input, .wiz-select, .wiz-textarea {
             width: 100%;
             padding: 0.85rem 1.1rem;
-            background-color: #F8FAFC;
+            background-color: var(--bg);
             border: 1.5px solid rgba(15, 118, 110, 0.08);
             border-radius: 12px;
             color: var(--fg);
@@ -77,7 +77,7 @@
             align-items: center;
             gap: 0.75rem;
             padding: 0.75rem 1rem;
-            background: #F8FAFC;
+            background: var(--bg);
             border: 1px solid rgba(15, 118, 110, 0.06);
             border-radius: 1rem;
             animation: fadeIn 0.3s ease-out;
@@ -108,7 +108,7 @@
         .btn-remove {
             background: transparent;
             border: none;
-            color: #94a3b8;
+            color: var(--fg-subtle);
             cursor: pointer;
             padding: 0.375rem;
             border-radius: 0.5rem;
@@ -118,20 +118,20 @@
             justify-content: center;
         }
         .btn-remove:hover {
-            color: #EF4444;
-            background: #FEF2F2;
+            color: var(--danger);
+            background: var(--danger-soft);
         }
 
         /* Stepper progress */
         .progress-line {
             height: 5px;
             width: 100%;
-            background: #E2E8F0;
+            background: var(--border);
             overflow: hidden;
         }
         .progress-fill {
             height: 100%;
-            background: linear-gradient(90deg, #0D9488 0%, #2dd4bf 100%);
+            background: linear-gradient(90deg, var(--primary-light) 0%, #2dd4bf 100%);
             transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
         }
     </style>
@@ -181,7 +181,7 @@
             <div style="width: 2.25rem; height: 2.25rem; border-radius: 50%; background: var(--primary); display: flex; align-items: center; justify-content: center; color: white; box-shadow: 0 4px 12px rgba(15, 118, 110, 0.25);">
                 <i data-lucide="compass" style="width: 18px; height: 18px; stroke-width: 2.5px;"></i>
             </div>
-            <h1 style="font-family: 'Playfair Display', serif; font-size: 1.35rem; font-weight: 700; color: white; letter-spacing: -0.01em;">
+            <h1 style="font-family: var(--font-serif); font-size: 1.35rem; font-weight: 700; color: white; letter-spacing: -0.01em;">
                 {% if plan == 'CROISSANCE' %}Plan de Croissance
                 {% elseif plan == 'DEVELOPPEMENT' %}Plan de Développement
                 {% elseif plan == 'TRANSMISSION' %}Plan de Transmission
@@ -216,7 +216,7 @@
                     <span style="font-size: 0.65rem; font-weight: 800; text-transform: uppercase; tracking: 0.1em; color: var(--primary);" data-wizard-target="progressText">
                         Étape {{ currentWizardStep }} sur {{ allowedSteps|length }}
                     </span>
-                    <h3 style="font-size: 0.95rem; font-weight: 700; color: #334155; display: flex; align-items: center; gap: 0.5rem; margin-top: 2px;" id="step-title">But de Dieu</h3>
+                    <h3 style="font-size: 0.95rem; font-weight: 700; color: var(--fg-light); display: flex; align-items: center; gap: 0.5rem; margin-top: 2px;" id="step-title">But de Dieu</h3>
                 </div>
             </div>
         </div>
@@ -232,7 +232,7 @@
                 <div data-wizard-target="step" data-step-number="1" class="{% if step != 1 %}hidden{% endif %} animate-fade-in" data-step-title="But de Dieu">
                     <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.75rem; color: var(--primary);">
                         <i data-lucide="compass" style="width: 24px; height: 24px;"></i>
-                        <h2 style="font-family: 'Playfair Display', serif; font-size: 1.75rem; font-weight: 500;">But de Dieu pour ma vie</h2>
+                        <h2 style="font-family: var(--font-serif); font-size: 1.75rem; font-weight: 500;">But de Dieu pour ma vie</h2>
                     </div>
                     <p style="color: var(--fg-muted); font-size: 0.95rem; margin-bottom: 1.75rem; line-height: 1.6;">
                         Définissez votre mission de vie principale. Quelle est la phrase ou le paragraphe qui résume le sens que vous donnez à votre existence ?
@@ -251,7 +251,7 @@
                 <div data-wizard-target="step" data-step-number="2" class="{% if step != 2 %}hidden{% endif %} animate-fade-in" data-step-title="Balance Interne">
                     <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.75rem; color: var(--primary);">
                         <i data-lucide="activity" style="width: 24px; height: 24px;"></i>
-                        <h2 style="font-family: 'Playfair Display', serif; font-size: 1.75rem; font-weight: 500;">Balance Interne</h2>
+                        <h2 style="font-family: var(--font-serif); font-size: 1.75rem; font-weight: 500;">Balance Interne</h2>
                     </div>
                     <p style="color: var(--fg-muted); font-size: 0.95rem; margin-bottom: 1.75rem; line-height: 1.6;">
                         Vos fondations psychologiques : vos valeurs cardinales, convictions profondes et croyances limitantes à surmonter.
@@ -463,7 +463,7 @@
                 <div data-wizard-target="step" data-step-number="3" class="{% if step != 3 %}hidden{% endif %} animate-fade-in" data-step-title="Passions & Intérêts">
                     <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.75rem; color: var(--primary);">
                         <i data-lucide="heart" style="width: 24px; height: 24px;"></i>
-                        <h2 style="font-family: 'Playfair Display', serif; font-size: 1.75rem; font-weight: 500;">Passions & Intérêts</h2>
+                        <h2 style="font-family: var(--font-serif); font-size: 1.75rem; font-weight: 500;">Passions & Intérêts</h2>
                     </div>
                     <p style="color: var(--fg-muted); font-size: 0.95rem; margin-bottom: 1.75rem; line-height: 1.6;">
                         Qu'est-ce qui vous anime, vous passionne, vous fait oublier le temps et vous redonne de l'énergie ?
@@ -504,7 +504,7 @@
                 <div data-wizard-target="step" data-step-number="4" class="{% if step != 4 %}hidden{% endif %} animate-fade-in" data-step-title="Dons & Talents">
                     <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.75rem; color: var(--primary);">
                         <i data-lucide="sparkles" style="width: 24px; height: 24px;"></i>
-                        <h2 style="font-family: 'Playfair Display', serif; font-size: 1.75rem; font-weight: 500;">Dons & Talents Naturels</h2>
+                        <h2 style="font-family: var(--font-serif); font-size: 1.75rem; font-weight: 500;">Dons & Talents Naturels</h2>
                     </div>
                     <p style="color: var(--fg-muted); font-size: 0.95rem; margin-bottom: 1.75rem; line-height: 1.6;">
                         Quelles sont vos facilités innées ? Ce que vous effectuez avec aisance et plaisir là où d'autres doivent faire de gros efforts.
@@ -545,7 +545,7 @@
                 <div data-wizard-target="step" data-step-number="5" class="{% if step != 5 %}hidden{% endif %} animate-fade-in" data-step-title="Profil de Personnalité">
                     <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.75rem; color: var(--primary);">
                         <i data-lucide="user" style="width: 24px; height: 24px;"></i>
-                        <h2 style="font-family: 'Playfair Display', serif; font-size: 1.75rem; font-weight: 500;">Profil de Personnalité</h2>
+                        <h2 style="font-family: var(--font-serif); font-size: 1.75rem; font-weight: 500;">Profil de Personnalité</h2>
                     </div>
                     <p style="color: var(--fg-muted); font-size: 0.95rem; margin-bottom: 1.75rem; line-height: 1.6;">
                         Indiquez vos résultats aux tests de personnalité si vous les connaissez, afin d'enrichir votre plan d'alignement.
@@ -620,7 +620,7 @@
                 <div data-wizard-target="step" data-step-number="6" class="{% if step != 6 %}hidden{% endif %} animate-fade-in" data-step-title="Ma Vision">
                     <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.75rem; color: var(--primary);">
                         <i data-lucide="eye" style="width: 24px; height: 24px;"></i>
-                        <h2 style="font-family: 'Playfair Display', serif; font-size: 1.75rem; font-weight: 500;">Ma Vision</h2>
+                        <h2 style="font-family: var(--font-serif); font-size: 1.75rem; font-weight: 500;">Ma Vision</h2>
                     </div>
                     <p style="color: var(--fg-muted); font-size: 0.95rem; margin-bottom: 1.75rem; line-height: 1.6;">
                         Projetez-vous à moyen/long terme. À quoi ressemblerait votre vie idéale ? Que voulez-vous avoir accompli ?
@@ -646,7 +646,7 @@
                 <div data-wizard-target="step" data-step-number="7" class="{% if step != 7 %}hidden{% endif %} animate-fade-in" data-step-title="Objectifs Spécifiques">
                     <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.75rem; color: var(--primary);">
                         <i data-lucide="target" style="width: 24px; height: 24px;"></i>
-                        <h2 style="font-family: 'Playfair Display', serif; font-size: 1.75rem; font-weight: 500;">Objectifs Spécifiques (BE, DO, HAVE, GIVE)</h2>
+                        <h2 style="font-family: var(--font-serif); font-size: 1.75rem; font-weight: 500;">Objectifs Spécifiques (BE, DO, HAVE, GIVE)</h2>
                     </div>
                     <p style="color: var(--fg-muted); font-size: 0.95rem; margin-bottom: 1.75rem; line-height: 1.6;">
                         Déclinez votre vision générale en objectifs catégorisés selon 4 angles fondamentaux.
@@ -806,7 +806,7 @@
                 <div data-wizard-target="step" data-step-number="8" class="{% if step != 8 %}hidden{% endif %} animate-fade-in" data-step-title="Compétence & Connaissance">
                     <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.75rem; color: var(--primary);">
                         <i data-lucide="book-open" style="width: 24px; height: 24px;"></i>
-                        <h2 style="font-family: 'Playfair Display', serif; font-size: 1.75rem; font-weight: 500;">Compétence & Connaissance</h2>
+                        <h2 style="font-family: var(--font-serif); font-size: 1.75rem; font-weight: 500;">Compétence & Connaissance</h2>
                     </div>
                     <p style="color: var(--fg-muted); font-size: 0.95rem; margin-bottom: 1.75rem; line-height: 1.6;">
                         Quels savoirs ou compétences techniques / comportementales devez-vous développer pour soutenir vos objectifs de vie ?
@@ -824,7 +824,7 @@
                         <div id="competence-container" style="display: flex; flex-direction: column; gap: 1rem; margin-bottom: 2rem;">
                             {% if competences.COMPETENCE|length > 0 %}
                                 {% for goal in competences.COMPETENCE %}
-                                    <div class="growth-goal-block" style="padding: 1.25rem; background: #F8FAFC; border: 1px solid rgba(15, 118, 110, 0.08); border-radius: 1.25rem; display: flex; flex-direction: column; gap: 0.75rem; position: relative;">
+                                    <div class="growth-goal-block" style="padding: 1.25rem; background: var(--bg); border: 1px solid rgba(15, 118, 110, 0.08); border-radius: 1.25rem; display: flex; flex-direction: column; gap: 0.75rem; position: relative;">
                                         {% if not loop.first %}
                                             <button type="button" onclick="this.parentElement.remove(); reindexGrowthGoals('competence-container', 'competence')" class="btn-remove" style="position: absolute; top: 0.5rem; right: 0.5rem;" title="Supprimer">
                                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
@@ -862,7 +862,7 @@
                                     </div>
                                 {% endfor %}
                             {% else %}
-                                <div class="growth-goal-block" style="padding: 1.25rem; background: #F8FAFC; border: 1px solid rgba(15, 118, 110, 0.08); border-radius: 1.25rem; display: flex; flex-direction: column; gap: 0.75rem; position: relative;">
+                                <div class="growth-goal-block" style="padding: 1.25rem; background: var(--bg); border: 1px solid rgba(15, 118, 110, 0.08); border-radius: 1.25rem; display: flex; flex-direction: column; gap: 0.75rem; position: relative;">
                                     <div style="display: flex; flex-direction: column; gap: 0.25rem;">
                                         <label style="font-size: 0.7rem; font-weight: 700; color: var(--fg-light); text-transform: uppercase;">Nom de la compétence</label>
                                         <input type="text" name="growth_competence_title[0]" class="wiz-input" placeholder="Ex: Apprendre à pitcher une idée" required>
@@ -906,7 +906,7 @@
                         <div id="connaissance-container" style="display: flex; flex-direction: column; gap: 1rem;">
                             {% if competences.CONNAISSANCE|length > 0 %}
                                 {% for goal in competences.CONNAISSANCE %}
-                                    <div class="growth-goal-block" style="padding: 1.25rem; background: #F8FAFC; border: 1px solid rgba(15, 118, 110, 0.08); border-radius: 1.25rem; display: flex; flex-direction: column; gap: 0.75rem; position: relative;">
+                                    <div class="growth-goal-block" style="padding: 1.25rem; background: var(--bg); border: 1px solid rgba(15, 118, 110, 0.08); border-radius: 1.25rem; display: flex; flex-direction: column; gap: 0.75rem; position: relative;">
                                         {% if not loop.first %}
                                             <button type="button" onclick="this.parentElement.remove(); reindexGrowthGoals('connaissance-container', 'connaissance')" class="btn-remove" style="position: absolute; top: 0.5rem; right: 0.5rem;" title="Supprimer">
                                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
@@ -944,7 +944,7 @@
                                     </div>
                                 {% endfor %}
                             {% else %}
-                                <div class="growth-goal-block" style="padding: 1.25rem; background: #F8FAFC; border: 1px solid rgba(15, 118, 110, 0.08); border-radius: 1.25rem; display: flex; flex-direction: column; gap: 0.75rem; position: relative;">
+                                <div class="growth-goal-block" style="padding: 1.25rem; background: var(--bg); border: 1px solid rgba(15, 118, 110, 0.08); border-radius: 1.25rem; display: flex; flex-direction: column; gap: 0.75rem; position: relative;">
                                     <div style="display: flex; flex-direction: column; gap: 0.25rem;">
                                         <label style="font-size: 0.7rem; font-weight: 700; color: var(--fg-light); text-transform: uppercase;">Nom de la connaissance</label>
                                         <input type="text" name="growth_connaissance_title[0]" class="wiz-input" placeholder="Ex: Finance d'entreprise" required>
@@ -986,7 +986,7 @@
                 <div data-wizard-target="step" data-step-number="9" class="{% if step != 9 %}hidden{% endif %} animate-fade-in" data-step-title="Caractère & Conviction">
                     <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.75rem; color: var(--primary);">
                         <i data-lucide="shield" style="width: 24px; height: 24px;"></i>
-                        <h2 style="font-family: 'Playfair Display', serif; font-size: 1.75rem; font-weight: 500;">Caractère & Conviction</h2>
+                        <h2 style="font-family: var(--font-serif); font-size: 1.75rem; font-weight: 500;">Caractère & Conviction</h2>
                     </div>
                     <p style="color: var(--fg-muted); font-size: 0.95rem; margin-bottom: 1.75rem; line-height: 1.6;">
                         Quelles facettes de votre personnalité ou de vos habitudes morales souhaitez-vous forger pour accroître votre résilience ou discipline ?
@@ -1003,7 +1003,7 @@
                         <div id="character-container" style="display: flex; flex-direction: column; gap: 1rem;">
                             {% if growthGoals.CHARACTER|length > 0 %}
                                 {% for goal in growthGoals.CHARACTER %}
-                                    <div class="growth-goal-block" style="padding: 1.25rem; background: #F8FAFC; border: 1px solid rgba(15, 118, 110, 0.08); border-radius: 1.25rem; display: flex; flex-direction: column; gap: 0.75rem; position: relative;">
+                                    <div class="growth-goal-block" style="padding: 1.25rem; background: var(--bg); border: 1px solid rgba(15, 118, 110, 0.08); border-radius: 1.25rem; display: flex; flex-direction: column; gap: 0.75rem; position: relative;">
                                         {% if not loop.first %}
                                             <button type="button" onclick="this.parentElement.remove(); reindexGrowthGoals('character-container', 'character')" class="btn-remove" style="position: absolute; top: 0.5rem; right: 0.5rem;" title="Supprimer">
                                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
@@ -1040,7 +1040,7 @@
                                     </div>
                                 {% endfor %}
                             {% else %}
-                                <div class="growth-goal-block" style="padding: 1.25rem; background: #F8FAFC; border: 1px solid rgba(15, 118, 110, 0.08); border-radius: 1.25rem; display: flex; flex-direction: column; gap: 0.75rem; position: relative;">
+                                <div class="growth-goal-block" style="padding: 1.25rem; background: var(--bg); border: 1px solid rgba(15, 118, 110, 0.08); border-radius: 1.25rem; display: flex; flex-direction: column; gap: 0.75rem; position: relative;">
                                     <div style="display: flex; flex-direction: column; gap: 0.25rem;">
                                         <label style="font-size: 0.7rem; font-weight: 700; color: var(--fg-light); text-transform: uppercase;">Trait à forger</label>
                                         <input type="text" name="growth_character_title[0]" class="wiz-input" placeholder="Ex: Patience sous pression" required>
@@ -1081,7 +1081,7 @@
                 <div data-wizard-target="step" data-step-number="10" class="{% if step != 10 %}hidden{% endif %} animate-fade-in" data-step-title="Relation & Réseau">
                     <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.75rem; color: var(--primary);">
                         <i data-lucide="users" style="width: 24px; height: 24px;"></i>
-                        <h2 style="font-family: 'Playfair Display', serif; font-size: 1.75rem; font-weight: 500;">Relation & Réseau</h2>
+                        <h2 style="font-family: var(--font-serif); font-size: 1.75rem; font-weight: 500;">Relation & Réseau</h2>
                     </div>
                     <p style="color: var(--fg-muted); font-size: 0.95rem; margin-bottom: 1.75rem; line-height: 1.6;">
                         Quels profils d'individus devez-vous intégrer à votre entourage (mentors, pairs, soutiens) pour catalyser votre réussite ?
@@ -1098,7 +1098,7 @@
                         <div id="relation-container" style="display: flex; flex-direction: column; gap: 1rem;">
                             {% if growthGoals.RELATION|length > 0 %}
                                 {% for goal in growthGoals.RELATION %}
-                                    <div class="growth-goal-block" style="padding: 1.25rem; background: #F8FAFC; border: 1px solid rgba(15, 118, 110, 0.08); border-radius: 1.25rem; display: flex; flex-direction: column; gap: 0.75rem; position: relative;">
+                                    <div class="growth-goal-block" style="padding: 1.25rem; background: var(--bg); border: 1px solid rgba(15, 118, 110, 0.08); border-radius: 1.25rem; display: flex; flex-direction: column; gap: 0.75rem; position: relative;">
                                         {% if not loop.first %}
                                             <button type="button" onclick="this.parentElement.remove(); reindexGrowthGoals('relation-container', 'relation')" class="btn-remove" style="position: absolute; top: 0.5rem; right: 0.5rem;" title="Supprimer">
                                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
@@ -1145,7 +1145,7 @@
                                     </div>
                                 {% endfor %}
                             {% else %}
-                                <div class="growth-goal-block" style="padding: 1.25rem; background: #F8FAFC; border: 1px solid rgba(15, 118, 110, 0.08); border-radius: 1.25rem; display: flex; flex-direction: column; gap: 0.75rem; position: relative;">
+                                <div class="growth-goal-block" style="padding: 1.25rem; background: var(--bg); border: 1px solid rgba(15, 118, 110, 0.08); border-radius: 1.25rem; display: flex; flex-direction: column; gap: 0.75rem; position: relative;">
                                     <div style="display: flex; flex-direction: column; gap: 0.25rem;">
                                         <label style="font-size: 0.7rem; font-weight: 700; color: var(--fg-light); text-transform: uppercase;">Profil visé</label>
                                         <input type="text" name="growth_relation_title[0]" class="wiz-input" placeholder="Ex: Un mentor expert en levée de fonds" required>
@@ -1196,7 +1196,7 @@
                 <div data-wizard-target="step" data-step-number="11" class="{% if step != 11 %}hidden{% endif %} animate-fade-in" data-step-title="Héritage & Transmission">
                     <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.75rem; color: var(--primary);">
                         <i data-lucide="gift" style="width: 24px; height: 24px;"></i>
-                        <h2 style="font-family: 'Playfair Display', serif; font-size: 1.75rem; font-weight: 500;">Héritage & Impact</h2>
+                        <h2 style="font-family: var(--font-serif); font-size: 1.75rem; font-weight: 500;">Héritage & Impact</h2>
                     </div>
                     <p style="color: var(--fg-muted); font-size: 0.95rem; margin-bottom: 1.75rem; line-height: 1.6;">
                         Héritage & Transmission : quel impact durable souhaitez-vous laisser ? Que désirez-vous transmettre (savoirs, fonds, fondation, valeurs) ? Ces projets sont par défaut orientés pour soutenir vos objectifs de type <strong>GIVE</strong>.
@@ -1213,7 +1213,7 @@
                         <div id="legacy-container" style="display: flex; flex-direction: column; gap: 1rem;">
                             {% if legacyGoals|length > 0 %}
                                 {% for lg in legacyGoals %}
-                                    <div class="legacy-goal-block" style="padding: 1.25rem; background: #F8FAFC; border: 1px solid rgba(15, 118, 110, 0.08); border-radius: 1.25rem; display: flex; flex-direction: column; gap: 0.75rem; position: relative;">
+                                    <div class="legacy-goal-block" style="padding: 1.25rem; background: var(--bg); border: 1px solid rgba(15, 118, 110, 0.08); border-radius: 1.25rem; display: flex; flex-direction: column; gap: 0.75rem; position: relative;">
                                         {% if not loop.first %}
                                             <button type="button" onclick="this.parentElement.remove(); reindexLegacyGoals()" class="btn-remove" style="position: absolute; top: 0.5rem; right: 0.5rem;" title="Supprimer">
                                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
@@ -1250,7 +1250,7 @@
                                     </div>
                                 {% endfor %}
                             {% else %}
-                                <div class="legacy-goal-block" style="padding: 1.25rem; background: #F8FAFC; border: 1px solid rgba(15, 118, 110, 0.08); border-radius: 1.25rem; display: flex; flex-direction: column; gap: 0.75rem; position: relative;">
+                                <div class="legacy-goal-block" style="padding: 1.25rem; background: var(--bg); border: 1px solid rgba(15, 118, 110, 0.08); border-radius: 1.25rem; display: flex; flex-direction: column; gap: 0.75rem; position: relative;">
                                     <div style="display: flex; flex-direction: column; gap: 0.25rem;">
                                         <label style="font-size: 0.7rem; font-weight: 700; color: var(--fg-light); text-transform: uppercase;">Nom du projet de transmission</label>
                                         <input type="text" name="legacy_title[0]" class="wiz-input" placeholder="Ex: Financer une bourse d'études annuelle" required>
@@ -1291,7 +1291,7 @@
                 <div data-wizard-target="step" data-step-number="12" class="{% if step != 12 %}hidden{% endif %} animate-fade-in" data-step-title="Hygiène de Vie">
                     <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.75rem; color: var(--primary);">
                         <i data-lucide="heart-pulse" style="width: 24px; height: 24px;"></i>
-                        <h2 style="font-family: 'Playfair Display', serif; font-size: 1.75rem; font-weight: 500;">Hygiène de Vie</h2>
+                        <h2 style="font-family: var(--font-serif); font-size: 1.75rem; font-weight: 500;">Hygiène de Vie</h2>
                     </div>
                     <p style="color: var(--fg-muted); font-size: 0.95rem; margin-bottom: 1.25rem; line-height: 1.6;">
                         Le socle de votre énergie physique et mentale. Quels domaines de votre hygiène de vie souhaitez-vous structurer ?
@@ -1308,7 +1308,7 @@
 
                         {% if hygieneTestScores is not null %}
                             <div class="test-scores-summary" style="margin-bottom: 2rem; background: #ffffff; border: 1px solid rgba(15, 118, 110, 0.12); border-radius: 1.25rem; padding: 1.5rem; box-shadow: 0 4px 20px rgba(0,0,0,0.02);">
-                                <h4 style="margin: 0 0 1rem 0; font-size: 1.02rem; font-family: 'Playfair Display', serif; color: var(--primary); display: flex; align-items: center; gap: 0.5rem; font-weight: 600;">
+                                <h4 style="margin: 0 0 1rem 0; font-size: 1.02rem; font-family: var(--font-serif); color: var(--primary); display: flex; align-items: center; gap: 0.5rem; font-weight: 600;">
                                     <i data-lucide="bar-chart-2" style="width: 18px; height: 18px; color: var(--primary);"></i>
                                     Synthèse de votre test du {{ hygieneTest.date|date('d/m/Y') }}
                                 </h4>
@@ -1320,13 +1320,13 @@
                                                              (categoryKey == 'spirituel' ? 'Spirituel' : 
                                                              (categoryKey == 'ressources' ? 'Ressources' : 
                                                              (categoryKey == 'environnement' ? 'Environnement' : categoryKey|capitalize))))) %}
-                                        <div style="padding: 0.85rem; background: #F8FAFC; border-radius: 1rem; border: 1px solid rgba(15, 118, 110, 0.05); display: flex; flex-direction: column; gap: 0.6rem;">
+                                        <div style="padding: 0.85rem; background: var(--bg); border-radius: 1rem; border: 1px solid rgba(15, 118, 110, 0.05); display: flex; flex-direction: column; gap: 0.6rem;">
                                             <div style="display: flex; justify-content: space-between; align-items: center;">
                                                 <span style="font-weight: 750; font-size: 0.88rem; color: var(--fg-light);">{{ categoryName }}</span>
                                                 <span style="font-size: 0.8rem; font-weight: 800; padding: 0.15rem 0.45rem; border-radius: 5px;
-                                                    {% if score >= 7.0 %}background: #ECFDF5; color: #059669;
-                                                    {% elseif score >= 4.0 %}background: #FFFBEB; color: #D97706;
-                                                    {% else %}background: #FEF2F2; color: #EF4444;{% endif %}">
+                                                    {% if score >= 7.0 %}background: var(--success-soft); color: var(--success);
+                                                    {% elseif score >= 4.0 %}background: var(--warning-soft); color: var(--warning);
+                                                    {% else %}background: var(--danger-soft); color: var(--danger);{% endif %}">
                                                     {{ score }}/10
                                                 </span>
                                             </div>
@@ -1336,10 +1336,10 @@
                                                         <div style="display: flex; justify-content: space-between; align-items: center; font-size: 0.78rem; color: var(--fg-muted);">
                                                             <span style="display: flex; align-items: center; gap: 0.25rem;">
                                                                 <i data-lucide="{% if subScore >= 7.0 %}check-circle-2{% else %}alert-circle{% endif %}" 
-                                                                   style="width: 11px; height: 11px; color: {% if subScore >= 7.0 %}#059669{% else %}#D97706{% endif %}; flex-shrink: 0;"></i>
+                                                                   style="width: 11px; height: 11px; color: {% if subScore >= 7.0 %}var(--success){% else %}var(--warning){% endif %}; flex-shrink: 0;"></i>
                                                                 {{ subtheme }}
                                                             </span>
-                                                            <span style="font-weight: 600; color: {% if subScore >= 7.0 %}#059669{% elseif subScore >= 4.0 %}#D97706{% else %}#EF4444{% endif %};">
+                                                            <span style="font-weight: 600; color: {% if subScore >= 7.0 %}var(--success){% elseif subScore >= 4.0 %}var(--warning){% else %}var(--danger){% endif %};">
                                                                 {{ subScore }}/10
                                                             </span>
                                                         </div>
@@ -1353,9 +1353,9 @@
                         {% endif %}
                     {% else %}
                         <div style="padding: 1rem 1.25rem; background: rgba(236, 72, 153, 0.05); border: 1px dashed rgba(236, 72, 153, 0.3); border-radius: 1rem; margin-bottom: 1.75rem; display: flex; align-items: flex-start; gap: 0.75rem;">
-                            <i data-lucide="help-circle" style="width: 20px; height: 20px; color: #ec4899; flex-shrink: 0; margin-top: 0.1rem;"></i>
+                            <i data-lucide="help-circle" style="width: 20px; height: 20px; color: var(--couple); flex-shrink: 0; margin-top: 0.1rem;"></i>
                             <div style="font-size: 0.88rem; color: var(--fg-light); line-height: 1.5;">
-                                <strong style="color: #ec4899;">Audit d'Hygiène non détecté.</strong> Vous pouvez <a href="{{ path('app_personality_take', { type: 'HYGIENE' }) }}" style="color: #ec4899; text-decoration: underline; font-weight: 600;">passer le test d'Hygiène de vie</a> pour pré-remplir automatiquement ces domaines selon vos forces et faiblesses actuelles.
+                                <strong style="color: var(--couple);">Audit d'Hygiène non détecté.</strong> Vous pouvez <a href="{{ path('app_personality_take', { type: 'HYGIENE' }) }}" style="color: var(--couple); text-decoration: underline; font-weight: 600;">passer le test d'Hygiène de vie</a> pour pré-remplir automatiquement ces domaines selon vos forces et faiblesses actuelles.
                             </div>
                         </div>
                     {% endif %}
@@ -1370,7 +1370,7 @@
                         <div id="hygiene-container" style="display: flex; flex-direction: column; gap: 1rem;">
                             {% if hygieneDomains|length > 0 %}
                                 {% for hd in hygieneDomains %}
-                                    <div class="hygiene-domain-block" style="padding: 1.25rem; background: #F8FAFC; border: 1px solid rgba(15, 118, 110, 0.08); border-radius: 1.25rem; display: flex; flex-direction: column; gap: 0.75rem; position: relative;">
+                                    <div class="hygiene-domain-block" style="padding: 1.25rem; background: var(--bg); border: 1px solid rgba(15, 118, 110, 0.08); border-radius: 1.25rem; display: flex; flex-direction: column; gap: 0.75rem; position: relative;">
                                         {% if not loop.first %}
                                             <button type="button" onclick="this.parentElement.remove(); reindexHygieneDomains()" class="btn-remove" style="position: absolute; top: 0.5rem; right: 0.5rem;" title="Supprimer">
                                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
@@ -1407,7 +1407,7 @@
                                     </div>
                                 {% endfor %}
                             {% else %}
-                                <div class="hygiene-domain-block" style="padding: 1.25rem; background: #F8FAFC; border: 1px solid rgba(15, 118, 110, 0.08); border-radius: 1.25rem; display: flex; flex-direction: column; gap: 0.75rem; position: relative;">
+                                <div class="hygiene-domain-block" style="padding: 1.25rem; background: var(--bg); border: 1px solid rgba(15, 118, 110, 0.08); border-radius: 1.25rem; display: flex; flex-direction: column; gap: 0.75rem; position: relative;">
                                     <div style="display: flex; flex-direction: column; gap: 0.25rem;">
                                         <label style="font-size: 0.7rem; font-weight: 700; color: var(--fg-light); text-transform: uppercase;">Nom du domaine d'hygiène</label>
                                         <input type="text" name="hygiene_name[0]" class="wiz-input" placeholder="Ex: Sommeil (Rituel de coucher à 22h30 max)" required>
@@ -1448,14 +1448,14 @@
                 <div data-wizard-target="step" data-step-number="13" class="{% if step != 13 %}hidden{% endif %} animate-fade-in" data-step-title="Mon Échéancier">
                     <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.75rem; color: var(--primary);">
                         <i data-lucide="calendar" style="width: 24px; height: 24px;"></i>
-                        <h2 style="font-family: 'Playfair Display', serif; font-size: 1.75rem; font-weight: 500;">Mon Échéancier</h2>
+                        <h2 style="font-family: var(--font-serif); font-size: 1.75rem; font-weight: 500;">Mon Échéancier</h2>
                     </div>
                     
                     <div style="display: flex; flex-direction: column; align-items: center; text-align: center; padding: 2.5rem 1.5rem; background: rgba(15, 118, 110, 0.04); border: 1px solid rgba(15, 118, 110, 0.1); border-radius: 1.5rem; margin-top: 1rem; gap: 1rem;">
                         <div style="width: 3.5rem; height: 3.5rem; border-radius: 50%; background: white; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 12px rgba(0,0,0,0.04);">
                             <i data-lucide="check" style="width: 28px; height: 28px; color: var(--primary);"></i>
                         </div>
-                        <h3 style="font-family: 'Playfair Display', serif; font-size: 1.35rem; color: var(--primary); font-weight: 500;">Félicitations !</h3>
+                        <h3 style="font-family: var(--font-serif); font-size: 1.35rem; color: var(--primary); font-weight: 500;">Félicitations !</h3>
                         <p style="color: var(--fg-light); font-size: 0.95rem; line-height: 1.6; max-width: 28rem;">
                             Votre plan global de vie est complété. En sauvegardant, KIINI SAWA va structurer vos piliers de croissance et y rattacher vos objectifs.
                         </p>
@@ -1473,7 +1473,7 @@
             <div style="margin-top: auto; padding-top: 1.5rem; border-top: 1px solid rgba(15, 118, 110, 0.05); display: flex; justify-content: space-between; align-items: center; background: white;">
                 {% if single %}
                     <a href="{{ path(planRoute) }}" 
-                       style="padding: 0.75rem 1.5rem; border-radius: 12px; background: #F1F5F9; color: #475569; border: none; font-size: 0.9rem; font-weight: 700; cursor: pointer; transition: all 0.2s;"
+                       style="padding: 0.75rem 1.5rem; border-radius: 12px; background: var(--bg-alt); color: var(--fg-light); border: none; font-size: 0.9rem; font-weight: 700; cursor: pointer; transition: all 0.2s;"
                        onmouseover="this.style.background='#E2E8F0'"
                        onmouseout="this.style.background='#F1F5F9'">
                         Annuler
@@ -1481,7 +1481,7 @@
                     
                     <button type="submit" 
                             name="save_single"
-                            style="padding: 0.75rem 1.75rem; border-radius: 12px; background: linear-gradient(135deg, #0D9488 0%, #0F766E 100%); color: white; border: none; font-size: 0.9rem; font-weight: 700; cursor: pointer; transition: all 0.2s; box-shadow: 0 4px 14px rgba(15, 118, 110, 0.3);"
+                            style="padding: 0.75rem 1.75rem; border-radius: 12px; background: linear-gradient(135deg, var(--primary-light) 0%, var(--primary) 100%); color: white; border: none; font-size: 0.9rem; font-weight: 700; cursor: pointer; transition: all 0.2s; box-shadow: 0 4px 14px rgba(15, 118, 110, 0.3);"
                             onmouseover="this.style.opacity='0.95'"
                             onmouseout="this.style.opacity='1'">
                         Enregistrer les modifications
@@ -1490,7 +1490,7 @@
                     <button type="button" 
                             data-action="click->wizard#previous" 
                             data-wizard-target="prevButton"
-                            style="padding: 0.75rem 1.5rem; border-radius: 12px; background: #F1F5F9; color: #475569; border: none; font-size: 0.9rem; font-weight: 700; cursor: pointer; transition: all 0.2s;"
+                            style="padding: 0.75rem 1.5rem; border-radius: 12px; background: var(--bg-alt); color: var(--fg-light); border: none; font-size: 0.9rem; font-weight: 700; cursor: pointer; transition: all 0.2s;"
                             onmouseover="this.style.background='#E2E8F0'"
                             onmouseout="this.style.background='#F1F5F9'"
                             class="invisible">
@@ -1508,7 +1508,7 @@
  
                     <button type="submit" 
                             data-wizard-target="submitButton"
-                            style="padding: 0.75rem 1.75rem; border-radius: 12px; background: linear-gradient(135deg, #0D9488 0%, #0F766E 100%); color: white; border: none; font-size: 0.9rem; font-weight: 700; cursor: pointer; transition: all 0.2s; box-shadow: 0 4px 14px rgba(15, 118, 110, 0.3);"
+                            style="padding: 0.75rem 1.75rem; border-radius: 12px; background: linear-gradient(135deg, var(--primary-light) 0%, var(--primary) 100%); color: white; border: none; font-size: 0.9rem; font-weight: 700; cursor: pointer; transition: all 0.2s; box-shadow: 0 4px 14px rgba(15, 118, 110, 0.3);"
                             onmouseover="this.style.opacity='0.95'"
                             onmouseout="this.style.opacity='1'"
                             class="hidden">
@@ -1731,7 +1731,7 @@
         const checkboxesHtml = getLifeGoalsCheckboxesHtml(axis, index);
 
         const html = `
-            <div class="growth-goal-block" style="padding: 1.25rem; background: #F8FAFC; border: 1px solid rgba(15, 118, 110, 0.08); border-radius: 1.25rem; display: flex; flex-direction: column; gap: 0.75rem; position: relative; animation: fadeIn 0.3s ease-out; margin-bottom: 0.75rem;">
+            <div class="growth-goal-block" style="padding: 1.25rem; background: var(--bg); border: 1px solid rgba(15, 118, 110, 0.08); border-radius: 1.25rem; display: flex; flex-direction: column; gap: 0.75rem; position: relative; animation: fadeIn 0.3s ease-out; margin-bottom: 0.75rem;">
                 <button type="button" onclick="this.parentElement.remove(); reindexGrowthGoals('${axis}-container', '${axis}')" class="btn-remove" style="position: absolute; top: 0.5rem; right: 0.5rem;" title="Supprimer">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
                 </button>
@@ -1802,7 +1802,7 @@
         }
 
         const html = `
-            <div class="legacy-goal-block" style="padding: 1.25rem; background: #F8FAFC; border: 1px solid rgba(15, 118, 110, 0.08); border-radius: 1.25rem; display: flex; flex-direction: column; gap: 0.75rem; position: relative; animation: fadeIn 0.3s ease-out; margin-bottom: 0.75rem;">
+            <div class="legacy-goal-block" style="padding: 1.25rem; background: var(--bg); border: 1px solid rgba(15, 118, 110, 0.08); border-radius: 1.25rem; display: flex; flex-direction: column; gap: 0.75rem; position: relative; animation: fadeIn 0.3s ease-out; margin-bottom: 0.75rem;">
                 <button type="button" onclick="this.parentElement.remove(); reindexLegacyGoals()" class="btn-remove" style="position: absolute; top: 0.5rem; right: 0.5rem;" title="Supprimer">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
                 </button>
@@ -1873,7 +1873,7 @@
         }
 
         const html = `
-            <div class="hygiene-domain-block" style="padding: 1.25rem; background: #F8FAFC; border: 1px solid rgba(15, 118, 110, 0.08); border-radius: 1.25rem; display: flex; flex-direction: column; gap: 0.75rem; position: relative; animation: fadeIn 0.3s ease-out; margin-bottom: 0.75rem;">
+            <div class="hygiene-domain-block" style="padding: 1.25rem; background: var(--bg); border: 1px solid rgba(15, 118, 110, 0.08); border-radius: 1.25rem; display: flex; flex-direction: column; gap: 0.75rem; position: relative; animation: fadeIn 0.3s ease-out; margin-bottom: 0.75rem;">
                 <button type="button" onclick="this.parentElement.remove(); reindexHygieneDomains()" class="btn-remove" style="position: absolute; top: 0.5rem; right: 0.5rem;" title="Supprimer">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
                 </button>

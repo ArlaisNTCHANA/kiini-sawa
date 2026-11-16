@@ -93,7 +93,7 @@
     }
     .bilan-sublabel {
         font-size: 0.7rem;
-        color: #94A3B8;
+        color: var(--fg-subtle);
         line-height: 1.4;
     }
 
@@ -119,7 +119,7 @@
     /* Buttons — aligned with btn-submit */
     .bilan-btn {
         padding: 0.75rem 1.5rem;
-        background: linear-gradient(135deg, #0D9488 0%, #0F766E 100%);
+        background: linear-gradient(135deg, var(--primary-light) 0%, var(--primary) 100%);
         border: none;
         border-radius: 12px;
         color: #ffffff;
@@ -180,7 +180,7 @@
         width: 100%;
         height: 6px;
         cursor: pointer;
-        background: #e2e8f0;
+        background: var(--border);
         border-radius: 9999px;
     }
     .ks-slider::-webkit-slider-thumb {
@@ -200,7 +200,7 @@
         width: 100%;
         height: 6px;
         cursor: pointer;
-        background: #e2e8f0;
+        background: var(--border);
         border-radius: 9999px;
     }
     .ks-slider::-moz-range-thumb {
@@ -233,9 +233,9 @@
      x-init="initBilan()">
      
     <!-- Header -->
-    <header class="text-center" style="margin-bottom: 2rem;">
-        <h1 style="font-size: 1.75rem; font-weight: 700; line-height: 1.2;">Mon bilan</h1>
-        <p style="color: var(--fg-muted); font-size: 0.875rem; margin-top: 0.5rem;">Évaluez vos progrès, suivez votre discipline et observez votre évolution.</p>
+    <header class="ks-header">
+        <h1 class="ks-header__title">Mon bilan</h1>
+        <p class="ks-header__lead">Évaluez vos progrès, suivez votre discipline et observez votre évolution.</p>
         <a href="{{ path('app_weekly_review') }}" class="bilan-btn" style="margin-top: 1.25rem; display: inline-flex; align-items: center; gap: .5rem; text-decoration: none;">
             <i data-lucide="calendar-check" class="w-4 h-4"></i> Faire ma revue de la semaine
         </a>
@@ -279,7 +279,7 @@
             </div>
         </div>
         <div class="bilan-stat-card">
-            <div style="padding: 0.6rem; background: rgba(16,185,129,0.08); border-radius: 0.75rem; color: #059669;">
+            <div style="padding: 0.6rem; background: rgba(16,185,129,0.08); border-radius: 0.75rem; color: var(--success);">
                 <i data-lucide="activity" class="w-4 h-4"></i>
             </div>
             <div>
@@ -297,7 +297,7 @@
             </div>
         </div>
         <div class="bilan-stat-card">
-            <div style="padding: 0.6rem; background: rgba(245,158,11,0.08); border-radius: 0.75rem; color: #D97706;">
+            <div style="padding: 0.6rem; background: rgba(245,158,11,0.08); border-radius: 0.75rem; color: var(--warning);">
                 <i data-lucide="smile" class="w-4 h-4"></i>
             </div>
             <div>
@@ -318,7 +318,7 @@
             <div>
                 <p style="color: var(--fg-light); font-weight: 600; margin-bottom: 0.25rem;">Aucun objectif actif dans cette catégorie.</p>
                 <p class="bilan-sublabel" style="max-width: 24rem; margin: 0 auto;">
-                    Ajoutez des objectifs de croissance ou liez des habitudes dans votre plan pour commencer le suivi de votre progression.
+                    Ajoutez des objectifs de croissance ou liez des rituels à votre plan pour suivre votre progression.
                 </p>
             </div>
             <a href="{{ path('app_strategies') }}" class="bilan-btn">
@@ -354,7 +354,7 @@
                                     <i data-lucide="repeat" class="w-3.5 h-3.5" style="color: var(--fg-muted);"></i>
                                     <span class="bilan-label">Régularité</span>
                                 </div>
-                                <span class="bilan-sublabel">Complétion des habitudes liées</span>
+                                <span class="bilan-sublabel">Régularité des rituels liés</span>
                             </div>
                             <span style="font-size: 1.25rem; font-weight: 800; line-height: 1;" 
                                   :class="getHabitRateColor(goal)" 
@@ -467,7 +467,7 @@
                          style="margin-top: 1rem; display: flex; flex-direction: column; gap: 0.75rem; background: rgba(248,250,252,0.5); border-radius: 1.25rem; border: 1px solid rgba(15,118,110,0.05); padding: 1.25rem;">
                         
                         <template x-if="goal.habits.length === 0">
-                            <p class="text-xs text-slate-400 italic text-center py-2">Aucune habitude liée à cet objectif.</p>
+                            <p class="text-xs text-slate-400 italic text-center py-2">Aucun rituel lié à cet objectif.</p>
                         </template>
                         
                         <template x-for="h in goal.habits" :key="h.id">  

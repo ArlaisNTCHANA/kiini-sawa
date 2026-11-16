@@ -13,9 +13,9 @@
     .og-kpi span { font-size: .78rem; color: var(--fg-muted); }
     .og-table { width: 100%; border-collapse: collapse; font-size: .88rem; }
     .og-table th { text-align: left; color: var(--fg-muted); font-weight: 600; font-size: .75rem; text-transform: uppercase; letter-spacing: .04em; padding: .5rem .4rem; }
-    .og-table td { padding: .65rem .4rem; border-top: 1px solid #F1F5F9; vertical-align: top; }
+    .og-table td { padding: .65rem .4rem; border-top: 1px solid var(--bg-alt); vertical-align: top; }
     .og-pill { display: inline-block; padding: .1rem .5rem; border-radius: 999px; font-size: .72rem; font-weight: 700; background: var(--bg-alt); color: var(--fg-light); margin: 0 .2rem .2rem 0; }
-    .og-input { padding: .55rem .75rem; border: 1.5px solid #E2E8F0; border-radius: var(--r-md); font: inherit; font-size: .88rem; background: #fff; }
+    .og-input { padding: .55rem .75rem; border: 1.5px solid var(--border); border-radius: var(--r-md); font: inherit; font-size: .88rem; background: #fff; }
     .og-btn { padding: .6rem 1.1rem; border: none; border-radius: var(--r-md); background: var(--primary); color: #fff; font: inherit; font-weight: 700; font-size: .88rem; cursor: pointer; }
     .og-btn.sec { background: var(--bg-alt); color: var(--fg); }
     .og-mini { font-size: .78rem; color: var(--fg-muted); }
@@ -27,8 +27,8 @@
             {% for m in memberships %}<a href="{{ path('app_organisation_index', {org: m.organisation.id}) }}" style="margin-right: .6rem; {{ m.organisation == org ? 'font-weight: 700; color: var(--primary);' }}">{{ m.organisation.name }}</a>{% endfor %}
         </p>
     {% endif %}
-    <h1 style="font-family: var(--font-serif); color: var(--primary); font-size: 2rem;">{{ org.name }}</h1>
-    <p style="color: var(--fg-muted); margin: .25rem 0 1.5rem;">{{ org.typeLabel }} · vous êtes <strong>{{ me.roleLabel|lower }}</strong>
+    <h1 class="ks-header__title">{{ org.name }}</h1>
+    <p class="ks-header__lead" style="margin-bottom: 2rem;">{{ org.typeLabel }} · vous êtes <strong>{{ me.roleLabel|lower }}</strong>
         {% if org.licenseValid %} · {{ org.usedSeats }}/{{ org.seats }} places, valables jusqu'au {{ org.seatsValidUntil|format_date(pattern: 'd MMMM y', locale: 'fr') }}{% else %} · <span style="color: var(--accent); font-weight: 600;">places non actives</span>{% endif %}
     </p>
 
@@ -123,7 +123,7 @@
         <section class="og-card" x-data="{ seats: {{ (org.seats in packs|map(p => p.seats)) ? org.seats : 25 }}, currency: 'EUR', method: '{{ bankInstructions ? 'BANK_TRANSFER' : 'MOBILE_MONEY' }}' }">
             <h2>{{ org.licenseValid ? 'Renouveler ou changer de pack' : 'Activer les places' }}</h2>
             {% if pendingOrder %}
-                <p style="border-left: 4px solid #F59E0B; padding-left: .75rem;">⏳ Commande de {{ pendingOrder.seats }} places ({{ pendingOrder.amount|money(pendingOrder.currency) }}) en cours de vérification.</p>
+                <p style="border-left: 4px solid var(--warning); padding-left: .75rem;">⏳ Commande de {{ pendingOrder.seats }} places ({{ pendingOrder.amount|money(pendingOrder.currency) }}) en cours de vérification.</p>
             {% elseif not bankInstructions and not mobileMoneyInstructions %}
                 <p class="og-mini">Le paiement en ligne n'est pas encore ouvert : écrivez-nous pour activer vos places.</p>
             {% else %}
@@ -140,8 +140,8 @@
                 <p style="font-size: 1.1rem; margin-bottom: .75rem;">Montant :
                     {% for p in packs %}{% for cur in ['EUR', 'XAF'] %}<strong x-show="seats === {{ p.seats }} && currency === '{{ cur }}'" x-cloak>{{ p[cur]|money(cur) }}</strong>{% endfor %}{% endfor %}
                 </p>
-                {% if bankInstructions %}<div x-show="method === 'BANK_TRANSFER'" style="white-space: pre-line; background: #F8FAFC; border: 1px dashed #CBD5E1; border-radius: var(--r-md); padding: .9rem; font-size: .9rem; margin-bottom: .75rem;">{{ bankInstructions }}</div>{% endif %}
-                {% if mobileMoneyInstructions %}<div x-show="method === 'MOBILE_MONEY'" x-cloak style="white-space: pre-line; background: #F8FAFC; border: 1px dashed #CBD5E1; border-radius: var(--r-md); padding: .9rem; font-size: .9rem; margin-bottom: .75rem;">{{ mobileMoneyInstructions }}</div>{% endif %}
+                {% if bankInstructions %}<div x-show="method === 'BANK_TRANSFER'" style="white-space: pre-line; background: var(--bg); border: 1px dashed var(--border-strong); border-radius: var(--r-md); padding: .9rem; font-size: .9rem; margin-bottom: .75rem;">{{ bankInstructions }}</div>{% endif %}
+                {% if mobileMoneyInstructions %}<div x-show="method === 'MOBILE_MONEY'" x-cloak style="white-space: pre-line; background: var(--bg); border: 1px dashed var(--border-strong); border-radius: var(--r-md); padding: .9rem; font-size: .9rem; margin-bottom: .75rem;">{{ mobileMoneyInstructions }}</div>{% endif %}
                 <form method="post" action="{{ path('app_organisation_order', {id: org.id}) }}" style="display: flex; gap: .5rem; flex-wrap: wrap;">
                     <input type="hidden" name="seats" :value="seats"><input type="hidden" name="currency" :value="currency">
                     <select name="method" x-model="method" class="og-input" aria-label="Moyen de paiement">

@@ -4,12 +4,12 @@
 
 {% block body %}
 <div style="max-width: 760px; margin: 0 auto; padding: 2.5rem 1.25rem 8rem;">
-    <a href="{{ path('app_plan_de_vie') }}" style="font-size: .8rem; font-weight: 700; color: var(--fg-muted); text-transform: uppercase; letter-spacing: .05em; text-decoration: none;">← Plan de Vie</a>
-    <h1 style="font-family: var(--font-serif); color: var(--primary); font-size: 2rem; margin-top: .4rem;">Historique de mes plans</h1>
+    <a href="{{ path('app_plan_de_vie') }}" class="ks-header__back">← Plan de Vie</a>
+    <h1 class="ks-header__title">Historique de mes plans</h1>
     <p style="color: var(--fg-muted); margin: .35rem 0 1.75rem;">Une version est enregistrée à chaque revue mensuelle et après chaque passage complet dans l'assistant. Relisez d'où vous venez.</p>
 
     <form method="post" action="{{ path('app_plan_history_save') }}" style="display: flex; gap: .6rem; flex-wrap: wrap; background: var(--card-bg); box-shadow: var(--card-shadow); border-radius: var(--r-lg); padding: 1rem; margin-bottom: 1.5rem;">
-        <input name="title" maxlength="200" placeholder="Nom de la version (facultatif), ex. « Avant ma reconversion »" style="flex: 1; min-width: 220px; padding: .65rem .85rem; border: 1.5px solid #E2E8F0; border-radius: var(--r-md); font: inherit;">
+        <input name="title" maxlength="200" placeholder="Nom de la version (facultatif), ex. « Avant ma reconversion »" style="flex: 1; min-width: 220px; padding: .65rem .85rem; border: 1.5px solid var(--border); border-radius: var(--r-md); font: inherit;">
         <input type="hidden" name="_csrf_token" value="{{ csrf_token('plan_history') }}">
         <button type="submit" style="padding: .65rem 1.1rem; border: none; border-radius: var(--r-md); background: var(--primary); color: #fff; font: inherit; font-weight: 600; cursor: pointer;">Enregistrer une version</button>
     </form>

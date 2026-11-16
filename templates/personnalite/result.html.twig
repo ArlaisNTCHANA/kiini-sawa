@@ -34,22 +34,22 @@
     gap: 0.4rem;
     padding: 0.45rem 0.9rem;
     border-radius: 10px;
-    border: 1.5px solid #e2e8f0;
+    border: 1.5px solid var(--border);
     background: transparent;
-    color: #64748b;
+    color: var(--fg-muted);
     font-size: 0.8rem;
     font-weight: 600;
     text-decoration: none;
     transition: background 0.15s;
     margin-bottom: 2rem;
 }
-.result-back:hover { background: #f1f5f9; }
+.result-back:hover { background: var(--bg-alt); }
 .result-label {
     font-size: 0.65rem;
     font-weight: 800;
     text-transform: uppercase;
     letter-spacing: 0.15em;
-    color: #94a3b8;
+    color: var(--fg-subtle);
     margin-bottom: 0.5rem;
 }
 .result-type-badge {
@@ -65,22 +65,22 @@
     margin-bottom: 1rem;
 }
 .result-code {
-    font-family: 'Playfair Display', serif;
+    font-family: var(--font-serif);
     font-size: 3rem;
     font-weight: 700;
     line-height: 1;
     margin-bottom: 0.25rem;
 }
 .result-title {
-    font-family: 'Playfair Display', serif;
+    font-family: var(--font-serif);
     font-size: 1.5rem;
     font-weight: 500;
-    color: #1e293b;
+    color: var(--fg-light);
     margin-bottom: 0.75rem;
 }
 .result-insights {
     font-size: 0.95rem;
-    color: #475569;
+    color: var(--fg-light);
     line-height: 1.7;
     max-width: 580px;
     font-style: italic;
@@ -90,7 +90,7 @@
 }
 .result-date {
     font-size: 0.72rem;
-    color: #94a3b8;
+    color: var(--fg-subtle);
     font-weight: 600;
 }
 .result-section {
@@ -105,7 +105,7 @@
     font-weight: 800;
     text-transform: uppercase;
     letter-spacing: 0.12em;
-    color: #94a3b8;
+    color: var(--fg-subtle);
     margin: 0 0 1.25rem;
     display: flex;
     align-items: center;
@@ -135,10 +135,10 @@
     margin-top: 0.2rem;
 }
 .result-list-icon.strength { color: #16a34a; }
-.result-list-icon.weakness { color: #dc2626; }
+.result-list-icon.weakness { color: var(--danger); }
 .result-essence-explanation {
     font-size: 0.8rem;
-    color: #64748b;
+    color: var(--fg-muted);
     margin-bottom: 0.85rem;
     line-height: 1.5;
 }
@@ -169,7 +169,7 @@
 }
 .bar-track {
     height: 10px;
-    background: #f1f5f9;
+    background: var(--bg-alt);
     border-radius: 99px;
     overflow: hidden;
 }
@@ -186,7 +186,7 @@
 .btn-retake {
     padding: 0.75rem 1.5rem;
     border-radius: 12px;
-    border: 1.5px solid #e2e8f0;
+    border: 1.5px solid var(--border);
     background: #fff;
     color: #374151;
     font-size: 0.85rem;
@@ -197,7 +197,7 @@
     gap: 0.5rem;
     transition: background 0.15s, transform 0.1s;
 }
-.btn-retake:hover { background: #f8fafc; transform: scale(1.01); }
+.btn-retake:hover { background: var(--bg); transform: scale(1.01); }
 .btn-catalogue {
     padding: 0.75rem 1.5rem;
     border-radius: 12px;
@@ -254,7 +254,7 @@
             {% else %}
             <div class="result-title" style="color:{{ testMeta.color }};">Votre profil {{ testMeta.name }}</div>
             {% if profile %}
-            <div style="font-size:1.25rem; font-weight:600; color:#475569; margin-top: 0.5rem; margin-bottom:0.75rem;">Dominant : {{ profile.title }}</div>
+            <div style="font-size:1.25rem; font-weight:600; color:var(--fg-light); margin-top: 0.5rem; margin-bottom:0.75rem;">Dominant : {{ profile.title }}</div>
             {% endif %}
             {% endif %}
 
@@ -311,8 +311,8 @@
                 <div class="subtheme-card" style="background: #ffffff; border: 1px solid #e8eaf0; border-radius: 20px; padding: 1.5rem; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.02), 0 2px 4px -1px rgba(0,0,0,0.01); transition: transform 0.2s, box-shadow 0.2s; display: flex; flex-direction: column; gap: 1rem;">
                     
                     {# Header of Axis card #}
-                    <div class="subtheme-card-header" style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #f1f5f9; padding-bottom: 0.75rem;">
-                        <span style="font-size: 1.05rem; font-weight: 700; color: #1e293b; text-transform: capitalize;">
+                    <div class="subtheme-card-header" style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--bg-alt); padding-bottom: 0.75rem;">
+                        <span style="font-size: 1.05rem; font-weight: 700; color: var(--fg-light); text-transform: capitalize;">
                             {% if axisKey == 'physique' %}
                                 🏃‍♂️ Physique
                             {% elseif axisKey == 'mental' %}
@@ -346,11 +346,11 @@
                     <div class="subtheme-items" style="display: flex; flex-direction: column; gap: 0.85rem;">
                         {% for label, score in subthemes %}
                             <div class="subtheme-row">
-                                <div class="subtheme-label" style="display: flex; justify-content: space-between; font-size: 0.82rem; font-weight: 600; color: #475569; margin-bottom: 0.3rem;">
+                                <div class="subtheme-label" style="display: flex; justify-content: space-between; font-size: 0.82rem; font-weight: 600; color: var(--fg-light); margin-bottom: 0.3rem;">
                                     <span>{{ label }}</span>
                                     <span style="color: {{ testMeta.color }}; font-weight: 700;">{{ score|round(1) }}/10</span>
                                 </div>
-                                <div class="subtheme-track" style="height: 6px; background: #f1f5f9; border-radius: 99px; overflow: hidden;">
+                                <div class="subtheme-track" style="height: 6px; background: var(--bg-alt); border-radius: 99px; overflow: hidden;">
                                     <div class="subtheme-fill" style="width: {{ score * 10 }}%; height: 100%; border-radius: 99px; background: {{ testMeta.color }}; opacity: 0.85;"></div>
                                 </div>
                             </div>
@@ -395,7 +395,7 @@
     {% if profile.weaknesses %}
     <div class="result-section">
         <h3>
-            <svg style="width:14px;height:14px;color:#dc2626;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+            <svg style="width:14px;height:14px;color:var(--danger);" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
             Points d'attention &amp; Défis
         </h3>
         <ul class="result-list">
@@ -418,7 +418,7 @@
         <p class="result-essence-explanation">
             <em>L'essence représente le besoin fondamental, la boussole intérieure et la motivation profonde qui guident inconsciemment vos choix de vie.</em>
         </p>
-        <div class="result-essence" style="border-color:{{ testMeta.color }};background:{{ testMeta.bg }}; font-size: 1.05rem; font-style: italic; color: #1e293b; font-weight: 500; padding: 1.25rem; border-radius: 14px; border-left: 3px solid;">
+        <div class="result-essence" style="border-color:{{ testMeta.color }};background:{{ testMeta.bg }}; font-size: 1.05rem; font-style: italic; color: var(--fg-light); font-weight: 500; padding: 1.25rem; border-radius: 14px; border-left: 3px solid;">
             {{ profile.essence }}
         </div>
     </div>

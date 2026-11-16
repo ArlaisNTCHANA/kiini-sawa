@@ -9,20 +9,20 @@
     .book-body h3 { font-size: 1.2rem; }
     .book-body p, .book-body ul, .book-body ol { margin-bottom: 1rem; }
     .book-body ul, .book-body ol { padding-left: 1.4rem; }
-    .book-body blockquote { border-left: 3px solid #F59E0B; background: #FFFBEB; padding: .75rem 1rem; border-radius: 0 10px 10px 0; color: #78350F; margin: 1.25rem 0; }
-    .book-body hr { border: none; border-top: 1px solid #E2E8F0; margin: 2rem 0; }
+    .book-body blockquote { border-left: 3px solid var(--warning); background: var(--warning-soft); padding: .75rem 1rem; border-radius: 0 10px 10px 0; color: #78350F; margin: 1.25rem 0; }
+    .book-body hr { border: none; border-top: 1px solid var(--border); margin: 2rem 0; }
     .book-body strong { color: var(--fg); }
     .book-body table { border-collapse: collapse; width: 100%; font-size: .9rem; margin: 1rem 0; }
-    .book-body th, .book-body td { border: 1px solid #E2E8F0; padding: .45rem .6rem; text-align: left; }
+    .book-body th, .book-body td { border: 1px solid var(--border); padding: .45rem .6rem; text-align: left; }
 </style>
 {% if not app.user %}{% include 'shared/_public_header.html.twig' %}{% endif %}
 <article style="max-width: 720px; margin: 0 auto; padding: 2.5rem 1.25rem 8rem;">
-    <a href="{{ path('app_methode_index') }}" style="font-size: .8rem; font-weight: 700; color: var(--fg-muted); text-transform: uppercase; letter-spacing: .05em; text-decoration: none;">← La méthode</a>
-    <h1 style="font-family: var(--font-serif); color: var(--primary); font-size: 2.1rem; line-height: 1.25; margin: .5rem 0 .25rem;">{{ chapter.title }}</h1>
+    <a href="{{ path('app_methode_index') }}" class="ks-header__back">← La méthode</a>
+    <h1 class="ks-header__title">{{ chapter.title }}</h1>
     <p style="color: var(--fg-muted); font-size: .85rem; margin-bottom: 2rem;">Lecture : {{ chapter.minutes }} min</p>
     {% if locked %}
         <p class="book-body">{{ chapter.excerpt }}</p>
-        <div style="background: #F0FDFA; border: 1px solid #99F6E4; border-radius: var(--r-lg); padding: 1.5rem; margin-top: 1.5rem; text-align: center;">
+        <div style="background: var(--primary-soft); border: 1px solid #99F6E4; border-radius: var(--r-lg); padding: 1.5rem; margin-top: 1.5rem; text-align: center;">
             <p style="font-family: var(--font-serif); font-size: 1.25rem; color: var(--fg); margin-bottom: .4rem;">La suite de ce chapitre vous attend</p>
             <p style="color: var(--fg-muted); margin-bottom: 1rem;">Créez votre compte gratuit pour lire toute la méthode, et la mettre en pratique dans votre Plan de Vie.</p>
             <a href="{{ path('app_register') }}" style="display: inline-block; background: var(--primary); color: #fff; font-weight: 700; padding: .7rem 1.4rem; border-radius: 999px; text-decoration: none;">Créer mon compte gratuit</a>
@@ -31,13 +31,13 @@
     {% else %}
         <div class="book-body">{{ chapter.html|raw }}</div>
         {% if not app.user %}
-            <div style="background: #F0FDFA; border-radius: var(--r-lg); padding: 1.25rem 1.5rem; margin-top: 2rem; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 1rem;">
+            <div style="background: var(--primary-soft); border-radius: var(--r-lg); padding: 1.25rem 1.5rem; margin-top: 2rem; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 1rem;">
                 <p style="color: var(--fg); margin: 0;">Prêt à poser vos fondations ? Trois minutes suffisent.</p>
                 <a href="{{ path('app_register') }}" style="background: var(--primary); color: #fff; font-weight: 700; padding: .6rem 1.2rem; border-radius: 999px; text-decoration: none;">Commencer gratuitement</a>
             </div>
         {% endif %}
     {% endif %}
-    <nav style="display: flex; justify-content: space-between; gap: 1rem; margin-top: 3rem; padding-top: 1.5rem; border-top: 1px solid #E2E8F0; font-size: .9rem;">
+    <nav style="display: flex; justify-content: space-between; gap: 1rem; margin-top: 3rem; padding-top: 1.5rem; border-top: 1px solid var(--border); font-size: .9rem;">
         {% if previous %}<a href="{{ path('app_methode_chapter', {slug: previous.slug}) }}" style="color: var(--primary); text-decoration: none;">← {{ previous.title }}</a>{% else %}<span></span>{% endif %}
         {% if next %}<a href="{{ path('app_methode_chapter', {slug: next.slug}) }}" style="color: var(--primary); text-decoration: none; text-align: right;">{{ next.title }} →</a>{% endif %}
     </nav>

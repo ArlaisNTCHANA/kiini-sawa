@@ -7,8 +7,8 @@
 {% block body %}
 {% import _self as macros %}
 <div style="max-width: 760px; margin: 0 auto; padding: 2.5rem 1.25rem 8rem; line-height: 1.6;">
-    <a href="{{ path('app_plan_history') }}" style="font-size: .8rem; font-weight: 700; color: var(--fg-muted); text-transform: uppercase; letter-spacing: .05em; text-decoration: none;">← Historique</a>
-    <h1 style="font-family: var(--font-serif); color: var(--primary); font-size: 1.9rem; margin-top: .4rem;">{{ version.title }}</h1>
+    <a href="{{ path('app_plan_history') }}" class="ks-header__back">← Historique</a>
+    <h1 class="ks-header__title">{{ version.title }}</h1>
     <p style="color: var(--fg-muted); margin-bottom: 1.5rem;">Version du {{ version.createdAt|format_datetime(pattern: "d MMMM y 'à' HH:mm", locale: 'fr') }} · lecture seule</p>
 
     <div style="background: var(--card-bg); box-shadow: var(--card-shadow); border-radius: var(--r-lg); padding: 1.5rem;">

@@ -1,0 +1,12 @@
+{#
+    En-tête de page commun (docs/design.md).
+    Paramètres : title (obligatoire), eyebrow, icon (Lucide), lead, back {url, label}, center (bool).
+    Pour ajouter des boutons : {% embed 'shared/_page_header.html.twig' with {...} %}{% block actions %}…{% endblock %}{% endembed %}
+#}
+<header class="ks-header{{ center|default(false) ? ' ks-header--center' }}">
+    {% if back is defined and back %}<a href="{{ back.url }}" class="ks-header__back">← {{ back.label }}</a><br>{% endif %}
+    {% if eyebrow is defined and eyebrow %}<span class="ks-header__eyebrow">{% if icon is defined and icon %}<i data-lucide="{{ icon }}" style="width: 14px; height: 14px;"></i>{% endif %}{{ eyebrow }}</span>{% endif %}
+    <h1 class="ks-header__title">{{ title }}</h1>
+    {% if lead is defined and lead %}<p class="ks-header__lead">{{ lead }}</p>{% endif %}
+    {% block actions %}{% endblock %}
+</header>

@@ -4,8 +4,8 @@
 
 {% block body %}
 <div style="max-width: 860px; margin: 0 auto; padding: 2.5rem 1.25rem 8rem;">
-    <h1 style="font-family: var(--font-serif); color: var(--primary); font-size: 2rem;">KIINI SAWA pour votre organisation</h1>
-    <p style="color: var(--fg-muted); font-size: 1.05rem; margin: .4rem 0 2rem;">Église, association, entreprise ou cabinet de coaching : accompagnez vos membres dans la durée. Chacun bâtit son Plan de Vie ; vous suivez l'engagement du groupe et confiez chacun à un accompagnateur.</p>
+    <h1 class="ks-header__title">KIINI SAWA pour votre organisation</h1>
+    <p class="ks-header__lead" style="margin-bottom: 2rem;">Église, association, entreprise ou cabinet de coaching : accompagnez vos membres dans la durée. Chacun bâtit son Plan de Vie ; vous suivez l'engagement du groupe et confiez chacun à un accompagnateur.</p>
 
     <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem; margin-bottom: 2rem;">
         {% for f in [
@@ -27,7 +27,7 @@
         <table style="width: 100%; border-collapse: collapse; font-size: .92rem;">
             <tr style="text-align: left; color: var(--fg-muted);"><th style="padding: .5rem;">Places</th><th style="padding: .5rem;">Remise</th><th style="padding: .5rem;">Euros</th><th style="padding: .5rem;">Francs CFA</th></tr>
             {% for p in packs %}
-                <tr style="border-top: 1px solid #F1F5F9;">
+                <tr style="border-top: 1px solid var(--bg-alt);">
                     <td style="padding: .5rem; font-weight: 700;">{{ p.seats }}</td>
                     <td style="padding: .5rem;">{{ p.discount ? '−' ~ p.discount ~ ' %' : '—' }}</td>
                     <td style="padding: .5rem;">{{ p.EUR|money('EUR') }} <small style="color: var(--fg-muted);">({{ (p.EUR / p.seats)|money('EUR') }} / pers.)</small></td>
@@ -40,8 +40,8 @@
     <form method="post" action="{{ path('app_organisation_create') }}" style="background: var(--card-bg); box-shadow: var(--card-shadow); border-radius: var(--r-lg); padding: 1.5rem;">
         <h2 style="font-family: var(--font-serif); font-size: 1.3rem; margin-bottom: 1rem;">Créer l'espace de mon organisation</h2>
         <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
-            <input name="name" required maxlength="150" placeholder="Nom (ex. Église Évangélique de Bonapriso)" aria-label="Nom de l'organisation" style="padding: .75rem .9rem; border: 1.5px solid #E2E8F0; border-radius: var(--r-md); font: inherit;">
-            <select name="type" aria-label="Type" style="padding: .75rem .9rem; border: 1.5px solid #E2E8F0; border-radius: var(--r-md); font: inherit;">
+            <input name="name" required maxlength="150" placeholder="Nom (ex. Église Évangélique de Bonapriso)" aria-label="Nom de l'organisation" style="padding: .75rem .9rem; border: 1.5px solid var(--border); border-radius: var(--r-md); font: inherit;">
+            <select name="type" aria-label="Type" style="padding: .75rem .9rem; border: 1.5px solid var(--border); border-radius: var(--r-md); font: inherit;">
                 {% for k, label in types %}<option value="{{ k }}">{{ label }}</option>{% endfor %}
             </select>
         </div>
