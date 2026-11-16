@@ -27,7 +27,8 @@ final class NotificationMailer
     ) {
     }
 
-    public function send(User $user, NotificationType $type, string $title, string $message, ?string $actionUrl): void
+    /** @param array<string, mixed> $context */
+    public function send(User $user, NotificationType $type, string $title, string $message, ?string $actionUrl, ?string $template = null, array $context = []): void
     {
         $unsubscribe = $this->signer->sign($this->urls->generate('app_notification_unsubscribe', ['user' => $user->getId(), 'type' => $type->value], UrlGeneratorInterface::ABSOLUTE_URL));
         // Lien de l'action en adresse absolue (les notifications stockent des chemins relatifs)
@@ -41,8 +42,8 @@ final class NotificationMailer
                 ->from(Address::create($this->from))
                 ->to($user->getEmail())
                 ->subject($title)
-                ->htmlTemplate('notification/email/notification.html.twig')
-                ->context(['name' => $user->getDisplayName(), 'title' => $title, 'message' => $message, 'actionUrl' => $action, 'unsubscribeUrl' => $unsubscribe]);
+                ->htmlTemplate($template ?? 'notification/email/notification.html.twig')
+                ->context(['name' => $user->getDisplayName(), 'title' => $title, 'message' => $message, 'actionUrl' => $action, 'unsubscribeUrl' => $unsubscribe] + $context);
             $email->getHeaders()->addTextHeader('List-Unsubscribe', '<'.$unsubscribe.'>');
             $this->mailer->send($email);
         } catch (\Throwable $e) {

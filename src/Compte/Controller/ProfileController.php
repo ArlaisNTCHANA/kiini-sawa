@@ -60,6 +60,7 @@ class ProfileController extends AbstractController
         'notifyGoalDeadline' => 'setNotifyGoalDeadline',
         'notifyPartnerInactive' => 'setNotifyPartnerInactive',
         'notifyConnection' => 'setNotifyConnection',
+        'notifyOnboarding' => 'setNotifyOnboarding',
     ];
 
     #[Route('', name: '', methods: ['GET'])]

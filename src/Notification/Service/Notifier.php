@@ -35,11 +35,12 @@ final class Notifier
     }
 
     /**
-     * @param string|null $key identifiant du rappel (ex. « 2026-W46 ») : rien n'est envoyé s'il existe déjà
+     * @param string|null          $key          identifiant du rappel (ex. « 2026-W46 ») : rien n'est envoyé s'il existe déjà
+     * @param array{template?: string, context?: array<string, mixed>} $email gabarit d'email particulier (sinon le gabarit commun)
      *
      * @return bool true si l'utilisateur a été prévenu
      */
-    public function notify(User $user, NotificationType $type, string $title, string $message, ?string $actionUrl = null, ?string $key = null): bool
+    public function notify(User $user, NotificationType $type, string $title, string $message, ?string $actionUrl = null, ?string $key = null, array $email = []): bool
     {
         $prefs = $this->preferences($user);
         if (null !== $key && $this->notifications->existsWithKey($user, $type, $key)) {
@@ -54,6 +55,11 @@ final class Notifier
             }
             $inApp = $prefs->isEnableInApp();
             $byEmail = \in_array($type, self::REMINDERS, true) ? $prefs->isEnableEmailDigest() : $prefs->isEnableEmailInstant();
+            // Accueil : un email (réglé par sa propre préférence), sans encombrer le centre de notifications
+            if (NotificationType::ONBOARDING === $type) {
+                $inApp = false;
+                $byEmail = true;
+            }
         }
         if (!$inApp && !$byEmail) {
             return false;
@@ -66,7 +72,7 @@ final class Notifier
         $this->em->flush();
 
         if ($byEmail) {
-            $this->mailer->send($user, $type, $title, $message, $actionUrl);
+            $this->mailer->send($user, $type, $title, $message, $actionUrl, $email['template'] ?? null, $email['context'] ?? []);
         }
 
         return true;
@@ -98,6 +104,7 @@ final class Notifier
             NotificationType::HABIT_REMINDER => $p->isNotifyHabitReminder(),
             NotificationType::GOAL_DEADLINE => $p->isNotifyGoalDeadline(),
             NotificationType::PARTNER_INACTIVE => $p->isNotifyPartnerInactive(),
+            NotificationType::ONBOARDING => $p->isNotifyOnboarding(),
             default => true,
         };
     }

@@ -44,3 +44,19 @@ php bin/console messenger:consume async --time-limit=3600
 | Code | `src/Notification/` (`Service/Notifier`, `Service/ReminderService`, `Service/NotificationMailer`) |
 | Templates | `templates/notification/` |
 | Tests | `tests/Notification/` |
+
+## Emails d'accueil (16/11/2026)
+
+`Service/OnboardingSequence` : une étape par jour clé après l'inscription, adaptée à ce que l'utilisateur a déjà fait.
+
+| Jour | Email | Envoyé si |
+|---|---|---|
+| J0 | Bienvenue (fondations, méthode, essai PRO) | dès la vérification de l'email (rattrapage à J1) |
+| J1 | Écrire sa vision | la vision est vide |
+| J3 | Premier rituel, ou profil complet si un rituel existe | ni rituel, ou pas encore de test |
+| J7 | Première revue de la semaine (+ conseil partenaire) | toujours |
+| J9 | Les 4 plans stratégiques | essai PRO en cours (le rappel de fin d'essai part à J11) |
+
+Type `NotificationType::ONBOARDING` : email seulement (pas dans le centre de notifications), préférence
+« conseils de démarrage » (`notify_onboarding`), lien de désabonnement en un clic. Clé anti-doublon « accueil J<n> ».
+Gabarits : `templates/notification/email/onboarding/`. Envoi quotidien via `app:reminders:send` (tâche planifiée).

@@ -67,6 +67,10 @@ class NotificationPreference
     #[ORM\Column(options: ['default' => true])]
     private bool $notifyPartnerInactive = true;
 
+    /** Emails de conseils pendant les deux premières semaines. */
+    #[ORM\Column(options: ['default' => true])]
+    private bool $notifyOnboarding = true;
+
     #[ORM\Column(length: 50)]
     private string $digestFrequency = 'WEEKLY';
 
@@ -267,6 +271,18 @@ class NotificationPreference
     public function setNotifyWeeklyReview(bool $notifyWeeklyReview): static
     {
         $this->notifyWeeklyReview = $notifyWeeklyReview;
+
+        return $this;
+    }
+
+    public function isNotifyOnboarding(): bool
+    {
+        return $this->notifyOnboarding;
+    }
+
+    public function setNotifyOnboarding(bool $notifyOnboarding): static
+    {
+        $this->notifyOnboarding = $notifyOnboarding;
 
         return $this;
     }

@@ -130,7 +130,7 @@ class RegistrationController extends AbstractController
     }
 
     #[Route('/verification-email', name: 'app_verify_email', methods: ['GET', 'POST'])]
-    public function verifyEmail(Request $request, EntityManagerInterface $em): Response
+    public function verifyEmail(Request $request, EntityManagerInterface $em, \App\Notification\Service\OnboardingSequence $onboarding): Response
     {
         /** @var User $user */
         $user = $this->getUser();
@@ -145,6 +145,7 @@ class RegistrationController extends AbstractController
             } elseif ($this->tokens->consumeCode($user, AccountToken::VERIFY_EMAIL, $payload->getString('code'))) {
                 $user->setIsVerified(true);
                 $em->flush();
+                $onboarding->welcome($user);
                 $this->addFlash('success', 'Votre adresse email est vérifiée. Bienvenue !');
 
                 return ($invite = PendingInvitation::redirectPath($request->getSession())) ? $this->redirect($invite) : $this->redirectToRoute('app_onboarding');

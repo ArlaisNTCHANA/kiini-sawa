@@ -26,15 +26,17 @@ final class ReminderService
         private readonly EntityManagerInterface $em,
         private readonly Notifier $notifier,
         private readonly WeeklyReviewRepository $weeklyReviews,
+        private readonly OnboardingSequence $onboarding,
     ) {
     }
 
     /** @return array<string, int> nombre de rappels envoyés par type */
     public function sendAll(\DateTimeImmutable $today): array
     {
-        $sent = array_fill_keys(['revue hebdomadaire', 'revue mensuelle', 'rituels', 'échéances', 'partenaires', 'fin d\'essai ou d\'abonnement'], 0);
+        $sent = array_fill_keys(['accueil', 'revue hebdomadaire', 'revue mensuelle', 'rituels', 'échéances', 'partenaires', 'fin d\'essai ou d\'abonnement'], 0);
         $users = $this->em->getRepository(User::class)->findBy(['isVerified' => true]);
         foreach ($users as $user) {
+            $sent['accueil'] += (int) $this->onboarding->sendFor($user, $today);
             $sent['revue hebdomadaire'] += (int) $this->weeklyReview($user, $today);
             $sent['revue mensuelle'] += (int) $this->monthlyReview($user, $today);
             $sent['rituels'] += (int) $this->habits($user, $today);
