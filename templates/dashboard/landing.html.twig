@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <title>KIINI SAWA — Bâtissez une vie alignée sur le but de Dieu</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {% include 'shared/_pwa_head.html.twig' %}
     <meta name="description" content="KIINI SAWA vous aide à discerner votre raison d'être, à bâtir votre Plan de Vie et à le vivre au quotidien : plans de croissance, rituels, revues et partenaires de redevabilité.">
     <meta name="theme-color" content="#0F766E">
     <link rel="canonical" href="{{ url('app_home') }}">
@@ -244,6 +245,7 @@
 <footer>
     <div class="wrap">
         © {{ 'now'|date('Y') }} KIINI SAWA ·
+        <a href="{{ path('app_install') }}">📱 Installer l'application</a> ·
         {% include 'legal/_footer_links.html.twig' with {} only %}
     </div>
 </footer>

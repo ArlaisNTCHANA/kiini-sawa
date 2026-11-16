@@ -1,0 +1,14 @@
+{# Application installable : manifeste, icônes, couleur, enregistrement du service worker #}
+<link rel="manifest" href="/manifest.webmanifest">
+<link rel="icon" type="image/png" sizes="32x32" href="/icons/favicon-32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/icons/favicon-16.png">
+<link rel="apple-touch-icon" href="/icons/apple-touch-icon.png">
+<meta name="apple-mobile-web-app-title" content="KIINI SAWA">
+<meta name="application-name" content="KIINI SAWA">
+<script>
+    if ('serviceWorker' in navigator) {
+        window.addEventListener('load', function () { navigator.serviceWorker.register('/sw.js').catch(function () {}); });
+    }
+    // Invitation d'installation (Android, Chrome, Edge) gardée pour le bouton « Installer l'application »
+    window.addEventListener('beforeinstallprompt', function (e) { e.preventDefault(); window.ksInstallPrompt = e; document.dispatchEvent(new Event('ks-install-ready')); });
+</script>

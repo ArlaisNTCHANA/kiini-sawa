@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-    <meta name="theme-color" content="#2C5559">
+    <meta name="theme-color" content="#0F766E">
+    {% include 'shared/_pwa_head.html.twig' %}
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <title>{% block title %}KIINI SAWA{% endblock %} — KIINI SAWA</title>
@@ -468,6 +469,7 @@
                             { label: 'Notre couple',    icon: 'heart',         href: path('app_couple'), desc: 'Vision et projets à deux' },
                             { label: 'Mon organisation', icon: 'building-2',  href: path('app_organisation_index'), desc: 'Église, association…' },
                             { label: 'La Méthode',      icon: 'book-open',     href: path('app_methode_index'), desc: 'Les chapitres du livre' },
+                            { label: 'Installer l\'application', icon: 'smartphone', href: path('app_install'), desc: 'Sur votre téléphone' },
                         ] %}
                         {% for it in ddItems1 %}
                         <a href="{{ it.href }}" @click="userOpen = false" class="dd-item">
@@ -563,6 +565,7 @@
                     { label: 'Notre couple', path: path('app_couple'),         icon: 'heart' },
                     { label: 'Mon organisation', path: path('app_organisation_index'), icon: 'building-2' },
                     { label: 'La Méthode',   path: path('app_methode_index'),  icon: 'book-open' },
+                    { label: 'Installer l\'application', path: path('app_install'), icon: 'smartphone' },
                     { label: is_pro() ? (is_trialing() ? 'Essai PRO' : 'Mon abonnement') : 'Passer à PRO', path: path('app_subscription'), icon: 'crown' },
                 ] %}
                 {% for mm in mobileMore %}

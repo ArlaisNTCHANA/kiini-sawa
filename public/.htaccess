@@ -2,6 +2,9 @@
 # sauf les fichiers qui existent vraiment (assets compilés, robots…).
 DirectoryIndex index.php
 
+# Application installable
+AddType application/manifest+json .webmanifest
+
 <IfModule mod_negotiation.c>
     Options -MultiViews
 </IfModule>
@@ -38,8 +41,12 @@ DirectoryIndex index.php
 # Assets compilés (nom versionné par empreinte) : mis en cache un an.
 <IfModule mod_headers.c>
     Header always unset X-Powered-By
+    # Le service worker et le manifeste doivent toujours être relus (mises à jour de l'application)
+    <FilesMatch "^(sw\.js|manifest\.webmanifest)$">
+        Header set Cache-Control "no-cache"
+    </FilesMatch>
     Header unset X-Powered-By
-    <FilesMatch "\.(css|js|woff2|svg|png|jpg|jpeg|webp|ico)$">
+    <FilesMatch "^(?!sw\.js$).+\.(css|js|woff2|svg|png|jpg|jpeg|webp|ico)$">
         Header set Cache-Control "public, max-age=31536000, immutable"
     </FilesMatch>
 </IfModule>
