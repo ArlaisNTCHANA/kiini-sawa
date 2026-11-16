@@ -21,7 +21,8 @@ class PersonalityAnswer
     #[ORM\Column(type: Types::TEXT)]
     private ?string $text = null;
 
-    #[ORM\Column(length: 255)]
+    // Protégé : « value » est un mot clé de MariaDB.
+    #[ORM\Column(name: '`value`', length: 255)]
     private ?string $value = null;
 
     #[ORM\Column(options: ['default' => 0])]

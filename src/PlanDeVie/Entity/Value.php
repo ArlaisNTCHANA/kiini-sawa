@@ -6,7 +6,9 @@ use App\PlanDeVie\Repository\ValueRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
+// « value » est un mot réservé de MariaDB (INSERT INTO value … échoue) : table renommée.
 #[ORM\Entity(repositoryClass: ValueRepository::class)]
+#[ORM\Table(name: 'life_value')]
 class Value
 {
     #[ORM\Id]

@@ -80,4 +80,29 @@ class LaunchReadinessTest extends WebTestCase
         $this->assertDoesNotMatchRegularExpression('/^(APP_SECRET|DATABASE_URL|MAILER_DSN)=./m', $envProd, 'Aucun secret dans .env.prod (fichier versionné)');
         $this->assertStringContainsString('/bin/ops/hostinger.local', (string) file_get_contents($root.'/.gitignore'));
     }
+
+    /**
+     * Compatibilité MariaDB (Hostinger) : aucun nom de table ou de colonne non protégé ne doit être un mot
+     * réservé. « value » s'ajoute à la liste : MariaDB accepte « INSERT INTO t VALUE (…) », donc
+     * « INSERT INTO value (…) » échoue.
+     */
+    public function testNoReservedWordsInSchema(): void
+    {
+        self::bootKernel();
+        $em = static::getContainer()->get('doctrine')->getManager();
+        $keywords = new \Doctrine\DBAL\Platforms\Keywords\MariaDBKeywords();
+        $isReserved = fn (string $name) => !str_starts_with($name, '`') && ($keywords->isKeyword($name) || \in_array(strtolower($name), ['value', 'values'], true));
+        $problems = [];
+        foreach ($em->getMetadataFactory()->getAllMetadata() as $meta) {
+            if ($isReserved($meta->getTableName())) {
+                $problems[] = 'table '.$meta->getTableName();
+            }
+            foreach ($meta->getFieldNames() as $field) {
+                if (!($meta->getFieldMapping($field)->quoted ?? false) && $isReserved($meta->getColumnName($field))) {
+                    $problems[] = $meta->getTableName().'.'.$meta->getColumnName($field);
+                }
+            }
+        }
+        $this->assertSame([], $problems, 'Noms réservés : les renommer ou les entourer de `backticks`.');
+    }
 }
