@@ -31,6 +31,10 @@ run bin/console cache:clear >/dev/null 2>&1
 
 FROM=$(grep '^MAILER_FROM=' .env.prod.local | cut -d= -f2- | tr -d '"')
 echo "Envoi d'un email de test à $TEST_TO (expéditeur : $FROM)…"
-if run bin/console mailer:test "$TEST_TO" --from="$FROM" --subject="KIINI SAWA : test d'envoi" --body="Si vous lisez ce message, les emails de KIINI SAWA fonctionnent." 2>&1 | grep -v -i deprecat | tail -3; then
-  echo "Terminé. Vérifiez la boîte de réception (et les spams) de $TEST_TO."
+if out=$(run bin/console mailer:test "$TEST_TO" --from="$FROM" --subject="KIINI SAWA : test d'envoi" --body="Si vous lisez ce message, les emails de KIINI SAWA fonctionnent." 2>&1); then
+  echo "Email de test envoyé. Vérifiez la boîte de réception (et les spams) de $TEST_TO."
+else
+  echo "Échec de l'envoi :" >&2
+  echo "$out" | grep -v -i deprecat | tail -5 >&2
+  exit 1
 fi
