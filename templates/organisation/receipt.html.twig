@@ -15,7 +15,7 @@
 </head>
 <body>
     <div class="brand">KIINI SAWA</div>
-    <div class="muted">[À COMPLÉTER : raison sociale, adresse, n° d'immatriculation]</div>
+    <div class="muted">[À COMPLÉTER : raison sociale, adresse, n° d'immatriculation]<br>contact@kiinisawa.com</div>
     <h1 style="font-size: 15pt; margin: 8mm 0 2mm;">Reçu de paiement n° {{ order.receiptNumber }}</h1>
     <p class="muted">Émis le {{ order.processedAt|format_date(pattern: 'd MMMM y', locale: 'fr') }}</p>
     <p><strong>Client :</strong> {{ order.organisation.name }} ({{ order.organisation.typeLabel }}){% if order.orderedBy %}, commandé par {{ order.orderedBy.displayName }} — {{ order.orderedBy.email }}{% endif %}</p>
