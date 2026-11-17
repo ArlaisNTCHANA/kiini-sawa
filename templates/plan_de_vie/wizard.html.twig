@@ -84,6 +84,18 @@
             margin-bottom: 0.5rem;
         }
 
+        .wiz-test-hint { display: flex; flex-wrap: wrap; align-items: center; gap: 0.35rem; font-size: 0.8rem; color: var(--fg-muted); }
+        .wiz-test-hint strong { color: var(--fg-light); }
+        .wiz-test-hint a, .wiz-suggestions a, .wiz-links a { color: var(--primary); font-weight: 600; text-decoration: underline; }
+        .wiz-links { display: flex; flex-wrap: wrap; gap: 0.5rem 1.25rem; margin-bottom: 1.5rem; font-size: 0.88rem; }
+        .wiz-links a { display: inline-flex; align-items: center; gap: 0.35rem; }
+        .wiz-suggestions { padding: 0.9rem 1.1rem; border: 1px dashed var(--border-strong); border-radius: 1rem; background: var(--bg-alt); margin-bottom: 1.25rem; }
+        .wiz-suggestions p { margin: 0 0 0.6rem; font-size: 0.85rem; color: var(--fg-light); line-height: 1.5; display: flex; flex-wrap: wrap; align-items: center; gap: 0.35rem; }
+        .wiz-chips { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+        .wiz-chip { display: inline-flex; align-items: center; gap: 0.3rem; padding: 0.4rem 0.85rem; border-radius: 9999px; border: 1px solid var(--border-strong); background: var(--bg); color: var(--primary); font-size: 0.82rem; font-weight: 650; cursor: pointer; }
+        .wiz-chip:hover { border-color: var(--primary); }
+        .wiz-chip.is-added { opacity: 0.55; cursor: default; }
+        .wiz-chip-note { font-size: 0.7rem; font-weight: 600; color: var(--fg-muted); }
         .btn-add {
             display: inline-flex;
             align-items: center;
@@ -257,6 +269,11 @@
                         Vos fondations psychologiques : vos valeurs cardinales, convictions profondes et croyances limitantes à surmonter.
                     </p>
                     {{ book_panel('wizard.2') }}
+                    {% if plan == 'CROISSANCE' %}
+                        <div class="wiz-suggestions" data-croissance-balance>
+                            <p style="margin: 0;"><i data-lucide="scale" style="width: 14px; height: 14px;"></i> Votre Balance interne vient de votre Plan de Vie ; elle sert ici à choisir les convictions à renforcer et les croyances à transformer.</p>
+                        </div>
+                    {% endif %}
 
                     <div style="display: flex; flex-direction: column; gap: 1.5rem;">
                         {# Values Real #}
@@ -510,6 +527,7 @@
                         Quelles sont vos facilités innées ? Ce que vous effectuez avec aisance et plaisir là où d'autres doivent faire de gros efforts.
                     </p>
                     {{ book_panel('wizard.4') }}
+                    {% include 'plan_de_vie/wizard/_gift_suggestions.html.twig' with {gifts: testResults.gifts} only %}
 
                     <div>
                         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
@@ -547,38 +565,43 @@
                         <i data-lucide="user" style="width: 24px; height: 24px;"></i>
                         <h2 style="font-family: var(--font-serif); font-size: 1.75rem; font-weight: 500;">Profil de Personnalité</h2>
                     </div>
-                    <p style="color: var(--fg-muted); font-size: 0.95rem; margin-bottom: 1.75rem; line-height: 1.6;">
-                        Indiquez vos résultats aux tests de personnalité si vous les connaissez, afin d'enrichir votre plan d'alignement.
+                    <p style="color: var(--fg-muted); font-size: 0.95rem; margin-bottom: 1rem; line-height: 1.6;">
+                        Vos résultats aux tests de personnalité enrichissent votre plan. Ceux que vous avez passés dans KIINI SAWA sont repris automatiquement ; vous pouvez toujours les modifier.
                     </p>
+                    <div class="wiz-links">
+                        <a href="{{ path('app_synthesis') }}" target="_blank" rel="noopener"><i data-lucide="user-round-search" style="width: 14px; height: 14px;"></i> Voir mon profil KIINI SAWA</a>
+                        <a href="{{ path('app_personality_index') }}" target="_blank" rel="noopener"><i data-lucide="flask-conical" style="width: 14px; height: 14px;"></i> Passer les tests</a>
+                    </div>
                     {{ book_panel('wizard.5') }}
 
+                    {% set selType = mbtiVal ?: (testResults.type.value ?? null) %}
+                    {% set selDisc = discVal ?: (testResults.disc.value ?? null) %}
+                    {% set selEnn = enneagramVal ?: (testResults.enneagram.value ?? null) %}
+                    {% set selBig5 = big5Val ?: (testResults.big5.value ?? null) %}
                     <div style="display: flex; flex-direction: column; gap: 1.25rem;">
 
-                        {# MBTI #}
+                        {# Type de fonctionnement #}
                         <div style="display: flex; flex-direction: column; gap: 0.375rem;">
                             <label style="font-size: 0.75rem; font-weight: 700; color: var(--fg-light); letter-spacing: 0.05em; text-transform: uppercase;">Type de fonctionnement (4 lettres)</label>
                             <select name="profile_mbti" class="wiz-select">
                                 <option value="">Je ne sais pas...</option>
                                 {% for code, t in constant('App\\Personnalite\\Psychometrie\\Interpretations::TYPES') %}
-                                <option value="{{ code }}" {% if mbtiVal == code %}selected{% endif %}>{{ code }} ({{ t[0] }})</option>
+                                <option value="{{ code }}" {% if selType == code %}selected{% endif %}>{{ code }} ({{ t[0] }})</option>
                                 {% endfor %}
                             </select>
+                            {% include 'plan_de_vie/wizard/_test_hint.html.twig' with {current: mbtiVal, test: testResults.type} only %}
                         </div>
 
                         {# DISC #}
                         <div style="display: flex; flex-direction: column; gap: 0.375rem;">
-                            <label style="font-size: 0.75rem; font-weight: 700; color: var(--fg-light); letter-spacing: 0.05em; text-transform: uppercase;">Style comportemental</label>
+                            <label style="font-size: 0.75rem; font-weight: 700; color: var(--fg-light); letter-spacing: 0.05em; text-transform: uppercase;">Profil DISC</label>
                             <select name="profile_disc" class="wiz-select">
                                 <option value="">Je ne sais pas...</option>
-                                <option value="D" {% if discVal == 'D' %}selected{% endif %}>D — Dominant (Direct, Décidé)</option>
-                                <option value="I" {% if discVal == 'I' %}selected{% endif %}>I — Influent (Enthousiaste, Sociable)</option>
-                                <option value="S" {% if discVal == 'S' %}selected{% endif %}>S — Stable (Patient, Fiable)</option>
-                                <option value="C" {% if discVal == 'C' %}selected{% endif %}>C — Consciencieux (Analytique, Précis)</option>
-                                <option value="DI" {% if discVal == 'DI' %}selected{% endif %}>DI — Dominant / Influent</option>
-                                <option value="DC" {% if discVal == 'DC' %}selected{% endif %}>DC — Dominant / Consciencieux</option>
-                                <option value="IS" {% if discVal == 'IS' %}selected{% endif %}>IS — Influent / Stable</option>
-                                <option value="SC" {% if discVal == 'SC' %}selected{% endif %}>SC — Stable / Consciencieux</option>
+                                {% for code, name in discOptions %}
+                                <option value="{{ code }}" {% if selDisc == code %}selected{% endif %}>{{ code }} · {{ name }}</option>
+                                {% endfor %}
                             </select>
+                            {% include 'plan_de_vie/wizard/_test_hint.html.twig' with {current: discVal, test: testResults.disc} only %}
                         </div>
 
                         {# ENNÉAGRAMME #}
@@ -587,27 +610,33 @@
                             <select name="profile_enneagram" class="wiz-select">
                                 <option value="">Je ne sais pas...</option>
                                 {% for n, t in constant('App\\Personnalite\\Psychometrie\\EnneagramBank::TYPES') %}
-                                <option value="{{ n }}" {% if enneagramVal == n ~ '' %}selected{% endif %}>Type {{ n }} ({{ t.name }})</option>
+                                <option value="{{ n }}" {% if selEnn == n ~ '' %}selected{% endif %}>Type {{ n }} ({{ t.name }})</option>
                                 {% endfor %}
                             </select>
+                            {% include 'plan_de_vie/wizard/_test_hint.html.twig' with {current: enneagramVal, test: testResults.enneagram} only %}
                         </div>
 
-                        {# BIG 5 (OCEAN) #}
+                        {# BIG FIVE #}
                         <div style="display: flex; flex-direction: column; gap: 0.375rem;">
-                            <label style="font-size: 0.75rem; font-weight: 700; color: var(--fg-light); letter-spacing: 0.05em; text-transform: uppercase;">Big Five (OCEAN) — Profil dominant</label>
+                            <label style="font-size: 0.75rem; font-weight: 700; color: var(--fg-light); letter-spacing: 0.05em; text-transform: uppercase;">Big Five : profil dominant</label>
                             <select name="profile_big5" class="wiz-select">
                                 <option value="">Je ne sais pas...</option>
-                                <option value="O" {% if big5Val == 'O' %}selected{% endif %}>O — Ouverture (Curiosité, Créativité)</option>
-                                <option value="C" {% if big5Val == 'C' %}selected{% endif %}>C — Conscienciosité (Organisation, Fiabilité)</option>
-                                <option value="E" {% if big5Val == 'E' %}selected{% endif %}>E — Extraversion (Sociabilité, Énergie)</option>
-                                <option value="A" {% if big5Val == 'A' %}selected{% endif %}>A — Agréabilité (Coopération, Bienveillance)</option>
-                                <option value="N" {% if big5Val == 'N' %}selected{% endif %}>N — Névrosisme (Sensibilité émotionnelle)</option>
-                                <option value="OC" {% if big5Val == 'OC' %}selected{% endif %}>OC — Ouverture + Conscienciosité</option>
-                                <option value="OE" {% if big5Val == 'OE' %}selected{% endif %}>OE — Ouverture + Extraversion</option>
-                                <option value="CE" {% if big5Val == 'CE' %}selected{% endif %}>CE — Conscienciosité + Extraversion</option>
-                                <option value="CA" {% if big5Val == 'CA' %}selected{% endif %}>CA — Conscienciosité + Agréabilité</option>
-                                <option value="AE" {% if big5Val == 'AE' %}selected{% endif %}>AE — Agréabilité + Extraversion</option>
+                                {% for code, label in {
+                                    'O': 'O — Ouverture (Curiosité, Créativité)',
+                                    'C': 'C — Conscienciosité (Organisation, Fiabilité)',
+                                    'E': 'E — Extraversion (Sociabilité, Énergie)',
+                                    'A': 'A — Agréabilité (Coopération, Bienveillance)',
+                                    'N': 'N — Névrosisme (Sensibilité émotionnelle)',
+                                    'OC': 'OC — Ouverture + Conscienciosité',
+                                    'OE': 'OE — Ouverture + Extraversion',
+                                    'CE': 'CE — Conscienciosité + Extraversion',
+                                    'CA': 'CA — Conscienciosité + Agréabilité',
+                                    'AE': 'AE — Agréabilité + Extraversion',
+                                } %}
+                                <option value="{{ code }}" {% if selBig5 == code %}selected{% endif %}>{{ label }}</option>
+                                {% endfor %}
                             </select>
+                            {% include 'plan_de_vie/wizard/_test_hint.html.twig' with {current: big5Val, test: testResults.big5} only %}
                         </div>
 
                     </div>
@@ -1202,6 +1231,7 @@
                         Héritage & Transmission : quel impact durable souhaitez-vous laisser ? Que désirez-vous transmettre (savoirs, fonds, fondation, valeurs) ? Ces projets sont par défaut orientés pour soutenir vos objectifs de type <strong>GIVE</strong>.
                     </p>
                     {{ book_panel('wizard.11') }}
+                    {% include 'plan_de_vie/wizard/_gifts_reminder.html.twig' with {gifts: testResults.gifts} only %}
 
                     <div>
                         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
@@ -1359,6 +1389,8 @@
                             </div>
                         </div>
                     {% endif %}
+
+                    {% include 'plan_de_vie/wizard/_hygiene_suggestions.html.twig' with {hygiene: testResults.hygiene} only %}
 
                     <div>
                         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
@@ -1620,6 +1652,39 @@
     }
 
     // Add dynamic row for simple list types (passions, talents, goals, etc.)
+    /** Puce « + don » (étape 4) : remplit la première ligne vide ou en ajoute une, sans doublon. */
+    function addSuggestedTalent(button) {
+        const value = button.dataset.value;
+        const inputs = [...document.querySelectorAll('#talents-container input[name="talents[]"]')];
+        if (!inputs.some(i => i.value.trim().toLowerCase() === value.toLowerCase())) {
+            let target = inputs.find(i => i.value.trim() === '');
+            if (!target) {
+                addTalent();
+                target = document.querySelector('#talents-container .dynamic-row:last-child input[name="talents[]"]');
+            }
+            target.value = value;
+        }
+        button.disabled = true;
+        button.classList.add('is-added');
+    }
+
+    /** Puce d'un axe prioritaire du test Hygiène de Vie (étape 12) : ajoute un domaine « À construire ». */
+    function addSuggestedHygieneDomain(button) {
+        const value = button.dataset.value;
+        const inputs = [...document.querySelectorAll('#hygiene-container input[name^="hygiene_name"]')];
+        if (!inputs.some(i => i.value.trim().toLowerCase() === value.toLowerCase())) {
+            let target = inputs.find(i => i.value.trim() === '');
+            if (!target) {
+                addHygieneDomain();
+                const blocks = document.querySelectorAll('#hygiene-container .hygiene-domain-block');
+                target = blocks[blocks.length - 1].querySelector('input[name^="hygiene_name"]');
+            }
+            target.value = value;
+        }
+        button.disabled = true;
+        button.classList.add('is-added');
+    }
+
     function addTalent() {
         const container = document.getElementById('talents-container');
         const html = `

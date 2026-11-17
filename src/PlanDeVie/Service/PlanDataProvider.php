@@ -426,32 +426,33 @@ final class PlanDataProvider
             }
         }
 
-        // Separate profile tests by type
-        $mbtiVal = null;
-        $discVal = null;
-        $enneagramVal = null;
-        $big5Val = null;
-        foreach ($profileTests as $pt) {
-            $val = $pt->getResult();
+        // Profil de personnalité saisi (étape 5) : la valeur la plus récente de chaque type, si c'est un choix de la
+        // liste. Les tests enregistrent aussi leurs scores bruts (JSON) dans ProfileTest : ce ne sont pas des choix, ils
+        // sont ignorés ici (l'assistant propose alors le résultat du test, voir TestResultsForPlans).
+        $valid = [
+            'MBTI' => array_map('strval', array_keys(\App\Personnalite\Psychometrie\Interpretations::TYPES)),
+            'DISC' => array_map('strval', array_keys(\App\Personnalite\Psychometrie\DiscCombos::PROFILES)),
+            'ENNEAGRAM' => array_map('strval', array_keys(\App\Personnalite\Psychometrie\EnneagramBank::TYPES)),
+            'BIG5' => ['O', 'C', 'E', 'A', 'N', ...TestResultsForPlans::BIG5_COMBOS],
+        ];
+        $picked = [];
+        $tests = $profileTests instanceof \Doctrine\Common\Collections\Collection ? $profileTests->toArray() : (array) $profileTests;
+        usort($tests, fn ($a, $b) => $a->getDate() <=> $b->getDate());
+        foreach ($tests as $pt) {
+            $val = (string) $pt->getResult();
             if (str_starts_with($val, '{')) {
-                try {
-                    $parsed = json_decode($val, true);
-                    if (is_array($parsed) && isset($parsed['type'])) {
-                        $val = $parsed['type'];
-                    }
-                } catch (\Throwable) {}
+                $val = (string) (json_decode($val, true)['type'] ?? '');
             }
             $ptType = strtoupper($pt->getType());
-            if ($ptType === 'MBTI') {
-                $mbtiVal = $val;
-            } elseif ($ptType === 'DISC') {
-                $discVal = $val;
-            } elseif ($ptType === 'ENNEAGRAM' || $ptType === 'ENNEAGRAMME') {
-                $enneagramVal = $val;
-            } elseif ($ptType === 'BIG5') {
-                $big5Val = $val;
+            $ptType = 'ENNEAGRAMME' === $ptType ? 'ENNEAGRAM' : $ptType;
+            if (isset($valid[$ptType]) && \in_array($val, $valid[$ptType], true)) {
+                $picked[$ptType] = $val;
             }
         }
+        $mbtiVal = $picked['MBTI'] ?? null;
+        $discVal = $picked['DISC'] ?? null;
+        $enneagramVal = $picked['ENNEAGRAM'] ?? null;
+        $big5Val = $picked['BIG5'] ?? null;
 
         // Life goals
         $lifeGoals = [

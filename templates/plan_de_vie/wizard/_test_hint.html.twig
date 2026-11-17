@@ -1,0 +1,12 @@
+{# Sous un champ du profil : d'où vient la valeur proposée. Variables : current (valeur enregistrée), test (TestResultsForPlans) #}
+{% if test %}
+    <div class="wiz-test-hint">
+        <i data-lucide="flask-conical" style="width: 13px; height: 13px; flex-shrink: 0;"></i>
+        {% if not current or current == test.value %}
+            <span>Issu de votre test du {{ test.date|date('d/m/Y') }} : <strong>{{ test.label }}</strong>.</span>
+        {% else %}
+            <span>Votre dernier test (du {{ test.date|date('d/m/Y') }}) indique <strong>{{ test.label }}</strong>.</span>
+        {% endif %}
+        <a href="{{ path('app_assessment_report', {id: test.reportId}) }}" target="_blank" rel="noopener">Voir le rapport</a>
+    </div>
+{% endif %}

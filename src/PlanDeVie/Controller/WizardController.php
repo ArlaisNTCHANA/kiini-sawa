@@ -6,6 +6,7 @@ use App\PlanDeVie\Entity\PlanDeVie;
 use App\PlanDeVie\Service\LifePlanWizardSaver;
 use App\PlanDeVie\Service\PlanCatalog;
 use App\PlanDeVie\Service\PlanSnapshotService;
+use App\PlanDeVie\Service\TestResultsForPlans;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -23,7 +24,7 @@ use Symfony\Component\Routing\Attribute\Route;
 class WizardController extends AbstractPlanController
 {
     #[Route('/plan-de-vie/assistant', name: 'app_plan_wizard', methods: ['GET', 'POST'])]
-    public function wizard(Request $request, LifePlanWizardSaver $saver, EntityManagerInterface $em, PlanSnapshotService $snapshots): Response
+    public function wizard(Request $request, LifePlanWizardSaver $saver, EntityManagerInterface $em, PlanSnapshotService $snapshots, TestResultsForPlans $testResults): Response
     {
         $user = $this->user();
         $plan = strtoupper($request->query->getString('plan'));
@@ -79,6 +80,8 @@ class WizardController extends AbstractPlanController
             'planRoute' => PlanCatalog::PLANS[$plan ?: 'VIE']['route'],
             'allowedSteps' => $allowedSteps,
             'currentWizardStep' => false === $currentWizardStep ? 1 : $currentWizardStep + 1,
+            'testResults' => $testResults->forUser($user),
+            'discOptions' => TestResultsForPlans::discOptions(),
         ]));
     }
 }

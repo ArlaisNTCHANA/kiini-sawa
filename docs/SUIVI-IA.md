@@ -11,10 +11,29 @@ Ne jamais afficher ni demander de mot de passe ; ne pas publier son nom (mention
 
 ---
 
-## 2026-11-17 · Audit de cohérence des 5 plans → À FAIRE
+## 2026-11-17 · Cohérence des plans, lot 1 : l'assistant reprend les résultats des tests
 
-- Audit fait, **rien n'est encore codé**. Travail détaillé, fichiers et décisions en attente :
-  **`docs/A-FAIRE-coherence-des-plans.md`** (lot 1 validé par le fondateur ; lots 2 et 3 à décider).
+- `PlanDeVie\Service\TestResultsForPlans` : derniers résultats sous forme utile aux plans (DISC 16 profils, type,
+  ennéagramme, Big Five dominant, dons + dons confirmés ou vus par les proches, 3 axes prioritaires du test Hygiène).
+  Lit les **scores** (`Assessment::getScores`), pas les rapports illustrés (plus lents) ; noms via `Content::get`.
+- Assistant (`WizardController` passe `testResults` et `discOptions`) :
+  - étape 5 : préremplie depuis les tests quand rien n'est saisi, mention « Issu de votre test du … » ou « Votre dernier
+    test indique … » (partiel `templates/plan_de_vie/wizard/_test_hint.html.twig`), liens « Voir mon profil KIINI SAWA »
+    et « Passer les tests » ; « Style comportemental » → **Profil DISC** avec les 16 profils ;
+  - étape 4 : puces « + don » (`_gift_suggestions`, JS `addSuggestedTalent`) ; étape 12 : puces des axes prioritaires
+    avec la note (`_hygiene_suggestions`, JS `addSuggestedHygieneDomain`) ; étape 11 : rappel « Vos dons » (`_gifts_reminder`) ;
+  - étape 2 avec `plan=CROISSANCE` : phrase sur la Balance interne.
+- Plan de Transmission ouvert (`strategies.html.twig`) : rappel « Vos dons » (`giftResults`, ajouté par
+  `AbstractPlanController::renderStrategies`). Les 4 phrases d'ouverture des plans réécrites selon la grille (doublon « (Être) » retiré).
+- **Piège corrigé** : les tests écrivent aussi leurs scores bruts (JSON) dans `ProfileTest` (DISC, BIG5) ; l'assistant
+  les prenait pour une saisie et rien n'était sélectionné. `PlanDataProvider::getWizardData` ne garde plus que des
+  valeurs de la liste, la plus récente par date.
+- Tests : `tests/PlanDeVie/WizardTestResultsTest.php`. Non vérifié à l'œil dans un navigateur (couvert par les tests fonctionnels).
+- Reste : lots 2 et 3 de `docs/A-FAIRE-coherence-des-plans.md` (décisions du fondateur).
+
+## 2026-11-17 · Audit de cohérence des 5 plans
+
+- Audit détaillé : **`docs/A-FAIRE-coherence-des-plans.md`** (lot 1 fait ; lots 2 et 3 à décider).
 
 ## 2026-11-17 · Les 5 plans : questions, ordre et icônes de la méthode
 
@@ -132,7 +151,7 @@ feedback nourricier, notifications push, tableau de rétention.
 
 ## Ouvert / à faire
 
-- **Prochain chantier : `docs/A-FAIRE-coherence-des-plans.md` (lot 1 validé).**
+- **Prochain chantier : décisions du fondateur sur les lots 2 et 3 de `docs/A-FAIRE-coherence-des-plans.md`.**
 
 - Carte DISC d'équipe ou de couple pour les organisations (offre Églises).
 - Suivi de la fidélité de tous les tests (Admin › Fidélité des tests couvre l'IPIP) ; normes dès 200 profils.

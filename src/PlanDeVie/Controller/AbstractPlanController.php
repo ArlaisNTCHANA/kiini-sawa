@@ -8,6 +8,7 @@ use App\PlanDeVie\Service\PlanCatalog;
 use App\PlanDeVie\Service\PlanDataProvider;
 use App\PlanDeVie\Service\PlanMailer;
 use App\PlanDeVie\Service\PlanPdfRenderer;
+use App\PlanDeVie\Service\TestResultsForPlans;
 use Symfony\Component\HttpFoundation\HeaderUtils;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -23,10 +24,12 @@ abstract class AbstractPlanController extends AbstractController
     protected PlanDataProvider $plans;
     protected PlanMailer $planMailer;
     protected Entitlements $entitlements;
+    protected TestResultsForPlans $testResults;
 
     #[Required]
-    public function setPlanServices(PlanDataProvider $plans, PlanMailer $planMailer, Entitlements $entitlements): void
+    public function setPlanServices(PlanDataProvider $plans, PlanMailer $planMailer, Entitlements $entitlements, TestResultsForPlans $testResults): void
     {
+        $this->testResults = $testResults;
         $this->plans = $plans;
         $this->planMailer = $planMailer;
         $this->entitlements = $entitlements;
@@ -58,6 +61,7 @@ abstract class AbstractPlanController extends AbstractController
         $data['initialPlan'] = $planKey;
         $data['pageTitle'] = null !== $planKey ? PlanCatalog::label($planKey) : 'Vue d\'ensemble de mes plans';
         $data['lockedPlans'] = $this->entitlements->lockedPlans($this->user());
+        $data['giftResults'] = $this->testResults->gifts($this->user()); // rappel des dons dans le Plan de Transmission
 
         return $this->render('plan_de_vie/strategies.html.twig', $data);
     }

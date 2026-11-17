@@ -1,0 +1,18 @@
+{# Dons issus du test des dons spirituels, ajoutés en un clic aux talents (étape 4). Variable : gifts #}
+{% if gifts %}
+    <div class="wiz-suggestions" data-gift-suggestions>
+        <p>
+            <i data-lucide="flask-conical" style="width: 14px; height: 14px;"></i>
+            Selon votre test des dons du {{ gifts.date|date('d/m/Y') }}{% if gifts.confirmed is not empty or gifts.seenByOthers is not empty %} et le regard de vos proches{% endif %} :
+            <a href="{{ path('app_assessment_report', {id: gifts.reportId}) }}" target="_blank" rel="noopener">voir le rapport</a>
+        </p>
+        <div class="wiz-chips">
+            {% for name in gifts.suggested %}
+                <button type="button" class="wiz-chip" data-value="{{ name }}" onclick="addSuggestedTalent(this)">
+                    <i data-lucide="plus" style="width: 12px; height: 12px;"></i> {{ name }}
+                    {% if name in gifts.confirmed %}<span class="wiz-chip-note">confirmé par vos proches</span>{% elseif name in gifts.seenByOthers %}<span class="wiz-chip-note">vu par vos proches</span>{% endif %}
+                </button>
+            {% endfor %}
+        </div>
+    </div>
+{% endif %}

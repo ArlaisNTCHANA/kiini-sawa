@@ -1,7 +1,7 @@
 # À faire : cohérence du contenu des 5 plans (audit du 17/11/2026)
 
 Référence : grille des 5 plans dans `docs/lexique.md` (source de code : `src/PlanDeVie/Service/PlanCatalog.php`).
-Contexte et règles de travail : `AGENTS.md`, puis `docs/SUIVI-IA.md`. **Le lot 1 est validé par le fondateur** ; les lots 2
+Contexte et règles de travail : `AGENTS.md`, puis `docs/SUIVI-IA.md`. **Le lot 1 est fait** ; les lots 2
 et 3 attendent ses décisions.
 
 ## Où se trouve quoi
@@ -14,7 +14,7 @@ et 3 attendent ses décisions.
 | Résultats des tests | `src/Personnalite/Repository/AssessmentRepository.php` (`latest($user, 'disc')`…), `src/Personnalite/Psychometrie/ReportBuilder.php`, `src/Personnalite/Service/ProfileSynthesis.php` (synthèse croisée), `src/Personnalite/Service/ConfirmationService.php` (dons confirmés par les proches), `src/Personnalite/Service/SelfAssessmentReport.php` (test Hygiène de Vie : priorités) |
 | Textes des tests | toujours via `App\Personnalite\Psychometrie\Content::get('source')` (modifiables dans l'admin) |
 
-## Lot 1 : validé, à faire (≈ une demi-journée)
+## Lot 1 : FAIT le 17/11/2026 (voir `docs/SUIVI-IA.md`)
 
 1. **Étape 5 « Profil de personnalité »** (`wizard.html.twig`, bloc `ETAPE 5`) : aujourd'hui, saisie manuelle de
    4 listes (type, « Style comportemental », ennéagramme, Big Five). À faire :

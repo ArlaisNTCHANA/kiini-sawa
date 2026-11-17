@@ -1,0 +1,10 @@
+{# Rappel des dons (test des dons spirituels) dans le Plan de Transmission. Variable : gifts #}
+{% if gifts %}
+    <div class="wiz-suggestions" data-gifts-reminder>
+        <p style="margin: 0;">
+            <i data-lucide="gift" style="width: 14px; height: 14px;"></i>
+            <span>Vos dons : <strong>{{ gifts.names|join(', ') }}</strong>. Transmettre, c'est d'abord mettre vos dons au service des autres.</span>
+            <a href="{{ path('app_assessment_report', {id: gifts.reportId}) }}" target="_blank" rel="noopener">Voir le rapport</a>
+        </p>
+    </div>
+{% endif %}
