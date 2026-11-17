@@ -54,15 +54,22 @@
             grid-template-columns: repeat(2, 1fr);
         }
     }
-    @media (min-width: 1024px) {
+    @media (min-width: 900px) {
         .plans-grid {
-            grid-template-columns: repeat(4, 1fr);
+            grid-template-columns: repeat(3, 1fr);
+        }
+    }
+    @media (min-width: 1200px) {
+        /* Les cinq plans sur une ligne : Être, Faire, socle, Avoir, Donner */
+        .plans-grid {
+            grid-template-columns: repeat(5, 1fr);
+            gap: 1rem;
         }
     }
 
     .plan-hub-card {
         background: white;
-        border: 1px solid rgba(15, 118, 110, 0.06);
+        border: 1px solid rgba(46, 107, 83, 0.06);
         border-radius: 2rem;
         padding: 2rem;
         box-shadow: var(--card-shadow);
@@ -78,7 +85,7 @@
     .plan-hub-card:hover {
         transform: translateY(-5px);
         box-shadow: var(--card-shadow-hover);
-        border-color: rgba(15, 118, 110, 0.15);
+        border-color: rgba(46, 107, 83, 0.15);
     }
     .plan-card-decor {
         position: absolute;
@@ -166,7 +173,7 @@
     .hero-choice {
         background: rgba(255, 255, 255, 0.85);
         backdrop-filter: blur(20px);
-        border: 1px solid rgba(15, 118, 110, 0.08);
+        border: 1px solid rgba(46, 107, 83, 0.08);
         border-radius: 2.5rem;
         padding: 2.5rem;
         box-shadow: var(--card-shadow);
@@ -184,7 +191,7 @@
         position: absolute;
         top: -10%; left: -10%;
         width: 30%; height: 50%;
-        background: radial-gradient(circle, rgba(13, 148, 136, 0.08) 0%, transparent 70%);
+        background: radial-gradient(circle, rgba(61, 122, 95, 0.08) 0%, transparent 70%);
         pointer-events: none;
     }
     .hero-choice::after {
@@ -204,7 +211,7 @@
         letter-spacing: 0.12em;
         padding: 0.5rem 1.25rem;
         border-radius: 9999px;
-        border: 1px solid rgba(15, 118, 110, 0.12);
+        border: 1px solid rgba(46, 107, 83, 0.12);
         display: inline-flex;
         align-items: center;
         gap: 0.375rem;
@@ -242,12 +249,12 @@
         font-weight: 750;
         font-size: 0.95rem;
         border-radius: 1rem;
-        box-shadow: 0 4px 14px rgba(15, 118, 110, 0.3);
+        box-shadow: 0 4px 14px rgba(46, 107, 83, 0.3);
         transition: all 0.25s var(--ease);
     }
     .btn-hero-primary:hover {
         transform: translateY(-2px);
-        box-shadow: 0 6px 20px rgba(15, 118, 110, 0.45);
+        box-shadow: 0 6px 20px rgba(46, 107, 83, 0.45);
         opacity: 0.98;
     }
     .btn-hero-secondary {
@@ -260,7 +267,7 @@
         font-weight: 750;
         font-size: 0.95rem;
         border-radius: 1rem;
-        border: 1px solid rgba(15, 118, 110, 0.15);
+        border: 1px solid rgba(46, 107, 83, 0.15);
         box-shadow: 0 2px 8px rgba(0, 0, 0, 0.02);
         transition: all 0.25s var(--ease);
         cursor: pointer;
@@ -272,7 +279,7 @@
         transform: translateY(-2px);
     }
     .btn-hero-secondary.active {
-        background: rgba(15, 118, 110, 0.08);
+        background: rgba(46, 107, 83, 0.08);
         color: var(--primary);
         border-color: var(--primary);
         box-shadow: 0 0 0 1px var(--primary);
@@ -284,11 +291,11 @@
         flex-wrap: nowrap;
         overflow-x: auto;
         gap: 0.25rem;
-        border-bottom: 2px solid rgba(15, 118, 110, 0.06);
+        border-bottom: 2px solid rgba(46, 107, 83, 0.06);
         padding-bottom: 0.25rem;
         margin-bottom: 2.5rem;
         scrollbar-width: thin;
-        scrollbar-color: rgba(15, 118, 110, 0.25) transparent;
+        scrollbar-color: rgba(46, 107, 83, 0.25) transparent;
     }
     .tabs-nav::-webkit-scrollbar {
         height: 4px;
@@ -297,7 +304,7 @@
         background: transparent;
     }
     .tabs-nav::-webkit-scrollbar-thumb {
-        background: rgba(15, 118, 110, 0.25);
+        background: rgba(46, 107, 83, 0.25);
         border-radius: 99px;
     }
     .tab-btn {
@@ -334,7 +341,7 @@
     }
     .tab-btn:hover {
         color: var(--primary);
-        background: rgba(15, 118, 110, 0.03);
+        background: rgba(46, 107, 83, 0.03);
     }
     .tab-btn.active {
         color: var(--primary);
@@ -371,7 +378,7 @@
 
     .plan-card {
         background: white;
-        border: 1px solid rgba(15, 118, 110, 0.06);
+        border: 1px solid rgba(46, 107, 83, 0.06);
         border-radius: 2rem;
         padding: 2rem;
         box-shadow: var(--card-shadow);
@@ -385,14 +392,14 @@
     .plan-card:hover {
         transform: translateY(-3px);
         box-shadow: var(--card-shadow-hover);
-        border-color: rgba(15, 118, 110, 0.15);
+        border-color: rgba(46, 107, 83, 0.15);
     }
     .card-header {
         display: flex;
         align-items: center;
         justify-content: space-between;
         margin-bottom: 1.5rem;
-        border-bottom: 1px solid rgba(15, 118, 110, 0.05);
+        border-bottom: 1px solid rgba(46, 107, 83, 0.05);
         padding-bottom: 0.75rem;
     }
     .card-title-group {
@@ -417,7 +424,7 @@
     .btn-edit-card {
         width: 2rem; height: 2rem;
         border-radius: 50%;
-        border: 1px solid rgba(15, 118, 110, 0.1);
+        border: 1px solid rgba(46, 107, 83, 0.1);
         background: transparent;
         color: var(--fg-muted);
         display: flex;
@@ -465,7 +472,7 @@
         display: inline-block;
     }
     .badge-primary { background: #E6F4F1; color: var(--primary); }
-    .badge-secondary { background: #FEF3C7; color: var(--warning); }
+    .badge-secondary { background: #D5E2DA; color: var(--warning); }
     .badge-tertiary { background: #F3E8FF; color: #7E22CE; }
     .badge-neutral { background: var(--bg-alt); color: var(--fg-light); }
 
@@ -484,7 +491,7 @@
     .timeline-container {
         position: relative;
         padding-left: 2rem;
-        border-left: 2px solid rgba(15, 118, 110, 0.08);
+        border-left: 2px solid rgba(46, 107, 83, 0.08);
         display: flex;
         flex-direction: column;
         gap: 2rem;
@@ -505,7 +512,7 @@
         height: 10px;
         border-radius: 50%;
         background: var(--primary);
-        box-shadow: 0 0 0 3px rgba(15, 118, 110, 0.12);
+        box-shadow: 0 0 0 3px rgba(46, 107, 83, 0.12);
         z-index: 2;
     }
     .timeline-date-label {
@@ -521,7 +528,7 @@
     .timeline-content {
         flex: 1;
         background: white;
-        border: 1px solid rgba(15, 118, 110, 0.06);
+        border: 1px solid rgba(46, 107, 83, 0.06);
         border-radius: 1.25rem;
         padding: 1.25rem;
         box-shadow: var(--card-shadow);
@@ -533,7 +540,7 @@
     .timeline-content:hover {
         transform: translateY(-2px);
         box-shadow: var(--card-shadow-hover);
-        border-color: rgba(15, 118, 110, 0.15);
+        border-color: rgba(46, 107, 83, 0.15);
     }
     .timeline-title {
         font-size: 0.95rem;
@@ -721,17 +728,18 @@
                 Vos cinq plans, au service de votre Plan de Vie : Croissance, Développement personnel, Hygiène de vie, Intendance et Transmission. C'est ici que vos objectifs de vie deviennent des actions concrètes.
             </p>
         </header>
+        {% include 'methode/_figure.html.twig' with {name: 'fig_6plans', alt: 'Les six plans : le Plan de Vie au centre, entouré des plans de Croissance, de Développement, d\'Hygiène de vie, d\'Intendance et de Transmission, reliés par le Système', max: '520px'} only %}
 
         <div class="plans-grid">
             {# 1. Plan de Croissance #}
             <div @click="{% if 'CROISSANCE' in (lockedPlans ?? []) %}window.location.href = '{{ path('app_subscription', {fonction: 'croissance'}) }}'{% else %}activePlan = 'CROISSANCE'; activeTab = 'INTENTION'{% endif %}" class="plan-hub-card">
-                <div class="plan-card-decor bg-gradient-to-br from-amber-400 to-orange-500"></div>
-                <div class="plan-card-icon" style="background: var(--warning-soft); color: var(--warning);">
+                <div class="plan-card-decor" style="background: var(--plan-croissance);"></div>
+                <div class="plan-card-icon" style="background: var(--plan-croissance-soft); color: var(--plan-croissance);">
                     <i data-lucide="sprout" style="width: 22px; height: 22px;"></i>
                 </div>
                 <div>
                     <div class="plan-card-subtitle">L'Évolution (Être)</div>
-                    <h2 class="plan-card-title">Croissance</h2>{% if 'CROISSANCE' in (lockedPlans ?? []) %}<span style="display:inline-block;margin-top:.25rem;font-size:.68rem;font-weight:800;letter-spacing:.06em;padding:.15rem .5rem;border-radius:999px;background:#FEF3C7;color:#92400E;">🔒 PRO</span>{% endif %}
+                    <h2 class="plan-card-title">Croissance</h2>{% if 'CROISSANCE' in (lockedPlans ?? []) %}<span style="display:inline-block;margin-top:.25rem;font-size:.68rem;font-weight:800;letter-spacing:.06em;padding:.15rem .5rem;border-radius:999px;background: var(--gold-soft); color: var(--accent);">🔒 PRO</span>{% endif %}
                     <p class="plan-card-desc" style="font-family: var(--font-serif); font-style: italic; color: var(--fg); margin-bottom: .3rem;">{{ constant('App\\PlanDeVie\\Service\\PlanCatalog::PLANS').CROISSANCE.question }}</p>
                     <p class="plan-card-desc">{{ constant('App\\PlanDeVie\\Service\\PlanCatalog::PLANS').CROISSANCE.desc }}</p>
                 </div>
@@ -740,7 +748,7 @@
                         <span class="plan-card-number">{{ growthGoals.CHARACTER|length + growthGoals.RELATION|length }}</span>
                         <span class="plan-card-label">éléments</span>
                     </div>
-                    <div class="plan-card-arrow" style="background: var(--warning-soft); color: var(--warning);">
+                    <div class="plan-card-arrow" style="background: var(--plan-croissance-soft); color: var(--plan-croissance);">
                         <i data-lucide="chevron-right" style="width: 16px; height: 16px;"></i>
                     </div>
                 </div>
@@ -748,13 +756,13 @@
 
             {# 2. Plan de Développement personnel #}
             <div @click="{% if 'DEVELOPPEMENT' in (lockedPlans ?? []) %}window.location.href = '{{ path('app_subscription', {fonction: 'developpement'}) }}'{% else %}activePlan = 'DEVELOPPEMENT'; activeTab = 'INTENTION'{% endif %}" class="plan-hub-card">
-                <div class="plan-card-decor bg-gradient-to-br from-blue-400 to-indigo-600"></div>
-                <div class="plan-card-icon" style="background: var(--info-soft); color: var(--info);">
+                <div class="plan-card-decor" style="background: var(--plan-developpement);"></div>
+                <div class="plan-card-icon" style="background: var(--plan-developpement-soft); color: var(--plan-developpement);">
                     <i data-lucide="wrench" style="width: 22px; height: 22px;"></i>
                 </div>
                 <div>
                     <div class="plan-card-subtitle">L'Exécution (Faire)</div>
-                    <h2 class="plan-card-title">Développement</h2>{% if 'DEVELOPPEMENT' in (lockedPlans ?? []) %}<span style="display:inline-block;margin-top:.25rem;font-size:.68rem;font-weight:800;letter-spacing:.06em;padding:.15rem .5rem;border-radius:999px;background:#FEF3C7;color:#92400E;">🔒 PRO</span>{% endif %}
+                    <h2 class="plan-card-title">Développement</h2>{% if 'DEVELOPPEMENT' in (lockedPlans ?? []) %}<span style="display:inline-block;margin-top:.25rem;font-size:.68rem;font-weight:800;letter-spacing:.06em;padding:.15rem .5rem;border-radius:999px;background: var(--gold-soft); color: var(--accent);">🔒 PRO</span>{% endif %}
                     <p class="plan-card-desc" style="font-family: var(--font-serif); font-style: italic; color: var(--fg); margin-bottom: .3rem;">{{ constant('App\\PlanDeVie\\Service\\PlanCatalog::PLANS').DEVELOPPEMENT.question }}</p>
                     <p class="plan-card-desc">{{ constant('App\\PlanDeVie\\Service\\PlanCatalog::PLANS').DEVELOPPEMENT.desc }}</p>
                 </div>
@@ -763,7 +771,7 @@
                         <span class="plan-card-number">{{ growthGoals.COMPETENCE|length }}</span>
                         <span class="plan-card-label">éléments</span>
                     </div>
-                    <div class="plan-card-arrow" style="background: var(--info-soft); color: var(--info);">
+                    <div class="plan-card-arrow" style="background: var(--plan-developpement-soft); color: var(--plan-developpement);">
                         <i data-lucide="chevron-right" style="width: 16px; height: 16px;"></i>
                     </div>
                 </div>
@@ -771,13 +779,13 @@
 
             {# 3. Plan d'Hygiène de vie #}
             <div @click="{% if 'HYGIENE' in (lockedPlans ?? []) %}window.location.href = '{{ path('app_subscription', {fonction: 'hygiene'}) }}'{% else %}activePlan = 'HYGIENE'; activeTab = 'INTENTION'{% endif %}" class="plan-hub-card">
-                <div class="plan-card-decor bg-gradient-to-br from-emerald-400 to-teal-600"></div>
-                <div class="plan-card-icon" style="background: var(--success-soft); color: var(--success);">
+                <div class="plan-card-decor" style="background: var(--plan-hygiene);"></div>
+                <div class="plan-card-icon" style="background: var(--plan-hygiene-soft); color: var(--plan-hygiene);">
                     <i data-lucide="heart-pulse" style="width: 22px; height: 22px;"></i>
                 </div>
                 <div>
                     <div class="plan-card-subtitle">Le soutien</div>
-                    <h2 class="plan-card-title">Hygiène de vie</h2>{% if 'HYGIENE' in (lockedPlans ?? []) %}<span style="display:inline-block;margin-top:.25rem;font-size:.68rem;font-weight:800;letter-spacing:.06em;padding:.15rem .5rem;border-radius:999px;background:#FEF3C7;color:#92400E;">🔒 PRO</span>{% endif %}
+                    <h2 class="plan-card-title">Hygiène de vie</h2>{% if 'HYGIENE' in (lockedPlans ?? []) %}<span style="display:inline-block;margin-top:.25rem;font-size:.68rem;font-weight:800;letter-spacing:.06em;padding:.15rem .5rem;border-radius:999px;background: var(--gold-soft); color: var(--accent);">🔒 PRO</span>{% endif %}
                     <p class="plan-card-desc" style="font-family: var(--font-serif); font-style: italic; color: var(--fg); margin-bottom: .3rem;">{{ constant('App\\PlanDeVie\\Service\\PlanCatalog::PLANS').HYGIENE.question }}</p>
                     <p class="plan-card-desc">{{ constant('App\\PlanDeVie\\Service\\PlanCatalog::PLANS').HYGIENE.desc }}</p>
                 </div>
@@ -786,20 +794,20 @@
                         <span class="plan-card-number">{{ hygieneDomains|length }}</span>
                         <span class="plan-card-label">domaines</span>
                     </div>
-                    <div class="plan-card-arrow" style="background: var(--success-soft); color: var(--success);">
+                    <div class="plan-card-arrow" style="background: var(--plan-hygiene-soft); color: var(--plan-hygiene);">
                         <i data-lucide="chevron-right" style="width: 16px; height: 16px;"></i>
                     </div>
                 </div>
             </div>
             {# Plan d'Intendance : page à part (livre, chapitre 18) #}
             <a href="{{ 'INTENDANCE' in (lockedPlans ?? []) ? path('app_subscription', {fonction: 'intendance'}) : path('app_plan_d_intendance') }}" class="plan-hub-card" data-plan-card="INTENDANCE" style="text-decoration: none; color: inherit;">
-                <div class="plan-card-decor" style="background: linear-gradient(135deg, var(--accent), var(--primary));"></div>
-                <div class="plan-card-icon" style="background: var(--primary-soft); color: var(--primary);">
+                <div class="plan-card-decor" style="background: var(--plan-intendance);"></div>
+                <div class="plan-card-icon" style="background: var(--plan-intendance-soft); color: var(--plan-intendance);">
                     <i data-lucide="hand-coins" style="width: 22px; height: 22px;"></i>
                 </div>
                 <div>
                     <div class="plan-card-subtitle">La gestion (Avoir)</div>
-                    <h2 class="plan-card-title">Intendance</h2>{% if 'INTENDANCE' in (lockedPlans ?? []) %}<span style="display:inline-block;margin-top:.25rem;font-size:.68rem;font-weight:800;letter-spacing:.06em;padding:.15rem .5rem;border-radius:999px;background:#FEF3C7;color:#92400E;">🔒 PRO</span>{% endif %}
+                    <h2 class="plan-card-title">Intendance</h2>{% if 'INTENDANCE' in (lockedPlans ?? []) %}<span style="display:inline-block;margin-top:.25rem;font-size:.68rem;font-weight:800;letter-spacing:.06em;padding:.15rem .5rem;border-radius:999px;background: var(--gold-soft); color: var(--accent);">🔒 PRO</span>{% endif %}
                     <p class="plan-card-desc" style="font-family: var(--font-serif); font-style: italic; color: var(--fg); margin-bottom: .3rem;">{{ constant('App\\PlanDeVie\\Service\\PlanCatalog::PLANS').INTENDANCE.question }}</p>
                     <p class="plan-card-desc">{{ constant('App\\PlanDeVie\\Service\\PlanCatalog::PLANS').INTENDANCE.desc }}</p>
                 </div>
@@ -807,20 +815,20 @@
                     <div class="plan-card-count">
                         <span class="plan-card-label">Inventaire, état, décision, compte rendu</span>
                     </div>
-                    <div class="plan-card-arrow" style="background: var(--primary-soft); color: var(--primary);">
+                    <div class="plan-card-arrow" style="background: var(--plan-intendance-soft); color: var(--plan-intendance);">
                         <i data-lucide="chevron-right" style="width: 16px; height: 16px;"></i>
                     </div>
                 </div>
             </a>
             {# 4. Plan de Transmission #}
             <div @click="{% if 'TRANSMISSION' in (lockedPlans ?? []) %}window.location.href = '{{ path('app_subscription', {fonction: 'transmission'}) }}'{% else %}activePlan = 'TRANSMISSION'; activeTab = 'INTENTION'{% endif %}" class="plan-hub-card">
-                <div class="plan-card-decor bg-gradient-to-br from-pink-400 to-rose-600"></div>
-                <div class="plan-card-icon" style="background: var(--couple-soft); color: var(--couple);">
+                <div class="plan-card-decor" style="background: var(--plan-transmission);"></div>
+                <div class="plan-card-icon" style="background: var(--plan-transmission-soft); color: var(--plan-transmission);">
                     <i data-lucide="hand-heart" style="width: 22px; height: 22px;"></i>
                 </div>
                 <div>
                     <div class="plan-card-subtitle">L'Impact (Donner)</div>
-                    <h2 class="plan-card-title">Transmission</h2>{% if 'TRANSMISSION' in (lockedPlans ?? []) %}<span style="display:inline-block;margin-top:.25rem;font-size:.68rem;font-weight:800;letter-spacing:.06em;padding:.15rem .5rem;border-radius:999px;background:#FEF3C7;color:#92400E;">🔒 PRO</span>{% endif %}
+                    <h2 class="plan-card-title">Transmission</h2>{% if 'TRANSMISSION' in (lockedPlans ?? []) %}<span style="display:inline-block;margin-top:.25rem;font-size:.68rem;font-weight:800;letter-spacing:.06em;padding:.15rem .5rem;border-radius:999px;background: var(--gold-soft); color: var(--accent);">🔒 PRO</span>{% endif %}
                     <p class="plan-card-desc" style="font-family: var(--font-serif); font-style: italic; color: var(--fg); margin-bottom: .3rem;">{{ constant('App\\PlanDeVie\\Service\\PlanCatalog::PLANS').TRANSMISSION.question }}</p>
                     <p class="plan-card-desc">{{ constant('App\\PlanDeVie\\Service\\PlanCatalog::PLANS').TRANSMISSION.desc }}</p>
                 </div>
@@ -829,7 +837,7 @@
                         <span class="plan-card-number">{{ legacyGoals|length }}</span>
                         <span class="plan-card-label">éléments</span>
                     </div>
-                    <div class="plan-card-arrow" style="background: var(--couple-soft); color: var(--couple);">
+                    <div class="plan-card-arrow" style="background: var(--plan-transmission-soft); color: var(--plan-transmission);">
                         <i data-lucide="chevron-right" style="width: 16px; height: 16px;"></i>
                     </div>
                 </div>
@@ -846,10 +854,10 @@
         <!-- Hero Header (Replicating Life Plan style) -->
         <header class="hero-choice" style="margin-bottom: 2rem;">
             <div class="hero-badge" 
-                 :style="activePlan === 'CROISSANCE' ? 'background: #FFFBEB; color: #D97706; border-color: rgba(217, 119, 6, 0.15);' : 
-                         (activePlan === 'DEVELOPPEMENT' ? 'background: #EFF6FF; color: #2563EB; border-color: rgba(37, 99, 235, 0.15);' : 
-                          (activePlan === 'TRANSMISSION' ? 'background: #FDF2F8; color: #DB2777; border-color: rgba(219, 39, 119, 0.15);' : 
-                           'background: #ECFDF5; color: #059669; border-color: rgba(5, 150, 105, 0.15);'))">
+                 :style="activePlan === 'CROISSANCE' ? 'background: #E4ECE7; color: #1F4D3A; border-color: rgba(217, 119, 6, 0.15);' : 
+                         (activePlan === 'DEVELOPPEMENT' ? 'background: #E9F1EC; color: #2E6B53; border-color: rgba(37, 99, 235, 0.15);' : 
+                          (activePlan === 'TRANSMISSION' ? 'background: #FAF4E6; color: #A87A1F; border-color: rgba(219, 39, 119, 0.15);' : 
+                           'background: #ECEFED; color: #5D7368; border-color: rgba(5, 150, 105, 0.15);'))">
                 <template x-if="activePlan === 'CROISSANCE'"><span style="display:flex; align-items:center; gap:0.25rem;"><i data-lucide="sprout" style="width: 14px; height: 14px;"></i> Plan de Croissance</span></template>
                 <template x-if="activePlan === 'DEVELOPPEMENT'"><span style="display:flex; align-items:center; gap:0.25rem;"><i data-lucide="wrench" style="width: 14px; height: 14px;"></i> Plan de Développement personnel</span></template>
                 <template x-if="activePlan === 'TRANSMISSION'"><span style="display:flex; align-items:center; gap:0.25rem;"><i data-lucide="hand-heart" style="width: 14px; height: 14px;"></i> Plan de Transmission</span></template>
@@ -932,7 +940,7 @@
                     <div class="plan-card">
                         <div class="card-header">
                             <div class="card-title-group">
-                                <div class="card-icon" style="background: rgba(13, 148, 136, 0.08); color: var(--primary);">
+                                <div class="card-icon" style="background: rgba(61, 122, 95, 0.08); color: var(--primary);">
                                     <i data-lucide="compass" style="width: 18px; height: 18px;"></i>
                                 </div>
                                 <h2 class="card-title">Intention & Raison d'être</h2>
@@ -943,15 +951,15 @@
                         </div>
                         <div class="card-body">
                             <p style="font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 0.25rem;"
-                               :style="activePlan === 'CROISSANCE' ? 'color: #D97706;' : 
-                                       (activePlan === 'DEVELOPPEMENT' ? 'color: #2563EB;' : 
-                                        (activePlan === 'TRANSMISSION' ? 'color: #DB2777;' : 'color: #059669;'))">
+                               :style="activePlan === 'CROISSANCE' ? 'color: #1F4D3A;' : 
+                                       (activePlan === 'DEVELOPPEMENT' ? 'color: #2E6B53;' : 
+                                        (activePlan === 'TRANSMISSION' ? 'color: #A87A1F;' : 'color: #5D7368;'))">
                                 Intention de ce pilier
                             </p>
                             <h3 style="font-family: var(--font-serif); font-size: 1.35rem; font-weight: 800; margin: 0 0 1rem 0;"
-                                :style="activePlan === 'CROISSANCE' ? 'color: #D97706;' : 
-                                        (activePlan === 'DEVELOPPEMENT' ? 'color: #2563EB;' : 
-                                         (activePlan === 'TRANSMISSION' ? 'color: #DB2777;' : 'color: #059669;'))">
+                                :style="activePlan === 'CROISSANCE' ? 'color: #1F4D3A;' : 
+                                        (activePlan === 'DEVELOPPEMENT' ? 'color: #2E6B53;' : 
+                                         (activePlan === 'TRANSMISSION' ? 'color: #A87A1F;' : 'color: #5D7368;'))">
                                 Ce que je vais <span style="text-decoration: underline; text-decoration-style: wavy; text-underline-offset: 4px;"
                                                     x-text="activePlan === 'CROISSANCE' ? 'DEVENIR' : 
                                                             (activePlan === 'DEVELOPPEMENT' ? 'ACCOMPLIR' : 
@@ -1084,7 +1092,7 @@
                     <div class="plan-card grid-full">
                         <div class="card-header">
                             <div class="card-title-group">
-                                <div class="card-icon" style="background: rgba(13, 148, 136, 0.08); color: var(--primary);">
+                                <div class="card-icon" style="background: rgba(61, 122, 95, 0.08); color: var(--primary);">
                                     <i data-lucide="target" style="width: 18px; height: 18px;"></i>
                                 </div>
                                 <h2 class="card-title" x-text="activePlan === 'CROISSANCE' ? 'Axes de Croissance' : 
@@ -1104,15 +1112,15 @@
                             <div x-show="activePlan === 'CROISSANCE'" style="display: flex; flex-direction: column; gap: 1.5rem; margin-top: 0.5rem;">
                                 {% set categoriesMeta = {
                                     'LIMITING_BELIEF': {'label': 'Croyances Limitantes', 'icon': 'shield-alert', 'color': '#EF4444', 'bg': '#FEF2F2'},
-                                    'COUNTER_VALUE': {'label': 'Contre-valeurs observées', 'icon': 'shield-x', 'color': '#F59E0B', 'bg': '#FFFBEB'},
-                                    'DECLARED_VALUE': {'label': 'Valeurs déclarées & admirées', 'icon': 'star', 'color': '#3B82F6', 'bg': '#EFF6FF'},
-                                    'CONVICTION': {'label': 'Caractère & Convictions', 'icon': 'heart', 'color': '#10B981', 'bg': '#ECFDF5'}
+                                    'COUNTER_VALUE': {'label': 'Contre-valeurs observées', 'icon': 'shield-x', 'color': '#2E5B47', 'bg': '#E4ECE7'},
+                                    'DECLARED_VALUE': {'label': 'Valeurs déclarées & admirées', 'icon': 'star', 'color': '#3D7A5F', 'bg': '#E9F1EC'},
+                                    'CONVICTION': {'label': 'Caractère & Convictions', 'icon': 'heart', 'color': '#7A8F84', 'bg': '#ECEFED'}
                                 } %}
 
                                 {% for type, meta in categoriesMeta %}
                                     {% set axesList = croissanceAxes[type] ?? [] %}
                                     {% if axesList|length > 0 %}
-                                        <div style="background: white; border-radius: 1rem; border: 1px solid rgba(15, 118, 110, 0.08); padding: 1.25rem;">
+                                        <div style="background: white; border-radius: 1rem; border: 1px solid rgba(46, 107, 83, 0.08); padding: 1.25rem;">
                                             <h3 style="font-size: 1rem; font-weight: 700; color: {{ meta.color }}; display: flex; align-items: center; gap: 0.5rem; margin: 0 0 1rem 0;">
                                                 <i data-lucide="{{ meta.icon }}" style="width: 18px; height: 18px;"></i>
                                                 {{ meta.label }}
@@ -1128,7 +1136,7 @@
                                                                 </div>
                                                                 <div style="display: flex; flex-wrap: wrap; gap: 0.35rem; margin-top: 0.5rem;">
                                                                     {% for lg in item.goal.supportedLifeGoals %}
-                                                                        <span class="ks-badge badge-secondary" style="font-size: 0.7rem; background: rgba(15,118,110,0.06); color: var(--primary);">
+                                                                        <span class="ks-badge badge-secondary" style="font-size: 0.7rem; background: rgba(46, 107, 83,0.06); color: var(--primary);">
                                                                             {{ lg.title }}
                                                                         </span>
                                                                     {% endfor %}
@@ -1235,8 +1243,8 @@
                                 {% for category, hds in groupedHygieneDomains %}
                                     {% if hds|length > 0 %}
                                         {% set hasAnyHygiene = true %}
-                                        <div style="border: 1px solid rgba(15, 118, 110, 0.08); border-radius: 1.25rem; padding: 1.25rem; background: #ffffff;">
-                                            <h3 style="font-size: 1rem; font-weight: 750; color: var(--primary); margin: 0 0 1rem 0; display: flex; align-items: center; gap: 0.5rem; border-bottom: 1px dashed rgba(15, 118, 110, 0.12); padding-bottom: 0.5rem; font-family: var(--font-serif);">
+                                        <div style="border: 1px solid rgba(46, 107, 83, 0.08); border-radius: 1.25rem; padding: 1.25rem; background: #ffffff;">
+                                            <h3 style="font-size: 1rem; font-weight: 750; color: var(--primary); margin: 0 0 1rem 0; display: flex; align-items: center; gap: 0.5rem; border-bottom: 1px dashed rgba(46, 107, 83, 0.12); padding-bottom: 0.5rem; font-family: var(--font-serif);">
                                                 <i data-lucide="shield" style="width: 16px; height: 16px; color: var(--primary);"></i>
                                                 Axe {{ category }}
                                             </h3>
@@ -1296,7 +1304,7 @@
                     <div class="plan-card grid-full">
                         <div class="card-header">
                             <div class="card-title-group">
-                                <div class="card-icon" style="background: rgba(13, 148, 136, 0.08); color: var(--primary);">
+                                <div class="card-icon" style="background: rgba(61, 122, 95, 0.08); color: var(--primary);">
                                     <i data-lucide="scale" style="width: 18px; height: 18px;"></i>
                                 </div>
                                 <h2 class="card-title">Lois & Principes Directeurs</h2>
@@ -1625,7 +1633,7 @@
                                 </div>
                                 <div class="card-body">
                                     <div class="sub-section-title">Diagnostic & Priorité</div>
-                                    <div class="purpose-quote" style="border-left-color: var(--success); color: #065f46;">
+                                    <div class="purpose-quote" style="border-left-color: var(--success); color: #3F5249;">
                                         Statut : {{ hd.subtype == 'leverage' ? 'À exploiter / Tirer profit' : (hd.subtype == 'consolidate' ? 'À consolider' : 'À construire') }}
                                     </div>
 
@@ -1656,7 +1664,7 @@
                     <div class="plan-card grid-full" style="min-height: auto;">
                         <div class="card-header">
                             <div class="card-title-group">
-                                <div class="card-icon" style="background: rgba(13, 148, 136, 0.08); color: var(--primary);">
+                                <div class="card-icon" style="background: rgba(61, 122, 95, 0.08); color: var(--primary);">
                                     <i data-lucide="calendar" style="width: 18px; height: 18px;"></i>
                                 </div>
                                 <h2 class="card-title">Échéances & Jalons Chronologiques</h2>
@@ -2021,12 +2029,12 @@
                     <div class="plan-card grid-full" x-show="activePlan === 'CROISSANCE'">
                         <div class="card-header">
                             <div class="card-title-group">
-                                <div class="card-icon" style="background: rgba(13, 148, 136, 0.08); color: var(--primary);">
+                                <div class="card-icon" style="background: rgba(61, 122, 95, 0.08); color: var(--primary);">
                                     <i data-lucide="bar-chart-2" style="width: 18px; height: 18px;"></i>
                                 </div>
                                 <h2 class="card-title">Analyse d'Alignement du Plan de Croissance</h2>
                             </div>
-                            {% set scoreColor = croissanceHealthScore > 80 ? '#166534' : (croissanceHealthScore > 50 ? '#854d0e' : '#991b1b') %}
+                            {% set scoreColor = croissanceHealthScore > 80 ? '#3F5249' : (croissanceHealthScore > 50 ? '#854d0e' : '#991b1b') %}
                             {% set scoreBg = croissanceHealthScore > 80 ? '#dcfce7' : (croissanceHealthScore > 50 ? '#fef9c3' : '#fee2e2') %}
                             <span class="analysis-score-badge" style="background: {{ scoreBg }}; color: {{ scoreColor }};">
                                 Score : {{ croissanceHealthScore }}/100
@@ -2034,7 +2042,7 @@
                         </div>
                         <div class="card-body">
                             {% if croissanceIssues|length == 0 %}
-                                <div style="text-align: center; padding: 2rem 0; color: #166534;">
+                                <div style="text-align: center; padding: 2rem 0; color: #3F5249;">
                                     <i data-lucide="check-circle" style="width: 48px; height: 48px; margin-bottom: 1rem; opacity: 0.5;"></i>
                                     <p style="font-weight: 700; font-size: 1.1rem; margin-bottom: 0.25rem;">Alignement parfait !</p>
                                     <p style="font-size: 0.9rem; opacity: 0.8; margin: 0;">Tous vos objectifs sont connectés et soutenus de manière rigoureuse par des stratégies et des rituels.</p>
@@ -2042,8 +2050,8 @@
                             {% else %}
                                 <div style="display: flex; flex-direction: column; gap: 0.75rem; margin-top: 0.5rem;">
                                     {% for issue in croissanceIssues %}
-                                        {% set rowBg = issue.type == 'CRITICAL' ? '#fef2f2' : (issue.type == 'WARNING' ? '#fffbeb' : '#f8fafc') %}
-                                        {% set rowBorder = issue.type == 'CRITICAL' ? '#ef4444' : (issue.type == 'WARNING' ? '#f59e0b' : '#94a3b8') %}
+                                        {% set rowBg = issue.type == 'CRITICAL' ? '#fef2f2' : (issue.type == 'WARNING' ? '#FAF4E6' : '#f8fafc') %}
+                                        {% set rowBorder = issue.type == 'CRITICAL' ? '#ef4444' : (issue.type == 'WARNING' ? '#C8962E' : '#94a3b8') %}
                                         <div class="analysis-issue-row" style="background: {{ rowBg }}; border-left: 4px solid {{ rowBorder }};">
                                             <div class="analysis-issue-content">
                                                 <i data-lucide="{{ issue.icon }}" style="width: 18px; height: 18px; color: {{ rowBorder }}; flex-shrink: 0;"></i>
@@ -2063,12 +2071,12 @@
                     <div class="plan-card grid-full" x-show="activePlan === 'DEVELOPPEMENT'">
                         <div class="card-header">
                             <div class="card-title-group">
-                                <div class="card-icon" style="background: rgba(13, 148, 136, 0.08); color: var(--primary);">
+                                <div class="card-icon" style="background: rgba(61, 122, 95, 0.08); color: var(--primary);">
                                     <i data-lucide="bar-chart-2" style="width: 18px; height: 18px;"></i>
                                 </div>
                                 <h2 class="card-title">Analyse d'Alignement du Plan de Développement personnel</h2>
                             </div>
-                            {% set scoreColor = developpementHealthScore > 80 ? '#166534' : (developpementHealthScore > 50 ? '#854d0e' : '#991b1b') %}
+                            {% set scoreColor = developpementHealthScore > 80 ? '#3F5249' : (developpementHealthScore > 50 ? '#854d0e' : '#991b1b') %}
                             {% set scoreBg = developpementHealthScore > 80 ? '#dcfce7' : (developpementHealthScore > 50 ? '#fef9c3' : '#fee2e2') %}
                             <span class="analysis-score-badge" style="background: {{ scoreBg }}; color: {{ scoreColor }};">
                                 Score : {{ developpementHealthScore }}/100
@@ -2076,7 +2084,7 @@
                         </div>
                         <div class="card-body">
                             {% if developpementIssues|length == 0 %}
-                                <div style="text-align: center; padding: 2rem 0; color: #166534;">
+                                <div style="text-align: center; padding: 2rem 0; color: #3F5249;">
                                     <i data-lucide="check-circle" style="width: 48px; height: 48px; margin-bottom: 1rem; opacity: 0.5;"></i>
                                     <p style="font-weight: 700; font-size: 1.1rem; margin-bottom: 0.25rem;">Alignement parfait !</p>
                                     <p style="font-size: 0.9rem; opacity: 0.8; margin: 0;">Tous vos objectifs sont connectés et soutenus de manière rigoureuse par des stratégies et des rituels.</p>
@@ -2084,8 +2092,8 @@
                             {% else %}
                                 <div style="display: flex; flex-direction: column; gap: 0.75rem; margin-top: 0.5rem;">
                                     {% for issue in developpementIssues %}
-                                        {% set rowBg = issue.type == 'CRITICAL' ? '#fef2f2' : (issue.type == 'WARNING' ? '#fffbeb' : '#f8fafc') %}
-                                        {% set rowBorder = issue.type == 'CRITICAL' ? '#ef4444' : (issue.type == 'WARNING' ? '#f59e0b' : '#94a3b8') %}
+                                        {% set rowBg = issue.type == 'CRITICAL' ? '#fef2f2' : (issue.type == 'WARNING' ? '#FAF4E6' : '#f8fafc') %}
+                                        {% set rowBorder = issue.type == 'CRITICAL' ? '#ef4444' : (issue.type == 'WARNING' ? '#C8962E' : '#94a3b8') %}
                                         <div class="analysis-issue-row" style="background: {{ rowBg }}; border-left: 4px solid {{ rowBorder }};">
                                             <div class="analysis-issue-content">
                                                 <i data-lucide="{{ issue.icon }}" style="width: 18px; height: 18px; color: {{ rowBorder }}; flex-shrink: 0;"></i>
@@ -2105,12 +2113,12 @@
                     <div class="plan-card grid-full" x-show="activePlan === 'TRANSMISSION'">
                         <div class="card-header">
                             <div class="card-title-group">
-                                <div class="card-icon" style="background: rgba(13, 148, 136, 0.08); color: var(--primary);">
+                                <div class="card-icon" style="background: rgba(61, 122, 95, 0.08); color: var(--primary);">
                                     <i data-lucide="bar-chart-2" style="width: 18px; height: 18px;"></i>
                                 </div>
                                 <h2 class="card-title">Analyse d'Alignement du Plan de Transmission</h2>
                             </div>
-                            {% set scoreColor = transmissionHealthScore > 80 ? '#166534' : (transmissionHealthScore > 50 ? '#854d0e' : '#991b1b') %}
+                            {% set scoreColor = transmissionHealthScore > 80 ? '#3F5249' : (transmissionHealthScore > 50 ? '#854d0e' : '#991b1b') %}
                             {% set scoreBg = transmissionHealthScore > 80 ? '#dcfce7' : (transmissionHealthScore > 50 ? '#fef9c3' : '#fee2e2') %}
                             <span class="analysis-score-badge" style="background: {{ scoreBg }}; color: {{ scoreColor }};">
                                 Score : {{ transmissionHealthScore }}/100
@@ -2118,7 +2126,7 @@
                         </div>
                         <div class="card-body">
                             {% if transmissionIssues|length == 0 %}
-                                <div style="text-align: center; padding: 2rem 0; color: #166534;">
+                                <div style="text-align: center; padding: 2rem 0; color: #3F5249;">
                                     <i data-lucide="check-circle" style="width: 48px; height: 48px; margin-bottom: 1rem; opacity: 0.5;"></i>
                                     <p style="font-weight: 700; font-size: 1.1rem; margin-bottom: 0.25rem;">Alignement parfait !</p>
                                     <p style="font-size: 0.9rem; opacity: 0.8; margin: 0;">Tous vos objectifs sont connectés et soutenus de manière rigoureuse par des stratégies et des rituels.</p>
@@ -2126,8 +2134,8 @@
                             {% else %}
                                 <div style="display: flex; flex-direction: column; gap: 0.75rem; margin-top: 0.5rem;">
                                     {% for issue in transmissionIssues %}
-                                        {% set rowBg = issue.type == 'CRITICAL' ? '#fef2f2' : (issue.type == 'WARNING' ? '#fffbeb' : '#f8fafc') %}
-                                        {% set rowBorder = issue.type == 'CRITICAL' ? '#ef4444' : (issue.type == 'WARNING' ? '#f59e0b' : '#94a3b8') %}
+                                        {% set rowBg = issue.type == 'CRITICAL' ? '#fef2f2' : (issue.type == 'WARNING' ? '#FAF4E6' : '#f8fafc') %}
+                                        {% set rowBorder = issue.type == 'CRITICAL' ? '#ef4444' : (issue.type == 'WARNING' ? '#C8962E' : '#94a3b8') %}
                                         <div class="analysis-issue-row" style="background: {{ rowBg }}; border-left: 4px solid {{ rowBorder }};">
                                             <div class="analysis-issue-content">
                                                 <i data-lucide="{{ issue.icon }}" style="width: 18px; height: 18px; color: {{ rowBorder }}; flex-shrink: 0;"></i>
@@ -2147,12 +2155,12 @@
                     <div class="plan-card grid-full" x-show="activePlan === 'HYGIENE'">
                         <div class="card-header">
                             <div class="card-title-group">
-                                <div class="card-icon" style="background: rgba(13, 148, 136, 0.08); color: var(--primary);">
+                                <div class="card-icon" style="background: rgba(61, 122, 95, 0.08); color: var(--primary);">
                                     <i data-lucide="bar-chart-2" style="width: 18px; height: 18px;"></i>
                                 </div>
                                 <h2 class="card-title">Analyse d'Alignement du Plan d'Hygiène de vie</h2>
                             </div>
-                            {% set scoreColor = hygieneHealthScore > 80 ? '#166534' : (hygieneHealthScore > 50 ? '#854d0e' : '#991b1b') %}
+                            {% set scoreColor = hygieneHealthScore > 80 ? '#3F5249' : (hygieneHealthScore > 50 ? '#854d0e' : '#991b1b') %}
                             {% set scoreBg = hygieneHealthScore > 80 ? '#dcfce7' : (hygieneHealthScore > 50 ? '#fef9c3' : '#fee2e2') %}
                             <span class="analysis-score-badge" style="background: {{ scoreBg }}; color: {{ scoreColor }};">
                                 Score : {{ hygieneHealthScore }}/100
@@ -2160,7 +2168,7 @@
                         </div>
                         <div class="card-body">
                             {% if hygieneIssues|length == 0 %}
-                                <div style="text-align: center; padding: 2rem 0; color: #166534;">
+                                <div style="text-align: center; padding: 2rem 0; color: #3F5249;">
                                     <i data-lucide="check-circle" style="width: 48px; height: 48px; margin-bottom: 1rem; opacity: 0.5;"></i>
                                     <p style="font-weight: 700; font-size: 1.1rem; margin-bottom: 0.25rem;">Alignement parfait !</p>
                                     <p style="font-size: 0.9rem; opacity: 0.8; margin: 0;">Tous vos objectifs sont connectés et soutenus de manière rigoureuse par des stratégies et des rituels.</p>
@@ -2168,8 +2176,8 @@
                             {% else %}
                                 <div style="display: flex; flex-direction: column; gap: 0.75rem; margin-top: 0.5rem;">
                                     {% for issue in hygieneIssues %}
-                                        {% set rowBg = issue.type == 'CRITICAL' ? '#fef2f2' : (issue.type == 'WARNING' ? '#fffbeb' : '#f8fafc') %}
-                                        {% set rowBorder = issue.type == 'CRITICAL' ? '#ef4444' : (issue.type == 'WARNING' ? '#f59e0b' : '#94a3b8') %}
+                                        {% set rowBg = issue.type == 'CRITICAL' ? '#fef2f2' : (issue.type == 'WARNING' ? '#FAF4E6' : '#f8fafc') %}
+                                        {% set rowBorder = issue.type == 'CRITICAL' ? '#ef4444' : (issue.type == 'WARNING' ? '#C8962E' : '#94a3b8') %}
                                         <div class="analysis-issue-row" style="background: {{ rowBg }}; border-left: 4px solid {{ rowBorder }};">
                                             <div class="analysis-issue-content">
                                                 <i data-lucide="{{ issue.icon }}" style="width: 18px; height: 18px; color: {{ rowBorder }}; flex-shrink: 0;"></i>
@@ -2193,7 +2201,7 @@
                     <div class="plan-card grid-full">
                         <div class="card-header">
                             <div class="card-title-group">
-                                <div class="card-icon" style="background: rgba(13, 148, 136, 0.08); color: var(--primary);">
+                                <div class="card-icon" style="background: rgba(61, 122, 95, 0.08); color: var(--primary);">
                                     <i data-lucide="map" style="width: 18px; height: 18px;"></i>
                                 </div>
                                 <h2 class="card-title">Cascade Stratégique du Plan</h2>
@@ -2236,9 +2244,9 @@ graph TD
     {% endif %}
   {% endfor %}
 
-  style Vision fill:#fdf4ff,stroke:#d946ef,stroke-width:2px,color:#701a75
-  classDef goal fill:#eff6ff,stroke:#3b82f6,stroke-width:2px,color:#1e40af
-  classDef char fill:#fffbeb,stroke:#f59e0b,stroke-width:1px,color:#92400e
+  style Vision fill:#FAF4E6,stroke:#C8962E,stroke-width:2px,color:#7A5713
+  classDef goal fill:#E9F1EC,stroke:#3D7A5F,stroke-width:2px,color:#1F4D3A
+  classDef char fill:#E4ECE7,stroke:#2E5B47,stroke-width:1px,color:#173D2E
   classDef strat fill:#f8fafc,stroke:#64748b,stroke-width:1px,color:#334155,stroke-dasharray: 5 5
   classDef habit fill:#ecfeff,stroke:#06b6d4,stroke-width:1px,color:#083344
 
@@ -2284,9 +2292,9 @@ graph TD
     {% endif %}
   {% endfor %}
 
-  style Vision fill:#fdf4ff,stroke:#d946ef,stroke-width:2px,color:#701a75
-  classDef goal fill:#eff6ff,stroke:#3b82f6,stroke-width:2px,color:#1e40af
-  classDef comp fill:#f0fdf4,stroke:#22c55e,stroke-width:1px,color:#166534
+  style Vision fill:#FAF4E6,stroke:#C8962E,stroke-width:2px,color:#7A5713
+  classDef goal fill:#E9F1EC,stroke:#3D7A5F,stroke-width:2px,color:#1F4D3A
+  classDef comp fill:#ECEFED,stroke:#7A8F84,stroke-width:1px,color:#3F5249
   classDef strat fill:#f8fafc,stroke:#64748b,stroke-width:1px,color:#334155,stroke-dasharray: 5 5
   classDef habit fill:#ecfeff,stroke:#06b6d4,stroke-width:1px,color:#083344
 
@@ -2326,9 +2334,9 @@ graph TD
     {% endfor %}
   {% endfor %}
 
-  style Vision fill:#fdf4ff,stroke:#d946ef,stroke-width:2px,color:#701a75
-  classDef goal fill:#eff6ff,stroke:#3b82f6,stroke-width:2px,color:#1e40af
-  classDef trans fill:#e0e7ff,stroke:#6366f1,stroke-width:1px,color:#3730a3
+  style Vision fill:#FAF4E6,stroke:#C8962E,stroke-width:2px,color:#7A5713
+  classDef goal fill:#E9F1EC,stroke:#3D7A5F,stroke-width:2px,color:#1F4D3A
+  classDef trans fill:#FAF4E6,stroke:#A87A1F,stroke-width:1px,color:#7A5713
   classDef strat fill:#f8fafc,stroke:#64748b,stroke-width:1px,color:#334155,stroke-dasharray: 5 5
   classDef habit fill:#ecfeff,stroke:#06b6d4,stroke-width:1px,color:#083344
 
@@ -2367,9 +2375,9 @@ graph TD
     {% endfor %}
   {% endfor %}
 
-  style Vision fill:#fdf4ff,stroke:#d946ef,stroke-width:2px,color:#701a75
-  classDef goal fill:#eff6ff,stroke:#3b82f6,stroke-width:2px,color:#1e40af
-  classDef hyg fill:#d1fae5,stroke:#10b981,stroke-width:1px,color:#065f46
+  style Vision fill:#FAF4E6,stroke:#C8962E,stroke-width:2px,color:#7A5713
+  classDef goal fill:#E9F1EC,stroke:#3D7A5F,stroke-width:2px,color:#1F4D3A
+  classDef hyg fill:#DDE4E0,stroke:#7A8F84,stroke-width:1px,color:#3F5249
   classDef habit fill:#ecfeff,stroke:#06b6d4,stroke-width:1px,color:#083344
 
   {% for g in lifeGoals.HAVE %}
@@ -2386,7 +2394,7 @@ graph TD
                             <!-- Map Legend -->
                             <div class="map-legend">
                                 <div class="legend-item">
-                                    <div class="legend-color" style="background: #d946ef;"></div>
+                                    <div class="legend-color" style="background: #C8962E;"></div>
                                     <span class="legend-label">✨ Vision</span>
                                 </div>
                                 <div class="legend-item">
@@ -2394,7 +2402,7 @@ graph TD
                                     <span class="legend-label">🎯 Objectifs de Vie</span>
                                 </div>
                                 <div class="legend-item" x-show="activePlan === 'DEVELOPPEMENT'">
-                                    <div class="legend-color" style="background: #22c55e;"></div>
+                                    <div class="legend-color" style="background: #7A8F84;"></div>
                                     <span class="legend-label">📚 Compétences</span>
                                 </div>
                                 <div class="legend-item" x-show="activePlan === 'CROISSANCE'">
@@ -2440,13 +2448,13 @@ graph TD
                  style="display: none;">
                  
                 <div class="modal-container" 
-                     style="background: white; border-radius: 1.5rem; width: 100%; max-width: 650px; max-height: 90vh; overflow-y: auto; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25); border: 1px solid rgba(15, 118, 110, 0.08); display: flex; flex-direction: column;"
+                     style="background: white; border-radius: 1.5rem; width: 100%; max-width: 650px; max-height: 90vh; overflow-y: auto; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25); border: 1px solid rgba(46, 107, 83, 0.08); display: flex; flex-direction: column;"
                      @click.away="showAxisModal = false"
                      x-transition:enter="transition ease-out duration-300"
                      x-transition:enter-start="scale-95 translate-y-4"
                      x-transition:enter-end="scale-100 translate-y-0">
                      
-                     <div style="padding: 1.5rem 2rem; border-bottom: 1px solid rgba(15, 118, 110, 0.06); display: flex; justify-content: space-between; align-items: center;">
+                     <div style="padding: 1.5rem 2rem; border-bottom: 1px solid rgba(46, 107, 83, 0.06); display: flex; justify-content: space-between; align-items: center;">
                          <div>
                              <span style="font-size: 0.7rem; font-weight: 800; text-transform: uppercase; color: var(--warning); letter-spacing: 0.05em;">Configuration de l'axe</span>
                              <h2 style="font-family: var(--font-serif); font-size: 1.35rem; font-weight: 700; color: var(--fg); margin: 2px 0 0 0;" x-text="currentAxis.text"></h2>
@@ -2475,7 +2483,7 @@ graph TD
                          <!-- Objectifs de vie -->
                          <div style="display: flex; flex-direction: column; gap: 0.35rem;">
                              <label style="font-size: 0.75rem; font-weight: 700; text-transform: uppercase; color: var(--fg-light); letter-spacing: 0.05em;">Objectifs de vie soutenus</label>
-                             <div class="checkbox-list-container" style="display: flex; flex-direction: column; gap: 0.5rem; background: var(--bg); border: 1px solid rgba(15, 118, 110, 0.08); border-radius: 0.75rem; padding: 0.75rem; max-height: 150px; overflow-y: auto;">
+                             <div class="checkbox-list-container" style="display: flex; flex-direction: column; gap: 0.5rem; background: var(--bg); border: 1px solid rgba(46, 107, 83, 0.08); border-radius: 0.75rem; padding: 0.75rem; max-height: 150px; overflow-y: auto;">
                                  {% if allLifeGoals|length > 0 %}
                                      {% for lg in allLifeGoals %}
                                          <label style="display: flex; align-items: flex-start; gap: 0.5rem; font-size: 0.85rem; color: var(--fg-light); cursor: pointer; padding: 0.2rem 0; margin-bottom: 0;">
@@ -2540,7 +2548,7 @@ graph TD
                          </div>
 
                          <!-- Footer Buttons -->
-                         <div style="display: flex; justify-content: flex-end; gap: 0.75rem; margin-top: 1rem; border-top: 1px solid rgba(15, 118, 110, 0.06); padding-top: 1.25rem;">
+                         <div style="display: flex; justify-content: flex-end; gap: 0.75rem; margin-top: 1rem; border-top: 1px solid rgba(46, 107, 83, 0.06); padding-top: 1.25rem;">
                              <button type="button" @click="showAxisModal = false" style="background: var(--bg-alt); color: var(--fg-light); border: none; padding: 0.5rem 1rem; border-radius: 0.5rem; font-weight: 600; cursor: pointer;">Annuler</button>
                              <button type="submit" style="background: var(--primary); color: white; border: none; padding: 0.5rem 1.25rem; border-radius: 0.5rem; font-weight: 600; cursor: pointer;">Enregistrer</button>
                          </div>
@@ -2562,16 +2570,16 @@ graph TD
                  style="display: none;">
                  
                 <div class="modal-container" 
-                     style="background: white; border-radius: 1.5rem; width: 100%; max-width: 600px; max-height: 90vh; overflow-y: auto; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25); border: 1px solid rgba(15, 118, 110, 0.08); display: flex; flex-direction: column;"
+                     style="background: white; border-radius: 1.5rem; width: 100%; max-width: 600px; max-height: 90vh; overflow-y: auto; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25); border: 1px solid rgba(46, 107, 83, 0.08); display: flex; flex-direction: column;"
                      @click.away="showPrinciplesModal = false"
                      x-transition:enter="transition ease-out duration-300"
                      x-transition:enter-start="scale-95 translate-y-4"
                      x-transition:enter-end="scale-100 translate-y-0">
                      
-                     <div style="padding: 1.5rem 2rem; border-bottom: 1px solid rgba(15, 118, 110, 0.06); display: flex; justify-content: space-between; align-items: center;">
+                     <div style="padding: 1.5rem 2rem; border-bottom: 1px solid rgba(46, 107, 83, 0.06); display: flex; justify-content: space-between; align-items: center;">
                          <div>
                              <span style="font-size: 0.7rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em;"
-                                    :style="{ color: activePlan === 'CROISSANCE' ? '#D97706' : (activePlan === 'DEVELOPPEMENT' ? '#2563EB' : (activePlan === 'TRANSMISSION' ? '#DB2777' : '#059669')) }"
+                                    :style="{ color: activePlan === 'CROISSANCE' ? '#1F4D3A' : (activePlan === 'DEVELOPPEMENT' ? '#2E6B53' : (activePlan === 'TRANSMISSION' ? '#A87A1F' : '#5D7368')) }"
                                     x-text="'Lois & Principes de ' + (activePlan === 'CROISSANCE' ? 'Croissance' : (activePlan === 'DEVELOPPEMENT' ? 'Développement' : (activePlan === 'TRANSMISSION' ? 'Transmission' : 'Vie/Discipline')))">
                                   Lois & Principes de Croissance
                               </span>
@@ -2587,7 +2595,7 @@ graph TD
                          <div style="display: flex; flex-direction: column; gap: 0.75rem;">
                              <label style="font-size: 0.75rem; font-weight: 700; text-transform: uppercase; color: var(--fg-light); letter-spacing: 0.05em;">Principes proposés (Cochez pour adopter)</label>
                              
-                             <div style="display: flex; flex-direction: column; gap: 0.75rem; background: var(--bg); border: 1px solid rgba(15, 118, 110, 0.08); border-radius: 0.75rem; padding: 1rem;">
+                             <div style="display: flex; flex-direction: column; gap: 0.75rem; background: var(--bg); border: 1px solid rgba(46, 107, 83, 0.08); border-radius: 0.75rem; padding: 1rem;">
                                  <!-- Principle 1 -->
                                  <label style="display: flex; align-items: flex-start; gap: 0.75rem; cursor: pointer; margin: 0;">
                                      <input type="checkbox" name="proposed_principles[]" value="syst-obj" :checked="hasProposed('Systèmes > Objectifs')" style="margin-top: 0.25rem;">
@@ -2650,7 +2658,7 @@ graph TD
                          </div>
 
                          <!-- Footer Buttons -->
-                         <div style="display: flex; justify-content: flex-end; gap: 0.75rem; margin-top: 1rem; border-top: 1px solid rgba(15, 118, 110, 0.06); padding-top: 1.25rem;">
+                         <div style="display: flex; justify-content: flex-end; gap: 0.75rem; margin-top: 1rem; border-top: 1px solid rgba(46, 107, 83, 0.06); padding-top: 1.25rem;">
                              <button type="button" @click="showPrinciplesModal = false" style="background: var(--bg-alt); color: var(--fg-light); border: none; padding: 0.5rem 1rem; border-radius: 0.5rem; font-weight: 600; cursor: pointer;">Annuler</button>
                              <button type="submit" style="background: var(--primary); color: white; border: none; padding: 0.5rem 1.25rem; border-radius: 0.5rem; font-weight: 600; cursor: pointer;">Enregistrer</button>
                          </div>
@@ -2705,23 +2713,23 @@ graph TD
         btn.innerHTML = '<span style="margin-right: 5px;">⏳</span> Envoi...';
 
         let path = '';
-        let toastBg = '#D97706';
+        let toastBg = '#1F4D3A';
         let planLabel = '';
         if (plan === 'CROISSANCE') {
             path = "{{ path('app_plan_de_croissance_email') }}";
-            toastBg = '#D97706';
+            toastBg = '#1F4D3A';
             planLabel = 'Plan de Croissance';
         } else if (plan === 'DEVELOPPEMENT') {
             path = "{{ path('app_plan_de_developpement_email') }}";
-            toastBg = '#2563EB';
+            toastBg = '#2E6B53';
             planLabel = 'Plan de Développement personnel';
         } else if (plan === 'TRANSMISSION') {
             path = "{{ path('app_plan_de_transmission_email') }}";
-            toastBg = '#DB2777';
+            toastBg = '#A87A1F';
             planLabel = 'Plan de Transmission';
         } else if (plan === 'HYGIENE') {
             path = "{{ path('app_plan_d_hygiene_email') }}";
-            toastBg = '#059669';
+            toastBg = '#5D7368';
             planLabel = "Plan d'Hygiène de vie";
         }
 

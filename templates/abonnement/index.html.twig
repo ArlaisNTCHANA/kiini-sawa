@@ -35,13 +35,13 @@
     <header class="ks-header"><h1 class="ks-header__title">Mon abonnement</h1></header>
 
     {% if limitReached %}
-        <div class="ab-card" style="background: linear-gradient(135deg, var(--primary-soft), var(--warning-soft)); border: 1px solid #99F6E4;">
+        <div class="ab-card" style="background: linear-gradient(135deg, var(--primary-soft), var(--warning-soft)); border: 1px solid #C8D6CD;">
             <p style="font-weight: 700; color: var(--primary);">{{ limitReached }}</p>
             <p style="color: var(--fg-light); margin-top: .35rem;">Passez à PRO pour continuer sans limite.</p>
         </div>
     {% endif %}
     {% if feature %}
-        <div class="ab-card" style="background: linear-gradient(135deg, var(--primary-soft), var(--warning-soft)); border: 1px solid #99F6E4;">
+        <div class="ab-card" style="background: linear-gradient(135deg, var(--primary-soft), var(--warning-soft)); border: 1px solid #C8D6CD;">
             <p style="font-weight: 700; color: var(--primary); display: flex; gap: .5rem; align-items: center;"><i data-lucide="lock" style="width: 18px; height: 18px;"></i> « {{ feature }} » fait partie de KIINI SAWA PRO.</p>
             <p style="color: var(--fg-light); margin-top: .35rem;">Passez à PRO pour bâtir vos cinq autres plans (Croissance, Développement personnel, Hygiène de vie, Intendance, Transmission), voir votre carte, exporter en PDF et suivre votre évolution dans le temps.</p>
         </div>
@@ -49,7 +49,7 @@
 
     <div class="ab-card ab-status">
         {% if isTrialing %}
-            <span class="ab-badge" style="background: #FEF3C7; color: #92400E;">ESSAI PRO</span>
+            <span class="ab-badge" style="background: var(--gold-soft); color: var(--accent);">ESSAI PRO</span>
             <span>Votre essai gratuit se termine le <strong>{{ proUntil|format_date(pattern: 'd MMMM y', locale: 'fr') }}</strong>. Choisissez une formule pour garder tous vos plans actifs.</span>
         {% elseif isPro %}
             <span class="ab-badge" style="background: var(--primary); color: #fff;">PRO</span>

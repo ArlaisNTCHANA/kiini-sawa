@@ -11,7 +11,7 @@
         lead: 'Les tests disent comment vous vous voyez ; vos proches voient parfois ce que vous ne voyez pas. Demandez-leur, en toute bienveillance.',
         back: {url: path('app_personality_index'), label: 'Mes tests'},
     } %}
-    <div style="max-width: 680px; margin-bottom: 1rem;">{{ book_panel('personnalite') }}</div>
+    <div style="max-width: 680px; margin-bottom: 1rem;">{{ book_panel('personnalite') }}{% include 'methode/_figure.html.twig' with {name: 'fig_temoins', alt: 'Les trois témoins : preuve personnelle, résultat d\'un outil, témoignage extérieur', caption: 'les trois témoins', collapsed: true, max: '560px'} only %}</div>
 
     {% if not request %}
         <div class="ks-card">

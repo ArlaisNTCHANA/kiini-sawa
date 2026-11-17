@@ -160,7 +160,7 @@ final class ReportBuilder
         $marked = \array_slice($marked, 0, 3, true);
 
         return ['domains' => $out, 'marked' => $marked, 'headline' => implode(' · ', array_map(fn ($m) => $m['lx']['label'], $marked)),
-            'radar' => ReportCharts::uri(ReportCharts::radar($axes, '#0F766E'))];
+            'radar' => ReportCharts::uri(ReportCharts::radar($axes, '#2E6B53'))];
     }
 
     /** Rapport « type de fonctionnement » illustré. */

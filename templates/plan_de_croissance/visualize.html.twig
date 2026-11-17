@@ -42,7 +42,7 @@
 
         h1, h2, h3, h4 {
             font-family: 'Playfair Display', Georgia, serif;
-            color: #d97706;
+            color: #1F4D3A;
             margin-top: 0;
         }
 
@@ -91,7 +91,7 @@
                 top: 0; left: 0; right: 0;
                 justify-content: space-between;
                 align-items: center;
-                border-bottom: 2px solid #d97706;
+                border-bottom: 2px solid #1F4D3A;
                 padding-bottom: 8px;
                 font-size: 0.8rem;
                 color: #64748b;
@@ -115,13 +115,13 @@
             width: 100%;
             border-collapse: collapse;
             margin-bottom: 40px;
-            border-bottom: 2px solid #d97706;
+            border-bottom: 2px solid #1F4D3A;
         }
 
         .section-header {
             font-size: 1.05rem;
             font-weight: 700;
-            color: #d97706;
+            color: #1F4D3A;
             text-transform: uppercase;
             letter-spacing: 0.1em;
             border-bottom: 1px solid #e2e8f0;
@@ -137,10 +137,10 @@
             text-align: center;
             padding: 30px;
             background: #fffdfa;
-            border: 1px solid #fef3c7;
+            border: 1px solid #D5E2DA;
             border-radius: 12px;
             line-height: 1.6;
-            color: #b45309;
+            color: #1F4D3A;
             margin-bottom: 25px;
         }
 
@@ -201,7 +201,7 @@
         }
 
         .btn-toolbar-primary {
-            background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+            background: linear-gradient(135deg, #2E5B47 0%, #1F4D3A 100%);
             color: white;
             box-shadow: 0 4px 10px rgba(217, 119, 6, 0.2);
         }
@@ -226,7 +226,7 @@
             position: fixed;
             top: 20px;
             right: 20px;
-            background: #d97706;
+            background: #1F4D3A;
             color: white;
             padding: 14px 24px;
             border-radius: 8px;
@@ -257,7 +257,7 @@
     {# Running header / footer for print #}
     {% if variant != 'EMAIL' %}
         <div class="print-only">
-            <div style="font-weight: bold; color: #d97706; text-transform: uppercase; letter-spacing: 0.1em;">KIINI SAWA • Plan de Croissance</div>
+            <div style="font-weight: bold; color: #1F4D3A; text-transform: uppercase; letter-spacing: 0.1em;">KIINI SAWA • Plan de Croissance</div>
             <div style="font-weight: 600; color: #1e293b;">{{ displayName }}</div>
             <div>{{ currentDate }}</div>
         </div>
@@ -267,12 +267,12 @@
     {% endif %}
 
     {# En-tête du document #}
-    <table class="header-table" style="width: 100%; border-collapse: collapse; margin-bottom: 35px; border-bottom: 2px solid #d97706;">
+    <table class="header-table" style="width: 100%; border-collapse: collapse; margin-bottom: 35px; border-bottom: 2px solid #1F4D3A;">
         <tr>
             <td style="vertical-align: bottom; padding-bottom: 15px; text-align: left;">
-                <h1 style="font-size: 2.3rem; font-family: 'Playfair Display', serif; margin: 0; line-height: 1.1; color: #d97706; text-transform: uppercase; letter-spacing: 0.05em;">Plan de Croissance</h1>
+                <h1 style="font-size: 2.3rem; font-family: 'Playfair Display', serif; margin: 0; line-height: 1.1; color: #1F4D3A; text-transform: uppercase; letter-spacing: 0.05em;">Plan de Croissance</h1>
                 <div style="font-size: 0.88rem; color: #64748b; margin-top: 6px;">
-                    Généré par <strong style="color: #d97706;">KIINI SAWA</strong>
+                    Généré par <strong style="color: #1F4D3A;">KIINI SAWA</strong>
                 </div>
             </td>
             <td style="text-align: right; vertical-align: bottom; padding-bottom: 15px;">
@@ -305,9 +305,9 @@
         
         {% set categoriesMeta = {
             'LIMITING_BELIEF': {'label': 'Croyances Limitantes', 'color': '#EF4444', 'bg': '#FEF2F2', 'border': '#FEE2E2'},
-            'COUNTER_VALUE': {'label': 'Contre-valeurs observées', 'color': '#F59E0B', 'bg': '#FFFBEB', 'border': '#FEF3C7'},
-            'DECLARED_VALUE': {'label': 'Valeurs déclarées & admirées', 'color': '#3B82F6', 'bg': '#EFF6FF', 'border': '#DBEAFE'},
-            'CONVICTION': {'label': 'Caractère & Convictions', 'color': '#10B981', 'bg': '#ECFDF5', 'border': '#D1FAE5'}
+            'COUNTER_VALUE': {'label': 'Contre-valeurs observées', 'color': '#2E5B47', 'bg': '#E4ECE7', 'border': '#D5E2DA'},
+            'DECLARED_VALUE': {'label': 'Valeurs déclarées & admirées', 'color': '#3D7A5F', 'bg': '#E9F1EC', 'border': '#D5E5DB'},
+            'CONVICTION': {'label': 'Caractère & Convictions', 'color': '#7A8F84', 'bg': '#ECEFED', 'border': '#DDE4E0'}
         } %}
 
         {% set hasAxes = false %}
@@ -333,10 +333,10 @@
                                         
                                         {% if item.goal %}
                                             <div style="margin-top: 8px; font-size: 0.9rem; color: #44403c;">
-                                                <strong style="color: #d97706;">Stratégie :</strong> {{ item.goal.strategy|default('Aucune stratégie définie.') }}
+                                                <strong style="color: #1F4D3A;">Stratégie :</strong> {{ item.goal.strategy|default('Aucune stratégie définie.') }}
                                             </div>
                                             <div style="margin-top: 6px; display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
-                                                <span style="font-size: 0.72rem; font-weight: 750; padding: 2px 6px; border-radius: 4px; text-transform: uppercase; background: {% if item.goal.subtype == 'consolidate' %}#d9f99d; color: #3f6212;{% else %}#fef3c7; color: #92400e;{% endif %}">
+                                                <span style="font-size: 0.72rem; font-weight: 750; padding: 2px 6px; border-radius: 4px; text-transform: uppercase; background: {% if item.goal.subtype == 'consolidate' %}#d9f99d; color: #3f6212;{% else %}#D5E2DA; color: #173D2E;{% endif %}">
                                                     {{ item.goal.subtype == 'consolidate' ? 'À consolider' : 'À construire' }}
                                                 </span>
                                                 {% if item.goal.supportedLifeGoals|length > 0 %}
@@ -368,18 +368,18 @@
         
         <div style="display: flex; flex-direction: column; gap: 20px;">
             <div class="no-break" style="background: white; border-radius: 12px; border: 1px solid #fbcfe8; padding: 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.02);">
-                <h3 style="font-size: 1.1rem; font-weight: 700; color: #db2777; margin: 0 0 15px 0; border-bottom: 1px dashed #fbcfe8; padding-bottom: 8px;">
+                <h3 style="font-size: 1.1rem; font-weight: 700; color: #A87A1F; margin: 0 0 15px 0; border-bottom: 1px dashed #fbcfe8; padding-bottom: 8px;">
                     👥 Relations & Alliances Stratégiques
                 </h3>
                 <div style="display: flex; flex-direction: column; gap: 15px;">
                     {% for item in growthGoals.RELATION %}
-                        <div style="padding: 15px; background: #fdf2f8; border-radius: 8px; border: 1px solid rgba(219,39,119,0.05);">
+                        <div style="padding: 15px; background: #FAF4E6; border-radius: 8px; border: 1px solid rgba(219,39,119,0.05);">
                             <div style="font-weight: 700; font-size: 1.05rem; color: #1e293b;">{{ item.title }}</div>
                             <div style="margin-top: 8px; font-size: 0.9rem; color: #334155;">
-                                <strong style="color: #db2777;">Stratégie d'impact :</strong> {{ item.strategy|default('Aucune stratégie définie.') }}
+                                <strong style="color: #A87A1F;">Stratégie d'impact :</strong> {{ item.strategy|default('Aucune stratégie définie.') }}
                             </div>
                             <div style="margin-top: 6px; display: inline-flex; align-items: center; gap: 8px;">
-                                <span style="font-size: 0.72rem; font-weight: 750; padding: 2px 6px; border-radius: 4px; text-transform: uppercase; background: {% if item.subtype == 'leverage' %}#d1fae5; color: #065f46;{% elseif item.subtype == 'consolidate' %}#dbeafe; color: #1e40af;{% else %}#fce7f3; color: #9d174d;{% endif %}">
+                                <span style="font-size: 0.72rem; font-weight: 750; padding: 2px 6px; border-radius: 4px; text-transform: uppercase; background: {% if item.subtype == 'leverage' %}#DDE4E0; color: #3F5249;{% elseif item.subtype == 'consolidate' %}#D5E5DB; color: #1F4D3A;{% else %}#F3E6C7; color: #7A5713;{% endif %}">
                                     {{ item.subtype == 'leverage' ? 'À mettre à profit' : (item.subtype == 'consolidate' ? 'À consolider' : 'À construire') }}
                                 </span>
                                 {% if item.supportedLifeGoals|length > 0 %}
@@ -402,7 +402,7 @@
         <div class="section-header">4. Lois & Principes Directeurs</div>
         <div style="display: flex; flex-direction: column; gap: 12px; margin-top: 15px;">
             {% for pr in growthPrinciples.CROISSANCE %}
-                <div style="padding: 15px; background: #fafaf9; border-radius: 8px; border: 1px solid rgba(0,0,0,0.03); border-left: 4px solid #d97706;">
+                <div style="padding: 15px; background: #fafaf9; border-radius: 8px; border: 1px solid rgba(0,0,0,0.03); border-left: 4px solid #1F4D3A;">
                     <h3 style="font-weight: 700; font-size: 1rem; color: #1c1917; margin-bottom: 4px; font-family: 'Inter', sans-serif;">{{ pr.title }}</h3>
                     {% if pr.description %}<p style="font-size: 0.88rem; color: #44403c; line-height: 1.5; margin: 0;">{{ pr.description }}</p>{% endif %}
                 </div>
@@ -423,7 +423,7 @@
                 {% for gg in characterGoals %}
                     {% if gg.habits|length > 0 or gg.actions|length > 0 %}
                         <div class="no-break" style="border: 1px solid #e7e5e4; border-radius: 12px; padding: 20px; background: white; box-shadow: 0 1px 3px rgba(0,0,0,0.02);">
-                            <h3 style="font-size: 1.15rem; font-weight: 700; color: #d97706; margin: 0 0 15px 0; font-family: 'Inter', sans-serif;">
+                            <h3 style="font-size: 1.15rem; font-weight: 700; color: #1F4D3A; margin: 0 0 15px 0; font-family: 'Inter', sans-serif;">
                                 {{ gg.title }}
                             </h3>
                             

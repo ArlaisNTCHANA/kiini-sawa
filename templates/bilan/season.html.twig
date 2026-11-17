@@ -28,6 +28,7 @@
     } %}
 
     <blockquote class="season-verse">« Enseigne-nous à bien compter nos jours, afin que nous appliquions notre cœur à la sagesse. »<cite>Psaume 90:12</cite></blockquote>
+    {% include 'methode/_figure.html.twig' with {name: 'fig_saisons', alt: 'Les quatre saisons : semis, croissance, récolte, hiver ; une saison dure environ trois mois', max: '440px'} only %}
 
     {% if activeSeason %}
         {% set k = kinds[activeSeason.kind] ?? null %}

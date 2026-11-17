@@ -5,14 +5,14 @@
     <title>{% block title %}KIINI SAWA{% endblock %}</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     {% include 'shared/_pwa_head.html.twig' %}
-    <meta name="theme-color" content="#0F766E">
+    <meta name="theme-color" content="#2E6B53">
     <link href="{{ asset('styles/fonts.css') }}" rel="stylesheet">
     <style>
         :root {
             --bg-color: #022c22;
             --card-bg: rgba(255, 255, 255, 0.07);
-            --accent-color: #2dd4bf;
-            --accent-gradient: linear-gradient(135deg, #2dd4bf 0%, #0d9488 100%);
+            --accent-color: #7A9E7E;
+            --accent-gradient: linear-gradient(135deg, #7A9E7E 0%, #3D7A5F 100%);
             --text-color: #cbd5e1;
             --text-heading: #f8fafc;
             --border-color: rgba(255, 255, 255, 0.1);
@@ -35,7 +35,7 @@
             position: relative;
             overflow-x: hidden;
             padding: 2rem 0;
-            background: linear-gradient(135deg, #022c22 0%, #0f766e 50%, #014751 100%);
+            background: linear-gradient(135deg, #022c22 0%, #2E6B53 50%, #014751 100%);
         }
 
         /* Ambient Glows */
@@ -89,7 +89,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            box-shadow: 0 8px 24px rgba(13, 148, 136, 0.35);
+            box-shadow: 0 8px 24px rgba(61, 122, 95, 0.35);
             margin: 0 auto 1.5rem;
         }
 
@@ -107,7 +107,7 @@
             font-weight: 600;
             letter-spacing: 0.15em;
             text-transform: uppercase;
-            color: #2dd4bf;
+            color: #7A9E7E;
             margin-bottom: 2.25rem;
         }
 
@@ -185,14 +185,14 @@
             font-size: 0.975rem;
             cursor: pointer;
             transition: all 0.25s ease;
-            box-shadow: 0 4px 14px rgba(13, 148, 136, 0.3);
+            box-shadow: 0 4px 14px rgba(61, 122, 95, 0.3);
             text-transform: uppercase;
             letter-spacing: 0.05em;
         }
 
         button:hover {
             opacity: 0.95;
-            box-shadow: 0 6px 20px rgba(13, 148, 136, 0.5);
+            box-shadow: 0 6px 20px rgba(61, 122, 95, 0.5);
             transform: translateY(-1px);
         }
 
@@ -213,7 +213,7 @@
         }
 
         .alert-success { background-color: rgba(16, 185, 129, 0.12); border-color: rgba(16, 185, 129, 0.25); color: #a7f3d0; }
-        .alert-info { background-color: rgba(45, 212, 191, 0.10); border-color: rgba(45, 212, 191, 0.25); color: #99f6e4; }
+        .alert-info { background-color: rgba(45, 212, 191, 0.10); border-color: rgba(45, 212, 191, 0.25); color: #C8D6CD; }
         .auth-title { font-family: 'Playfair Display', Georgia, serif; color: #fff; font-size: 1.5rem; margin-bottom: .5rem; }
         .auth-text { font-size: .925rem; line-height: 1.55; margin-bottom: 1.5rem; }
         .auth-links { margin-top: 1.5rem; font-size: .875rem; display: flex; flex-direction: column; gap: .5rem; }

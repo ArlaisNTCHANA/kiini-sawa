@@ -9,7 +9,7 @@
     .book-body h3 { font-size: 1.2rem; }
     .book-body p, .book-body ul, .book-body ol { margin-bottom: 1rem; }
     .book-body ul, .book-body ol { padding-left: 1.4rem; }
-    .book-body blockquote { border-left: 3px solid var(--warning); background: var(--warning-soft); padding: .75rem 1rem; border-radius: 0 10px 10px 0; color: #78350F; margin: 1.25rem 0; }
+    .book-body blockquote { border-left: 3px solid var(--gold); background: var(--primary-soft); padding: .75rem 1rem; border-radius: 0 10px 10px 0; color: var(--primary-dark); margin: 1.25rem 0; font-family: var(--font-serif); }
     .book-body hr { border: none; border-top: 1px solid var(--border); margin: 2rem 0; }
     .book-body strong { color: var(--fg); }
     .book-body table { border-collapse: collapse; width: 100%; font-size: .9rem; margin: 1rem 0; }
@@ -18,11 +18,15 @@
 {% if not app.user %}{% include 'shared/_public_header.html.twig' %}{% endif %}
 <article style="max-width: 720px; margin: 0 auto; padding: 2.5rem 1.25rem 8rem;">
     <a href="{{ path('app_methode_index') }}" class="ks-header__back">← La méthode</a>
+    {% set partCovers = {'plan-et-providence': 1, 'but-de-dieu': 2, 'puissance-sans-plan': 3, 'competence-et-connaissance': 4, 'hygiene-de-vie': 5, 'intendance': 6, 'perspective-de-l-eternite': 7, 'carte-strategique': 8} %}
+    {% if partCovers[chapter.slug] is defined %}
+        <img src="{{ asset('images/livre/ouverture_partie' ~ partCovers[chapter.slug] ~ '.png') }}" alt="Ouverture de la partie {{ partCovers[chapter.slug] }} du livre" loading="lazy" data-part-cover style="display: block; width: 100%; max-width: 260px; margin: 1rem auto 1.5rem; border-radius: 14px; box-shadow: var(--card-shadow);">
+    {% endif %}
     <h1 class="ks-header__title">{{ chapter.title }}</h1>
     <p style="color: var(--fg-muted); font-size: .85rem; margin-bottom: 2rem;">Lecture : {{ chapter.minutes }} min</p>
     {% if mode == 'locked' %}
         <p class="book-body">{{ chapter.excerpt }}</p>
-        <div style="background: var(--primary-soft); border: 1px solid #99F6E4; border-radius: var(--r-lg); padding: 1.5rem; margin-top: 1.5rem; text-align: center;">
+        <div style="background: var(--primary-soft); border: 1px solid #C8D6CD; border-radius: var(--r-lg); padding: 1.5rem; margin-top: 1.5rem; text-align: center;">
             <p style="font-family: var(--font-serif); font-size: 1.25rem; color: var(--fg); margin-bottom: .4rem;">La suite de ce chapitre vous attend</p>
             <p style="color: var(--fg-muted); margin-bottom: 1rem;">Créez votre compte gratuit pour lire l'essentiel de chaque chapitre, et le mettre en pratique dans votre Plan de Vie.</p>
             <a href="{{ path('app_register') }}" style="display: inline-block; background: var(--primary); color: #fff; font-weight: 700; padding: .7rem 1.4rem; border-radius: 999px; text-decoration: none;">Créer mon compte gratuit</a>

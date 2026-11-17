@@ -42,7 +42,7 @@
 
         h1, h2, h3, h4 {
             font-family: 'Playfair Display', Georgia, serif;
-            color: #059669;
+            color: #5D7368;
             margin-top: 0;
         }
 
@@ -91,7 +91,7 @@
                 top: 0; left: 0; right: 0;
                 justify-content: space-between;
                 align-items: center;
-                border-bottom: 2px solid #059669;
+                border-bottom: 2px solid #5D7368;
                 padding-bottom: 8px;
                 font-size: 0.8rem;
                 color: #64748b;
@@ -115,13 +115,13 @@
             width: 100%;
             border-collapse: collapse;
             margin-bottom: 40px;
-            border-bottom: 2px solid #059669;
+            border-bottom: 2px solid #5D7368;
         }
 
         .section-header {
             font-size: 1.05rem;
             font-weight: 700;
-            color: #059669;
+            color: #5D7368;
             text-transform: uppercase;
             letter-spacing: 0.1em;
             border-bottom: 1px solid #e2e8f0;
@@ -140,7 +140,7 @@
             border: 1px solid #a7f3d0;
             border-radius: 12px;
             line-height: 1.6;
-            color: #065f46;
+            color: #3F5249;
             margin-bottom: 25px;
         }
 
@@ -189,12 +189,12 @@
         }
 
         .btn-toolbar-primary {
-            background: #059669;
+            background: #5D7368;
             color: white;
         }
 
         .btn-toolbar-primary:hover {
-            background: #047857;
+            background: #4E6359;
         }
 
         .btn-toolbar-secondary {
@@ -211,7 +211,7 @@
             position: fixed;
             top: 20px;
             right: 20px;
-            background: #059669;
+            background: #5D7368;
             color: white;
             padding: 14px 24px;
             border-radius: 8px;
@@ -243,7 +243,7 @@
     {# Running header / footer for print #}
     {% if variant != 'EMAIL' %}
         <div class="print-only">
-            <div style="font-weight: bold; color: #059669; text-transform: uppercase; letter-spacing: 0.1em;">KIINI SAWA • Plan d'Hygiène de vie</div>
+            <div style="font-weight: bold; color: #5D7368; text-transform: uppercase; letter-spacing: 0.1em;">KIINI SAWA • Plan d'Hygiène de vie</div>
             <div style="font-weight: 600; color: #1e293b;">{{ displayName }}</div>
             <div>{{ currentDate }}</div>
         </div>
@@ -253,12 +253,12 @@
     {% endif %}
 
     {# En-tête du document #}
-    <table class="header-table" style="width: 100%; border-collapse: collapse; margin-bottom: 35px; border-bottom: 2px solid #059669;">
+    <table class="header-table" style="width: 100%; border-collapse: collapse; margin-bottom: 35px; border-bottom: 2px solid #5D7368;">
         <tr>
             <td style="vertical-align: bottom; padding-bottom: 15px; text-align: left;">
-                <h1 style="font-size: 2.3rem; font-family: 'Playfair Display', serif; margin: 0; line-height: 1.1; color: #059669; text-transform: uppercase; letter-spacing: 0.05em;">Plan d'Hygiène de vie</h1>
+                <h1 style="font-size: 2.3rem; font-family: 'Playfair Display', serif; margin: 0; line-height: 1.1; color: #5D7368; text-transform: uppercase; letter-spacing: 0.05em;">Plan d'Hygiène de vie</h1>
                 <div style="font-size: 0.88rem; color: #64748b; margin-top: 6px;">
-                    Généré par <strong style="color: #059669;">KIINI SAWA</strong>
+                    Généré par <strong style="color: #5D7368;">KIINI SAWA</strong>
                 </div>
             </td>
             <td style="text-align: right; vertical-align: bottom; padding-bottom: 15px;">
@@ -280,7 +280,7 @@
             « {% if planDeVie and planDeVie.purpose and planDeVie.purpose.statement %}{{ planDeVie.purpose.statement }}{% else %}{{ defaultPurposeStatement }}{% endif %} »
         </div>
         <div style="font-size: 0.72rem; font-weight: 800; color: #64748b; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 8px;">Ce que je vais MAÎTRISER (Mon Intention)</div>
-        <div style="padding: 20px; background: #fffdfa; border: 1px solid #a7f3d0; border-radius: 12px; line-height: 1.6; font-size: 1.05rem; color: #065f46; margin-bottom: 25px;">
+        <div style="padding: 20px; background: #fffdfa; border: 1px solid #a7f3d0; border-radius: 12px; line-height: 1.6; font-size: 1.05rem; color: #3F5249; margin-bottom: 25px;">
             {{ planDeVie.vision.content|default('Aucune vision de vie définie.') }}
         </div>
     </section>
@@ -291,7 +291,7 @@
         
         <div style="display: flex; flex-direction: column; gap: 20px;">
             <div class="no-break" style="background: white; border-radius: 12px; border: 1px solid #a7f3d0; padding: 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.02);">
-                <h3 style="font-size: 1.1rem; font-weight: 700; color: #059669; margin: 0 0 15px 0; border-bottom: 1px dashed #a7f3d0; padding-bottom: 8px;">
+                <h3 style="font-size: 1.1rem; font-weight: 700; color: #5D7368; margin: 0 0 15px 0; border-bottom: 1px dashed #a7f3d0; padding-bottom: 8px;">
                     🛡️ Domaines de Vitalité et d'Ancrage
                 </h3>
                 <div style="display: flex; flex-direction: column; gap: 20px;">
@@ -300,14 +300,14 @@
                         {% if items|length > 0 %}
                             {% set hasAnyHygiene = true %}
                             <div class="no-break">
-                                <div style="font-size: 0.85rem; font-weight: 800; color: #059669; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 10px; border-bottom: 1px dashed rgba(5, 150, 105, 0.2); padding-bottom: 4px;">
+                                <div style="font-size: 0.85rem; font-weight: 800; color: #5D7368; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 10px; border-bottom: 1px dashed rgba(5, 150, 105, 0.2); padding-bottom: 4px;">
                                     Axe {{ category }}
                                 </div>
                                 {% for item in items %}
-                                    <div style="padding: 15px; background: #ecfdf5; border-radius: 8px; border: 1px solid rgba(5,150,105,0.05); margin-bottom: 10px;">
+                                    <div style="padding: 15px; background: #ECEFED; border-radius: 8px; border: 1px solid rgba(5,150,105,0.05); margin-bottom: 10px;">
                                         <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
                                             <div style="font-weight: 700; font-size: 1.05rem; color: #1e293b;">{{ item.name }}</div>
-                                            <span style="font-size: 0.72rem; font-weight: 750; padding: 2px 6px; border-radius: 4px; text-transform: uppercase; background: {% if item.subtype == 'leverage' %}#d1fae5; color: #065f46;{% elseif item.subtype == 'consolidate' %}#dbeafe; color: #1e40af;{% else %}#fee2e2; color: #991b1b;{% endif %}">
+                                            <span style="font-size: 0.72rem; font-weight: 750; padding: 2px 6px; border-radius: 4px; text-transform: uppercase; background: {% if item.subtype == 'leverage' %}#DDE4E0; color: #3F5249;{% elseif item.subtype == 'consolidate' %}#D5E5DB; color: #1F4D3A;{% else %}#fee2e2; color: #991b1b;{% endif %}">
                                                 {{ item.subtype == 'leverage' ? 'À mettre à profit / Exploiter' : (item.subtype == 'consolidate' ? 'À consolider' : 'À construire') }}
                                             </span>
                                         </div>
@@ -318,7 +318,7 @@
                                             {% if score is not null %}
                                                 <div style="font-size: 0.78rem; color: #475569; margin-top: 6px; display: flex; align-items: center; gap: 4px;">
                                                     <span>Score d'auto-évaluation au test :</span>
-                                                    <strong style="color: {% if score >= 7.0 %}#059669{% elseif score >= 4.0 %}#b45309{% else %}#b91c1c{% endif %};">{{ score }}/10</strong>
+                                                    <strong style="color: {% if score >= 7.0 %}#5D7368{% elseif score >= 4.0 %}#1F4D3A{% else %}#b91c1c{% endif %};">{{ score }}/10</strong>
                                                 </div>
                                             {% endif %}
                                         {% endif %}
@@ -347,7 +347,7 @@
         <div class="section-header">3. Lois & Principes Directeurs</div>
         <div style="display: flex; flex-direction: column; gap: 12px; margin-top: 15px;">
             {% for pr in growthPrinciples.HYGIENE %}
-                <div style="padding: 15px; background: #ecfdf5; border-radius: 8px; border: 1px solid rgba(0,0,0,0.03); border-left: 4px solid #059669;">
+                <div style="padding: 15px; background: #ECEFED; border-radius: 8px; border: 1px solid rgba(0,0,0,0.03); border-left: 4px solid #5D7368;">
                     <h3 style="font-weight: 700; font-size: 1rem; color: #1e293b; margin-bottom: 4px; font-family: 'Inter', sans-serif;">{{ pr.title }}</h3>
                     {% if pr.description %}<p style="font-size: 0.88rem; color: #334155; line-height: 1.5; margin: 0;">{{ pr.description }}</p>{% endif %}
                 </div>
@@ -374,17 +374,17 @@
                         
                         {% if categoryHasItems %}
                             <div class="no-break" style="margin-bottom: 15px;">
-                                <div style="font-size: 0.85rem; font-weight: 800; color: #059669; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 12px; border-bottom: 1px dashed rgba(5, 150, 105, 0.2); padding-bottom: 4px;">
+                                <div style="font-size: 0.85rem; font-weight: 800; color: #5D7368; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 12px; border-bottom: 1px dashed rgba(5, 150, 105, 0.2); padding-bottom: 4px;">
                                     Axe {{ category }}
                                 </div>
                                 {% for hd in items %}
                                     {% if hd.habits|length > 0 %}
                                         <div class="no-break" style="border: 1px solid #e2e8f0; border-radius: 12px; padding: 20px; background: white; box-shadow: 0 1px 3px rgba(0,0,0,0.02); margin-bottom: 10px;">
-                                            <h4 style="font-size: 1.05rem; font-weight: 700; color: #059669; margin: 0 0 12px 0; font-family: 'Inter', sans-serif;">
+                                            <h4 style="font-size: 1.05rem; font-weight: 700; color: #5D7368; margin: 0 0 12px 0; font-family: 'Inter', sans-serif;">
                                                 {{ hd.name }}
                                             </h4>
                                             
-                                            <div style="background: #ecfdf5; padding: 15px; border-radius: 8px; border: 1px solid rgba(0,0,0,0.02);">
+                                            <div style="background: #ECEFED; padding: 15px; border-radius: 8px; border: 1px solid rgba(0,0,0,0.02);">
                                                 <div style="font-size: 0.72rem; font-weight: 850; color: #64748b; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 10px;">
                                                     ⚡ Rituels
                                                 </div>

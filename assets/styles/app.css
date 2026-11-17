@@ -3,6 +3,21 @@
 @source "../../templates/**/*.html.twig";
 @source "../../templates/**/*.twig";
 
+/* Les classes « teal » de Tailwind prennent les verts du livre */
+@theme {
+    --color-teal-50: #EEF3EF;
+    --color-teal-100: #DCE7DF;
+    --color-teal-200: #C8D6CD;
+    --color-teal-300: #A9C2B1;
+    --color-teal-400: #7A9E7E;
+    --color-teal-500: #5E9479;
+    --color-teal-600: #3D7A5F;
+    --color-teal-700: #2E6B53;
+    --color-teal-800: #1F4D3A;
+    --color-teal-900: #173D2E;
+    --color-teal-950: #0F2A1F;
+}
+
 /* ══════════════════════════════════════════════════════
    KIINI SAWA — Global Styles & Utilities
    ══════════════════════════════════════════════════════ */
@@ -86,7 +101,7 @@
 .ks-btn:hover { transform: translateY(-1px); }
 .ks-btn:disabled, .ks-btn[aria-disabled="true"] { opacity: .5; cursor: not-allowed; transform: none; }
 .ks-btn svg { width: 16px; height: 16px; }
-.ks-btn--primary { background: var(--primary); color: #fff; box-shadow: 0 4px 14px rgba(15, 118, 110, .25); }
+.ks-btn--primary { background: var(--primary); color: #fff; box-shadow: 0 4px 14px rgba(46, 107, 83, .25); }
 .ks-btn--primary:hover { background: var(--primary-dark); }
 .ks-btn--secondary { background: var(--card-bg); color: var(--fg); border-color: var(--border); }
 .ks-btn--secondary:hover { border-color: var(--primary); color: var(--primary); }

@@ -20,7 +20,7 @@
         background: rgba(255, 255, 255, 0.85);
         backdrop-filter: blur(20px);
         -webkit-backdrop-filter: blur(20px);
-        border: 1px solid rgba(15, 118, 110, 0.06);
+        border: 1px solid rgba(46, 107, 83, 0.06);
         border-radius: 2rem;
         padding: 2.25rem;
         box-shadow: 0 10px 30px rgba(0, 0, 0, 0.02);
@@ -44,7 +44,7 @@
     .bilan-tab.active {
         background: var(--primary-glow);
         color: var(--primary);
-        border-color: rgba(15, 118, 110, 0.15);
+        border-color: rgba(46, 107, 83, 0.15);
     }
     .bilan-tab:hover:not(.active) {
         background: var(--bg-alt);
@@ -54,17 +54,17 @@
     /* Stat KPI Cards */
     .bilan-stat-card {
         background: rgba(255, 255, 255, 0.9);
-        border: 1px solid rgba(15, 118, 110, 0.06);
+        border: 1px solid rgba(46, 107, 83, 0.06);
         border-radius: 1.25rem;
         padding: 1.25rem 1.5rem;
         display: flex;
         align-items: center;
         gap: 1rem;
         transition: all 0.25s var(--ease);
-        box-shadow: 0 4px 12px rgba(15, 118, 110, 0.02);
+        box-shadow: 0 4px 12px rgba(46, 107, 83, 0.02);
     }
     .bilan-stat-card:hover {
-        box-shadow: 0 8px 20px rgba(15, 118, 110, 0.06);
+        box-shadow: 0 8px 20px rgba(46, 107, 83, 0.06);
         transform: translateY(-1px);
     }
 
@@ -72,7 +72,7 @@
     .bilan-metric {
         padding: 1.25rem;
         border-radius: 1.25rem;
-        border: 1px solid rgba(15, 118, 110, 0.06);
+        border: 1px solid rgba(46, 107, 83, 0.06);
         background: rgba(248, 250, 252, 0.6);
         display: flex;
         flex-direction: column;
@@ -102,7 +102,7 @@
         width: 100%;
         padding: 0.85rem 1.1rem;
         background-color: #ffffff;
-        border: 1.5px solid rgba(15, 118, 110, 0.08);
+        border: 1.5px solid rgba(46, 107, 83, 0.08);
         border-radius: 12px;
         color: var(--fg);
         font-family: inherit;
@@ -113,7 +113,7 @@
     }
     .bilan-input:focus {
         border-color: var(--primary-light);
-        box-shadow: 0 0 0 4px rgba(13, 148, 136, 0.12), inset 0 2px 4px rgba(0,0,0,0.01);
+        box-shadow: 0 0 0 4px rgba(61, 122, 95, 0.12), inset 0 2px 4px rgba(0,0,0,0.01);
     }
 
     /* Buttons — aligned with btn-submit */
@@ -128,14 +128,14 @@
         font-size: 0.85rem;
         cursor: pointer;
         transition: all 0.25s ease;
-        box-shadow: 0 4px 14px rgba(15, 118, 110, 0.3);
+        box-shadow: 0 4px 14px rgba(46, 107, 83, 0.3);
         display: inline-flex;
         align-items: center;
         gap: 0.5rem;
     }
     .bilan-btn:hover:not(:disabled) {
         opacity: 0.95;
-        box-shadow: 0 6px 20px rgba(15, 118, 110, 0.45);
+        box-shadow: 0 6px 20px rgba(46, 107, 83, 0.45);
         transform: translateY(-1px);
     }
     .bilan-btn:disabled {
@@ -164,8 +164,8 @@
         padding: 1rem 1.15rem;
         border-radius: 1rem;
         background: #ffffff;
-        border: 1px solid rgba(15, 118, 110, 0.05);
-        box-shadow: 0 4px 12px rgba(15, 118, 110, 0.02);
+        border: 1px solid rgba(46, 107, 83, 0.05);
+        box-shadow: 0 4px 12px rgba(46, 107, 83, 0.02);
         transition: all 0.2s var(--ease);
     }
 
@@ -192,7 +192,7 @@
         cursor: pointer;
         -webkit-appearance: none;
         margin-top: -6px;
-        box-shadow: 0 2px 6px rgba(15, 118, 110, 0.3);
+        box-shadow: 0 2px 6px rgba(46, 107, 83, 0.3);
         transition: transform 0.1s var(--ease);
     }
     .ks-slider::-webkit-slider-thumb:hover { transform: scale(1.15); }
@@ -210,7 +210,7 @@
         background: var(--primary);
         border: 2px solid white;
         cursor: pointer;
-        box-shadow: 0 2px 6px rgba(15, 118, 110, 0.3);
+        box-shadow: 0 2px 6px rgba(46, 107, 83, 0.3);
     }
 
     /* Progress bars */
@@ -250,6 +250,7 @@
         </a>
     </header>
     <div style="max-width: 760px; margin: 0 auto 1.5rem;">{{ book_panel('bilan') }}</div>
+    <div style="max-width: 760px; margin: 0 auto;">{% include 'methode/_figure.html.twig' with {name: 'fig_revues', alt: 'Les revues : hebdomadaire, mensuelle, de saison, annuelle', caption: 'mes rythmes de revue', collapsed: true, max: '600px'} only %}</div>
 
     <!-- Tabs Navigation -->
     <nav style="display: flex; gap: 0.5rem; justify-content: center; flex-wrap: wrap; margin-bottom: 2.5rem;">
@@ -276,7 +277,7 @@
     <!-- Global Category Stats (KPIs) -->
     <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; margin-bottom: 1.5rem;" class="sm:!grid-cols-4" x-show="filteredGoals().length > 0">
         <div class="bilan-stat-card">
-            <div style="padding: 0.6rem; background: rgba(13,148,136,0.06); border-radius: 0.75rem; color: var(--primary);">
+            <div style="padding: 0.6rem; background: rgba(61, 122, 95,0.06); border-radius: 0.75rem; color: var(--primary);">
                 <i data-lucide="target" class="w-4 h-4"></i>
             </div>
             <div>
@@ -374,7 +375,7 @@
                     </div>
 
                     <!-- Progress level -->
-                    <div class="bilan-metric" style="background: rgba(13,148,136,0.03);">
+                    <div class="bilan-metric" style="background: rgba(61, 122, 95,0.03);">
                         <div style="display: flex; justify-content: space-between; align-items: flex-start;">
                             <div style="display: flex; flex-direction: column; gap: 0.2rem;">
                                 <div style="display: flex; align-items: center; gap: 0.4rem;">
@@ -385,7 +386,7 @@
                             </div>
                             <span style="font-size: 1.25rem; font-weight: 800; color: var(--primary); line-height: 1;" x-text="goal.progress + '%'"></span>
                         </div>
-                        <div class="bilan-progress-track" style="background: rgba(13,148,136,0.1);">
+                        <div class="bilan-progress-track" style="background: rgba(61, 122, 95,0.1);">
                             <div class="bilan-progress-fill" style="background: var(--primary);" :style="'width: ' + goal.progress + '%'"></div>
                         </div>
                     </div>
@@ -413,9 +414,9 @@
                                         </linearGradient>
                                     </defs>
                                     <!-- Background Grid Lines -->
-                                    <line x1="10" y1="10" x2="490" y2="10" stroke="rgba(15, 118, 110, 0.08)" stroke-width="1" stroke-dasharray="2,2" />
-                                    <line x1="10" y1="50" x2="490" y2="50" stroke="rgba(15, 118, 110, 0.08)" stroke-width="1" stroke-dasharray="2,2" />
-                                    <line x1="10" y1="90" x2="490" y2="90" stroke="rgba(15, 118, 110, 0.08)" stroke-width="1" stroke-dasharray="2,2" />
+                                    <line x1="10" y1="10" x2="490" y2="10" stroke="rgba(46, 107, 83, 0.08)" stroke-width="1" stroke-dasharray="2,2" />
+                                    <line x1="10" y1="50" x2="490" y2="50" stroke="rgba(46, 107, 83, 0.08)" stroke-width="1" stroke-dasharray="2,2" />
+                                    <line x1="10" y1="90" x2="490" y2="90" stroke="rgba(46, 107, 83, 0.08)" stroke-width="1" stroke-dasharray="2,2" />
                                     <!-- Area Path -->
                                     <path :d="getAreaPath(goal.scores)" :fill="'url(#gradient-' + goal.id + ')'" stroke="none" />
                                     <!-- Stroke Path -->
@@ -456,7 +457,7 @@
                 </div>
 
                 <!-- Associated Habits Accordion -->
-                <div style="border-top: 1px solid rgba(15,118,110,0.06); padding-top: 1.25rem; margin-top: 0.5rem;">
+                <div style="border-top: 1px solid rgba(46, 107, 83,0.06); padding-top: 1.25rem; margin-top: 0.5rem;">
                     <button @click="goal.showHabits = !goal.showHabits" 
                             class="w-full flex items-center justify-between text-xs font-semibold text-slate-500 hover:text-teal-700 transition-colors cursor-pointer">
                         <span class="flex items-center gap-2">
@@ -470,7 +471,7 @@
                          x-transition:enter="transition ease-out duration-200"
                          x-transition:enter-start="opacity-0 -translate-y-2"
                          x-transition:enter-end="opacity-100 translate-y-0"
-                         style="margin-top: 1rem; display: flex; flex-direction: column; gap: 0.75rem; background: rgba(248,250,252,0.5); border-radius: 1.25rem; border: 1px solid rgba(15,118,110,0.05); padding: 1.25rem;">
+                         style="margin-top: 1rem; display: flex; flex-direction: column; gap: 0.75rem; background: rgba(248,250,252,0.5); border-radius: 1.25rem; border: 1px solid rgba(46, 107, 83,0.05); padding: 1.25rem;">
                         
                         <template x-if="goal.habits.length === 0">
                             <p class="text-xs text-slate-400 italic text-center py-2">Aucun rituel lié à cet objectif.</p>

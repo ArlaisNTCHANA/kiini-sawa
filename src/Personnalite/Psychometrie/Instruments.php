@@ -57,7 +57,7 @@ final class Instruments
             'name' => 'Profil complet', 'subtitle' => 'Big Five en 29 facettes et type',
             'description' => 'Le questionnaire de référence (IPIP-NEO, domaine public, utilisé en recherche). Il produit votre Big Five détaillé et votre type de fonctionnement.',
             'bank' => 'ipip', 'facets' => 'all', 'perFacet' => 4, 'minutes' => 15,
-            'icon' => 'layers', 'color' => '#0F766E', 'bg' => '#F0FDFA', 'level' => 'Questionnaire scientifique',
+            'icon' => 'layers', 'color' => '#2E6B53', 'bg' => '#EEF3EF', 'level' => 'Questionnaire scientifique',
         ],
         'big-five' => [
             'name' => 'Big Five essentiel', 'subtitle' => 'Les 5 grandes dimensions',

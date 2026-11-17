@@ -58,17 +58,17 @@
             init() { if (this.$refs.canvas) { document.fonts.ready.then(() => this.draw()); } },
             draw() {
                 const c = this.$refs.canvas, x = c.getContext('2d'), d = this.$root.dataset, W = c.width, H = c.height;
-                const g = x.createLinearGradient(0, 0, W, H); g.addColorStop(0, '#134E4A'); g.addColorStop(1, '#0F766E');
+                const g = x.createLinearGradient(0, 0, W, H); g.addColorStop(0, '#173D2E'); g.addColorStop(1, '#2E6B53');
                 x.fillStyle = g; x.fillRect(0, 0, W, H);
                 x.fillStyle = 'rgba(255,255,255,.9)'; x.font = '600 44px "Playfair Display", Georgia, serif'; x.fillText('KIINI SAWA', 90, 140);
                 x.fillStyle = '#F59E0B'; x.fillRect(90, 170, 120, 8);
-                x.fillStyle = '#CCFBF1'; x.font = '700 40px Inter, sans-serif'; x.fillText(d.kicker.toUpperCase(), 90, 420);
+                x.fillStyle = '#DCE7DF'; x.font = '700 40px Inter, sans-serif'; x.fillText(d.kicker.toUpperCase(), 90, 420);
                 x.fillStyle = '#FFFFFF'; x.font = '600 96px "Playfair Display", Georgia, serif';
                 let y = this.wrap(x, d.title, 90, 540, W - 180, 110);
                 x.fillStyle = 'rgba(255,255,255,.85)'; x.font = '400 40px Inter, sans-serif';
                 y = this.wrap(x, d.desc, 90, y + 70, W - 180, 58, 6);
                 x.fillStyle = 'rgba(255,255,255,.95)'; x.font = '600 42px Inter, sans-serif'; x.fillText(d.name, 90, H - 230);
-                x.fillStyle = '#CCFBF1'; x.font = '400 36px Inter, sans-serif'; x.fillText('Et toi ? Fais le test sur app.kiinisawa.com', 90, H - 160);
+                x.fillStyle = '#DCE7DF'; x.font = '400 36px Inter, sans-serif'; x.fillText('Et toi ? Fais le test sur app.kiinisawa.com', 90, H - 160);
             },
             wrap(x, text, left, top, maxW, lh, maxLines = 4) {
                 const words = (text || '').split(' '); let line = '', y = top, n = 0;

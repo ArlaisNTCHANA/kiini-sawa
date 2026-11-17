@@ -11,6 +11,22 @@ Ne jamais afficher ni demander de mot de passe ; ne pas publier son nom (mention
 
 ---
 
+## 2026-11-17 · Identité visuelle du livre dans l'application
+
+- Demande du fondateur : cohérence visuelle avec le livre (couleurs, schémas) ; **les polices restent** (Playfair, Inter).
+- Palette du livre dans `base.html.twig` (`:root`) : vert `#2E6B53` / forêt `#1F4D3A`, or `#C8962E`, sauge, neutres
+  légèrement verts ; anciennes valeurs turquoise remplacées partout (60 fichiers) ; `teal-*` de Tailwind redéfini.
+- Couleurs des plans (`--plan-*`) selon la figure Être/Faire/Avoir/Donner ; appliquées à la vue d'ensemble (5 cartes
+  sur une ligne), à la carte stratégique et sa légende, aux pages « visualiser » des plans, à la revue de la semaine.
+  Badges PRO en or ; avertissements de l'analyse de cohérence en or.
+- Encart « Comprendre cette étape » et citations du livre : vert pâle et filet d'or, icônes au lieu d'émojis.
+- Schémas du livre placés (`methode/_figure.html.twig`) : 6 plans (vue d'ensemble), cascade (carte), saisons (Ma saison),
+  cycle de l'intendant (Intendance), revues (Bilan), Équation du But, convictions, réseaux, héritage, hygiène, horizons
+  (assistant, repliés), racines (rituels), trois témoins (feedback) ; ouvertures de parties en tête des chapitres.
+- **Signalé à l'auteur** : la figure Être/Faire/Avoir/Donner dit « AVOIR : De quoi ai-je besoin ? » et BE/DO/HAVE/GIVE
+  (non utilisée dans l'application) ; les ouvertures de parties posent les formules en questions (« Qui suis-je… »).
+- Rappel : le prénom de l'auteur reste dans l'histoire du chapitre 10 (accord du 17/11) ; la signature reste retirée.
+
 ## 2026-11-17 · Phase 2 : le parcours de 90 jours (livre, annexe A)
 
 - `/parcours` (`Methode\Controller\JourneyController`, contenu `Methode\Service\Journey::PLAN`) : les 13 semaines de

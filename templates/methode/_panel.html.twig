@@ -1,13 +1,13 @@
-{# Encart « Comprendre cette étape » (fonction Twig book_panel) #}
-<details class="book-panel" {{ open ? 'open' }} style="margin: 0 0 1.25rem; background: var(--warning-soft); border: 1px solid #FDE68A; border-radius: 14px; padding: .85rem 1.1rem; font-size: .9rem; color: #78350F;">
-    <summary style="cursor: pointer; font-weight: 700; display: flex; align-items: center; gap: .5rem; list-style: none;">
-        <span aria-hidden="true">📖</span> Comprendre cette étape
-        <span style="font-weight: 500; color: #92400E; opacity: .8;">· {{ chapter.title }}</span>
+{# Encart « Comprendre cette étape » (fonction Twig book_panel), dans le style des encadrés du livre : vert pâle, filet d'or #}
+<details class="book-panel" {{ open ? 'open' }} style="margin: 0 0 1.25rem; background: var(--primary-soft); border-left: 3px solid var(--gold); border-radius: 0 12px 12px 0; padding: .85rem 1.1rem; font-size: .9rem; color: var(--fg-light);">
+    <summary style="cursor: pointer; font-weight: 700; display: flex; align-items: center; gap: .5rem; list-style: none; color: var(--primary-dark);">
+        <i data-lucide="book-open" style="width: 16px; height: 16px; color: var(--gold);" aria-hidden="true"></i> Comprendre cette étape
+        <span style="font-weight: 500; font-family: var(--font-serif); font-style: italic; color: var(--fg-muted);">· {{ chapter.title }}</span>
     </summary>
     <p style="margin: .6rem 0 .5rem; line-height: 1.6;">{{ chapter.excerpt }}</p>
     {% if chapter.sanctuary %}
-        <details class="book-panel__sanctuary" data-sanctuary style="margin: .4rem 0 .7rem; background: rgba(255,255,255,.6); border-radius: 10px; padding: .55rem .8rem;">
-            <summary style="cursor: pointer; font-weight: 700;">🕯️ {{ chapter.sanctuary.title }}</summary>
+        <details class="book-panel__sanctuary" data-sanctuary style="margin: .4rem 0 .7rem; background: #FFFFFF; border-radius: 10px; padding: .55rem .8rem;">
+            <summary style="cursor: pointer; font-weight: 700; color: var(--primary-dark); display: flex; align-items: center; gap: .4rem;"><i data-lucide="flame" style="width: 14px; height: 14px; color: var(--gold);" aria-hidden="true"></i> {{ chapter.sanctuary.title }}</summary>
             <div style="margin-top: .5rem; line-height: 1.6;">{{ chapter.sanctuary.html|raw }}</div>
         </details>
     {% endif %}

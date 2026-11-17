@@ -21,7 +21,7 @@ final class ProfileSynthesis
         'enneagramme' => 'Ennéagramme', 'dons' => 'Dons spirituels',
     ];
     private const SLUGS = ['disc' => 'disc', 'bigfive' => 'profil-complet', 'type' => 'type', 'enneagramme' => 'enneagramme', 'dons' => 'dons-spirituels'];
-    private const COLORS = ['disc' => '#F43F5E', 'bigfive' => '#0F766E', 'type' => '#6366F1'];
+    private const COLORS = ['disc' => '#F43F5E', 'bigfive' => '#2E6B53', 'type' => '#6366F1'];
 
     public function __construct(
         private readonly AssessmentRepository $assessments,
@@ -89,7 +89,7 @@ final class ProfileSynthesis
             $cards[] = ['icon' => 'flame', 'label' => 'Ce qui vous pousse', 'title' => 'Type '.$e['type'].' · '.$e['profile']['name'], 'text' => $e['profile']['motivation'], 'color' => $e['center']['color']];
         }
         if ($r['bigfive']) {
-            $cards[] = ['icon' => 'sun', 'label' => 'Votre personnalité', 'title' => $r['bigfive']['bf']['headline'], 'text' => 'Vos trois traits les plus marqués (Big Five).', 'color' => '#0F766E'];
+            $cards[] = ['icon' => 'sun', 'label' => 'Votre personnalité', 'title' => $r['bigfive']['bf']['headline'], 'text' => 'Vos trois traits les plus marqués (Big Five).', 'color' => '#2E6B53'];
         }
         if ($r['type']) {
             $t = $r['type'];

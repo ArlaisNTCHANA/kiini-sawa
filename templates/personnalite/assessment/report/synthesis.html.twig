@@ -1,8 +1,8 @@
 {# « Mon profil KIINI SAWA » : synthèse croisée (écran et PDF). Variables : identity, convergence, vocation, fragile, resources,
    priorities, life, parts, missing, slugs, count, locked, pdf, name, assessment, quality. #}
-{% set pc = '#0F766E' %}
+{% set pc = '#2E6B53' %}
 {% set serif = pdf ? "'Playfair Display', serif" : 'var(--font-serif)' %}
-{% include 'personnalite/assessment/report/_styles.html.twig' with {pcLight: '#CCFBF1', pcDark: '#134E4A'} %}
+{% include 'personnalite/assessment/report/_styles.html.twig' with {pcLight: '#DCE7DF', pcDark: '#173D2E'} %}
 
 <div class="dr">
 {% include 'personnalite/assessment/report/_cover.html.twig' with {
@@ -38,9 +38,9 @@
 </div>
 
 {% if evolutions|default([])|length and not pdf %}
-    <div class="dr-tile" style="margin: -8px 0 22px; background: #F0FDFA; border-color: #99F6E4;">
-        <div class="dr-label" style="color: #134E4A;">{{ report_icon('up', '#0F766E') }}Votre évolution</div>
-        <p style="margin: 0; color: #134E4A;">Vous avez repassé certains tests : {% for key, label in evolutions %}<a href="{{ path('app_test_evolution', {series: key}) }}" style="color: #0F766E; font-weight: 600;">{{ label }}</a>{{ not loop.last ? ' · ' }}{% endfor %}. Voyez ce qui a changé.</p>
+    <div class="dr-tile" style="margin: -8px 0 22px; background: #EEF3EF; border-color: #C8D6CD;">
+        <div class="dr-label" style="color: #173D2E;">{{ report_icon('up', '#2E6B53') }}Votre évolution</div>
+        <p style="margin: 0; color: #173D2E;">Vous avez repassé certains tests : {% for key, label in evolutions %}<a href="{{ path('app_test_evolution', {series: key}) }}" style="color: #2E6B53; font-weight: 600;">{{ label }}</a>{{ not loop.last ? ' · ' }}{% endfor %}. Voyez ce qui a changé.</p>
     </div>
 {% endif %}
 
@@ -82,14 +82,14 @@
     {% if vocation %}
         <p class="dr-lead">À la rencontre de votre manière d'agir ({{ vocation.dimension|lower }}) et de vos dons ({{ vocation.familyName|lower }}).</p>
         <div style="border-radius: 22px; background: #0F172A; color: #fff; padding: {{ pdf ? '8mm 9mm' : '26px' }};">
-            <div style="font-size: {{ pdf ? '8pt' : '.75rem' }}; letter-spacing: 3px; text-transform: uppercase; color: #5EEAD4; font-weight: bold;">Votre zone de vocation</div>
+            <div style="font-size: {{ pdf ? '8pt' : '.75rem' }}; letter-spacing: 3px; text-transform: uppercase; color: #A9C2B1; font-weight: bold;">Votre zone de vocation</div>
             <div style="font-family: {{ serif }}; font-size: {{ pdf ? '22pt' : '2rem' }}; font-weight: bold; margin: 6px 0;">{{ vocation.name }}</div>
             <p style="margin: 0; color: #E2E8F0; font-size: {{ pdf ? '10.5pt' : '1.05rem' }};">{{ vocation.text }}</p>
             {% if vocation.motivation %}<p style="margin: 10px 0 0; color: #CBD5E1;">Ce qui vous y pousse au fond : {{ vocation.motivation|lower }}</p>{% endif %}
         </div>
         <table class="dr-grid" style="margin-top: 10px;"><tr>
             <td style="width: 60%;"><div class="dr-tile"><div class="dr-label">{{ report_icon('work', '#475569') }}Où l'exercer</div><ul>{% for i in vocation.ideas %}<li>{{ i }}</li>{% endfor %}</ul></div></td>
-            <td><div class="dr-tile" style="background: #CCFBF1; border-color: #CCFBF1;"><div class="dr-label" style="color: #134E4A;">{{ report_icon('star', '#134E4A') }}Vos dons</div><p style="margin: 0 0 6px; color: #134E4A;">{{ vocation.gifts|join(' · ') }}</p><div class="dr-label" style="color: #134E4A;">Dans KIINI SAWA</div><p class="dr-small" style="margin: 0; color: #134E4A;">{{ vocation.plan }} · à lire : {{ vocation.read }}</p></div></td>
+            <td><div class="dr-tile" style="background: #DCE7DF; border-color: #DCE7DF;"><div class="dr-label" style="color: #173D2E;">{{ report_icon('star', '#173D2E') }}Vos dons</div><p style="margin: 0 0 6px; color: #173D2E;">{{ vocation.gifts|join(' · ') }}</p><div class="dr-label" style="color: #173D2E;">Dans KIINI SAWA</div><p class="dr-small" style="margin: 0; color: #173D2E;">{{ vocation.plan }} · à lire : {{ vocation.read }}</p></div></td>
         </tr></table>
         <p class="dr-small">Une zone de vocation est une piste à éprouver dans la prière, le service et le conseil de votre communauté, pas une assignation.</p>
     {% else %}
@@ -137,15 +137,15 @@
 
 {# ═══ Conclusion ═══ #}
 <div class="dr-page">
-    <div style="border-radius: 22px; background: #CCFBF1; padding: {{ pdf ? '10mm' : '28px' }};">
-        <div class="dr-kicker" style="color: #134E4A;">En résumé</div>
-        <h2 style="color: #134E4A;">{{ identity.headline }}</h2>
-        {% if vocation %}<p style="color: #134E4A;">Votre zone de vocation : <strong>{{ vocation.name }}</strong>.</p>{% endif %}
+    <div style="border-radius: 22px; background: #DCE7DF; padding: {{ pdf ? '10mm' : '28px' }};">
+        <div class="dr-kicker" style="color: #173D2E;">En résumé</div>
+        <h2 style="color: #173D2E;">{{ identity.headline }}</h2>
+        {% if vocation %}<p style="color: #173D2E;">Votre zone de vocation : <strong>{{ vocation.name }}</strong>.</p>{% endif %}
         <table class="dr-grid"><tr>
             {% for p in priorities %}<td><div class="dr-tile" style="background: #fff; border-color: #fff;"><div class="dr-label">Priorité {{ loop.index }}</div><p class="dr-small" style="margin: 0; color: #334155;">{{ p.text }}</p></div></td>{% endfor %}
         </tr></table>
     </div>
-    <div class="dr-quote" style="margin-top: 16px; background: #CCFBF1; color: #134E4A;">« Car nous sommes son ouvrage, ayant été créés en Jésus-Christ pour de bonnes œuvres, que Dieu a préparées d'avance, afin que nous les pratiquions. »<div style="font-style: normal; font-weight: bold; margin-top: 6px; font-size: {{ pdf ? '9pt' : '.9rem' }};">Éphésiens 2.10</div></div>
+    <div class="dr-quote" style="margin-top: 16px; background: #DCE7DF; color: #173D2E;">« Car nous sommes son ouvrage, ayant été créés en Jésus-Christ pour de bonnes œuvres, que Dieu a préparées d'avance, afin que nous les pratiquions. »<div style="font-style: normal; font-weight: bold; margin-top: 6px; font-size: {{ pdf ? '9pt' : '.9rem' }};">Éphésiens 2.10</div></div>
     <p style="margin-top: 14px;">Vous n'êtes pas un résultat de test : vous êtes une personne unique, aimée et appelée. Que cette synthèse vous aide à mieux vous connaître, à mieux aimer, et à bâtir votre vie avec Dieu.</p>
     <p class="dr-small" style="text-align: right; margin-top: 18px;">KIINI SAWA · Bâtir sa vie avec Dieu</p>
 </div>

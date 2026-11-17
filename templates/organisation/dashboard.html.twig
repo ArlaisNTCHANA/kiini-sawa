@@ -55,7 +55,7 @@
                         <td><strong>{{ m.user.displayName }}</strong>{% if m == me %} <span class="og-mini">(vous)</span>{% endif %}<br><span class="og-mini">{{ m.roleLabel }}{{ m.mentor ? ' · suivi par ' ~ m.mentor.user.displayName }}</span>
                             {% if m != me and m.sharePlans %}<br><a href="{{ path('app_organisation_member_plan', {id: org.id, memberId: m.id}) }}" style="font-size: .8rem; color: var(--primary); font-weight: 600;">Lire ses plans →</a>{% elseif m != me %}<br><span class="og-mini">🔒 plans non partagés</span>{% endif %}
                         </td>
-                        <td>{% if not s.onboarded %}<span class="og-pill" style="background: #FEF3C7; color: #92400E;">Pas démarré</span>{% elseif s.activeThisWeek %}<span class="og-pill" style="background: #DCFCE7; color: #166534;">Actif</span>{% else %}<span class="og-pill">Inactif</span>{% endif %}
+                        <td>{% if not s.onboarded %}<span class="og-pill" style="background: var(--gold-soft); color: var(--accent);">Pas démarré</span>{% elseif s.activeThisWeek %}<span class="og-pill" style="background: #DCFCE7; color: #166534;">Actif</span>{% else %}<span class="og-pill">Inactif</span>{% endif %}
                             <br><span class="og-mini">{{ s.lastActive ? 'vu le ' ~ s.lastActive|date('d/m') : 'jamais connecté' }}</span></td>
                         <td>{% for p in s.plans %}<span class="og-pill">{{ p }}</span>{% else %}<span class="og-mini">—</span>{% endfor %}</td>
                         <td>{{ s.reviews4w }}/4</td>
