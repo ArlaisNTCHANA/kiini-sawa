@@ -20,6 +20,9 @@ Décision du fondateur : le livre est un produit en soi (vente, KDP), l'applicat
   l'auteur sans réécriture.
 - PRO (essai compris) : texte intégral. Interrupteur « Le livre en entier (La Méthode) » dans Configuration
   (`AppConfig::enableMethodFree`, désormais faux par défaut ; migration `Version20261117151426` le met à faux).
+- Déployé le 17/11/2026 à 15 h 15 (UTC). **Piège du déploiement** : pendant les ~10 s entre l'envoi des fichiers et la
+  reconstruction du cache, une nouvelle route (ici `app_plan_d_intendance`, appelée par le menu) donne des erreurs 500
+  (6 dans le journal, toutes avant 15:15:46). Sans gravité ; à corriger un jour en vidant le cache avant d'ouvrir le menu.
 - Pas de code imprimé dans le livre pour l'instant : KDP imprime le même code dans chaque exemplaire. Idée retenue
   pour la sortie du livre : un code de bienvenue (prolongation de l'essai, une fois par compte), sans risque s'il circule.
 
