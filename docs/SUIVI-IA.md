@@ -11,6 +11,11 @@ Ne jamais afficher ni demander de mot de passe ; ne pas publier son nom (mention
 
 ---
 
+## 2026-11-17 · Audit de cohérence des 5 plans → À FAIRE
+
+- Audit fait, **rien n'est encore codé**. Travail détaillé, fichiers et décisions en attente :
+  **`docs/A-FAIRE-coherence-des-plans.md`** (lot 1 validé par le fondateur ; lots 2 et 3 à décider).
+
 ## 2026-11-17 · Les 5 plans : questions, ordre et icônes de la méthode
 
 - Référence fournie par le fondateur (diapositive « Les 5 plans de la méthode KIINI ») : une question par plan, ordre
@@ -126,6 +131,8 @@ Voir `git log` : mise en ligne Hostinger, emails Brevo, audit en 6 lots, PWA, pr
 feedback nourricier, notifications push, tableau de rétention.
 
 ## Ouvert / à faire
+
+- **Prochain chantier : `docs/A-FAIRE-coherence-des-plans.md` (lot 1 validé).**
 
 - Carte DISC d'équipe ou de couple pour les organisations (offre Églises).
 - Suivi de la fidélité de tous les tests (Admin › Fidélité des tests couvre l'IPIP) ; normes dès 200 profils.
