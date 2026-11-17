@@ -12,7 +12,7 @@ class LexiconTest extends WebTestCase
 {
     use AccountTestTrait;
 
-    private const BANNED = ['Quick Capture', 'Insight', 'Wheel of Life', 'Gantt', '(BE)', '(DO)', '(GIVE)', '(HAVE)',
+    private const BANNED = ['Mes stratégies', 'plans stratégiques', 'Quick Capture', 'Insight', 'Wheel of Life', 'Gantt', '(BE)', '(DO)', '(GIVE)', '(HAVE)',
         "Score d'Alignement", 'Mes Découvertes', 'Découverte de Soi', 'Architecture Intérieure', 'second cerveau',
         'Ancrage cognitif', 'Collections', 'Habitudes', 'Mon Réseau', 'Espace de Croissance'];
 

@@ -10,7 +10,8 @@ méthode) restent ceux du livre.
 | Espace Église / association / entreprise | **Mon organisation** | — |
 | Personnes qui vous accompagnent | **Partenaires** (de redevabilité) | Réseau |
 | Questionnaires | **Mes tests** | Mes découvertes, Découverte de soi, Architecture intérieure |
-| Les 4 plans (Croissance, Développement, Transmission, Hygiène) | **Mes stratégies** / plans stratégiques | Plans stratégiques en titre de menu |
+| Les 4 plans (Croissance, Développement, Transmission, Hygiène) | **Vos quatre plans** ; la page qui les réunit : **Vue d'ensemble de mes plans** | Mes stratégies, plans stratégiques (décision du fondateur, 17/11/2026 : un plan *contient* des stratégies, il n'en est pas une) |
+| Moyens d'atteindre un objectif, dans un plan et sur la carte | **Stratégies** (sens du livre, chapitre 10) | — |
 | Indicateur du Plan de Vie | **Score de cohérence** | Score d'alignement |
 | Catégories d'objectifs | **Être, Faire, Avoir, Donner** | BE, DO, HAVE, GIVE, Devenir, Accomplir, Posséder, Léguer |
 | Note du journal saisie vite | **Note rapide** | Quick capture |

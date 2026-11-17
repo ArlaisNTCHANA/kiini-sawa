@@ -6,7 +6,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
 /**
- * Hub « Mes stratégies » : vue d'ensemble des quatre plans qui découlent du Plan de Vie.
+ * « Vue d'ensemble de mes plans » (ancien « Mes stratégies ») : vue d'ensemble des quatre plans qui découlent du Plan de Vie.
  * Chaque plan a aussi sa propre adresse (/plan-de-croissance…), servie par son module.
  */
 class StrategiesController extends AbstractPlanController

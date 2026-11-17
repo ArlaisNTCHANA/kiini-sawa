@@ -11,6 +11,16 @@ Ne jamais afficher ni demander de mot de passe ; ne pas publier son nom (mention
 
 ---
 
+## 2026-11-17 · « Mes stratégies » retiré (décision du fondateur)
+
+- Selon le livre (chapitre 10), une **stratégie** est un moyen d'atteindre un objectif, *dans* un plan : les 4 plans
+  ne sont donc pas des « stratégies ». La rubrique « Mes plans » liste désormais directement le Plan de Vie et les
+  4 plans (badge PRO pour les comptes gratuits), puis la **« Vue d'ensemble de mes plans »** (ancien hub `/mes-strategies`,
+  adresse et route `app_strategies` inchangées).
+- Libellés mis à jour (pages, emails, abonnement, bilan) ; `docs/lexique.md` et la charte modifiés ;
+  `LexiconTest` interdit « Mes stratégies » et « plans stratégiques » dans le texte visible.
+- Le mot « stratégie » reste employé dans son sens du livre (stratégies d'un plan, carte stratégique).
+
 ## 2026-11-17 · Navigation par rubriques
 
 - Constat (audit de navigation) : fonctionnalités majeures cachées dans le menu du compte (Mes tests, Agenda,

@@ -36,7 +36,7 @@ Les titres d'axes de la section 1 restent inchangés mot pour mot ; seul l'axe �
 ## 1ter. LEXIQUE DE L'INTERFACE (décision du 16/11/2026)
 
 Validé par l'utilisateur lors de l'audit du 16/11/2026 : un seul mot par chose dans toute l'interface (Rituels, Agenda,
-Partenaires, Mes tests, Mes stratégies, score de cohérence ; objectifs affichés **Être / Faire / Avoir / Donner**, codes
+Partenaires, Mes tests, Vue d'ensemble de mes plans (ex « Mes stratégies »), score de cohérence ; objectifs affichés **Être / Faire / Avoir / Donner**, codes
 BE/DO/HAVE/GIVE réservés au stockage). Référence : `docs/lexique.md`. Ne pas revenir aux anciens termes.
 
 ## 2. RÈGLES D'OR DE DÉVELOPPEMENT (AI BEHAVIOR)

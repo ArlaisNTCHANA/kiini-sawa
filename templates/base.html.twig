@@ -433,7 +433,7 @@
                                 {% set href = path(it[1]) %}
                                 <a href="{{ href }}" class="{{ cp == href or cp == href ~ '/' ? 'current' }}">
                                     <span class="np-icon"><i data-lucide="{{ it[2] }}"></i></span>
-                                    <span><span class="np-title" style="display: block;">{{ it[0] }}</span><span class="np-desc" style="display: block;">{{ it[3] }}</span></span>
+                                    <span><span class="np-title" style="display: block;">{{ it[0] }}{% if it[4] is defined and not is_pro() %} <span style="font-size: .62rem; font-weight: 800; letter-spacing: .05em; padding: .1rem .4rem; border-radius: 999px; background: #FEF3C7; color: #92400E; vertical-align: 1px;">PRO</span>{% endif %}</span><span class="np-desc" style="display: block;">{{ it[3] }}</span></span>
                                 </a>
                             {% endfor %}
                         </div>
@@ -584,7 +584,7 @@
                                 {% set links = sec.items is empty ? [[sec.label, sec.route, sec.icon]] : sec.items %}
                                 {% for it in links %}
                                     {% set href = path(it[1]) %}
-                                    <a href="{{ href }}" class="ks-sheet__link {{ cp == href or cp == href ~ '/' ? 'current' }}" @click="o = false"><i data-lucide="{{ it[2] }}"></i>{{ it[0] }}</a>
+                                    <a href="{{ href }}" class="ks-sheet__link {{ cp == href or cp == href ~ '/' ? 'current' }}" @click="o = false"><i data-lucide="{{ it[2] }}"></i>{{ it[0] }}{% if it[4] is defined and not is_pro() %} <span style="font-size: .6rem; font-weight: 800; padding: .05rem .35rem; border-radius: 999px; background: #FEF3C7; color: #92400E;">PRO</span>{% endif %}</a>
                                 {% endfor %}
                             </div>
                         {% endfor %}

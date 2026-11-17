@@ -24,7 +24,11 @@ final class NavigationExtension extends AbstractExtension
         ]],
         'plans' => ['label' => 'Mes plans', 'icon' => 'compass', 'match' => ['/plan-de-vie', '/mes-strategies', '/plan-de-croissance', '/plan-de-developpement', '/plan-de-transmission', '/plan-d-hygiene'], 'items' => [
             ['Plan de Vie', 'app_plan_de_vie', 'compass', 'Raison d\'être, valeurs, vision et objectifs'],
-            ['Mes stratégies', 'app_strategies', 'layout-grid', 'Croissance, Développement, Transmission, Hygiène de vie'],
+            ['Plan de Croissance', 'app_plan_de_croissance', 'sprout', 'Caractère, relations, compétences', 'pro'],
+            ['Plan de Développement', 'app_plan_de_developpement', 'graduation-cap', 'Compétences, formations, lectures', 'pro'],
+            ['Plan de Transmission', 'app_plan_de_transmission', 'hand-heart', 'Legs, mentorat et service', 'pro'],
+            ['Plan d\'Hygiène de Vie', 'app_plan_d_hygiene', 'heart-pulse', 'Sommeil, nutrition, sport, repos', 'pro'],
+            ['Vue d\'ensemble de mes plans', 'app_strategies', 'layout-grid', 'Vos quatre plans côte à côte : Être, Faire, Donner'],
         ]],
         'daily' => ['label' => 'Mon quotidien', 'icon' => 'calendar-check', 'match' => ['/mes-plans/rituels', '/planner', '/journal', '/bilan'], 'items' => [
             ['Rituels', 'app_user_habits', 'activity', 'Les petites actions qui nourrissent vos objectifs'],

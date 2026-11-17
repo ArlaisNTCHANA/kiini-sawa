@@ -1,7 +1,7 @@
 {% extends 'notification/email/onboarding/_base.html.twig' %}
 {% block body %}
   <p style="font-size:17px;font-weight:bold;color:#0f766e;margin:18px 0 8px;">Votre vision a besoin d'un plan</p>
-  <p>Votre Plan de Vie dit <strong>où</strong> vous allez. Les quatre plans stratégiques disent <strong>comment</strong> y arriver :</p>
+  <p>Votre Plan de Vie dit <strong>où</strong> vous allez. Vos quatre plans (Croissance, Développement, Transmission, Hygiène de vie) disent <strong>comment</strong> y arriver :</p>
   <ul style="padding-left:20px;margin:0 0 12px;">
     <li><strong>Croissance</strong> : le caractère et les relations pour porter votre vision ;</li>
     <li><strong>Développement</strong> : les compétences et les connaissances à acquérir ;</li>
@@ -10,5 +10,5 @@
   </ul>
   <p>Ils sont inclus dans votre essai PRO{% if trialEnd %} jusqu'au <strong>{{ trialEnd|date('d/m/Y') }}</strong>{% endif %}. Ouvrez-en au moins un d'ici là : l'assistant vous guide, avec à chaque étape le chapitre du livre qui l'explique.</p>
 {% endblock %}
-{% block cta %}Ouvrir mes plans stratégiques{% endblock %}
+{% block cta %}Ouvrir mes plans{% endblock %}
 {% block verse %}« Les projets de l'homme diligent ne mènent qu'à l'abondance. » Proverbes 21:5{% endblock %}

@@ -44,7 +44,7 @@ Une seule définition pour l'ordinateur et le téléphone : `App\Shared\Twig\Nav
 |---|---|
 | Aujourd'hui | Accueil |
 | Me connaître | Mes tests, Mon profil KIINI SAWA, Mon évolution, Feedback nourricier |
-| Mes plans | Plan de Vie, Mes stratégies (4 plans) |
+| Mes plans | Plan de Vie, Plan de Croissance, Plan de Développement, Plan de Transmission, Plan d'Hygiène de Vie, Vue d'ensemble de mes plans |
 | Mon quotidien | Rituels, Agenda, Journal, Bilan |
 | Ensemble | Partenaires, Notre couple, Défis, Mon organisation, Inviter mes proches |
 | La Méthode | Les chapitres du livre |
