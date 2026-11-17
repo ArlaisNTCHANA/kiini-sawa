@@ -38,6 +38,8 @@ run bin/console importmap:install
 run bin/console assets:install public
 run bin/console tailwind:build --minify
 run bin/console asset-map:compile
+# Fichiers publics lisibles par le serveur web (une image copiée avec des droits 600 donne une erreur 403)
+chmod -R a+rX public/assets
 run bin/console doctrine:migrations:migrate --no-interaction --allow-no-migration
 run bin/console cache:clear
 run bin/console cache:warmup
