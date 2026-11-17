@@ -4,7 +4,11 @@
 
 ## Rôle
 
-Plan de Croissance : objectifs de croissance (caractère, compétence, relation), actions, scores, principes, points de redevabilité et preuves.
+Plan de Croissance : **Caractère & Conviction**, **Relation & Réseau** et valeurs d'alignement ; actions, scores, principes, points de redevabilité et preuves.
+
+> Depuis le 15/11/2026 (`docs/plan-v1.md` §6.1), l'axe **Compétence & Connaissance** relève du **Plan de Développement**. Les objectifs
+> de compétence restent techniquement des `GrowthGoal` d'axe `COMPETENCE`, mais s'affichent dans le Plan de Développement.
+> Le livre (chapitre 9, « Les 3 axes ») décrit encore l'ancienne version : il sera mis à jour par l'auteur.
 
 ## Emplacements
 

@@ -2,6 +2,7 @@
 
 namespace App\Shared\Twig;
 
+use App\PlanDeVie\Service\PlanCatalog;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
@@ -23,11 +24,12 @@ final class NavigationExtension extends AbstractExtension
             ['Feedback nourricier', 'app_feedback', 'message-circle-heart', 'Le regard bienveillant de vos proches'],
         ]],
         'plans' => ['label' => 'Mes plans', 'icon' => 'compass', 'match' => ['/plan-de-vie', '/mes-strategies', '/plan-de-croissance', '/plan-de-developpement', '/plan-de-transmission', '/plan-d-hygiene'], 'items' => [
-            ['Plan de Vie', 'app_plan_de_vie', 'compass', 'Raison d\'être, valeurs, vision et objectifs'],
-            ['Plan de Croissance', 'app_plan_de_croissance', 'sprout', 'Caractère, relations, compétences', 'pro'],
-            ['Plan de Développement', 'app_plan_de_developpement', 'graduation-cap', 'Compétences, formations, lectures', 'pro'],
-            ['Plan de Transmission', 'app_plan_de_transmission', 'hand-heart', 'Legs, mentorat et service', 'pro'],
-            ['Plan d\'Hygiène de Vie', 'app_plan_d_hygiene', 'heart-pulse', 'Sommeil, nutrition, sport, repos', 'pro'],
+            // Descriptions : source unique PlanCatalog (le contenu de chaque plan a changé le 15/11/2026)
+            ['Plan de Vie', 'app_plan_de_vie', 'compass', PlanCatalog::PLANS['VIE']['desc']],
+            ['Plan de Croissance', 'app_plan_de_croissance', 'sprout', PlanCatalog::PLANS['CROISSANCE']['desc'], 'pro'],
+            ['Plan de Développement', 'app_plan_de_developpement', 'graduation-cap', PlanCatalog::PLANS['DEVELOPPEMENT']['desc'], 'pro'],
+            ['Plan de Transmission', 'app_plan_de_transmission', 'hand-heart', PlanCatalog::PLANS['TRANSMISSION']['desc'], 'pro'],
+            ['Plan d\'Hygiène de Vie', 'app_plan_d_hygiene', 'heart-pulse', PlanCatalog::PLANS['HYGIENE']['desc'], 'pro'],
             ['Vue d\'ensemble de mes plans', 'app_strategies', 'layout-grid', 'Vos quatre plans côte à côte : Être, Faire, Donner'],
         ]],
         'daily' => ['label' => 'Mon quotidien', 'icon' => 'calendar-check', 'match' => ['/mes-plans/rituels', '/planner', '/journal', '/bilan'], 'items' => [

@@ -45,7 +45,7 @@ final class SelfAssessmentProfiles
             'mid' => ['Vous avez des relations, mais elles mériteraient peut-être plus de profondeur.', ['Proposer un moment à un ami proche', 'Inviter quelqu\'un chez vous']],
             'high' => ['Vos relations sont riches : elles sont une force à cultiver et à partager.', ['Présenter deux amis qui pourraient s\'entraider', 'Être attentif à une personne isolée de votre entourage']],
             'question' => 'Qui pourrait compter sur moi, et sur qui puis-je compter ?'],
-        'personnel' => ['label' => 'Développement personnel', 'color' => '#0891B2', 'light' => '#CFFAFE', 'dark' => '#164E63', 'plan' => 'Plan de Croissance', 'read' => 'Romains 12.2 ; Philippiens 3.13–14',
+        'personnel' => ['label' => 'Développement personnel', 'color' => '#0891B2', 'light' => '#CFFAFE', 'dark' => '#164E63', 'plan' => 'Plan de Croissance (caractère) et Plan de Développement (apprentissages)', 'read' => 'Romains 12.2 ; Philippiens 3.13–14',
             'what' => 'Votre croissance, vos apprentissages, votre connaissance de vous-même.',
             'low' => ['Vous avez peut-être l\'impression de stagner. Grandir commence par un petit apprentissage régulier.', ['Lire 10 pages par jour', 'Choisir un seul objectif de croissance pour ce mois']],
             'mid' => ['Vous progressez, mais un objectif clair vous aiderait à aller plus loin.', ['Fixer un objectif de croissance à trois mois', 'Faire le point chaque semaine dans votre journal']],

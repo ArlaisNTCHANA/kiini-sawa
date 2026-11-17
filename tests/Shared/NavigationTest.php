@@ -40,6 +40,20 @@ class NavigationTest extends WebTestCase
         }
     }
 
+    /** Le contenu des plans suit la décision du 15/11/2026 : la compétence relève du Développement, plus de la Croissance. */
+    public function testPlanDescriptionsComeFromTheCatalog(): void
+    {
+        $catalog = \App\PlanDeVie\Service\PlanCatalog::PLANS;
+        $this->assertStringNotContainsStringIgnoringCase('compétence', $catalog['CROISSANCE']['desc']);
+        $this->assertStringContainsStringIgnoringCase('compétence', $catalog['DEVELOPPEMENT']['desc']);
+        $byRoute = array_column($catalog, 'desc', 'route');
+        foreach (NavigationExtension::SECTIONS['plans']['items'] as $item) {
+            if (isset($byRoute[$item[1]])) {
+                $this->assertSame($byRoute[$item[1]], $item[3], $item[0].' : même description que la vue d\'ensemble');
+            }
+        }
+    }
+
     public function testHeaderShowsSixSectionsAndLeanAccountMenu(): void
     {
         $client = static::createClient();

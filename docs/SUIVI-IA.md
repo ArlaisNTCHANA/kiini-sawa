@@ -11,6 +11,18 @@ Ne jamais afficher ni demander de mot de passe ; ne pas publier son nom (mention
 
 ---
 
+## 2026-11-17 · Correction : contenu du Plan de Croissance
+
+- **Erreur commise** : le menu décrivait la Croissance avec « compétences » (ancienne version à 3 axes du livre).
+  Décision du 15/11/2026 (`docs/plan-v1.md` §6.1) : **Compétence & Connaissance → Plan de Développement** ; la Croissance
+  garde Caractère & Conviction, Relation & Réseau, valeurs d'alignement.
+- **Source unique** des descriptions des plans : `PlanDeVie\Service\PlanCatalog::PLANS[...]['desc']`, utilisée par le menu
+  (`NavigationExtension`) et la vue d'ensemble (`strategies.html.twig`). `NavigationTest` le vérifie.
+- Corrigé aussi : zone de vocation « L'enseignant » → Plan de Développement ; Équilibre « Développement personnel » →
+  Croissance (caractère) et Développement (apprentissages) ; fiche `docs/modules/plan_de_croissance.md`.
+- **Attention** : le livre (`docs/livre/CHAP_09_LES_3_AXES.md`, `SUMMARY_PLANS.md`) décrit encore l'ancienne version ;
+  ne pas s'en servir pour décrire les plans dans l'interface, et ne pas le réécrire sans l'auteur.
+
 ## 2026-11-17 · « Mes stratégies » retiré (décision du fondateur)
 
 - Selon le livre (chapitre 10), une **stratégie** est un moyen d'atteindre un objectif, *dans* un plan : les 4 plans

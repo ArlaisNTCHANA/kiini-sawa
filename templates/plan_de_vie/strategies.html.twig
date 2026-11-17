@@ -732,7 +732,7 @@
                 <div>
                     <div class="plan-card-subtitle">L'Évolution (Être)</div>
                     <h2 class="plan-card-title">Croissance</h2>{% if 'CROISSANCE' in (lockedPlans ?? []) %}<span style="display:inline-block;margin-top:.25rem;font-size:.68rem;font-weight:800;letter-spacing:.06em;padding:.15rem .5rem;border-radius:999px;background:#FEF3C7;color:#92400E;">🔒 PRO</span>{% endif %}
-                    <p class="plan-card-desc">Caractère & Conviction, Relation & Réseau, Valeurs d'alignement.</p>
+                    <p class="plan-card-desc">{{ constant('App\\PlanDeVie\\Service\\PlanCatalog::PLANS').CROISSANCE.desc }}</p>
                 </div>
                 <div class="plan-card-footer">
                     <div class="plan-card-count">
@@ -754,7 +754,7 @@
                 <div>
                     <div class="plan-card-subtitle">L'Exécution (Faire)</div>
                     <h2 class="plan-card-title">Développement</h2>{% if 'DEVELOPPEMENT' in (lockedPlans ?? []) %}<span style="display:inline-block;margin-top:.25rem;font-size:.68rem;font-weight:800;letter-spacing:.06em;padding:.15rem .5rem;border-radius:999px;background:#FEF3C7;color:#92400E;">🔒 PRO</span>{% endif %}
-                    <p class="plan-card-desc">Compétences à acquérir, Formations & Livres d'étude.</p>
+                    <p class="plan-card-desc">{{ constant('App\\PlanDeVie\\Service\\PlanCatalog::PLANS').DEVELOPPEMENT.desc }}</p>
                 </div>
                 <div class="plan-card-footer">
                     <div class="plan-card-count">
@@ -776,7 +776,7 @@
                 <div>
                     <div class="plan-card-subtitle">L'Impact (Donner)</div>
                     <h2 class="plan-card-title">Transmission</h2>{% if 'TRANSMISSION' in (lockedPlans ?? []) %}<span style="display:inline-block;margin-top:.25rem;font-size:.68rem;font-weight:800;letter-spacing:.06em;padding:.15rem .5rem;border-radius:999px;background:#FEF3C7;color:#92400E;">🔒 PRO</span>{% endif %}
-                    <p class="plan-card-desc">Projets de legs, Mentorat & Service.</p>
+                    <p class="plan-card-desc">{{ constant('App\\PlanDeVie\\Service\\PlanCatalog::PLANS').TRANSMISSION.desc }}</p>
                 </div>
                 <div class="plan-card-footer">
                     <div class="plan-card-count">
@@ -798,7 +798,7 @@
                 <div>
                     <div class="plan-card-subtitle">Le Système</div>
                     <h2 class="plan-card-title">Hygiène de Vie</h2>{% if 'HYGIENE' in (lockedPlans ?? []) %}<span style="display:inline-block;margin-top:.25rem;font-size:.68rem;font-weight:800;letter-spacing:.06em;padding:.15rem .5rem;border-radius:999px;background:#FEF3C7;color:#92400E;">🔒 PRO</span>{% endif %}
-                    <p class="plan-card-desc">Sommeil, Nutrition, Sport, Méditation & Environnement.</p>
+                    <p class="plan-card-desc">{{ constant('App\\PlanDeVie\\Service\\PlanCatalog::PLANS').HYGIENE.desc }}</p>
                 </div>
                 <div class="plan-card-footer">
                     <div class="plan-card-count">
