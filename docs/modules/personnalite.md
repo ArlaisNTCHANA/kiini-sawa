@@ -7,7 +7,7 @@
 | Profil complet | 116 | IPIP-NEO-120 (Johnson 2014, domaine public), 29 facettes : facette « Libéralisme » retirée |
 | Big Five essentiel | 58 | 2 items par facette |
 | Type de fonctionnement | 48 | Facettes IPIP liées aux 4 axes de Jung ; 16 types aux noms KIINI SAWA |
-| DISC | 24 blocs | Choix forcé (le plus / le moins), items originaux, modèle de Marston : profil naturel (le moins inversé), profil adapté (le plus), écart d'adaptation, perception croisée, interactions, indices (`DiscBank`, `DiscProfiles`, contenus tirés de la formation DISC du fondateur, avec son accord) |
+| DISC | 24 blocs | Choix forcé (le plus / le moins), items originaux, modèle de Marston : profil naturel (le moins inversé), profil adapté (le plus), écart d'adaptation, perception croisée, interactions, indices (`DiscBank`, `DiscProfiles`, contenus tirés de la formation DISC du fondateur, avec son accord). 16 profils (`DiscCombos` : 4 marqués + 12 combinaisons) avec figures bibliques ; schémas SVG (`DiscCharts`) ; rapport `templates/personnalite/assessment/disc/` (page de garde, conclusion, conditions d'utilisation) ; accord obligatoire avant les résultats |
 | Style comportemental (retiré du catalogue) | 52 | Ancien style déduit des facettes IPIP ; reste lisible pour les rapports existants |
 | Ennéagramme | 72 | Items originaux (outil d'introspection) |
 | Dons spirituels | 60 | Items originaux, 15 dons bibliques |

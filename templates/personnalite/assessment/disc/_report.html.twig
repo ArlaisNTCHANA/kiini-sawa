@@ -1,0 +1,379 @@
+{#
+  Rapport DISC complet, commun à l'écran et au PDF.
+  Variables : disc, assessment, quality, pdf (bool), name.
+  Mise en page en tableaux et styles simples (compatibles Dompdf), schémas en SVG (images data:).
+#}
+{% set p = disc.profile %}
+{% set c = disc.combo %}
+{% set pc = p.color %}
+{% set lights = {D: '#FEE2E2', I: '#FEF3C7', S: '#DCFCE7', C: '#DBEAFE'} %}
+{% set darks = {D: '#991B1B', I: '#854D0E', S: '#166534', C: '#1E40AF'} %}
+{% set codeLetters = c.code|split('') %}
+
+<style>
+    .dr { color: #1E293B; line-height: 1.55; }
+    .dr * { box-sizing: border-box; }
+    .dr h2 { font-family: {{ pdf ? "'DejaVu Serif', serif" : 'var(--font-serif)' }}; font-size: {{ pdf ? '17pt' : '1.55rem' }}; color: #0F172A; margin: 0 0 4px; font-weight: bold; }
+    .dr h3 { font-size: {{ pdf ? '11pt' : '1.02rem' }}; margin: 0 0 6px; color: #0F172A; }
+    .dr p { margin: 0 0 8px; }
+    .dr-kicker { font-size: {{ pdf ? '7.5pt' : '.72rem' }}; letter-spacing: 2px; text-transform: uppercase; font-weight: bold; color: {{ pc }}; margin-bottom: 4px; }
+    .dr-lead { color: #475569; font-size: {{ pdf ? '9.5pt' : '.95rem' }}; margin-bottom: 14px !important; }
+    .dr-page { {{ pdf ? 'page-break-before: always;' : 'background: var(--card-bg, #fff); border-radius: 20px; box-shadow: var(--card-shadow); padding: 28px; margin-bottom: 22px;' }} }
+    .dr-grid { width: 100%; border-collapse: separate; border-spacing: 10px; margin: 0 -10px; table-layout: fixed; }
+    .dr-grid td { vertical-align: top; }
+    .dr-tile { border-radius: 14px; padding: 14px 16px; background: #F8FAFC; border: 1px solid #E2E8F0; }
+    .dr-tile ul { margin: 0; padding-left: 16px; }
+    .dr-tile li { margin-bottom: 4px; }
+    .dr-label { font-size: {{ pdf ? '7.5pt' : '.7rem' }}; text-transform: uppercase; letter-spacing: 1.5px; font-weight: bold; color: #64748B; margin-bottom: 6px; }
+    .dr-chip { display: inline-block; padding: 4px 12px; border-radius: 99px; font-weight: bold; font-size: {{ pdf ? '9pt' : '.85rem' }}; margin: 0 4px 4px 0; }
+    .dr-quote { border-radius: 14px; padding: 16px 20px; background: {{ lights[disc.primary] }}; color: {{ darks[disc.primary] }}; font-family: {{ pdf ? "'DejaVu Serif', serif" : 'var(--font-serif)' }}; font-style: italic; }
+    .dr-img { width: 100%; height: auto; display: block; }
+    .dr-small { font-size: {{ pdf ? '8pt' : '.8rem' }}; color: #64748B; }
+    .dr-table { width: 100%; border-collapse: collapse; }
+    .dr-table td, .dr-table th { padding: 8px 10px; border-bottom: 1px solid #EEF2F6; vertical-align: top; text-align: left; font-size: {{ pdf ? '8.8pt' : '.88rem' }}; }
+    .dr-table th { font-size: {{ pdf ? '7.5pt' : '.7rem' }}; text-transform: uppercase; letter-spacing: 1px; color: #64748B; }
+    {% if not pdf %}
+    @media (max-width: 640px) {
+        .dr-grid, .dr-grid tbody, .dr-grid tr, .dr-grid td { display: block; width: 100% !important; }
+        .dr-grid { border-spacing: 0; margin: 0; }
+        .dr-grid td { margin-bottom: 10px; }
+        .dr-page { padding: 20px 16px; }
+        .dr-table-wrap { overflow-x: auto; }
+    }
+    {% endif %}
+</style>
+
+<div class="dr">
+
+{# ═══ Page de garde ═══════════════════════════════════════════════════ #}
+<div style="{{ pdf ? 'height: 222mm;' : 'margin-bottom: 22px;' }} border-radius: 24px; background: #0F172A; color: #fff; padding: {{ pdf ? '22mm 16mm' : '40px 28px' }}; position: relative;">
+    <div style="font-size: {{ pdf ? '9pt' : '.8rem' }}; letter-spacing: 4px; font-weight: bold; color: #5EEAD4;">KIINI SAWA</div>
+    <div style="margin-top: {{ pdf ? '30mm' : '36px' }}; font-size: {{ pdf ? '10pt' : '.85rem' }}; letter-spacing: 3px; text-transform: uppercase; color: #CBD5E1;">Rapport personnel</div>
+    <div style="font-family: {{ pdf ? "'DejaVu Serif', serif" : 'var(--font-serif)' }}; font-size: {{ pdf ? '34pt' : '2.6rem' }}; font-weight: bold; line-height: 1.1; margin: 6px 0 4px;">Profil DISC</div>
+    <div style="color: #CBD5E1; font-size: {{ pdf ? '11pt' : '1rem' }};">Profil naturel · profil adapté · relations</div>
+
+    <table style="margin-top: {{ pdf ? '24mm' : '32px' }}; border-collapse: separate; border-spacing: 10px 0;"><tr>
+        {% for l in codeLetters %}
+            <td style="width: {{ pdf ? '30mm' : '96px' }}; height: {{ pdf ? '30mm' : '96px' }}; border-radius: 50%; background: {{ disc.profiles[l].color }}; text-align: center; vertical-align: middle; font-size: {{ pdf ? '38pt' : '3rem' }}; font-weight: bold; color: #fff;">{{ l }}</td>
+        {% endfor %}
+    </tr></table>
+
+    <div style="margin-top: {{ pdf ? '10mm' : '22px' }}; font-family: {{ pdf ? "'DejaVu Serif', serif" : 'var(--font-serif)' }}; font-size: {{ pdf ? '24pt' : '2rem' }}; font-weight: bold;">{{ c.name }}</div>
+    <div style="color: #E2E8F0; font-size: {{ pdf ? '12pt' : '1.1rem' }}; margin-top: 4px;">{{ c.tagline }}</div>
+    <div style="margin-top: 14px;">
+        {% for k in c.keywords %}<span class="dr-chip" style="background: rgba(255,255,255,.12); color: #fff; border: 1px solid rgba(255,255,255,.25);">{{ k }}</span>{% endfor %}
+    </div>
+
+    <div style="{{ pdf ? 'position: absolute; bottom: 14mm; left: 16mm; right: 16mm;' : 'margin-top: 36px;' }} border-top: 1px solid rgba(255,255,255,.2); padding-top: 12px; color: #CBD5E1; font-size: {{ pdf ? '9pt' : '.85rem' }};">
+        <strong style="color: #fff;">{{ name }}</strong> · questionnaire passé le {{ assessment.takenAt|format_date(pattern: 'd MMMM y', locale: 'fr') }}<br>
+        Document personnel et confidentiel · outil de connaissance de soi, pas un diagnostic
+    </div>
+</div>
+
+{% if quality.warnings is defined and quality.warnings|length %}
+    <div style="background: #FEF3C7; border: 1px solid #FDE68A; color: #92400E; border-radius: 12px; padding: 10px 14px; margin: {{ pdf ? '0 0 4mm' : '0 0 18px' }}; font-size: 13px;">
+        {% for w in quality.warnings %}<div>⚠ {{ w }}</div>{% endfor %}
+    </div>
+{% endif %}
+
+{# ═══ 1. Lire ce rapport ══════════════════════════════════════════════ #}
+<div class="dr-page">
+    <div class="dr-kicker">Avant de commencer</div>
+    <h2>Comment lire ce rapport</h2>
+    <p class="dr-lead">Le DISC décrit votre manière d'agir et de communiquer selon deux axes : votre <strong>rythme</strong> (plutôt rapide ou plutôt posé) et votre <strong>orientation</strong> (plutôt vers la tâche ou plutôt vers les relations). Ces deux axes dessinent quatre dimensions. Chacun de nous possède les quatre, à des degrés différents.</p>
+    <table class="dr-grid"><tr>
+        {% for l, prof in disc.profiles %}
+            <td><div class="dr-tile" style="background: {{ lights[l] }}; border-color: {{ lights[l] }};">
+                <div style="font-size: {{ pdf ? '20pt' : '1.8rem' }}; font-weight: bold; color: {{ prof.color }}; line-height: 1;">{{ l }}</div>
+                <div style="font-weight: bold; color: {{ darks[l] }}; margin: 4px 0 2px;">{{ prof.name }}</div>
+                <div class="dr-small" style="color: {{ darks[l] }};">« {{ prof.question }} »</div>
+                <div class="dr-small" style="margin-top: 6px;">{{ prof.axis }}</div>
+            </div></td>
+        {% endfor %}
+    </tr></table>
+    <table class="dr-grid" style="margin-top: 6px;"><tr>
+        <td><div class="dr-tile">
+            <h3>Votre profil naturel</h3>
+            <p class="dr-small" style="margin: 0;">Votre façon spontanée d'agir, quand rien ne vous contraint. Il change peu au fil de la vie. Il est calculé à partir des mots que vous avez choisis comme vous ressemblant <em>le moins</em>.</p>
+        </div></td>
+        <td><div class="dr-tile">
+            <h3>Votre profil adapté</h3>
+            <p class="dr-small" style="margin: 0;">La façon d'agir que vous adoptez en ce moment pour répondre à votre contexte (travail, famille, Église). Il évolue avec votre situation. Il est calculé à partir des mots choisis comme vous ressemblant <em>le plus</em>.</p>
+        </div></td>
+    </tr></table>
+    <div class="dr-tile" style="margin-top: 8px; background: #FFFBEB; border-color: #FDE68A;">
+        <h3 style="color: #92400E;">À garder en tête</h3>
+        <p class="dr-small" style="color: #92400E; margin: 0;">Aucun profil n'est meilleur qu'un autre. Ce rapport décrit des tendances de comportement, pas votre valeur, vos compétences ni votre caractère moral. Il s'appuie uniquement sur vos réponses d'un jour donné : lisez-le comme un miroir à discuter, pas comme un verdict. Les conditions d'utilisation figurent à la fin du rapport.</p>
+    </div>
+</div>
+
+{# ═══ 2. Le profil en un coup d'œil ═══════════════════════════════════ #}
+<div class="dr-page">
+    <div class="dr-kicker">Votre profil · {{ c.code }}</div>
+    <h2>{{ c.name }}</h2>
+    <p class="dr-lead">{{ c.tagline }}{% if disc.secondaryProfile %} Dimension dominante <strong style="color: {{ pc }};">{{ p.name }}</strong>, dimension secondaire <strong style="color: {{ disc.secondaryProfile.color }};">{{ disc.secondaryProfile.name }}</strong>.{% else %} Une dimension nettement dominante : <strong style="color: {{ pc }};">{{ p.name }}</strong>.{% endif %}</p>
+    <table class="dr-grid"><tr>
+        <td style="width: 58%;">
+            <p style="font-size: {{ pdf ? '10.5pt' : '1.05rem' }};">{{ c.portrait }}</p>
+            <div style="margin-top: 8px;">{% for k in c.keywords %}<span class="dr-chip" style="background: {{ lights[disc.primary] }}; color: {{ darks[disc.primary] }};">{{ k }}</span>{% endfor %}</div>
+        </td>
+        <td>
+            <div class="dr-tile" style="background: {{ lights[disc.primary] }}; border-color: {{ lights[disc.primary] }};">
+                <div class="dr-label" style="color: {{ darks[disc.primary] }};">Votre question réflexe</div>
+                <div style="font-family: {{ pdf ? "'DejaVu Serif', serif" : 'var(--font-serif)' }}; font-size: {{ pdf ? '14pt' : '1.3rem' }}; color: {{ darks[disc.primary] }};">« {{ p.question }} »</div>
+                <div class="dr-small" style="margin-top: 6px; color: {{ darks[disc.primary] }};">{{ p.axis }}</div>
+            </div>
+        </td>
+    </tr></table>
+    <h3 style="margin-top: 14px;">Votre position sur la boussole DISC</h3>
+    <div style="text-align: center;">
+        <img src="{{ disc.charts.compass }}" alt="Boussole DISC : votre position naturelle et votre position adaptée" style="width: {{ pdf ? '118mm' : '100%' }}; max-width: 460px; height: auto;">
+    </div>
+    <table class="dr-grid" style="margin-top: 4px;"><tr>
+        <td><div class="dr-tile"><div class="dr-label">● Point plein</div><p class="dr-small" style="margin: 0;">Votre position naturelle : là où vous êtes quand rien ne vous contraint.</p></div></td>
+        <td><div class="dr-tile"><div class="dr-label">○ Cercle et flèche</div><p class="dr-small" style="margin: 0;">Votre position adaptée : là où votre contexte vous conduit. Plus la flèche est longue, plus l'effort est grand.</p></div></td>
+    </tr></table>
+</div>
+
+{# ═══ 3. Naturel et adapté ════════════════════════════════════════════ #}
+<div class="dr-page">
+    <div class="dr-kicker">Ce que vous êtes, ce que vous montrez</div>
+    <h2>Profil naturel et profil adapté</h2>
+    <p class="dr-lead">La ligne pointillée indique la moyenne (25 %). Une dimension au-dessus de la ligne est marquée chez vous ; en dessous, elle est plus discrète.</p>
+    <img class="dr-img" src="{{ disc.charts.graphs }}" alt="Graphiques du profil naturel et du profil adapté">
+    <table class="dr-table" style="margin-top: 10px;">
+        <tr><th>Dimension</th><th>Naturel</th><th>Adapté</th><th>Écart</th></tr>
+        {% for l, prof in disc.profiles %}
+            <tr><td><strong style="color: {{ prof.color }};">{{ l }}</strong> · {{ prof.name }}</td><td>{{ disc.natural[l] }} %</td><td>{{ disc.adapted[l] }} %</td>
+                <td>{% set sh = disc.shifts[l] %}{{ sh > 0 ? '+' ~ sh : sh }}</td></tr>
+        {% endfor %}
+    </table>
+    <h3 style="margin-top: 18px;">Votre effort d'adaptation : {{ disc.gapReading[0]|lower }} ({{ disc.gap }} points)</h3>
+    <img class="dr-img" src="{{ disc.charts.gauge }}" alt="Jauge de l'écart entre profil naturel et profil adapté" style="max-width: 560px;">
+    <p>{{ disc.gapReading[1] }}</p>
+    {% if disc.more|length %}<p>• Votre contexte vous demande de <strong>{{ disc.more|join(', ') }}</strong>.</p>{% endif %}
+    {% if disc.less|length %}<p>• Vous mettez en retrait une part de votre côté <strong>{{ disc.less|join(', ')|lower }}</strong>.</p>{% endif %}
+    {% if disc.adaptedPrimary != disc.primary %}<p>• Dans votre contexte actuel, on vous voit surtout <strong style="color: {{ disc.adaptedProfile.color }};">{{ disc.adaptedProfile.name }}</strong>. Votre entourage ne connaît peut-être pas votre nature <strong>{{ p.name|lower }}</strong> : dites-leur ce dont vous avez besoin.</p>{% endif %}
+    <div class="dr-tile" style="margin-top: 10px;">
+        <div class="dr-label">Une question pour réfléchir</div>
+        <p style="margin: 0;">Dans quelles situations vous sentez-vous le plus vous-même ? Lesquelles vous demandent le plus d'énergie ? Notez-les : elles éclairent votre Plan d'Hygiène de Vie.</p>
+    </div>
+</div>
+
+{# ═══ 4. Forces et vigilances ═════════════════════════════════════════ #}
+<div class="dr-page">
+    <div class="dr-kicker">Vos talents et vos angles morts</div>
+    <h2>Forces et points de vigilance</h2>
+    <p class="dr-lead">Une force poussée à l'excès devient une faiblesse : vos points de vigilance sont souvent l'ombre de vos forces.</p>
+    <table class="dr-grid"><tr>
+        <td><div class="dr-tile" style="background: #F0FDF4; border-color: #BBF7D0;">
+            <div class="dr-label" style="color: #166534;">✓ Vos forces</div>
+            <ul>{% for s in c.strengths %}<li>{{ s }}</li>{% endfor %}</ul>
+        </div></td>
+        <td><div class="dr-tile" style="background: #FFF7ED; border-color: #FED7AA;">
+            <div class="dr-label" style="color: #9A3412;">▲ Vos points de vigilance</div>
+            <ul>{% for s in c.watch %}<li>{{ s }}</li>{% endfor %}</ul>
+        </div></td>
+    </tr><tr>
+        <td><div class="dr-tile">
+            <div class="dr-label">Ce qui vous motive</div>
+            <ul>{% for s in c.motivators %}<li>{{ s }}</li>{% endfor %}</ul>
+        </div></td>
+        <td><div class="dr-tile">
+            <div class="dr-label">Ce qui vous épuise</div>
+            <ul>{% for s in c.drains %}<li>{{ s }}</li>{% endfor %}</ul>
+        </div></td>
+    </tr><tr>
+        <td><div class="dr-tile" style="background: {{ lights[disc.primary] }}; border-color: {{ lights[disc.primary] }};">
+            <div class="dr-label" style="color: {{ darks[disc.primary] }};">Votre crainte profonde</div>
+            <p style="margin: 0; font-weight: bold; color: {{ darks[disc.primary] }};">{{ p.fear }}</p>
+        </div></td>
+        <td><div class="dr-tile" style="background: {{ lights[disc.primary] }}; border-color: {{ lights[disc.primary] }};">
+            <div class="dr-label" style="color: {{ darks[disc.primary] }};">Vos besoins</div>
+            <p style="margin: 0; color: {{ darks[disc.primary] }};">{{ p.needs|join(' · ') }}</p>
+        </div></td>
+    </tr></table>
+    <div class="dr-tile" style="margin-top: 4px;">
+        <div class="dr-label">Votre environnement idéal</div>
+        <p style="margin: 0;">{{ c.environment }}</p>
+    </div>
+</div>
+
+{# ═══ 5. En situation ═════════════════════════════════════════════════ #}
+<div class="dr-page">
+    <div class="dr-kicker">Votre profil dans la vie</div>
+    <h2>Votre profil en situation</h2>
+    <p class="dr-lead">Le même profil s'exprime différemment selon les lieux de votre vie.</p>
+    <table class="dr-grid"><tr>
+        <td><div class="dr-tile"><div class="dr-label">◆ Au travail</div><p style="margin: 0;">{{ c.work }}</p></div></td>
+        <td><div class="dr-tile"><div class="dr-label">♥ En famille et en couple</div><p style="margin: 0;">{{ c.family }}</p></div></td>
+    </tr><tr>
+        <td><div class="dr-tile"><div class="dr-label">✦ À l'Église et dans le service</div><p style="margin: 0;">{{ c.church }}</p></div></td>
+        <td><div class="dr-tile"><div class="dr-label">★ Comme leader</div><p style="margin: 0;">{{ c.leader }}</p></div></td>
+    </tr></table>
+    <table class="dr-table" style="margin-top: 8px;">
+        <tr><td style="width: 30%;"><strong>Comment vous décidez</strong></td><td>{{ c.decide }}</td></tr>
+        <tr><td><strong>Comment vous communiquez</strong></td><td>{{ c.communicate }}</td></tr>
+        <tr><td><strong>Face à un conflit</strong></td><td>{{ c.conflict }}</td></tr>
+        <tr><td><strong>Dans un désaccord</strong></td><td>{{ p.disagree }}</td></tr>
+        <tr><td><strong>Comment les autres vous repèrent</strong></td><td>Débit {{ p.cues.speech|lower }}, gestuelle {{ p.cues.gesture|lower }}, mails {{ p.cues.mail|lower }}.</td></tr>
+    </table>
+</div>
+
+{# ═══ 6. Sous pression ════════════════════════════════════════════════ #}
+<div class="dr-page">
+    <div class="dr-kicker">Quand la tension monte</div>
+    <h2>Sous pression</h2>
+    <p class="dr-lead">La pression vous fait descendre, marche après marche, vers vos réflexes les plus profonds. Les repérer tôt permet de s'arrêter avant la dernière marche.</p>
+    <table style="width: 100%; border-collapse: separate; border-spacing: 0 8px;">
+        {% for step in [
+            {n: 1, t: 'Vous vous adaptez', d: p.pressure.adapted, bg: '#F0FDF4', fg: '#166534', w: 100},
+            {n: 2, t: 'Votre réflexe naturel reprend le dessus', d: p.pressure.natural, bg: '#FEF3C7', fg: '#854D0E', w: 88},
+            {n: 3, t: 'Tension durable', d: p.pressure.tension, bg: '#FEE2E2', fg: '#991B1B', w: 76},
+        ] %}
+            <tr><td style="padding-left: {{ (100 - step.w) * 3 }}px;">
+                <div style="background: {{ step.bg }}; color: {{ step.fg }}; border-radius: 12px; padding: 12px 16px;">
+                    <strong>Marche {{ step.n }} · {{ step.t }}</strong><br>{{ step.d }}
+                </div>
+            </td></tr>
+        {% endfor %}
+    </table>
+    <table class="dr-grid" style="margin-top: 6px;"><tr>
+        <td><div class="dr-tile"><div class="dr-label">Les signaux d'alerte</div><p style="margin: 0;">{{ c.signs }}</p></div></td>
+        <td><div class="dr-tile"><div class="dr-label">Ce qui vous ressource</div><p style="margin: 0;">{{ c.recharge }}</p></div></td>
+    </tr></table>
+    <p class="dr-small" style="margin-top: 8px;">Si vous restez longtemps à la troisième marche (fatigue persistante, sommeil perturbé, découragement), parlez-en à un proche, à votre pasteur ou à un professionnel de santé.</p>
+</div>
+
+{# ═══ 7. Vous et les autres ═══════════════════════════════════════════ #}
+<div class="dr-page">
+    <div class="dr-kicker">Vous, vu par les autres</div>
+    <h2>Comment vous percevez les autres, et comment ils vous perçoivent</h2>
+    <p class="dr-lead">Chaque profil regarde le monde depuis sa propre question. Voici ce qui se joue entre vous, profil {{ p.name }}, et chacun des quatre profils.</p>
+    {% set o = disc.others %}
+    {% macro persp(l, o, lights, darks) %}
+        <div class="dr-tile" style="background: {{ lights[l] }}; border-color: {{ lights[l] }}; min-height: 150px;">
+            <div style="font-weight: bold; color: {{ darks[l] }};">Avec un profil {{ o[l].profile.name }} ({{ l }})</div>
+            <p class="dr-small" style="margin: 6px 0 2px; color: {{ darks[l] }};"><strong>Vous voyez :</strong> {{ o[l].perception[0] }}</p>
+            <p class="dr-small" style="margin: 0 0 2px; color: {{ darks[l] }};"><strong>Il voit :</strong> {{ o[l].perception[1] }}</p>
+            <p class="dr-small" style="margin: 0; color: {{ darks[l] }};"><strong>Friction :</strong> {{ o[l].perception[2] }}</p>
+        </div>
+    {% endmacro %}
+    <table class="dr-grid">
+        <tr><td style="width: 38%;">{{ _self.persp('D', o, lights, darks) }}</td><td rowspan="2" style="width: 24%; vertical-align: middle; text-align: center;">
+            <img src="{{ disc.charts.badge }}" alt="Votre profil {{ c.code }}" style="width: {{ pdf ? '28mm' : '110px' }}; height: auto;">
+        </td><td style="width: 38%;">{{ _self.persp('I', o, lights, darks) }}</td></tr>
+        <tr><td>{{ _self.persp('C', o, lights, darks) }}</td><td>{{ _self.persp('S', o, lights, darks) }}</td></tr>
+    </table>
+
+    <h3 style="margin-top: 16px;">Votre mode d'emploi avec chaque profil</h3>
+    <div class="dr-table-wrap"><table class="dr-table">
+        <tr><th style="width: 20%;">Avec un…</th><th>De votre côté</th><th>Ce que vous pouvez lui demander</th><th style="width: 22%;">Le reconnaître</th></tr>
+        {% for l, x in o %}
+            <tr><td><strong style="color: {{ x.profile.color }};">{{ l }}</strong> · {{ x.profile.name }}</td><td>{{ x.interaction[0] }}</td><td>{{ x.interaction[1] }}</td>
+                <td class="dr-small">« {{ x.profile.question }} » · {{ x.profile.cues.speech|lower }}</td></tr>
+        {% endfor %}
+    </table></div>
+</div>
+
+{# ═══ 8. Figures bibliques ════════════════════════════════════════════ #}
+<div class="dr-page">
+    <div class="dr-kicker">Dans les Écritures</div>
+    <h2>Des figures bibliques qui vous ressemblent</h2>
+    <p class="dr-lead">La Bible montre des hommes et des femmes aux tempéraments très différents, que Dieu a appelés tels qu'ils étaient, et transformés. Ces rapprochements avec votre profil sont des illustrations, non une interprétation savante des textes.</p>
+    {% for f in c.figures %}
+        <div class="dr-tile" style="margin-bottom: 10px; border-left: 6px solid {{ pc }}; border-radius: 0 14px 14px 0;">
+            <div style="font-family: {{ pdf ? "'DejaVu Serif', serif" : 'var(--font-serif)' }}; font-size: {{ pdf ? '14pt' : '1.25rem' }}; font-weight: bold;">{{ f.name }}</div>
+            <div class="dr-small" style="margin-bottom: 6px;">{{ f.ref }}</div>
+            <p style="margin: 0;">{{ f.text }}</p>
+        </div>
+    {% endfor %}
+    {% if disc.familyFigures|length %}
+        <h3 style="margin-top: 14px;">Dans la même famille de tempérament ({{ p.name }})</h3>
+        <table class="dr-grid"><tr>
+            {% for f in disc.familyFigures|slice(0, 3) %}
+                <td><div class="dr-tile" style="min-height: 120px;">
+                    <div style="font-weight: bold;">{{ f.name }}</div>
+                    <div class="dr-small" style="margin-bottom: 4px;">{{ f.ref }}</div>
+                    <p class="dr-small" style="margin: 0; color: #334155;">{{ f.text }}</p>
+                </div></td>
+            {% endfor %}
+        </tr></table>
+    {% endif %}
+    <div class="dr-quote" style="margin-top: 14px;">
+        « {{ disc.verse[0] }} »
+        <div style="font-style: normal; font-weight: bold; margin-top: 6px; font-size: {{ pdf ? '9pt' : '.9rem' }};">{{ disc.verse[1] }}</div>
+    </div>
+    <div class="dr-tile" style="margin-top: 10px;">
+        <div class="dr-label">Une question à méditer</div>
+        <p style="margin: 0; font-family: {{ pdf ? "'DejaVu Serif', serif" : 'var(--font-serif)' }}; font-size: {{ pdf ? '11pt' : '1.05rem' }};">{{ disc.meditation }}</p>
+    </div>
+</div>
+
+{# ═══ 9. Grandir ══════════════════════════════════════════════════════ #}
+<div class="dr-page">
+    <div class="dr-kicker">Passer à l'action</div>
+    <h2>Pour grandir</h2>
+    <p class="dr-lead">Grandir ne veut pas dire changer de profil, mais élargir votre palette : garder vos forces et apprendre ce qui ne vous vient pas naturellement.</p>
+    <table class="dr-grid"><tr>
+        {% for g in c.grow %}
+            <td><div class="dr-tile" style="text-align: center; min-height: 120px;">
+                <div style="font-size: {{ pdf ? '20pt' : '1.8rem' }}; font-weight: bold; color: {{ pc }}; line-height: 1;">{{ loop.index }}</div>
+                <p style="margin: 8px 0 0;">{{ g }}</p>
+            </div></td>
+        {% endfor %}
+    </tr></table>
+    <h3 style="margin-top: 14px;">Votre plan d'action pour les 30 prochains jours</h3>
+    <table class="dr-table">
+        {% for a in c.actions %}
+            <tr><td style="width: 34px; font-size: {{ pdf ? '13pt' : '1.2rem' }}; color: {{ pc }};">☐</td><td>{{ a }}</td></tr>
+        {% endfor %}
+    </table>
+    <p class="dr-small" style="margin-top: 10px;">Reportez ces actions dans votre Plan de Croissance (axe Caractère et conviction) et parlez-en à votre partenaire de redevabilité.</p>
+</div>
+
+{# ═══ Conclusion ══════════════════════════════════════════════════════ #}
+<div class="dr-page">
+    <div style="border-radius: 22px; background: {{ lights[disc.primary] }}; padding: {{ pdf ? '10mm' : '28px' }};">
+        <div class="dr-kicker" style="color: {{ darks[disc.primary] }};">En résumé</div>
+        <h2 style="color: {{ darks[disc.primary] }};">{{ c.code }} · {{ c.name }}</h2>
+        <p style="color: {{ darks[disc.primary] }}; font-size: {{ pdf ? '11pt' : '1.05rem' }};">{{ c.tagline }}</p>
+        <table class="dr-grid"><tr>
+            <td><div class="dr-tile" style="background: #fff; border-color: #fff;"><div class="dr-label">Vos atouts</div><ul>{% for s in c.strengths|slice(0, 3) %}<li>{{ s }}</li>{% endfor %}</ul></div></td>
+            <td><div class="dr-tile" style="background: #fff; border-color: #fff;"><div class="dr-label">À surveiller</div><ul>{% for s in c.watch|slice(0, 2) %}<li>{{ s }}</li>{% endfor %}</ul></div></td>
+            <td><div class="dr-tile" style="background: #fff; border-color: #fff;"><div class="dr-label">Votre écart</div><p style="margin: 0;"><strong>{{ disc.gapReading[0] }}</strong> ({{ disc.gap }} points)</p></div></td>
+        </tr></table>
+    </div>
+    <h3 style="margin-top: 18px;">Et maintenant ?</h3>
+    <table class="dr-table">
+        <tr><td style="width: 34px; color: {{ pc }};">1</td><td>Relisez ce rapport dans une semaine et soulignez ce qui vous ressemble vraiment.</td></tr>
+        <tr><td style="color: {{ pc }};">2</td><td>Demandez à deux proches s'ils vous reconnaissent : leur regard complète le vôtre.</td></tr>
+        <tr><td style="color: {{ pc }};">3</td><td>Choisissez une seule action du plan et commencez-la cette semaine.</td></tr>
+        <tr><td style="color: {{ pc }};">4</td><td>Refaites le test dans six mois, ou quand votre situation change, pour voir évoluer votre profil adapté.</td></tr>
+    </table>
+    <div class="dr-quote" style="margin-top: 16px;">
+        « Nous avons plusieurs membres dans un seul corps, et tous les membres n'ont pas la même fonction. »
+        <div style="font-style: normal; font-weight: bold; margin-top: 6px; font-size: {{ pdf ? '9pt' : '.9rem' }};">Romains 12.4</div>
+    </div>
+    <p style="margin-top: 14px;">Votre profil est une manière d'agir, pas une prison. Dieu vous a fait unique, et il continue de vous former. Utilisez ce que vous découvrez ici pour mieux aimer, mieux servir, et avancer dans votre Plan de Vie.</p>
+    <p class="dr-small" style="text-align: right; margin-top: 18px;">KIINI SAWA · Bâtir sa vie avec Dieu</p>
+</div>
+
+{# ═══ Conditions d'utilisation ════════════════════════════════════════ #}
+<div class="dr-page" id="avertissement">
+    <div class="dr-kicker" style="color: #64748B;">À lire</div>
+    <h2>Bon usage de ce rapport</h2>
+    <div class="dr-small" style="color: #334155; font-size: {{ pdf ? '8.4pt' : '.86rem' }};">
+        <p><strong>1. Un outil de connaissance de soi.</strong> Le DISC proposé par KIINI SAWA est issu du modèle de William Marston (1928). Le questionnaire et les textes sont propres à KIINI SAWA. Ce n'est ni un test psychologique standardisé, ni un examen médical, psychologique ou psychiatrique, et il ne pose aucun diagnostic. Il décrit des tendances de comportement, telles qu'elles ressortent de vos réponses.</p>
+        <p><strong>2. Des résultats indicatifs et évolutifs.</strong> Vos résultats dépendent de vos réponses, de votre état du moment et de votre contexte. Ils peuvent varier d'une passation à l'autre, en particulier le profil adapté. Ils ne mesurent ni l'intelligence, ni les compétences, ni la valeur d'une personne, ni sa maturité spirituelle.</p>
+        <p><strong>3. Pas de décision importante sur la seule base de ce rapport.</strong> Ne prenez aucune décision importante ou difficilement réversible (orientation ou changement professionnel, démission, choix ou rupture d'une relation, mariage ou séparation, engagement financier, décision médicale, responsabilité dans une Église…) sur la seule base de ce rapport. Croisez-le avec votre expérience, le regard de personnes de confiance et, si nécessaire, l'avis d'un professionnel qualifié.</p>
+        <p><strong>4. Usage strictement personnel.</strong> Ce rapport ne doit pas servir à recruter, sélectionner, évaluer, promouvoir, sanctionner, écarter ou étiqueter une autre personne, ni à fonder une quelconque discrimination. Si vous le partagez, faites-le librement et avec discernement ; ne demandez jamais à quelqu'un de vous communiquer le sien sans son libre consentement.</p>
+        <p><strong>5. Il ne remplace pas un accompagnement.</strong> Ce rapport ne remplace pas l'avis d'un médecin, d'un psychologue, d'un conseiller conjugal ou d'un accompagnement pastoral. Si vous traversez une période de détresse, de souffrance psychique ou d'idées noires, contactez sans attendre un professionnel de santé ou les services d'urgence (15 ou 112 en France, ou le numéro d'urgence de votre pays).</p>
+        <p><strong>6. Les références bibliques.</strong> Les rapprochements entre votre profil et des personnages bibliques sont des illustrations pédagogiques. Ils ne prétendent pas décrire la personnalité réelle de ces personnages ni constituer un enseignement théologique.</p>
+        <p><strong>7. Responsabilité.</strong> Vous restez seul responsable de l'usage que vous faites de ce rapport et des décisions que vous prenez. Dans les limites permises par la loi, KIINI SAWA ne saurait être tenu responsable des conséquences d'une décision fondée sur ce rapport ou de son utilisation par un tiers.</p>
+        <p><strong>8. Vos données.</strong> Vos réponses et votre rapport sont privés : ils ne sont visibles que par vous, sauf si vous choisissez de partager votre résultat principal ou vos tests avec votre conjoint dans l'espace couple. Vous pouvez supprimer vos données à tout moment ; voir la politique de confidentialité.</p>
+        <p><strong>9. Marques.</strong> DISC désigne ici le modèle public de William Marston. KIINI SAWA n'est affilié à aucun éditeur de tests commerciaux ; les marques citées appartiennent à leurs propriétaires.</p>
+    </div>
+</div>
+
+</div>

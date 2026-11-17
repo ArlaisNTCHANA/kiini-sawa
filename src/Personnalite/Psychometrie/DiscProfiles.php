@@ -119,22 +119,6 @@ final class DiscProfiles
         ],
     ];
 
-    /** Combinaisons dominante + secondaire. */
-    public const COMBOS = [
-        'DI' => ['L\'entraîneur', 'Vous avancez vite et emmenez les autres avec vous : l\'énergie du résultat et de la conviction.'],
-        'DS' => ['Le bâtisseur', 'Déterminé et constant : vous visez loin et tenez dans la durée.'],
-        'DC' => ['Le stratège', 'Exigeant et rigoureux : vous voulez des résultats, et des résultats justes.'],
-        'ID' => ['Le promoteur', 'Communicant et audacieux : vous convainquez et faites bouger les lignes.'],
-        'IS' => ['Le conseiller', 'Chaleureux et attentif : vous créez du lien et mettez les gens à l\'aise.'],
-        'IC' => ['Le créatif structuré', 'Inventif et soigné : vous savez donner envie et donner forme.'],
-        'SD' => ['Le pilier engagé', 'Fiable et tenace : on peut compter sur vous, jusqu\'au bout.'],
-        'SI' => ['L\'accompagnateur', 'À l\'écoute et bienveillant : vous soutenez et encouragez.'],
-        'SC' => ['Le spécialiste fiable', 'Patient et méthodique : la qualité, dans la sérénité.'],
-        'CD' => ['L\'architecte', 'Analytique et décidé : vous construisez des solutions solides.'],
-        'CI' => ['Le pédagogue', 'Précis et communicant : vous rendez clair ce qui est complexe.'],
-        'CS' => ['Le gardien de la qualité', 'Rigoureux et constant : vous assurez la fiabilité dans la durée.'],
-    ];
-
     /** Lecture de l'écart entre profil naturel et adapté. */
     public static function gapReading(int $gap): array
     {

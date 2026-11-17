@@ -92,7 +92,7 @@ final class DiscBank
             'adapted' => $adapted, 'natural' => $natural, 'most' => $most, 'least' => $least,
             'primary' => $keys[0],
             // Deuxième dimension retenue si elle est nettement présente
-            'secondary' => $order[$keys[1]] >= 27 ? $keys[1] : null,
+            'secondary' => $order[$keys[1]] >= 25 ? $keys[1] : null,
             'adaptedPrimary' => array_key_first($adaptedOrder),
             'gap' => (int) round($gap / 2),
             'shifts' => $shifts,

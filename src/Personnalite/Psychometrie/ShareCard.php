@@ -31,8 +31,7 @@ final class ShareCard
         if (!empty($report['disc'])) {
             $d = $report['disc'];
 
-            return $base + ['kicker' => 'Mon profil DISC', 'title' => $d['combo']['name'] ?? $d['profile']['name'],
-                'desc' => ($d['combo'] ? $d['profile']['name'].' – '.$d['secondaryProfile']['name'].'. '.$d['combo']['desc'] : $d['profile']['essence'])];
+            return $base + ['kicker' => 'Mon profil DISC · '.$d['combo']['code'], 'title' => $d['combo']['name'], 'desc' => $d['combo']['tagline'].' '.strtok($d['combo']['portrait'], '.').'.'];
         }
         if (!empty($report['style']) && 'type' !== $report['slug']) {
             $s = $report['style']['profile'];

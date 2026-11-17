@@ -37,6 +37,11 @@ class AssessmentController extends AbstractController
 
                 return $this->redirectToRoute('app_assessment_take', ['slug' => $slug]);
             }
+            if ('disc' === Instruments::CATALOG[$slug]['bank'] && !$request->request->getBoolean('consent')) {
+                $this->addFlash('error', 'Merci de confirmer que vous avez lu les conditions d\'utilisation du rapport.');
+
+                return $this->redirectToRoute('app_assessment_take', ['slug' => $slug]);
+            }
             $started = $request->request->getInt('startedAt');
             $seconds = $started > 0 ? max(0, time() - $started) : null;
             try {
@@ -88,7 +93,7 @@ class AssessmentController extends AbstractController
         $this->denyUnlessOwner($assessment);
         $data = $this->reports->build($assessment) + ['name' => $this->user()->getDisplayName()];
 
-        return new Response($pdf->render($this->renderView('personnalite/assessment/report_pdf.html.twig', $data)), 200, [
+        return new Response($pdf->render($this->renderView('disc' === $assessment->getInstrument() ? 'personnalite/assessment/disc/report_pdf.html.twig' : 'personnalite/assessment/report_pdf.html.twig', $data)), 200, [
             'Content-Type' => 'application/pdf',
             'Content-Disposition' => HeaderUtils::makeDisposition(HeaderUtils::DISPOSITION_ATTACHMENT, 'kiini-sawa-'.$assessment->getInstrument().'-'.$assessment->getTakenAt()->format('Y-m-d').'.pdf'),
         ]);

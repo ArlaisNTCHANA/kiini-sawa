@@ -33,7 +33,7 @@
 {% set isDisc = def.bank == 'disc' %}
 {% set perPage = isDisc ? 6 : 12 %}
 {% set pages = (items|length / perPage)|round(0, 'ceil') %}
-<div class="as-wrap" x-data="{ page: 0, pages: {{ pages }}, answered: {}, total: {{ items|length }},
+<div class="as-wrap" x-data="{ page: 0, pages: {{ pages }}, answered: {}, total: {{ items|length }}, consent: {{ isDisc ? 'false' : 'true' }},
         count() { return Object.keys(this.answered).length },
         pageDone(p) { return [...document.querySelectorAll('[data-page=\'' + p + '\'] [data-key]')].every(el => this.answered[el.dataset.key]) } }">
     <a href="{{ path('app_personality_index') }}" style="font-size: .8rem; font-weight: 700; color: var(--fg-muted); text-transform: uppercase; letter-spacing: .05em; text-decoration: none;">← Mes tests</a>
@@ -87,13 +87,27 @@
             </div>
         {% endfor %}
 
+        {% if isDisc %}
+        <div class="as-q" x-show="page === pages - 1" x-cloak style="border: 1.5px solid var(--border);">
+            <p style="margin-bottom: .5rem;">Avant de voir vos résultats</p>
+            <ul style="font-size: .85rem; color: var(--fg-light); padding-left: 1.1rem; margin-bottom: .75rem; line-height: 1.5;">
+                <li>Ce questionnaire est un outil de connaissance de soi, issu du modèle de Marston : ce n'est ni un test psychologique standardisé, ni un diagnostic.</li>
+                <li>Ses résultats sont indicatifs et peuvent évoluer ; ils ne mesurent ni vos compétences ni votre valeur.</li>
+                <li>Ils ne doivent pas fonder seuls une décision importante (professionnelle, conjugale, financière, médicale…), ni servir à évaluer ou sélectionner une autre personne.</li>
+            </ul>
+            <label style="display: flex; gap: .6rem; align-items: flex-start; font-size: .9rem; cursor: pointer;">
+                <input type="checkbox" name="consent" value="1" required x-model="consent" style="margin-top: .2rem; width: 1.1rem; height: 1.1rem; accent-color: {{ def.color }};">
+                <span>J'ai compris que ce rapport est un outil de réflexion personnelle et je m'engage à en faire un usage personnel et prudent.</span>
+            </label>
+        </div>
+        {% endif %}
         <input type="hidden" name="startedAt" value="{{ startedAt }}">
         <input type="hidden" name="_csrf_token" value="{{ csrf_token('assessment_' ~ slug) }}">
         <div class="as-nav">
             <button type="button" class="as-btn sec" x-show="page > 0" @click="page--; window.scrollTo(0, 0)">← Précédent</button>
             <span x-show="page === 0"></span>
             <button type="button" class="as-btn" x-show="page < pages - 1" :disabled="!pageDone(page)" @click="page++; window.scrollTo(0, 0)">Suivant →</button>
-            <button type="submit" class="as-btn" x-show="page === pages - 1" x-cloak :disabled="count() < total">Voir mes résultats</button>
+            <button type="submit" class="as-btn" x-show="page === pages - 1" x-cloak :disabled="count() < total || !consent">Voir mes résultats</button>
         </div>
     </form>
     <p style="font-size: .75rem; color: var(--fg-muted); margin-top: 1.5rem;">{{ def.level }}. {% if slug in ['profil-complet', 'big-five', 'type', 'style'] %}Questions issues de l'International Personality Item Pool (IPIP-NEO, Johnson 2014, domaine public), traduction KIINI SAWA.{% elseif isDisc %}Questionnaire à choix forcé propre à KIINI SAWA, issu du modèle de William Marston (1928).{% endif %}</p>

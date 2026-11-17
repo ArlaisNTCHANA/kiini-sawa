@@ -87,7 +87,8 @@ final class ReportBuilder
         $p = DiscProfiles::PROFILES;
         $primary = $scores['primary'];
         $secondary = $scores['secondary'];
-        $combo = $secondary ? DiscProfiles::COMBOS[$primary.$secondary] : null;
+        $code = DiscCombos::code($primary, $secondary);
+        $combo = DiscCombos::PROFILES[$code] + ['code' => $code];
         $others = [];
         foreach (DiscBank::LETTERS as $l) {
             $others[$l] = ['profile' => $p[$l], 'perception' => DiscProfiles::PERCEPTION[$primary][$l], 'interaction' => DiscProfiles::INTERACTION[$primary][$l]];
@@ -106,7 +107,12 @@ final class ReportBuilder
             'profile' => $p[$primary],
             'secondaryProfile' => $secondary ? $p[$secondary] : null,
             'adaptedProfile' => $p[$scores['adaptedPrimary']],
-            'combo' => $combo ? ['name' => $combo[0], 'desc' => $combo[1]] : null,
+            'combo' => $combo,
+            'verse' => DiscCombos::VERSES[$primary],
+            'meditation' => DiscCombos::MEDITATIONS[$primary],
+            'familyFigures' => DiscCombos::familyFigures($primary, $code),
+            'adaptedCode' => $scores['adaptedPrimary'],
+            'charts' => DiscCharts::all($scores),
             'gapReading' => DiscProfiles::gapReading($scores['gap']),
             'more' => $more, 'less' => $less,
             'profiles' => $p,
