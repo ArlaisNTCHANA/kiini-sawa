@@ -36,7 +36,31 @@ class PersonalityController extends AbstractController
         private readonly PersonalityScoreService       $scoreService,
         private readonly EntityManagerInterface        $em,
         private readonly \App\Personnalite\Repository\AssessmentRepository $assessments,
+        private readonly \App\Personnalite\Service\SelfAssessmentReport $selfReports,
     ) {}
+
+    /** Rapport PDF d'une auto-évaluation (dernière passation). */
+    #[Route('/{type}/resultats/pdf', name: 'result_pdf', methods: ['GET'])]
+    public function resultPdf(string $type, \App\Shared\Service\PdfFactory $pdf): Response
+    {
+        $type = strtoupper($type);
+        /** @var \App\Compte\Entity\User|null $user */
+        $user = $this->getUser();
+        if (!$user || !isset(self::TESTS[$type])) {
+            throw $this->createNotFoundException();
+        }
+        $latest = $this->em->getRepository(ProfileTest::class)->findOneBy(['user' => $user, 'type' => $type], ['date' => 'DESC', 'id' => 'DESC']);
+        $report = $latest ? $this->selfReports->build($latest) : null;
+        if (!$report) {
+            throw $this->createNotFoundException();
+        }
+        $html = $this->renderView('personnalite/assessment/report/pdf.html.twig', $report + ['body' => $report['template'], 'name' => $user->getDisplayName(), 'instrument' => ['name' => self::TESTS[$type]['name']]]);
+
+        return new Response($pdf->render($html), 200, [
+            'Content-Type' => 'application/pdf',
+            'Content-Disposition' => \Symfony\Component\HttpFoundation\HeaderUtils::makeDisposition('attachment', 'kiini-sawa-'.strtolower($type).'-'.$latest->getDate()->format('Y-m-d').'.pdf'),
+        ]);
+    }
 
     // ─────────────────────────────────────────────────────────────────────────
     // Catalogue — /mes-tests/
@@ -183,20 +207,17 @@ class PersonalityController extends AbstractController
             return $this->redirectToRoute('app_login');
         }
 
-        // Get latest test of this type
-        $latestTest = null;
-        foreach ($user->getProfileTests() as $pt) {
-            $ptType = strtoupper($pt->getType());
-            if ($ptType === $type || ($type === 'ENNEAGRAMME' && $ptType === 'ENNEAGRAM')) {
-                if (!$latestTest || $pt->getDate() > $latestTest->getDate() || ($pt->getDate() == $latestTest->getDate() && $pt->getId() > $latestTest->getId())) {
-                    $latestTest = $pt;
-                }
-            }
-        }
+        // Dernière passation de ce test (requête directe : la collection de l'utilisateur peut être incomplète)
+        $latestTest = $this->em->getRepository(ProfileTest::class)->findOneBy(['user' => $user, 'type' => $type], ['date' => 'DESC', 'id' => 'DESC']);
 
         if (!$latestTest) {
             $this->addFlash('info', 'Vous n\'avez pas encore passé ce test.');
             return $this->redirectToRoute('app_personality_take', ['type' => strtolower($type)]);
+        }
+
+        // Rapport illustré (Équilibre de Vie, Hygiène de Vie)
+        if ($report = $this->selfReports->build($latestTest)) {
+            return $this->render('personnalite/self_report.html.twig', $report + ['testMeta' => self::TESTS[$type], 'instrument' => ['name' => self::TESTS[$type]['name']]]);
         }
 
         // Find profile if available

@@ -94,3 +94,6 @@ bibliques (sauf Big Five), plan d'action, conclusion et page « Bon usage de ce 
 - Schémas : `DiscCharts` (boussole, graphiques, jauge) et `ReportCharts` (figure de l'ennéagramme, barres, radar,
   jauges, préférences, grille des 16 types). SVG simples pour Dompdf (pas de text-anchor ni de marqueurs).
 - L'ancien « style » (DISC déduit du Big Five) garde l'ancien rapport (`_report_body`).
+- Auto-évaluations « Équilibre de Vie » et « Hygiène de Vie » : `Service/SelfAssessmentReport` + `SelfAssessmentProfiles`,
+  gabarit `report/self.html.twig` (roue de la vie, priorités, domaine par domaine, plan) ; PDF sur
+  `/mes-tests/{type}/resultats/pdf`.

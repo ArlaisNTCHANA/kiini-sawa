@@ -99,6 +99,45 @@ final class ReportCharts
         return $svg.'</svg>';
     }
 
+    // ── Roue de la vie ─────────────────────────────────────────────
+
+    /** @param list<array{label: string, value: float, color: string}> $segments valeurs sur 10 */
+    public static function wheel(array $segments): string
+    {
+        $cx = 300;
+        $cy = 250;
+        $r = 165;
+        $n = \count($segments);
+        $step = 360 / $n;
+        $sector = function (float $from, float $to, float $radius) use ($cx, $cy): string {
+            $pts = ["$cx,$cy"];
+            for ($a = $from; $a <= $to + 0.01; $a += ($to - $from) / 16) {
+                $pts[] = sprintf('%.1f,%.1f', $cx + $radius * cos(deg2rad($a)), $cy + $radius * sin(deg2rad($a)));
+            }
+
+            return implode(' ', $pts);
+        };
+        $svg = "<svg xmlns='http://www.w3.org/2000/svg' width='600' height='500' viewBox='0 0 600 500'>";
+        foreach ($segments as $i => $seg) {
+            $from = -90 + $i * $step;
+            $to = $from + $step;
+            $svg .= "<polygon points='".$sector($from, $to, $r)."' fill='#F8FAFC' stroke='#FFFFFF' stroke-width='3'/>";
+            $svg .= "<polygon points='".$sector($from, $to, max(6, $r * min(10, $seg['value']) / 10))."' fill='{$seg['color']}' fill-opacity='0.85' stroke='#FFFFFF' stroke-width='3'/>";
+        }
+        foreach ([2.5, 5, 7.5, 10] as $lvl) {
+            $svg .= sprintf("<circle cx='%d' cy='%d' r='%.1f' fill='none' stroke='#CBD5E1' stroke-width='%s' stroke-dasharray='%s'/>", $cx, $cy, $r * $lvl / 10, 5 == $lvl ? '1.5' : '0.8', 10 == $lvl ? 'none' : '3,4');
+        }
+        foreach ($segments as $i => $seg) {
+            $mid = deg2rad(-90 + ($i + 0.5) * $step);
+            $lx = $cx + ($r + 38) * cos($mid);
+            $ly = $cy + ($r + 30) * sin($mid);
+            $svg .= self::text($lx, $ly, $seg['label'], 12, '#0F172A', true, true);
+            $svg .= self::text($lx, $ly + 16, str_replace('.', ',', (string) round($seg['value'], 1)).' / 10', 11, $seg['color'], true, true);
+        }
+
+        return $svg.'</svg>';
+    }
+
     // ── Big Five ───────────────────────────────────────────────────
 
     /** @param array<string, array{label: string, value: float}> $axes 5 dimensions, valeurs 0-100 */

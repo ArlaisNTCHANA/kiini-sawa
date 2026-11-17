@@ -1,0 +1,148 @@
+{# Rapports d'auto-évaluation « Équilibre de Vie » et « Hygiène de Vie » (écran et PDF).
+   Variables : type (EQUILIBRE | HYGIENE), areas, summary, wheel, assessment, quality, pdf, name. #}
+{% macro f(v) %}{{ (v|round(1))|number_format(1, ',', ' ') }}{% endmacro %}
+{% set eq = type == 'EQUILIBRE' %}
+{% set s = summary %}
+{% set pc = eq ? '#3B82F6' : '#EC4899' %}
+{% set serif = pdf ? "'DejaVu Serif', serif" : 'var(--font-serif)' %}
+{% set lowest = min(areas|map(a => a.value)) %}
+{% include 'personnalite/assessment/report/_styles.html.twig' with {pcLight: eq ? '#DBEAFE' : '#FCE7F3', pcDark: eq ? '#1E3A8A' : '#831843'} %}
+
+<div class="dr">
+{% include 'personnalite/assessment/report/_cover.html.twig' with {
+    title: eq ? 'Équilibre de Vie' : 'Hygiène de Vie',
+    subtitle: eq ? 'Votre roue de la vie en 8 domaines' : 'Vos 6 axes vitaux et 24 habitudes',
+    badges: [], headline: 'Score global : ' ~ _self.f(s.avg) ~ ' / 10',
+    tagline: s.globalLevel == 'low' ? 'Des fondations à reconstruire, pas à pas' : (s.globalLevel == 'mid' ? 'Un équilibre à consolider' : 'Des fondations solides'),
+    keywords: s.priorities|map(a => a.label),
+} %}
+
+{# ═══ Lire ce rapport ═══ #}
+<div class="dr-page">
+    <div class="dr-kicker">Avant de commencer</div>
+    <h2>Comment lire ce rapport</h2>
+    <p class="dr-lead">{% if eq %}Vous avez évalué de 1 à 10 votre satisfaction dans huit domaines de votre vie.{% else %}Vous avez évalué de 1 à 10 vos habitudes dans six axes vitaux, à travers vingt-quatre questions.{% endif %} Ce n'est pas un test : c'est <strong>votre propre regard</strong> sur votre situation aujourd'hui. Il ne s'agit pas d'avoir 10 partout, mais de repérer où mettre votre énergie en priorité.</p>
+    <table class="dr-grid"><tr>
+        {% for lvl, info in {low: ['Moins de 5', 'À soigner en priorité', '#FEE2E2', '#991B1B'], mid: ['De 5 à 7,4', 'À consolider', '#FEF3C7', '#854D0E'], high: ['7,5 et plus', 'Point d\'appui', '#DCFCE7', '#166534']} %}
+            <td><div class="dr-tile" style="background: {{ info[2] }}; border-color: {{ info[2] }}; text-align: center;">
+                <div style="font-weight: bold; color: {{ info[3] }}; font-size: {{ pdf ? '13pt' : '1.2rem' }};">{{ info[1] }}</div>
+                <div class="dr-small" style="color: {{ info[3] }};">{{ info[0] }}</div>
+            </div></td>
+        {% endfor %}
+    </tr></table>
+    <table class="dr-grid" style="margin-top: 4px;"><tr>
+        {% for a in areas %}{% if loop.index0 is divisible by(4) and not loop.first %}</tr><tr>{% endif %}
+            <td><div class="dr-tile" style="background: {{ a.light }}; border-color: {{ a.light }}; min-height: 92px;">
+                <div style="font-weight: bold; color: {{ a.dark }};">{{ a.label }}</div>
+                <p class="dr-small" style="margin: 4px 0 0; color: {{ a.dark }};">{{ a.what }}</p>
+            </div></td>
+        {% endfor %}
+    </tr></table>
+    <div class="dr-tile" style="margin-top: 8px; background: #FFFBEB; border-color: #FDE68A;">
+        <h3 style="color: #92400E;">À garder en tête</h3>
+        <p class="dr-small" style="color: #92400E; margin: 0;">Une auto-évaluation est une photographie du moment : elle varie avec votre humeur et vos circonstances. Refaites-la tous les trois mois pour mesurer le chemin parcouru. Les conditions d'utilisation figurent à la fin du rapport.</p>
+    </div>
+</div>
+
+{# ═══ La roue ═══ #}
+<div class="dr-page">
+    <div class="dr-kicker">Vue d'ensemble</div>
+    <h2>{{ eq ? 'Votre roue de la vie' : 'Votre roue de vitalité' }}</h2>
+    <p class="dr-lead">Plus une part est remplie, plus le domaine est satisfaisant pour vous. Une roue très irrégulière « roule mal » : c'est souvent là que naissent la fatigue et le sentiment de déséquilibre.</p>
+    <div style="text-align: center;"><img src="{{ wheel }}" alt="Roue des domaines et de leurs scores" style="width: {{ pdf ? '135mm' : '100%' }}; max-width: 540px; height: auto;"></div>
+    <h3 style="margin-top: 6px;">Votre score global : {{ _self.f(s.avg) }} / 10</h3>
+    <img src="{{ s.gauge }}" alt="Jauge du score global" style="width: 100%; max-width: 560px; height: auto;">
+    {% if s.globalLevel == 'low' or lowest <= 3 %}
+        <div class="dr-tile" style="margin-top: 8px; background: #FEF2F2; border-color: #FECACA;"><p class="dr-small" style="margin: 0; color: #991B1B;">Certains domaines sont très bas. Vous n'avez pas à tout porter seul : parlez-en à un proche, à votre pasteur, et, si votre santé ou votre moral sont touchés, à un médecin ou à un professionnel.</p></div>
+    {% endif %}
+</div>
+
+{# ═══ Priorités et points d'appui ═══ #}
+<div class="dr-page">
+    <div class="dr-kicker">Où mettre votre énergie</div>
+    <h2>Vos priorités et vos points d'appui</h2>
+    <p class="dr-lead">Vos domaines du plus fragile au plus solide. Les plus bas sont en couleur pleine.</p>
+    <img class="dr-img" src="{{ s.bars }}" alt="Domaines classés par score">
+    <table class="dr-grid" style="margin-top: 10px;"><tr>
+        <td style="width: 58%;"><div class="dr-tile" style="background: #FEF2F2; border-color: #FECACA;">
+            <div class="dr-label" style="color: #991B1B;">▲ Vos trois priorités</div>
+            {% for a in s.priorities %}<p style="margin: 0 0 6px;"><strong style="color: {{ a.color }};">{{ a.label }}</strong> · {{ _self.f(a.value) }} / 10</p>{% endfor %}
+        </div></td>
+        <td><div class="dr-tile" style="background: #F0FDF4; border-color: #BBF7D0;">
+            <div class="dr-label" style="color: #166534;">✓ Vos points d'appui</div>
+            {% for a in s.supports %}<p style="margin: 0 0 6px;"><strong style="color: {{ a.color }};">{{ a.label }}</strong> · {{ _self.f(a.value) }} / 10</p>{% endfor %}
+        </div></td>
+    </tr></table>
+    <p class="dr-small" style="margin-top: 6px;">Appuyez-vous sur vos points forts pour relever vos priorités : par exemple, si votre vie sociale est solide, entraînez un ami dans une nouvelle habitude.</p>
+</div>
+
+{# ═══ Domaine par domaine (deux par page) ═══ #}
+{% for pair in areas|batch(2) %}
+<div class="dr-page">
+    {% if loop.first %}<div class="dr-kicker">Domaine par domaine</div><h2>{{ eq ? 'Vos huit domaines' : 'Vos six axes' }}</h2>{% endif %}
+    {% for a in pair %}
+        <div style="border-radius: 18px; border: 1px solid {{ a.light }}; padding: {{ pdf ? '5mm' : '18px' }}; margin-bottom: 12px; page-break-inside: avoid;">
+            <table style="width: 100%; border-collapse: collapse;"><tr>
+                <td><div style="font-family: {{ serif }}; font-size: {{ pdf ? '14pt' : '1.3rem' }}; font-weight: bold; color: {{ a.dark }};">{{ a.label }}</div><div class="dr-small">{{ a.what }}</div></td>
+                <td style="width: {{ pdf ? '32mm' : '120px' }}; text-align: right;"><span style="font-size: {{ pdf ? '20pt' : '1.9rem' }}; font-weight: bold; color: {{ a.color }};">{{ _self.f(a.value) }}</span><span class="dr-small"> / 10</span><br><span class="dr-chip" style="background: {{ a.light }}; color: {{ a.dark }}; font-size: {{ pdf ? '7.5pt' : '.72rem' }};">{{ a.levelLabel }}</span></td>
+            </tr></table>
+            <p style="margin: 8px 0;">{{ a.text }}</p>
+            {% if not eq and a.subChart %}<img class="dr-img" src="{{ a.subChart }}" alt="Habitudes de l'axe {{ a.label|lower }}" style="margin-bottom: 6px;">{% endif %}
+            <table class="dr-grid"><tr>
+                <td><div class="dr-tile" style="background: {{ a.light }}; border-color: {{ a.light }};"><div class="dr-label" style="color: {{ a.dark }};">{{ eq ? 'Deux pas concrets' : 'Trois habitudes à adopter' }}</div><ul style="color: {{ a.dark }};">{% for x in (eq ? a.actions : a.habits) %}<li>{{ x }}</li>{% endfor %}</ul></div></td>
+                <td style="width: 40%;"><div class="dr-tile">
+                    {% if eq %}<div class="dr-label">Une question</div><p style="margin: 0 0 6px; font-family: {{ serif }};">{{ a.question }}</p>{% endif %}
+                    <div class="dr-label">À lire</div><p class="dr-small" style="margin: 0;">{{ a.read }}</p>
+                    {% if eq %}<div class="dr-label" style="margin-top: 6px;">Dans KIINI SAWA</div><p class="dr-small" style="margin: 0;">{{ a.plan }}</p>{% endif %}
+                </div></td>
+            </tr></table>
+        </div>
+    {% endfor %}
+</div>
+{% endfor %}
+
+{# ═══ Plan d'action ═══ #}
+<div class="dr-page">
+    <div class="dr-kicker">Passer à l'action</div>
+    <h2>Votre plan pour les 30 prochains jours</h2>
+    <p class="dr-lead">Ne changez pas tout à la fois. Choisissez une action par priorité, et tenez-la un mois.</p>
+    <table class="dr-table">
+        {% for a in s.priorities %}
+            <tr><td style="width: 34px; font-size: {{ pdf ? '13pt' : '1.2rem' }}; color: {{ a.color }};">☐</td><td><strong style="color: {{ a.color }};">{{ a.label }} :</strong> {{ (eq ? a.actions : a.habits)|first }}</td></tr>
+        {% endfor %}
+    </table>
+    <table class="dr-grid" style="margin-top: 12px;"><tr>
+        {% for step in [['Choisir', 'Une action par priorité, pas plus.'], ['Ancrer', 'L\'ajouter à vos rituels dans KIINI SAWA pour la suivre chaque jour.'], ['Partager', 'En parler à votre partenaire de redevabilité.'], ['Mesurer', 'Refaire cette évaluation dans trois mois.']] %}
+            <td><div class="dr-tile" style="text-align: center; min-height: 120px;"><div style="font-size: {{ pdf ? '18pt' : '1.7rem' }}; font-weight: bold; color: {{ pc }}; line-height: 1;">{{ loop.index }}</div><div style="font-weight: bold; margin: 6px 0 2px;">{{ step[0] }}</div><p class="dr-small" style="margin: 0; color: #334155;">{{ step[1] }}</p></div></td>
+        {% endfor %}
+    </tr></table>
+</div>
+
+{# ═══ Conclusion ═══ #}
+<div class="dr-page">
+    <div style="border-radius: 22px; background: {{ eq ? '#DBEAFE' : '#FCE7F3' }}; padding: {{ pdf ? '10mm' : '28px' }};">
+        <div class="dr-kicker" style="color: {{ eq ? '#1E3A8A' : '#831843' }};">En résumé</div>
+        <h2 style="color: {{ eq ? '#1E3A8A' : '#831843' }};">Score global : {{ _self.f(s.avg) }} / 10</h2>
+        <table class="dr-grid"><tr>
+            <td><div class="dr-tile" style="background: #fff; border-color: #fff;"><div class="dr-label">À soigner</div>{% for a in s.priorities %}<p style="margin: 0 0 4px;">{{ a.label }}</p>{% endfor %}</div></td>
+            <td><div class="dr-tile" style="background: #fff; border-color: #fff;"><div class="dr-label">Vos appuis</div>{% for a in s.supports %}<p style="margin: 0 0 4px;">{{ a.label }}</p>{% endfor %}</div></td>
+        </tr></table>
+    </div>
+    {% if eq %}
+        <div class="dr-quote" style="margin-top: 16px;">« Il y a un temps pour tout, un temps pour toute chose sous les cieux. »<div style="font-style: normal; font-weight: bold; margin-top: 6px; font-size: {{ pdf ? '9pt' : '.9rem' }};">Ecclésiaste 3.1</div></div>
+        <p style="margin-top: 14px;">L'équilibre n'est pas une perfection immobile, mais un ajustement permanent. Dieu vous invite à prendre soin de chaque dimension de votre vie, sans culpabilité, un pas après l'autre.</p>
+    {% else %}
+        <div class="dr-quote" style="margin-top: 16px;">« Bien-aimé, je souhaite que tu prospères à tous égards et sois en bonne santé, comme prospère l'état de ton âme. »<div style="font-style: normal; font-weight: bold; margin-top: 6px; font-size: {{ pdf ? '9pt' : '.9rem' }};">3 Jean 2</div></div>
+        <p style="margin-top: 14px;">Votre corps, votre esprit, vos relations et votre vie intérieure forment un tout. De petites habitudes, tenues avec constance, portent de grands fruits.</p>
+    {% endif %}
+    <p class="dr-small" style="text-align: right; margin-top: 18px;">KIINI SAWA · Bâtir sa vie avec Dieu</p>
+</div>
+
+{% include 'personnalite/assessment/report/_warnings.html.twig' with {
+    about: eq ? 'Cette auto-évaluation repose uniquement sur votre propre appréciation de huit domaines de votre vie.' : 'Cette auto-évaluation repose uniquement sur votre propre appréciation de vos habitudes dans six axes vitaux.',
+    variable: 'car elles reflètent votre ressenti du moment',
+    extra: eq ? ['Une photographie du moment.', 'Un domaine bas ne signifie pas un échec : il indique où porter votre attention. Les pistes proposées sont générales et ne tiennent pas compte de votre situation particulière.'] : ['Pas un avis médical.', 'Les habitudes proposées sont des conseils généraux de bien-être. Elles ne remplacent ni un avis médical, ni un suivi nutritionnel, ni un traitement. En cas de symptôme, de douleur, de trouble du sommeil ou de l\'alimentation persistant, consultez un médecin.'],
+    marks: 'La « roue de la vie » est un outil d\'auto-évaluation largement répandu ; les questions et les textes sont propres à KIINI SAWA.',
+    bible: false,
+} %}
+</div>
