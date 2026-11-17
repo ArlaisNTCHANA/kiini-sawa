@@ -11,6 +11,18 @@ Ne jamais afficher ni demander de mot de passe ; ne pas publier son nom (mention
 
 ---
 
+## 2026-11-17 · Le livre : trois niveaux d'accès
+
+Décision du fondateur : le livre est un produit en soi (vente, KDP), l'application fait pratiquer.
+- Visiteur : 3 premiers chapitres en entier (`BookLibrary::PUBLIC_CHAPTERS`), extrait des autres.
+- Compte gratuit : **l'essentiel** de chaque chapitre (`BookLibrary::essentials` : partie, sous-titre, verset, premier
+  paragraphe, Le Sanctuaire, Ce que j'écris, À retenir ; ni les histoires ni « Pour les groupes »), extrait du texte de
+  l'auteur sans réécriture.
+- PRO (essai compris) : texte intégral. Interrupteur « Le livre en entier (La Méthode) » dans Configuration
+  (`AppConfig::enableMethodFree`, désormais faux par défaut ; migration `Version20261117151426` le met à faux).
+- Pas de code imprimé dans le livre pour l'instant : KDP imprime le même code dans chaque exemplaire. Idée retenue
+  pour la sortie du livre : un code de bienvenue (prolongation de l'essai, une fois par compte), sans risque s'il circule.
+
 ## 2026-11-17 · Phase 1 : l'application alignée sur le nouveau livre (6 plans, Plan d'Intendance)
 
 Contexte : l'auteur a ajouté au livre le **Plan d'Intendance : ce que je gère** (manuscrit

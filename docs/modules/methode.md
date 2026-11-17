@@ -29,3 +29,9 @@ compagnon du livre, et le livre son canal d'acquisition (docs/plan-v1.md §3.6).
 |---|---|---|
 | `app_methode_index` | GET | `/methode` |
 | `app_methode_chapter` | GET | `/methode/{slug}` |
+
+## Niveaux d'accès (17/11/2026)
+
+Visiteur : 3 premiers chapitres ; compte gratuit : « l'essentiel » (`BookLibrary::essentials`) ; PRO : texte intégral
+(`Entitlements::can($user, 'method')`, interrupteur « Le livre en entier » dans Configuration). Source des chapitres :
+le manuscrit de l'auteur, découpé par `app:livre:sync` (voir `content/livre/README.md`).

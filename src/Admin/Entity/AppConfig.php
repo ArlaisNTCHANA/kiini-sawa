@@ -107,8 +107,9 @@ class AppConfig
     #[ORM\Column(options: ['default' => false])]
     private bool $enableCoachingFree = false;
 
-    #[ORM\Column(options: ['default' => true])]
-    private bool $enableMethodFree = true;
+    /** Texte intégral du livre pour les comptes gratuits (sinon : l'essentiel de chaque chapitre). */
+    #[ORM\Column(options: ['default' => false])]
+    private bool $enableMethodFree = false;
 
     // ── Offres et paiements (phase 5) ──────────────────────────────
     /** Prix en francs CFA (XAF), pour l'Afrique francophone. */

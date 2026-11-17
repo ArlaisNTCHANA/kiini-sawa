@@ -40,7 +40,7 @@ final class Entitlements
         'planner' => ['isEnablePlannerFree', 'Agenda'],
         'social' => ['isEnableSocialFree', 'Partenaires'],
         'discovery' => ['isEnableDiscoveryFree', 'Tests'],
-        'method' => ['isEnableMethodFree', 'La méthode'],
+        'method' => ['isEnableMethodFree', 'Le livre en entier'],
     ];
 
     /** Limites de l'offre gratuite => getter de la configuration. */

@@ -3,10 +3,13 @@
 namespace App\Tests\Methode\Controller;
 
 use App\Compte\Repository\UserRepository;
+use App\Tests\Compte\AccountTestTrait;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 class MethodeControllerTest extends WebTestCase
 {
+    use AccountTestTrait;
+
     /** Visiteur : sommaire et premiers chapitres lisibles, la suite invite à créer un compte. */
     public function testVisitorReadsFirstChaptersOnly(): void
     {
@@ -81,5 +84,30 @@ class MethodeControllerTest extends WebTestCase
         // L'encart du Plan d'Intendance renvoie au chapitre 18
         $crawler = $client->request('GET', '/plan-d-intendance');
         $this->assertSame('/methode/intendance', $crawler->filter('.book-panel a')->attr('href'));
+    }
+
+    /** Niveaux d'accès : visiteur (extrait), compte gratuit (l'essentiel), PRO (texte intégral). */
+    public function testFreeAccountReadsTheEssentialsAndProReadsEverything(): void
+    {
+        $client = static::createClient();
+
+        $client->loginUser($this->createUser());
+        $client->request('GET', '/methode/intendance');
+        $this->assertResponseIsSuccessful();
+        $this->assertSelectorExists('[data-book-essentials]');
+        $this->assertSelectorTextContains('.book-body', 'Le Sanctuaire');
+        $this->assertSelectorTextContains('.book-body', 'À retenir');
+        $this->assertSelectorTextNotContains('.book-body', 'Propriétaire ou intendant');
+        $this->assertSelectorTextNotContains('.book-body', 'Pour les groupes');
+        $this->assertSelectorTextContains('article', 'Lire le livre en entier avec PRO');
+
+        // Les premiers chapitres restent entiers pour tous
+        $client->request('GET', '/methode/introduction');
+        $this->assertSelectorNotExists('[data-book-essentials]');
+
+        $client->loginUser($this->createUser(pro: true));
+        $client->request('GET', '/methode/intendance');
+        $this->assertSelectorNotExists('[data-book-essentials]');
+        $this->assertSelectorTextContains('.book-body', 'Propriétaire ou intendant');
     }
 }

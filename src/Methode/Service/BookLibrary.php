@@ -107,7 +107,7 @@ final class BookLibrary
         return false !== $i && $i < self::PUBLIC_CHAPTERS;
     }
 
-    /** @return array{slug: string, title: string, excerpt: string, html: string, minutes: int, previous: ?string, next: ?string}|null */
+    /** @return array{slug: string, title: string, excerpt: string, html: string, essentials: string, minutes: int, previous: ?string, next: ?string}|null */
     public function get(string $slug): ?array
     {
         if (isset($this->cache[$slug])) {
@@ -136,6 +136,7 @@ final class BookLibrary
             'title' => $title,
             'excerpt' => $this->excerpt((string) $body),
             'html' => $parser->text((string) $body),
+            'essentials' => $parser->text(self::essentials((string) $body)),
             'minutes' => max(1, (int) round(str_word_count(strip_tags($body)) / 200)),
             'previous' => $slugs[$i - 1] ?? null,
             'next' => $slugs[$i + 1] ?? null,
@@ -145,6 +146,45 @@ final class BookLibrary
     public function forStep(string $key): ?array
     {
         return isset(self::STEPS[$key]) ? $this->get(self::STEPS[$key]) : null;
+    }
+
+    /** Rubriques pratiques reprises dans « l'essentiel » (compte gratuit). */
+    public const ESSENTIAL_SECTIONS = ['Le Sanctuaire', 'Ce que j\'écris', 'À retenir'];
+
+    /**
+     * « L'essentiel » d'un chapitre, extrait du texte de l'auteur sans le réécrire : partie et sous-titre, verset
+     * d'ouverture, premier paragraphe, puis les rubriques pratiques (Le Sanctuaire, Ce que j'écris, À retenir).
+     * L'enseignement complet (histoires, explications) reste dans le texte intégral.
+     */
+    public static function essentials(string $body): string
+    {
+        $parts = preg_split('/^(?=### )/m', $body);
+        $intro = array_shift($parts);
+        $keep = [];
+        $verse = false;
+        $paragraph = false;
+        foreach (preg_split('/\n\s*\n/', trim((string) $intro)) as $block) {
+            $block = trim($block);
+            if (preg_match('/^(\*\*Partie|\*[^*])/u', $block)) {
+                $keep[] = $block;
+            } elseif (!$verse && str_starts_with($block, '>')) {
+                $keep[] = $block;
+                $verse = true;
+            } elseif (!$paragraph && '' !== $block && !preg_match('/^(>|#|-|\||\d+\.)/', $block)) {
+                $keep[] = $block;
+                $paragraph = true;
+            }
+        }
+        foreach ($parts as $section) {
+            foreach (self::ESSENTIAL_SECTIONS as $heading) {
+                if (str_starts_with($section, '### '.$heading)) {
+                    $keep[] = trim($section);
+                    break;
+                }
+            }
+        }
+
+        return implode("\n\n", $keep)."\n";
     }
 
     /** Premier vrai paragraphe (ni citation, ni titre, ni liste), sans mise en forme. */

@@ -70,7 +70,7 @@ class AppConfigType extends AbstractType
             'enableTransmissionFree' => 'Plan de Transmission', 'enableHygieneFree' => 'Plan d\'Hygiène de vie', 'enableStewardshipFree' => 'Plan d\'Intendance',
             'enableMapFree' => 'Carte stratégique', 'enablePrintFree' => 'Export PDF',
             'enableMonthlyReviewsFree' => 'Revue mensuelle', 'enablePlanHistoryFree' => 'Historique des plans',
-            'enableCoherenceAnalysisFree' => 'Analyse de cohérence', 'enableDiscoveryFree' => 'Tests',
+            'enableCoherenceAnalysisFree' => 'Analyse de cohérence', 'enableDiscoveryFree' => 'Tests', 'enableMethodFree' => 'Le livre en entier (La Méthode)',
         ] as $field => $label) {
             $builder->add($field, CheckboxType::class, ['label' => $label, 'required' => false]);
         }

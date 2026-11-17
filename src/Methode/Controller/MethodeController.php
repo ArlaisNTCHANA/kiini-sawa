@@ -2,6 +2,8 @@
 
 namespace App\Methode\Controller;
 
+use App\Abonnement\Service\Entitlements;
+use App\Compte\Entity\User;
 use App\Methode\Service\BookLibrary;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -9,8 +11,12 @@ use Symfony\Component\Routing\Attribute\Route;
 
 /**
  * La méthode : les chapitres du livre, lisibles dans l'application.
- * Les premiers chapitres sont ouverts aux visiteurs (découvrir avant de s'inscrire) ; les suivants
- * demandent un compte, gratuit.
+ * Trois niveaux :
+ * - visiteur : les premiers chapitres en entier (BookLibrary::PUBLIC_CHAPTERS), un extrait des autres ;
+ * - compte gratuit : « l'essentiel » de chaque chapitre (verset, Sanctuaire, Ce que j'écris, À retenir) ;
+ * - PRO (essai compris) : le texte intégral. L'administrateur peut ouvrir le texte intégral à tous
+ *   (Configuration, « Le livre en entier », AppConfig::enableMethodFree).
+ * Le livre est un produit en soi (vente, KDP) : l'application fait pratiquer, le livre enseigne.
  */
 #[Route('/methode', name: 'app_methode_')]
 class MethodeController extends AbstractController
@@ -25,7 +31,7 @@ class MethodeController extends AbstractController
     }
 
     #[Route('/{slug}', name: 'chapter', requirements: ['slug' => '[a-z0-9-]+'], methods: ['GET'])]
-    public function chapter(string $slug, BookLibrary $book): Response
+    public function chapter(string $slug, BookLibrary $book, Entitlements $entitlements): Response
     {
         if (isset(BookLibrary::LEGACY_SLUGS[$slug])) {
             return $this->redirectToRoute('app_methode_chapter', ['slug' => BookLibrary::LEGACY_SLUGS[$slug]], Response::HTTP_MOVED_PERMANENTLY);
@@ -34,9 +40,23 @@ class MethodeController extends AbstractController
 
         return $this->render('methode/chapter.html.twig', [
             'chapter' => $chapter,
-            'locked' => null === $this->getUser() && !$book->isPublic($slug),
+            'mode' => $this->mode($slug, $book, $entitlements),
             'previous' => $chapter['previous'] ? $book->get($chapter['previous']) : null,
             'next' => $chapter['next'] ? $book->get($chapter['next']) : null,
         ]);
+    }
+
+    /** full (texte intégral), essentials (l'essentiel, compte gratuit) ou locked (visiteur, extrait). */
+    private function mode(string $slug, BookLibrary $book, Entitlements $entitlements): string
+    {
+        $user = $this->getUser();
+        if ($book->isPublic($slug)) {
+            return 'full';
+        }
+        if (!$user instanceof User) {
+            return 'locked';
+        }
+
+        return $entitlements->can($user, 'method') ? 'full' : 'essentials';
     }
 }
