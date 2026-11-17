@@ -42,7 +42,7 @@ class PsychometricsTest extends WebTestCase
         foreach (IpipItemBank::FACETS as $facet => $label) {
             $this->assertCount(4, IpipItemBank::itemsOfFacet($facet), "4 items pour $facet");
         }
-        $expected = ['profil-complet' => 116, 'big-five' => 58, 'type' => 48, 'style' => 52, 'enneagramme' => 72, 'dons-spirituels' => 60];
+        $expected = ['profil-complet' => 116, 'big-five' => 58, 'type' => 48, 'style' => 52, 'disc' => 24, 'enneagramme' => 72, 'dons-spirituels' => 60];
         foreach ($expected as $slug => $count) {
             $items = Instruments::items($slug);
             $this->assertCount($count, $items, $slug);

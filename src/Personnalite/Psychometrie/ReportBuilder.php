@@ -22,6 +22,7 @@ final class ReportBuilder
         return $report + match ($def['bank']) {
             'ipip' => $this->ipip($scores, $a->getInstrument()),
             'enn' => $this->enneagram($scores),
+            'disc' => $this->disc($scores),
             default => $this->gifts($scores),
         };
     }
@@ -75,9 +76,42 @@ final class ReportBuilder
             'strengths' => \array_slice($favourable, 0, 5, true),
             'vigilance' => \in_array($slug, ['type', 'style'], true) ? [] : \array_slice($vigilance, 0, 4, true),
             'type' => 'style' === $slug ? null : $type,
-            'style' => 'type' === $slug ? null : $style,
+            // Le style déduit du Big Five ne s'affiche plus que dans les anciens rapports « style » : le test DISC le remplace
+            'style' => 'style' === $slug ? $style : null,
             'normsAvailable' => null !== $this->norms->percentile('E', 50),
         ];
+    }
+
+    public function disc(array $scores): array
+    {
+        $p = DiscProfiles::PROFILES;
+        $primary = $scores['primary'];
+        $secondary = $scores['secondary'];
+        $combo = $secondary ? DiscProfiles::COMBOS[$primary.$secondary] : null;
+        $others = [];
+        foreach (DiscBank::LETTERS as $l) {
+            $others[$l] = ['profile' => $p[$l], 'perception' => DiscProfiles::PERCEPTION[$primary][$l], 'interaction' => DiscProfiles::INTERACTION[$primary][$l]];
+        }
+        // Ce que le contexte demande en plus ou en moins (écart d'au moins 8 points)
+        $more = $less = [];
+        foreach ($scores['shifts'] as $l => $shift) {
+            if ($shift >= 8) {
+                $more[] = $p[$l]['more'];
+            } elseif ($shift <= -8) {
+                $less[] = $p[$l]['name'];
+            }
+        }
+
+        return ['disc' => $scores + [
+            'profile' => $p[$primary],
+            'secondaryProfile' => $secondary ? $p[$secondary] : null,
+            'adaptedProfile' => $p[$scores['adaptedPrimary']],
+            'combo' => $combo ? ['name' => $combo[0], 'desc' => $combo[1]] : null,
+            'gapReading' => DiscProfiles::gapReading($scores['gap']),
+            'more' => $more, 'less' => $less,
+            'profiles' => $p,
+            'others' => $others,
+        ]];
     }
 
     private function enneagram(array $scores): array

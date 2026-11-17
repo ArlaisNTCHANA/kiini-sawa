@@ -20,16 +20,29 @@
     .as-btn:disabled { opacity: .4; cursor: not-allowed; }
     .as-btn.sec { background: var(--bg-alt); color: var(--fg); }
     @media (max-width: 480px) { .as-scale label { font-size: .64rem; } }
+    .as-disc { display: grid; grid-template-columns: 1fr 4.5rem 4.5rem; align-items: center; gap: .35rem .5rem; }
+    .as-disc .h { font-size: .7rem; font-weight: 700; color: var(--fg-muted); text-transform: uppercase; letter-spacing: .04em; text-align: center; }
+    .as-disc .w { font-weight: 600; color: var(--fg); }
+    .as-disc label { display: flex; justify-content: center; align-items: center; height: 2.4rem; border: 1.5px solid var(--border); border-radius: .7rem; cursor: pointer; font-size: .8rem; color: var(--fg-light); }
+    .as-disc input { position: absolute; opacity: 0; pointer-events: none; }
+    .as-disc label.most:has(input:checked) { background: {{ def.color }}; border-color: {{ def.color }}; color: #fff; font-weight: 700; }
+    .as-disc label.least:has(input:checked) { background: var(--fg); border-color: var(--fg); color: var(--bg); font-weight: 700; }
+    .as-disc label:has(input:focus-visible) { outline: 2px solid {{ def.color }}; outline-offset: 2px; }
 </style>
 
-{% set perPage = 12 %}
+{% set isDisc = def.bank == 'disc' %}
+{% set perPage = isDisc ? 6 : 12 %}
 {% set pages = (items|length / perPage)|round(0, 'ceil') %}
 <div class="as-wrap" x-data="{ page: 0, pages: {{ pages }}, answered: {}, total: {{ items|length }},
         count() { return Object.keys(this.answered).length },
         pageDone(p) { return [...document.querySelectorAll('[data-page=\'' + p + '\'] [data-key]')].every(el => this.answered[el.dataset.key]) } }">
     <a href="{{ path('app_personality_index') }}" style="font-size: .8rem; font-weight: 700; color: var(--fg-muted); text-transform: uppercase; letter-spacing: .05em; text-decoration: none;">← Mes tests</a>
     <h1 style="font-family: var(--font-serif); color: {{ def.color }}; font-size: 1.9rem; margin: .4rem 0 .25rem;">{{ def.name }}</h1>
+    {% if isDisc %}
+    <p style="color: var(--fg-muted); margin-bottom: .5rem;">{{ items|length }} groupes de 4 mots · environ {{ def.minutes }} minutes. Dans chaque groupe, choisissez le mot qui vous ressemble <strong>le plus</strong> et celui qui vous ressemble <strong>le moins</strong>. Pensez à votre vie de tous les jours, sans trop réfléchir : les quatre mots sont des qualités, il n'y a pas de mauvais choix.</p>
+    {% else %}
     <p style="color: var(--fg-muted); margin-bottom: .5rem;">{{ items|length }} affirmations · environ {{ def.minutes }} minutes. Répondez spontanément, selon ce que vous êtes vraiment (et non ce que vous aimeriez être). Il n'y a pas de bonne ou de mauvaise réponse.</p>
+    {% endif %}
 
     <div class="as-progress">
         <div style="display: flex; justify-content: space-between; font-size: .8rem; color: var(--fg-muted); margin-bottom: .35rem;">
@@ -39,11 +52,27 @@
         <div class="as-bar"><span :style="'width:' + (count() / total * 100) + '%'"></span></div>
     </div>
 
-    <form method="post" @submit="if (count() < total) { $event.preventDefault(); alert('Il reste ' + (total - count()) + ' question(s) sans réponse.'); }">
+    <form method="post" @submit="if (count() < total) { $event.preventDefault(); alert('Il reste ' + (total - count()) + ' {{ isDisc ? 'groupe(s) incomplet(s)' : 'question(s) sans réponse' }}.'); }">
         {% for chunk in items|batch(perPage) %}
             {% set p = loop.index0 %}
             <div data-page="{{ p }}" x-show="page === {{ p }}" {{ p > 0 ? 'x-cloak' }}>
                 {% for item in chunk %}
+                    {% if isDisc %}
+                    <fieldset class="as-q" data-key="{{ item.key }}" x-data="{ m: '', l: '' }"
+                              x-effect="if (m && l && m !== l) { answered['{{ item.key }}'] = true } else { delete answered['{{ item.key }}'] }">
+                        <legend style="position: absolute; left: -9999px;">{{ item.text }}</legend>
+                        <p style="margin-bottom: .5rem;">{{ item.text }} <span style="font-weight: 400; color: var(--fg-muted); font-size: .8rem;">sur {{ items|length }}</span></p>
+                        <div class="as-disc">
+                            <span></span><span class="h">Le plus</span><span class="h">Le moins</span>
+                            {% for w in item.words %}
+                                <span class="w">{{ w.word }}</span>
+                                <label class="most" aria-label="{{ w.word }} : le plus"><input type="radio" name="most[{{ item.key }}]" value="{{ w.letter }}" x-model="m" @change="if (l === m) l = ''">＋</label>
+                                <label class="least" aria-label="{{ w.word }} : le moins"><input type="radio" name="least[{{ item.key }}]" value="{{ w.letter }}" x-model="l" @change="if (m === l) m = ''">－</label>
+                            {% endfor %}
+                        </div>
+                        <input type="hidden" name="answers[{{ item.key }}]" :value="m && l && m !== l ? m + l : ''">
+                    </fieldset>
+                    {% else %}
                     <fieldset class="as-q" data-key="{{ item.key }}">
                         <legend class="sr-only" style="position: absolute; left: -9999px;">{{ item.text }}</legend>
                         <p>{{ item.text }}</p>
@@ -53,6 +82,7 @@
                             {% endfor %}
                         </div>
                     </fieldset>
+                    {% endif %}
                 {% endfor %}
             </div>
         {% endfor %}
@@ -66,6 +96,6 @@
             <button type="submit" class="as-btn" x-show="page === pages - 1" x-cloak :disabled="count() < total">Voir mes résultats</button>
         </div>
     </form>
-    <p style="font-size: .75rem; color: var(--fg-muted); margin-top: 1.5rem;">{{ def.level }}. {% if slug in ['profil-complet', 'big-five', 'type', 'style'] %}Questions issues de l'International Personality Item Pool (IPIP-NEO, Johnson 2014, domaine public), traduction KIINI SAWA.{% endif %}</p>
+    <p style="font-size: .75rem; color: var(--fg-muted); margin-top: 1.5rem;">{{ def.level }}. {% if slug in ['profil-complet', 'big-five', 'type', 'style'] %}Questions issues de l'International Personality Item Pool (IPIP-NEO, Johnson 2014, domaine public), traduction KIINI SAWA.{% elseif isDisc %}Questionnaire à choix forcé propre à KIINI SAWA, issu du modèle de William Marston (1928).{% endif %}</p>
 </div>
 {% endblock %}

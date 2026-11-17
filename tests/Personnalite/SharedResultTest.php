@@ -24,10 +24,10 @@ class SharedResultTest extends WebTestCase
         $this->em()->persist($profile);
         $this->em()->flush();
         $answers = [];
-        foreach (Instruments::items('style') as $i => $item) {
-            $answers[$item['key']] = 1 + ($i % 5);
+        foreach (Instruments::items('disc') as $item) {
+            $answers[$item['key']] = 'IC';
         }
-        $a = static::getContainer()->get(AssessmentService::class)->record($user, 'style', $answers, 400);
+        $a = static::getContainer()->get(AssessmentService::class)->record($user, 'disc', $answers, 400);
         $client->loginUser($user);
 
         $client->request('GET', '/mes-tests/rapport/'.$a->getId());

@@ -6,7 +6,9 @@ namespace App\Personnalite\Psychometrie;
  * Catalogue des questionnaires. Les questionnaires « IPIP » puisent tous dans la même banque d'items :
  * les réponses se cumulent (le profil complet alimente le type et le style, et inversement).
  *
- * Clé d'item : « ipip:12 », « enn:3 », « don:5 ».
+ * Clé d'item : « ipip:12 », « enn:3 », « don:5 », « disc:7 » (bloc de 4 mots à choix forcé).
+ * L'ancien questionnaire « style » (DISC déduit du Big Five) reste lisible pour les rapports existants mais
+ * n'apparaît plus au catalogue : le test « disc » le remplace.
  */
 final class Instruments
 {
@@ -33,20 +35,27 @@ final class Instruments
         'Questionnaire scientifique' => 'Questions et échelles validées par la recherche ; leur fiabilité est mesurée.',
         'Issu d\'un questionnaire scientifique' => 'Questions validées ; le classement en types ou en styles en est une lecture simplifiée.',
         'Outil d\'introspection' => 'Pour réfléchir à vos motivations ; à confirmer par l\'expérience et le regard de vos proches.',
+        'Outil de connaissance de soi' => 'Issu du modèle de William Marston : il décrit des comportements, pas une valeur ; il éclaire, il n\'enferme pas.',
         'Outil de discernement' => 'À confirmer dans le service, la prière et le regard de votre communauté.',
         'Auto-évaluation' => 'Votre propre regard sur votre situation aujourd\'hui ; à refaire régulièrement pour mesurer le chemin.',
     ];
 
     /** Regroupement du catalogue. */
     public const GROUPS = [
-        'Personnalité' => ['profil-complet', 'big-five', 'type', 'style'],
+        'Personnalité' => ['disc', 'profil-complet', 'big-five', 'type'],
         'Motivations et dons' => ['enneagramme', 'dons-spirituels'],
     ];
 
     public const CATALOG = [
+        'disc' => [
+            'name' => 'DISC', 'subtitle' => 'Profil naturel et profil adapté',
+            'description' => 'Votre manière d\'agir et de communiquer selon 4 dimensions (Dominance, Influence, Stabilité, Conformité), d\'après le modèle de William Marston. Vous découvrez votre profil naturel, votre profil adapté, comment les autres vous perçoivent et comment interagir avec chaque profil.',
+            'bank' => 'disc', 'minutes' => 10,
+            'icon' => 'zap', 'color' => '#F43F5E', 'bg' => '#FFF1F2', 'level' => 'Outil de connaissance de soi',
+        ],
         'profil-complet' => [
-            'name' => 'Profil complet', 'subtitle' => 'Big Five en 29 facettes, type et style',
-            'description' => 'Le questionnaire de référence (IPIP-NEO, domaine public, utilisé en recherche). Il produit votre Big Five détaillé, votre type de fonctionnement et votre style comportemental.',
+            'name' => 'Profil complet', 'subtitle' => 'Big Five en 29 facettes et type',
+            'description' => 'Le questionnaire de référence (IPIP-NEO, domaine public, utilisé en recherche). Il produit votre Big Five détaillé et votre type de fonctionnement.',
             'bank' => 'ipip', 'facets' => 'all', 'perFacet' => 4, 'minutes' => 15,
             'icon' => 'layers', 'color' => '#0F766E', 'bg' => '#F0FDFA', 'level' => 'Questionnaire scientifique',
         ],
@@ -109,6 +118,10 @@ final class Instruments
                         $items[] = ['key' => 'ipip:'.$list[$round], 'text' => IpipItemBank::ITEMS[$list[$round]][2]];
                     }
                 }
+            }
+        } elseif ('disc' === $def['bank']) {
+            foreach (array_keys(DiscBank::BLOCKS) as $block) {
+                $items[] = ['key' => 'disc:'.$block, 'text' => 'Bloc '.$block, 'words' => DiscBank::shuffled($block)];
             }
         } elseif ('enn' === $def['bank']) {
             // Les items sont déjà entrelacés par type (1, 2, … 9, 1, 2…)

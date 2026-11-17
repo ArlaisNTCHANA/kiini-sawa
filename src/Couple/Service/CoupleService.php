@@ -12,6 +12,7 @@ use App\Notification\Enum\NotificationType;
 use App\Notification\Service\Notifier;
 use App\Personnalite\Entity\ProfileTest;
 use App\Personnalite\Psychometrie\AssessmentService;
+use App\Personnalite\Psychometrie\DiscProfiles;
 use App\Personnalite\Psychometrie\EnneagramBank;
 use App\Personnalite\Psychometrie\Interpretations;
 use App\Personnalite\Psychometrie\IpipItemBank;
@@ -211,15 +212,12 @@ final class CoupleService
             }
         }
 
+        // Style : le test DISC s'il a été passé, sinon le style déduit du Big Five (anciens profils)
         $styles = null;
-        $sa = $people[0]['profile']['style'] ?? null;
-        $sb = $people[1]['profile']['style'] ?? null;
+        $sa = $this->styleOf($people[0]);
+        $sb = $this->styleOf($people[1]);
         if ($sa && $sb) {
-            $styles = [
-                'a' => Interpretations::STYLES[$sa['primary']] + ['code' => $sa['primary']],
-                'b' => Interpretations::STYLES[$sb['primary']] + ['code' => $sb['primary']],
-                'same' => $sa['primary'] === $sb['primary'],
-            ];
+            $styles = ['a' => $this->styleCard($sa, $sb), 'b' => $this->styleCard($sb, $sa), 'same' => $sa['code'] === $sb['code']];
         }
         $types = null;
         $ta = $people[0]['profile']['type'] ?? null;
@@ -238,6 +236,35 @@ final class CoupleService
         }
 
         return ['people' => $people, 'domains' => $domains, 'styles' => $styles, 'types' => $types, 'enneagram' => $enneagram];
+    }
+
+    /** @return array{code: string, disc: bool}|null */
+    private function styleOf(array $person): ?array
+    {
+        if (!$person['shares']) {
+            return null;
+        }
+        $disc = $this->em->getRepository(\App\Personnalite\Entity\Assessment::class)->latest($person['user'], 'disc');
+        if ($disc) {
+            return ['code' => $disc->getScores()['primary'], 'disc' => true];
+        }
+        $style = $person['profile']['style'] ?? null;
+
+        return $style ? ['code' => $style['primary'], 'disc' => false] : null;
+    }
+
+    /** Fiche « pour parler à » de la personne $who, vue par son conjoint $other. */
+    private function styleCard(array $who, array $other): array
+    {
+        if ($who['disc']) {
+            $p = DiscProfiles::PROFILES[$who['code']];
+
+            return ['code' => $who['code'], 'name' => $p['name'],
+                'communicate' => DiscProfiles::INTERACTION[$other['code']][$who['code']][0].'. Ses besoins : '.mb_strtolower(implode(', ', $p['needs'])).'.',
+                'watch' => implode(', ', $p['watch'])];
+        }
+
+        return Interpretations::STYLES[$who['code']] + ['code' => $who['code']];
     }
 
     private function latest(User $u, string $type): ?ProfileTest

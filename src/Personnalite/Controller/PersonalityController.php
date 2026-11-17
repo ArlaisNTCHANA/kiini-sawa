@@ -16,10 +16,10 @@ use Symfony\Component\Routing\Attribute\Route;
 class PersonalityController extends AbstractController
 {
     /** Anciens tests courts remplacés par les questionnaires psychométriques (AssessmentController). */
-    private const REPLACED = ['MBTI' => 'type', 'DISC' => 'style', 'ENNEAGRAMME' => 'enneagramme', 'ENNEAGRAM' => 'enneagramme', 'BIG5' => 'profil-complet', 'DONS' => 'dons-spirituels'];
+    private const REPLACED = ['MBTI' => 'type', 'DISC' => 'disc', 'ENNEAGRAMME' => 'enneagramme', 'ENNEAGRAM' => 'enneagramme', 'BIG5' => 'profil-complet', 'DONS' => 'dons-spirituels'];
 
     /** Questionnaires où l'on cherche le dernier rapport d'un ancien type (le profil complet couvre type, style et Big Five). */
-    private const REPORT_SOURCES = ['MBTI' => ['type', 'profil-complet'], 'DISC' => ['style', 'profil-complet'], 'BIG5' => ['profil-complet', 'big-five'],
+    private const REPORT_SOURCES = ['MBTI' => ['type', 'profil-complet'], 'DISC' => ['disc', 'style', 'profil-complet'], 'BIG5' => ['profil-complet', 'big-five'],
         'ENNEAGRAMME' => ['enneagramme'], 'ENNEAGRAM' => ['enneagramme'], 'DONS' => ['dons-spirituels']];
 
     /** Tests retirés (trop peu de questions pour un résultat fiable) : leurs anciennes adresses ramènent au catalogue. */
@@ -161,8 +161,9 @@ class PersonalityController extends AbstractController
     {
         $type = strtoupper($type);
         if (isset(self::REPORT_SOURCES[$type]) && ($user = $this->getUser()) instanceof \App\Compte\Entity\User) {
-            foreach ($this->assessments->findForUser($user) as $a) {
-                if (\in_array($a->getInstrument(), self::REPORT_SOURCES[$type], true)) {
+            // Par ordre de préférence (le test DISC passe avant l'ancien style déduit du Big Five)
+            foreach (self::REPORT_SOURCES[$type] as $source) {
+                if ($a = $this->assessments->latest($user, $source)) {
                     return $this->redirectToRoute('app_assessment_report', ['id' => $a->getId()]);
                 }
             }

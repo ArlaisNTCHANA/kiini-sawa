@@ -10,6 +10,116 @@
     </div>
 {% endif %}
 
+{# ── DISC (questionnaire à choix forcé) ─────────────────── #}
+{% if disc is defined %}
+    {% set p = disc.profile %}
+    {% set th = 'padding: 6px 8px; text-align: left; font-size: 12px; color: #64748B; border-bottom: 1px solid #E2E8F0;' %}
+    {% set td = 'padding: 7px 8px; font-size: 13px; vertical-align: top; border-bottom: 1px solid #F1F5F9;' %}
+    <div class="r-section">
+        <h2>Votre profil : {{ p.name }}{% if disc.secondaryProfile %} – {{ disc.secondaryProfile.name }}{% endif %}{% if disc.combo %} · {{ disc.combo.name }}{% endif %}</h2>
+        <p style="font-size: 15px;">{{ disc.combo ? disc.combo.desc : p.essence }}</p>
+        <p style="font-size: 13px; color: #475569;">Votre question réflexe : <strong>« {{ p.question }} »</strong> · {{ p.axis }}.</p>
+    </div>
+
+    <div class="r-section">
+        <h2>Profil naturel et profil adapté</h2>
+        <p style="font-size: 13px; color: #475569;">Le <strong>profil naturel</strong> est votre façon spontanée d'agir, quand rien ne vous contraint. Le <strong>profil adapté</strong> est celle que vous adoptez en ce moment pour répondre à votre contexte (travail, famille, Église).</p>
+        <table style="width: 100%; border-collapse: collapse; margin: 8px 0;">
+            <tr><th style="{{ th }} width: 26%;">Dimension</th><th style="{{ th }}">Naturel</th><th style="{{ th }}">Adapté</th></tr>
+            {% for l, prof in disc.profiles %}
+                <tr>
+                    <td style="{{ td }}"><strong style="color: {{ prof.color }};">{{ l }}</strong> · {{ prof.name }}</td>
+                    <td style="{{ td }}">{{ _self.bar(min(100, disc.natural[l] * 2), prof.color) }}<span style="font-size: 11px; color: #64748B;">{{ disc.natural[l] }} %</span></td>
+                    <td style="{{ td }}">{{ _self.bar(min(100, disc.adapted[l] * 2), '#94A3B8') }}<span style="font-size: 11px; color: #64748B;">{{ disc.adapted[l] }} %</span></td>
+                </tr>
+            {% endfor %}
+        </table>
+        <div style="background: #F8FAFC; border-radius: 10px; padding: 10px 14px; margin-top: 8px;">
+            <p style="margin: 0 0 4px;"><strong>{{ disc.gapReading[0] }}</strong> (écart de {{ disc.gap }} points)</p>
+            <p style="margin: 0; font-size: 13px;">{{ disc.gapReading[1] }}</p>
+            {% if disc.more|length %}<p style="margin: 6px 0 0; font-size: 13px;">Votre contexte vous demande de {{ disc.more|join(', ') }}.</p>{% endif %}
+            {% if disc.less|length %}<p style="margin: 4px 0 0; font-size: 13px;">Vous mettez en retrait une partie de votre côté {{ disc.less|join(', ')|lower }}.</p>{% endif %}
+            {% if disc.adaptedPrimary != disc.primary %}<p style="margin: 4px 0 0; font-size: 13px;">En contexte, on vous voit surtout <strong>{{ disc.adaptedProfile.name }}</strong> : les autres ne connaissent peut-être pas votre nature {{ p.name|lower }}.</p>{% endif %}
+        </div>
+    </div>
+
+    <div class="r-section" style="page-break-inside: avoid;">
+        <h2>La fiche du profil {{ p.name }} <span style="font-weight: normal; font-size: 14px; color: #64748B;">({{ p.colorName }})</span></h2>
+        <table style="width: 100%; border-collapse: collapse;">
+            <tr>
+                <td style="{{ td }} width: 50%;"><strong>Vos forces</strong><br>{{ p.strengths|join(' · ') }}</td>
+                <td style="{{ td }}"><strong>Vos points de vigilance</strong><br>{{ p.watch|join(' · ') }}</td>
+            </tr>
+            <tr>
+                <td style="{{ td }}"><strong>Votre crainte principale</strong><br>{{ p.fear }}</td>
+                <td style="{{ td }}"><strong>Vos besoins</strong><br>{{ p.needs|join(' · ') }}</td>
+            </tr>
+        </table>
+        {% if disc.secondaryProfile %}
+            <p style="font-size: 13px; color: #475569; margin-top: 8px;">Votre dimension secondaire, <strong>{{ disc.secondaryProfile.name }}</strong>, ajoute : {{ disc.secondaryProfile.strengths|join(', ')|lower }}.</p>
+        {% endif %}
+    </div>
+
+    <div class="r-section" style="page-break-inside: avoid;">
+        <h2>Sous pression</h2>
+        <table style="width: 100%; border-collapse: collapse;">
+            <tr><td style="{{ td }} width: 34%;"><strong>Quand vous vous adaptez</strong></td><td style="{{ td }}">{{ p.pressure.adapted }}</td></tr>
+            <tr><td style="{{ td }}"><strong>Votre réflexe naturel</strong></td><td style="{{ td }}">{{ p.pressure.natural }}</td></tr>
+            <tr><td style="{{ td }}"><strong>Sous tension durable</strong></td><td style="{{ td }}">{{ p.pressure.tension }}</td></tr>
+            <tr><td style="{{ td }}"><strong>Dans un désaccord</strong></td><td style="{{ td }}">{{ p.disagree }}</td></tr>
+            <tr><td style="{{ td }}"><strong>Pour grandir</strong></td><td style="{{ td }}">{{ p.grow }}</td></tr>
+        </table>
+    </div>
+
+    <div class="r-section">
+        <h2>Comment les autres vous perçoivent</h2>
+        <p style="font-size: 13px; color: #475569;">Chaque profil voit le monde depuis sa propre question. Voici ce que vous percevez chez les autres, et ce qu'ils perçoivent de vous.</p>
+        <table style="width: 100%; border-collapse: collapse;">
+            <tr><th style="{{ th }} width: 18%;">Avec un…</th><th style="{{ th }}">Vous percevez</th><th style="{{ th }}">Il vous perçoit</th><th style="{{ th }}">Point de friction</th></tr>
+            {% for l, o in disc.others %}
+                <tr>
+                    <td style="{{ td }}"><strong style="color: {{ o.profile.color }};">{{ l }}</strong> · {{ o.profile.name }}</td>
+                    <td style="{{ td }}">{{ o.perception[0] }}</td>
+                    <td style="{{ td }}">{{ o.perception[1] }}</td>
+                    <td style="{{ td }} color: #64748B;">{{ o.perception[2] }}</td>
+                </tr>
+            {% endfor %}
+        </table>
+    </div>
+
+    <div class="r-section">
+        <h2>Interagir avec chaque profil</h2>
+        <table style="width: 100%; border-collapse: collapse;">
+            <tr><th style="{{ th }} width: 18%;">Avec un…</th><th style="{{ th }}">De votre côté</th><th style="{{ th }}">Ce que vous pouvez lui demander</th></tr>
+            {% for l, o in disc.others %}
+                <tr>
+                    <td style="{{ td }}"><strong style="color: {{ o.profile.color }};">{{ l }}</strong> · {{ o.profile.name }}</td>
+                    <td style="{{ td }}">{{ o.interaction[0] }}</td>
+                    <td style="{{ td }}">{{ o.interaction[1] }}</td>
+                </tr>
+            {% endfor %}
+        </table>
+    </div>
+
+    <div class="r-section" style="page-break-inside: avoid;">
+        <h2>Reconnaître le profil des autres</h2>
+        <p style="font-size: 13px; color: #475569;">Quelques indices observables. Un indice seul ne suffit pas : cherchez-en plusieurs, et vérifiez en écoutant.</p>
+        <table style="width: 100%; border-collapse: collapse;">
+            <tr><th style="{{ th }}">Indice</th>{% for l, prof in disc.profiles %}<th style="{{ th }} color: {{ prof.color }};">{{ l }} · {{ prof.name }}</th>{% endfor %}</tr>
+            {% for key, label in {question: 'Sa question', speech: 'Débit', gesture: 'Gestuelle', mail: 'Ses mails', stress: 'Sous pression'} %}
+                <tr><td style="{{ td }}"><strong>{{ label }}</strong></td>
+                    {% for l, prof in disc.profiles %}<td style="{{ td }}">{{ key == 'question' ? prof.question : prof.cues[key] }}</td>{% endfor %}
+                </tr>
+            {% endfor %}
+        </table>
+    </div>
+
+    <div class="r-section">
+        <p style="font-size: 13px;">« Nous avons plusieurs membres dans un seul corps, et tous les membres n'ont pas la même fonction » (Romains 12.4). Aucun profil n'est meilleur qu'un autre : chacun est une manière d'agir, que l'on peut ajuster par amour pour les autres.</p>
+        <p style="font-size: 12px; color: #64748B;">Le DISC décrit des comportements observables, pas la valeur d'une personne ni ses compétences. Outil de connaissance de soi issu du modèle de William Marston (1928) ; questionnaire et textes propres à KIINI SAWA. Le profil adapté change avec votre contexte : refaites le test quand votre situation évolue.</p>
+    </div>
+{% endif %}
+
 {# ── Type de fonctionnement ─────────────────────────────── #}
 {% if type is defined and type %}
     <div class="r-section">

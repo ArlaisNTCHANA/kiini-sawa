@@ -96,7 +96,7 @@ final class PlanDataProvider
         $latestTests = [];
         $testTypesMeta = [
             'MBTI'          => ['name' => 'Type de fonctionnement', 'icon' => 'brain', 'color' => '#6366f1', 'bg' => '#eef2ff', 'url_key' => 'mbti'],
-            'DISC'          => ['name' => 'Style comportemental', 'icon' => 'zap', 'color' => '#f43f5e', 'bg' => '#fff1f2', 'url_key' => 'disc'],
+            'DISC'          => ['name' => 'Profil DISC', 'icon' => 'zap', 'color' => '#f43f5e', 'bg' => '#fff1f2', 'url_key' => 'disc'],
             'ENNEAGRAM'     => ['name' => 'Ennéagramme', 'icon' => 'target', 'color' => '#f59e0b', 'bg' => '#fffbeb', 'url_key' => 'enneagramme'],
             'BIG5'          => ['name' => 'Big Five', 'icon' => 'sparkles', 'color' => '#10b981', 'bg' => '#ecfdf5', 'url_key' => 'big5'],
             'DONS'          => ['name' => 'Dons spirituels', 'icon' => 'flame', 'color' => '#B45309', 'bg' => '#FFF7ED', 'url_key' => 'dons'],
