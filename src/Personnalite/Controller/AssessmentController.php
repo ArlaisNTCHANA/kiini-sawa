@@ -65,13 +65,14 @@ class AssessmentController extends AbstractController
     }
 
     #[Route('/rapport/{id}', name: 'report', requirements: ['id' => '\d+'], methods: ['GET'])]
-    public function report(Assessment $assessment): Response
+    public function report(Assessment $assessment, \Doctrine\ORM\EntityManagerInterface $em): Response
     {
         $this->denyUnlessOwner($assessment);
 
         $data = $this->reports->build($assessment);
 
-        return $this->render('personnalite/assessment/report.html.twig', $data + ['shareCard' => \App\Personnalite\Psychometrie\ShareCard::from($data)]);
+        return $this->render('personnalite/assessment/report.html.twig', $data + ['shareCard' => \App\Personnalite\Psychometrie\ShareCard::from($data),
+            'addedActions' => $em->getRepository(\App\Personnalite\Entity\TestAction::class)->addedBy($this->user())]);
     }
 
     /** Partager le résultat (page publique : prénom + résultat principal) ou arrêter le partage. */

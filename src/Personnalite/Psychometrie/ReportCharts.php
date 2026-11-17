@@ -99,6 +99,39 @@ final class ReportCharts
         return $svg.'</svg>';
     }
 
+    // ── Convergence des tests ──────────────────────────────────────
+
+    /**
+     * Trois axes bipolaires ; chaque test place un repère, le cercle noir montre la moyenne.
+     *
+     * @param list<array{left: string, right: string, markers: list<array{name: string, value: float, color: string}>, mean: ?float}> $axes valeurs de -1 à 1
+     */
+    public static function convergence(array $axes): string
+    {
+        $h = 96 * \count($axes) + 10;
+        $svg = "<svg xmlns='http://www.w3.org/2000/svg' width='640' height='$h' viewBox='0 0 640 $h'>";
+        $x0 = 60;
+        $w = 520;
+        foreach ($axes as $i => $a) {
+            $y = 30 + $i * 96;
+            $svg .= self::text(0, $y - 8, $a['left'], 12, '#475569', true);
+            $svg .= self::text(640 - self::tw($a['right'], 12), $y - 8, $a['right'], 12, '#475569', true);
+            $svg .= "<rect x='$x0' y='".($y + 8)."' width='$w' height='8' rx='4' fill='#E2E8F0'/>";
+            $svg .= "<line x1='".($x0 + $w / 2)."' y1='".($y + 2)."' x2='".($x0 + $w / 2)."' y2='".($y + 22)."' stroke='#94A3B8' stroke-width='2'/>";
+            foreach ($a['markers'] as $j => $m) {
+                $mx = $x0 + $w * ($m['value'] + 1) / 2;
+                $svg .= sprintf("<circle cx='%.1f' cy='%d' r='8' fill='%s' stroke='#FFFFFF' stroke-width='2'/>", $mx, $y + 12, $m['color']);
+                $svg .= self::text($mx, $y + 40 + ($j % 2) * 13, $m['name'], 10, $m['color'], true, true);
+            }
+            if (null !== $a['mean']) {
+                $mx = $x0 + $w * ($a['mean'] + 1) / 2;
+                $svg .= sprintf("<circle cx='%.1f' cy='%d' r='12' fill='none' stroke='#0F172A' stroke-width='3'/>", $mx, $y + 12);
+            }
+        }
+
+        return $svg.'</svg>';
+    }
+
     // ── Roue de la vie ─────────────────────────────────────────────
 
     /** @param list<array{label: string, value: float, color: string}> $segments valeurs sur 10 */

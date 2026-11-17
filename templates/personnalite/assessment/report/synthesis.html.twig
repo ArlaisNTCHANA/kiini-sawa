@@ -1,0 +1,154 @@
+{# « Mon profil KIINI SAWA » : synthèse croisée (écran et PDF). Variables : identity, convergence, vocation, fragile, resources,
+   priorities, life, parts, missing, slugs, count, locked, pdf, name, assessment, quality. #}
+{% set pc = '#0F766E' %}
+{% set serif = pdf ? "'Playfair Display', serif" : 'var(--font-serif)' %}
+{% include 'personnalite/assessment/report/_styles.html.twig' with {pcLight: '#CCFBF1', pcDark: '#134E4A'} %}
+
+<div class="dr">
+{% include 'personnalite/assessment/report/_cover.html.twig' with {
+    title: 'Mon profil KIINI SAWA', subtitle: 'La synthèse de vos tests : qui vous êtes, ce qui vous pousse, pour quoi vous êtes fait',
+    badges: [], headline: identity.headline, tagline: count ~ ' tests croisés', keywords: identity.cards|map(c => c.label),
+} %}
+
+{# ═══ Carte d'identité ═══ #}
+<div class="dr-page">
+    <div class="dr-kicker">{{ report_icon('compass', pc) }}Votre carte d'identité</div>
+    <h2>{{ identity.headline }}</h2>
+    <p class="dr-lead">Chaque test éclaire une facette différente de votre personne. Ensemble, ils dessinent un portrait plus juste qu'un seul résultat.</p>
+    <table class="dr-grid">
+        {% for row in identity.cards|batch(2) %}<tr>
+            {% for c in row %}
+                <td><div class="dr-tile" style="border-top: 5px solid {{ c.color }}; border-radius: 0 0 14px 14px; min-height: 120px;">
+                    <div class="dr-label">{{ report_icon(c.icon, c.color) }}{{ c.label }}</div>
+                    <div style="font-family: {{ serif }}; font-weight: bold; font-size: {{ pdf ? '13pt' : '1.2rem' }}; color: #0F172A;">{{ c.title }}</div>
+                    <p class="dr-small" style="margin: 4px 0 0; color: #334155;">{{ c.text }}</p>
+                </div></td>
+            {% endfor %}
+            {% if row|length == 1 %}<td></td>{% endif %}
+        </tr>{% endfor %}
+    </table>
+    {% if missing|length %}
+        <div class="dr-tile" style="margin-top: 6px; background: #F8FAFC;">
+            <div class="dr-label">{{ report_icon('book', '#64748B') }}Pour compléter votre portrait</div>
+            <p class="dr-small" style="margin: 0; color: #334155;">
+                {% for key, label in missing %}{% if not pdf %}<a href="{{ path('app_assessment_take', {slug: slugs[key]}) }}" style="color: {{ pc }}; font-weight: 600;">{{ label }}</a>{% else %}{{ label }}{% endif %}{{ not loop.last ? ' · ' }}{% endfor %}
+            </p>
+        </div>
+    {% endif %}
+</div>
+
+{# ═══ Convergences ═══ #}
+{% if convergence.chart %}
+<div class="dr-page">
+    <div class="dr-kicker">{{ report_icon('target', pc) }}Ce que vos tests disent ensemble</div>
+    <h2>Vos tests convergent-ils ?</h2>
+    <p class="dr-lead">Chaque test mesure à sa manière votre rapport aux personnes, votre rythme et votre besoin de structure. Quand ils se rejoignent, le trait est solide ; quand ils divergent, c'est une question à explorer.</p>
+    <img class="dr-img" src="{{ convergence.chart }}" alt="Position de chaque test sur trois axes">
+    <p class="dr-small">Pastilles : la position donnée par chaque test · cercle noir : la moyenne.</p>
+    <table class="dr-table" style="margin-top: 6px;">
+        {% for key, a in convergence.axes %}
+            <tr>
+                <td style="width: 32%;"><strong>{{ a.left }} / {{ a.right }}</strong></td>
+                <td>{{ a.reading }}
+                    {% if a.agree is same as(true) %}<br><span class="dr-small" style="color: #166534;">{{ report_icon('check', '#16A34A', 12) }}Vos tests se rejoignent : c'est un trait solide de votre personnalité.</span>
+                    {% elseif a.agree is same as(false) %}<br><span class="dr-small" style="color: #9A3412;">{{ report_icon('alert', '#EA580C', 12) }}Vos tests divergent : c'est souvent la trace d'une différence entre votre nature et ce que votre contexte vous demande, ou d'une préférence peu nette.</span>{% endif %}
+                </td>
+            </tr>
+        {% endfor %}
+    </table>
+</div>
+{% endif %}
+
+{% if locked %}
+    <div class="dr-page" style="text-align: center;">
+        <div style="font-size: 2rem;">{{ report_icon('star', '#D97706', 32) }}</div>
+        <h2>La suite de votre synthèse est réservée à l'offre PRO</h2>
+        <p class="dr-lead">Votre zone de vocation, vos ressources et vos fragilités croisées, vos trois priorités de croissance reliées à vos plans, et le rapport PDF complet.</p>
+        <a href="{{ path('app_subscription') }}" class="ks-btn ks-btn--primary">Découvrir l'offre PRO</a>
+    </div>
+{% else %}
+
+{# ═══ Zone de vocation ═══ #}
+<div class="dr-page">
+    <div class="dr-kicker">{{ report_icon('flame', pc) }}Pour quoi vous êtes fait</div>
+    <h2>Votre zone de vocation</h2>
+    {% if vocation %}
+        <p class="dr-lead">À la rencontre de votre manière d'agir ({{ vocation.dimension|lower }}) et de vos dons ({{ vocation.familyName|lower }}).</p>
+        <div style="border-radius: 22px; background: #0F172A; color: #fff; padding: {{ pdf ? '8mm 9mm' : '26px' }};">
+            <div style="font-size: {{ pdf ? '8pt' : '.75rem' }}; letter-spacing: 3px; text-transform: uppercase; color: #5EEAD4; font-weight: bold;">Votre zone de vocation</div>
+            <div style="font-family: {{ serif }}; font-size: {{ pdf ? '22pt' : '2rem' }}; font-weight: bold; margin: 6px 0;">{{ vocation.name }}</div>
+            <p style="margin: 0; color: #E2E8F0; font-size: {{ pdf ? '10.5pt' : '1.05rem' }};">{{ vocation.text }}</p>
+            {% if vocation.motivation %}<p style="margin: 10px 0 0; color: #CBD5E1;">Ce qui vous y pousse au fond : {{ vocation.motivation|lower }}</p>{% endif %}
+        </div>
+        <table class="dr-grid" style="margin-top: 10px;"><tr>
+            <td style="width: 60%;"><div class="dr-tile"><div class="dr-label">{{ report_icon('work', '#475569') }}Où l'exercer</div><ul>{% for i in vocation.ideas %}<li>{{ i }}</li>{% endfor %}</ul></div></td>
+            <td><div class="dr-tile" style="background: #CCFBF1; border-color: #CCFBF1;"><div class="dr-label" style="color: #134E4A;">{{ report_icon('star', '#134E4A') }}Vos dons</div><p style="margin: 0 0 6px; color: #134E4A;">{{ vocation.gifts|join(' · ') }}</p><div class="dr-label" style="color: #134E4A;">Dans KIINI SAWA</div><p class="dr-small" style="margin: 0; color: #134E4A;">{{ vocation.plan }} · à lire : {{ vocation.read }}</p></div></td>
+        </tr></table>
+        <p class="dr-small">Une zone de vocation est une piste à éprouver dans la prière, le service et le conseil de votre communauté, pas une assignation.</p>
+    {% else %}
+        <p class="dr-lead">Votre zone de vocation naît de la rencontre entre votre manière d'agir (DISC) et vos dons spirituels. Passez {{ parts.disc ? 'le test des dons spirituels' : (parts.dons ? 'le DISC' : 'le DISC et le test des dons spirituels') }} pour la découvrir.</p>
+    {% endif %}
+</div>
+
+{# ═══ Ressources et fragilités ═══ #}
+<div class="dr-page">
+    <div class="dr-kicker">{{ report_icon('leaf', pc) }}Prendre soin de vous</div>
+    <h2>Vos ressources et vos fragilités</h2>
+    <p class="dr-lead">Ce que vos tests révèlent de vos forces intérieures, et des zones où vous avez besoin de grâce.</p>
+    <table class="dr-grid"><tr>
+        <td><div class="dr-tile" style="background: #F0FDF4; border-color: #BBF7D0;"><div class="dr-label" style="color: #166534;">{{ report_icon('sun', '#16A34A') }}Vos ressources</div>
+            {% for i in resources %}<p style="margin: 0 0 8px;"><span class="dr-chip" style="background: #fff; color: #166534; font-size: {{ pdf ? '7pt' : '.68rem' }};">{{ i[0] }}</span> {{ i[1] }}</p>{% endfor %}
+        </div></td>
+        <td><div class="dr-tile" style="background: #FFF7ED; border-color: #FED7AA;"><div class="dr-label" style="color: #9A3412;">{{ report_icon('alert', '#EA580C') }}Vos fragilités</div>
+            {% for i in fragile %}<p style="margin: 0 0 8px;"><span class="dr-chip" style="background: #fff; color: #9A3412; font-size: {{ pdf ? '7pt' : '.68rem' }};">{{ i[0] }}</span> {{ i[1] }}</p>{% endfor %}
+        </div></td>
+    </tr></table>
+    {% if life %}
+        <div class="dr-tile" style="margin-top: 6px;">
+            <div class="dr-label">{{ report_icon('calendar', '#64748B') }}Votre situation de vie (Équilibre de Vie : {{ (life.avg|round(1))|number_format(1, ',', ' ') }} / 10)</div>
+            <p style="margin: 0;">Vos appuis : {{ life.supports|join(', ')|lower }}. Vos priorités : {{ life.priorities|join(', ')|lower }}. Votre profil s'exprime dans cette réalité : commencez par ce qui vous fragilise le plus.</p>
+        </div>
+    {% endif %}
+    <div class="dr-quote" style="margin-top: 12px;">« Ma grâce te suffit, car ma puissance s'accomplit dans la faiblesse. »<div style="font-style: normal; font-weight: bold; margin-top: 6px; font-size: {{ pdf ? '9pt' : '.9rem' }};">2 Corinthiens 12.9</div></div>
+</div>
+
+{# ═══ Priorités ═══ #}
+<div class="dr-page" id="priorites">
+    <div class="dr-kicker">{{ report_icon('target', pc) }}Passer à l'action</div>
+    <h2>Vos trois priorités de croissance</h2>
+    <p class="dr-lead">Une action tirée de chacun de vos tests. Ajoutez-les à vos plans : KIINI SAWA vous les rappellera.</p>
+    {% for p in priorities %}
+        <div class="dr-tile" style="margin-bottom: 10px;">
+            <table style="width: 100%; border-collapse: collapse;"><tr>
+                <td style="width: {{ pdf ? '12mm' : '44px' }}; font-size: {{ pdf ? '20pt' : '1.8rem' }}; font-weight: bold; color: {{ pc }};">{{ loop.index }}</td>
+                <td><div class="dr-small">{{ p.source }}</div><div style="font-weight: bold;">{{ p.text }}</div></td>
+            </tr></table>
+            {% if not pdf %}{% include 'personnalite/assessment/report/_add_action.html.twig' with {text: p.text, source: p.source, back: 'synthese'} %}{% endif %}
+        </div>
+    {% endfor %}
+</div>
+
+{# ═══ Conclusion ═══ #}
+<div class="dr-page">
+    <div style="border-radius: 22px; background: #CCFBF1; padding: {{ pdf ? '10mm' : '28px' }};">
+        <div class="dr-kicker" style="color: #134E4A;">En résumé</div>
+        <h2 style="color: #134E4A;">{{ identity.headline }}</h2>
+        {% if vocation %}<p style="color: #134E4A;">Votre zone de vocation : <strong>{{ vocation.name }}</strong>.</p>{% endif %}
+        <table class="dr-grid"><tr>
+            {% for p in priorities %}<td><div class="dr-tile" style="background: #fff; border-color: #fff;"><div class="dr-label">Priorité {{ loop.index }}</div><p class="dr-small" style="margin: 0; color: #334155;">{{ p.text }}</p></div></td>{% endfor %}
+        </tr></table>
+    </div>
+    <div class="dr-quote" style="margin-top: 16px; background: #CCFBF1; color: #134E4A;">« Car nous sommes son ouvrage, ayant été créés en Jésus-Christ pour de bonnes œuvres, que Dieu a préparées d'avance, afin que nous les pratiquions. »<div style="font-style: normal; font-weight: bold; margin-top: 6px; font-size: {{ pdf ? '9pt' : '.9rem' }};">Éphésiens 2.10</div></div>
+    <p style="margin-top: 14px;">Vous n'êtes pas un résultat de test : vous êtes une personne unique, aimée et appelée. Que cette synthèse vous aide à mieux vous connaître, à mieux aimer, et à bâtir votre vie avec Dieu.</p>
+    <p class="dr-small" style="text-align: right; margin-top: 18px;">KIINI SAWA · Bâtir sa vie avec Dieu</p>
+</div>
+{% endif %}
+
+{% include 'personnalite/assessment/report/_warnings.html.twig' with {
+    about: 'Cette synthèse croise les résultats de plusieurs questionnaires de KIINI SAWA (DISC, Big Five issu de l\'IPIP, type de fonctionnement, ennéagramme, dons spirituels). Les rapprochements entre tests et la « zone de vocation » sont des lectures proposées par KIINI SAWA, non des mesures scientifiques.',
+    variable: 'et chaque nouvelle passation d\'un test modifie la synthèse',
+    extra: ['Une vocation se discerne.', 'La zone de vocation est une piste de réflexion. Elle ne remplace ni le discernement personnel dans la prière, ni le conseil de votre communauté, ni l\'accompagnement d\'un professionnel de l\'orientation.'],
+    marks: 'Les noms de profils et de types sont propres à KIINI SAWA ; les outils s\'inspirent de modèles publics (Marston, Big Five, Jung, ennéagramme), sans affiliation avec un éditeur commercial.',
+    bible: true,
+} %}
+</div>

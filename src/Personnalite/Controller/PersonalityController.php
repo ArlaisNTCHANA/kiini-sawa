@@ -217,7 +217,7 @@ class PersonalityController extends AbstractController
 
         // Rapport illustré (Équilibre de Vie, Hygiène de Vie)
         if ($report = $this->selfReports->build($latestTest)) {
-            return $this->render('personnalite/self_report.html.twig', $report + ['testMeta' => self::TESTS[$type], 'instrument' => ['name' => self::TESTS[$type]['name']]]);
+            return $this->render('personnalite/self_report.html.twig', $report + ['testMeta' => self::TESTS[$type], 'instrument' => ['name' => self::TESTS[$type]['name']], 'addedActions' => $this->em->getRepository(\App\Personnalite\Entity\TestAction::class)->addedBy($user)]);
         }
 
         // Find profile if available

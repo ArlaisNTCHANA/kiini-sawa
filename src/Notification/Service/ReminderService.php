@@ -34,10 +34,11 @@ final class ReminderService
     /** @return array<string, int> nombre de rappels envoyés par type */
     public function sendAll(\DateTimeImmutable $today): array
     {
-        $sent = array_fill_keys(['rituels du matin', 'défis', 'accueil', 'revue hebdomadaire', 'revue mensuelle', 'rituels', 'échéances', 'partenaires', 'fin d\'essai ou d\'abonnement'], 0);
+        $sent = array_fill_keys(['suivi des tests', 'rituels du matin', 'défis', 'accueil', 'revue hebdomadaire', 'revue mensuelle', 'rituels', 'échéances', 'partenaires', 'fin d\'essai ou d\'abonnement'], 0);
         $users = $this->em->getRepository(User::class)->findBy(['isVerified' => true]);
         foreach ($users as $user) {
             $sent['accueil'] += (int) $this->onboarding->sendFor($user, $today);
+            $sent['suivi des tests'] += $this->testFollowUps($user, $today);
             $sent['défis'] += $this->challengeDay($user, $today);
             $sent['rituels du matin'] += (int) $this->dailyRituals($user, $today);
             $sent['revue hebdomadaire'] += (int) $this->weeklyReview($user, $today);
@@ -47,6 +48,23 @@ final class ReminderService
             $sent['partenaires'] += $this->partners($user, $today);
             $sent['fin d\'essai ou d\'abonnement'] += (int) $this->subscriptionEnding($user, $today);
         }
+
+        return $sent;
+    }
+
+    /** 30 jours après avoir ajouté une action d'un rapport de test : « Où en êtes-vous ? » (une seule fois par action). */
+    public function testFollowUps(User $user, \DateTimeImmutable $today): int
+    {
+        $sent = 0;
+        foreach ($this->em->getRepository(\App\Personnalite\Entity\TestAction::class)->dueForFollowUp($user, $today) as $action) {
+            $ok = $this->notifier->notify($user, NotificationType::GOAL_DEADLINE,
+                'Il y a un mois, vous avez choisi une action',
+                sprintf('« %s » (%s). Où en êtes-vous ? Prenez cinq minutes pour faire le point, puis repassez le test pour mesurer le chemin parcouru.', $action->getText(), $action->getSource()),
+                '/mes-tests/', 'test-action-'.$action->getId());
+            $action->markReminded();
+            $sent += (int) $ok;
+        }
+        $this->em->flush();
 
         return $sent;
     }

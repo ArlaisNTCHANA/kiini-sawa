@@ -117,7 +117,7 @@
     <p class="dr-lead">Ne changez pas tout à la fois. Choisissez une action par priorité, et tenez-la un mois.</p>
     <table class="dr-table">
         {% for a in s.priorities %}
-            <tr><td style="width: 34px; font-size: {{ pdf ? '13pt' : '1.2rem' }}; color: {{ a.color }};">{{ report_icon('box', pc, 16) }}</td><td><strong style="color: {{ a.color }};">{{ a.label }} :</strong> {{ (eq ? a.actions : a.habits)|first }}</td></tr>
+            <tr><td style="width: 34px; font-size: {{ pdf ? '13pt' : '1.2rem' }}; color: {{ a.color }};">{{ report_icon('box', pc, 16) }}</td><td><strong style="color: {{ a.color }};">{{ a.label }} :</strong> {{ (eq ? a.actions : a.habits)|first }}{% if not pdf %}{% include 'personnalite/assessment/report/_add_action.html.twig' with {text: (eq ? a.actions : a.habits)|first, source: eq ? 'Équilibre de Vie' : 'Hygiène de Vie'} %}{% endif %}</td></tr>
         {% endfor %}
     </table>
     <table class="dr-grid" style="margin-top: 12px;"><tr>

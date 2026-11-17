@@ -108,7 +108,7 @@
         {% endfor %}
     </tr></table>
     <h3 style="margin-top: 14px;">Votre plan d'action</h3>
-    <table class="dr-table">{% for g in gf.top %}<tr><td style="width: 34px; font-size: {{ pdf ? '13pt' : '1.2rem' }}; color: {{ g.family.color }};">{{ report_icon('box', pc, 16) }}</td><td><strong>{{ g.name }} :</strong> {{ g.action }}</td></tr>{% endfor %}</table>
+    <table class="dr-table">{% for g in gf.top %}<tr><td style="width: 34px; font-size: {{ pdf ? '13pt' : '1.2rem' }}; color: {{ g.family.color }};">{{ report_icon('box', pc, 16) }}</td><td><strong>{{ g.name }} :</strong> {{ g.action }}{% if not pdf %}{% include 'personnalite/assessment/report/_add_action.html.twig' with {text: g.action, source: 'Dons spirituels'} %}{% endif %}</td></tr>{% endfor %}</table>
     <p class="dr-small" style="margin-top: 10px;">Ces dons nourrissent votre Plan de Transmission (Donner) et votre Plan de Vie : notez-y le service que vous choisissez.</p>
 </div>
 

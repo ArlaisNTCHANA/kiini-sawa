@@ -1,0 +1,28 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Mon profil KIINI SAWA{% endblock %}
+
+{% block body %}
+<div style="max-width: 820px; margin: 0 auto; padding: 2rem 1.25rem 8rem; line-height: 1.6;">
+    <a href="{{ path('app_personality_index') }}" style="font-size: .8rem; font-weight: 700; color: var(--fg-muted); text-transform: uppercase; letter-spacing: .05em; text-decoration: none;">← Mes tests</a>
+    <h1 style="font-family: var(--font-serif); color: var(--primary); font-size: 2rem; margin: .4rem 0 .25rem;">Mon profil KIINI SAWA</h1>
+    <p style="color: var(--fg-muted); margin-bottom: 1.25rem;">La synthèse de vos tests · {{ count }} test{{ count > 1 ? 's' }} sur 5</p>
+    {% if enough %}
+        <div style="display: flex; gap: .6rem; flex-wrap: wrap; margin-bottom: 1.25rem;">
+            {% if not locked %}<a href="{{ path('app_synthesis_pdf') }}" data-turbo="false" class="ks-btn ks-btn--primary">Télécharger le rapport PDF</a>{% endif %}
+            <a href="#priorites" class="ks-btn ks-btn--secondary">Mes priorités</a>
+        </div>
+        {% include 'personnalite/assessment/report/synthesis.html.twig' with {pdf: false, name: app.user.displayName} %}
+    {% else %}
+        <section style="background: var(--card-bg); border-radius: var(--r-lg); box-shadow: var(--card-shadow); padding: 1.5rem;">
+            <h2 style="font-family: var(--font-serif); font-size: 1.3rem; margin-bottom: .5rem;">Encore {{ 2 - count }} test{{ 2 - count > 1 ? 's' }} pour découvrir votre synthèse</h2>
+            <p style="color: var(--fg-light);">« Mon profil KIINI SAWA » croise vos résultats pour dessiner votre portrait complet : votre manière d'agir, ce qui vous pousse, vos dons et votre zone de vocation. Plus vous passez de tests, plus il est juste.</p>
+            <div style="display: flex; flex-direction: column; gap: .5rem; margin-top: 1rem;">
+                {% for key, label in missing %}
+                    <a href="{{ path('app_assessment_take', {slug: slugs[key]}) }}" class="ks-btn ks-btn--secondary" style="justify-content: space-between;">{{ label }} <span>→</span></a>
+                {% endfor %}
+            </div>
+        </section>
+    {% endif %}
+</div>
+{% endblock %}

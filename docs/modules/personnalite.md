@@ -109,3 +109,16 @@ vivent dans la table `content_override` (chemin → texte) et s'appliquent via `
   (calcul, clés, couleurs).
 - Verrouillé : clés, lettres, dimensions, sens et rattachement des questions, couleurs, questions IPIP.
 - « Revenir au texte d'origine » supprime la ligne ; un export JSON des modifications est disponible.
+
+## Synthèse « Mon profil KIINI SAWA » et actions reliées aux plans
+
+- `/mes-tests/synthese` (`SynthesisController`, `Service/ProfileSynthesis`) : croise les derniers résultats (DISC, Big Five,
+  type, ennéagramme, dons, équilibre de vie) dès 2 tests. Carte d'identité, convergence des tests sur 3 axes
+  (personnes/tâche, rythme, structure ; `ReportCharts::convergence`), zone de vocation (dimension DISC × famille de dons,
+  `SynthesisContent::VOCATIONS`, modifiable dans l'admin), ressources et fragilités, 3 priorités. Gratuit : carte
+  d'identité et convergences ; PRO : le reste et le PDF.
+- Boutons « Ajouter à mes rituels / à mon Plan de Croissance » sous chaque action des rapports (`_add_action`,
+  `TestActionService`) : rituel hebdomadaire de 30 jours ou objectif (axe Caractère, échéance 30 jours). Table
+  `test_action` ; `ReminderService::testFollowUps` relance une fois à 30 jours (« Où en êtes-vous ? »).
+- PDF : polices Inter et Playfair Display (`resources/fonts/pdf`, OFL) enregistrées par `PdfFactory` ; icônes et logo par
+  `Twig/ReportVisualsExtension` (`report_icon()`, `brand_logo()`) ; « L'essentiel en une page » (`_essentials`).

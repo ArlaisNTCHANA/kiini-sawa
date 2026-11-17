@@ -51,6 +51,8 @@ final class Content
         'type.families' => ['Type de fonctionnement', 'Les 4 familles', []],
         'self.equilibre' => ['Équilibre et Hygiène de Vie', 'Équilibre de Vie : les 8 domaines', []],
         'self.hygiene' => ['Équilibre et Hygiène de Vie', 'Hygiène de Vie : les 6 axes', []],
+        'synth.vocations' => ['Mon profil KIINI SAWA', 'Les 12 zones de vocation (DISC × famille de dons)', []],
+        'synth.axes' => ['Mon profil KIINI SAWA', 'Les 3 axes de convergence', []],
     ];
 
     /** Contenu de référence (code). */
@@ -82,6 +84,8 @@ final class Content
             'type.families' => TypeProfiles::FAMILIES,
             'self.equilibre' => SelfAssessmentProfiles::EQUILIBRE,
             'self.hygiene' => SelfAssessmentProfiles::HYGIENE,
+            'synth.vocations' => SynthesisContent::VOCATIONS,
+            'synth.axes' => SynthesisContent::AXES,
         };
     }
 

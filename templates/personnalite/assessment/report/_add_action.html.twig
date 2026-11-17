@@ -1,0 +1,19 @@
+{# Boutons « Ajouter à mes rituels / à mon Plan de Croissance » (écran seulement). Variables : text, source, addedActions. #}
+{% set already = (addedActions|default({}))[text]|default([]) %}
+{% set back = app.request.pathInfo %}
+<div style="display: flex; gap: 8px; flex-wrap: wrap; margin-top: 8px;">
+    {% for target, label in {habit: 'Ajouter à mes rituels', growth: 'Ajouter à mon Plan de Croissance'} %}
+        {% if target in already %}
+            <span style="font-size: .78rem; font-weight: 600; color: #166534; background: #DCFCE7; border-radius: 99px; padding: 5px 12px;">{{ report_icon('check', '#16A34A', 12) }}{{ target == 'habit' ? 'Dans vos rituels' : 'Dans votre Plan de Croissance' }}</span>
+        {% else %}
+            <form method="post" action="{{ path('app_test_action_add') }}" style="margin: 0;">
+                <input type="hidden" name="text" value="{{ text }}">
+                <input type="hidden" name="source" value="{{ source }}">
+                <input type="hidden" name="target" value="{{ target }}">
+                <input type="hidden" name="back" value="{{ back }}">
+                <input type="hidden" name="_csrf_token" value="{{ csrf_token('test_action') }}">
+                <button type="submit" style="font: inherit; font-size: .78rem; font-weight: 600; cursor: pointer; color: #0F766E; background: #F0FDFA; border: 1px solid #99F6E4; border-radius: 99px; padding: 5px 12px;">+ {{ label }}</button>
+            </form>
+        {% endif %}
+    {% endfor %}
+</div>
