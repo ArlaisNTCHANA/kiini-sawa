@@ -31,7 +31,7 @@ class LexiconTest extends WebTestCase
         $this->em()->flush();
         $client->loginUser($user);
 
-        foreach (['/dashboard', '/plan-de-vie', '/mes-strategies', '/journal', '/mes-plans/rituels', '/planner', '/bilan', '/social', '/mes-tests/', '/abonnement', '/plan-de-vie/assistant'] as $url) {
+        foreach (['/dashboard', '/plan-de-vie', '/mes-plans', '/journal', '/mes-plans/rituels', '/planner', '/bilan', '/social', '/mes-tests/', '/abonnement', '/plan-de-vie/assistant'] as $url) {
             $client->request('GET', $url);
             $this->assertResponseIsSuccessful($url);
             $doc = new \DOMDocument();

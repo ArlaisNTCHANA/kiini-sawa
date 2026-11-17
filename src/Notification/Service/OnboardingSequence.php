@@ -82,7 +82,7 @@ final class OnboardingSequence
                 default => null,
             },
             7 => ['j7_revue', 'Votre première revue de la semaine', '/bilan/revue-hebdomadaire', ['hasPartner' => $this->hasPartner($user)]],
-            9 => null === $trialEnd ? null : ['j9_pro', 'Votre vision a besoin d\'un plan', '/mes-strategies', ['trialEnd' => $trialEnd]],
+            9 => null === $trialEnd ? null : ['j9_pro', 'Votre vision a besoin d\'un plan', '/mes-plans', ['trialEnd' => $trialEnd]],
             default => null,
         };
     }

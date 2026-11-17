@@ -11,6 +11,27 @@ Ne jamais afficher ni demander de mot de passe ; ne pas publier son nom (mention
 
 ---
 
+## 2026-11-17 · Audit design n° 2 : noms, vitrine, entonnoir
+
+Audit : `docs/audit-design-2-strategique-2026-11-17.md` (vitrine, premier usage, interactivité, noms).
+- **Noms** : « Mes plans » partout. `/mes-plans` (route `app_plans`, `PlansOverviewController`, gabarit `plans.html.twig`) ;
+  `/mes-strategies` redirige en 301 (anciens courriels). Le menu choisit la rubrique par le **préfixe le plus long**
+  (`/mes-plans/rituels` reste dans « Mon quotidien »). « Stratégie » est réservé au sens du livre.
+- **Vitrine** (`dashboard/landing.html.twig`) : titre « Bâtissez la vie pour laquelle Dieu vous a créé », couverture du livre
+  en tête et dans une section « Le livre », Équation du But (figure du livre), cercle des 6 plans, icônes Lucide à la place
+  des émojis, lien vers l'introduction du livre. Promesse corrigée : le gratuit a « l'essentiel de chaque chapitre », PRO « le
+  livre en entier » (aussi dans `abonnement/index`).
+- **Couverture** : `assets/images/livre/couverture.png` = la couverture HD **recadrée au-dessus du nom de l'auteur**
+  (règle : son nom n'est pas publié tant que les mentions légales ne sont pas prêtes). Quand elles le seront, on pourra
+  mettre la couverture complète (`livre-et-ressources/livre/KIINI_couverture_HD.png`).
+  Piège : `sips -c` recadre toujours au centre (ignore `--cropOffset`) ; le recadrage a été fait en Python (PNG).
+- **Entonnoir** : `Media\Service\FunnelReport`, compteur `daily_visit` (visites de la vitrine par jour, robots écartés, aucune
+  donnée personnelle), page `/admin/entonnoir` (visites, comptes, email vérifié, onboarding, parcours, PRO). Les visites ne
+  sont comptées que depuis le déploiement. Test : `tests/Media/FunnelTest.php`.
+- **Reste (audit n° 2)** : visuels interactifs (cercle des plans cliquable avec progression, carte cliquable, rythmes),
+  accueil « Ma prochaine étape », puis lots A, B, C de l'audit n° 1 (zéro émoji dans l'application, composants uniques).
+- Pas de capture d'écran de l'application sur la vitrine (pas de photo ni de témoignage non plus : ne rien inventer).
+
 ## 2026-11-17 · Identité visuelle du livre dans l'application
 
 - Demande du fondateur : cohérence visuelle avec le livre (couleurs, schémas) ; **les polices restent** (Playfair, Inter).

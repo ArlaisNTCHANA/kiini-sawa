@@ -43,7 +43,8 @@
         .card { background: #fff; border-radius: 18px; padding: 1.5rem; box-shadow: 0 4px 20px -4px rgba(46, 107, 83,.08); }
         .card h3 { font-size: 1.1rem; margin: .5rem 0 .35rem; }
         .card p { color: var(--muted); font-size: .95rem; }
-        .icon { font-size: 1.6rem; }
+        .icon { width: 2.6rem; height: 2.6rem; border-radius: 12px; display: flex; align-items: center; justify-content: center; }
+        .icon svg { width: 1.3rem; height: 1.3rem; }
         .step-num { width: 2.2rem; height: 2.2rem; border-radius: 50%; background: #DCE7DF; color: var(--primary); font-weight: 800; display: flex; align-items: center; justify-content: center; }
         .verse { font-family: var(--serif); font-style: italic; font-size: clamp(1.2rem, 2.6vw, 1.6rem); text-align: center; color: var(--primary-dark); max-width: 760px; margin: 0 auto; }
         .verse small { display: block; font-style: normal; font-family: 'Inter', sans-serif; font-size: .85rem; color: var(--muted); margin-top: .75rem; letter-spacing: .08em; text-transform: uppercase; }
@@ -69,6 +70,18 @@
         .final h2 { color: #fff; }
         footer { padding: 2.5rem 0; color: var(--muted); font-size: .85rem; text-align: center; }
         footer a { margin: 0 .5rem; text-decoration: none; }
+        .hero-grid { display: grid; grid-template-columns: 1fr; gap: 2.5rem; align-items: center; }
+        .hero-cover { display: none; }
+        @media (min-width: 900px) { .hero-grid { grid-template-columns: 1.4fr .8fr; } .hero-cover { display: block; } }
+        .hero-cover img { width: 100%; max-width: 300px; display: block; margin-left: auto; border-radius: 6px; box-shadow: 0 30px 60px -20px rgba(0,0,0,.55), 0 0 0 1px rgba(255,255,255,.08); transform: rotate(2deg); }
+        .eq { background: #fff; border-radius: 22px; padding: 2rem 1.5rem; box-shadow: 0 4px 20px -4px rgba(46,107,83,.08); text-align: center; }
+        .eq-line { font-family: var(--serif); font-size: clamp(1.15rem, 2.6vw, 1.55rem); color: var(--primary-dark); margin: 0 auto 1.25rem; max-width: 720px; }
+        .eq-line em { color: #9A6B12; font-style: italic; }
+        .figure { background: #fff; border-radius: 22px; padding: 1.25rem; box-shadow: 0 4px 20px -4px rgba(46,107,83,.08); }
+        .figure img { display: block; width: 100%; height: auto; margin: 0 auto; }
+        .split { display: grid; grid-template-columns: 1fr; gap: 2rem; align-items: center; }
+        @media (min-width: 860px) { .split { grid-template-columns: 1fr 1fr; } }
+        .book img { width: 100%; max-width: 280px; display: block; margin: 0 auto; border-radius: 6px; box-shadow: 0 24px 50px -18px rgba(31,77,58,.5); }
         @media (max-width: 640px) { .nav-links .hide-sm { display: none; } section { padding: 3.25rem 0; } }
     </style>
 </head>
@@ -85,15 +98,20 @@
                 <a href="{{ path('app_login') }}">Se connecter</a>
             </div>
         </nav>
-        <div class="hero-inner">
-            <span class="kicker">Plan de Vie · Croissance · Transmission</span>
-            <h1>Bâtissez une vie alignée sur le but pour lequel Dieu vous a créé.</h1>
-            <p class="lead">KIINI SAWA vous guide pas à pas pour discerner votre raison d'être, la traduire en plans concrets et la vivre chaque jour, avec des rituels, des revues et des partenaires qui vous tiennent la main.</p>
-            <div class="cta-row">
-                <a href="{{ path('app_register') }}" class="btn btn-primary">Commencer gratuitement</a>
-                <a href="#methode" class="btn btn-ghost">Découvrir la méthode</a>
+        <div class="hero-grid">
+            <div class="hero-inner">
+                <span class="kicker">Les six plans d'une vie alignée</span>
+                <h1>Bâtissez la vie pour laquelle Dieu vous a créé.</h1>
+                <p class="lead">Découvrez votre But de Dieu, écrivez-le en une phrase, puis bâtissez six plans concrets pour le vivre chaque jour : avec des rituels, des revues et des partenaires qui vous tiennent la main.</p>
+                <div class="cta-row">
+                    <a href="{{ path('app_register') }}" class="btn btn-primary">Commencer gratuitement</a>
+                    <a href="#methode" class="btn btn-ghost">Découvrir la méthode</a>
+                </div>
+                <p class="small">Gratuit pour toujours · {{ trialDays }} jours de PRO offerts · sans carte bancaire</p>
             </div>
-            <p class="small">Gratuit pour toujours · {{ trialDays }} jours de PRO offerts · sans carte bancaire</p>
+            <div class="hero-cover">
+                <img src="{{ asset('images/livre/couverture.png') }}" alt="Couverture du livre KIINI : Bâtis la vie pour laquelle tu as été créé" width="300" height="400">
+            </div>
         </div>
     </div>
 </header>
@@ -104,20 +122,52 @@
     </div>
 </section>
 
+<section style="background: #fff;">
+    <div class="wrap">
+        <h2 style="text-align: center;">Votre vie tient en une phrase</h2>
+        <p class="sub" style="text-align: center; margin-left: auto; margin-right: auto;">Votre But de Dieu est une fonction, pas un projet : ce que vous êtes fait pour accomplir, quel que soit le lieu. KIINI SAWA vous aide à le formuler avec l'Équation du But.</p>
+        <div class="eq">
+            <p class="eq-line">Je suis créé pour <em>[verbe]</em> afin d'apporter <em>[impact]</em> chez <em>[cible]</em>.</p>
+            <div class="figure" style="box-shadow: none; padding: 0;"><img src="{{ asset('images/livre/fig_equation.png') }}" alt="L'Équation du But : je suis créé pour un verbe, afin d'apporter un impact, chez une cible" loading="lazy" style="max-width: 620px;"></div>
+        </div>
+    </div>
+</section>
+
 <section id="methode" style="background: #fff;">
     <div class="wrap">
         <h2>Beaucoup d'activité, peu de direction ?</h2>
         <p class="sub">On peut faire beaucoup de choses bien, et passer à côté des bonnes. La méthode KIINI SAWA part de l'Être pour aller vers le Faire : d'abord votre raison d'être, puis des plans qui en découlent, puis un quotidien qui les nourrit.</p>
-        <div class="grid">
-            <div class="card"><div class="icon">🧭</div><h3>Plan de Vie</h3><p>But de Dieu, valeurs, passions, dons et talents, vision et objectifs : les fondations de tout le reste.</p></div>
-            <div class="card"><div class="icon">💎</div><h3>Plan de Croissance</h3><p>Caractère & Conviction, Relation & Réseau : devenir la personne capable de porter votre vision.</p></div>
-            <div class="card"><div class="icon">🎓</div><h3>Plan de Développement personnel</h3><p>Compétence & Connaissance : les savoir-faire à acquérir, les livres et formations à suivre.</p></div>
-            <div class="card"><div class="icon">🛡️</div><h3>Plan d'Hygiène de vie</h3><p>Corps, âme et esprit : les rythmes qui vous soutiennent et vous font durer.</p></div>
-            <div class="card"><div class="icon">⚖️</div><h3>Plan d'Intendance</h3><p>Argent, temps, foyer, dons : gérer fidèlement tout ce qui vous est confié.</p></div>
-            <div class="card"><div class="icon">🎁</div><h3>Plan de Transmission</h3><p>Ce que vous laisserez : des valeurs, des œuvres et des personnes qui porteront du fruit après vous.</p></div>
-            <div class="card"><div class="icon">🗺️</div><h3>Carte et cohérence</h3><p>Voyez comment tout s'enchaîne, et recevez un score de cohérence avec les points à renforcer.</p></div>
+        <div class="split" style="margin-bottom: 2.5rem;">
+            <div class="figure"><img src="{{ asset('images/livre/fig_6plans.png') }}" alt="Les six plans : le Plan de Vie au centre, entouré des plans de Croissance, de Développement, d'Hygiène de vie, d'Intendance et de Transmission" loading="lazy" style="max-width: 520px;"></div>
+            <div>
+                <p class="kicker" style="color: var(--primary);">Une méthode complète</p>
+                <p style="font-family: var(--serif); font-size: 1.5rem; color: var(--primary-dark); line-height: 1.3; margin-bottom: .75rem;">Qui je suis, qui je deviens, ce que je développe, ce qui me soutient, ce que je gère, ce que je laisse.</p>
+                <p class="sub" style="margin-bottom: 0;">Chaque plan répond à une question de votre vie. Le Plan de Vie est la boussole ; les cinq autres la mettent en œuvre ; le système du quotidien les relie.</p>
+            </div>
         </div>
-        <p style="text-align: center; margin-top: 2rem;"><a href="{{ path('app_methode_chapter', {slug: 'introduction'}) }}" style="color: #2E6B53; font-weight: 700;">Lire gratuitement l'introduction du livre →</a></p>
+        <div class="grid">
+            <div class="card"><div class="icon" style="color: #C8962E; background: #FAF4E6;"><i data-lucide="compass"></i></div><h3>Plan de Vie</h3><p>But de Dieu, valeurs, passions, dons et talents, vision et objectifs : les fondations de tout le reste.</p></div>
+            <div class="card"><div class="icon" style="color: #1F4D3A; background: #E4ECE7;"><i data-lucide="sprout"></i></div><h3>Plan de Croissance</h3><p>Caractère & Conviction, Relation & Réseau : devenir la personne capable de porter votre vision.</p></div>
+            <div class="card"><div class="icon" style="color: #2E6B53; background: #E9F1EC;"><i data-lucide="wrench"></i></div><h3>Plan de Développement personnel</h3><p>Compétence & Connaissance : les savoir-faire à acquérir, les livres et formations à suivre.</p></div>
+            <div class="card"><div class="icon" style="color: #5D7368; background: #ECEFED;"><i data-lucide="heart-pulse"></i></div><h3>Plan d'Hygiène de vie</h3><p>Corps, âme et esprit : les rythmes qui vous soutiennent et vous font durer.</p></div>
+            <div class="card"><div class="icon" style="color: #5E8463; background: #EEF4EF;"><i data-lucide="hand-coins"></i></div><h3>Plan d'Intendance</h3><p>Argent, temps, foyer, dons : gérer fidèlement tout ce qui vous est confié.</p></div>
+            <div class="card"><div class="icon" style="color: #A87A1F; background: #FAF4E6;"><i data-lucide="hand-heart"></i></div><h3>Plan de Transmission</h3><p>Ce que vous laisserez : des valeurs, des œuvres et des personnes qui porteront du fruit après vous.</p></div>
+            <div class="card"><div class="icon" style="color: #2E6B53; background: #E9F1EC;"><i data-lucide="map"></i></div><h3>Carte et cohérence</h3><p>Voyez comment tout s'enchaîne, et recevez un score de cohérence avec les points à renforcer.</p></div>
+        </div>
+    </div>
+</section>
+
+<section style="background: #fff;">
+    <div class="wrap">
+        <div class="split">
+            <div class="book"><img src="{{ asset('images/livre/couverture.png') }}" alt="Couverture du livre KIINI" loading="lazy"></div>
+            <div>
+                <p class="kicker" style="color: var(--primary);">Le livre</p>
+                <h2 style="margin-bottom: .6rem;">Un livre qui se vit, une application qui le met en pratique</h2>
+                <p class="sub">« Ce livre ne se lit pas, il se vit. » À chaque étape de l'application, le chapitre qui l'explique : la parole, l'enseignement, l'exercice du Sanctuaire, puis ce que vous écrivez dans votre plan. Un parcours de 90 jours vous conduit de la première page à vos six plans écrits.</p>
+                <p><a href="{{ path('app_methode_chapter', {slug: 'introduction'}) }}" class="btn btn-primary">Lire gratuitement l'introduction</a></p>
+            </div>
+        </div>
     </div>
 </section>
 
@@ -138,12 +188,12 @@
         <h2>Se connaître, avec des outils sérieux</h2>
         <p class="sub">Pour bâtir sur ce que Dieu a mis en vous, il faut d'abord le discerner. Les tests de KIINI SAWA reposent sur des questionnaires utilisés en recherche, avec un rapport détaillé et des pistes concrètes.</p>
         <div class="grid" style="grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));">
-            <div class="card"><div class="icon">🧬</div><h3>Profil complet</h3><p>116 questions, vos 5 grandes dimensions de personnalité en 29 facettes. Questionnaire de référence IPIP-NEO.</p><span class="tag">15 min</span></div>
-            <div class="card"><div class="icon">🧠</div><h3>Type de fonctionnement</h3><p>16 types, d'après la typologie de Carl Jung : comment vous puisez votre énergie, décidez et vous organisez.</p><span class="tag">7 min</span></div>
-            <div class="card"><div class="icon">⚡</div><h3>DISC</h3><p>Votre profil naturel et votre profil adapté : votre manière d'agir, comment les autres vous perçoivent et comment interagir avec chacun.</p><span class="tag">10 min</span></div>
-            <div class="card"><div class="icon">🎯</div><h3>Ennéagramme</h3><p>Vos motivations profondes et vos peurs, avec votre chemin de croissance.</p><span class="tag">10 min</span></div>
-            <div class="card"><div class="icon">🔥</div><h3>Dons spirituels</h3><p>15 dons bibliques (Romains 12, 1 Corinthiens 12, Éphésiens 4) pour discerner comment servir.</p><span class="tag">8 min</span></div>
-            <div class="card"><div class="icon">📄</div><h3>Un vrai rapport</h3><p>Forces, points de vigilance, pistes pour votre Plan de Vie, et un PDF à garder ou à partager avec votre mentor.</p></div>
+            <div class="card"><div class="icon" style="color: #2E6B53; background: #E9F1EC;"><i data-lucide="dna"></i></div><h3>Profil complet</h3><p>116 questions, vos 5 grandes dimensions de personnalité en 29 facettes. Questionnaire de référence IPIP-NEO.</p><span class="tag">15 min</span></div>
+            <div class="card"><div class="icon" style="color: #2E6B53; background: #E9F1EC;"><i data-lucide="brain"></i></div><h3>Type de fonctionnement</h3><p>16 types, d'après la typologie de Carl Jung : comment vous puisez votre énergie, décidez et vous organisez.</p><span class="tag">7 min</span></div>
+            <div class="card"><div class="icon" style="color: #2E6B53; background: #E9F1EC;"><i data-lucide="zap"></i></div><h3>DISC</h3><p>Votre profil naturel et votre profil adapté : votre manière d'agir, comment les autres vous perçoivent et comment interagir avec chacun.</p><span class="tag">10 min</span></div>
+            <div class="card"><div class="icon" style="color: #2E6B53; background: #E9F1EC;"><i data-lucide="target"></i></div><h3>Ennéagramme</h3><p>Vos motivations profondes et vos peurs, avec votre chemin de croissance.</p><span class="tag">10 min</span></div>
+            <div class="card"><div class="icon" style="color: #A87A1F; background: #FAF4E6;"><i data-lucide="flame"></i></div><h3>Dons spirituels</h3><p>15 dons bibliques (Romains 12, 1 Corinthiens 12, Éphésiens 4) pour discerner comment servir.</p><span class="tag">8 min</span></div>
+            <div class="card"><div class="icon" style="color: #2E6B53; background: #E9F1EC;"><i data-lucide="file-text"></i></div><h3>Un vrai rapport</h3><p>Forces, points de vigilance, pistes pour votre Plan de Vie, et un PDF à garder ou à partager avec votre mentor.</p></div>
         </div>
     </div>
 </section>
@@ -215,7 +265,7 @@
             </div>
         </div>
         <div class="card" style="margin-top: 2rem; max-width: 860px; border: 2px dashed #C8D6CD;">
-            <h3 style="font-size: 1.3rem;">⛪ Église, association, entreprise : l'offre Organisation</h3>
+            <h3 style="font-size: 1.3rem;">Église, association, entreprise : l'offre Organisation</h3>
             <p style="margin: .4rem 0 1rem;">Offrez KIINI SAWA PRO à tous vos membres. Vous suivez l'engagement du groupe, vous confiez chacun à un accompagnateur ; chaque membre choisit ce qu'il partage, et son journal reste toujours privé.</p>
             <p style="color: var(--fg); font-weight: 600;">Dès {{ orgSeatEur|money('EUR') }} ou {{ orgSeatXaf|money('XAF') }} par membre et par an, jusqu'à −35 % selon le nombre de places.</p>
             <a href="{{ path('app_register') }}" class="btn btn-primary" style="margin-top: 1rem;">Créer l'espace de mon organisation</a>
@@ -247,12 +297,14 @@
 <footer>
     <div class="wrap">
         © {{ 'now'|date('Y') }} KIINI SAWA ·
-        <a href="{{ path('app_install') }}">📱 Installer l'application</a> ·
+        <a href="{{ path('app_install') }}">Installer l'application</a> ·
         {% include 'legal/_footer_links.html.twig' with {} only %}
     </div>
 </footer>
 
+<script src="{{ asset('lib/lucide-1.73.0.min.js') }}"></script>
 <script>
+    if (window.lucide) { lucide.createIcons(); }
     function setCur(cur) {
         document.querySelectorAll('[data-cur]').forEach(b => b.classList.toggle('on', b.dataset.cur === cur));
         ['EUR', 'XAF'].forEach(c => document.querySelectorAll('.price-' + c).forEach(el => el.hidden = c !== cur));

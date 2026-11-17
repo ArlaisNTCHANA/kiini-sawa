@@ -59,11 +59,11 @@ abstract class AbstractPlanController extends AbstractController
         }
         $data = $this->plans->getStrategiesData($this->user());
         $data['initialPlan'] = $planKey;
-        $data['pageTitle'] = null !== $planKey ? PlanCatalog::label($planKey) : 'Vue d\'ensemble de mes plans';
+        $data['pageTitle'] = null !== $planKey ? PlanCatalog::label($planKey) : 'Mes plans';
         $data['lockedPlans'] = $this->entitlements->lockedPlans($this->user());
         $data['giftResults'] = $this->testResults->gifts($this->user()); // rappel des dons dans le Plan de Transmission
 
-        return $this->render('plan_de_vie/strategies.html.twig', $data);
+        return $this->render('plan_de_vie/plans.html.twig', $data);
     }
 
     protected function renderVisualization(string $planKey): Response

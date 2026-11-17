@@ -152,7 +152,7 @@ class PlanDIntendanceControllerTest extends WebTestCase
     public function testSixPlansInNavigationAndOverview(): void
     {
         $this->client->loginUser($this->createUser(pro: true));
-        $crawler = $this->client->request('GET', '/mes-strategies');
+        $crawler = $this->client->request('GET', '/mes-plans');
         $this->assertResponseIsSuccessful();
         $this->assertCount(1, $crawler->filter('[data-plan-card="INTENDANCE"]'));
         $this->assertGreaterThan(0, $crawler->filter('a[href="/plan-d-intendance"]')->count());

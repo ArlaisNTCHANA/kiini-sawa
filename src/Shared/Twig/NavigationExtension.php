@@ -23,7 +23,7 @@ final class NavigationExtension extends AbstractExtension
             ['Mon évolution', 'app_test_evolution', 'trending-up', 'Vos tests au fil du temps'],
             ['Feedback nourricier', 'app_feedback', 'message-circle-heart', 'Le regard bienveillant de vos proches'],
         ]],
-        'plans' => ['label' => 'Mes plans', 'icon' => 'compass', 'match' => ['/plan-de-vie', '/mes-strategies', '/plan-de-croissance', '/plan-de-developpement', '/plan-de-transmission', '/plan-d-hygiene', '/plan-d-intendance'], 'items' => [
+        'plans' => ['label' => 'Mes plans', 'icon' => 'compass', 'match' => ['/plan-de-vie', '/mes-plans', '/plan-de-croissance', '/plan-de-developpement', '/plan-de-transmission', '/plan-d-hygiene', '/plan-d-intendance'], 'items' => [
             // Question et contenu : source unique PlanCatalog ; ordre et icônes de la méthode
             ['Plan de Vie', 'app_plan_de_vie', 'compass', PlanCatalog::PLANS['VIE']['question'].'. '.PlanCatalog::PLANS['VIE']['desc']],
             ['Plan de Croissance', 'app_plan_de_croissance', 'sprout', PlanCatalog::PLANS['CROISSANCE']['question'].'. '.PlanCatalog::PLANS['CROISSANCE']['desc'], 'pro'],
@@ -31,7 +31,7 @@ final class NavigationExtension extends AbstractExtension
             ['Plan d\'Hygiène de vie', 'app_plan_d_hygiene', 'heart-pulse', PlanCatalog::PLANS['HYGIENE']['question'].'. '.PlanCatalog::PLANS['HYGIENE']['desc'], 'pro'],
             ['Plan d\'Intendance', 'app_plan_d_intendance', 'hand-coins', PlanCatalog::PLANS['INTENDANCE']['question'].'. '.PlanCatalog::PLANS['INTENDANCE']['desc'], 'pro'],
             ['Plan de Transmission', 'app_plan_de_transmission', 'hand-heart', PlanCatalog::PLANS['TRANSMISSION']['question'].'. '.PlanCatalog::PLANS['TRANSMISSION']['desc'], 'pro'],
-            ['Vue d\'ensemble de mes plans', 'app_strategies', 'layout-grid', 'Vos plans côte à côte : Être, Faire, Avoir, Donner'],
+            ['Tous mes plans', 'app_plans', 'layout-grid', 'Vos plans côte à côte : Être, Faire, Avoir, Donner'],
         ]],
         'daily' => ['label' => 'Mon quotidien', 'icon' => 'calendar-check', 'desc' => 'Le système qui relie vos 6 plans au quotidien : rituels, agenda, journal, revues.', 'match' => ['/mes-plans/rituels', '/planner', '/journal', '/bilan'], 'items' => [
             ['Rituels', 'app_user_habits', 'activity', 'Les petites actions qui nourrissent vos objectifs'],
@@ -74,14 +74,18 @@ final class NavigationExtension extends AbstractExtension
     public function activeSection(): ?string
     {
         $path = $this->requests->getCurrentRequest()?->getPathInfo() ?? '';
+        $best = null;
+        $bestLength = -1;
         foreach (self::SECTIONS as $key => $s) {
             foreach ($s['match'] as $prefix) {
-                if ($path === $prefix || str_starts_with($path, rtrim($prefix, '/').'/') || str_starts_with($path, $prefix)) {
-                    return $key;
+                // Le préfixe le plus long l'emporte : /mes-plans/rituels (Mon quotidien) avant /mes-plans (Mes plans)
+                if (str_starts_with($path, $prefix) && \strlen($prefix) > $bestLength) {
+                    $best = $key;
+                    $bestLength = \strlen($prefix);
                 }
             }
         }
 
-        return null;
+        return $best;
     }
 }

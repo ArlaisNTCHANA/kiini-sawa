@@ -358,6 +358,10 @@
                     <i data-lucide="radar"></i>
                     <span>Provenance des inscrits</span>
                 </a>
+                <a href="{{ path('admin_funnel') }}" class="ks-sidebar__link {{ app.request.attributes.get('_route') starts with 'admin_funnel' ? 'active' }}" id="nav-funnel">
+                    <i data-lucide="filter"></i>
+                    <span>Entonnoir</span>
+                </a>
                 <a href="{{ path('admin_retention') }}" class="ks-sidebar__link {{ app.request.attributes.get('_route') starts with 'admin_retention' ? 'active' }}" id="nav-retention">
                     <i data-lucide="repeat"></i>
                     <span>Rétention</span>

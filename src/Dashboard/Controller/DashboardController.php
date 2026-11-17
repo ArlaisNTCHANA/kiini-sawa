@@ -14,11 +14,12 @@ class DashboardController extends AbstractController
 {
     /** Page d'accueil publique (présentation et prix) ; un utilisateur connecté va à son tableau de bord. */
     #[Route('/', name: 'app_home', methods: ['GET'])]
-    public function home(\App\Abonnement\Service\SubscriptionManager $prices, \App\Abonnement\Service\Entitlements $entitlements, \App\Abonnement\Service\CurrencyResolver $currencies, \Symfony\Component\HttpFoundation\Request $request): Response
+    public function home(\App\Abonnement\Service\SubscriptionManager $prices, \App\Abonnement\Service\Entitlements $entitlements, \App\Abonnement\Service\CurrencyResolver $currencies, \Symfony\Component\HttpFoundation\Request $request, \App\Media\Service\FunnelReport $funnel): Response
     {
         if ($this->getUser()) {
             return $this->redirectToRoute('app_dashboard');
         }
+        $funnel->countVisit($request);
 
         return $this->render('dashboard/landing.html.twig', [
             'defaultCurrency' => $currencies->resolve($request),

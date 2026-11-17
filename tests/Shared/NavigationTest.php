@@ -75,4 +75,25 @@ class NavigationTest extends WebTestCase
         $this->assertStringNotContainsString('Mes tests', $account, 'Les fonctionnalités ne sont plus dans le menu du compte');
         $this->assertSelectorTextContains('.ks-sheet', 'Ensemble');
     }
+
+    /** « Mes plans » : l'ancienne adresse redirige, et la page des rituels reste dans « Mon quotidien ». */
+    public function testPlansOverviewAddress(): void
+    {
+        $client = static::createClient();
+        $client->loginUser($this->createUser());
+
+        $client->request('GET', '/mes-strategies');
+        $this->assertResponseRedirects('/mes-plans', 301);
+
+        $client->request('GET', '/mes-plans');
+        $this->assertResponseIsSuccessful();
+        $this->assertSelectorTextContains('h1', 'Mes plans');
+
+        // Le préfixe le plus long l'emporte : /mes-plans/rituels appartient à « Mon quotidien », pas à « Mes plans »
+        foreach (['/mes-plans' => 'plans', '/mes-plans/rituels' => 'daily', '/plan-d-intendance' => 'plans', '/bilan/saison' => 'daily'] as $path => $section) {
+            $stack = new \Symfony\Component\HttpFoundation\RequestStack();
+            $stack->push(\Symfony\Component\HttpFoundation\Request::create($path));
+            $this->assertSame($section, (new NavigationExtension($stack))->activeSection(), $path);
+        }
+    }
 }

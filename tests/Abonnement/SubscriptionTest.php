@@ -48,7 +48,7 @@ class SubscriptionTest extends WebTestCase
         }
 
         // Le cœur reste gratuit
-        foreach (['/plan-de-vie', '/plan-de-vie/assistant', '/mes-plans/rituels', '/journal', '/bilan/revue-hebdomadaire', '/methode', '/mes-strategies'] as $url) {
+        foreach (['/plan-de-vie', '/plan-de-vie/assistant', '/mes-plans/rituels', '/journal', '/bilan/revue-hebdomadaire', '/methode', '/mes-plans'] as $url) {
             $this->client->request('GET', $url);
             $this->assertResponseIsSuccessful("$url doit rester gratuit");
         }
@@ -178,8 +178,14 @@ class SubscriptionTest extends WebTestCase
     {
         $this->client->request('GET', '/');
         $this->assertResponseIsSuccessful();
-        $this->assertSelectorTextContains('h1', 'Bâtissez une vie alignée');
+        $this->assertSelectorTextContains('h1', 'Bâtissez la vie pour laquelle Dieu vous a créé');
         $this->assertStringContainsString('25 000 FCFA', $this->client->getResponse()->getContent());
         $this->assertStringContainsString('79,99 €', $this->client->getResponse()->getContent());
+        // Vitrine : couverture du livre sans le nom de l'auteur, schémas, plus d'émojis, promesse exacte sur le livre
+        $html = $this->client->getResponse()->getContent();
+        $this->assertStringContainsString('images/livre/couverture', $html);
+        $this->assertStringContainsString('images/livre/fig_6plans', $html);
+        $this->assertStringContainsString('l\'essentiel de chaque chapitre du livre', $html);
+        $this->assertDoesNotMatchRegularExpression('/[\x{1F300}-\x{1FAFF}]/u', $html);
     }
 }

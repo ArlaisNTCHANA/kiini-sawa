@@ -166,7 +166,7 @@ final class SubscriptionManager
         }
         $this->notifier->notify($user, NotificationType::PAYMENT_VALIDATED, 'Un accès PRO vous est offert',
             sprintf('Vous bénéficiez de KIINI SAWA PRO jusqu\'au %s. Profitez-en pour bâtir vos six plans !', $end->format('d/m/Y')),
-            '/mes-strategies', 'cadeau '.$transaction->getId());
+            '/mes-plans', 'cadeau '.$transaction->getId());
 
         return $transaction;
     }
