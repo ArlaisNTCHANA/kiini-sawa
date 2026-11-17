@@ -5,5 +5,11 @@
         <span style="font-weight: 500; color: #92400E; opacity: .8;">· {{ chapter.title }}</span>
     </summary>
     <p style="margin: .6rem 0 .5rem; line-height: 1.6;">{{ chapter.excerpt }}</p>
+    {% if chapter.sanctuary %}
+        <details class="book-panel__sanctuary" data-sanctuary style="margin: .4rem 0 .7rem; background: rgba(255,255,255,.6); border-radius: 10px; padding: .55rem .8rem;">
+            <summary style="cursor: pointer; font-weight: 700;">🕯️ {{ chapter.sanctuary.title }}</summary>
+            <div style="margin-top: .5rem; line-height: 1.6;">{{ chapter.sanctuary.html|raw }}</div>
+        </details>
+    {% endif %}
     <a href="{{ path('app_methode_chapter', {slug: chapter.slug}) }}" target="_blank" rel="noopener" style="color: var(--accent); font-weight: 700; text-decoration: none;">Lire le chapitre ({{ chapter.minutes }} min) →</a>
 </details>

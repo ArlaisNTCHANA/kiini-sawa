@@ -11,6 +11,31 @@ Ne jamais afficher ni demander de mot de passe ; ne pas publier son nom (mention
 
 ---
 
+## 2026-11-17 · Phase 1 bis : les pratiques du livre dans l'application
+
+- **Vérification visuelle** en local avec un compte de test PRO (`var/compte-de-test.local`, non versionné) : page
+  d'Intendance, vue d'ensemble, Équation du But. Corrigé : retour sur l'élément après enregistrement (formulaires sans
+  Turbo + défilement vers l'ancre), « Hygiène de vie » dans les titres.
+- **Intendance dans la revue du mois** (compte rendu, chapitre 18) : état et action faite des priorités, date du dernier
+  point (`MonthlyReviewController::saveStewardship`).
+- **Intendance sur la carte stratégique** : lien facultatif d'un élément vers un objectif (`StewardshipItem::lifeGoal`) ;
+  nœuds « ⚖️ » sur la carte ; alerte du chapitre 21 « Absent de la carte : … » pour tout plan qui ne soutient aucun objectif.
+- **Ma saison** (`/bilan/saison`, `SeasonController`, `Bilan\Service\Seasons`, chapitre 11) : saison de 3 mois, thème,
+  nature (semis, croissance, récolte, hiver : travail et piège du livre), revue de saison, historique. Entité `Season`
+  existante, jusque-là inutilisée.
+- **Bilan du jour** (`/bilan/du-jour`, `DailyReviewController`, chapitre 17) : intention tenue, énergie, humeur, stress,
+  gratitude, tendances sur 14 jours. Stocké dans `DailyLog` (déjà utilisé par l'Agenda pour l'intention du jour).
+- **Phrase d'éternité** et « déplacement de trésor » (chapitre 19) : étape 11 de l'assistant, affichés en tête du Plan de
+  Transmission (`PlanDeTransmission::eternityPhrase`, `treasureShift`).
+- **Le Sanctuaire** : chaque encart « Comprendre cette étape » propose l'exercice du chapitre (`BookLibrary::sanctuary`).
+- **Ne manque jamais deux fois** (chapitre 22) : rappel sur la page des rituels pour les rituels quotidiens manqués la veille.
+- **Axe « Ressources » du test Hygiène** : test inchangé (comparaison des passations) ; à l'étape 12, cet axe n'est plus
+  proposé comme domaine d'hygiène mais renvoyé au domaine « Temps » du Plan d'Intendance.
+- 3 migrations (lien objectif, saisons et bilan du jour, phrase d'éternité). 212 tests verts.
+- **Pièges** : dans un gabarit enfant, ne pas nommer une variable `active` (écrasée par le menu de `base.html.twig`) ;
+  `Habit` réécrit `createdAt` au `PrePersist` (dans un test, antidater en SQL puis `clear()`).
+- **Choix retenus** : l'application garde le « vous », le livre le « tu » ; le mot reste « Agenda ».
+
 ## 2026-11-17 · Le livre : trois niveaux d'accès
 
 Décision du fondateur : le livre est un produit en soi (vente, KDP), l'application fait pratiquer.

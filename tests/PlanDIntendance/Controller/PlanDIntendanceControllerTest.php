@@ -5,6 +5,8 @@ namespace App\Tests\PlanDIntendance\Controller;
 use App\Compte\Entity\User;
 use App\Personnalite\Psychometrie\AssessmentService;
 use App\Personnalite\Psychometrie\Instruments;
+use App\PlanDeVie\Entity\LifeGoal;
+use App\PlanDeVie\Entity\PlanDeVie;
 use App\PlanDIntendance\Entity\StewardshipItem;
 use App\PlanDIntendance\Entity\StewardshipRhythm;
 use App\Tests\Compte\AccountTestTrait;
@@ -155,5 +157,55 @@ class PlanDIntendanceControllerTest extends WebTestCase
         $this->assertCount(1, $crawler->filter('[data-plan-card="INTENDANCE"]'));
         $this->assertGreaterThan(0, $crawler->filter('a[href="/plan-d-intendance"]')->count());
         $this->assertSelectorTextContains('body', 'Ce que je gère');
+    }
+
+    /** La revue du mois sert de compte rendu : état et action faite des priorités, date du dernier point. */
+    public function testMonthlyReviewIsTheStewardshipReport(): void
+    {
+        $user = $this->createUser(pro: true);
+        $this->client->loginUser($user);
+        $this->client->request('POST', '/plan-d-intendance/element', ['origin' => 'FINANCES', 'label' => 'Mon épargne']);
+        $item = $this->items($user)[0];
+        $this->client->request('POST', '/plan-d-intendance/element/'.$item->getId(), ['status' => 'DORT', 'decision' => 'PROTEGER', 'action' => 'Compte séparé', 'priority' => '1']);
+
+        $crawler = $this->client->request('GET', '/bilan/revue-mensuelle');
+        $this->assertSelectorTextContains('[data-stewardship-review]', 'Mon épargne');
+        $token = $crawler->filter('input[name="_csrf_token"]')->attr('value');
+        $this->client->request('POST', '/bilan/revue-mensuelle', [
+            '_csrf_token' => $token, 'progress' => 'Un pas', 'decision' => 'Continuer',
+            'stw' => [$item->getId() => ['status' => 'FRUCTIFIE', 'done' => '1']],
+        ]);
+        $this->assertResponseRedirects('/bilan/revue-mensuelle');
+
+        $item = $this->items($user)[0];
+        $this->assertSame('FRUCTIFIE', $item->getStatus());
+        $this->assertNotNull($item->getActionDoneAt());
+        $this->assertNotNull($this->em()->getRepository(StewardshipRhythm::class)->findOneBy(['user' => $user->getId()])?->getLastReviewAt());
+    }
+
+    /** Carte stratégique : un élément relié à un objectif y apparaît ; sinon, l'Intendance est signalée absente. */
+    public function testStewardshipOnTheStrategicMap(): void
+    {
+        $user = $this->createUser(pro: true);
+        $em = $this->em();
+        $plan = new PlanDeVie();
+        $em->find(User::class, $user->getId())->setPlanDeVie($plan);
+        $em->persist($plan);
+        $goal = (new LifeGoal())->setPlanDeVie($plan)->setTitle('Lancer un atelier pilote')->setCategory('DO')->setPriority('HIGH');
+        $em->persist($goal);
+        $em->flush();
+
+        $this->client->loginUser($user);
+        $this->client->request('GET', '/plan-de-vie');
+        $this->assertSelectorTextContains('[data-map-missing-plans]', 'Intendance');
+
+        $this->client->request('POST', '/plan-d-intendance/element', ['origin' => 'TEMPS', 'label' => 'Deux soirées par mois']);
+        $item = $this->items($user)[0];
+        $this->client->request('POST', '/plan-d-intendance/element/'.$item->getId(), ['life_goal' => (string) $goal->getId()]);
+        $this->assertSame($goal->getId(), $this->items($user)[0]->getLifeGoal()?->getId());
+
+        $crawler = $this->client->request('GET', '/plan-de-vie');
+        $this->assertStringContainsString('Stew'.$item->getId().'["⚖️ Deux soirées par mois"]', $crawler->filter('#mermaid-code-src')->text());
+        $this->assertSelectorTextNotContains('[data-map-missing-plans]', 'Intendance');
     }
 }

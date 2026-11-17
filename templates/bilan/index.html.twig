@@ -242,6 +242,12 @@
         <a href="{{ path('app_monthly_review') }}" class="bilan-btn" style="margin-top: 1.25rem; margin-left: .5rem; display: inline-flex; align-items: center; gap: .5rem; text-decoration: none; background: var(--bg-alt); color: var(--fg);">
             <i data-lucide="calendar-range" class="w-4 h-4"></i> Revue du mois
         </a>
+        <a href="{{ path('app_daily_review') }}" class="bilan-btn" style="margin-top: 1.25rem; margin-left: .5rem; display: inline-flex; align-items: center; gap: .5rem; text-decoration: none; background: var(--bg-alt); color: var(--fg);">
+            <i data-lucide="moon" class="w-4 h-4"></i> Bilan du jour
+        </a>
+        <a href="{{ path('app_season') }}" class="bilan-btn" style="margin-top: 1.25rem; margin-left: .5rem; display: inline-flex; align-items: center; gap: .5rem; text-decoration: none; background: var(--bg-alt); color: var(--fg);">
+            <i data-lucide="sprout" class="w-4 h-4"></i> Ma saison
+        </a>
     </header>
     <div style="max-width: 760px; margin: 0 auto 1.5rem;">{{ book_panel('bilan') }}</div>
 

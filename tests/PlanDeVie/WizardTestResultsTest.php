@@ -124,9 +124,12 @@ class WizardTestResultsTest extends WebTestCase
         $this->client->loginUser($this->user);
         $crawler = $this->client->request('GET', '/plan-de-vie/assistant?plan=HYGIENE');
         $this->assertResponseIsSuccessful();
+        // L'axe « Ressources » (le plus faible, 3/10) est renvoyé au Plan d'Intendance ; les deux autres restent proposés
         $chips = $crawler->filter('button[onclick^="addSuggestedHygieneDomain"]');
-        $this->assertCount(3, $chips);
-        $this->assertStringContainsString('3,0/10', $chips->first()->text());
+        $this->assertCount(2, $chips);
+        $this->assertStringContainsString('4,5/10', $chips->first()->text());
+        $this->assertSelectorTextContains('[data-ressources-to-stewardship]', 'Plan d\'Intendance');
+        $this->assertSelectorTextContains('[data-ressources-to-stewardship]', '3,0/10');
     }
 
     public function testBalanceExplainedInGrowthPlan(): void

@@ -237,6 +237,8 @@ class HygieneDomain
             'Alignement' => 'Spirituel',
             'Paix intérieure' => 'Spirituel',
             'Pratique personnelle' => 'Spirituel',
+            // Temps et projets relèvent aussi du Plan d'Intendance (domaine « Temps ») depuis le 17/11/2026 ;
+            // ils restent ici pour les plans d'hygiène déjà saisis.
             'Gestion du temps' => 'Ressources',
             'Projets personnels' => 'Ressources',
             'Limites d’énergie' => 'Ressources',

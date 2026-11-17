@@ -1820,7 +1820,7 @@
                         <div class="card-icon" style="background: rgba(16, 185, 129, 0.08); color: var(--success);">
                             <i data-lucide="heart-pulse" style="width: 18px; height: 18px;"></i>
                         </div>
-                        <h2 class="card-title">Hygiène de Vie</h2>
+                        <h2 class="card-title">Hygiène de vie</h2>
                     </div>
                     <a href="{{ path('app_plan_wizard', { step: 12, single: 1 }) }}" class="btn-edit-card" title="Modifier">
                         <i data-lucide="pencil" style="width: 14px; height: 14px;"></i>
@@ -2037,7 +2037,7 @@
             <div style="width: 100%; display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.5rem; flex-wrap: wrap; gap: 1rem;">
                 <div>
                     <h2 style="font-family: var(--font-serif); font-size: 1.5rem; color: var(--primary); margin: 0;">🗺️ Ma Carte Stratégique</h2>
-                    <p style="color: var(--fg-muted); font-size: 0.875rem; margin: 0.25rem 0 0 0;">Visualisation de la cascade entre votre Vision, vos Objectifs et vos plans de Croissance.</p>
+                    <p style="color: var(--fg-muted); font-size: 0.875rem; margin: 0.25rem 0 0 0;">De votre vision à vos objectifs, et de chaque objectif aux plans qui le soutiennent.</p>
                 </div>
                 <button onclick="window.print()" class="btn-hero-primary" style="padding: 0.5rem 1rem; font-size: 0.85rem; box-shadow: none;">
                     <i data-lucide="printer" style="width: 14px; height: 14px;"></i> Imprimer la Carte
@@ -2093,6 +2093,12 @@ graph TD
       {% endfor %}
   {% endfor %}
 
+  {# Plan d'Intendance : éléments reliés à un objectif #}
+  {% for st in stewardshipItems|default([]) %}
+      Stew{{ st.id }}["⚖️ {{ st.label|slice(0, 60)|escape('html') }}"]
+      Goal{{ st.lifeGoal.id }} --> Stew{{ st.id }}
+  {% endfor %}
+
   {# Styling #}
   style Vision fill:#fdf4ff,stroke:#d946ef,stroke-width:2px,color:#701a75
   classDef goal fill:#eff6ff,stroke:#3b82f6,stroke-width:2px,color:#1e40af
@@ -2101,6 +2107,7 @@ graph TD
   classDef rel fill:#fdf2f8,stroke:#ec4899,stroke-width:1px,color:#9d174d
   classDef trans fill:#e0e7ff,stroke:#6366f1,stroke-width:1px,color:#3730a3
   classDef hyg fill:#d1fae5,stroke:#10b981,stroke-width:1px,color:#065f46
+  classDef stew fill:#fef9c3,stroke:#ca8a04,stroke-width:1px,color:#713f12
 
   {% for g in allGoals %}
       class Goal{{ g.id }} goal
@@ -2119,6 +2126,9 @@ graph TD
   {% endfor %}
   {% for hd in hygieneDomains %}
       class Hygiene{{ hd.id }} hyg
+  {% endfor %}
+  {% for st in stewardshipItems|default([]) %}
+      class Stew{{ st.id }} stew
   {% endfor %}
                 </div>
                 <!-- Container where Mermaid will render the SVG -->
@@ -2152,9 +2162,29 @@ graph TD
                 </div>
                 <div class="legend-item">
                     <div class="legend-color" style="background: var(--success);"></div>
-                    <span class="legend-label">⭐ Hygiène de Vie</span>
+                    <span class="legend-label">⭐ Hygiène de vie</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background: #ca8a04;"></div>
+                    <span class="legend-label">⚖️ Intendance</span>
                 </div>
             </div>
+
+            {# Livre, chapitre 21 : « Un de mes six plans est-il absent de la carte ? C'est un signal d'alerte. » #}
+            {% set mapGrowth = [] %}{% for axis, list in growthGoals %}{% set mapGrowth = mapGrowth|merge(list) %}{% endfor %}
+            {% set onMap = {
+                'Croissance': mapGrowth|filter(g => g.axis != 'COMPETENCE' and g.supportedLifeGoals|length > 0)|length,
+                'Développement personnel': mapGrowth|filter(g => g.axis == 'COMPETENCE' and g.supportedLifeGoals|length > 0)|length,
+                'Hygiène de vie': hygieneDomains|filter(h => h.supportedLifeGoals|length > 0)|length,
+                'Intendance': stewardshipItems|default([])|length,
+                'Transmission': legacyGoals|filter(l => l.supportedLifeGoals|length > 0)|length,
+            } %}
+            {% set missing = onMap|filter(v => v == 0)|keys %}
+            {% if missing is not empty %}
+                <p data-map-missing-plans style="margin-top: 1rem; background: var(--warning-soft); border-radius: var(--r-md); padding: .7rem 1rem; font-size: .9rem;">
+                    <strong>Absent{{ missing|length > 1 ? 's' }} de la carte : {{ missing|join(', ', ' et ') }}.</strong> Un plan qui ne soutient aucun objectif est un signal d'alerte : reliez-le à au moins un de vos objectifs.
+                </p>
+            {% endif %}
         </div>
     {% endif %}
     </div>

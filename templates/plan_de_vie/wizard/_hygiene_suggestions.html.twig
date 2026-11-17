@@ -1,4 +1,4 @@
-{# Axes prioritaires du test Hygiène de Vie, ajoutés en un clic comme domaines (étape 12). Variable : hygiene #}
+{# Axes prioritaires du test Hygiène de Vie (sauf « Ressources », renvoyé au Plan d'Intendance), ajoutés en un clic comme domaines (étape 12). Variable : hygiene #}
 {% if hygiene %}
     <div class="wiz-suggestions">
         <p>
@@ -6,13 +6,22 @@
             Vos axes prioritaires selon votre test du {{ hygiene.date|date('d/m/Y') }} : commencez par l'un d'eux.
             <a href="{{ path('app_personality_result', {type: 'hygiene', id: hygiene.testId}) }}" target="_blank" rel="noopener">voir le rapport</a>
         </p>
+        {# Décision du fondateur (17/11/2026) : l'axe « Ressources » (temps, projets) relève du Plan d'Intendance #}
+        {% set toStewardship = hygiene.priorities|filter(p => p.label|lower starts with 'ressources') %}
         <div class="wiz-chips">
-            {% for p in hygiene.priorities %}
+            {% for p in hygiene.priorities|filter(p => not (p.label|lower starts with 'ressources')) %}
                 <button type="button" class="wiz-chip" data-value="{{ p.label }}" onclick="addSuggestedHygieneDomain(this)">
                     <i data-lucide="plus" style="width: 12px; height: 12px;"></i> {{ p.label }}
                     <span class="wiz-chip-note">{{ p.value|number_format(1, ',') }}/10</span>
                 </button>
             {% endfor %}
         </div>
+        {% for p in toStewardship %}
+            <p data-ressources-to-stewardship style="margin-top: .6rem;">
+                Votre axe « {{ p.label }} » ({{ p.value|number_format(1, ',') }}/10) parle surtout de votre temps et de vos projets : c'est le domaine « Temps » de votre
+                <a href="{{ path('app_plan_d_intendance') }}#origine-temps" target="_blank" rel="noopener">Plan d'Intendance</a>.
+                Ici, gardez ce qui touche à votre énergie et à votre récupération.
+            </p>
+        {% endfor %}
     </div>
 {% endif %}

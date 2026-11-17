@@ -29,6 +29,17 @@ class Season
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $theme = null;
 
+    /** SEMIS, CROISSANCE, RECOLTE, HIVER (livre, chapitre 11) ; voir App\Bilan\Service\Seasons. */
+    #[ORM\Column(length: 12, nullable: true)]
+    private ?string $kind = null;
+
+    /** Revue de saison : ce que j'ai récolté et appris. */
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
+    private ?string $reviewNote = null;
+
+    #[ORM\Column(type: Types::DATETIME_IMMUTABLE, nullable: true)]
+    private ?\DateTimeImmutable $reviewedAt = null;
+
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $createdAt = null;
 
@@ -99,5 +110,41 @@ class Season
     public function getCreatedAt(): ?\DateTimeInterface
     {
         return $this->createdAt;
+    }
+
+    public function getKind(): ?string
+    {
+        return $this->kind;
+    }
+
+    public function setKind(?string $kind): static
+    {
+        $this->kind = $kind ?: null;
+
+        return $this;
+    }
+
+    public function getReviewNote(): ?string
+    {
+        return $this->reviewNote;
+    }
+
+    public function setReviewNote(?string $reviewNote): static
+    {
+        $this->reviewNote = '' === trim((string) $reviewNote) ? null : trim((string) $reviewNote);
+
+        return $this;
+    }
+
+    public function getReviewedAt(): ?\DateTimeImmutable
+    {
+        return $this->reviewedAt;
+    }
+
+    public function setReviewedAt(?\DateTimeImmutable $reviewedAt): static
+    {
+        $this->reviewedAt = $reviewedAt;
+
+        return $this;
     }
 }

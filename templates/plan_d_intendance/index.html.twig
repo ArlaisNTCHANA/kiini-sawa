@@ -8,7 +8,7 @@
 {% set statuses = constant(S ~ '::STATUSES') %}
 {% set decisions = constant(S ~ '::DECISIONS') %}
 
-{% macro item(it, statuses, decisions) %}
+{% macro item(it, statuses, decisions, lifeGoals) %}
     <details class="ks-card ks-card--flat stw-item" id="element-{{ it.id }}" {{ it.status is null ? 'open' }}>
         <summary class="stw-item__summary">
             <span class="stw-item__label">{{ it.label }}</span>
@@ -18,7 +18,7 @@
                 {% if it.decision %}<span class="ks-badge ks-badge--muted">{{ decisions[it.decision].label }}</span>{% endif %}
             </span>
         </summary>
-        <form method="post" action="{{ path('app_plan_d_intendance_update', {id: it.id}) }}" class="stw-item__form">
+        <form method="post" data-turbo="false" action="{{ path('app_plan_d_intendance_update', {id: it.id}) }}" class="stw-item__form">
             <fieldset class="stw-choice">
                 <legend class="ks-label">Comment je le gère aujourd'hui</legend>
                 {% for key, s in statuses %}
@@ -35,6 +35,15 @@
                 <label class="ks-label" for="action-{{ it.id }}">Mon action des 30 prochains jours</label>
                 <input class="ks-input" id="action-{{ it.id }}" name="action" value="{{ it.actionText }}" maxlength="255" placeholder="Une action simple et mesurable">
             </div>
+            {% if lifeGoals is not empty %}
+            <div class="ks-field">
+                <label class="ks-label" for="goal-{{ it.id }}">Au service de l'objectif (facultatif)</label>
+                <select class="ks-input" id="goal-{{ it.id }}" name="life_goal">
+                    <option value="">Aucun objectif précis</option>
+                    {% for g in lifeGoals %}<option value="{{ g.id }}" {{ it.lifeGoal and it.lifeGoal.id == g.id ? 'selected' }}>{{ g.title }}</option>{% endfor %}
+                </select>
+            </div>
+            {% endif %}
             <div class="ks-field">
                 <label class="ks-label" for="note-{{ it.id }}">Note (facultatif)</label>
                 <textarea class="ks-input" id="note-{{ it.id }}" name="note" rows="2" placeholder="Ce que vous voulez garder en tête. Aucun montant n'est demandé.">{{ it.note }}</textarea>
@@ -45,14 +54,14 @@
                 <button type="submit" class="ks-btn ks-btn--secondary ks-btn--sm">Enregistrer</button>
             </div>
         </form>
-        <form method="post" action="{{ path('app_plan_d_intendance_delete', {id: it.id}) }}" onsubmit="return confirm('Retirer cet élément de votre inventaire ?');" class="stw-item__delete">
+        <form method="post" data-turbo="false" action="{{ path('app_plan_d_intendance_delete', {id: it.id}) }}" onsubmit="return confirm('Retirer cet élément de votre inventaire ?');" class="stw-item__delete">
             <button type="submit" class="ks-btn ks-btn--ghost ks-btn--sm">Retirer</button>
         </form>
     </details>
 {% endmacro %}
 
 {% macro add_form(origin, placeholder) %}
-    <form method="post" action="{{ path('app_plan_d_intendance_add') }}" class="stw-add">
+    <form method="post" data-turbo="false" action="{{ path('app_plan_d_intendance_add') }}" class="stw-add">
         <input type="hidden" name="origin" value="{{ origin }}">
         <input class="ks-input" name="label" maxlength="255" required placeholder="{{ placeholder }}" aria-label="Ajouter un élément">
         <button type="submit" class="ks-btn ks-btn--secondary ks-btn--sm">Ajouter</button>
@@ -99,7 +108,7 @@
                             <td>{{ it.actionText ?: '—' }}</td>
                             <td>
                                 {% if it.actionText %}
-                                <form method="post" action="{{ path('app_plan_d_intendance_done', {id: it.id}) }}">
+                                <form method="post" data-turbo="false" action="{{ path('app_plan_d_intendance_done', {id: it.id}) }}">
                                     <button type="submit" class="ks-btn ks-btn--{{ it.actionDoneAt ? 'secondary' : 'ghost' }} ks-btn--sm" title="{{ it.actionDoneAt ? 'Faite le ' ~ it.actionDoneAt|date('d/m') : 'Marquer comme faite' }}">{{ it.actionDoneAt ? '✓ Faite' : 'Fait ?' }}</button>
                                 </form>
                                 {% endif %}
@@ -122,11 +131,11 @@
             <article class="ks-card stw-origin" id="origine-{{ origin|lower }}">
                 <h3 class="stw-origin__title">{{ meta.label }}</h3>
                 <p class="stw-origin__question">{{ meta.question }}</p>
-                {% for it in byOrigin[origin] %}{{ _self.item(it, statuses, decisions) }}{% endfor %}
+                {% for it in byOrigin[origin] %}{{ _self.item(it, statuses, decisions, lifeGoals) }}{% endfor %}
                 {% if suggestions[origin] is not empty %}
                     <div class="stw-chips" data-stewardship-suggestions="{{ origin }}">
                         {% for label in suggestions[origin] %}
-                            <form method="post" action="{{ path('app_plan_d_intendance_add') }}">
+                            <form method="post" data-turbo="false" action="{{ path('app_plan_d_intendance_add') }}">
                                 <input type="hidden" name="origin" value="{{ origin }}">
                                 <input type="hidden" name="label" value="{{ label }}">
                                 <button type="submit" class="stw-chip" title="Ajouter à mon inventaire">+ {{ label|length > 70 ? label|slice(0, 69) ~ '…' : label }}</button>
@@ -151,7 +160,7 @@
                 <h3 class="stw-origin__title"><i data-lucide="{{ meta.icon }}" style="width: 18px; height: 18px;"></i> {{ meta.label }}</h3>
                 <p class="stw-origin__content">{{ meta.content }}</p>
                 <p class="stw-origin__question">{{ meta.question }}</p>
-                {% for it in byOrigin[origin] %}{{ _self.item(it, statuses, decisions) }}{% endfor %}
+                {% for it in byOrigin[origin] %}{{ _self.item(it, statuses, decisions, lifeGoals) }}{% endfor %}
                 {{ _self.add_form(origin, 'Ce qui m\'est confié ici…') }}
             </article>
         {% endfor %}
@@ -161,7 +170,7 @@
     <section id="compte-rendu" class="stw-section">
         <h2 class="ks-section-title">Mon compte rendu</h2>
         <p class="stw-hint">« Longtemps après, le maître de ces serviteurs revint, et leur fit rendre compte » (Matthieu 25:19). À intervalles réguliers, revenez sur vos décisions et mesurez-en le fruit.</p>
-        <form method="post" action="{{ path('app_plan_d_intendance_rhythm') }}" class="ks-card stw-rhythm">
+        <form method="post" data-turbo="false" action="{{ path('app_plan_d_intendance_rhythm') }}" class="ks-card stw-rhythm">
             <div class="ks-field">
                 <label class="ks-label" for="frequency">Quand je fais le point</label>
                 <select class="ks-input" id="frequency" name="frequency">
@@ -194,6 +203,13 @@
     </section>
 </div>
 
+<script>
+    // Après un enregistrement, revenir sur l'élément modifié (le gabarit commun remonte en haut de page)
+    window.addEventListener('load', () => {
+        const target = location.hash ? document.getElementById(location.hash.slice(1)) : null;
+        if (target) { setTimeout(() => target.scrollIntoView({block: 'center'}), 50); }
+    });
+</script>
 <style>
     .stw-verse { font-family: var(--font-serif); font-style: italic; font-size: 1.1rem; color: var(--fg); border-left: 3px solid var(--accent); padding: .25rem 0 .25rem 1rem; margin: 0 0 1.25rem; max-width: 760px; }
     .stw-verse cite { display: block; font-style: normal; font-size: .85rem; color: var(--fg-muted); margin-top: .35rem; }

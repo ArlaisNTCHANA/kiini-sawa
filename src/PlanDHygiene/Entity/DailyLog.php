@@ -45,6 +45,16 @@ class DailyLog
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $notes = null;
 
+    /** Bilan du jour (livre, chapitre 17) : intention tenue ? humeur de 1 à 5, un sujet de gratitude. */
+    #[ORM\Column(nullable: true)]
+    private ?bool $intentionKept = null;
+
+    #[ORM\Column(type: Types::SMALLINT, nullable: true)]
+    private ?int $moodLevel = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $gratitude = null;
+
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $createdAt = null;
 
@@ -191,5 +201,41 @@ class DailyLog
     public function getUpdatedAt(): ?\DateTimeInterface
     {
         return $this->updatedAt;
+    }
+
+    public function isIntentionKept(): ?bool
+    {
+        return $this->intentionKept;
+    }
+
+    public function setIntentionKept(?bool $intentionKept): static
+    {
+        $this->intentionKept = $intentionKept;
+
+        return $this;
+    }
+
+    public function getMoodLevel(): ?int
+    {
+        return $this->moodLevel;
+    }
+
+    public function setMoodLevel(?int $moodLevel): static
+    {
+        $this->moodLevel = null === $moodLevel ? null : max(1, min(5, $moodLevel));
+
+        return $this;
+    }
+
+    public function getGratitude(): ?string
+    {
+        return $this->gratitude;
+    }
+
+    public function setGratitude(?string $gratitude): static
+    {
+        $this->gratitude = '' === trim((string) $gratitude) ? null : mb_substr(trim((string) $gratitude), 0, 255);
+
+        return $this;
     }
 }

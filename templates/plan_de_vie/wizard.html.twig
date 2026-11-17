@@ -175,7 +175,7 @@
                     {% elseif step == 9 %}Modifier Caractère & Conviction
                     {% elseif step == 10 %}Modifier Relation & Réseau
                     {% elseif step == 11 %}Modifier Héritage & Transmission
-                    {% elseif step == 12 %}Modifier mon Hygiène de Vie
+                    {% elseif step == 12 %}Modifier mon Hygiène de vie
                     {% elseif step == 13 %}Modifier mon Échéancier
                     {% endif %}
                 </h1>
@@ -1249,6 +1249,17 @@
                     {{ book_panel('wizard.11') }}
                     {% include 'plan_de_vie/wizard/_gifts_reminder.html.twig' with {gifts: testResults.gifts} only %}
 
+                    {% set transmissionPlan = app.user.planDeTransmission %}
+                    <div class="wiz-equation" data-eternity>
+                        <p class="wiz-equation__formula">« Il a mis dans leur cœur la pensée de l'éternité. » <span style="font-size: .8rem; color: var(--fg-muted);">Ecclésiaste 3:11</span></p>
+                        <label style="display: flex; flex-direction: column; gap: .3rem; font-size: .8rem; font-weight: 600; color: var(--fg-muted);">Ma phrase d'éternité : ce que je veux qui demeure quand je ne serai plus là
+                            <textarea name="eternity_phrase" class="wiz-textarea" rows="2" placeholder="Que mes enfants et ceux que j'ai formés marchent avec Dieu et forment d'autres à leur tour.">{{ transmissionPlan ? transmissionPlan.eternityPhrase }}</textarea>
+                        </label>
+                        <label style="display: flex; flex-direction: column; gap: .3rem; font-size: .8rem; font-weight: 600; color: var(--fg-muted);">Un déplacement de trésor : une chose temporaire à laquelle je donne moins, une chose éternelle à laquelle je donne plus
+                            <textarea name="treasure_shift" class="wiz-textarea" rows="2" placeholder="Moins d'heures sur les écrans, plus de temps à former un jeune de mon église.">{{ transmissionPlan ? transmissionPlan.treasureShift }}</textarea>
+                        </label>
+                    </div>
+
                     <div>
                         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
                             <label style="font-size: 0.75rem; font-weight: 700; color: var(--fg-light); letter-spacing: 0.05em; text-transform: uppercase;">Projets de transmission</label>
@@ -1337,7 +1348,7 @@
                 <div data-wizard-target="step" data-step-number="12" class="{% if step != 12 %}hidden{% endif %} animate-fade-in" data-step-title="Hygiène de Vie">
                     <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.75rem; color: var(--primary);">
                         <i data-lucide="heart-pulse" style="width: 24px; height: 24px;"></i>
-                        <h2 style="font-family: var(--font-serif); font-size: 1.75rem; font-weight: 500;">Hygiène de Vie</h2>
+                        <h2 style="font-family: var(--font-serif); font-size: 1.75rem; font-weight: 500;">Hygiène de vie</h2>
                     </div>
                     <p style="color: var(--fg-muted); font-size: 0.95rem; margin-bottom: 1.25rem; line-height: 1.6;">
                         Le socle de votre énergie physique et mentale. Quels domaines de votre hygiène de vie souhaitez-vous structurer ?

@@ -137,6 +137,7 @@ final class BookLibrary
             'excerpt' => $this->excerpt((string) $body),
             'html' => $parser->text((string) $body),
             'essentials' => $parser->text(self::essentials((string) $body)),
+            'sanctuary' => self::sanctuary((string) $body, $parser),
             'minutes' => max(1, (int) round(str_word_count(strip_tags($body)) / 200)),
             'previous' => $slugs[$i - 1] ?? null,
             'next' => $slugs[$i + 1] ?? null,
@@ -146,6 +147,20 @@ final class BookLibrary
     public function forStep(string $key): ?array
     {
         return isset(self::STEPS[$key]) ? $this->get(self::STEPS[$key]) : null;
+    }
+
+    /**
+     * L'exercice « Le Sanctuaire » du chapitre (titre et contenu HTML), affiché dans les encarts de l'application.
+     *
+     * @return array{title: string, html: string}|null
+     */
+    public static function sanctuary(string $body, \Parsedown $parser): ?array
+    {
+        if (!preg_match('/^### (Le Sanctuaire[^\n]*)\n(.*?)(?=^### |\z)/msu', $body, $m)) {
+            return null;
+        }
+
+        return ['title' => trim($m[1]), 'html' => $parser->text(trim($m[2]))];
     }
 
     /** Rubriques pratiques reprises dans « l'essentiel » (compte gratuit). */

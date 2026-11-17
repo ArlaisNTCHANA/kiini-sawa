@@ -5,6 +5,7 @@ namespace App\PlanDeTransmission\Entity;
 use App\PlanDeTransmission\Repository\PlanDeTransmissionRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use App\Compte\Entity\User;
 
@@ -31,6 +32,14 @@ class PlanDeTransmission
      */
     #[ORM\OneToMany(mappedBy: 'planDeTransmission', targetEntity: TalentDon::class, cascade: ['persist', 'remove'])]
     private Collection $talentDons;
+
+    /** Livre, chapitre 19 : « ce que je veux qui demeure quand je ne serai plus là ». */
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
+    private ?string $eternityPhrase = null;
+
+    /** Livre, chapitre 19 : une chose temporaire à laquelle je donne moins, une chose éternelle à laquelle je donne plus. */
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
+    private ?string $treasureShift = null;
 
     public function __construct()
     {
@@ -111,6 +120,30 @@ class PlanDeTransmission
                 $talentDon->setPlanDeTransmission(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getEternityPhrase(): ?string
+    {
+        return $this->eternityPhrase;
+    }
+
+    public function setEternityPhrase(?string $eternityPhrase): static
+    {
+        $this->eternityPhrase = '' === trim((string) $eternityPhrase) ? null : trim((string) $eternityPhrase);
+
+        return $this;
+    }
+
+    public function getTreasureShift(): ?string
+    {
+        return $this->treasureShift;
+    }
+
+    public function setTreasureShift(?string $treasureShift): static
+    {
+        $this->treasureShift = '' === trim((string) $treasureShift) ? null : trim((string) $treasureShift);
 
         return $this;
     }

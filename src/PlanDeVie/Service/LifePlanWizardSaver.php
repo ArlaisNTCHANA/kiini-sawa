@@ -134,6 +134,12 @@ final class LifePlanWizardSaver
                 fn (GrowthGoal $g, int|string $i) => $g->setType($types[$i] ?? $g->getType() ?? 'orientation'));
         }
 
+        if (\in_array(11, $steps, true) && $input->has('eternity_phrase')) {
+            $plan = $user->getPlanDeTransmission() ?? $this->persistNew((new PlanDeTransmission())->setUser($user));
+            $plan->setEternityPhrase(mb_substr($input->getString('eternity_phrase'), 0, 2000))
+                ->setTreasureShift(mb_substr($input->getString('treasure_shift'), 0, 2000));
+        }
+
         if (\in_array(11, $steps, true) && $input->has('legacy_title')) {
             $plan = $user->getPlanDeTransmission() ?? $this->persistNew((new PlanDeTransmission())->setUser($user));
             $this->saveIndexedGoals('legacy', $input, $plan->getLegacyGoals()->toArray(), $lifeGoals,

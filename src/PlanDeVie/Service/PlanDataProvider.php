@@ -356,6 +356,9 @@ final class PlanDataProvider
             'competences' => $competences,
             'legacyGoals' => $legacyGoals,
             'hygieneDomains' => $hygieneDomainsList,
+            // Plan d'Intendance sur la carte : les éléments reliés à un objectif
+            'stewardshipItems' => $this->em->getRepository(\App\PlanDIntendance\Entity\StewardshipItem::class)->createQueryBuilder('s')
+                ->where('s.user = :user')->andWhere('s.lifeGoal IS NOT NULL')->setParameter('user', $user)->getQuery()->getResult(),
             'groupedHygieneDomains' => $groupedHygieneDomains,
             'hygieneTest' => $hygieneTest,
             'hygieneTestScores' => $hygieneTestScores,

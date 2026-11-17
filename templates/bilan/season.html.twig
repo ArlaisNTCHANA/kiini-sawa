@@ -1,0 +1,108 @@
+{% extends 'base.html.twig' %}
+{# Ma saison (livre, chapitre 11) : SeasonController, vocabulaire App\Bilan\Service\Seasons #}
+{% block title %}Ma saison{% endblock %}
+
+{% macro kind_fields(kinds, selected, theme) %}
+    <div class="ks-field">
+        <label class="ks-label" for="theme">Le thème de ma saison</label>
+        <input class="ks-input" id="theme" name="theme" maxlength="255" value="{{ theme }}" placeholder="Fondations, Lancement, Restauration…">
+    </div>
+    <fieldset class="season-kinds">
+        <legend class="ks-label">Dans quelle saison suis-je ?</legend>
+        {% for key, k in kinds %}
+            <label class="ks-card ks-card--flat season-kind">
+                <input type="radio" name="kind" value="{{ key }}" {{ selected == key ? 'checked' }}>
+                <span><strong>{{ k.label }}</strong> · {{ k.what }}</span>
+            </label>
+        {% endfor %}
+    </fieldset>
+{% endmacro %}
+
+{% block body %}
+<div class="ks-page ks-page--narrow">
+    {% include 'shared/_page_header.html.twig' with {
+        back: {url: path('app_bilan'), label: 'Bilan'},
+        eyebrow: 'Saisons & Échéancier', icon: 'sprout',
+        title: 'Ma saison',
+        lead: 'Une saison dure généralement trois mois et porte un thème dominant. Lui donner un thème, c\'est vous permettre de dire « pas maintenant » à certaines priorités pour vous consacrer pleinement à une autre.'
+    } %}
+
+    <blockquote class="season-verse">« Enseigne-nous à bien compter nos jours, afin que nous appliquions notre cœur à la sagesse. »<cite>Psaume 90:12</cite></blockquote>
+
+    {% if activeSeason %}
+        {% set k = kinds[activeSeason.kind] ?? null %}
+        <section class="ks-card" data-current-season>
+            <p class="ks-eyebrow">Saison en cours · jusqu'au {{ activeSeason.endDate|date('d/m/Y') }} · {{ daysLeft }} jour{{ daysLeft > 1 ? 's' }} restant{{ daysLeft > 1 ? 's' }}</p>
+            <h2 class="season-title">{{ activeSeason.theme ?: 'Saison sans thème' }}{% if k %} <span class="ks-badge">{{ k.label }}</span>{% endif %}</h2>
+            <div class="season-bar"><span style="width: {{ progress }}%;"></span></div>
+            {% if k %}
+                <dl class="season-grid">
+                    <div><dt>Le travail de cette saison</dt><dd>{{ k.work }}</dd></div>
+                    <div><dt>Le piège</dt><dd>{{ k.trap }}</dd></div>
+                </dl>
+            {% endif %}
+            <details style="margin-top: 1rem;">
+                <summary class="ks-btn ks-btn--ghost ks-btn--sm">Modifier ma saison</summary>
+                <form method="post" class="season-form">
+                    <input type="hidden" name="_csrf_token" value="{{ csrf_token('season') }}">
+                    <input type="hidden" name="action" value="update">
+                    {{ _self.kind_fields(kinds, activeSeason.kind, activeSeason.theme) }}
+                    <button type="submit" class="ks-btn ks-btn--secondary">Enregistrer</button>
+                </form>
+            </details>
+        </section>
+    {% endif %}
+
+    {% if reviewDue %}
+        <section class="ks-card ks-card--accent" data-season-review style="margin-top: 1.25rem;">
+            <h2 class="season-title">La revue de saison</h2>
+            <p class="season-hint">Une demi-journée pour regarder le thème de la saison, vos jalons, puis choisir la saison suivante. « Tu ne peux pas récolter en saison de semis. Mais tu ne récolteras jamais si tu ne sèmes pas. »</p>
+            <form method="post" class="season-form">
+                <input type="hidden" name="_csrf_token" value="{{ csrf_token('season') }}">
+                <input type="hidden" name="action" value="review">
+                <div class="ks-field">
+                    <label class="ks-label" for="review_note">Ce que cette saison m'a apporté, et ce que j'en retiens</label>
+                    <textarea class="ks-input" id="review_note" name="review_note" rows="4">{{ current.reviewNote }}</textarea>
+                </div>
+                <button type="submit" class="ks-btn ks-btn--secondary">Enregistrer ma revue</button>
+            </form>
+        </section>
+    {% endif %}
+
+    <section class="ks-card" style="margin-top: 1.25rem;">
+        <h2 class="season-title">{{ activeSeason ? 'Commencer une nouvelle saison' : 'Commencer ma saison' }}</h2>
+        <p class="season-hint">{{ activeSeason ? 'La saison en cours se terminera aujourd\'hui.' : 'Trois mois à partir d\'aujourd\'hui.' }} « Honore ce qui a précédé, sans t'y installer. »</p>
+        <form method="post" class="season-form">
+            <input type="hidden" name="_csrf_token" value="{{ csrf_token('season') }}">
+            <input type="hidden" name="action" value="start">
+            {{ _self.kind_fields(kinds, null, '') }}
+            <button type="submit" class="ks-btn {{ activeSeason ? 'ks-btn--secondary' : 'ks-btn--primary' }}">Commencer cette saison</button>
+        </form>
+    </section>
+
+    {% if history is not empty %}
+        <section style="margin-top: 2rem;">
+            <h2 class="ks-section-title">Mes saisons passées</h2>
+            {% for s in history %}
+                <p class="season-past"><strong>{{ s.theme ?: 'Sans thème' }}</strong>{% if kinds[s.kind] is defined %} · {{ kinds[s.kind].label }}{% endif %} · {{ s.startDate|date('d/m/Y') }} → {{ s.endDate|date('d/m/Y') }}{% if s.reviewNote %}<br><span>{{ s.reviewNote }}</span>{% endif %}</p>
+            {% endfor %}
+        </section>
+    {% endif %}
+</div>
+<style>
+    .season-verse { font-family: var(--font-serif); font-style: italic; border-left: 3px solid var(--accent); padding: .2rem 0 .2rem 1rem; margin: 0 0 1.25rem; }
+    .season-verse cite { display: block; font-style: normal; font-size: .85rem; color: var(--fg-muted); margin-top: .3rem; }
+    .season-title { font-family: var(--font-serif); font-size: 1.35rem; margin: .2rem 0 .6rem; display: flex; align-items: center; gap: .5rem; flex-wrap: wrap; }
+    .season-hint { color: var(--fg-muted); font-size: .9rem; margin: 0 0 1rem; }
+    .season-bar { height: 8px; background: var(--bg-alt); border-radius: 999px; overflow: hidden; }
+    .season-bar span { display: block; height: 100%; background: var(--primary); }
+    .season-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: .8rem; margin: 1rem 0 0; }
+    .season-grid dt { font-size: .75rem; text-transform: uppercase; letter-spacing: .05em; color: var(--fg-muted); }
+    .season-grid dd { margin: .2rem 0 0; }
+    .season-form { display: flex; flex-direction: column; gap: .9rem; margin-top: .8rem; }
+    .season-kinds { border: 0; padding: 0; margin: 0; display: grid; gap: .45rem; }
+    .season-kind { display: flex; gap: .6rem; align-items: baseline; padding: .6rem .8rem; cursor: pointer; font-size: .92rem; }
+    .season-past { border-top: 1px solid var(--border); padding: .6rem 0; margin: 0; font-size: .92rem; }
+    .season-past span { color: var(--fg-muted); }
+</style>
+{% endblock %}

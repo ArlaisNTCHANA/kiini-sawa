@@ -12,11 +12,17 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use App\PlanDIntendance\Entity\StewardshipItem;
+use App\PlanDIntendance\Entity\StewardshipRhythm;
+use App\PlanDIntendance\Repository\StewardshipItemRepository;
+use App\PlanDIntendance\Service\Stewardship;
 
 /**
  * Revue mensuelle : progrès, stagnation, blocage, ajustement, décision.
  * Du 1er au 7 du mois, on revoit le mois précédent ; ensuite, le mois en cours.
  * Chaque revue enregistre aussi une version datée des plans.
+ * Elle tient lieu de compte rendu du Plan d'Intendance (livre, chapitre 18) : on y revoit l'état et l'action de
+ * chaque priorité d'intendance, et la date du dernier point est mise à jour.
  */
 class MonthlyReviewController extends AbstractController
 {
@@ -29,7 +35,7 @@ class MonthlyReviewController extends AbstractController
     ];
 
     #[Route('/bilan/revue-mensuelle', name: 'app_monthly_review', methods: ['GET', 'POST'])]
-    public function index(Request $request, EntityManagerInterface $em, PlanSnapshotService $snapshots, Entitlements $entitlements): Response
+    public function index(Request $request, EntityManagerInterface $em, PlanSnapshotService $snapshots, Entitlements $entitlements, StewardshipItemRepository $stewardship): Response
     {
         /** @var User $user */
         $user = $this->getUser();
@@ -52,6 +58,9 @@ class MonthlyReviewController extends AbstractController
                 $review->{'set'.ucfirst($field)}('' === $value ? null : mb_substr($value, 0, 5000));
             }
             $em->persist($review);
+            if ($entitlements->can($user, 'intendance')) {
+                $this->saveStewardship($request, $user, $em, $stewardship);
+            }
             $em->flush();
             if ($isNew) {
                 $snapshots->snapshot($user, 'Revue de '.$monthLabel);
@@ -81,7 +90,35 @@ class MonthlyReviewController extends AbstractController
             'goalsDone' => \count(array_filter($goals, fn ($g) => $g->getProgress() >= 100)),
             'averageProgress' => $goals ? (int) round(array_sum(array_map(fn ($g) => $g->getProgress(), $goals)) / \count($goals)) : null,
             'history' => $repo->findBy(['user' => $user], ['month' => 'DESC'], 12),
+            'stewardship' => $entitlements->can($user, 'intendance') ? array_filter($stewardship->forUser($user), fn (StewardshipItem $i) => $i->isPriority()) : [],
         ]);
+    }
+
+    /** Compte rendu d'intendance : état et action faite de chaque priorité, date du dernier point. */
+    private function saveStewardship(Request $request, User $user, EntityManagerInterface $em, StewardshipItemRepository $stewardship): void
+    {
+        $posted = $request->request->all('stw');
+        if (!$posted) {
+            return;
+        }
+        foreach ($stewardship->forUser($user) as $item) {
+            $data = $posted[$item->getId()] ?? null;
+            if (!\is_array($data) || !$item->isPriority()) {
+                continue;
+            }
+            $status = (string) ($data['status'] ?? '');
+            $item->setStatus(isset(Stewardship::STATUSES[$status]) ? $status : $item->getStatus());
+            $done = !empty($data['done']);
+            if ($done !== (null !== $item->getActionDoneAt())) {
+                $item->setActionDoneAt($done ? new \DateTimeImmutable() : null);
+            }
+        }
+        $rhythm = $em->getRepository(StewardshipRhythm::class)->findOneBy(['user' => $user]);
+        if (!$rhythm) {
+            $rhythm = (new StewardshipRhythm())->setUser($user);
+            $em->persist($rhythm);
+        }
+        $rhythm->setLastReviewAt(new \DateTimeImmutable());
     }
 
     /** Mois passé en revue : le précédent pendant la première semaine, sinon le mois en cours. */

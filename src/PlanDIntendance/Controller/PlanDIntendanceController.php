@@ -45,6 +45,7 @@ class PlanDIntendanceController extends AbstractPlanController
             'suggestions' => $this->inventory->suggestions($user),
             'rhythm' => $this->rhythms->findOneBy(['user' => $user]),
             'giftResults' => $this->testResults->gifts($user),
+            'lifeGoals' => $user->getPlanDeVie()?->getLifeGoals()->toArray() ?? [],
         ]);
     }
 
@@ -97,6 +98,16 @@ class PlanDIntendanceController extends AbstractPlanController
         }
         if ($form->has('action')) {
             $item->setActionText($form->getString('action'));
+        }
+        if ($form->has('life_goal')) {
+            $goalId = $form->getInt('life_goal');
+            $goal = null;
+            foreach ($this->user()->getPlanDeVie()?->getLifeGoals() ?? [] as $g) {
+                if ($g->getId() === $goalId) {
+                    $goal = $g;
+                }
+            }
+            $item->setLifeGoal($goal);
         }
         if ($form->has('note')) {
             $item->setNote($form->getString('note'));

@@ -1,0 +1,88 @@
+{% extends 'base.html.twig' %}
+{# Bilan du jour (livre, chapitre 17) : DailyReviewController #}
+{% block title %}Bilan du jour{% endblock %}
+
+{% macro scale(name, label, value, low, high) %}
+    <fieldset class="dr-scale">
+        <legend class="ks-label">{{ label }}</legend>
+        <div class="dr-scale__row">
+            <span class="dr-scale__end">{{ low }}</span>
+            {% for n in 1..5 %}<label class="dr-dot"><input type="radio" name="{{ name }}" value="{{ n }}" {{ value == n ? 'checked' }}><span>{{ n }}</span></label>{% endfor %}
+            <span class="dr-scale__end">{{ high }}</span>
+        </div>
+    </fieldset>
+{% endmacro %}
+
+{% block body %}
+<div class="ks-page ks-page--narrow">
+    {% include 'shared/_page_header.html.twig' with {
+        back: {url: path('app_bilan'), label: 'Bilan'},
+        eyebrow: 'Plan d\'Hygiène de vie', icon: 'moon',
+        title: 'Mon bilan du jour',
+        lead: 'Chaque soir, en deux minutes. Au bout de quelques semaines, des tendances apparaissent : vous découvrez ce qui vous vide et ce qui vous recharge. Ce n\'est plus une impression, c\'est une observation.'
+    } %}
+
+    <form method="post" class="ks-card dr-form" data-daily-review>
+        <input type="hidden" name="_csrf_token" value="{{ csrf_token('daily_review') }}">
+        <div class="ks-field">
+            <label class="ks-label" for="intention">Mon intention du jour</label>
+            <input class="ks-input" id="intention" name="intention" maxlength="255" value="{{ log ? log.intention }}" placeholder="Celle que vous avez posée ce matin">
+        </div>
+        <fieldset class="dr-scale">
+            <legend class="ks-label">L'ai-je tenue ?</legend>
+            <div class="dr-scale__row">
+                {% for v, l in {'1': 'Oui', '0': 'Pas vraiment'} %}
+                    <label class="dr-pill"><input type="radio" name="intention_kept" value="{{ v }}" {{ log and log.intentionKept is not null and (log.intentionKept ? '1' : '0') == v ? 'checked' }}><span>{{ l }}</span></label>
+                {% endfor %}
+            </div>
+        </fieldset>
+        {{ _self.scale('energy', 'Mon énergie', log ? log.energyLevel, 'à plat', 'pleine') }}
+        {{ _self.scale('mood', 'Mon humeur', log ? log.moodLevel, 'basse', 'joyeuse') }}
+        {{ _self.scale('stress', 'Mon niveau de stress', log ? log.stressLevel, 'serein', 'sous pression') }}
+        <div class="ks-field">
+            <label class="ks-label" for="gratitude">Un sujet de gratitude</label>
+            <input class="ks-input" id="gratitude" name="gratitude" maxlength="255" value="{{ log ? log.gratitude }}" placeholder="Merci pour…">
+        </div>
+        <button type="submit" class="ks-btn ks-btn--primary">Enregistrer mon bilan du jour</button>
+    </form>
+
+    {% if recent is not empty %}
+        <section style="margin-top: 2rem;">
+            <h2 class="ks-section-title">Mes 14 derniers jours</h2>
+            <p class="dr-avg">
+                {% for k, v in averages %}{% if v is not null %}<span>{{ k|capitalize }} : <strong>{{ v|number_format(1, ',') }}/5</strong></span>{% endif %}{% endfor %}
+            </p>
+            <div class="ks-scroll">
+                <table class="dr-table">
+                    <thead><tr><th>Jour</th><th>Intention</th><th>Énergie</th><th>Humeur</th><th>Stress</th><th>Gratitude</th></tr></thead>
+                    <tbody>
+                    {% for l in recent %}
+                        <tr>
+                            <td>{{ l.date|format_date(pattern: 'EEE d/MM', locale: 'fr') }}</td>
+                            <td>{{ l.intention ?: '—' }}{% if l.intentionKept is not null %} {{ l.intentionKept ? '✓' : '·' }}{% endif %}</td>
+                            <td>{{ l.energyLevel ?? '—' }}</td><td>{{ l.moodLevel ?? '—' }}</td><td>{{ l.stressLevel ?? '—' }}</td>
+                            <td>{{ l.gratitude ?: '—' }}</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    {% endif %}
+    <p style="margin-top: 1.5rem; font-size: .9rem; color: var(--fg-muted);">« Si tu ne planifies pas ta santé, tu finiras par devoir planifier ta maladie. »</p>
+</div>
+<style>
+    .dr-form { display: flex; flex-direction: column; gap: 1.1rem; }
+    .dr-scale { border: 0; padding: 0; margin: 0; }
+    .dr-scale__row { display: flex; align-items: center; gap: .45rem; flex-wrap: wrap; margin-top: .35rem; }
+    .dr-scale__end { font-size: .8rem; color: var(--fg-muted); }
+    .dr-dot input, .dr-pill input { position: absolute; opacity: 0; }
+    .dr-dot span, .dr-pill span { display: inline-flex; align-items: center; justify-content: center; min-width: 2.4rem; height: 2.4rem; padding: 0 .7rem; border-radius: 999px; border: 1.5px solid var(--border); cursor: pointer; font-weight: 600; }
+    .dr-dot input:checked + span, .dr-pill input:checked + span { background: var(--primary); border-color: var(--primary); color: #fff; }
+    .dr-dot input:focus-visible + span, .dr-pill input:focus-visible + span { outline: 2px solid var(--primary); outline-offset: 2px; }
+    .dr-avg { display: flex; gap: 1.2rem; flex-wrap: wrap; color: var(--fg-muted); font-size: .92rem; }
+    .dr-table { width: 100%; border-collapse: collapse; font-size: .88rem; }
+    .dr-table th, .dr-table td { text-align: left; padding: .45rem .5rem; border-bottom: 1px solid var(--border); }
+    .dr-table th { font-size: .74rem; text-transform: uppercase; color: var(--fg-muted); }
+</style>
+{% endblock %}

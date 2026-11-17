@@ -53,7 +53,16 @@ class HabitController extends AbstractController
 
         $habits = $em->getRepository(Habit::class)->findByWithAllRelations($user);
 
+        // Rattrapage bienveillant (livre, chapitre 22) : « ne manque jamais deux fois de suite »
+        $yesterday = new \DateTime('yesterday');
+        $doneYesterday = array_flip(array_map('intval', array_column($em->createQuery(
+            'SELECT IDENTITY(l.habit) AS habit FROM App\Rituels\Entity\HabitLog l JOIN l.habit h WHERE h.user = :user AND l.date = :day AND l.status = true'
+        )->setParameter('user', $user)->setParameter('day', $yesterday->format('Y-m-d'))->getArrayResult(), 'habit')));
+        $missedYesterday = array_values(array_filter($habits, fn (Habit $h) => \App\Rituels\Enum\HabitFrequency::DAILY === $h->getFrequency()
+            && $h->getCreatedAt() && $h->getCreatedAt() < $yesterday && !isset($doneYesterday[$h->getId()])));
+
         return $this->render('rituels/index.html.twig', [
+            'missedYesterday' => $missedYesterday,
             'habits' => $habits,
             'growthGoals' => $growthGoals,
             'form' => $form->createView(),

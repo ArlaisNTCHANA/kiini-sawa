@@ -308,6 +308,13 @@
         </div>
     </header>
     {{ book_panel('rituels') }}
+    {% if missedYesterday|default([]) is not empty %}
+        <div class="ks-alert ks-alert--info" data-never-miss-twice style="margin: 0 0 1.25rem;">
+            <strong>Ne manquez jamais deux fois de suite.</strong>
+            Hier : {{ missedYesterday|map(h => h.title)|join(', ', ' et ') }}. Reprenez aujourd'hui, sans vous flageller : la culpabilité est le poison de la croissance ; la responsabilité en est le remède.
+            <span style="display: block; margin-top: .3rem; font-style: italic;">« Elles se renouvellent chaque matin. » Lamentations 3:22-23</span>
+        </div>
+    {% endif %}
 
     {# ══════════════════════════════════════════════════════
        VIEW 1 — TRACKER (Suivi quotidien)

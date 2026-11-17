@@ -3,6 +3,7 @@
 namespace App\PlanDIntendance\Entity;
 
 use App\Compte\Entity\User;
+use App\PlanDeVie\Entity\LifeGoal;
 use App\PlanDIntendance\Repository\StewardshipItemRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
@@ -50,6 +51,11 @@ class StewardshipItem
 
     #[ORM\Column(options: ['default' => false])]
     private bool $priority = false;
+
+    /** Objectif de vie que cet élément sert (carte stratégique) ; facultatif. */
+    #[ORM\ManyToOne]
+    #[ORM\JoinColumn(nullable: true, onDelete: 'SET NULL')]
+    private ?LifeGoal $lifeGoal = null;
 
     #[ORM\Column(type: Types::DATETIME_IMMUTABLE, nullable: true)]
     private ?\DateTimeImmutable $actionDoneAt = null;
@@ -111,6 +117,10 @@ class StewardshipItem
     public function isPriority(): bool { return $this->priority; }
 
     public function setPriority(bool $priority): static { $this->priority = $priority; return $this->touch(); }
+
+    public function getLifeGoal(): ?LifeGoal { return $this->lifeGoal; }
+
+    public function setLifeGoal(?LifeGoal $lifeGoal): static { $this->lifeGoal = $lifeGoal; return $this->touch(); }
 
     public function getActionDoneAt(): ?\DateTimeImmutable { return $this->actionDoneAt; }
 

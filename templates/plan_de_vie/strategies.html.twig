@@ -777,7 +777,7 @@
                 </div>
                 <div>
                     <div class="plan-card-subtitle">Le soutien</div>
-                    <h2 class="plan-card-title">Hygiène de Vie</h2>{% if 'HYGIENE' in (lockedPlans ?? []) %}<span style="display:inline-block;margin-top:.25rem;font-size:.68rem;font-weight:800;letter-spacing:.06em;padding:.15rem .5rem;border-radius:999px;background:#FEF3C7;color:#92400E;">🔒 PRO</span>{% endif %}
+                    <h2 class="plan-card-title">Hygiène de vie</h2>{% if 'HYGIENE' in (lockedPlans ?? []) %}<span style="display:inline-block;margin-top:.25rem;font-size:.68rem;font-weight:800;letter-spacing:.06em;padding:.15rem .5rem;border-radius:999px;background:#FEF3C7;color:#92400E;">🔒 PRO</span>{% endif %}
                     <p class="plan-card-desc" style="font-family: var(--font-serif); font-style: italic; color: var(--fg); margin-bottom: .3rem;">{{ constant('App\\PlanDeVie\\Service\\PlanCatalog::PLANS').HYGIENE.question }}</p>
                     <p class="plan-card-desc">{{ constant('App\\PlanDeVie\\Service\\PlanCatalog::PLANS').HYGIENE.desc }}</p>
                 </div>
@@ -867,8 +867,9 @@
                         (activePlan === 'TRANSMISSION' ? 'Pilotez votre Donner : vos projets de legs, votre mentorat et votre service.' : 
                          'Prenez soin de ce qui vous soutient : sommeil, nutrition, sport, méditation et environnement.'))">
             </p>
-            {% if giftResults %}
-                <p x-show="activePlan === 'TRANSMISSION'" x-cloak data-gifts-reminder style="font-size: .92rem; color: var(--fg-muted); margin: 0 0 .75rem; display: flex; flex-wrap: wrap; align-items: center; gap: .35rem;">
+            {% if app.user.planDeTransmission and app.user.planDeTransmission.eternityPhrase %}<p x-show="activePlan === 'TRANSMISSION'" x-cloak data-eternity-phrase style="font-family: var(--font-serif); font-style: italic; font-size: 1.05rem; color: var(--fg); margin: 0 0 .6rem;">Ma phrase d'éternité : « {{ app.user.planDeTransmission.eternityPhrase }} »</p>{% endif %}
+                {% if giftResults %}
+                                <p x-show="activePlan === 'TRANSMISSION'" x-cloak data-gifts-reminder style="font-size: .92rem; color: var(--fg-muted); margin: 0 0 .75rem; display: flex; flex-wrap: wrap; align-items: center; gap: .35rem;">
                     <i data-lucide="gift" style="width: 15px; height: 15px; color: var(--primary);"></i>
                     <span>Vos dons : <strong style="color: var(--fg);">{{ giftResults.names|join(', ') }}</strong>.</span>
                     <a href="{{ path('app_assessment_report', {id: giftResults.reportId}) }}" style="color: var(--primary); font-weight: 600; text-decoration: underline;">Voir le rapport</a>
