@@ -6,9 +6,10 @@
 
 KIINI SAWA est une application de planification de vie **chrétienne assumée**, en français, pour l'Europe et l'Afrique
 francophone. La méthode vient d'un livre (`docs/livre/`) : on part de l'Être (raison d'être, valeurs, dons) pour aller
-vers le Faire (5 plans, rituels, revues).
+vers le Faire (6 plans, rituels, revues).
 
-- **5 plans** : Plan de Vie, Plan de Croissance, Plan de Développement, Plan de Transmission, Plan d'Hygiène de Vie.
+- **6 plans** (ordre du livre) : Plan de Vie, Plan de Croissance, Plan de Développement personnel, Plan d'Hygiène de vie,
+  Plan d'Intendance (ajouté le 17/11/2026), Plan de Transmission. Référence : `docs/lexique.md`.
 - **Autour** : rituels, journal, agenda, bilan (revues de la semaine et du mois), partenaires de redevabilité, tests
   de personnalité, espace couple, organisations (églises, associations), la méthode (chapitres du livre).
 - **Monétisation** : offre gratuite + PRO (mensuel, annuel, Duo couple, places d'organisation), en **EUR et FCFA**.
@@ -45,7 +46,7 @@ Un **module par dossier** : `src/<Module>/{Controller,Entity,Repository,Service,
 
 - Créer un module : `php bin/console app:module:create NomDuModule` ; une entité : `app:module:entity`.
 - Modules principaux : `Compte`, `Dashboard`, `PlanDeVie` (+ `PlanDeCroissance`, `PlanDeDeveloppement`,
-  `PlanDeTransmission`, `PlanDHygiene`), `Rituels`, `Journal`, `Planner` (agenda), `Bilan`, `Social` (partenaires),
+  `PlanDeTransmission`, `PlanDHygiene`, `PlanDIntendance`), `Rituels`, `Journal`, `Planner` (agenda), `Bilan`, `Social` (partenaires),
   `Personnalite` (tests, dont `Psychometrie/` : banque IPIP-NEO, scores, normes), `Couple`, `Organisation`,
   `Abonnement`, `Notification`, `Methode` (livre), `Media` (provenance des inscrits, liens suivis), `Admin`, `Shared`.
 - Navigation : une seule définition, `App\Shared\Twig\NavigationExtension` (6 rubriques ; voir `docs/design.md`).
@@ -115,9 +116,11 @@ Guide complet : `docs/mise-en-ligne.md` (section 3). En résumé :
 
 ## 7. Le livre
 
-Manuscrit source : `docs/livre/*.md` (texte de l'auteur, à ne pas réécrire sans accord). Les chapitres affichés dans
-l'application sont copiés dans `content/livre/` par `php bin/console app:livre:sync`. Les 3 premiers chapitres sont
-publics (`BookLibrary::PUBLIC_CHAPTERS`).
+Manuscrit source : **`../livre-et-ressources/sources/livre/manuscrit.md`** (hors du dépôt ; texte de l'auteur, à ne pas
+réécrire sans accord ; fiche `../livre-et-ressources/CONTEXTE_POUR_IA.md`). `php bin/console app:livre:sync` le découpe
+en chapitres dans `content/livre/` (versionné, c'est ce qui part en production) et retire dédicace, page auteur,
+signature et marqueurs de travail (« [HISTOIRE PERSONNELLE] »…). Les 3 premiers chapitres sont publics
+(`BookLibrary::PUBLIC_CHAPTERS`). `docs/livre/` est l'ancienne version (5 plans), conservée mais plus utilisée.
 
 ## 8. Ce qui reste ouvert
 

@@ -1,0 +1,232 @@
+{% extends 'base.html.twig' %}
+{#
+    Plan d'Intendance (livre, partie VI, chapitre 18). Le cycle de l'intendant, dans l'ordre de la page :
+    1. inventaire (Plan de Vie + 7 domaines), 2. état, 3. décision et action (dans chaque élément),
+    puis les priorités et 4. le compte rendu. Vocabulaire : App\PlanDIntendance\Service\Stewardship.
+#}
+{% set S = 'App\\PlanDIntendance\\Service\\Stewardship' %}
+{% set statuses = constant(S ~ '::STATUSES') %}
+{% set decisions = constant(S ~ '::DECISIONS') %}
+
+{% macro item(it, statuses, decisions) %}
+    <details class="ks-card ks-card--flat stw-item" id="element-{{ it.id }}" {{ it.status is null ? 'open' }}>
+        <summary class="stw-item__summary">
+            <span class="stw-item__label">{{ it.label }}</span>
+            <span class="stw-item__tags">
+                {% if it.priority %}<span class="ks-badge" title="Élément prioritaire">★ Priorité</span>{% endif %}
+                {% if it.status %}<span class="stw-pill" style="color: {{ statuses[it.status].color }}; background: {{ statuses[it.status].bg }};">{{ statuses[it.status].label }}</span>{% else %}<span class="ks-badge ks-badge--muted">À évaluer</span>{% endif %}
+                {% if it.decision %}<span class="ks-badge ks-badge--muted">{{ decisions[it.decision].label }}</span>{% endif %}
+            </span>
+        </summary>
+        <form method="post" action="{{ path('app_plan_d_intendance_update', {id: it.id}) }}" class="stw-item__form">
+            <fieldset class="stw-choice">
+                <legend class="ks-label">Comment je le gère aujourd'hui</legend>
+                {% for key, s in statuses %}
+                    <label class="stw-radio"><input type="radio" name="status" value="{{ key }}" {{ it.status == key ? 'checked' }}> {{ s.label }}</label>
+                {% endfor %}
+            </fieldset>
+            <fieldset class="stw-choice">
+                <legend class="ks-label">Ce que j'en fais</legend>
+                {% for key, d in decisions %}
+                    <label class="stw-radio" title="{{ d.help }}"><input type="radio" name="decision" value="{{ key }}" {{ it.decision == key ? 'checked' }}> {{ d.label }} <small>{{ d.help|lower }}</small></label>
+                {% endfor %}
+            </fieldset>
+            <div class="ks-field">
+                <label class="ks-label" for="action-{{ it.id }}">Mon action des 30 prochains jours</label>
+                <input class="ks-input" id="action-{{ it.id }}" name="action" value="{{ it.actionText }}" maxlength="255" placeholder="Une action simple et mesurable">
+            </div>
+            <div class="ks-field">
+                <label class="ks-label" for="note-{{ it.id }}">Note (facultatif)</label>
+                <textarea class="ks-input" id="note-{{ it.id }}" name="note" rows="2" placeholder="Ce que vous voulez garder en tête. Aucun montant n'est demandé.">{{ it.note }}</textarea>
+            </div>
+            <input type="hidden" name="priority" value="0">
+            <label class="stw-radio"><input type="checkbox" name="priority" value="1" {{ it.priority ? 'checked' }}> Parmi mes priorités d'intendance (trois à cinq au plus)</label>
+            <div class="stw-item__actions">
+                <button type="submit" class="ks-btn ks-btn--secondary ks-btn--sm">Enregistrer</button>
+            </div>
+        </form>
+        <form method="post" action="{{ path('app_plan_d_intendance_delete', {id: it.id}) }}" onsubmit="return confirm('Retirer cet élément de votre inventaire ?');" class="stw-item__delete">
+            <button type="submit" class="ks-btn ks-btn--ghost ks-btn--sm">Retirer</button>
+        </form>
+    </details>
+{% endmacro %}
+
+{% macro add_form(origin, placeholder) %}
+    <form method="post" action="{{ path('app_plan_d_intendance_add') }}" class="stw-add">
+        <input type="hidden" name="origin" value="{{ origin }}">
+        <input class="ks-input" name="label" maxlength="255" required placeholder="{{ placeholder }}" aria-label="Ajouter un élément">
+        <button type="submit" class="ks-btn ks-btn--secondary ks-btn--sm">Ajouter</button>
+    </form>
+{% endmacro %}
+
+{% block title %}Plan d'Intendance{% endblock %}
+
+{% block body %}
+<div class="ks-page">
+    {% include 'shared/_page_header.html.twig' with {
+        back: {url: path('app_strategies'), label: 'Vue d\'ensemble de mes plans'},
+        eyebrow: 'Plan d\'Intendance', icon: 'hand-coins',
+        title: 'Ce que je gère',
+        lead: 'Rien de ce que vous avez ne vous appartient vraiment. Tout vous est confié. Ce plan vous aide à gérer fidèlement ce qui est déjà entre vos mains, et à en rendre compte.'
+    } %}
+
+    <blockquote class="stw-verse">« C'est bien, bon et fidèle serviteur ; tu as été fidèle en peu de chose, je te confierai beaucoup ; entre dans la joie de ton maître. »<cite>Matthieu 25:21</cite></blockquote>
+
+    {{ book_panel('intendance') }}
+
+    <ol class="stw-steps" aria-label="Le cycle de l'intendant">
+        <li><strong>1. Inventaire</strong><span>ce qui m'est confié · {{ count }} élément{{ count > 1 ? 's' }}</span></li>
+        <li><strong>2. État</strong><span>fructifie, dort, fuit · {{ evaluated }} évalué{{ evaluated > 1 ? 's' }}</span></li>
+        <li><strong>3. Décision</strong><span>affecter, protéger, libérer · {{ priorities|length }} priorité{{ priorities|length > 1 ? 's' }}</span></li>
+        <li><strong>4. Compte rendu</strong><span>{{ rhythm and rhythm.lastReviewAt ? 'dernier point le ' ~ rhythm.lastReviewAt|date('d/m/Y') : 'à planifier' }}</span></li>
+    </ol>
+
+    {# Priorités d'abord quand il y en a : c'est le plan au quotidien #}
+    <section id="priorites" class="stw-section">
+        <h2 class="ks-section-title">Mes priorités d'intendance</h2>
+        {% if priorities is empty %}
+            <p class="ks-empty">Faites l'inventaire ci-dessous, donnez à chaque élément son état, puis choisissez trois à cinq éléments : pour chacun, une décision et une action pour les 30 prochains jours.</p>
+        {% else %}
+            <div class="ks-scroll">
+                <table class="stw-table">
+                    <thead><tr><th>Ce qui m'est confié</th><th>État</th><th>Décision</th><th>Action des 30 prochains jours</th><th><span class="sr-only">Fait</span></th></tr></thead>
+                    <tbody>
+                    {% for it in priorities %}
+                        <tr>
+                            <td><a href="#element-{{ it.id }}">{{ it.label }}</a></td>
+                            <td>{% if it.status %}<span class="stw-pill" style="color: {{ statuses[it.status].color }}; background: {{ statuses[it.status].bg }};">{{ statuses[it.status].label }}</span>{% else %}—{% endif %}</td>
+                            <td>{{ it.decision ? decisions[it.decision].label : '—' }}</td>
+                            <td>{{ it.actionText ?: '—' }}</td>
+                            <td>
+                                {% if it.actionText %}
+                                <form method="post" action="{{ path('app_plan_d_intendance_done', {id: it.id}) }}">
+                                    <button type="submit" class="ks-btn ks-btn--{{ it.actionDoneAt ? 'secondary' : 'ghost' }} ks-btn--sm" title="{{ it.actionDoneAt ? 'Faite le ' ~ it.actionDoneAt|date('d/m') : 'Marquer comme faite' }}">{{ it.actionDoneAt ? '✓ Faite' : 'Fait ?' }}</button>
+                                </form>
+                                {% endif %}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            <p class="stw-hint">Aucune ligne ne demande d'avoir davantage. Toutes demandent de mieux gérer ce qui est déjà là.</p>
+        {% endif %}
+    </section>
+
+    <section class="stw-section">
+        <h2 class="ks-section-title">Ce que votre Plan de Vie a mis entre vos mains</h2>
+        <p class="stw-hint">Un don se découvre, puis il se gère comme un dépôt. Pour chaque élément, une seule question : qu'est-ce que j'en fais ?</p>
+        {% if giftResults %}<p class="stw-hint">Le même don traverse vos plans : vous l'avez <strong>identifié</strong> (Plan de Vie), vous l'<strong>aiguisez</strong> (Développement personnel), ici vous le <strong>gérez</strong>, et vous le <strong>transmettrez</strong> (Transmission).</p>{% endif %}
+        <div class="stw-grid">
+        {% for origin, meta in constant(S ~ '::LIFE_PLAN') %}
+            <article class="ks-card stw-origin" id="origine-{{ origin|lower }}">
+                <h3 class="stw-origin__title">{{ meta.label }}</h3>
+                <p class="stw-origin__question">{{ meta.question }}</p>
+                {% for it in byOrigin[origin] %}{{ _self.item(it, statuses, decisions) }}{% endfor %}
+                {% if suggestions[origin] is not empty %}
+                    <div class="stw-chips" data-stewardship-suggestions="{{ origin }}">
+                        {% for label in suggestions[origin] %}
+                            <form method="post" action="{{ path('app_plan_d_intendance_add') }}">
+                                <input type="hidden" name="origin" value="{{ origin }}">
+                                <input type="hidden" name="label" value="{{ label }}">
+                                <button type="submit" class="stw-chip" title="Ajouter à mon inventaire">+ {{ label|length > 70 ? label|slice(0, 69) ~ '…' : label }}</button>
+                            </form>
+                        {% endfor %}
+                    </div>
+                {% elseif byOrigin[origin] is empty %}
+                    <p class="stw-hint">Rien encore dans votre Plan de Vie. <a href="{{ path('app_plan_de_vie') }}">Compléter mon Plan de Vie</a> ou écrivez-le ici.</p>
+                {% endif %}
+                {{ _self.add_form(origin, 'Ajouter…') }}
+            </article>
+        {% endfor %}
+        </div>
+    </section>
+
+    <section class="stw-section">
+        <h2 class="ks-section-title">Les sept domaines de votre intendance</h2>
+        <p class="stw-hint">Pour chacun, notez en une ligne ce qui vous est confié. Un regard honnête, sans culpabilité : ce qui dort peut se réveiller.</p>
+        <div class="stw-grid">
+        {% for origin, meta in constant(S ~ '::DOMAINS') %}
+            <article class="ks-card stw-origin" id="origine-{{ origin|lower }}">
+                <h3 class="stw-origin__title"><i data-lucide="{{ meta.icon }}" style="width: 18px; height: 18px;"></i> {{ meta.label }}</h3>
+                <p class="stw-origin__content">{{ meta.content }}</p>
+                <p class="stw-origin__question">{{ meta.question }}</p>
+                {% for it in byOrigin[origin] %}{{ _self.item(it, statuses, decisions) }}{% endfor %}
+                {{ _self.add_form(origin, 'Ce qui m\'est confié ici…') }}
+            </article>
+        {% endfor %}
+        </div>
+    </section>
+
+    <section id="compte-rendu" class="stw-section">
+        <h2 class="ks-section-title">Mon compte rendu</h2>
+        <p class="stw-hint">« Longtemps après, le maître de ces serviteurs revint, et leur fit rendre compte » (Matthieu 25:19). À intervalles réguliers, revenez sur vos décisions et mesurez-en le fruit.</p>
+        <form method="post" action="{{ path('app_plan_d_intendance_rhythm') }}" class="ks-card stw-rhythm">
+            <div class="ks-field">
+                <label class="ks-label" for="frequency">Quand je fais le point</label>
+                <select class="ks-input" id="frequency" name="frequency">
+                    {% for key, label in constant('App\\PlanDIntendance\\Entity\\StewardshipRhythm::FREQUENCIES') %}
+                        <option value="{{ key }}" {{ (rhythm ? rhythm.frequency : 'MONTHLY') == key ? 'selected' }}>{{ label }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="ks-field">
+                <label class="ks-label" for="with_whom">Avec qui (facultatif)</label>
+                <input class="ks-input" id="with_whom" name="with_whom" maxlength="120" value="{{ rhythm ? rhythm.withWhom }}" placeholder="Mon conjoint, mon mentor, un partenaire…">
+            </div>
+            {% if rhythm and rhythm.lastReviewAt %}
+                <p class="stw-hint">Dernier point le {{ rhythm.lastReviewAt|date('d/m/Y') }}{% if rhythm.nextReviewAt %} · prochain vers le {{ rhythm.nextReviewAt|date('d/m/Y') }}{% endif %}.</p>
+            {% endif %}
+            <div class="stw-item__actions">
+                <button type="submit" class="ks-btn ks-btn--secondary">Enregistrer mon rythme</button>
+                <button type="submit" name="review" value="1" class="ks-btn ks-btn--primary">J'ai fait le point</button>
+            </div>
+        </form>
+    </section>
+
+    <section class="stw-section">
+        <h2 class="ks-section-title">Ce que l'intendance n'est pas</h2>
+        <div class="stw-grid">
+            <div class="ks-card ks-card--flat"><strong>Une méthode pour s'enrichir.</strong> Le but n'est pas d'accumuler, mais de servir. Si votre plan ne parle que d'argent, il a perdu son centre.</div>
+            <div class="ks-card ks-card--flat"><strong>Un fardeau.</strong> L'intendant fidèle n'est pas un comptable anxieux. Le maître cherche la fidélité, et sa parole finale est une invitation : « entre dans la joie de ton maître. »</div>
+        </div>
+        <p style="margin-top: 1rem;"><a href="{{ path('app_plan_d_intendance_visualize') }}" class="ks-btn ks-btn--ghost ks-btn--sm"><i data-lucide="printer" style="width: 14px; height: 14px;"></i> Voir mon plan sur une page</a></p>
+    </section>
+</div>
+
+<style>
+    .stw-verse { font-family: var(--font-serif); font-style: italic; font-size: 1.1rem; color: var(--fg); border-left: 3px solid var(--accent); padding: .25rem 0 .25rem 1rem; margin: 0 0 1.25rem; max-width: 760px; }
+    .stw-verse cite { display: block; font-style: normal; font-size: .85rem; color: var(--fg-muted); margin-top: .35rem; }
+    .stw-steps { list-style: none; padding: 0; margin: 1.25rem 0 2rem; display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: .6rem; }
+    .stw-steps li { background: var(--primary-soft); border-radius: var(--r-md); padding: .7rem .9rem; display: flex; flex-direction: column; gap: .15rem; }
+    .stw-steps span { font-size: .82rem; color: var(--fg-muted); }
+    .stw-section { margin-bottom: 2.5rem; }
+    .stw-hint { color: var(--fg-muted); font-size: .92rem; margin: .25rem 0 1rem; max-width: 760px; }
+    .stw-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1rem; }
+    .stw-origin { display: flex; flex-direction: column; gap: .6rem; }
+    .stw-origin__title { font-size: 1.05rem; font-weight: 700; margin: 0; display: flex; align-items: center; gap: .4rem; }
+    .stw-origin__content { font-size: .85rem; color: var(--fg-muted); margin: 0; }
+    .stw-origin__question { font-family: var(--font-serif); font-style: italic; margin: 0; color: var(--fg); }
+    .stw-item { padding: .6rem .8rem; }
+    .stw-item__summary { cursor: pointer; display: flex; flex-wrap: wrap; justify-content: space-between; gap: .4rem; align-items: center; }
+    .stw-item__label { font-weight: 600; }
+    .stw-item__tags { display: flex; flex-wrap: wrap; gap: .3rem; }
+    .stw-item__form { display: flex; flex-direction: column; gap: .7rem; margin-top: .8rem; }
+    .stw-item__actions { display: flex; flex-wrap: wrap; gap: .5rem; }
+    .stw-item__delete { margin-top: .4rem; }
+    .stw-choice { border: 0; padding: 0; margin: 0; display: flex; flex-wrap: wrap; gap: .35rem .9rem; }
+    .stw-choice legend { margin-bottom: .3rem; }
+    .stw-radio { display: inline-flex; align-items: baseline; gap: .35rem; font-size: .92rem; cursor: pointer; }
+    .stw-radio small { color: var(--fg-muted); }
+    .stw-pill { font-size: .75rem; font-weight: 700; padding: .12rem .55rem; border-radius: 999px; }
+    .stw-add { display: flex; gap: .4rem; }
+    .stw-add .ks-input { flex: 1; min-width: 0; }
+    .stw-chips { display: flex; flex-wrap: wrap; gap: .4rem; }
+    .stw-chip { border: 1px dashed var(--primary); background: transparent; color: var(--primary); border-radius: 999px; padding: .3rem .7rem; font-size: .85rem; cursor: pointer; text-align: left; }
+    .stw-table { width: 100%; border-collapse: collapse; font-size: .92rem; }
+    .stw-table th, .stw-table td { text-align: left; padding: .55rem .6rem; border-bottom: 1px solid var(--border); vertical-align: top; }
+    .stw-table th { font-size: .78rem; text-transform: uppercase; letter-spacing: .04em; color: var(--fg-muted); }
+    .stw-rhythm { display: grid; gap: .9rem; max-width: 560px; }
+    .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+</style>
+{% endblock %}

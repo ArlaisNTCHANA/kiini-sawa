@@ -718,7 +718,7 @@
             </div>
             <h1 class="strat-title">Vue d'ensemble de mes plans</h1>
             <p class="strat-desc">
-                Vos quatre plans, au service de votre Plan de Vie : Croissance, Développement, Hygiène de vie et Transmission. C'est ici que vos objectifs de vie deviennent des actions concrètes.
+                Vos cinq plans, au service de votre Plan de Vie : Croissance, Développement personnel, Hygiène de vie, Intendance et Transmission. C'est ici que vos objectifs de vie deviennent des actions concrètes.
             </p>
         </header>
 
@@ -746,7 +746,7 @@
                 </div>
             </div>
 
-            {# 2. Plan de Développement #}
+            {# 2. Plan de Développement personnel #}
             <div @click="{% if 'DEVELOPPEMENT' in (lockedPlans ?? []) %}window.location.href = '{{ path('app_subscription', {fonction: 'developpement'}) }}'{% else %}activePlan = 'DEVELOPPEMENT'; activeTab = 'INTENTION'{% endif %}" class="plan-hub-card">
                 <div class="plan-card-decor bg-gradient-to-br from-blue-400 to-indigo-600"></div>
                 <div class="plan-card-icon" style="background: var(--info-soft); color: var(--info);">
@@ -769,7 +769,7 @@
                 </div>
             </div>
 
-            {# 3. Plan d'Hygiène de Vie #}
+            {# 3. Plan d'Hygiène de vie #}
             <div @click="{% if 'HYGIENE' in (lockedPlans ?? []) %}window.location.href = '{{ path('app_subscription', {fonction: 'hygiene'}) }}'{% else %}activePlan = 'HYGIENE'; activeTab = 'INTENTION'{% endif %}" class="plan-hub-card">
                 <div class="plan-card-decor bg-gradient-to-br from-emerald-400 to-teal-600"></div>
                 <div class="plan-card-icon" style="background: var(--success-soft); color: var(--success);">
@@ -791,6 +791,27 @@
                     </div>
                 </div>
             </div>
+            {# Plan d'Intendance : page à part (livre, chapitre 18) #}
+            <a href="{{ 'INTENDANCE' in (lockedPlans ?? []) ? path('app_subscription', {fonction: 'intendance'}) : path('app_plan_d_intendance') }}" class="plan-hub-card" data-plan-card="INTENDANCE" style="text-decoration: none; color: inherit;">
+                <div class="plan-card-decor" style="background: linear-gradient(135deg, var(--accent), var(--primary));"></div>
+                <div class="plan-card-icon" style="background: var(--primary-soft); color: var(--primary);">
+                    <i data-lucide="hand-coins" style="width: 22px; height: 22px;"></i>
+                </div>
+                <div>
+                    <div class="plan-card-subtitle">La gestion (Avoir)</div>
+                    <h2 class="plan-card-title">Intendance</h2>{% if 'INTENDANCE' in (lockedPlans ?? []) %}<span style="display:inline-block;margin-top:.25rem;font-size:.68rem;font-weight:800;letter-spacing:.06em;padding:.15rem .5rem;border-radius:999px;background:#FEF3C7;color:#92400E;">🔒 PRO</span>{% endif %}
+                    <p class="plan-card-desc" style="font-family: var(--font-serif); font-style: italic; color: var(--fg); margin-bottom: .3rem;">{{ constant('App\\PlanDeVie\\Service\\PlanCatalog::PLANS').INTENDANCE.question }}</p>
+                    <p class="plan-card-desc">{{ constant('App\\PlanDeVie\\Service\\PlanCatalog::PLANS').INTENDANCE.desc }}</p>
+                </div>
+                <div class="plan-card-footer">
+                    <div class="plan-card-count">
+                        <span class="plan-card-label">Inventaire, état, décision, compte rendu</span>
+                    </div>
+                    <div class="plan-card-arrow" style="background: var(--primary-soft); color: var(--primary);">
+                        <i data-lucide="chevron-right" style="width: 16px; height: 16px;"></i>
+                    </div>
+                </div>
+            </a>
             {# 4. Plan de Transmission #}
             <div @click="{% if 'TRANSMISSION' in (lockedPlans ?? []) %}window.location.href = '{{ path('app_subscription', {fonction: 'transmission'}) }}'{% else %}activePlan = 'TRANSMISSION'; activeTab = 'INTENTION'{% endif %}" class="plan-hub-card">
                 <div class="plan-card-decor bg-gradient-to-br from-pink-400 to-rose-600"></div>
@@ -830,14 +851,14 @@
                           (activePlan === 'TRANSMISSION' ? 'background: #FDF2F8; color: #DB2777; border-color: rgba(219, 39, 119, 0.15);' : 
                            'background: #ECFDF5; color: #059669; border-color: rgba(5, 150, 105, 0.15);'))">
                 <template x-if="activePlan === 'CROISSANCE'"><span style="display:flex; align-items:center; gap:0.25rem;"><i data-lucide="sprout" style="width: 14px; height: 14px;"></i> Plan de Croissance</span></template>
-                <template x-if="activePlan === 'DEVELOPPEMENT'"><span style="display:flex; align-items:center; gap:0.25rem;"><i data-lucide="wrench" style="width: 14px; height: 14px;"></i> Plan de Développement</span></template>
+                <template x-if="activePlan === 'DEVELOPPEMENT'"><span style="display:flex; align-items:center; gap:0.25rem;"><i data-lucide="wrench" style="width: 14px; height: 14px;"></i> Plan de Développement personnel</span></template>
                 <template x-if="activePlan === 'TRANSMISSION'"><span style="display:flex; align-items:center; gap:0.25rem;"><i data-lucide="hand-heart" style="width: 14px; height: 14px;"></i> Plan de Transmission</span></template>
-                <template x-if="activePlan === 'HYGIENE'"><span style="display:flex; align-items:center; gap:0.25rem;"><i data-lucide="heart-pulse" style="width: 14px; height: 14px;"></i> Plan d'Hygiène de Vie</span></template>
+                <template x-if="activePlan === 'HYGIENE'"><span style="display:flex; align-items:center; gap:0.25rem;"><i data-lucide="heart-pulse" style="width: 14px; height: 14px;"></i> Plan d'Hygiène de vie</span></template>
             </div>
             <h1 class="hero-title"
                 x-text="activePlan === 'CROISSANCE' ? 'Plan de Croissance' : 
-                        (activePlan === 'DEVELOPPEMENT' ? 'Plan de Développement' : 
-                         (activePlan === 'TRANSMISSION' ? 'Plan de Transmission' : 'Plan d\'Hygiène de Vie'))">
+                        (activePlan === 'DEVELOPPEMENT' ? 'Plan de Développement personnel' : 
+                         (activePlan === 'TRANSMISSION' ? 'Plan de Transmission' : 'Plan d\'Hygiène de vie'))">
             </h1>
             <p style="font-family: var(--font-serif); font-style: italic; font-size: 1.25rem; color: var(--fg); margin: -.25rem 0 .5rem;" x-text="{{ {CROISSANCE: constant('App\\PlanDeVie\\Service\\PlanCatalog::PLANS').CROISSANCE.question, DEVELOPPEMENT: constant('App\\PlanDeVie\\Service\\PlanCatalog::PLANS').DEVELOPPEMENT.question, HYGIENE: constant('App\\PlanDeVie\\Service\\PlanCatalog::PLANS').HYGIENE.question, TRANSMISSION: constant('App\\PlanDeVie\\Service\\PlanCatalog::PLANS').TRANSMISSION.question}|json_encode|e('html_attr') }}[activePlan] || ''"></p>
             <p class="hero-desc"
@@ -2044,7 +2065,7 @@
                                 <div class="card-icon" style="background: rgba(13, 148, 136, 0.08); color: var(--primary);">
                                     <i data-lucide="bar-chart-2" style="width: 18px; height: 18px;"></i>
                                 </div>
-                                <h2 class="card-title">Analyse d'Alignement du Plan de Développement</h2>
+                                <h2 class="card-title">Analyse d'Alignement du Plan de Développement personnel</h2>
                             </div>
                             {% set scoreColor = developpementHealthScore > 80 ? '#166534' : (developpementHealthScore > 50 ? '#854d0e' : '#991b1b') %}
                             {% set scoreBg = developpementHealthScore > 80 ? '#dcfce7' : (developpementHealthScore > 50 ? '#fef9c3' : '#fee2e2') %}
@@ -2128,7 +2149,7 @@
                                 <div class="card-icon" style="background: rgba(13, 148, 136, 0.08); color: var(--primary);">
                                     <i data-lucide="bar-chart-2" style="width: 18px; height: 18px;"></i>
                                 </div>
-                                <h2 class="card-title">Analyse d'Alignement du Plan d'Hygiène de Vie</h2>
+                                <h2 class="card-title">Analyse d'Alignement du Plan d'Hygiène de vie</h2>
                             </div>
                             {% set scoreColor = hygieneHealthScore > 80 ? '#166534' : (hygieneHealthScore > 50 ? '#854d0e' : '#991b1b') %}
                             {% set scoreBg = hygieneHealthScore > 80 ? '#dcfce7' : (hygieneHealthScore > 50 ? '#fef9c3' : '#fee2e2') %}
@@ -2692,7 +2713,7 @@ graph TD
         } else if (plan === 'DEVELOPPEMENT') {
             path = "{{ path('app_plan_de_developpement_email') }}";
             toastBg = '#2563EB';
-            planLabel = 'Plan de Développement';
+            planLabel = 'Plan de Développement personnel';
         } else if (plan === 'TRANSMISSION') {
             path = "{{ path('app_plan_de_transmission_email') }}";
             toastBg = '#DB2777';
@@ -2700,7 +2721,7 @@ graph TD
         } else if (plan === 'HYGIENE') {
             path = "{{ path('app_plan_d_hygiene_email') }}";
             toastBg = '#059669';
-            planLabel = "Plan d'Hygiène de Vie";
+            planLabel = "Plan d'Hygiène de vie";
         }
 
         const toast = document.getElementById('toast-strategies');

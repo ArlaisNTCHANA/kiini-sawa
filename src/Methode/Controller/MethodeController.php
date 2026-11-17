@@ -27,6 +27,9 @@ class MethodeController extends AbstractController
     #[Route('/{slug}', name: 'chapter', requirements: ['slug' => '[a-z0-9-]+'], methods: ['GET'])]
     public function chapter(string $slug, BookLibrary $book): Response
     {
+        if (isset(BookLibrary::LEGACY_SLUGS[$slug])) {
+            return $this->redirectToRoute('app_methode_chapter', ['slug' => BookLibrary::LEGACY_SLUGS[$slug]], Response::HTTP_MOVED_PERMANENTLY);
+        }
         $chapter = $book->get($slug) ?? throw $this->createNotFoundException('Chapitre introuvable.');
 
         return $this->render('methode/chapter.html.twig', [

@@ -66,8 +66,8 @@ class AppConfigType extends AbstractType
         ;
         // Fonctions accessibles en gratuit (décochées = réservées à PRO)
         foreach ([
-            'enableGrowthFree' => 'Plan de Croissance', 'enableDevelopmentFree' => 'Plan de Développement',
-            'enableTransmissionFree' => 'Plan de Transmission', 'enableHygieneFree' => 'Plan d\'Hygiène de Vie',
+            'enableGrowthFree' => 'Plan de Croissance', 'enableDevelopmentFree' => 'Plan de Développement personnel',
+            'enableTransmissionFree' => 'Plan de Transmission', 'enableHygieneFree' => 'Plan d\'Hygiène de vie', 'enableStewardshipFree' => 'Plan d\'Intendance',
             'enableMapFree' => 'Carte stratégique', 'enablePrintFree' => 'Export PDF',
             'enableMonthlyReviewsFree' => 'Revue mensuelle', 'enablePlanHistoryFree' => 'Historique des plans',
             'enableCoherenceAnalysisFree' => 'Analyse de cohérence', 'enableDiscoveryFree' => 'Tests',

@@ -47,8 +47,9 @@ vérification de la prod. Le fondateur fait `git push` lui-même.
 
 ## Lot 2 : décisions du fondateur à obtenir avant de coder
 
-- **A. « Avoir »** (finances, biens) n'a pas de plan (Être → Croissance, Faire → Développement, Donner → Transmission).
-  Proposition : Plan de Développement (carrière, finances). Alternative : Hygiène de Vie (ressources).
+- **A. « Avoir »** : TRANCHÉ le 17/11/2026 par l'auteur. Un **sixième plan, le Plan d'Intendance** (« ce que je
+  gère »), placé entre l'Hygiène et la Transmission (livre, chapitre 18). Mise en œuvre et décisions restantes :
+  `docs/DECISION-plan-d-intendance.md`.
 - **B. Confirmations (chapitre 7)** : section « Confirmations » dans le Plan de Vie qui rassemble feedback nourricier,
   confirmation par les proches et preuves ; entités existantes mais inutilisées : `src/PlanDeCroissance/Entity/ConfirmPoint.php`,
   `Evidence.php` (≈ 1 jour).

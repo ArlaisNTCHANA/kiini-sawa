@@ -1,0 +1,68 @@
+{% set S = 'App\\PlanDIntendance\\Service\\Stewardship' %}
+{% set statuses = constant(S ~ '::STATUSES') %}
+{% set decisions = constant(S ~ '::DECISIONS') %}
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Mon Plan d'Intendance — KIINI SAWA</title>
+    <style>
+        body { font-family: Georgia, 'Times New Roman', serif; color: #1f2937; max-width: 900px; margin: 0 auto; padding: 2rem 1.25rem; background: #fff; }
+        .brand { font-family: Arial, sans-serif; font-weight: bold; color: #0F766E; text-transform: uppercase; letter-spacing: .1em; font-size: .8rem; }
+        h1 { font-size: 2rem; margin: .3rem 0 0; color: #0F766E; }
+        .formula { font-style: italic; color: #4b5563; margin: .2rem 0 1.5rem; }
+        h2 { font-family: Arial, sans-serif; font-size: 1rem; text-transform: uppercase; letter-spacing: .06em; color: #0F766E; border-bottom: 1px solid #d1d5db; padding-bottom: .3rem; margin-top: 2rem; }
+        table { width: 100%; border-collapse: collapse; font-size: .92rem; }
+        th, td { text-align: left; padding: .45rem .5rem; border-bottom: 1px solid #e5e7eb; vertical-align: top; }
+        th { font-family: Arial, sans-serif; font-size: .72rem; text-transform: uppercase; color: #6b7280; }
+        .origin { font-family: Arial, sans-serif; font-size: .75rem; color: #6b7280; }
+        .muted { color: #6b7280; }
+        .no-print { margin-bottom: 1rem; font-family: Arial, sans-serif; }
+        @media print { .no-print { display: none; } body { padding: 0; } }
+    </style>
+</head>
+<body>
+    <p class="no-print"><a href="{{ path('app_plan_d_intendance') }}">← Retour au plan</a> · <a href="#" onclick="window.print(); return false;">Imprimer</a></p>
+    <div class="brand">KIINI SAWA • Plan d'Intendance</div>
+    <h1>Ce que je gère</h1>
+    <p class="formula">{{ name }} · « Fidèle dans le peu, tu seras établi sur beaucoup. »</p>
+
+    <h2>Mes priorités d'intendance</h2>
+    {% if priorities is empty %}
+        <p class="muted">Aucune priorité choisie pour l'instant.</p>
+    {% else %}
+        <table>
+            <thead><tr><th>Ce qui m'est confié</th><th>État</th><th>Décision</th><th>Action des 30 prochains jours</th></tr></thead>
+            <tbody>
+            {% for it in priorities %}
+                <tr><td>{{ it.label }}</td><td>{{ it.status ? statuses[it.status].label : '—' }}</td><td>{{ it.decision ? decisions[it.decision].label : '—' }}</td><td>{{ it.actionText ?: '—' }}{% if it.actionDoneAt %} ✓{% endif %}</td></tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    {% endif %}
+
+    <h2>Mon inventaire</h2>
+    {% if count == 0 %}
+        <p class="muted">L'inventaire est encore vide.</p>
+    {% else %}
+        <table>
+            <thead><tr><th>Domaine</th><th>Ce qui m'est confié</th><th>État</th><th>Décision</th></tr></thead>
+            <tbody>
+            {% for origin, list in byOrigin %}
+                {% for it in list %}
+                    <tr><td class="origin">{{ loop.first ? constant(S ~ '::LIFE_PLAN')[origin].label ?? constant(S ~ '::DOMAINS')[origin].label }}</td><td>{{ it.label }}</td><td>{{ it.status ? statuses[it.status].label : '—' }}</td><td>{{ it.decision ? decisions[it.decision].label : '—' }}</td></tr>
+                {% endfor %}
+            {% endfor %}
+            </tbody>
+        </table>
+    {% endif %}
+
+    <h2>Mon rythme de compte rendu</h2>
+    {% if rhythm %}
+        <p>{{ constant('App\\PlanDIntendance\\Entity\\StewardshipRhythm::FREQUENCIES')[rhythm.frequency] }}{% if rhythm.withWhom %}, avec {{ rhythm.withWhom }}{% endif %}.{% if rhythm.lastReviewAt %} Dernier point le {{ rhythm.lastReviewAt|date('d/m/Y') }}.{% endif %}</p>
+    {% else %}
+        <p class="muted">À définir.</p>
+    {% endif %}
+</body>
+</html>

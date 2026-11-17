@@ -263,7 +263,7 @@
 
     {# ── Faire le point : auto-évaluations ── #}
     <p class="tests-section-title" style="margin-top:3rem;">Faire le point</p>
-    <p style="color:var(--fg-muted);font-size:.85rem;margin:-0.5rem 0 1rem;">Deux auto-évaluations à refaire régulièrement : elles nourrissent votre Plan d'Hygiène de Vie et vos revues.</p>
+    <p style="color:var(--fg-muted);font-size:.85rem;margin:-0.5rem 0 1rem;">Deux auto-évaluations à refaire régulièrement : elles nourrissent votre Plan d'Hygiène de vie et vos revues.</p>
     <div class="tests-grid">
         {% for typeKey, meta in tests %}
             {% include 'personnalite/_card.html.twig' with {typeKey: typeKey, meta: meta, done: latestTests[typeKey] is defined} %}

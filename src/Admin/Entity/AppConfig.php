@@ -90,6 +90,9 @@ class AppConfig
     private bool $enableHygieneFree = false;
 
     #[ORM\Column(options: ['default' => false])]
+    private bool $enableStewardshipFree = false;
+
+    #[ORM\Column(options: ['default' => false])]
     private bool $enableTransmissionFree = false;
 
     #[ORM\Column(options: ['default' => false])]
@@ -484,6 +487,18 @@ class AppConfig
     public function setEnableHygieneFree(bool $enableHygieneFree): static
     {
         $this->enableHygieneFree = $enableHygieneFree;
+
+        return $this;
+    }
+
+    public function isEnableStewardshipFree(): bool
+    {
+        return $this->enableStewardshipFree;
+    }
+
+    public function setEnableStewardshipFree(bool $enableStewardshipFree): static
+    {
+        $this->enableStewardshipFree = $enableStewardshipFree;
 
         return $this;
     }

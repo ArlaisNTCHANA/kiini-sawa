@@ -138,4 +138,14 @@ class WizardTestResultsTest extends WebTestCase
         $this->client->request('GET', '/plan-de-vie/assistant');
         $this->assertSelectorNotExists('[data-croissance-balance]');
     }
+
+    /** Étape 1 : l'Équation du But du livre (« Je suis créé pour … afin d'apporter … chez … »). */
+    public function testPurposeEquationInStepOne(): void
+    {
+        $this->client->loginUser($this->user);
+        $crawler = $this->client->request('GET', '/plan-de-vie/assistant?step=1&single=1');
+        $this->assertSelectorTextContains('[data-purpose-equation]', 'Je suis créé pour');
+        $this->assertCount(3, $crawler->filter('[data-purpose-equation] input[data-eq]'));
+        $this->assertCount(0, $crawler->filter('[data-purpose-equation] input[name]'), 'Les champs de l\'équation ne sont pas enregistrés seuls');
+    }
 }

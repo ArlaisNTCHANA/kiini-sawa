@@ -51,13 +51,13 @@ class NavigationTest extends WebTestCase
         foreach (NavigationExtension::SECTIONS['plans']['items'] as $item) {
             if (isset($byRoute[$item[1]])) {
                 $plan = $byRoute[$item[1]];
-                $this->assertSame($plan['question'].' '.$plan['desc'], $item[3], $item[0].' : question et contenu du catalogue');
+                $this->assertSame($plan['question'].'. '.$plan['desc'], $item[3], $item[0].' : question et contenu du catalogue');
                 $menuOrder[] = $item[1];
             }
         }
-        // Ordre de la méthode : Vie, Croissance, Développement, Hygiène, Transmission
+        // Ordre du livre : Vie, Croissance, Développement personnel, Hygiène de vie, Intendance, Transmission
         $this->assertSame(array_column($catalog, 'route'), $menuOrder);
-        $this->assertSame(['VIE', 'CROISSANCE', 'DEVELOPPEMENT', 'HYGIENE', 'TRANSMISSION'], array_keys($catalog));
+        $this->assertSame(['VIE', 'CROISSANCE', 'DEVELOPPEMENT', 'HYGIENE', 'INTENDANCE', 'TRANSMISSION'], array_keys($catalog));
     }
 
     public function testHeaderShowsSixSectionsAndLeanAccountMenu(): void

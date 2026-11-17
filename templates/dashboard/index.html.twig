@@ -289,7 +289,7 @@
                 {% endfor %}
             </ol>
             {% if is_trialing() and pro_until() %}
-                <p style="margin-top: 1rem; font-size: .85rem; color: var(--fg-light); background: var(--warning-soft); border-radius: var(--r-md); padding: .6rem .9rem;">✨ Votre essai PRO est actif jusqu'au <strong>{{ pro_until()|date('d/m/Y') }}</strong> : profitez-en pour bâtir aussi vos plans de Croissance, Développement, Transmission et Hygiène. <a href="{{ path('app_subscription') }}" style="color: var(--primary); font-weight: 600;">En savoir plus</a></p>
+                <p style="margin-top: 1rem; font-size: .85rem; color: var(--fg-light); background: var(--warning-soft); border-radius: var(--r-md); padding: .6rem .9rem;">✨ Votre essai PRO est actif jusqu'au <strong>{{ pro_until()|date('d/m/Y') }}</strong> : profitez-en pour bâtir aussi vos plans de Croissance, Développement personnel, Hygiène de vie, Intendance et Transmission. <a href="{{ path('app_subscription') }}" style="color: var(--primary); font-weight: 600;">En savoir plus</a></p>
             {% endif %}
         </section>
     {% endif %}

@@ -11,6 +11,34 @@ Ne jamais afficher ni demander de mot de passe ; ne pas publier son nom (mention
 
 ---
 
+## 2026-11-17 · Phase 1 : l'application alignée sur le nouveau livre (6 plans, Plan d'Intendance)
+
+Contexte : l'auteur a ajouté au livre le **Plan d'Intendance : ce que je gère** (manuscrit
+`../livre-et-ressources/sources/livre/manuscrit.md`, partie VI, chapitre 18 ; fiche `../livre-et-ressources/CONTEXTE_POUR_IA.md`).
+Décision et suite : `docs/DECISION-plan-d-intendance.md`. Le livre et l'application doivent sortir ensemble sans se contredire.
+
+- **6 plans, noms et formules du livre** : `PlanCatalog::PLANS` (clé `INTENDANCE` entre `HYGIENE` et `TRANSMISSION` ;
+  la clé `question` porte la formule du livre : « Qui je suis, où je vais », « Ce que je développe », « Ce que je gère »…).
+  « Plan de Développement personnel », « Plan d'Hygiène de vie » partout ; plus de « quatre plans » / « 5 plans »
+  visibles (navigation, accueil, abonnement, courriels, revue de la semaine). Lexique : `docs/lexique.md`.
+- **Module `PlanDIntendance`** (doc `docs/modules/plan_d_intendance.md`) : page guidée (pas d'étape dans l'assistant,
+  trop monolithique : `wizard.html.twig` fait 2 000 lignes), inventaire prérempli depuis le Plan de Vie et les tests,
+  état, décision, action, 5 priorités au plus, compte rendu ; vue sur une page. PRO, interrupteur gratuit dans
+  l'administration (`enableStewardshipFree`). Migration `Version20261117145446`. Carte dans la vue d'ensemble.
+- **La Méthode lit le nouveau livre** : `app:livre:sync` découpe le manuscrit en 28 fichiers `content/livre/`
+  (`BookLibrary::CHAPTERS`) ; retire dédicace, page auteur, signature et marqueurs « [HISTOIRE PERSONNELLE] »,
+  « [À COMPLÉTER] », « [… À CONFIRMER] ». Anciennes adresses redirigées (`BookLibrary::LEGACY_SLUGS`, 301). Encarts
+  « Comprendre cette étape » remappés (`STEPS`, dont `intendance` → chapitre 18).
+- **Équation du But** dans l'étape 1 de l'assistant (« Je suis créé pour … afin d'apporter … chez … ») : trois champs
+  qui écrivent le But ; le champ enregistré reste `purpose_statement`.
+- Tests : `tests/PlanDIntendance/`, `MethodeControllerTest::testNewBookWithStewardshipChapter`,
+  `WizardTestResultsTest::testPurposeEquationInStepOne` ; 204 tests verts.
+- **Pièges** : `docs/livre/` est l'ancienne version (gardée, `README-OBSOLETE.md`) ; sur macOS, `grep -Z` ne sépare
+  pas par NUL (utiliser `grep -l | xargs`).
+- **Reste (phase 1 bis)** : bilan du jour, saisons (thème de 3 mois, revue de saison), phrase d'éternité dans la
+  Transmission, nom « Le Sanctuaire » pour les exercices, « ne manque jamais deux fois », Organisateur ou Agenda (un
+  seul mot à choisir) ; Intendance dans la revue du mois et la carte stratégique ; axe « Ressources » du test Hygiène.
+
 ## 2026-11-17 · Cohérence des plans, lot 1 : l'assistant reprend les résultats des tests
 
 - `PlanDeVie\Service\TestResultsForPlans` : derniers résultats sous forme utile aux plans (DISC 16 profils, type,

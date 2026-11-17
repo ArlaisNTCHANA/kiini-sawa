@@ -26,9 +26,10 @@ final class Entitlements
     /** Fonction => interrupteur « gratuit » de la configuration. */
     public const FEATURES = [
         'croissance' => ['isEnableGrowthFree', 'Plan de Croissance'],
-        'developpement' => ['isEnableDevelopmentFree', 'Plan de Développement'],
+        'developpement' => ['isEnableDevelopmentFree', 'Plan de Développement personnel'],
         'transmission' => ['isEnableTransmissionFree', 'Plan de Transmission'],
-        'hygiene' => ['isEnableHygieneFree', 'Plan d\'Hygiène de Vie'],
+        'hygiene' => ['isEnableHygieneFree', 'Plan d\'Hygiène de vie'],
+        'intendance' => ['isEnableStewardshipFree', 'Plan d\'Intendance'],
         'map' => ['isEnableMapFree', 'Carte stratégique'],
         'pdf' => ['isEnablePrintFree', 'Export PDF'],
         'monthly_review' => ['isEnableMonthlyReviewsFree', 'Revue mensuelle'],
@@ -55,6 +56,7 @@ final class Entitlements
         'DEVELOPPEMENT' => 'developpement',
         'TRANSMISSION' => 'transmission',
         'HYGIENE' => 'hygiene',
+        'INTENDANCE' => 'intendance',
     ];
 
     private ?AppConfig $config = null;

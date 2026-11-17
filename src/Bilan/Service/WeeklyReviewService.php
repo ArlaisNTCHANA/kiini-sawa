@@ -24,9 +24,9 @@ final class WeeklyReviewService
     /** Plans passés en revue, dans l'ordre d'affichage. */
     public const PLANS = [
         'CROISSANCE' => ['label' => 'Plan de Croissance', 'color' => '#D97706', 'icon' => 'zap'],
-        'DEVELOPPEMENT' => ['label' => 'Plan de Développement', 'color' => '#2563EB', 'icon' => 'graduation-cap'],
+        'DEVELOPPEMENT' => ['label' => 'Plan de Développement personnel', 'color' => '#2563EB', 'icon' => 'graduation-cap'],
         'TRANSMISSION' => ['label' => 'Plan de Transmission', 'color' => '#DB2777', 'icon' => 'gift'],
-        'HYGIENE' => ['label' => 'Plan d\'Hygiène de Vie', 'color' => '#059669', 'icon' => 'shield'],
+        'HYGIENE' => ['label' => 'Plan d\'Hygiène de vie', 'color' => '#059669', 'icon' => 'shield'],
     ];
 
     public function __construct(

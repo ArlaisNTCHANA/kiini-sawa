@@ -488,7 +488,7 @@
                     <div style="padding: 0.375rem 0;">
                         {% set ddItems1 = [
                             { label: 'Mon profil',      icon: 'user',          href: path('app_profile'),                desc: 'Compte, préférences et données' },
-                            { label: is_pro() ? (is_trialing() ? 'Essai PRO' : 'Mon abonnement') : 'Passer à PRO', icon: 'crown', href: path('app_subscription'), desc: is_trialing() ? 'Jusqu\'au ' ~ pro_until()|date('d/m') : (is_pro() ? 'Offre PRO' : 'Débloquer les 4 plans') },
+                            { label: is_pro() ? (is_trialing() ? 'Essai PRO' : 'Mon abonnement') : 'Passer à PRO', icon: 'crown', href: path('app_subscription'), desc: is_trialing() ? 'Jusqu\'au ' ~ pro_until()|date('d/m') : (is_pro() ? 'Offre PRO' : 'Débloquer tous les plans') },
                             { label: 'Notifications',   icon: 'bell',          href: path('app_notifications'),          desc: unread_notifications() ? unread_notifications() ~ ' non lue' ~ (unread_notifications() > 1 ? 's') : 'Tout est lu' },
                             { label: 'Installer l\'application', icon: 'smartphone', href: path('app_install'), desc: 'Sur votre téléphone' },
                         ] %}

@@ -7,7 +7,7 @@ use App\PlanDeVie\Entity\PlanHistory;
 use Doctrine\ORM\EntityManagerInterface;
 
 /**
- * Versions datées des plans : une photographie lisible de l'état des 5 plans à une date.
+ * Versions datées des plans : une photographie lisible de l'état des plans à une date.
  * Créée à chaque revue mensuelle, après un passage complet dans l'assistant (une par jour au plus)
  * ou à la demande depuis la page Historique.
  */

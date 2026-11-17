@@ -885,7 +885,7 @@ class UserPlanControllerTest extends WebTestCase
         // Request wizard for HYGIENE
         $client->request('GET', '/plan-de-vie/assistant?plan=HYGIENE');
         $this->assertResponseIsSuccessful();
-        $this->assertSelectorTextContains('h1', 'Plan d\'Hygiène de Vie');
+        $this->assertSelectorTextContains('h1', 'Plan d\'Hygiène de vie');
         $this->assertSelectorExists('div[data-step-title="Hygiène de Vie"]');
     }
 
@@ -952,7 +952,7 @@ class UserPlanControllerTest extends WebTestCase
         // Test HYGIENE
         $client->request('GET', '/plan-d-hygiene/visualiser');
         $this->assertResponseIsSuccessful();
-        $this->assertSelectorTextContains('h1', 'Plan d\'Hygiène de Vie');
+        $this->assertSelectorTextContains('h1', 'Plan d\'Hygiène de vie');
 
         $client->request('POST', '/plan-d-hygiene/email');
         $this->assertResponseIsSuccessful();

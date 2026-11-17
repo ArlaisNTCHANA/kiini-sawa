@@ -92,7 +92,12 @@
         .wiz-suggestions { padding: 0.9rem 1.1rem; border: 1px dashed var(--border-strong); border-radius: 1rem; background: var(--bg-alt); margin-bottom: 1.25rem; }
         .wiz-suggestions p { margin: 0 0 0.6rem; font-size: 0.85rem; color: var(--fg-light); line-height: 1.5; display: flex; flex-wrap: wrap; align-items: center; gap: 0.35rem; }
         .wiz-chips { display: flex; flex-wrap: wrap; gap: 0.5rem; }
-        .wiz-chip { display: inline-flex; align-items: center; gap: 0.3rem; padding: 0.4rem 0.85rem; border-radius: 9999px; border: 1px solid var(--border-strong); background: var(--bg); color: var(--primary); font-size: 0.82rem; font-weight: 650; cursor: pointer; }
+        .wiz-equation { background: var(--primary-soft); border-radius: var(--r-md); padding: 1rem 1.1rem; margin-bottom: 1.25rem; display: flex; flex-direction: column; gap: .7rem; }
+    .wiz-equation__formula { font-family: var(--font-serif); font-size: 1.05rem; margin: 0; }
+    .wiz-equation__fields { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: .6rem; }
+    .wiz-equation__fields label { display: flex; flex-direction: column; gap: .25rem; font-size: .8rem; font-weight: 600; color: var(--fg-muted); }
+    .wiz-equation__example { font-size: .82rem; color: var(--fg-muted); font-style: italic; margin: 0; }
+    .wiz-chip { display: inline-flex; align-items: center; gap: 0.3rem; padding: 0.4rem 0.85rem; border-radius: 9999px; border: 1px solid var(--border-strong); background: var(--bg); color: var(--primary); font-size: 0.82rem; font-weight: 650; cursor: pointer; }
         .wiz-chip:hover { border-color: var(--primary); }
         .wiz-chip.is-added { opacity: 0.55; cursor: default; }
         .wiz-chip-note { font-size: 0.7rem; font-weight: 600; color: var(--fg-muted); }
@@ -195,9 +200,9 @@
             </div>
             <h1 style="font-family: var(--font-serif); font-size: 1.35rem; font-weight: 700; color: white; letter-spacing: -0.01em;">
                 {% if plan == 'CROISSANCE' %}Plan de Croissance
-                {% elseif plan == 'DEVELOPPEMENT' %}Plan de Développement
+                {% elseif plan == 'DEVELOPPEMENT' %}Plan de Développement personnel
                 {% elseif plan == 'TRANSMISSION' %}Plan de Transmission
-                {% elseif plan == 'HYGIENE' %}Plan d'Hygiène de Vie
+                {% elseif plan == 'HYGIENE' %}Plan d'Hygiène de vie
                 {% else %}Plan de Vie{% endif %}
             </h1>
         </div>
@@ -246,14 +251,25 @@
                         <i data-lucide="compass" style="width: 24px; height: 24px;"></i>
                         <h2 style="font-family: var(--font-serif); font-size: 1.75rem; font-weight: 500;">But de Dieu pour ma vie</h2>
                     </div>
-                    <p style="color: var(--fg-muted); font-size: 0.95rem; margin-bottom: 1.75rem; line-height: 1.6;">
-                        Définissez votre mission de vie principale. Quelle est la phrase ou le paragraphe qui résume le sens que vous donnez à votre existence ?
+                    <p style="color: var(--fg-muted); font-size: 0.95rem; margin-bottom: 1.25rem; line-height: 1.6;">
+                        Votre But de Dieu est une fonction, pas un projet : ce que vous êtes fait pour accomplir, quel que soit le lieu. Formulez-le avec l'Équation du But.
                     </p>
                     {{ book_panel('wizard.1') }}
-                    
+
+                    <div class="wiz-equation" data-purpose-equation>
+                        <p class="wiz-equation__formula">Je suis créé pour <em>[verbe]</em> afin d'apporter <em>[impact]</em> chez <em>[cible]</em>.</p>
+                        <div class="wiz-equation__fields">
+                            <label>Je suis créé pour<input type="text" class="wiz-input" data-eq="verb" placeholder="administrer, structurer, enseigner…"></label>
+                            <label>afin d'apporter<input type="text" class="wiz-input" data-eq="impact" placeholder="la sécurité, la restauration…"></label>
+                            <label>chez<input type="text" class="wiz-input" data-eq="target" placeholder="ceux que je sers, mon peuple…"></label>
+                        </div>
+                        <button type="button" class="wiz-chip" onclick="composePurposeEquation(this)">Écrire mon But avec cette équation</button>
+                        <p class="wiz-equation__example">Joseph : « Je suis créé pour administrer les ressources et optimiser les systèmes afin d'apporter la préservation de la vie et l'abondance chez ceux que je sers. »</p>
+                    </div>
+
                     <div style="display: flex; flex-direction: column; gap: 0.5rem;">
-                        <label style="font-size: 0.75rem; font-weight: 700; color: var(--fg-light); letter-spacing: 0.05em; text-transform: uppercase;">Énoncé de mission</label>
-                        <textarea name="purpose_statement" class="wiz-textarea" rows="5" placeholder="Ex: Guider et inspirer les autres à réaliser leur plein potentiel par l'éducation, le partage et l'engagement continu.">{% if planDeVie and planDeVie.purpose and planDeVie.purpose.statement %}{{ planDeVie.purpose.statement }}{% else %}{{ defaultPurposeStatement }}{% endif %}</textarea>
+                        <label style="font-size: 0.75rem; font-weight: 700; color: var(--fg-light); letter-spacing: 0.05em; text-transform: uppercase;">Mon But de Dieu</label>
+                        <textarea name="purpose_statement" class="wiz-textarea" rows="5" placeholder="Je suis créé pour … afin d'apporter … chez …">{% if planDeVie and planDeVie.purpose and planDeVie.purpose.statement %}{{ planDeVie.purpose.statement }}{% else %}{{ defaultPurposeStatement }}{% endif %}</textarea>
                     </div>
                 </div>
                 {% endif %}
@@ -1653,6 +1669,18 @@
 
     // Add dynamic row for simple list types (passions, talents, goals, etc.)
     /** Puce « + don » (étape 4) : remplit la première ligne vide ou en ajoute une, sans doublon. */
+    function composePurposeEquation(button) {
+        const box = button.closest('[data-purpose-equation]');
+        const val = (k) => box.querySelector('[data-eq="' + k + '"]').value.trim();
+        if (!val('verb') || !val('impact') || !val('target')) {
+            box.querySelector('[data-eq="' + (!val('verb') ? 'verb' : (!val('impact') ? 'impact' : 'target')) + '"]').focus();
+            return;
+        }
+        const textarea = box.parentElement.querySelector('textarea[name="purpose_statement"]');
+        textarea.value = 'Je suis créé pour ' + val('verb') + ' afin d\'apporter ' + val('impact') + ' chez ' + val('target') + '.';
+        textarea.focus();
+    }
+
     function addSuggestedTalent(button) {
         const value = button.dataset.value;
         const inputs = [...document.querySelectorAll('#talents-container input[name="talents[]"]')];

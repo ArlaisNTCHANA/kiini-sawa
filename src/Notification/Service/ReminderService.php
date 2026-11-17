@@ -202,7 +202,7 @@ final class ReminderService
 
         return $isTrial
             ? $this->notifier->notify($user, NotificationType::TRIAL_ENDING, 'Votre essai PRO se termine dans 3 jours',
-                'Le '.$end->format('d/m/Y').', vos plans de Croissance, Développement, Transmission et Hygiène passeront en lecture limitée. Gardez tout en choisissant une formule PRO, à partir de quelques centimes par jour.',
+                'Le '.$end->format('d/m/Y').', vos plans de Croissance, Développement personnel, Hygiène de vie, Intendance et Transmission passeront en lecture limitée. Gardez tout en choisissant une formule PRO, à partir de quelques centimes par jour.',
                 '/abonnement', 'essai '.$end->format('Y-m-d'))
             : $this->notifier->notify($user, NotificationType::SUBSCRIPTION_ENDING, 'Votre abonnement PRO se termine dans 7 jours',
                 'Votre accès PRO se termine le '.$end->format('d/m/Y').'. Pour continuer sans interruption, renouvelez dès maintenant : les jours restants sont conservés.',

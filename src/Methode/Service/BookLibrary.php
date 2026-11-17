@@ -12,29 +12,55 @@ use Symfony\Component\DependencyInjection\Attribute\Autowire;
  */
 final class BookLibrary
 {
-    /** Ordre de lecture : fichier => identifiant d'URL. */
-    /** Nombre de premiers chapitres lisibles sans compte (introduction, synthèse, chapitre 1). */
+    /** Nombre de premiers chapitres lisibles sans compte (Comment lire ce livre, introduction, chapitre 1). */
     public const PUBLIC_CHAPTERS = 3;
 
+    /**
+     * Ordre de lecture : fichier => identifiant d'URL. Les fichiers sont produits par app:livre:sync à partir du
+     * manuscrit (livre-et-ressources/sources/livre/manuscrit.md) ; la dédicace et la page auteur ne sont pas publiées.
+     */
     public const CHAPTERS = [
-        'INTRO.md' => 'introduction',
-        'SUMMARY_PLANS.md' => 'synthese',
-        'CHAP_01_BUT_DE_DIEU.md' => 'but-de-dieu',
-        'CHAP_02_BALANCE_INTERNE.md' => 'balance-interne',
-        'CHAP_03_PASSIONS_INTERETS.md' => 'passions',
-        'CHAP_04_DONS_TALENTS.md' => 'dons-et-talents',
-        'CHAP_05_VISION_OBJECTIFS.md' => 'vision-et-objectifs',
-        'CHAP_06_ECHEANCIER_SAISONS.md' => 'echeancier-et-saisons',
-        'CHAP_07_CONFIRMATIONS.md' => 'confirmations',
-        'CHAP_08_POURQUOI_CROITRE.md' => 'pourquoi-croitre',
-        'CHAP_09_LES_3_AXES.md' => 'les-3-axes',
-        'CHAP_10_CARTE_STRATEGIQUE.md' => 'carte-strategique',
-        'CHAP_11_HABITUDES_ORGANISATEUR.md' => 'habitudes',
-        'CHAP_12_ENRACINEMENT.md' => 'enracinement',
-        'CHAP_13_REVUES_BILANS.md' => 'revues-et-bilans',
-        'CHAP_14_DECOUVERTE_FEEDBACK.md' => 'decouverte-et-feedback',
-        'CHAP_15_DEFIS_CROISSANCE.md' => 'defis',
-        'CONCLUSION.md' => 'conclusion',
+        '00_COMMENT_LIRE.md' => 'comment-lire',
+        '01_INTRODUCTION.md' => 'introduction',
+        'CHAP_01.md' => 'danger-de-comparer',
+        'CHAP_02.md' => 'plan-et-providence',
+        'CHAP_03.md' => 'clarifier-les-notions',
+        'CHAP_04.md' => 'but-de-dieu',
+        'CHAP_05.md' => 'balance-interne',
+        'CHAP_06.md' => 'passions',
+        'CHAP_07.md' => 'dons-et-talents',
+        'CHAP_08.md' => 'personnalite',
+        'CHAP_09.md' => 'vision',
+        'CHAP_10.md' => 'objectifs',
+        'CHAP_11.md' => 'saisons-et-echeancier',
+        'CHAP_12.md' => 'confirmations',
+        'CHAP_13.md' => 'puissance-sans-plan',
+        'CHAP_14.md' => 'caractere-et-conviction',
+        'CHAP_15.md' => 'relation-et-reseau',
+        'CHAP_16.md' => 'competence-et-connaissance',
+        'CHAP_17.md' => 'hygiene-de-vie',
+        'CHAP_18.md' => 'intendance',
+        'CHAP_19.md' => 'perspective-de-l-eternite',
+        'CHAP_20.md' => 'heritage-et-transmission',
+        'CHAP_21.md' => 'carte-strategique',
+        'CHAP_22.md' => 'habitudes',
+        'CHAP_23.md' => 'revues-feedback-et-defis',
+        'CHAP_24.md' => 'quand-le-plan-echoue',
+        '90_CONCLUSION.md' => 'conclusion',
+        '91_ANNEXES.md' => 'annexes',
+    ];
+
+    /** Anciennes adresses (première version du livre) => chapitre actuel, pour ne pas casser les liens. */
+    public const LEGACY_SLUGS = [
+        'synthese' => 'comment-lire',
+        'vision-et-objectifs' => 'vision',
+        'echeancier-et-saisons' => 'saisons-et-echeancier',
+        'pourquoi-croitre' => 'puissance-sans-plan',
+        'les-3-axes' => 'puissance-sans-plan',
+        'enracinement' => 'habitudes',
+        'revues-et-bilans' => 'revues-feedback-et-defis',
+        'decouverte-et-feedback' => 'revues-feedback-et-defis',
+        'defis' => 'revues-feedback-et-defis',
     ];
 
     /** Écran de l'application => chapitre qui l'explique. */
@@ -43,20 +69,22 @@ final class BookLibrary
         'wizard.2' => 'balance-interne',
         'wizard.3' => 'passions',
         'wizard.4' => 'dons-et-talents',
-        'wizard.5' => 'decouverte-et-feedback',
-        'wizard.6' => 'vision-et-objectifs',
-        'wizard.7' => 'vision-et-objectifs',
-        'wizard.8' => 'les-3-axes',
-        'wizard.9' => 'les-3-axes',
-        'wizard.10' => 'les-3-axes',
-        'wizard.12' => 'habitudes',
-        'wizard.13' => 'echeancier-et-saisons',
-        'plan_de_vie' => 'synthese',
+        'wizard.5' => 'personnalite',
+        'wizard.6' => 'vision',
+        'wizard.7' => 'objectifs',
+        'wizard.8' => 'competence-et-connaissance',
+        'wizard.9' => 'caractere-et-conviction',
+        'wizard.10' => 'relation-et-reseau',
+        'wizard.11' => 'heritage-et-transmission',
+        'wizard.12' => 'hygiene-de-vie',
+        'wizard.13' => 'saisons-et-echeancier',
+        'plan_de_vie' => 'comment-lire',
         'strategies' => 'carte-strategique',
-        'rituels' => 'enracinement',
-        'bilan' => 'revues-et-bilans',
-        'revue' => 'revues-et-bilans',
-        'personnalite' => 'decouverte-et-feedback',
+        'intendance' => 'intendance',
+        'rituels' => 'habitudes',
+        'bilan' => 'revues-feedback-et-defis',
+        'revue' => 'revues-feedback-et-defis',
+        'personnalite' => 'personnalite',
     ];
 
     private array $cache = [];

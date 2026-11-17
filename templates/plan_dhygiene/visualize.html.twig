@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mon Plan d'Hygiène de Vie — KIINI SAWA</title>
+    <title>Mon Plan d'Hygiène de vie — KIINI SAWA</title>
 </head>
 <body style="margin: 0; padding: 0; background-color: #f4f4f5; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%;">
     <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color: #f4f4f5; padding: 20px 10px;">
@@ -17,7 +17,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mon Plan d'Hygiène de Vie — KIINI SAWA</title>
+    <title>Mon Plan d'Hygiène de vie — KIINI SAWA</title>
     <link href="{{ asset('styles/fonts.css') }}" rel="stylesheet">
     <script src="{{ asset('lib/lucide-1.73.0.min.js') }}"></script>
     <style>
@@ -243,7 +243,7 @@
     {# Running header / footer for print #}
     {% if variant != 'EMAIL' %}
         <div class="print-only">
-            <div style="font-weight: bold; color: #059669; text-transform: uppercase; letter-spacing: 0.1em;">KIINI SAWA • Plan d'Hygiène de Vie</div>
+            <div style="font-weight: bold; color: #059669; text-transform: uppercase; letter-spacing: 0.1em;">KIINI SAWA • Plan d'Hygiène de vie</div>
             <div style="font-weight: 600; color: #1e293b;">{{ displayName }}</div>
             <div>{{ currentDate }}</div>
         </div>
@@ -256,7 +256,7 @@
     <table class="header-table" style="width: 100%; border-collapse: collapse; margin-bottom: 35px; border-bottom: 2px solid #059669;">
         <tr>
             <td style="vertical-align: bottom; padding-bottom: 15px; text-align: left;">
-                <h1 style="font-size: 2.3rem; font-family: 'Playfair Display', serif; margin: 0; line-height: 1.1; color: #059669; text-transform: uppercase; letter-spacing: 0.05em;">Plan d'Hygiène de Vie</h1>
+                <h1 style="font-size: 2.3rem; font-family: 'Playfair Display', serif; margin: 0; line-height: 1.1; color: #059669; text-transform: uppercase; letter-spacing: 0.05em;">Plan d'Hygiène de vie</h1>
                 <div style="font-size: 0.88rem; color: #64748b; margin-top: 6px;">
                     Généré par <strong style="color: #059669;">KIINI SAWA</strong>
                 </div>
@@ -439,7 +439,7 @@
     </div>
 
     {# Toast Notification #}
-    <div id="toast" class="toast-notify">Plan d'Hygiène de Vie envoyé avec succès à votre adresse email !</div>
+    <div id="toast" class="toast-notify">Plan d'Hygiène de vie envoyé avec succès à votre adresse email !</div>
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
@@ -462,7 +462,7 @@
                         });
                         const result = await response.json();
                         if (result.success) {
-                            toast.innerText = `Plan d'Hygiène de Vie envoyé avec succès à ${result.emailSentTo} !`;
+                            toast.innerText = `Plan d'Hygiène de vie envoyé avec succès à ${result.emailSentTo} !`;
                             toast.classList.add('show');
                             setTimeout(() => {
                                 toast.classList.remove('show');

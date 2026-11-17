@@ -21,7 +21,8 @@ Le code de KIINI SAWA est rangé **par module métier**. Chaque module regroupe 
 | [Notification](modules/notification.md) | Centre de notifications, préférences, rappels par email | 3 | 5 | Oui |
 | [Organisation](modules/organisation.md) | Offre B2B : églises, associations, entreprises ; places, rôles, accompagnateurs, engagement | 3 | 11 | Oui |
 | [Personnalite](modules/personnalite.md) | Questionnaires psychométriques (IPIP-NEO, type, style, ennéagramme, dons), rapports PDF, fidélité ; tests d'aptitudes et d'hygiène | 5 | 14 | Oui |
-| [PlanDHygiene](modules/plan_d_hygiene.md) | Plan d'Hygiène de Vie | 3 | 3 | Oui |
+| [PlanDHygiene](modules/plan_d_hygiene.md) | Plan d'Hygiène de vie | 3 | 3 | Oui |
+| [PlanDIntendance](modules/plan_d_intendance.md) | Plan d'Intendance : ce que je gère (7 domaines, état, décision, compte rendu) | 2 | 7 | Oui |
 | [PlanDeCroissance](modules/plan_de_croissance.md) | Plan de Croissance : Caractère & Conviction, Relation & Réseau, principes, export PDF | 7 | 6 | Oui |
 | [PlanDeDeveloppement](modules/plan_de_developpement.md) | Plan de Développement : Compétence & Connaissance | 4 | 3 | Oui |
 | [PlanDeTransmission](modules/plan_de_transmission.md) | Plan de Transmission : projets de legs | 4 | 3 | Oui |

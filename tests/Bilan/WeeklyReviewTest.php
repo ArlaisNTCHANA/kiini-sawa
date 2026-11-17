@@ -30,7 +30,7 @@ class WeeklyReviewTest extends WebTestCase
 
         $crawler = $client->request('GET', '/bilan/revue-hebdomadaire');
         $this->assertResponseIsSuccessful();
-        foreach (['Plan de Croissance', 'Plan de Développement', 'Plan de Transmission', 'Plan d\'Hygiène de Vie', 'Patience', 'Prise de parole', 'Bourse d\'études', 'Sommeil'] as $text) {
+        foreach (['Plan de Croissance', 'Plan de Développement', 'Plan de Transmission', 'Plan d\'Hygiène de vie', 'Patience', 'Prise de parole', 'Bourse d\'études', 'Sommeil'] as $text) {
             $this->assertSelectorTextContains('main', $text);
         }
 
