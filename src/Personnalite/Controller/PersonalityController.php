@@ -37,6 +37,7 @@ class PersonalityController extends AbstractController
         private readonly EntityManagerInterface        $em,
         private readonly \App\Personnalite\Repository\AssessmentRepository $assessments,
         private readonly \App\Personnalite\Service\SelfAssessmentReport $selfReports,
+        private readonly \App\Personnalite\Service\TestHistory $history,
     ) {}
 
     /** Rapport PDF d'une auto-évaluation (dernière passation). */
@@ -49,7 +50,10 @@ class PersonalityController extends AbstractController
         if (!$user || !isset(self::TESTS[$type])) {
             throw $this->createNotFoundException();
         }
-        $latest = $this->em->getRepository(ProfileTest::class)->findOneBy(['user' => $user, 'type' => $type], ['date' => 'DESC', 'id' => 'DESC']);
+        $id = (int) ($this->container->get('request_stack')->getCurrentRequest()?->query->get('id') ?? 0);
+        $latest = $id
+            ? $this->em->getRepository(ProfileTest::class)->findOneBy(['id' => $id, 'user' => $user, 'type' => $type])
+            : $this->em->getRepository(ProfileTest::class)->findOneBy(['user' => $user, 'type' => $type], ['date' => 'DESC', 'id' => 'DESC']);
         $report = $latest ? $this->selfReports->build($latest) : null;
         if (!$report) {
             throw $this->createNotFoundException();
@@ -180,8 +184,8 @@ class PersonalityController extends AbstractController
     // ─────────────────────────────────────────────────────────────────────────
     // Résultats — /mes-tests/{type}/resultats
     // ─────────────────────────────────────────────────────────────────────────
-    #[Route('/{type}/resultats', name: 'result')]
-    public function result(string $type): Response
+    #[Route('/{type}/resultats/{id}', name: 'result', requirements: ['id' => '\d+'], defaults: ['id' => null])]
+    public function result(string $type, ?int $id = null): Response
     {
         $type = strtoupper($type);
         if (isset(self::REPORT_SOURCES[$type]) && ($user = $this->getUser()) instanceof \App\Compte\Entity\User) {
@@ -208,7 +212,9 @@ class PersonalityController extends AbstractController
         }
 
         // Dernière passation de ce test (requête directe : la collection de l'utilisateur peut être incomplète)
-        $latestTest = $this->em->getRepository(ProfileTest::class)->findOneBy(['user' => $user, 'type' => $type], ['date' => 'DESC', 'id' => 'DESC']);
+        $latestTest = $id
+            ? ($this->em->getRepository(ProfileTest::class)->findOneBy(['id' => $id, 'user' => $user, 'type' => $type]) ?? throw $this->createNotFoundException())
+            : $this->em->getRepository(ProfileTest::class)->findOneBy(['user' => $user, 'type' => $type], ['date' => 'DESC', 'id' => 'DESC']);
 
         if (!$latestTest) {
             $this->addFlash('info', 'Vous n\'avez pas encore passé ce test.');
@@ -217,7 +223,8 @@ class PersonalityController extends AbstractController
 
         // Rapport illustré (Équilibre de Vie, Hygiène de Vie)
         if ($report = $this->selfReports->build($latestTest)) {
-            return $this->render('personnalite/self_report.html.twig', $report + ['testMeta' => self::TESTS[$type], 'instrument' => ['name' => self::TESTS[$type]['name']], 'addedActions' => $this->em->getRepository(\App\Personnalite\Entity\TestAction::class)->addedBy($user)]);
+            return $this->render('personnalite/self_report.html.twig', $report + ['testMeta' => self::TESTS[$type], 'instrument' => ['name' => self::TESTS[$type]['name']], 'addedActions' => $this->em->getRepository(\App\Personnalite\Entity\TestAction::class)->addedBy($user),
+                'history' => ['series' => strtolower($type), 'name' => self::TESTS[$type]['name'], 'entries' => $this->history->entries($user, strtolower($type))]]);
         }
 
         // Find profile if available

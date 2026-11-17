@@ -133,3 +133,9 @@ vivent dans la table `content_override` (chemin → texte) et s'appliquent via `
   `confirmation_request` / `confirmation_answer`. Lien public `/confirmer/{jeton}` (sans compte, anonyme, champ piège,
   une réponse par session, 50 au plus) ; descriptions DISC sans lettre (`DiscProfiles::OBSERVED`) ; résultat dans le
   rapport à partir de 3 réponses ; notification `FEEDBACK_RECEIVED` à chaque réponse.
+
+## Historique et évolution
+
+`Service/TestHistory` (séries, libellés, évolution) ; « Vos passations » sous chaque rapport ; `/mes-tests/evolution`
+et `/mes-tests/evolution/{série}` ; passation précise d'une auto-évaluation : `/mes-tests/{type}/resultats/{id}`.
+Tests : `tests/Personnalite/HistoryTest.php`.

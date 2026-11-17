@@ -99,6 +99,62 @@ final class ReportCharts
         return $svg.'</svg>';
     }
 
+    // ── Évolution dans le temps ────────────────────────────────────
+
+    /**
+     * Courbes d'évolution (une par série), axe vertical 0 → $max.
+     *
+     * @param list<string> $labels dates
+     * @param list<array{name: string, color: string, values: list<?float>}> $series
+     */
+    public static function lines(array $labels, array $series, float $max = 100, bool $dashedLast = false): string
+    {
+        $w = 640;
+        $h = 300;
+        $left = 40;
+        $top = 20;
+        $plotW = $w - $left - 44;
+        $plotH = 190;
+        $n = max(2, \count($labels));
+        $x = fn (int $i) => $left + ($n > 1 ? $plotW * $i / ($n - 1) : $plotW / 2);
+        $y = fn (float $v) => $top + $plotH * (1 - min($max, max(0, $v)) / $max);
+        $svg = "<svg xmlns='http://www.w3.org/2000/svg' width='$w' height='$h' viewBox='0 0 $w $h'>";
+        foreach ([0, 0.25, 0.5, 0.75, 1] as $f) {
+            $yy = $top + $plotH * (1 - $f);
+            $svg .= "<line x1='$left' y1='$yy' x2='".($left + $plotW)."' y2='$yy' stroke='#E2E8F0' stroke-width='1'/>";
+            $svg .= self::text(4, $yy + 4, (string) round($max * $f), 10, '#94A3B8');
+        }
+        foreach ($labels as $i => $l) {
+            $svg .= self::text($x($i), $top + $plotH + 18, $l, 10, '#64748B', false, true);
+        }
+        foreach ($series as $k => $s) {
+            $pts = [];
+            foreach ($s['values'] as $i => $v) {
+                if (null !== $v) {
+                    $pts[] = sprintf('%.1f,%.1f', $x($i), $y($v));
+                }
+            }
+            if (\count($pts) > 1) {
+                $dash = $dashedLast && $k === \count($series) - 1 ? " stroke-dasharray='6,4'" : '';
+                $svg .= "<polyline points='".implode(' ', $pts)."' fill='none' stroke='{$s['color']}' stroke-width='3'$dash/>";
+            }
+            foreach ($s['values'] as $i => $v) {
+                if (null !== $v) {
+                    $svg .= sprintf("<circle cx='%.1f' cy='%.1f' r='4.5' fill='%s' stroke='#FFFFFF' stroke-width='1.5'/>", $x($i), $y($v), $s['color']);
+                }
+            }
+        }
+        // Légende
+        $lx = $left;
+        foreach ($series as $s) {
+            $svg .= "<rect x='$lx' y='".($h - 26)."' width='12' height='12' rx='3' fill='{$s['color']}'/>";
+            $svg .= self::text($lx + 17, $h - 16, $s['name'], 11, '#334155');
+            $lx += 30 + self::tw($s['name'], 11);
+        }
+
+        return $svg.'</svg>';
+    }
+
     // ── Convergence des tests ──────────────────────────────────────
 
     /**

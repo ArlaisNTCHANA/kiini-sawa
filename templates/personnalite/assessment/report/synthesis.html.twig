@@ -37,6 +37,13 @@
     {% endif %}
 </div>
 
+{% if evolutions|default([])|length and not pdf %}
+    <div class="dr-tile" style="margin: -8px 0 22px; background: #F0FDFA; border-color: #99F6E4;">
+        <div class="dr-label" style="color: #134E4A;">{{ report_icon('up', '#0F766E') }}Votre évolution</div>
+        <p style="margin: 0; color: #134E4A;">Vous avez repassé certains tests : {% for key, label in evolutions %}<a href="{{ path('app_test_evolution', {series: key}) }}" style="color: #0F766E; font-weight: 600;">{{ label }}</a>{{ not loop.last ? ' · ' }}{% endfor %}. Voyez ce qui a changé.</p>
+    </div>
+{% endif %}
+
 {# ═══ Convergences ═══ #}
 {% if convergence.chart %}
 <div class="dr-page">

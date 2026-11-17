@@ -26,7 +26,8 @@ vers le Faire (5 plans, rituels, revues).
    une page de l'application ; une seule action principale par écran.
 4. **Interface 100 % en français**, ton chaleureux, sans jargon ni anglais. Les codes techniques (BE, DO, enums…)
    ne s'affichent jamais bruts (filtre Twig `categorie_objectif` pour les objectifs).
-5. **Tests** : tout changement passe `php bin/phpunit` (≈ 140 tests). Ajouter un test pour chaque correction.
+5. **Tests** : tout changement passe `php bin/phpunit` (≈ 180 tests). Ajouter un test pour chaque correction.
+   Puis **compléter `docs/SUIVI-IA.md`** (ce qui a été fait, où, pièges, reste à faire).
 6. **Secrets** : jamais dans le dépôt. Ils vivent sur le serveur dans `.env.prod.local` (voir §6).
 7. **Marques** : les tests s'inspirent du Big Five, de Jung, de DISC, de l'ennéagramme, mais n'emploient pas les
    marques déposées (MBTI®…) autrement qu'en référence nominative. Noms de types propres à KIINI SAWA.
@@ -62,7 +63,8 @@ Certaines colonnes de `AppConfig` ne sont lues nulle part (limites et interrupte
 formulaire d'administration comptent.
 
 Documentation détaillée : `docs/index.md`, `docs/architecture.md`, `docs/database.md`, `docs/modules/*.md`.
-Historique des décisions et chantiers : `docs/plan-v1.md`, `docs/audit-2026-11-16.md`.
+Historique des décisions et chantiers : **`docs/SUIVI-IA.md` (journal de passation, à tenir à jour à chaque chantier)**,
+`docs/plan-v1.md`, `docs/audit-2026-11-16.md`.
 
 ## 5. Travailler en local
 

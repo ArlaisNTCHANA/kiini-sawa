@@ -25,6 +25,8 @@
         {% include 'personnalite/assessment/_report_body.html.twig' %}
     {% endif %}
 
+    {% include 'personnalite/_history.html.twig' with {currentUrl: '/mes-tests/rapport/' ~ assessment.id} %}
+
     {# Partage : décidé par l'utilisateur ; seule la carte (prénom + résultat principal) devient publique #}
     {% set shareUrl = assessment.shareToken ? url('app_shared_result', {token: assessment.shareToken}) ~ '?utm_source=partage-test&utm_medium=partage&utm_campaign=test-' ~ slug : null %}
     <section class="r-section" id="partage" x-data="shareCard()" data-kicker="{{ shareCard.kicker }}" data-title="{{ shareCard.title }}" data-desc="{{ shareCard.desc }}" data-name="{{ app.user.displayName }}">

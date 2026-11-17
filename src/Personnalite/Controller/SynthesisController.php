@@ -28,6 +28,7 @@ final class SynthesisController extends AbstractController
         private readonly ProfileSynthesis $synthesis,
         private readonly Entitlements $entitlements,
         private readonly TestActionRepository $actions,
+        private readonly \App\Personnalite\Service\TestHistory $history,
     ) {
     }
 
@@ -39,7 +40,23 @@ final class SynthesisController extends AbstractController
 
         return $this->render('personnalite/synthesis.html.twig', $data + [
             'locked' => !$this->entitlements->isPro($user), 'addedActions' => $this->actions->addedBy($user),
+            'evolutions' => $this->history->withHistory($user),
         ]);
+    }
+
+    /** « Mon évolution » : la liste des tests repassés, ou l'évolution d'un test. */
+    #[Route('/evolution/{series}', name: 'app_test_evolution', defaults: ['series' => null], methods: ['GET'])]
+    public function evolution(?string $series, \App\Personnalite\Service\TestHistory $history): Response
+    {
+        $user = $this->user();
+        if (null === $series) {
+            return $this->render('personnalite/evolution_index.html.twig', ['available' => $history->withHistory($user), 'series' => \App\Personnalite\Service\TestHistory::SERIES]);
+        }
+        if (!isset(\App\Personnalite\Service\TestHistory::SERIES[$series])) {
+            throw $this->createNotFoundException();
+        }
+
+        return $this->render('personnalite/evolution.html.twig', $history->evolution($user, $series));
     }
 
     #[Route('/synthese/pdf', name: 'app_synthesis_pdf', methods: ['GET'])]

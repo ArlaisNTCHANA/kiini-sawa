@@ -1,0 +1,20 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Mon évolution{% endblock %}
+
+{% block body %}
+<div style="max-width: 820px; margin: 0 auto; padding: 2rem 1.25rem 8rem; line-height: 1.6;">
+    <a href="{{ path('app_personality_index') }}" style="font-size: .8rem; font-weight: 700; color: var(--fg-muted); text-transform: uppercase; letter-spacing: .05em; text-decoration: none;">← Mes tests</a>
+    <h1 style="font-family: var(--font-serif); color: var(--primary); font-size: 2rem; margin: .4rem 0 1rem;">Mon évolution</h1>
+    <section style="background: var(--card-bg); border-radius: var(--r-lg); box-shadow: var(--card-shadow); padding: 1.5rem;">
+        {% if available|length %}
+            <p style="color: var(--fg-light); margin-bottom: .75rem;">Les tests que vous avez passés plusieurs fois :</p>
+            {% for key, label in available %}
+                <a href="{{ path('app_test_evolution', {series: key}) }}" class="ks-btn ks-btn--secondary" style="display: flex; justify-content: space-between; margin-bottom: .5rem;">{{ label }} <span>→</span></a>
+            {% endfor %}
+        {% else %}
+            <p style="color: var(--fg-light);">Vous n'avez encore passé chaque test qu'une fois. Repassez un test dans quelques mois, ou quand votre situation change, pour voir ici votre évolution.</p>
+        {% endif %}
+    </section>
+</div>
+{% endblock %}

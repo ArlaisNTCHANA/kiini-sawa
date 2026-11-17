@@ -1,0 +1,19 @@
+{# « Vos passations » sous un rapport (écran). Variables : history {series, name, entries}, currentUrl. #}
+{% if history is defined and history and history.entries|length %}
+<section class="r-section" id="passations" style="background: var(--card-bg); border-radius: var(--r-lg); box-shadow: var(--card-shadow); padding: 1.5rem; margin-bottom: 1.25rem;">
+    <h2 style="font-family: var(--font-serif); font-size: 1.3rem; margin-bottom: .4rem;">Vos passations · {{ history.name }}</h2>
+    <p style="color: var(--fg-muted); font-size: .9rem; margin-bottom: .75rem;">Chaque passation est conservée avec ses résultats du jour. Refaites le test tous les six mois pour mesurer votre chemin.</p>
+    <div style="display: flex; flex-direction: column; gap: .35rem;">
+        {% for e in history.entries|reverse %}
+            {% set current = e.url == currentUrl %}
+            <a href="{{ e.url }}" style="display: flex; justify-content: space-between; gap: 1rem; padding: .6rem .8rem; border-radius: 10px; text-decoration: none; color: var(--fg); border: 1px solid {{ current ? 'var(--primary)' : 'var(--border)' }}; background: {{ current ? 'var(--bg-alt)' : 'transparent' }};">
+                <span><strong>{{ e.date|format_date(pattern: 'd MMMM y', locale: 'fr') }}</strong> · {{ e.label }}</span>
+                <span style="font-size: .8rem; color: var(--fg-muted); white-space: nowrap;">{{ current ? 'affiché' : 'voir →' }}</span>
+            </a>
+        {% endfor %}
+    </div>
+    {% if history.entries|length >= 2 %}
+        <a href="{{ path('app_test_evolution', {series: history.series}) }}" class="ks-btn ks-btn--primary" style="margin-top: 1rem;"><i data-lucide="trending-up"></i> Voir mon évolution</a>
+    {% endif %}
+</section>
+{% endif %}

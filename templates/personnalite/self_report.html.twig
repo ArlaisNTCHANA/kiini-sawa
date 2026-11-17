@@ -8,9 +8,10 @@
     <h1 style="font-family: var(--font-serif); color: {{ testMeta.color }}; font-size: 2rem; margin: .4rem 0 .25rem;">{{ testMeta.name }}</h1>
     <p style="color: var(--fg-muted); margin-bottom: 1.25rem;">Passé le {{ test.date|format_date(pattern: 'd MMMM y', locale: 'fr') }} · {{ testMeta.level }}</p>
     <div style="display: flex; gap: .6rem; flex-wrap: wrap; margin-bottom: 1.25rem;">
-        <a href="{{ path('app_personality_result_pdf', {type: type|lower}) }}" data-turbo="false" class="ks-btn ks-btn--primary">Télécharger le rapport PDF</a>
+        <a href="{{ path('app_personality_result_pdf', {type: type|lower, id: test.id}) }}" data-turbo="false" class="ks-btn ks-btn--primary">Télécharger le rapport PDF</a>
         <a href="{{ path('app_personality_take', {type: type|lower}) }}" class="ks-btn ks-btn--secondary">Refaire l'évaluation</a>
     </div>
     {% include template with {pdf: false, name: app.user.displayName} %}
+    {% include 'personnalite/_history.html.twig' with {currentUrl: '/mes-tests/' ~ type|lower ~ '/resultats/' ~ test.id} %}
 </div>
 {% endblock %}

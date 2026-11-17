@@ -73,7 +73,8 @@ class AssessmentController extends AbstractController
 
         return $this->render('personnalite/assessment/report.html.twig', $data + ['shareCard' => \App\Personnalite\Psychometrie\ShareCard::from($data),
             'addedActions' => $em->getRepository(\App\Personnalite\Entity\TestAction::class)->addedBy($this->user()),
-            'confirmation' => $this->confirmationFor($assessment, $data)]);
+            'confirmation' => $this->confirmationFor($assessment, $data),
+            'history' => $this->historyFor($assessment->getInstrument())]);
     }
 
     /** Partager le résultat (page publique : prénom + résultat principal) ou arrêter le partage. */
@@ -112,9 +113,21 @@ class AssessmentController extends AbstractController
         return $service->summary($service->current($this->user(), $assessment->getInstrument()), $data);
     }
 
+    private function historyFor(string $instrument): ?array
+    {
+        $series = \App\Personnalite\Service\TestHistory::SERIES_OF[$instrument] ?? null;
+        if (!$series) {
+            return null;
+        }
+
+        return ['series' => $series, 'name' => \App\Personnalite\Service\TestHistory::SERIES[$series]['name'],
+            'entries' => $this->container->get('history')->entries($this->user(), $series)];
+    }
+
     public static function getSubscribedServices(): array
     {
-        return parent::getSubscribedServices() + ['confirmations' => \App\Personnalite\Service\ConfirmationService::class];
+        return parent::getSubscribedServices() + ['confirmations' => \App\Personnalite\Service\ConfirmationService::class,
+            'history' => \App\Personnalite\Service\TestHistory::class];
     }
 
     private function denyUnlessOwner(Assessment $assessment): void
