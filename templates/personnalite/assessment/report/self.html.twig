@@ -4,7 +4,7 @@
 {% set eq = type == 'EQUILIBRE' %}
 {% set s = summary %}
 {% set pc = eq ? '#3B82F6' : '#EC4899' %}
-{% set serif = pdf ? "'DejaVu Serif', serif" : 'var(--font-serif)' %}
+{% set serif = pdf ? "'Playfair Display', serif" : 'var(--font-serif)' %}
 {% set lowest = min(areas|map(a => a.value)) %}
 {% include 'personnalite/assessment/report/_styles.html.twig' with {pcLight: eq ? '#DBEAFE' : '#FCE7F3', pcDark: eq ? '#1E3A8A' : '#831843'} %}
 
@@ -16,6 +16,15 @@
     tagline: s.globalLevel == 'low' ? 'Des fondations à reconstruire, pas à pas' : (s.globalLevel == 'mid' ? 'Un équilibre à consolider' : 'Des fondations solides'),
     keywords: s.priorities|map(a => a.label),
 } %}
+
+{% include 'personnalite/assessment/report/_essentials.html.twig' with {
+    pcLight: eq ? '#DBEAFE' : '#FCE7F3', pcDark: eq ? '#1E3A8A' : '#831843', headline: 'Score global : ' ~ _self.f(s.avg) ~ ' / 10',
+    tagline: 'Vos points d\'appui : ' ~ s.supports|map(a => a.label|lower)|join(' et ') ~ '. Vos priorités : ' ~ s.priorities|map(a => a.label|lower)|join(', ') ~ '.',
+    chart: wheel, chartAlt: 'Roue des domaines', strengths: s.supports|map(a => a.label ~ ' · ' ~ _self.f(a.value) ~ ' / 10'), watch: s.priorities|map(a => a.label ~ ' · ' ~ _self.f(a.value) ~ ' / 10'),
+    action: (eq ? (s.priorities|first).actions : (s.priorities|first).habits)|first,
+    toc: ['Comment lire ce rapport', eq ? 'Votre roue de la vie' : 'Votre roue de vitalité', 'Priorités et points d\'appui', eq ? 'Vos huit domaines' : 'Vos six axes', 'Votre plan pour 30 jours', 'En résumé', 'Bon usage de ce rapport'],
+} %}
+
 
 {# ═══ Lire ce rapport ═══ #}
 <div class="dr-page">
@@ -65,11 +74,11 @@
     <img class="dr-img" src="{{ s.bars }}" alt="Domaines classés par score">
     <table class="dr-grid" style="margin-top: 10px;"><tr>
         <td style="width: 58%;"><div class="dr-tile" style="background: #FEF2F2; border-color: #FECACA;">
-            <div class="dr-label" style="color: #991B1B;">▲ Vos trois priorités</div>
+            <div class="dr-label" style="color: #991B1B;">{{ report_icon('alert', '#EA580C') }}Vos trois priorités</div>
             {% for a in s.priorities %}<p style="margin: 0 0 6px;"><strong style="color: {{ a.color }};">{{ a.label }}</strong> · {{ _self.f(a.value) }} / 10</p>{% endfor %}
         </div></td>
         <td><div class="dr-tile" style="background: #F0FDF4; border-color: #BBF7D0;">
-            <div class="dr-label" style="color: #166534;">✓ Vos points d'appui</div>
+            <div class="dr-label" style="color: #166534;">{{ report_icon('check', '#16A34A') }}Vos points d'appui</div>
             {% for a in s.supports %}<p style="margin: 0 0 6px;"><strong style="color: {{ a.color }};">{{ a.label }}</strong> · {{ _self.f(a.value) }} / 10</p>{% endfor %}
         </div></td>
     </tr></table>
@@ -108,7 +117,7 @@
     <p class="dr-lead">Ne changez pas tout à la fois. Choisissez une action par priorité, et tenez-la un mois.</p>
     <table class="dr-table">
         {% for a in s.priorities %}
-            <tr><td style="width: 34px; font-size: {{ pdf ? '13pt' : '1.2rem' }}; color: {{ a.color }};">☐</td><td><strong style="color: {{ a.color }};">{{ a.label }} :</strong> {{ (eq ? a.actions : a.habits)|first }}</td></tr>
+            <tr><td style="width: 34px; font-size: {{ pdf ? '13pt' : '1.2rem' }}; color: {{ a.color }};">{{ report_icon('box', pc, 16) }}</td><td><strong style="color: {{ a.color }};">{{ a.label }} :</strong> {{ (eq ? a.actions : a.habits)|first }}</td></tr>
         {% endfor %}
     </table>
     <table class="dr-grid" style="margin-top: 12px;"><tr>

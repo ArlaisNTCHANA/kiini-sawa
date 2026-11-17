@@ -21,9 +21,16 @@
     headline: c.name, tagline: c.tagline, keywords: c.keywords,
 } %}
 
+{% include 'personnalite/assessment/report/_essentials.html.twig' with {
+    pcLight: lights[disc.primary], pcDark: darks[disc.primary], headline: c.code ~ ' · ' ~ c.name, tagline: c.tagline ~ ' ' ~ c.portrait,
+    chart: disc.charts.compass, chartAlt: 'Boussole DISC', strengths: c.strengths|slice(0, 3), watch: c.watch|slice(0, 2), action: c.actions|first,
+    toc: ['Comment lire ce rapport', 'Votre profil', 'Profil naturel et profil adapté', 'Forces et points de vigilance', 'Votre profil en situation', 'Sous pression', 'Vous et les autres', 'Figures bibliques', 'Pour grandir', 'En résumé', 'Bon usage de ce rapport'],
+} %}
+
+
 {% if quality.warnings is defined and quality.warnings|length %}
     <div style="background: #FEF3C7; border: 1px solid #FDE68A; color: #92400E; border-radius: 12px; padding: 10px 14px; margin: {{ pdf ? '0 0 4mm' : '0 0 18px' }}; font-size: 13px;">
-        {% for w in quality.warnings %}<div>⚠ {{ w }}</div>{% endfor %}
+        {% for w in quality.warnings %}<div>{{ report_icon('alert', '#B45309') }}{{ w }}</div>{% endfor %}
     </div>
 {% endif %}
 
@@ -71,7 +78,7 @@
         <td>
             <div class="dr-tile" style="background: {{ lights[disc.primary] }}; border-color: {{ lights[disc.primary] }};">
                 <div class="dr-label" style="color: {{ darks[disc.primary] }};">Votre question réflexe</div>
-                <div style="font-family: {{ pdf ? "'DejaVu Serif', serif" : 'var(--font-serif)' }}; font-size: {{ pdf ? '14pt' : '1.3rem' }}; color: {{ darks[disc.primary] }};">« {{ p.question }} »</div>
+                <div style="font-family: {{ pdf ? "'Playfair Display', serif" : 'var(--font-serif)' }}; font-size: {{ pdf ? '14pt' : '1.3rem' }}; color: {{ darks[disc.primary] }};">« {{ p.question }} »</div>
                 <div class="dr-small" style="margin-top: 6px; color: {{ darks[disc.primary] }};">{{ p.axis }}</div>
             </div>
         </td>
@@ -81,8 +88,8 @@
         <img src="{{ disc.charts.compass }}" alt="Boussole DISC : votre position naturelle et votre position adaptée" style="width: {{ pdf ? '118mm' : '100%' }}; max-width: 460px; height: auto;">
     </div>
     <table class="dr-grid" style="margin-top: 4px;"><tr>
-        <td><div class="dr-tile"><div class="dr-label">● Point plein</div><p class="dr-small" style="margin: 0;">Votre position naturelle : là où vous êtes quand rien ne vous contraint.</p></div></td>
-        <td><div class="dr-tile"><div class="dr-label">○ Cercle et flèche</div><p class="dr-small" style="margin: 0;">Votre position adaptée : là où votre contexte vous conduit. Plus la flèche est longue, plus l'effort est grand.</p></div></td>
+        <td><div class="dr-tile"><div class="dr-label">{{ report_icon('dot', pc) }}Point plein</div><p class="dr-small" style="margin: 0;">Votre position naturelle : là où vous êtes quand rien ne vous contraint.</p></div></td>
+        <td><div class="dr-tile"><div class="dr-label">{{ report_icon('ring', pc) }}Cercle et flèche</div><p class="dr-small" style="margin: 0;">Votre position adaptée : là où votre contexte vous conduit. Plus la flèche est longue, plus l'effort est grand.</p></div></td>
     </tr></table>
 </div>
 
@@ -118,11 +125,11 @@
     <p class="dr-lead">Une force poussée à l'excès devient une faiblesse : vos points de vigilance sont souvent l'ombre de vos forces.</p>
     <table class="dr-grid"><tr>
         <td><div class="dr-tile" style="background: #F0FDF4; border-color: #BBF7D0;">
-            <div class="dr-label" style="color: #166534;">✓ Vos forces</div>
+            <div class="dr-label" style="color: #166534;">{{ report_icon('check', '#16A34A') }}Vos forces</div>
             <ul>{% for s in c.strengths %}<li>{{ s }}</li>{% endfor %}</ul>
         </div></td>
         <td><div class="dr-tile" style="background: #FFF7ED; border-color: #FED7AA;">
-            <div class="dr-label" style="color: #9A3412;">▲ Vos points de vigilance</div>
+            <div class="dr-label" style="color: #9A3412;">{{ report_icon('alert', '#EA580C') }}Vos points de vigilance</div>
             <ul>{% for s in c.watch %}<li>{{ s }}</li>{% endfor %}</ul>
         </div></td>
     </tr><tr>
@@ -156,11 +163,11 @@
     <h2>Votre profil en situation</h2>
     <p class="dr-lead">Le même profil s'exprime différemment selon les lieux de votre vie.</p>
     <table class="dr-grid"><tr>
-        <td><div class="dr-tile"><div class="dr-label">◆ Au travail</div><p style="margin: 0;">{{ c.work }}</p></div></td>
-        <td><div class="dr-tile"><div class="dr-label">♥ En famille et en couple</div><p style="margin: 0;">{{ c.family }}</p></div></td>
+        <td><div class="dr-tile"><div class="dr-label">{{ report_icon('work', '#475569') }}Au travail</div><p style="margin: 0;">{{ c.work }}</p></div></td>
+        <td><div class="dr-tile"><div class="dr-label">{{ report_icon('heart', '#DB2777') }}En famille et en couple</div><p style="margin: 0;">{{ c.family }}</p></div></td>
     </tr><tr>
-        <td><div class="dr-tile"><div class="dr-label">✦ À l'Église et dans le service</div><p style="margin: 0;">{{ c.church }}</p></div></td>
-        <td><div class="dr-tile"><div class="dr-label">★ Comme leader</div><p style="margin: 0;">{{ c.leader }}</p></div></td>
+        <td><div class="dr-tile"><div class="dr-label">{{ report_icon('cross', '#7C3AED') }}À l'Église et dans le service</div><p style="margin: 0;">{{ c.church }}</p></div></td>
+        <td><div class="dr-tile"><div class="dr-label">{{ report_icon('star', '#D97706') }}Comme leader</div><p style="margin: 0;">{{ c.leader }}</p></div></td>
     </tr></table>
     <table class="dr-table" style="margin-top: 8px;">
         <tr><td style="width: 30%;"><strong>Comment vous décidez</strong></td><td>{{ c.decide }}</td></tr>
@@ -234,7 +241,7 @@
     <p class="dr-lead">La Bible montre des hommes et des femmes aux tempéraments très différents, que Dieu a appelés tels qu'ils étaient, et transformés. Ces rapprochements avec votre profil sont des illustrations, non une interprétation savante des textes.</p>
     {% for f in c.figures %}
         <div class="dr-tile" style="margin-bottom: 10px; border-left: 6px solid {{ pc }}; border-radius: 0 14px 14px 0;">
-            <div style="font-family: {{ pdf ? "'DejaVu Serif', serif" : 'var(--font-serif)' }}; font-size: {{ pdf ? '14pt' : '1.25rem' }}; font-weight: bold;">{{ f.name }}</div>
+            <div style="font-family: {{ pdf ? "'Playfair Display', serif" : 'var(--font-serif)' }}; font-size: {{ pdf ? '14pt' : '1.25rem' }}; font-weight: bold;">{{ f.name }}</div>
             <div class="dr-small" style="margin-bottom: 6px;">{{ f.ref }}</div>
             <p style="margin: 0;">{{ f.text }}</p>
         </div>
@@ -257,7 +264,7 @@
     </div>
     <div class="dr-tile" style="margin-top: 10px;">
         <div class="dr-label">Une question à méditer</div>
-        <p style="margin: 0; font-family: {{ pdf ? "'DejaVu Serif', serif" : 'var(--font-serif)' }}; font-size: {{ pdf ? '11pt' : '1.05rem' }};">{{ disc.meditation }}</p>
+        <p style="margin: 0; font-family: {{ pdf ? "'Playfair Display', serif" : 'var(--font-serif)' }}; font-size: {{ pdf ? '11pt' : '1.05rem' }};">{{ disc.meditation }}</p>
     </div>
 </div>
 
@@ -277,7 +284,7 @@
     <h3 style="margin-top: 14px;">Votre plan d'action pour les 30 prochains jours</h3>
     <table class="dr-table">
         {% for a in c.actions %}
-            <tr><td style="width: 34px; font-size: {{ pdf ? '13pt' : '1.2rem' }}; color: {{ pc }};">☐</td><td>{{ a }}</td></tr>
+            <tr><td style="width: 34px; font-size: {{ pdf ? '13pt' : '1.2rem' }}; color: {{ pc }};">{{ report_icon('box', pc, 16) }}</td><td>{{ a }}</td></tr>
         {% endfor %}
     </table>
     <p class="dr-small" style="margin-top: 10px;">Reportez ces actions dans votre Plan de Croissance (axe Caractère et conviction) et parlez-en à votre partenaire de redevabilité.</p>

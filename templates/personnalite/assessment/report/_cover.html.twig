@@ -3,9 +3,12 @@
 #}
 {% set big = badges|length <= 2 %}
 <div style="{{ pdf ? 'height: 222mm;' : 'margin-bottom: 22px;' }} border-radius: 24px; background: #0F172A; color: #fff; padding: {{ pdf ? '22mm 16mm' : '40px 28px' }}; position: relative;">
-    <div style="font-size: {{ pdf ? '9pt' : '.8rem' }}; letter-spacing: 4px; font-weight: bold; color: #5EEAD4;">KIINI SAWA</div>
+    <table style="border-collapse: collapse;"><tr>
+        {% if brand_logo() %}<td style="padding-right: 10px;"><img src="{{ brand_logo() }}" alt="KIINI SAWA" style="width: {{ pdf ? '13mm' : '46px' }}; height: {{ pdf ? '13mm' : '46px' }}; border-radius: 10px;"></td>{% endif %}
+        <td style="font-size: {{ pdf ? '9pt' : '.8rem' }}; letter-spacing: 4px; font-weight: bold; color: #5EEAD4; vertical-align: middle;">KIINI SAWA<br><span style="letter-spacing: 1px; font-weight: normal; color: #94A3B8;">Bâtir sa vie avec Dieu</span></td>
+    </tr></table>
     <div style="margin-top: {{ pdf ? '30mm' : '36px' }}; font-size: {{ pdf ? '10pt' : '.85rem' }}; letter-spacing: 3px; text-transform: uppercase; color: #CBD5E1;">Rapport personnel</div>
-    <div style="font-family: {{ pdf ? "'DejaVu Serif', serif" : 'var(--font-serif)' }}; font-size: {{ pdf ? '32pt' : '2.5rem' }}; font-weight: bold; line-height: 1.1; margin: 6px 0 4px;">{{ title }}</div>
+    <div style="font-family: {{ pdf ? "'Playfair Display', serif" : 'var(--font-serif)' }}; font-size: {{ pdf ? '32pt' : '2.5rem' }}; font-weight: bold; line-height: 1.1; margin: 6px 0 4px;">{{ title }}</div>
     <div style="color: #CBD5E1; font-size: {{ pdf ? '11pt' : '1rem' }};">{{ subtitle }}</div>
 
     {% if badges|length %}
@@ -16,7 +19,7 @@
     </tr></table>
     {% endif %}
 
-    <div style="margin-top: {{ pdf ? '10mm' : '22px' }}; font-family: {{ pdf ? "'DejaVu Serif', serif" : 'var(--font-serif)' }}; font-size: {{ pdf ? '23pt' : '1.9rem' }}; font-weight: bold;">{{ headline }}</div>
+    <div style="margin-top: {{ pdf ? '10mm' : '22px' }}; font-family: {{ pdf ? "'Playfair Display', serif" : 'var(--font-serif)' }}; font-size: {{ pdf ? '23pt' : '1.9rem' }}; font-weight: bold;">{{ headline }}</div>
     <div style="color: #E2E8F0; font-size: {{ pdf ? '12pt' : '1.1rem' }}; margin-top: 4px;">{{ tagline }}</div>
     {% if keywords|default([])|length %}
     <div style="margin-top: 14px;">
@@ -32,6 +35,6 @@
 
 {% if quality.warnings is defined and quality.warnings|length %}
     <div style="background: #FEF3C7; border: 1px solid #FDE68A; color: #92400E; border-radius: 12px; padding: 10px 14px; margin: {{ pdf ? '0 0 4mm' : '0 0 18px' }}; font-size: 13px;">
-        {% for w in quality.warnings %}<div>⚠ {{ w }}</div>{% endfor %}
+        {% for w in quality.warnings %}<div>{{ report_icon('alert', '#B45309') }}{{ w }}</div>{% endfor %}
     </div>
 {% endif %}

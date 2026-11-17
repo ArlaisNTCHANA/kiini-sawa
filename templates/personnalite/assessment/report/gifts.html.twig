@@ -3,7 +3,7 @@
 {% set main = gf.families[gf.mainFamily] %}
 {% set first = gf.top[0] %}
 {% set pc = first.family.color %}
-{% set serif = pdf ? "'DejaVu Serif', serif" : 'var(--font-serif)' %}
+{% set serif = pdf ? "'Playfair Display', serif" : 'var(--font-serif)' %}
 {% include 'personnalite/assessment/report/_styles.html.twig' with {pcLight: first.family.light, pcDark: first.family.dark} %}
 
 <div class="dr">
@@ -12,6 +12,13 @@
     badges: gf.top|map(g => {t: g.name|first, color: g.family.color}),
     headline: gf.top|map(g => g.name)|join(' · '), tagline: 'Vos trois dons les plus marqués', keywords: [main.name],
 } %}
+
+{% include 'personnalite/assessment/report/_essentials.html.twig' with {
+    pcLight: first.family.light, pcDark: first.family.dark, headline: gf.top|map(g => g.name)|join(' · '), tagline: 'Votre famille de dons la plus marquée : ' ~ main.name|lower ~ '. ' ~ first.desc,
+    chart: gf.charts.bars, chartAlt: 'Vos quinze dons', strengths: gf.top|map(g => g.name ~ ' : ' ~ g.desc), watch: first.dangers, action: first.action,
+    toc: ['Comment lire ce rapport'] | merge(gf.top|map(g => 'Votre don : ' ~ g.name)) | merge(['Vos quinze dons', 'Mettre vos dons au service', 'En résumé', 'Bon usage de ce rapport']),
+} %}
+
 
 {# ═══ Lire ce rapport ═══ #}
 <div class="dr-page">
@@ -48,11 +55,11 @@
         </div></td>
     </tr></table>
     <table class="dr-grid" style="margin-top: 6px;"><tr>
-        <td><div class="dr-tile" style="background: #F0FDF4; border-color: #BBF7D0;"><div class="dr-label" style="color: #166534;">✓ Les signes de ce don</div><ul>{% for s in g.signs %}<li>{{ s }}</li>{% endfor %}</ul></div></td>
-        <td><div class="dr-tile" style="background: #FFF7ED; border-color: #FED7AA;"><div class="dr-label" style="color: #9A3412;">▲ Les pièges à éviter</div><ul>{% for s in g.dangers %}<li>{{ s }}</li>{% endfor %}</ul></div></td>
+        <td><div class="dr-tile" style="background: #F0FDF4; border-color: #BBF7D0;"><div class="dr-label" style="color: #166534;">{{ report_icon('check', '#16A34A') }}Les signes de ce don</div><ul>{% for s in g.signs %}<li>{{ s }}</li>{% endfor %}</ul></div></td>
+        <td><div class="dr-tile" style="background: #FFF7ED; border-color: #FED7AA;"><div class="dr-label" style="color: #9A3412;">{{ report_icon('alert', '#EA580C') }}Les pièges à éviter</div><ul>{% for s in g.dangers %}<li>{{ s }}</li>{% endfor %}</ul></div></td>
     </tr><tr>
-        <td><div class="dr-tile"><div class="dr-label">✦ Dans l'Église</div><p style="margin: 0;">{{ g.church }}</p></div></td>
-        <td><div class="dr-tile"><div class="dr-label">◆ Au quotidien</div><p style="margin: 0;">{{ g.daily }}</p></div></td>
+        <td><div class="dr-tile"><div class="dr-label">{{ report_icon('cross', '#7C3AED') }}Dans l'Église</div><p style="margin: 0;">{{ g.church }}</p></div></td>
+        <td><div class="dr-tile"><div class="dr-label">{{ report_icon('work', '#475569') }}Au quotidien</div><p style="margin: 0;">{{ g.daily }}</p></div></td>
     </tr></table>
     <h3 style="margin-top: 10px;">Dans les Écritures</h3>
     <table class="dr-grid"><tr>
@@ -101,7 +108,7 @@
         {% endfor %}
     </tr></table>
     <h3 style="margin-top: 14px;">Votre plan d'action</h3>
-    <table class="dr-table">{% for g in gf.top %}<tr><td style="width: 34px; font-size: {{ pdf ? '13pt' : '1.2rem' }}; color: {{ g.family.color }};">☐</td><td><strong>{{ g.name }} :</strong> {{ g.action }}</td></tr>{% endfor %}</table>
+    <table class="dr-table">{% for g in gf.top %}<tr><td style="width: 34px; font-size: {{ pdf ? '13pt' : '1.2rem' }}; color: {{ g.family.color }};">{{ report_icon('box', pc, 16) }}</td><td><strong>{{ g.name }} :</strong> {{ g.action }}</td></tr>{% endfor %}</table>
     <p class="dr-small" style="margin-top: 10px;">Ces dons nourrissent votre Plan de Transmission (Donner) et votre Plan de Vie : notez-y le service que vous choisissez.</p>
 </div>
 

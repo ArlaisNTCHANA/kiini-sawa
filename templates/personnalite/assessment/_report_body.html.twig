@@ -6,7 +6,7 @@
 
 {% if quality.warnings is defined and quality.warnings|length %}
     <div style="background: #FEF3C7; border: 1px solid #FDE68A; color: #92400E; border-radius: 10px; padding: 10px 14px; margin-bottom: 16px; font-size: 13px;">
-        {% for w in quality.warnings %}<div>⚠ {{ w }}</div>{% endfor %}
+        {% for w in quality.warnings %}<div>{{ report_icon('alert', '#B45309') }}{{ w }}</div>{% endfor %}
     </div>
 {% endif %}
 

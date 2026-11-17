@@ -3,7 +3,7 @@
 {% set x = typeX %}
 {% set fam = x.family %}
 {% set pc = fam.color %}
-{% set serif = pdf ? "'DejaVu Serif', serif" : 'var(--font-serif)' %}
+{% set serif = pdf ? "'Playfair Display', serif" : 'var(--font-serif)' %}
 {% include 'personnalite/assessment/report/_styles.html.twig' with {pcLight: fam.light, pcDark: fam.dark} %}
 
 <div class="dr">
@@ -11,6 +11,13 @@
     title: 'Type de fonctionnement', subtitle: 'Vos préférences naturelles · approche de Carl Jung',
     badges: t.code|split('')|map(l => {t: l, color: pc}), headline: t.code ~ ' · ' ~ t.name, tagline: x.tagline, keywords: x.keywords,
 } %}
+
+{% include 'personnalite/assessment/report/_essentials.html.twig' with {
+    pcLight: fam.light, pcDark: fam.dark, headline: t.code ~ ' · ' ~ t.name, tagline: x.tagline ~ ' ' ~ t.desc,
+    chart: x.axesChart, chartAlt: 'Vos quatre préférences', strengths: x.strengths|slice(0, 3), watch: x.watch|slice(0, 2), action: x.actions|first,
+    toc: ['Comment lire ce rapport', 'Votre type', 'Vos quatre préférences', 'Forces, vigilances et situations', 'Figures bibliques', 'Pour grandir', 'En résumé', 'Bon usage de ce rapport'],
+} %}
+
 
 {# ═══ Lire ce rapport ═══ #}
 <div class="dr-page">
@@ -68,15 +75,15 @@
     <div class="dr-kicker">Vos talents et vos angles morts</div>
     <h2>Forces et points de vigilance</h2>
     <table class="dr-grid"><tr>
-        <td><div class="dr-tile" style="background: #F0FDF4; border-color: #BBF7D0;"><div class="dr-label" style="color: #166534;">✓ Vos forces</div><ul>{% for s in x.strengths %}<li>{{ s }}</li>{% endfor %}</ul></div></td>
-        <td><div class="dr-tile" style="background: #FFF7ED; border-color: #FED7AA;"><div class="dr-label" style="color: #9A3412;">▲ Vos points de vigilance</div><ul>{% for s in x.watch %}<li>{{ s }}</li>{% endfor %}</ul></div></td>
+        <td><div class="dr-tile" style="background: #F0FDF4; border-color: #BBF7D0;"><div class="dr-label" style="color: #166534;">{{ report_icon('check', '#16A34A') }}Vos forces</div><ul>{% for s in x.strengths %}<li>{{ s }}</li>{% endfor %}</ul></div></td>
+        <td><div class="dr-tile" style="background: #FFF7ED; border-color: #FED7AA;"><div class="dr-label" style="color: #9A3412;">{{ report_icon('alert', '#EA580C') }}Vos points de vigilance</div><ul>{% for s in x.watch %}<li>{{ s }}</li>{% endfor %}</ul></div></td>
     </tr></table>
     <h3 style="margin-top: 12px;">Votre type en situation</h3>
     <table class="dr-grid"><tr>
-        <td><div class="dr-tile"><div class="dr-label">◆ Au travail</div><p style="margin: 0;">{{ x.work }}</p></div></td>
-        <td><div class="dr-tile"><div class="dr-label">♥ En couple et en famille</div><p style="margin: 0;">{{ x.relations }}</p></div></td>
+        <td><div class="dr-tile"><div class="dr-label">{{ report_icon('work', '#475569') }}Au travail</div><p style="margin: 0;">{{ x.work }}</p></div></td>
+        <td><div class="dr-tile"><div class="dr-label">{{ report_icon('heart', '#DB2777') }}En couple et en famille</div><p style="margin: 0;">{{ x.relations }}</p></div></td>
     </tr><tr>
-        <td><div class="dr-tile"><div class="dr-label">✦ À l'Église</div><p style="margin: 0;">{{ x.church }}</p></div></td>
+        <td><div class="dr-tile"><div class="dr-label">{{ report_icon('cross', '#7C3AED') }}À l'Église</div><p style="margin: 0;">{{ x.church }}</p></div></td>
         <td><div class="dr-tile" style="background: #FEF2F2; border-color: #FECACA;"><div class="dr-label" style="color: #991B1B;">Sous pression</div><p style="margin: 0; color: #991B1B;">{{ x.stress }}</p></div></td>
     </tr></table>
 </div>
@@ -107,7 +114,7 @@
         {% endfor %}
     </tr></table>
     <h3 style="margin-top: 14px;">Votre plan d'action pour les 30 prochains jours</h3>
-    <table class="dr-table">{% for a in x.actions %}<tr><td style="width: 34px; font-size: {{ pdf ? '13pt' : '1.2rem' }}; color: {{ pc }};">☐</td><td>{{ a }}</td></tr>{% endfor %}</table>
+    <table class="dr-table">{% for a in x.actions %}<tr><td style="width: 34px; font-size: {{ pdf ? '13pt' : '1.2rem' }}; color: {{ pc }};">{{ report_icon('box', pc, 16) }}</td><td>{{ a }}</td></tr>{% endfor %}</table>
     <p class="dr-small" style="margin-top: 10px;">Reportez ces actions dans votre Plan de Croissance et parlez-en à votre partenaire de redevabilité.</p>
 </div>
 

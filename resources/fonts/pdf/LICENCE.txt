@@ -1,0 +1,2 @@
+Polices pour les PDF (Dompdf) : Inter et Playfair Display, statiques, téléchargées depuis Google Fonts.
+Licence SIL Open Font License 1.1 (https://openfontlicense.org).

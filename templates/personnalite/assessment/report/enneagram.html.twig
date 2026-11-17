@@ -4,7 +4,7 @@
 {% set x = e.x %}
 {% set ce = e.center %}
 {% set pc = ce.color %}
-{% set serif = pdf ? "'DejaVu Serif', serif" : 'var(--font-serif)' %}
+{% set serif = pdf ? "'Playfair Display', serif" : 'var(--font-serif)' %}
 {% include 'personnalite/assessment/report/_styles.html.twig' with {pcLight: ce.light, pcDark: ce.dark} %}
 
 <div class="dr">
@@ -12,6 +12,13 @@
     title: 'Ennéagramme', subtitle: 'Vos motivations profondes · aile · chemin de croissance',
     badges: [{t: e.type, color: pc}], headline: 'Type ' ~ e.type ~ ' · ' ~ p.name, tagline: x.tagline, keywords: x.keywords,
 } %}
+
+{% include 'personnalite/assessment/report/_essentials.html.twig' with {
+    pcLight: ce.light, pcDark: ce.dark, headline: 'Type ' ~ e.type ~ ' aile ' ~ e.wing ~ ' · ' ~ p.name, tagline: x.tagline ~ ' Ce qui vous motive : ' ~ p.motivation|lower ~ ' Ce que vous craignez : ' ~ p.fear|lower,
+    chart: e.charts.circle, chartAlt: 'Figure de l\'ennéagramme', strengths: x.strengths|slice(0, 3), watch: [p.watch], action: x.actions|first,
+    toc: ['Comment lire ce rapport', 'Votre type', 'Vos neuf scores et votre aile', 'Forces et vigilances', 'Croissance et stress', 'Figures bibliques', 'Pour grandir', 'En résumé', 'Bon usage de ce rapport'],
+} %}
+
 
 {# ═══ Lire ce rapport ═══ #}
 <div class="dr-page">
@@ -86,15 +93,15 @@
     <div class="dr-kicker">Vos talents et vos angles morts</div>
     <h2>Forces et points de vigilance</h2>
     <table class="dr-grid"><tr>
-        <td><div class="dr-tile" style="background: #F0FDF4; border-color: #BBF7D0;"><div class="dr-label" style="color: #166534;">✓ Vos forces</div><ul>{% for s in x.strengths %}<li>{{ s }}</li>{% endfor %}</ul></div></td>
-        <td><div class="dr-tile" style="background: #FFF7ED; border-color: #FED7AA;"><div class="dr-label" style="color: #9A3412;">▲ Votre vigilance</div><p style="margin: 0;">{{ p.watch }}</p></div></td>
+        <td><div class="dr-tile" style="background: #F0FDF4; border-color: #BBF7D0;"><div class="dr-label" style="color: #166534;">{{ report_icon('check', '#16A34A') }}Vos forces</div><ul>{% for s in x.strengths %}<li>{{ s }}</li>{% endfor %}</ul></div></td>
+        <td><div class="dr-tile" style="background: #FFF7ED; border-color: #FED7AA;"><div class="dr-label" style="color: #9A3412;">{{ report_icon('alert', '#EA580C') }}Votre vigilance</div><p style="margin: 0;">{{ p.watch }}</p></div></td>
     </tr></table>
     <div class="dr-tile" style="margin-top: 4px; background: {{ ce.light }}; border-color: {{ ce.light }};"><div class="dr-label" style="color: {{ ce.dark }};">Votre don</div><p style="margin: 0; color: {{ ce.dark }};">{{ p.gift }}</p></div>
     <h3 style="margin-top: 16px;">Votre type en situation</h3>
     <table class="dr-grid"><tr>
-        <td><div class="dr-tile"><div class="dr-label">◆ Au travail</div><p style="margin: 0;">{{ x.work }}</p></div></td>
-        <td><div class="dr-tile"><div class="dr-label">♥ En couple et en famille</div><p style="margin: 0;">{{ x.relations }}</p></div></td>
-        <td><div class="dr-tile"><div class="dr-label">✦ À l'Église</div><p style="margin: 0;">{{ x.church }}</p></div></td>
+        <td><div class="dr-tile"><div class="dr-label">{{ report_icon('work', '#475569') }}Au travail</div><p style="margin: 0;">{{ x.work }}</p></div></td>
+        <td><div class="dr-tile"><div class="dr-label">{{ report_icon('heart', '#DB2777') }}En couple et en famille</div><p style="margin: 0;">{{ x.relations }}</p></div></td>
+        <td><div class="dr-tile"><div class="dr-label">{{ report_icon('cross', '#7C3AED') }}À l'Église</div><p style="margin: 0;">{{ x.church }}</p></div></td>
     </tr></table>
 </div>
 
@@ -105,12 +112,12 @@
     <p class="dr-lead">Votre type n'est pas figé : selon votre état intérieur, vous empruntez des qualités, ou des travers, à d'autres types.</p>
     <table class="dr-grid"><tr>
         <td><div class="dr-tile" style="background: #F0FDF4; border-color: #BBF7D0; min-height: 170px;">
-            <div class="dr-label" style="color: #166534;">↗ En croissance : vers le type {{ e.grow.n }}</div>
+            <div class="dr-label" style="color: #166534;">{{ report_icon('up', '#16A34A') }}En croissance : vers le type {{ e.grow.n }}</div>
             <div style="font-weight: bold; color: #166534; font-size: {{ pdf ? '12pt' : '1.1rem' }};">{{ e.grow.name }}</div>
             <p style="margin: 6px 0 0; color: #166534;">{{ x.growthText }}</p>
         </div></td>
         <td><div class="dr-tile" style="background: #FEF2F2; border-color: #FECACA; min-height: 170px;">
-            <div class="dr-label" style="color: #991B1B;">↘ Sous pression : vers le type {{ e.stress.n }}</div>
+            <div class="dr-label" style="color: #991B1B;">{{ report_icon('down', '#DC2626') }}Sous pression : vers le type {{ e.stress.n }}</div>
             <div style="font-weight: bold; color: #991B1B; font-size: {{ pdf ? '12pt' : '1.1rem' }};">{{ e.stress.name }}</div>
             <p style="margin: 6px 0 0; color: #991B1B;">{{ x.stressText }}</p>
         </div></td>
@@ -149,7 +156,7 @@
         {% endfor %}
     </tr></table>
     <h3 style="margin-top: 14px;">Votre plan d'action pour les 30 prochains jours</h3>
-    <table class="dr-table">{% for a in x.actions %}<tr><td style="width: 34px; font-size: {{ pdf ? '13pt' : '1.2rem' }}; color: {{ pc }};">☐</td><td>{{ a }}</td></tr>{% endfor %}</table>
+    <table class="dr-table">{% for a in x.actions %}<tr><td style="width: 34px; font-size: {{ pdf ? '13pt' : '1.2rem' }}; color: {{ pc }};">{{ report_icon('box', pc, 16) }}</td><td>{{ a }}</td></tr>{% endfor %}</table>
     <p class="dr-small" style="margin-top: 10px;">Reportez ces actions dans votre Plan de Croissance (axe Caractère et conviction) et parlez-en à votre partenaire de redevabilité.</p>
 </div>
 
