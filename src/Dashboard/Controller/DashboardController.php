@@ -51,7 +51,12 @@ class DashboardController extends AbstractController
 
         $habits = $entityManager->getRepository(Habit::class)->findByWithAllRelations($user);
 
+        // Parcours de 90 jours (livre, annexe A) : rappel de la semaine en cours
+        $journey = $entityManager->getRepository(\App\Methode\Entity\JourneyProgress::class)->findOneBy(['user' => $user]);
+
         return $this->render('dashboard/index.html.twig', [
+            'journey' => $journey,
+            'journeyWeek' => $journey && !$journey->isFinished() ? \App\Methode\Service\Journey::PLAN[$journey->currentWeek()] + ['n' => $journey->currentWeek()] : null,
             'user' => $user,
             'quote' => $dashboard->quote(),
             'stats' => $dashboard->stats($habits),

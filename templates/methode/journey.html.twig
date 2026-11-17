@@ -1,0 +1,95 @@
+{% extends 'base.html.twig' %}
+{# Parcours de 90 jours (livre, annexe A) : JourneyController, contenu App\Methode\Service\Journey #}
+{% block title %}Mon parcours de 90 jours{% endblock %}
+
+{% block body %}
+<div class="ks-page ks-page--narrow">
+    {% include 'shared/_page_header.html.twig' with {
+        back: {url: path('app_methode_index'), label: 'La Méthode'},
+        eyebrow: 'Le parcours de 90 jours', icon: 'route',
+        title: 'Treize semaines pour écrire vos six plans',
+        lead: 'Une saison suffit pour écrire vos six plans et lancer votre système. Environ trois heures par semaine : une heure de lecture, une heure de Sanctuaire, une heure de mise en pratique.'
+    } %}
+
+    {% if not progress %}
+        <form method="post" class="ks-card journey-start" data-journey-start>
+            <input type="hidden" name="_csrf_token" value="{{ csrf_token('journey') }}">
+            <input type="hidden" name="action" value="start">
+            <p>Chaque semaine, vous lisez un ou deux chapitres du livre, vous faites l'exercice du Sanctuaire, puis vous écrivez le résultat ici, dans vos plans. Vous avancez à votre rythme : une semaine peut en prendre deux.</p>
+            <button type="submit" class="ks-btn ks-btn--primary">Commencer mon parcours aujourd'hui</button>
+        </form>
+    {% else %}
+        {% set done = progress.completedWeeks|length %}
+        <div class="ks-card journey-status" data-journey-status>
+            <p class="ks-eyebrow">Commencé le {{ progress.startedAt|date('d/m/Y') }}</p>
+            <p class="journey-status__line"><strong>Semaine {{ current }}</strong> sur 13 · {{ done }} semaine{{ done > 1 ? 's' }} terminée{{ done > 1 ? 's' }}</p>
+            <div class="journey-bar"><span style="width: {{ (done / 13 * 100)|round }}%;"></span></div>
+            {% if progress.finished %}
+                <p class="journey-celebrate">Accordez-vous une demi-journée pour relire vos six plans d'un trait, puis célébrez. Vous avez fait ce que la plupart des gens ne feront jamais.</p>
+            {% endif %}
+        </div>
+    {% endif %}
+
+    <ol class="journey-weeks">
+        {% for n, week in weeks %}
+            {% set isDone = progress and progress.weekDone(n) %}
+            {% set isCurrent = progress and n == current and not isDone %}
+            <li class="ks-card journey-week{{ isCurrent ? ' is-current' }}{{ isDone ? ' is-done' }}" id="semaine-{{ n }}" data-week="{{ n }}">
+                <div class="journey-week__head">
+                    <span class="journey-week__num">{{ isDone ? '✓' : n }}</span>
+                    <div>
+                        <p class="ks-eyebrow">Semaine {{ n }}{{ isCurrent ? ' · en cours' }}</p>
+                        <h2 class="journey-week__title">{{ week.produce }}</h2>
+                    </div>
+                </div>
+                <div class="journey-week__body">
+                    <p class="journey-label">Lire</p>
+                    <ul class="journey-list">
+                        {% for c in week.books %}<li><a href="{{ path('app_methode_chapter', {slug: c.slug}) }}">{{ c.title }}</a> <span>· {{ c.minutes }} min</span></li>{% endfor %}
+                    </ul>
+                    <p class="journey-label">Écrire dans mes plans</p>
+                    <div class="journey-actions">
+                        {% for a in week.actions %}<a class="ks-btn ks-btn--secondary ks-btn--sm" href="{{ path(a[1], a[2] ?? {}) }}">{{ a[0] }}</a>{% endfor %}
+                    </div>
+                    {% if progress %}
+                        <form method="post" class="journey-toggle">
+                            <input type="hidden" name="_csrf_token" value="{{ csrf_token('journey') }}">
+                            <input type="hidden" name="action" value="toggle">
+                            <input type="hidden" name="week" value="{{ n }}">
+                            <button type="submit" class="ks-btn {{ isDone ? 'ks-btn--ghost' : (isCurrent ? 'ks-btn--primary' : 'ks-btn--ghost') }} ks-btn--sm">{{ isDone ? 'Rouvrir cette semaine' : 'J\'ai terminé cette semaine' }}</button>
+                        </form>
+                    {% endif %}
+                </div>
+            </li>
+        {% endfor %}
+    </ol>
+</div>
+<style>
+    .journey-start p { margin: 0 0 1rem; color: var(--fg-muted); }
+    .journey-status__line { font-size: 1.1rem; margin: .2rem 0 .6rem; }
+    .journey-bar { height: 8px; background: var(--bg-alt); border-radius: 999px; overflow: hidden; }
+    .journey-bar span { display: block; height: 100%; background: var(--primary); }
+    .journey-celebrate { margin: .9rem 0 0; font-family: var(--font-serif); font-style: italic; }
+    .journey-weeks { list-style: none; padding: 0; margin: 1.5rem 0 0; display: flex; flex-direction: column; gap: .8rem; }
+    .journey-week { padding: 1rem 1.15rem; }
+    .journey-week.is-current { border: 2px solid var(--primary); }
+    .journey-week.is-done { opacity: .75; }
+    .journey-week__head { display: flex; gap: .9rem; align-items: flex-start; }
+    .journey-week__num { flex: none; width: 2.2rem; height: 2.2rem; border-radius: 999px; background: var(--primary-soft); color: var(--primary); font-weight: 800; display: inline-flex; align-items: center; justify-content: center; }
+    .journey-week.is-done .journey-week__num { background: var(--primary); color: #fff; }
+    .journey-week__title { font-family: var(--font-serif); font-size: 1.15rem; margin: .1rem 0 0; }
+    .journey-week__body { margin: .8rem 0 0 3.1rem; }
+    .journey-label { font-size: .72rem; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; color: var(--fg-muted); margin: .6rem 0 .3rem; }
+    .journey-list { margin: 0; padding-left: 1.1rem; font-size: .92rem; }
+    .journey-list span { color: var(--fg-muted); font-size: .82rem; }
+    .journey-actions { display: flex; flex-wrap: wrap; gap: .4rem; }
+    .journey-toggle { margin-top: .9rem; }
+    @media (max-width: 560px) { .journey-week__body { margin-left: 0; } }
+</style>
+<script>
+    window.addEventListener('load', () => {
+        const el = document.querySelector('.journey-week.is-current');
+        if (el && !location.hash) { setTimeout(() => el.scrollIntoView({block: 'start', behavior: 'smooth'}), 80); }
+    });
+</script>
+{% endblock %}

@@ -11,6 +11,19 @@ Ne jamais afficher ni demander de mot de passe ; ne pas publier son nom (mention
 
 ---
 
+## 2026-11-17 · Phase 2 : le parcours de 90 jours (livre, annexe A)
+
+- `/parcours` (`Methode\Controller\JourneyController`, contenu `Methode\Service\Journey::PLAN`) : les 13 semaines de
+  l'annexe A, mot pour mot (chapitres, « ce que tu produis »), avec pour chaque semaine les chapitres à lire et des
+  boutons vers les écrans où écrire (étapes de l'assistant, Ma saison, bilan du jour, Plan d'Intendance, rituels…).
+- Avancement : `Methode\Entity\JourneyProgress` (date de départ, semaines terminées) ; semaine en cours calculée depuis
+  la date de départ (`Journey::currentWeek`). Migration `journey_progress`.
+- Entrées : carte en tête de la Méthode (comptes connectés), rappel de la semaine en cours sur l'accueil (`/dashboard`),
+  invitation tant que le parcours n'est pas commencé.
+- `tests/Methode/JourneyTest.php` vérifie que chaque semaine pointe vers des chapitres et des écrans qui existent :
+  à garder vert si l'on renomme un chapitre ou une route. 214 tests verts.
+- Les titres des semaines gardent le « tu » du livre (extraits du livre), le reste de la page vouvoie.
+
 ## 2026-11-17 · Phase 1 bis : les pratiques du livre dans l'application
 
 - **Vérification visuelle** en local avec un compte de test PRO (`var/compte-de-test.local`, non versionné) : page

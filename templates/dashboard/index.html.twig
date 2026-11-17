@@ -236,6 +236,22 @@
     {# Proposition d'activer les notifications (application installée uniquement) #}
     {% include 'shared/_push_toggle.html.twig' with {compact: true} %}
 
+    {# Parcours de 90 jours (livre, annexe A) #}
+    {% if journeyWeek|default(null) %}
+        <section class="ks-card" data-journey-reminder style="max-width: 1100px; margin: 1.25rem auto 0; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: .8rem;">
+            <div>
+                <p class="ks-eyebrow" style="margin: 0;">Mon parcours de 90 jours · semaine {{ journeyWeek.n }} sur 13</p>
+                <p style="font-family: var(--font-serif); font-size: 1.1rem; margin: .2rem 0 0;">{{ journeyWeek.produce }}</p>
+            </div>
+            <a href="{{ path('app_journey') }}#semaine-{{ journeyWeek.n }}" class="ks-btn ks-btn--secondary ks-btn--sm">Voir ma semaine</a>
+        </section>
+    {% elseif journey|default(null) is null %}
+        <section class="ks-card ks-card--flat" data-journey-invite style="max-width: 1100px; margin: 1.25rem auto 0; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: .8rem;">
+            <p style="margin: 0;"><strong>Le parcours de 90 jours</strong> : treize semaines pour écrire vos six plans, chapitre après chapitre.</p>
+            <a href="{{ path('app_journey') }}" class="ks-btn ks-btn--ghost ks-btn--sm">Découvrir le parcours</a>
+        </section>
+    {% endif %}
+
     {# Défis collectifs en cours #}
     {% for ch in challenges %}
         <section class="ks-card ks-card--accent" style="margin-top: 1.5rem; display: flex; flex-wrap: wrap; gap: 1rem; align-items: center; justify-content: space-between;">

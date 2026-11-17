@@ -35,3 +35,8 @@ compagnon du livre, et le livre son canal d'acquisition (docs/plan-v1.md §3.6).
 Visiteur : 3 premiers chapitres ; compte gratuit : « l'essentiel » (`BookLibrary::essentials`) ; PRO : texte intégral
 (`Entitlements::can($user, 'method')`, interrupteur « Le livre en entier » dans Configuration). Source des chapitres :
 le manuscrit de l'auteur, découpé par `app:livre:sync` (voir `content/livre/README.md`).
+
+## Parcours de 90 jours (17/11/2026)
+
+`/parcours` : les 13 semaines de l'annexe A (`Service/Journey.php`), avancement par utilisateur (`Entity/JourneyProgress`).
+Si un chapitre ou une route change, `tests/Methode/JourneyTest.php` le signale.
