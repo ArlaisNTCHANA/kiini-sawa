@@ -2,6 +2,7 @@
 
 namespace App\Personnalite\Service;
 
+use App\Personnalite\Psychometrie\Content;
 use App\Personnalite\Entity\ProfileTest;
 use App\Personnalite\Psychometrie\ReportCharts;
 
@@ -57,7 +58,7 @@ final class SelfAssessmentReport
 
     private function equilibre(array $scores): array
     {
-        $areas = $this->areas($scores, SelfAssessmentProfiles::EQUILIBRE);
+        $areas = $this->areas($scores, Content::get('self.equilibre'));
         foreach ($areas as $k => $a) {
             [$areas[$k]['text'], $areas[$k]['actions']] = $a[$a['level']];
         }
@@ -68,7 +69,7 @@ final class SelfAssessmentReport
 
     private function hygiene(array $data): array
     {
-        $areas = $this->areas($data['axes'] ?? [], SelfAssessmentProfiles::HYGIENE);
+        $areas = $this->areas($data['axes'] ?? [], Content::get('self.hygiene'));
         foreach ($areas as $k => $a) {
             $areas[$k]['text'] = $a[$a['level']];
             $subs = $data['details'][$k] ?? [];

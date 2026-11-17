@@ -51,7 +51,7 @@ final class DiscBank
      */
     public static function shuffled(int $block): array
     {
-        $words = array_map(fn ($l, $w) => ['letter' => $l, 'word' => $w], self::LETTERS, self::BLOCKS[$block]);
+        $words = array_map(fn ($l, $w) => ['letter' => $l, 'word' => $w], self::LETTERS, Content::get('disc.words')[$block]);
         $offset = ($block * 3) % 4;
 
         return array_merge(\array_slice($words, $offset), \array_slice($words, 0, $offset));

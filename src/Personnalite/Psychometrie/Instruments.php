@@ -125,11 +125,11 @@ final class Instruments
             }
         } elseif ('enn' === $def['bank']) {
             // Les items sont déjà entrelacés par type (1, 2, … 9, 1, 2…)
-            foreach (EnneagramBank::ITEMS as $id => [, $text]) {
+            foreach (Content::get('enn.items') as $id => [, $text]) {
                 $items[] = ['key' => 'enn:'.$id, 'text' => $text];
             }
         } else {
-            foreach (SpiritualGiftsBank::ITEMS as $id => [, $text]) {
+            foreach (Content::get('gifts.items') as $id => [, $text]) {
                 $items[] = ['key' => 'don:'.$id, 'text' => $text];
             }
         }

@@ -2,6 +2,7 @@
 
 namespace App\Couple\Service;
 
+use App\Personnalite\Psychometrie\Content;
 use App\Abonnement\Service\Entitlements;
 use App\Compte\Entity\User;
 use App\Couple\Entity\Couple;
@@ -227,12 +228,12 @@ final class CoupleService
             foreach (str_split($ta['code']) as $i => $l) {
                 $shared += $l === $tb['code'][$i] ? 1 : 0;
             }
-            $types = ['a' => $ta['code'], 'b' => $tb['code'], 'aName' => Interpretations::TYPES[$ta['code']][0], 'bName' => Interpretations::TYPES[$tb['code']][0], 'shared' => $shared,
+            $types = ['a' => $ta['code'], 'b' => $tb['code'], 'aName' => Content::get('type.types')[$ta['code']][0], 'bName' => Content::get('type.types')[$tb['code']][0], 'shared' => $shared,
                 'axes' => array_map(fn ($k) => ['axis' => $k, 'a' => $ta['axes'][$k]['letter'], 'b' => $tb['axes'][$k]['letter'], 'tip' => $ta['axes'][$k]['letter'] !== $tb['axes'][$k]['letter'] ? self::AXIS_TIPS[$k] : null], array_keys($ta['axes']))];
         }
         $enneagram = null;
         if ($people[0]['enneagram'] && $people[1]['enneagram']) {
-            $enneagram = ['a' => EnneagramBank::TYPES[$people[0]['enneagram']] + ['n' => $people[0]['enneagram']], 'b' => EnneagramBank::TYPES[$people[1]['enneagram']] + ['n' => $people[1]['enneagram']]];
+            $enneagram = ['a' => Content::get('enn.types')[$people[0]['enneagram']] + ['n' => $people[0]['enneagram']], 'b' => Content::get('enn.types')[$people[1]['enneagram']] + ['n' => $people[1]['enneagram']]];
         }
 
         return ['people' => $people, 'domains' => $domains, 'styles' => $styles, 'types' => $types, 'enneagram' => $enneagram];
@@ -257,10 +258,10 @@ final class CoupleService
     private function styleCard(array $who, array $other): array
     {
         if ($who['disc']) {
-            $p = DiscProfiles::PROFILES[$who['code']];
+            $p = Content::get('disc.dimensions')[$who['code']];
 
             return ['code' => $who['code'], 'name' => $p['name'],
-                'communicate' => DiscProfiles::INTERACTION[$other['code']][$who['code']][0].'. Ses besoins : '.mb_strtolower(implode(', ', $p['needs'])).'.',
+                'communicate' => Content::get('disc.interaction')[$other['code']][$who['code']][0].'. Ses besoins : '.mb_strtolower(implode(', ', $p['needs'])).'.',
                 'watch' => implode(', ', $p['watch'])];
         }
 

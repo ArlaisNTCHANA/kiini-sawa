@@ -53,11 +53,11 @@ final class ReportBuilder
                 $fp = $this->norms->percentile($f, $fs);
                 $lvl = Interpretations::level($fp ?? $fs);
                 $facets[$f] = ['label' => IpipItemBank::FACETS[$f], 'score' => $fs, 'percentile' => $fp, 'level' => $lvl,
-                    'text' => 'high' === $lvl ? Interpretations::FACETS[$f][0] : ('low' === $lvl ? Interpretations::FACETS[$f][1] : null)];
+                    'text' => 'high' === $lvl ? Content::get('bigfive.facets')[$f][0] : ('low' === $lvl ? Content::get('bigfive.facets')[$f][1] : null)];
             }
             $lvl = Interpretations::level($ref);
             $domains[$d] = ['label' => IpipItemBank::DOMAINS[$d], 'score' => $v['score'], 'percentile' => $percentile, 'level' => $lvl,
-                'what' => Interpretations::DOMAINS[$d]['what'], 'text' => Interpretations::DOMAINS[$d][$lvl], 'facets' => $facets];
+                'what' => Content::get('bigfive.domains')[$d]['what'], 'text' => Content::get('bigfive.domains')[$d][$lvl], 'facets' => $facets];
         }
 
         // Forces : facettes favorables les plus élevées ; vigilances : facettes sensibles
@@ -73,9 +73,9 @@ final class ReportBuilder
 
         $type = $scores['type'] ? [
             'code' => $scores['type']['code'],
-            'name' => Interpretations::TYPES[$scores['type']['code']][0],
-            'desc' => Interpretations::TYPES[$scores['type']['code']][1],
-            'axes' => array_map(fn ($axis, $k) => $axis + ['text' => Interpretations::TYPE_AXES[$k][$axis['letter']]], $scores['type']['axes'], array_keys($scores['type']['axes'])),
+            'name' => Content::get('type.types')[$scores['type']['code']][0],
+            'desc' => Content::get('type.types')[$scores['type']['code']][1],
+            'axes' => array_map(fn ($axis, $k) => $axis + ['text' => Content::get('type.axes')[$k][$axis['letter']]], $scores['type']['axes'], array_keys($scores['type']['axes'])),
         ] : null;
         $style = $scores['style'] ? $scores['style'] + [
             'profile' => Interpretations::STYLES[$scores['style']['primary']],
@@ -97,14 +97,14 @@ final class ReportBuilder
 
     public function disc(array $scores): array
     {
-        $p = DiscProfiles::PROFILES;
+        $p = Content::get('disc.dimensions');
         $primary = $scores['primary'];
         $secondary = $scores['secondary'];
         $code = DiscCombos::code($primary, $secondary);
-        $combo = DiscCombos::PROFILES[$code] + ['code' => $code];
+        $combo = Content::get('disc.profiles')[$code] + ['code' => $code];
         $others = [];
         foreach (DiscBank::LETTERS as $l) {
-            $others[$l] = ['profile' => $p[$l], 'perception' => DiscProfiles::PERCEPTION[$primary][$l], 'interaction' => DiscProfiles::INTERACTION[$primary][$l]];
+            $others[$l] = ['profile' => $p[$l], 'perception' => Content::get('disc.perception')[$primary][$l], 'interaction' => Content::get('disc.interaction')[$primary][$l]];
         }
         // Ce que le contexte demande en plus ou en moins (écart d'au moins 8 points)
         $more = $less = [];
@@ -121,8 +121,8 @@ final class ReportBuilder
             'secondaryProfile' => $secondary ? $p[$secondary] : null,
             'adaptedProfile' => $p[$scores['adaptedPrimary']],
             'combo' => $combo,
-            'verse' => DiscCombos::VERSES[$primary],
-            'meditation' => DiscCombos::MEDITATIONS[$primary],
+            'verse' => Content::get('disc.verses')[$primary],
+            'meditation' => Content::get('disc.meditations')[$primary],
             'familyFigures' => DiscCombos::familyFigures($primary, $code),
             'adaptedCode' => $scores['adaptedPrimary'],
             'charts' => DiscCharts::all($scores),
@@ -143,7 +143,7 @@ final class ReportBuilder
                 continue;
             }
             $dom = $domains[$d];
-            $x = BigFiveProfiles::DOMAINS[$d];
+            $x = Content::get('bigfive.levels')[$d];
             $value = $dom['percentile'] ?? $dom['score'];
             $axes[$d] = ['label' => $dom['label'], 'value' => $value];
             $rows = array_map(fn ($f) => ['label' => $f['label'], 'value' => $f['percentile'] ?? $f['score'], 'color' => $x['color'], 'strong' => 'mid' !== $f['level']], $dom['facets']);
@@ -164,7 +164,7 @@ final class ReportBuilder
     private function typeExtras(array $type): array
     {
         $code = $type['code'];
-        $family = TypeProfiles::FAMILIES[TypeProfiles::familyOf($code)];
+        $family = Content::get('type.families')[TypeProfiles::familyOf($code)];
         $rows = [];
         $keys = array_keys(Instruments::TYPE_FACETS);
         foreach (array_values($type['axes']) as $i => $axis) {
@@ -172,9 +172,9 @@ final class ReportBuilder
             $rows[] = ['left' => $key[0], 'right' => $key[1], 'leftName' => TypeProfiles::LETTERS[$key[0]], 'rightName' => TypeProfiles::LETTERS[$key[1]],
                 'letter' => $axis['letter'], 'clarity' => $axis['clarity']];
         }
-        $names = array_map(fn ($t) => $t[0], Interpretations::TYPES);
+        $names = array_map(fn ($t) => $t[0], Content::get('type.types'));
 
-        return TypeProfiles::TYPES[$code] + ['family' => $family, 'familyKey' => TypeProfiles::familyOf($code), 'families' => TypeProfiles::FAMILIES,
+        return Content::get('type.profiles')[$code] + ['family' => $family, 'familyKey' => TypeProfiles::familyOf($code), 'families' => Content::get('type.families'),
             'axesChart' => ReportCharts::uri(ReportCharts::typeAxes($rows, $family['color'])),
             'grid' => ReportCharts::uri(ReportCharts::typeGrid($code, $family['color'], $names))];
     }
@@ -183,23 +183,23 @@ final class ReportBuilder
     {
         $bars = [];
         foreach ($scores['scores'] as $t => $s) {
-            $bars[$t] = ['name' => EnneagramBank::TYPES[$t]['name'], 'score' => $s];
+            $bars[$t] = ['name' => Content::get('enn.types')[$t]['name'], 'score' => $s];
         }
 
         $t = $scores['type'];
-        $x = EnneagramProfiles::TYPES[$t];
+        $x = Content::get('enn.profiles')[$t];
         [$grow, $stress] = EnneagramProfiles::ARROWS[$t];
         $rows = [];
         foreach ($scores['scores'] as $k => $v) {
-            $rows[] = ['label' => $k.' · '.EnneagramBank::TYPES[$k]['name'], 'value' => $v, 'color' => EnneagramProfiles::CENTERS[EnneagramProfiles::centerOf($k)]['color'], 'strong' => $k === $t];
+            $rows[] = ['label' => $k.' · '.Content::get('enn.types')[$k]['name'], 'value' => $v, 'color' => Content::get('enn.centers')[EnneagramProfiles::centerOf($k)]['color'], 'strong' => $k === $t];
         }
 
         return ['enneagram' => $scores + [
-            'profile' => EnneagramBank::TYPES[$t], 'wingProfile' => EnneagramBank::TYPES[$scores['wing']], 'bars' => $bars,
-            'x' => $x, 'center' => EnneagramProfiles::CENTERS[$x['center']], 'centerKey' => $x['center'],
-            'wingName' => EnneagramProfiles::WINGS[$t][$scores['wing']],
-            'grow' => ['n' => $grow, 'name' => EnneagramBank::TYPES[$grow]['name']], 'stress' => ['n' => $stress, 'name' => EnneagramBank::TYPES[$stress]['name']],
-            'centers' => EnneagramProfiles::CENTERS,
+            'profile' => Content::get('enn.types')[$t], 'wingProfile' => Content::get('enn.types')[$scores['wing']], 'bars' => $bars,
+            'x' => $x, 'center' => Content::get('enn.centers')[$x['center']], 'centerKey' => $x['center'],
+            'wingName' => Content::get('enn.wings')[$t][$scores['wing']],
+            'grow' => ['n' => $grow, 'name' => Content::get('enn.types')[$grow]['name']], 'stress' => ['n' => $stress, 'name' => Content::get('enn.types')[$stress]['name']],
+            'centers' => Content::get('enn.centers'),
             'charts' => ['circle' => ReportCharts::uri(ReportCharts::enneagram($t, $scores['wing'])), 'bars' => ReportCharts::uri(ReportCharts::hbars($rows))],
         ]];
     }
@@ -208,20 +208,20 @@ final class ReportBuilder
     {
         $bars = [];
         foreach ($scores['scores'] as $g => $s) {
-            $bars[$g] = SpiritualGiftsBank::GIFTS[$g] + ['score' => $s];
+            $bars[$g] = Content::get('gifts.gifts')[$g] + ['score' => $s];
         }
 
         $rows = [];
         foreach ($scores['scores'] as $g => $v) {
-            $rows[] = ['label' => SpiritualGiftsBank::GIFTS[$g]['name'], 'value' => $v, 'color' => GiftProfiles::FAMILIES[GiftProfiles::familyOf($g)]['color'], 'strong' => \in_array($g, $scores['top'], true)];
+            $rows[] = ['label' => Content::get('gifts.gifts')[$g]['name'], 'value' => $v, 'color' => Content::get('gifts.families')[GiftProfiles::familyOf($g)]['color'], 'strong' => \in_array($g, $scores['top'], true)];
         }
         $families = [];
-        foreach (GiftProfiles::FAMILIES as $key => $f) {
+        foreach (Content::get('gifts.families') as $key => $f) {
             $vals = array_map(fn ($g) => $scores['scores'][$g] ?? 0, $f['gifts']);
             $families[$key] = $f + ['avg' => (int) round(array_sum($vals) / \count($vals))];
         }
-        $top = array_map(fn ($g) => SpiritualGiftsBank::GIFTS[$g] + GiftProfiles::GIFTS[$g] + ['score' => $scores['scores'][$g], 'code' => $g,
-            'family' => GiftProfiles::FAMILIES[GiftProfiles::familyOf($g)]], $scores['top']);
+        $top = array_map(fn ($g) => Content::get('gifts.gifts')[$g] + Content::get('gifts.profiles')[$g] + ['score' => $scores['scores'][$g], 'code' => $g,
+            'family' => Content::get('gifts.families')[GiftProfiles::familyOf($g)]], $scores['top']);
         uasort($families, fn ($a, $b) => $b['avg'] <=> $a['avg']);
 
         return ['gifts' => ['top' => $top, 'bars' => $bars, 'families' => $families, 'mainFamily' => array_key_first($families),

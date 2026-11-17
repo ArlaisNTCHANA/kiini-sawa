@@ -49,6 +49,8 @@ Un **module par dossier** : `src/<Module>/{Controller,Entity,Repository,Service,
   `Abonnement`, `Notification`, `Methode` (livre), `Media` (provenance des inscrits, liens suivis), `Admin`, `Shared`.
 - Droits PRO : `App\Abonnement\Service\Entitlements` (`can`, `require`, `requireBelowLimit`) ; une exception
   `ProRequiredException` redirige vers `/abonnement`.
+- Textes des tests : toujours via `App\Personnalite\Psychometrie\Content::get()` (l'administrateur peut les modifier
+  dans Admin › Textes des tests ; voir `docs/modules/personnalite.md`).
 - Notifications et emails : `App\Notification\Service\Notifier` (préférences, anti-doublon, désabonnement signé).
 - Sécurité : contrôle d'accès dans `config/packages/security.yaml` (liste des pages publiques), vérification de
   l'email obligatoire, **connexion en deux étapes des administrateurs** (`Compte/Security/AdminSecondFactorSubscriber`),

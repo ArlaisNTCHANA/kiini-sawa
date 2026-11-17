@@ -110,17 +110,17 @@ final class AssessmentService
             }
             if ($scores['type']) {
                 $code = $scores['type']['code'];
-                $add('MBTI', ['type' => $code], Interpretations::TYPES[$code][0].' — '.Interpretations::TYPES[$code][1]);
+                $add('MBTI', ['type' => $code], Content::get('type.types')[$code][0].' — '.Content::get('type.types')[$code][1]);
             }
             // Le DISC vient désormais de son propre questionnaire (banque « disc »)
         } elseif ('disc' === $bank) {
-            $p = DiscProfiles::PROFILES[$scores['primary']];
+            $p = Content::get('disc.dimensions')[$scores['primary']];
             $add('DISC', $scores['natural'], $p['name'].' — '.$p['essence']);
         } elseif ('enn' === $bank) {
-            $t = EnneagramBank::TYPES[$scores['type']];
+            $t = Content::get('enn.types')[$scores['type']];
             $add('ENNEAGRAM', ['type' => $scores['type'], 'wing' => $scores['wing']], $t['name'].' — '.$t['motivation']);
         } else {
-            $names = array_map(fn ($g) => SpiritualGiftsBank::GIFTS[$g]['name'], $scores['top']);
+            $names = array_map(fn ($g) => Content::get('gifts.gifts')[$g]['name'], $scores['top']);
             $add('DONS', ['top' => $scores['top']], implode(', ', $names));
         }
     }

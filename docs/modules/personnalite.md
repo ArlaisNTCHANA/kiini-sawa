@@ -97,3 +97,15 @@ bibliques (sauf Big Five), plan d'action, conclusion et page « Bon usage de ce 
 - Auto-évaluations « Équilibre de Vie » et « Hygiène de Vie » : `Service/SelfAssessmentReport` + `SelfAssessmentProfiles`,
   gabarit `report/self.html.twig` (roue de la vie, priorités, domaine par domaine, plan) ; PDF sur
   `/mes-tests/{type}/resultats/pdf`.
+
+## Textes modifiables depuis l'administration
+
+Admin › Textes des tests (`/admin/tests/textes`, `Controller/Admin/ContentAdminController`) : l'administrateur reformule
+les questions (DISC, ennéagramme, dons) et tous les textes des rapports. Le code reste la référence ; les modifications
+vivent dans la table `content_override` (chemin → texte) et s'appliquent via `Psychometrie\Content::get('source')`.
+
+- **Toujours lire les textes par `Content::get()`**, jamais directement par les constantes (`DiscCombos::PROFILES`…),
+  sinon les modifications de l'administrateur ne s'affichent pas. Les constantes restent utilisées pour la structure
+  (calcul, clés, couleurs).
+- Verrouillé : clés, lettres, dimensions, sens et rattachement des questions, couleurs, questions IPIP.
+- « Revenir au texte d'origine » supprime la ligne ; un export JSON des modifications est disponible.

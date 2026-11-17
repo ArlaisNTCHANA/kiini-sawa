@@ -389,6 +389,10 @@
                     <i data-lucide="brain"></i>
                     <span>Tests</span>
                 </a>
+                <a href="{{ path('admin_content_index') }}" class="ks-sidebar__link {{ app.request.attributes.get('_route') starts with 'admin_content' ? 'active' }}" id="nav-test-texts">
+                    <i data-lucide="pencil-line"></i>
+                    <span>Textes des tests</span>
+                </a>
 
                 <div class="ks-sidebar__label">Système</div>
                 <a href="{{ path('admin_doc') }}" class="ks-sidebar__link {{ app.request.attributes.get('_route') starts with 'admin_doc' ? 'active' }}" id="nav-docs">

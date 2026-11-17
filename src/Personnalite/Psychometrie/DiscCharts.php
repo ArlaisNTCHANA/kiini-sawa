@@ -18,7 +18,7 @@ final class DiscCharts
             'compass' => self::uri(self::compass($scores['natural'], $scores['adapted'])),
             'graphs' => self::uri(self::graphs($scores['natural'], $scores['adapted'])),
             'gauge' => self::uri(self::gauge($scores['gap'])),
-            'badge' => self::uri(self::badge($scores['primary'].($scores['secondary'] ?? ''), DiscProfiles::PROFILES[$scores['primary']]['color'])),
+            'badge' => self::uri(self::badge($scores['primary'].($scores['secondary'] ?? ''), Content::get('disc.dimensions')[$scores['primary']]['color'])),
         ];
     }
 
@@ -32,7 +32,7 @@ final class DiscCharts
 
     public static function compass(array $natural, array $adapted): string
     {
-        $c = DiscProfiles::PROFILES;
+        $c = Content::get('disc.dimensions');
         $cx = 210;
         $cy = 200;
         $r = 150;
@@ -86,7 +86,7 @@ final class DiscCharts
             $svg .= "<text x='".($ox + 22)."' y='".($mid - 5)."' ".self::FONT." font-size='9' fill='#94A3B8'>moyenne</text>";
             $svg .= "<line x1='".($ox + 20)."' y1='$base' x2='".($ox + 290)."' y2='$base' stroke='#CBD5E1'/>";
             foreach (DiscBank::LETTERS as $i => $l) {
-                $color = DiscProfiles::PROFILES[$l]['color'];
+                $color = Content::get('disc.dimensions')[$l]['color'];
                 $bh = max(3, $h * min(60, $s[$l]) / 60);
                 $x = $ox + 34 + $i * 66;
                 $fill = $outline ? "fill='".self::LIGHT[$l]."' stroke='$color' stroke-width='2'" : "fill='$color'";

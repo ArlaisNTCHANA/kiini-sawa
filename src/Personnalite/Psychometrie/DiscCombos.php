@@ -442,10 +442,11 @@ final class DiscCombos
     /** Autres figures de la même famille (même dimension dominante). */
     public static function familyFigures(string $primary, string $code): array
     {
-        $keys = $code === $primary ? array_filter(array_keys(self::PROFILES), fn ($k) => 2 === \strlen($k) && $k[0] === $primary) : [$primary];
+        $profiles = Content::get('disc.profiles');
+        $keys = $code === $primary ? array_filter(array_keys($profiles), fn ($k) => 2 === \strlen($k) && $k[0] === $primary) : [$primary];
         $figures = [];
         foreach ($keys as $k) {
-            $figures = array_merge($figures, $code === $primary ? [self::PROFILES[$k]['figures'][0]] : self::PROFILES[$k]['figures']);
+            $figures = array_merge($figures, $code === $primary ? [$profiles[$k]['figures'][0]] : $profiles[$k]['figures']);
         }
 
         return $figures;
