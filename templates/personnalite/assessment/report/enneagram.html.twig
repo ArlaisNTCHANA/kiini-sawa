@@ -1,0 +1,186 @@
+{# Rapport Ennéagramme (écran et PDF). Variables : enneagram, assessment, quality, pdf, name. #}
+{% set e = enneagram %}
+{% set p = e.profile %}
+{% set x = e.x %}
+{% set ce = e.center %}
+{% set pc = ce.color %}
+{% set serif = pdf ? "'DejaVu Serif', serif" : 'var(--font-serif)' %}
+{% include 'personnalite/assessment/report/_styles.html.twig' with {pcLight: ce.light, pcDark: ce.dark} %}
+
+<div class="dr">
+{% include 'personnalite/assessment/report/_cover.html.twig' with {
+    title: 'Ennéagramme', subtitle: 'Vos motivations profondes · aile · chemin de croissance',
+    badges: [{t: e.type, color: pc}], headline: 'Type ' ~ e.type ~ ' · ' ~ p.name, tagline: x.tagline, keywords: x.keywords,
+} %}
+
+{# ═══ Lire ce rapport ═══ #}
+<div class="dr-page">
+    <div class="dr-kicker">Avant de commencer</div>
+    <h2>Comment lire ce rapport</h2>
+    <p class="dr-lead">L'ennéagramme décrit neuf manières de voir le monde, chacune portée par une motivation profonde et une peur. Il ne dit pas <em>ce que</em> vous faites, mais <em>pourquoi</em> vous le faites. Les neuf types se regroupent en trois centres.</p>
+    <table class="dr-grid"><tr>
+        {% for key, cen in e.centers %}
+            <td><div class="dr-tile" style="background: {{ cen.light }}; border-color: {{ cen.light }}; min-height: 150px;">
+                <div style="font-weight: bold; color: {{ cen.dark }};">{{ cen.name }}</div>
+                <div style="font-size: {{ pdf ? '16pt' : '1.5rem' }}; font-weight: bold; color: {{ cen.color }}; margin: 4px 0;">{{ cen.types|join(' · ') }}</div>
+                <p class="dr-small" style="margin: 0; color: {{ cen.dark }};">Émotion clé : {{ cen.emotion }}.</p>
+            </div></td>
+        {% endfor %}
+    </tr></table>
+    <table class="dr-grid" style="margin-top: 4px;"><tr>
+        <td><div class="dr-tile"><h3>Votre type</h3><p class="dr-small" style="margin: 0;">Votre motivation dominante : elle reste stable au fil de la vie, même si votre manière de la vivre mûrit.</p></div></td>
+        <td><div class="dr-tile"><h3>Votre aile</h3><p class="dr-small" style="margin: 0;">L'un des deux types voisins, qui colore votre type et lui donne sa nuance.</p></div></td>
+        <td><div class="dr-tile"><h3>Vos flèches</h3><p class="dr-small" style="margin: 0;">Vers quel type vous allez quand vous grandissez, et vers lequel vous glissez sous la pression.</p></div></td>
+    </tr></table>
+    <div class="dr-tile" style="margin-top: 8px; background: #FFFBEB; border-color: #FDE68A;">
+        <h3 style="color: #92400E;">À garder en tête</h3>
+        <p class="dr-small" style="color: #92400E; margin: 0;">Aucun type n'est meilleur qu'un autre. L'ennéagramme est un outil d'introspection : votre type se confirme par la réflexion, l'expérience et le regard de vos proches, pas par un seul questionnaire. Si un autre type vous parle davantage en lisant sa peur profonde, faites confiance à votre discernement.</p>
+    </div>
+</div>
+
+{# ═══ Votre type ═══ #}
+<div class="dr-page">
+    <div class="dr-kicker">Votre type · {{ ce.name }}</div>
+    <h2>Type {{ e.type }} · {{ p.name }}</h2>
+    <p class="dr-lead">{{ x.tagline }} Aile {{ e.wing }} : <strong>{{ e.wingName[0] }}</strong>.</p>
+    <p style="font-size: {{ pdf ? '10.5pt' : '1.05rem' }};">{{ x.portrait }}</p>
+    <table class="dr-grid"><tr>
+        <td><div class="dr-tile" style="background: {{ ce.light }}; border-color: {{ ce.light }};">
+            <div class="dr-label" style="color: {{ ce.dark }};">Ce qui vous motive</div>
+            <div style="font-family: {{ serif }}; font-size: {{ pdf ? '13pt' : '1.2rem' }}; color: {{ ce.dark }};">{{ p.motivation }}</div>
+        </div></td>
+        <td><div class="dr-tile" style="background: #F8FAFC;">
+            <div class="dr-label">Ce que vous craignez au fond</div>
+            <div style="font-family: {{ serif }}; font-size: {{ pdf ? '13pt' : '1.2rem' }};">{{ p.fear }}</div>
+        </div></td>
+    </tr></table>
+    <h3 style="margin-top: 12px;">Votre place sur la figure de l'ennéagramme</h3>
+    <div style="text-align: center;"><img src="{{ e.charts.circle }}" alt="Figure de l'ennéagramme : votre type, votre aile et vos flèches" style="width: {{ pdf ? '105mm' : '100%' }}; max-width: 420px; height: auto;"></div>
+    <p class="dr-small" style="text-align: center;">Grand cercle : votre type · cercle cerclé : votre aile · <span style="color: #16A34A;">flèche verte</span> : croissance · <span style="color: #DC2626;">flèche rouge pointillée</span> : stress</p>
+</div>
+
+{# ═══ Scores et aile ═══ #}
+<div class="dr-page">
+    <div class="dr-kicker">Vos résultats</div>
+    <h2>Vos neuf scores</h2>
+    <p class="dr-lead">Chacun porte un peu des neuf types. Le plus élevé indique votre type probable ; les couleurs montrent les trois centres.</p>
+    <img class="dr-img" src="{{ e.charts.bars }}" alt="Scores des neuf types">
+    {% if e.clarity < 8 %}
+        <div class="dr-tile" style="margin-top: 8px; background: #FFFBEB; border-color: #FDE68A;"><p class="dr-small" style="margin: 0; color: #92400E;">Plusieurs types sont proches dans vos réponses (écart de {{ e.clarity }} points). Lisez aussi les profils suivants et retenez celui dont la peur profonde vous parle le plus.</p></div>
+    {% endif %}
+    <table class="dr-grid" style="margin-top: 10px;"><tr>
+        <td><div class="dr-tile" style="background: {{ ce.light }}; border-color: {{ ce.light }};">
+            <div class="dr-label" style="color: {{ ce.dark }};">Votre aile · {{ e.type }} aile {{ e.wing }}</div>
+            <div style="font-weight: bold; color: {{ ce.dark }}; font-size: {{ pdf ? '12pt' : '1.1rem' }};">{{ e.wingName[0] }}</div>
+            <p style="margin: 4px 0 0; color: {{ ce.dark }};">{{ e.wingName[1] }}</p>
+        </div></td>
+        <td><div class="dr-tile">
+            <div class="dr-label">{{ ce.name }}</div>
+            <p style="margin: 0;">{{ ce.desc }} L'émotion à apprivoiser : <strong>{{ ce.emotion }}</strong>.</p>
+        </div></td>
+    </tr></table>
+</div>
+
+{# ═══ Forces et vigilances ═══ #}
+<div class="dr-page">
+    <div class="dr-kicker">Vos talents et vos angles morts</div>
+    <h2>Forces et points de vigilance</h2>
+    <table class="dr-grid"><tr>
+        <td><div class="dr-tile" style="background: #F0FDF4; border-color: #BBF7D0;"><div class="dr-label" style="color: #166534;">✓ Vos forces</div><ul>{% for s in x.strengths %}<li>{{ s }}</li>{% endfor %}</ul></div></td>
+        <td><div class="dr-tile" style="background: #FFF7ED; border-color: #FED7AA;"><div class="dr-label" style="color: #9A3412;">▲ Votre vigilance</div><p style="margin: 0;">{{ p.watch }}</p></div></td>
+    </tr></table>
+    <div class="dr-tile" style="margin-top: 4px; background: {{ ce.light }}; border-color: {{ ce.light }};"><div class="dr-label" style="color: {{ ce.dark }};">Votre don</div><p style="margin: 0; color: {{ ce.dark }};">{{ p.gift }}</p></div>
+    <h3 style="margin-top: 16px;">Votre type en situation</h3>
+    <table class="dr-grid"><tr>
+        <td><div class="dr-tile"><div class="dr-label">◆ Au travail</div><p style="margin: 0;">{{ x.work }}</p></div></td>
+        <td><div class="dr-tile"><div class="dr-label">♥ En couple et en famille</div><p style="margin: 0;">{{ x.relations }}</p></div></td>
+        <td><div class="dr-tile"><div class="dr-label">✦ À l'Église</div><p style="margin: 0;">{{ x.church }}</p></div></td>
+    </tr></table>
+</div>
+
+{# ═══ Croissance et stress ═══ #}
+<div class="dr-page">
+    <div class="dr-kicker">Votre chemin</div>
+    <h2>Quand vous grandissez, quand vous êtes sous pression</h2>
+    <p class="dr-lead">Votre type n'est pas figé : selon votre état intérieur, vous empruntez des qualités, ou des travers, à d'autres types.</p>
+    <table class="dr-grid"><tr>
+        <td><div class="dr-tile" style="background: #F0FDF4; border-color: #BBF7D0; min-height: 170px;">
+            <div class="dr-label" style="color: #166534;">↗ En croissance : vers le type {{ e.grow.n }}</div>
+            <div style="font-weight: bold; color: #166534; font-size: {{ pdf ? '12pt' : '1.1rem' }};">{{ e.grow.name }}</div>
+            <p style="margin: 6px 0 0; color: #166534;">{{ x.growthText }}</p>
+        </div></td>
+        <td><div class="dr-tile" style="background: #FEF2F2; border-color: #FECACA; min-height: 170px;">
+            <div class="dr-label" style="color: #991B1B;">↘ Sous pression : vers le type {{ e.stress.n }}</div>
+            <div style="font-weight: bold; color: #991B1B; font-size: {{ pdf ? '12pt' : '1.1rem' }};">{{ e.stress.name }}</div>
+            <p style="margin: 6px 0 0; color: #991B1B;">{{ x.stressText }}</p>
+        </div></td>
+    </tr></table>
+    <table class="dr-grid" style="margin-top: 4px;"><tr>
+        <td><div class="dr-tile"><div class="dr-label">Les signaux d'alerte</div><p style="margin: 0;">{{ x.signs }}</p></div></td>
+        <td><div class="dr-tile"><div class="dr-label">Votre chemin de croissance</div><p style="margin: 0;">{{ p.growth }}</p></div></td>
+    </tr></table>
+    <p class="dr-small" style="margin-top: 8px;">Si la pression dure (fatigue persistante, sommeil perturbé, découragement), parlez-en à un proche, à votre pasteur ou à un professionnel de santé.</p>
+</div>
+
+{# ═══ Figures bibliques ═══ #}
+<div class="dr-page">
+    <div class="dr-kicker">Dans les Écritures</div>
+    <h2>Des figures bibliques qui vous ressemblent</h2>
+    <p class="dr-lead">La Bible montre des hommes et des femmes habités par les mêmes motivations et les mêmes peurs que nous, que Dieu a rencontrés et transformés. Ces rapprochements sont des illustrations, non une interprétation savante des textes.</p>
+    {% for f in x.figures %}
+        <div class="dr-tile" style="margin-bottom: 10px; border-left: 6px solid {{ pc }}; border-radius: 0 14px 14px 0;">
+            <div style="font-family: {{ serif }}; font-size: {{ pdf ? '14pt' : '1.25rem' }}; font-weight: bold;">{{ f.name }}</div>
+            <div class="dr-small" style="margin-bottom: 6px;">{{ f.ref }}</div>
+            <p style="margin: 0;">{{ f.text }}</p>
+        </div>
+    {% endfor %}
+    <div class="dr-quote" style="margin-top: 14px;">« {{ x.verse[0] }} »<div style="font-style: normal; font-weight: bold; margin-top: 6px; font-size: {{ pdf ? '9pt' : '.9rem' }};">{{ x.verse[1] }}</div></div>
+    <div class="dr-tile" style="margin-top: 10px;"><div class="dr-label">Une question à méditer</div><p style="margin: 0; font-family: {{ serif }}; font-size: {{ pdf ? '11pt' : '1.05rem' }};">{{ x.meditation }}</p></div>
+</div>
+
+{# ═══ Grandir ═══ #}
+<div class="dr-page">
+    <div class="dr-kicker">Passer à l'action</div>
+    <h2>Pour grandir</h2>
+    <p class="dr-lead">Grandir, pour votre type, c'est desserrer l'emprise de votre peur et laisser votre motivation devenir un don pour les autres.</p>
+    <table class="dr-grid"><tr>
+        {% for g in x.grow %}
+            <td><div class="dr-tile" style="text-align: center; min-height: 120px;"><div style="font-size: {{ pdf ? '20pt' : '1.8rem' }}; font-weight: bold; color: {{ pc }}; line-height: 1;">{{ loop.index }}</div><p style="margin: 8px 0 0;">{{ g }}</p></div></td>
+        {% endfor %}
+    </tr></table>
+    <h3 style="margin-top: 14px;">Votre plan d'action pour les 30 prochains jours</h3>
+    <table class="dr-table">{% for a in x.actions %}<tr><td style="width: 34px; font-size: {{ pdf ? '13pt' : '1.2rem' }}; color: {{ pc }};">☐</td><td>{{ a }}</td></tr>{% endfor %}</table>
+    <p class="dr-small" style="margin-top: 10px;">Reportez ces actions dans votre Plan de Croissance (axe Caractère et conviction) et parlez-en à votre partenaire de redevabilité.</p>
+</div>
+
+{# ═══ Conclusion ═══ #}
+<div class="dr-page">
+    <div style="border-radius: 22px; background: {{ ce.light }}; padding: {{ pdf ? '10mm' : '28px' }};">
+        <div class="dr-kicker" style="color: {{ ce.dark }};">En résumé</div>
+        <h2 style="color: {{ ce.dark }};">Type {{ e.type }} aile {{ e.wing }} · {{ p.name }}</h2>
+        <p style="color: {{ ce.dark }}; font-size: {{ pdf ? '11pt' : '1.05rem' }};">{{ x.tagline }}</p>
+        <table class="dr-grid"><tr>
+            <td><div class="dr-tile" style="background: #fff; border-color: #fff;"><div class="dr-label">Votre motivation</div><p style="margin: 0;">{{ p.motivation }}</p></div></td>
+            <td><div class="dr-tile" style="background: #fff; border-color: #fff;"><div class="dr-label">Votre peur</div><p style="margin: 0;">{{ p.fear }}</p></div></td>
+            <td><div class="dr-tile" style="background: #fff; border-color: #fff;"><div class="dr-label">Votre chemin</div><p style="margin: 0;">Vers le type {{ e.grow.n }} · {{ e.grow.name }}</p></div></td>
+        </tr></table>
+    </div>
+    <h3 style="margin-top: 18px;">Et maintenant ?</h3>
+    <table class="dr-table">
+        <tr><td style="width: 34px; color: {{ pc }};">1</td><td>Relisez la peur profonde de votre type : si elle vous touche vraiment, c'est sans doute le bon.</td></tr>
+        <tr><td style="color: {{ pc }};">2</td><td>Demandez à deux proches s'ils vous reconnaissent dans ce portrait.</td></tr>
+        <tr><td style="color: {{ pc }};">3</td><td>Choisissez une seule action du plan et commencez-la cette semaine.</td></tr>
+        <tr><td style="color: {{ pc }};">4</td><td>Portez votre question à méditer dans la prière pendant quelques jours.</td></tr>
+    </table>
+    <div class="dr-quote" style="margin-top: 16px;">« Sonde-moi, ô Dieu, et connais mon cœur ! Éprouve-moi, et connais mes pensées ! »<div style="font-style: normal; font-weight: bold; margin-top: 6px; font-size: {{ pdf ? '9pt' : '.9rem' }};">Psaume 139.23</div></div>
+    <p style="margin-top: 14px;">Votre type décrit ce qui vous pousse, pas ce que vous valez. Dieu connaît vos motivations les plus profondes et il veut les libérer de la peur. Laissez ce que vous découvrez ici nourrir votre Plan de Vie.</p>
+    <p class="dr-small" style="text-align: right; margin-top: 18px;">KIINI SAWA · Bâtir sa vie avec Dieu</p>
+</div>
+
+{% include 'personnalite/assessment/report/_warnings.html.twig' with {
+    about: 'L\'ennéagramme de KIINI SAWA est un outil d\'introspection : ses 72 affirmations et ses textes sont propres à KIINI SAWA. L\'ennéagramme n\'est pas un instrument scientifiquement validé ; sa fidélité est suivie sur les réponses réelles.',
+    variable: 'en particulier lorsque plusieurs types sont proches',
+    marks: 'Les noms des types sont propres à KIINI SAWA. KIINI SAWA n\'est affilié à aucun institut ou éditeur d\'ennéagramme ; les marques citées appartiennent à leurs propriétaires.',
+    bible: true,
+} %}
+</div>

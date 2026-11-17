@@ -9,6 +9,13 @@ use App\Personnalite\Entity\Assessment;
  */
 final class ReportBuilder
 {
+    /** Rapports illustrés (page de garde, schémas, conclusion) ; les autres utilisent _report_body. */
+    public const TEMPLATES = [
+        'disc' => 'personnalite/assessment/disc/_report.html.twig',
+        'enneagramme' => 'personnalite/assessment/report/enneagram.html.twig',
+        'dons-spirituels' => 'personnalite/assessment/report/gifts.html.twig',
+    ];
+
     public function __construct(private readonly NormService $norms)
     {
     }
@@ -17,7 +24,8 @@ final class ReportBuilder
     {
         $def = Instruments::CATALOG[$a->getInstrument()];
         $scores = $a->getScores();
-        $report = ['instrument' => $def, 'slug' => $a->getInstrument(), 'assessment' => $a, 'quality' => $a->getQuality()];
+        $report = ['instrument' => $def, 'slug' => $a->getInstrument(), 'assessment' => $a, 'quality' => $a->getQuality(),
+            'template' => self::TEMPLATES[$a->getInstrument()] ?? null];
 
         return $report + match ($def['bank']) {
             'ipip' => $this->ipip($scores, $a->getInstrument()),
@@ -127,7 +135,22 @@ final class ReportBuilder
             $bars[$t] = ['name' => EnneagramBank::TYPES[$t]['name'], 'score' => $s];
         }
 
-        return ['enneagram' => $scores + ['profile' => EnneagramBank::TYPES[$scores['type']], 'wingProfile' => EnneagramBank::TYPES[$scores['wing']], 'bars' => $bars]];
+        $t = $scores['type'];
+        $x = EnneagramProfiles::TYPES[$t];
+        [$grow, $stress] = EnneagramProfiles::ARROWS[$t];
+        $rows = [];
+        foreach ($scores['scores'] as $k => $v) {
+            $rows[] = ['label' => $k.' · '.EnneagramBank::TYPES[$k]['name'], 'value' => $v, 'color' => EnneagramProfiles::CENTERS[EnneagramProfiles::centerOf($k)]['color'], 'strong' => $k === $t];
+        }
+
+        return ['enneagram' => $scores + [
+            'profile' => EnneagramBank::TYPES[$t], 'wingProfile' => EnneagramBank::TYPES[$scores['wing']], 'bars' => $bars,
+            'x' => $x, 'center' => EnneagramProfiles::CENTERS[$x['center']], 'centerKey' => $x['center'],
+            'wingName' => EnneagramProfiles::WINGS[$t][$scores['wing']],
+            'grow' => ['n' => $grow, 'name' => EnneagramBank::TYPES[$grow]['name']], 'stress' => ['n' => $stress, 'name' => EnneagramBank::TYPES[$stress]['name']],
+            'centers' => EnneagramProfiles::CENTERS,
+            'charts' => ['circle' => ReportCharts::uri(ReportCharts::enneagram($t, $scores['wing'])), 'bars' => ReportCharts::uri(ReportCharts::hbars($rows))],
+        ]];
     }
 
     private function gifts(array $scores): array
@@ -137,6 +160,20 @@ final class ReportBuilder
             $bars[$g] = SpiritualGiftsBank::GIFTS[$g] + ['score' => $s];
         }
 
-        return ['gifts' => ['top' => array_map(fn ($g) => SpiritualGiftsBank::GIFTS[$g] + ['score' => $scores['scores'][$g]], $scores['top']), 'bars' => $bars]];
+        $rows = [];
+        foreach ($scores['scores'] as $g => $v) {
+            $rows[] = ['label' => SpiritualGiftsBank::GIFTS[$g]['name'], 'value' => $v, 'color' => GiftProfiles::FAMILIES[GiftProfiles::familyOf($g)]['color'], 'strong' => \in_array($g, $scores['top'], true)];
+        }
+        $families = [];
+        foreach (GiftProfiles::FAMILIES as $key => $f) {
+            $vals = array_map(fn ($g) => $scores['scores'][$g] ?? 0, $f['gifts']);
+            $families[$key] = $f + ['avg' => (int) round(array_sum($vals) / \count($vals))];
+        }
+        $top = array_map(fn ($g) => SpiritualGiftsBank::GIFTS[$g] + GiftProfiles::GIFTS[$g] + ['score' => $scores['scores'][$g], 'code' => $g,
+            'family' => GiftProfiles::FAMILIES[GiftProfiles::familyOf($g)]], $scores['top']);
+        uasort($families, fn ($a, $b) => $b['avg'] <=> $a['avg']);
+
+        return ['gifts' => ['top' => $top, 'bars' => $bars, 'families' => $families, 'mainFamily' => array_key_first($families),
+            'charts' => ['bars' => ReportCharts::uri(ReportCharts::hbars($rows, 150))]]];
     }
 }

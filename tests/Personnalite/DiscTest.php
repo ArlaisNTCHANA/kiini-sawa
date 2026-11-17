@@ -133,7 +133,7 @@ class DiscTest extends WebTestCase
             $natural[array_key_first(array_diff_key($natural, array_flip(str_split($code))))] += 100 - array_sum($natural);
             $scores = ['natural' => $natural, 'adapted' => $natural, 'most' => [], 'least' => [], 'primary' => $code[0], 'secondary' => $code[1] ?? null,
                 'adaptedPrimary' => $code[0], 'gap' => 0, 'shifts' => array_fill_keys(DiscBank::LETTERS, 0)];
-            $html = $twig->render('personnalite/assessment/disc/report_pdf.html.twig', ['instrument' => Instruments::CATALOG['disc'], 'slug' => 'disc',
+            $html = $twig->render('personnalite/assessment/report/pdf.html.twig', ['body' => 'personnalite/assessment/disc/_report.html.twig', 'instrument' => Instruments::CATALOG['disc'], 'slug' => 'disc',
                 'assessment' => ['takenAt' => new \DateTime()], 'quality' => [], 'name' => 'Test'] + $builder->disc($scores));
             $this->assertStringContainsString(htmlspecialchars(DiscCombos::PROFILES[$code]['name'], \ENT_QUOTES), $html, $code);
             $this->assertStringContainsString('Dans la même famille', $html, "Figures de la même famille pour $code");

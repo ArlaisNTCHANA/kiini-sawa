@@ -1,0 +1,130 @@
+{# Rapport Dons spirituels (écran et PDF). Variables : gifts, assessment, quality, pdf, name. #}
+{% set gf = gifts %}
+{% set main = gf.families[gf.mainFamily] %}
+{% set first = gf.top[0] %}
+{% set pc = first.family.color %}
+{% set serif = pdf ? "'DejaVu Serif', serif" : 'var(--font-serif)' %}
+{% include 'personnalite/assessment/report/_styles.html.twig' with {pcLight: first.family.light, pcDark: first.family.dark} %}
+
+<div class="dr">
+{% include 'personnalite/assessment/report/_cover.html.twig' with {
+    title: 'Dons spirituels', subtitle: 'Discerner les dons que Dieu vous a confiés pour servir',
+    badges: gf.top|map(g => {t: g.name|first, color: g.family.color}),
+    headline: gf.top|map(g => g.name)|join(' · '), tagline: 'Vos trois dons les plus marqués', keywords: [main.name],
+} %}
+
+{# ═══ Lire ce rapport ═══ #}
+<div class="dr-page">
+    <div class="dr-kicker">Avant de commencer</div>
+    <h2>Comment lire ce rapport</h2>
+    <p class="dr-lead">« Comme de bons dispensateurs des diverses grâces de Dieu, que chacun de vous mette au service des autres le don qu'il a reçu » (1 Pierre 4.10). Ce rapport vous aide à repérer les dons qui semblent les plus présents dans votre vie, pour les confirmer et les mettre au service.</p>
+    <table class="dr-grid"><tr>
+        {% for key, f in gf.families %}
+            <td><div class="dr-tile" style="background: {{ f.light }}; border-color: {{ f.light }}; min-height: 150px;">
+                <div style="font-weight: bold; color: {{ f.dark }};">{{ f.name }}</div>
+                <p class="dr-small" style="margin: 4px 0; color: {{ f.dark }};">{{ f.desc }}</p>
+                <div style="font-size: {{ pdf ? '16pt' : '1.5rem' }}; font-weight: bold; color: {{ f.color }};">{{ f.avg }}<span style="font-size: {{ pdf ? '8pt' : '.75rem' }};"> /100 en moyenne</span></div>
+            </div></td>
+        {% endfor %}
+    </tr></table>
+    <div class="dr-tile" style="margin-top: 8px; background: #FFFBEB; border-color: #FDE68A;">
+        <h3 style="color: #92400E;">Un outil de discernement, pas un verdict</h3>
+        <p class="dr-small" style="color: #92400E; margin: 0;">Un don ne se découvre pas seulement par un questionnaire : il se confirme en servant, par le fruit que cela porte, et par le regard de votre communauté et de vos responsables. Dieu peut aussi vous équiper pour un service qui ne figure pas parmi vos dons les plus marqués. Lisez ce rapport dans la prière, et parlez-en.</p>
+    </div>
+</div>
+
+{# ═══ Une page par don principal ═══ #}
+{% for g in gf.top %}
+<div class="dr-page">
+    <div class="dr-kicker" style="color: {{ g.family.color }};">Votre don n° {{ loop.index }} · {{ g.family.name }}</div>
+    <h2>{{ g.name }}</h2>
+    <p class="dr-lead">{{ g.desc }} <span class="dr-small">({{ g.ref }})</span></p>
+    <table class="dr-grid"><tr>
+        <td style="width: 62%;"><p style="font-size: {{ pdf ? '10.5pt' : '1.05rem' }}; margin: 0;">{{ g.portrait }}</p></td>
+        <td><div class="dr-tile" style="background: {{ g.family.light }}; border-color: {{ g.family.light }}; text-align: center;">
+            <div class="dr-label" style="color: {{ g.family.dark }};">Votre score</div>
+            <div style="font-size: {{ pdf ? '30pt' : '2.6rem' }}; font-weight: bold; color: {{ g.family.color }}; line-height: 1.1;">{{ g.score|round }}</div>
+            <div class="dr-small" style="color: {{ g.family.dark }};">sur 100</div>
+        </div></td>
+    </tr></table>
+    <table class="dr-grid" style="margin-top: 6px;"><tr>
+        <td><div class="dr-tile" style="background: #F0FDF4; border-color: #BBF7D0;"><div class="dr-label" style="color: #166534;">✓ Les signes de ce don</div><ul>{% for s in g.signs %}<li>{{ s }}</li>{% endfor %}</ul></div></td>
+        <td><div class="dr-tile" style="background: #FFF7ED; border-color: #FED7AA;"><div class="dr-label" style="color: #9A3412;">▲ Les pièges à éviter</div><ul>{% for s in g.dangers %}<li>{{ s }}</li>{% endfor %}</ul></div></td>
+    </tr><tr>
+        <td><div class="dr-tile"><div class="dr-label">✦ Dans l'Église</div><p style="margin: 0;">{{ g.church }}</p></div></td>
+        <td><div class="dr-tile"><div class="dr-label">◆ Au quotidien</div><p style="margin: 0;">{{ g.daily }}</p></div></td>
+    </tr></table>
+    <h3 style="margin-top: 10px;">Dans les Écritures</h3>
+    <table class="dr-grid"><tr>
+        {% for f in g.figures %}
+            <td><div class="dr-tile" style="border-left: 6px solid {{ g.family.color }}; border-radius: 0 14px 14px 0;">
+                <div style="font-family: {{ serif }}; font-weight: bold; font-size: {{ pdf ? '12pt' : '1.1rem' }};">{{ f[0] }}</div>
+                <div class="dr-small" style="margin-bottom: 4px;">{{ f[1] }}</div>
+                <p class="dr-small" style="margin: 0; color: #334155;">{{ f[2] }}</p>
+            </div></td>
+        {% endfor %}
+    </tr></table>
+    <table class="dr-table" style="margin-top: 6px;">
+        <tr><td style="width: 30%;"><strong>À lire et méditer</strong></td><td>{{ g.read }}</td></tr>
+        <tr><td><strong>Un premier pas</strong></td><td>{{ g.action }}</td></tr>
+    </table>
+</div>
+{% endfor %}
+
+{# ═══ Les 15 dons ═══ #}
+<div class="dr-page">
+    <div class="dr-kicker">Vue d'ensemble</div>
+    <h2>Vos quinze dons</h2>
+    <p class="dr-lead">Les couleurs indiquent les trois familles de dons. Vos trois dons principaux sont en couleur pleine.</p>
+    <img class="dr-img" src="{{ gf.charts.bars }}" alt="Scores des quinze dons spirituels">
+    <table class="dr-grid" style="margin-top: 10px;"><tr>
+        {% for key, f in gf.families %}<td><div class="dr-tile" style="background: {{ f.light }}; border-color: {{ f.light }};"><span style="display: inline-block; width: 10px; height: 10px; border-radius: 50%; background: {{ f.color }};"></span> <strong style="color: {{ f.dark }};">{{ f.name }}</strong></div></td>{% endfor %}
+    </tr></table>
+    <div class="dr-tile" style="margin-top: 6px;">
+        <div class="dr-label">Votre combinaison</div>
+        <p style="margin: 0;">Vos dons ne fonctionnent pas séparément : {{ gf.top[0].name|lower }}, {{ gf.top[1].name|lower }} et {{ gf.top[2].name|lower }} se complètent. Cherchez un service où ils peuvent s'exprimer ensemble ; c'est souvent là que vous porterez le plus de fruit, avec joie.</p>
+    </div>
+</div>
+
+{# ═══ Mettre ses dons au service ═══ #}
+<div class="dr-page">
+    <div class="dr-kicker">Passer à l'action</div>
+    <h2>Mettre vos dons au service</h2>
+    <p class="dr-lead">Un don grandit quand on l'exerce. Voici un chemin simple pour les trois prochains mois.</p>
+    <table class="dr-grid"><tr>
+        {% for step in [
+            ['Discerner', 'Relisez ce rapport dans la prière. Demandez à deux personnes qui vous connaissent si elles reconnaissent ces dons en vous.'],
+            ['Essayer', 'Engagez-vous dans un service lié à l\'un de vos dons pendant trois mois, avec un responsable.'],
+            ['Confirmer', 'Faites le point : quel fruit ? quelle joie ? quels retours ? Ajustez avec votre responsable.'],
+        ] %}
+            <td><div class="dr-tile" style="text-align: center; min-height: 150px;"><div style="font-size: {{ pdf ? '20pt' : '1.8rem' }}; font-weight: bold; color: {{ pc }}; line-height: 1;">{{ loop.index }}</div><div style="font-weight: bold; margin: 6px 0 4px;">{{ step[0] }}</div><p class="dr-small" style="margin: 0; color: #334155;">{{ step[1] }}</p></div></td>
+        {% endfor %}
+    </tr></table>
+    <h3 style="margin-top: 14px;">Votre plan d'action</h3>
+    <table class="dr-table">{% for g in gf.top %}<tr><td style="width: 34px; font-size: {{ pdf ? '13pt' : '1.2rem' }}; color: {{ g.family.color }};">☐</td><td><strong>{{ g.name }} :</strong> {{ g.action }}</td></tr>{% endfor %}</table>
+    <p class="dr-small" style="margin-top: 10px;">Ces dons nourrissent votre Plan de Transmission (Donner) et votre Plan de Vie : notez-y le service que vous choisissez.</p>
+</div>
+
+{# ═══ Conclusion ═══ #}
+<div class="dr-page">
+    <div style="border-radius: 22px; background: {{ first.family.light }}; padding: {{ pdf ? '10mm' : '28px' }};">
+        <div class="dr-kicker" style="color: {{ first.family.dark }};">En résumé</div>
+        <h2 style="color: {{ first.family.dark }};">{{ gf.top|map(g => g.name)|join(' · ') }}</h2>
+        <p style="color: {{ first.family.dark }};">Votre famille de dons la plus marquée : <strong>{{ main.name|lower }}</strong>. {{ main.desc }}</p>
+        <table class="dr-grid"><tr>
+            {% for g in gf.top %}<td><div class="dr-tile" style="background: #fff; border-color: #fff;"><div class="dr-label">{{ g.name }}</div><p class="dr-small" style="margin: 0; color: #334155;">{{ g.desc }}</p></div></td>{% endfor %}
+        </tr></table>
+    </div>
+    <div class="dr-quote" style="margin-top: 16px;">« Il y a diversité de dons, mais le même Esprit ; diversité de ministères, mais le même Seigneur. »<div style="font-style: normal; font-weight: bold; margin-top: 6px; font-size: {{ pdf ? '9pt' : '.9rem' }};">1 Corinthiens 12.4–5</div></div>
+    <p style="margin-top: 14px;">Vos dons ne sont ni une récompense ni un titre : ils vous sont confiés pour le bien des autres. Exercez-les avec humilité, dans l'amour, et laissez votre communauté les confirmer. C'est ainsi que le corps grandit.</p>
+    <p class="dr-small" style="text-align: right; margin-top: 18px;">KIINI SAWA · Bâtir sa vie avec Dieu</p>
+</div>
+
+{% include 'personnalite/assessment/report/_warnings.html.twig' with {
+    about: 'Le questionnaire des dons spirituels de KIINI SAWA (60 affirmations originales, 15 dons tirés des listes bibliques) est un outil de discernement. Ce n\'est pas un instrument scientifique.',
+    variable: 'en particulier au fil de votre expérience du service',
+    extra: ['Un discernement communautaire.', 'Un don se confirme dans le service, par le fruit qu\'il porte et par le regard de la communauté et de ses responsables. Ce rapport ne confère aucun titre, aucune fonction ni aucune autorité dans une Église.'],
+    marks: 'Les textes et le questionnaire sont propres à KIINI SAWA, sans affiliation avec d\'autres inventaires de dons spirituels.',
+    bible: true,
+} %}
+</div>

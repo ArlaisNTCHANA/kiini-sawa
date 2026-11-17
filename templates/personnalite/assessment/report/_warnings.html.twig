@@ -1,0 +1,21 @@
+{#
+  Conditions d'utilisation communes à tous les rapports.
+  Variables : pdf, about (origine de l'outil), variable (ce qui varie le plus), marks (marques), bible (bool), extra (point propre au test, facultatif).
+#}
+<div class="dr-page" id="avertissement">
+    <div class="dr-kicker" style="color: #64748B;">À lire</div>
+    <h2>Bon usage de ce rapport</h2>
+    <div class="dr-small" style="color: #334155; font-size: {{ pdf ? '8.4pt' : '.86rem' }};">
+        <p><strong>1. Un outil de connaissance de soi.</strong> {{ about }} Ce rapport n'est ni un examen médical, psychologique ou psychiatrique, ni un test d'aptitude, et il ne pose aucun diagnostic. Il décrit des tendances, telles qu'elles ressortent de vos réponses.</p>
+        <p><strong>2. Des résultats indicatifs et évolutifs.</strong> Vos résultats dépendent de vos réponses, de votre état du moment et de votre contexte. Ils peuvent varier d'une passation à l'autre{{ variable|default('') ? ', ' ~ variable : '' }}. Ils ne mesurent ni l'intelligence, ni les compétences, ni la valeur d'une personne, ni sa maturité spirituelle.</p>
+        <p><strong>3. Pas de décision importante sur la seule base de ce rapport.</strong> Ne prenez aucune décision importante ou difficilement réversible (orientation ou changement professionnel, démission, choix ou rupture d'une relation, mariage ou séparation, engagement financier, décision médicale, responsabilité dans une Église…) sur la seule base de ce rapport. Croisez-le avec votre expérience, le regard de personnes de confiance et, si nécessaire, l'avis d'un professionnel qualifié.</p>
+        <p><strong>4. Usage strictement personnel.</strong> Ce rapport ne doit pas servir à recruter, sélectionner, évaluer, promouvoir, sanctionner, écarter ou étiqueter une autre personne, ni à fonder une quelconque discrimination. Si vous le partagez, faites-le librement et avec discernement ; ne demandez jamais à quelqu'un de vous communiquer le sien sans son libre consentement.</p>
+        <p><strong>5. Il ne remplace pas un accompagnement.</strong> Ce rapport ne remplace pas l'avis d'un médecin, d'un psychologue, d'un conseiller conjugal ou d'un accompagnement pastoral. Si vous traversez une période de détresse, de souffrance psychique ou d'idées noires, contactez sans attendre un professionnel de santé ou les services d'urgence (15 ou 112 en France, ou le numéro d'urgence de votre pays).</p>
+        {% if extra|default(false) %}<p><strong>6. {{ extra[0] }}</strong> {{ extra[1] }}</p>{% endif %}
+        {% if bible|default(false) %}<p><strong>{{ extra|default(false) ? 7 : 6 }}. Les références bibliques.</strong> Les rapprochements avec des personnages bibliques sont des illustrations pédagogiques. Ils ne prétendent pas décrire la personnalité réelle de ces personnages ni constituer un enseignement théologique.</p>{% endif %}
+        {% set n = 6 + (extra|default(false) ? 1 : 0) + (bible|default(false) ? 1 : 0) %}
+        <p><strong>{{ n }}. Responsabilité.</strong> Vous restez seul responsable de l'usage que vous faites de ce rapport et des décisions que vous prenez. Dans les limites permises par la loi, KIINI SAWA ne saurait être tenu responsable des conséquences d'une décision fondée sur ce rapport ou de son utilisation par un tiers.</p>
+        <p><strong>{{ n + 1 }}. Vos données.</strong> Vos réponses et votre rapport sont privés : ils ne sont visibles que par vous, sauf si vous choisissez de partager votre résultat principal ou vos tests avec votre conjoint dans l'espace couple. Vous pouvez supprimer vos données à tout moment ; voir la politique de confidentialité.</p>
+        <p><strong>{{ n + 2 }}. Marques.</strong> {{ marks }}</p>
+    </div>
+</div>

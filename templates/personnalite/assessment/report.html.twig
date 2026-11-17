@@ -19,8 +19,8 @@
         <a href="{{ path('app_assessment_take', {slug: slug}) }}" style="padding: .65rem 1.1rem; border-radius: var(--r-md); background: var(--bg-alt); color: var(--fg); font-weight: 600; text-decoration: none;">Repasser le test</a>
     </div>
     {{ book_panel('personnalite') }}
-    {% if slug == 'disc' %}
-        {% include 'personnalite/assessment/disc/_report.html.twig' with {pdf: false, name: app.user.displayName} %}
+    {% if template %}
+        {% include template with {pdf: false, name: app.user.displayName} %}
     {% else %}
         {% include 'personnalite/assessment/_report_body.html.twig' %}
     {% endif %}

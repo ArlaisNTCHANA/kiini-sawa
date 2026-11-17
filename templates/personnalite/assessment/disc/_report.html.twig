@@ -10,65 +10,16 @@
 {% set darks = {D: '#991B1B', I: '#854D0E', S: '#166534', C: '#1E40AF'} %}
 {% set codeLetters = c.code|split('') %}
 
-<style>
-    .dr { color: #1E293B; line-height: 1.55; }
-    .dr * { box-sizing: border-box; }
-    .dr h2 { font-family: {{ pdf ? "'DejaVu Serif', serif" : 'var(--font-serif)' }}; font-size: {{ pdf ? '17pt' : '1.55rem' }}; color: #0F172A; margin: 0 0 4px; font-weight: bold; }
-    .dr h3 { font-size: {{ pdf ? '11pt' : '1.02rem' }}; margin: 0 0 6px; color: #0F172A; }
-    .dr p { margin: 0 0 8px; }
-    .dr-kicker { font-size: {{ pdf ? '7.5pt' : '.72rem' }}; letter-spacing: 2px; text-transform: uppercase; font-weight: bold; color: {{ pc }}; margin-bottom: 4px; }
-    .dr-lead { color: #475569; font-size: {{ pdf ? '9.5pt' : '.95rem' }}; margin-bottom: 14px !important; }
-    .dr-page { {{ pdf ? 'page-break-before: always;' : 'background: var(--card-bg, #fff); border-radius: 20px; box-shadow: var(--card-shadow); padding: 28px; margin-bottom: 22px;' }} }
-    .dr-grid { width: 100%; border-collapse: separate; border-spacing: 10px; margin: 0 -10px; table-layout: fixed; }
-    .dr-grid td { vertical-align: top; }
-    .dr-tile { border-radius: 14px; padding: 14px 16px; background: #F8FAFC; border: 1px solid #E2E8F0; }
-    .dr-tile ul { margin: 0; padding-left: 16px; }
-    .dr-tile li { margin-bottom: 4px; }
-    .dr-label { font-size: {{ pdf ? '7.5pt' : '.7rem' }}; text-transform: uppercase; letter-spacing: 1.5px; font-weight: bold; color: #64748B; margin-bottom: 6px; }
-    .dr-chip { display: inline-block; padding: 4px 12px; border-radius: 99px; font-weight: bold; font-size: {{ pdf ? '9pt' : '.85rem' }}; margin: 0 4px 4px 0; }
-    .dr-quote { border-radius: 14px; padding: 16px 20px; background: {{ lights[disc.primary] }}; color: {{ darks[disc.primary] }}; font-family: {{ pdf ? "'DejaVu Serif', serif" : 'var(--font-serif)' }}; font-style: italic; }
-    .dr-img { width: 100%; height: auto; display: block; }
-    .dr-small { font-size: {{ pdf ? '8pt' : '.8rem' }}; color: #64748B; }
-    .dr-table { width: 100%; border-collapse: collapse; }
-    .dr-table td, .dr-table th { padding: 8px 10px; border-bottom: 1px solid #EEF2F6; vertical-align: top; text-align: left; font-size: {{ pdf ? '8.8pt' : '.88rem' }}; }
-    .dr-table th { font-size: {{ pdf ? '7.5pt' : '.7rem' }}; text-transform: uppercase; letter-spacing: 1px; color: #64748B; }
-    {% if not pdf %}
-    @media (max-width: 640px) {
-        .dr-grid, .dr-grid tbody, .dr-grid tr, .dr-grid td { display: block; width: 100% !important; }
-        .dr-grid { border-spacing: 0; margin: 0; }
-        .dr-grid td { margin-bottom: 10px; }
-        .dr-page { padding: 20px 16px; }
-        .dr-table-wrap { overflow-x: auto; }
-    }
-    {% endif %}
-</style>
+{% include 'personnalite/assessment/report/_styles.html.twig' with {pcLight: lights[disc.primary], pcDark: darks[disc.primary]} %}
 
 <div class="dr">
 
 {# ═══ Page de garde ═══════════════════════════════════════════════════ #}
-<div style="{{ pdf ? 'height: 222mm;' : 'margin-bottom: 22px;' }} border-radius: 24px; background: #0F172A; color: #fff; padding: {{ pdf ? '22mm 16mm' : '40px 28px' }}; position: relative;">
-    <div style="font-size: {{ pdf ? '9pt' : '.8rem' }}; letter-spacing: 4px; font-weight: bold; color: #5EEAD4;">KIINI SAWA</div>
-    <div style="margin-top: {{ pdf ? '30mm' : '36px' }}; font-size: {{ pdf ? '10pt' : '.85rem' }}; letter-spacing: 3px; text-transform: uppercase; color: #CBD5E1;">Rapport personnel</div>
-    <div style="font-family: {{ pdf ? "'DejaVu Serif', serif" : 'var(--font-serif)' }}; font-size: {{ pdf ? '34pt' : '2.6rem' }}; font-weight: bold; line-height: 1.1; margin: 6px 0 4px;">Profil DISC</div>
-    <div style="color: #CBD5E1; font-size: {{ pdf ? '11pt' : '1rem' }};">Profil naturel · profil adapté · relations</div>
-
-    <table style="margin-top: {{ pdf ? '24mm' : '32px' }}; border-collapse: separate; border-spacing: 10px 0;"><tr>
-        {% for l in codeLetters %}
-            <td style="width: {{ pdf ? '30mm' : '96px' }}; height: {{ pdf ? '30mm' : '96px' }}; border-radius: 50%; background: {{ disc.profiles[l].color }}; text-align: center; vertical-align: middle; font-size: {{ pdf ? '38pt' : '3rem' }}; font-weight: bold; color: #fff;">{{ l }}</td>
-        {% endfor %}
-    </tr></table>
-
-    <div style="margin-top: {{ pdf ? '10mm' : '22px' }}; font-family: {{ pdf ? "'DejaVu Serif', serif" : 'var(--font-serif)' }}; font-size: {{ pdf ? '24pt' : '2rem' }}; font-weight: bold;">{{ c.name }}</div>
-    <div style="color: #E2E8F0; font-size: {{ pdf ? '12pt' : '1.1rem' }}; margin-top: 4px;">{{ c.tagline }}</div>
-    <div style="margin-top: 14px;">
-        {% for k in c.keywords %}<span class="dr-chip" style="background: rgba(255,255,255,.12); color: #fff; border: 1px solid rgba(255,255,255,.25);">{{ k }}</span>{% endfor %}
-    </div>
-
-    <div style="{{ pdf ? 'position: absolute; bottom: 14mm; left: 16mm; right: 16mm;' : 'margin-top: 36px;' }} border-top: 1px solid rgba(255,255,255,.2); padding-top: 12px; color: #CBD5E1; font-size: {{ pdf ? '9pt' : '.85rem' }};">
-        <strong style="color: #fff;">{{ name }}</strong> · questionnaire passé le {{ assessment.takenAt|format_date(pattern: 'd MMMM y', locale: 'fr') }}<br>
-        Document personnel et confidentiel · outil de connaissance de soi, pas un diagnostic
-    </div>
-</div>
+{% include 'personnalite/assessment/report/_cover.html.twig' with {
+    title: 'Profil DISC', subtitle: 'Profil naturel · profil adapté · relations',
+    badges: codeLetters|map(l => {t: l, color: disc.profiles[l].color}),
+    headline: c.name, tagline: c.tagline, keywords: c.keywords,
+} %}
 
 {% if quality.warnings is defined and quality.warnings|length %}
     <div style="background: #FEF3C7; border: 1px solid #FDE68A; color: #92400E; border-radius: 12px; padding: 10px 14px; margin: {{ pdf ? '0 0 4mm' : '0 0 18px' }}; font-size: 13px;">
@@ -360,20 +311,11 @@
 </div>
 
 {# ═══ Conditions d'utilisation ════════════════════════════════════════ #}
-<div class="dr-page" id="avertissement">
-    <div class="dr-kicker" style="color: #64748B;">À lire</div>
-    <h2>Bon usage de ce rapport</h2>
-    <div class="dr-small" style="color: #334155; font-size: {{ pdf ? '8.4pt' : '.86rem' }};">
-        <p><strong>1. Un outil de connaissance de soi.</strong> Le DISC proposé par KIINI SAWA est issu du modèle de William Marston (1928). Le questionnaire et les textes sont propres à KIINI SAWA. Ce n'est ni un test psychologique standardisé, ni un examen médical, psychologique ou psychiatrique, et il ne pose aucun diagnostic. Il décrit des tendances de comportement, telles qu'elles ressortent de vos réponses.</p>
-        <p><strong>2. Des résultats indicatifs et évolutifs.</strong> Vos résultats dépendent de vos réponses, de votre état du moment et de votre contexte. Ils peuvent varier d'une passation à l'autre, en particulier le profil adapté. Ils ne mesurent ni l'intelligence, ni les compétences, ni la valeur d'une personne, ni sa maturité spirituelle.</p>
-        <p><strong>3. Pas de décision importante sur la seule base de ce rapport.</strong> Ne prenez aucune décision importante ou difficilement réversible (orientation ou changement professionnel, démission, choix ou rupture d'une relation, mariage ou séparation, engagement financier, décision médicale, responsabilité dans une Église…) sur la seule base de ce rapport. Croisez-le avec votre expérience, le regard de personnes de confiance et, si nécessaire, l'avis d'un professionnel qualifié.</p>
-        <p><strong>4. Usage strictement personnel.</strong> Ce rapport ne doit pas servir à recruter, sélectionner, évaluer, promouvoir, sanctionner, écarter ou étiqueter une autre personne, ni à fonder une quelconque discrimination. Si vous le partagez, faites-le librement et avec discernement ; ne demandez jamais à quelqu'un de vous communiquer le sien sans son libre consentement.</p>
-        <p><strong>5. Il ne remplace pas un accompagnement.</strong> Ce rapport ne remplace pas l'avis d'un médecin, d'un psychologue, d'un conseiller conjugal ou d'un accompagnement pastoral. Si vous traversez une période de détresse, de souffrance psychique ou d'idées noires, contactez sans attendre un professionnel de santé ou les services d'urgence (15 ou 112 en France, ou le numéro d'urgence de votre pays).</p>
-        <p><strong>6. Les références bibliques.</strong> Les rapprochements entre votre profil et des personnages bibliques sont des illustrations pédagogiques. Ils ne prétendent pas décrire la personnalité réelle de ces personnages ni constituer un enseignement théologique.</p>
-        <p><strong>7. Responsabilité.</strong> Vous restez seul responsable de l'usage que vous faites de ce rapport et des décisions que vous prenez. Dans les limites permises par la loi, KIINI SAWA ne saurait être tenu responsable des conséquences d'une décision fondée sur ce rapport ou de son utilisation par un tiers.</p>
-        <p><strong>8. Vos données.</strong> Vos réponses et votre rapport sont privés : ils ne sont visibles que par vous, sauf si vous choisissez de partager votre résultat principal ou vos tests avec votre conjoint dans l'espace couple. Vous pouvez supprimer vos données à tout moment ; voir la politique de confidentialité.</p>
-        <p><strong>9. Marques.</strong> DISC désigne ici le modèle public de William Marston. KIINI SAWA n'est affilié à aucun éditeur de tests commerciaux ; les marques citées appartiennent à leurs propriétaires.</p>
-    </div>
-</div>
+{% include 'personnalite/assessment/report/_warnings.html.twig' with {
+    about: 'Le DISC proposé par KIINI SAWA est issu du modèle de William Marston (1928). Le questionnaire et les textes sont propres à KIINI SAWA.',
+    variable: 'en particulier le profil adapté',
+    marks: 'DISC désigne ici le modèle public de William Marston. KIINI SAWA n\'est affilié à aucun éditeur de tests commerciaux ; les marques citées appartiennent à leurs propriétaires.',
+    bible: true,
+} %}
 
 </div>

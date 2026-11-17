@@ -93,7 +93,7 @@ class AssessmentController extends AbstractController
         $this->denyUnlessOwner($assessment);
         $data = $this->reports->build($assessment) + ['name' => $this->user()->getDisplayName()];
 
-        return new Response($pdf->render($this->renderView('disc' === $assessment->getInstrument() ? 'personnalite/assessment/disc/report_pdf.html.twig' : 'personnalite/assessment/report_pdf.html.twig', $data)), 200, [
+        return new Response($pdf->render($this->renderView($data['template'] ? 'personnalite/assessment/report/pdf.html.twig' : 'personnalite/assessment/report_pdf.html.twig', $data + ['body' => $data['template']])), 200, [
             'Content-Type' => 'application/pdf',
             'Content-Disposition' => HeaderUtils::makeDisposition(HeaderUtils::DISPOSITION_ATTACHMENT, 'kiini-sawa-'.$assessment->getInstrument().'-'.$assessment->getTakenAt()->format('Y-m-d').'.pdf'),
         ]);
