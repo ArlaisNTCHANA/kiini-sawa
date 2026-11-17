@@ -34,11 +34,12 @@ final class ReminderService
     /** @return array<string, int> nombre de rappels envoyés par type */
     public function sendAll(\DateTimeImmutable $today): array
     {
-        $sent = array_fill_keys(['défis', 'accueil', 'revue hebdomadaire', 'revue mensuelle', 'rituels', 'échéances', 'partenaires', 'fin d\'essai ou d\'abonnement'], 0);
+        $sent = array_fill_keys(['rituels du matin', 'défis', 'accueil', 'revue hebdomadaire', 'revue mensuelle', 'rituels', 'échéances', 'partenaires', 'fin d\'essai ou d\'abonnement'], 0);
         $users = $this->em->getRepository(User::class)->findBy(['isVerified' => true]);
         foreach ($users as $user) {
             $sent['accueil'] += (int) $this->onboarding->sendFor($user, $today);
             $sent['défis'] += $this->challengeDay($user, $today);
+            $sent['rituels du matin'] += (int) $this->dailyRituals($user, $today);
             $sent['revue hebdomadaire'] += (int) $this->weeklyReview($user, $today);
             $sent['revue mensuelle'] += (int) $this->monthlyReview($user, $today);
             $sent['rituels'] += (int) $this->habits($user, $today);
@@ -188,6 +189,19 @@ final class ReminderService
             : $this->notifier->notify($user, NotificationType::SUBSCRIPTION_ENDING, 'Votre abonnement PRO se termine dans 7 jours',
                 'Votre accès PRO se termine le '.$end->format('d/m/Y').'. Pour continuer sans interruption, renouvelez dès maintenant : les jours restants sont conservés.',
                 '/abonnement', 'fin '.$end->format('Y-m-d'));
+    }
+
+    /** Rappel du matin sur le téléphone : les rituels du jour (seulement si l'utilisateur a autorisé les notifications). */
+    public function dailyRituals(User $user, \DateTimeImmutable $today): bool
+    {
+        $count = $this->em->getRepository(\App\Rituels\Entity\Habit::class)->count(['user' => $user]);
+        if (0 === $count) {
+            return false;
+        }
+        $title = 'Vos rituels du jour 🌱';
+        $message = 1 === $count ? 'Un petit rituel vous attend aujourd\'hui. Un pas après l\'autre.' : $count.' rituels vous attendent aujourd\'hui. Commencez par le plus simple.';
+
+        return $this->notifier->notify($user, NotificationType::DAILY_RITUALS, $title, $message, '/dashboard', 'rituels '.$today->format('Y-m-d'));
     }
 
     /** Action du jour des défis en cours, chaque matin (une fois par jour et par défi). */

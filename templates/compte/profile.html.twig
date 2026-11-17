@@ -110,6 +110,7 @@
     <section class="p-card" id="notifications">
         <h2><i data-lucide="bell" style="width:20px;height:20px;"></i> Notifications et rappels</h2>
         <p class="p-sub">Des rappels doux pour garder le cap. Chaque email contient aussi un lien de désabonnement.</p>
+        {% include 'shared/_push_toggle.html.twig' %}
         <form method="post" action="{{ path('app_profile_notifications') }}">
             {% set toggles = [
                 ['enableInApp', prefs.enableInApp, 'Afficher les notifications dans l\'application', 'La cloche en haut de l\'écran'],

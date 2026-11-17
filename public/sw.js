@@ -3,7 +3,7 @@
  * - Pages : toujours depuis le réseau (données personnelles, jamais mises en cache) ; hors connexion : page « hors ligne ».
  * - Fichiers compilés (/assets/…, noms versionnés) et icônes : mis en cache pour un chargement rapide.
  */
-const VERSION = 'ks-v1';
+const VERSION = 'ks-v2';
 const OFFLINE_URL = '/hors-ligne';
 const PRECACHE = [OFFLINE_URL, '/icons/icon-192.png', '/icons/apple-touch-icon.png'];
 
@@ -43,4 +43,26 @@ self.addEventListener('fetch', (event) => {
       }))
     );
   }
+});
+
+// Notifications sur le téléphone
+self.addEventListener('push', (event) => {
+  let data = {};
+  try { data = event.data ? event.data.json() : {}; } catch (e) { data = { title: 'KIINI SAWA', body: event.data ? event.data.text() : '' }; }
+  event.waitUntil(self.registration.showNotification(data.title || 'KIINI SAWA', {
+    body: data.body || '',
+    icon: '/icons/icon-192.png',
+    badge: '/icons/favicon-32.png',
+    tag: data.tag || undefined,
+    data: { url: data.url || '/dashboard' },
+  }));
+});
+
+self.addEventListener('notificationclick', (event) => {
+  event.notification.close();
+  const url = new URL((event.notification.data && event.notification.data.url) || '/dashboard', self.location.origin).href;
+  event.waitUntil(self.clients.matchAll({ type: 'window', includeUncontrolled: true }).then((wins) => {
+    for (const w of wins) { if (w.url === url && 'focus' in w) return w.focus(); }
+    return self.clients.openWindow(url);
+  }));
 });

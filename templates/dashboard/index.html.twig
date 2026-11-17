@@ -233,6 +233,9 @@
         </div>
     </section>
 
+    {# Proposition d'activer les notifications (application installée uniquement) #}
+    {% include 'shared/_push_toggle.html.twig' with {compact: true} %}
+
     {# Défis collectifs en cours #}
     {% for ch in challenges %}
         <section class="ks-card ks-card--accent" style="margin-top: 1.5rem; display: flex; flex-wrap: wrap; gap: 1rem; align-items: center; justify-content: space-between;">

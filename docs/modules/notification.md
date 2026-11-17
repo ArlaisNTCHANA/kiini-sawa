@@ -60,3 +60,17 @@ php bin/console messenger:consume async --time-limit=3600
 Type `NotificationType::ONBOARDING` : email seulement (pas dans le centre de notifications), préférence
 « conseils de démarrage » (`notify_onboarding`), lien de désabonnement en un clic. Clé anti-doublon « accueil J<n> ».
 Gabarits : `templates/notification/email/onboarding/`. Envoi quotidien via `app:reminders:send` (tâche planifiée).
+
+
+## Notifications sur le téléphone (17/11/2026)
+
+Web Push (`minishlink/web-push`), clés VAPID dans `.env.prod.local` (`VAPID_PUBLIC_KEY`, `VAPID_PRIVATE_KEY`, `VAPID_SUBJECT`).
+Sans clés, rien n'est envoyé et le bouton n'apparaît pas.
+
+- Activation par appareil : profil › Notifications (« Activer sur ce téléphone ») et bannière sur l'accueil dans l'application
+  installée. Une notification de test part à l'activation. Sur iPhone : seulement dans l'application installée (iOS 16.4+).
+- `PushSubscription` (un enregistrement par appareil), `PushSender` (envoi, suppression des abonnements expirés).
+- `Notifier` envoie aussi sur le téléphone les types `isPushable()` : revues, rituels, échéances, défis, partenaires,
+  parrainage, feedback, fin d'essai et d'abonnement, paiement validé.
+- `DAILY_RITUALS` : rappel du matin « Vos rituels du jour » (tâche planifiée), téléphone uniquement, préférence « rituels ».
+- Service worker : événements `push` et `notificationclick` (`public/sw.js`).

@@ -19,6 +19,30 @@ use Symfony\Component\Routing\Attribute\Route;
  */
 class NotificationController extends AbstractController
 {
+    /** Autorisation des notifications sur cet appareil (appelé par le navigateur, en JSON). */
+    #[Route('/notifications/appareil', name: 'app_push_subscribe', methods: ['POST'])]
+    public function pushSubscribe(Request $request, \App\Notification\Service\PushSender $push): \Symfony\Component\HttpFoundation\JsonResponse
+    {
+        $user = $this->getUser();
+        $data = json_decode($request->getContent(), true);
+        $endpoint = (string) ($data['endpoint'] ?? '');
+        $p256dh = (string) ($data['keys']['p256dh'] ?? '');
+        $auth = (string) ($data['keys']['auth'] ?? '');
+        if (!$user instanceof \App\Compte\Entity\User || !str_starts_with($endpoint, 'https://') || \strlen($endpoint) > 2000 || '' === $p256dh || '' === $auth) {
+            return new \Symfony\Component\HttpFoundation\JsonResponse(['ok' => false], 400);
+        }
+        if ('remove' === ($data['action'] ?? null)) {
+            $push->unsubscribe($user, $endpoint);
+        } else {
+            $push->subscribe($user, $endpoint, mb_substr($p256dh, 0, 255), mb_substr($auth, 0, 255), $request->headers->get('User-Agent'));
+            if (true === ($data['test'] ?? false)) {
+                $push->send($user, 'Notifications activées ✓', 'Vous recevrez ici vos rappels de rituels, votre revue du dimanche et l\'action du jour de vos défis.', '/dashboard', 'bienvenue');
+            }
+        }
+
+        return new \Symfony\Component\HttpFoundation\JsonResponse(['ok' => true]);
+    }
+
     #[Route('/notifications', name: 'app_notifications', methods: ['GET'])]
     public function index(NotificationRepository $notifications): Response
     {

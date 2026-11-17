@@ -29,6 +29,8 @@ enum NotificationType: string
     case CHALLENGE_DAY = 'CHALLENGE_DAY';
     // Parrainage : un ami parrainé a rejoint KIINI SAWA (message de service : un mois PRO offert)
     case REFERRAL_REWARD = 'REFERRAL_REWARD';
+    // Rappel du matin « vos rituels du jour » : notification sur le téléphone uniquement
+    case DAILY_RITUALS = 'DAILY_RITUALS';
 
     /** Icône Lucide affichée dans le centre de notifications. */
     public function icon(): string
@@ -46,7 +48,16 @@ enum NotificationType: string
             self::ONBOARDING => 'sparkles',
             self::CHALLENGE_DAY => 'trophy',
             self::REFERRAL_REWARD => 'gift',
+            self::DAILY_RITUALS => 'sun',
         };
+    }
+
+    /** Types aussi envoyés sur le téléphone (si l'utilisateur l'a autorisé sur au moins un appareil). */
+    public function isPushable(): bool
+    {
+        return \in_array($this, [self::WEEKLY_REVIEW_REMINDER, self::MONTHLY_REVIEW_REMINDER, self::HABIT_REMINDER, self::GOAL_DEADLINE,
+            self::CHALLENGE_DAY, self::DAILY_RITUALS, self::REFERRAL_REWARD, self::FEEDBACK_RECEIVED, self::CONNECTION_REQUEST,
+            self::CONNECTION_ACCEPTED, self::TRIAL_ENDING, self::SUBSCRIPTION_ENDING, self::PAYMENT_VALIDATED], true);
     }
 
     /** Messages de service (paiement, fin d'essai) : envoyés quelles que soient les préférences. */

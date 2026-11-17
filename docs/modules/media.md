@@ -30,3 +30,11 @@ Tests : `tests/Media/SignupOriginTest.php`.
 - Les cadeaux (montant 0) ne comptent pas comme « payants » dans Provenance des inscrits.
 
 Tests : `tests/Media/ReferralTest.php`.
+
+
+## Rétention (17/11/2026)
+
+Admin › Croissance › Rétention (`/admin/retention`, `Service/RetentionReport`) : membres actifs sur 7 et 30 jours ;
+part des inscrits revenus au moins une fois 7, 30 et 90 jours après l'inscription (dernière activité ≥ inscription + N jours),
+par semaine d'inscription (12 semaines) et par canal (12 mois). Comptes vérifiés, administrateurs exclus.
+L'activité est la date de dernière visite (`user.last_active_at`, mise à jour au plus une fois par heure).

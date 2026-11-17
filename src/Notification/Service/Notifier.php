@@ -31,6 +31,7 @@ final class Notifier
         private readonly EntityManagerInterface $em,
         private readonly NotificationRepository $notifications,
         private readonly NotificationMailer $mailer,
+        private readonly PushSender $push,
     ) {
     }
 
@@ -60,8 +61,14 @@ final class Notifier
                 $inApp = false;
                 $byEmail = true;
             }
+            // Rituels du matin : seulement sur le téléphone
+            if (NotificationType::DAILY_RITUALS === $type) {
+                $inApp = false;
+                $byEmail = false;
+            }
         }
-        if (!$inApp && !$byEmail) {
+        $byPush = $type->isPushable() && $this->push->hasDevice($user);
+        if (!$inApp && !$byEmail && !$byPush) {
             return false;
         }
 
@@ -73,6 +80,9 @@ final class Notifier
 
         if ($byEmail) {
             $this->mailer->send($user, $type, $title, $message, $actionUrl, $email['template'] ?? null, $email['context'] ?? []);
+        }
+        if ($byPush) {
+            $this->push->send($user, $title, $title === $message ? '' : $message, $actionUrl, $type->value.($key ? '-'.$key : ''));
         }
 
         return true;
@@ -105,6 +115,7 @@ final class Notifier
             NotificationType::GOAL_DEADLINE => $p->isNotifyGoalDeadline(),
             NotificationType::PARTNER_INACTIVE => $p->isNotifyPartnerInactive(),
             NotificationType::ONBOARDING => $p->isNotifyOnboarding(),
+            NotificationType::DAILY_RITUALS => $p->isNotifyHabitReminder(),
             default => true,
         };
     }

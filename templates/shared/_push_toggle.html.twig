@@ -1,0 +1,93 @@
+{#
+    Notifications sur ce téléphone (Web Push). Paramètre : compact (bool) pour la bannière de l'accueil.
+    Sur iPhone, les notifications ne marchent que dans l'application installée (écran d'accueil).
+#}
+{% set pushKey = push_public_key() %}
+{% if pushKey %}
+<div x-data="ksPush('{{ pushKey }}')" x-init="init()" x-cloak {% if compact|default(false) %}x-show="ready && showBanner"{% endif %}>
+    {% if compact|default(false) %}
+        <section class="ks-card" style="margin-top: 1.5rem; display: flex; gap: 1rem; align-items: center; flex-wrap: wrap; justify-content: space-between;">
+            <div style="flex: 1; min-width: 220px;">
+                <p style="font-weight: 700; color: var(--fg);">🔔 Recevoir vos rappels sur ce téléphone</p>
+                <p style="color: var(--fg-muted); font-size: .9rem;">Vos rituels du matin, votre revue du dimanche et l'action du jour de vos défis.</p>
+            </div>
+            <div style="display: flex; gap: .5rem;">
+                <button type="button" class="ks-btn ks-btn--primary" @click="enable()" :disabled="busy">Activer</button>
+                <button type="button" class="ks-btn ks-btn--ghost" @click="dismiss()">Plus tard</button>
+            </div>
+        </section>
+    {% else %}
+        <div class="ks-card ks-card--flat" style="margin-bottom: 1rem;">
+            <p style="font-weight: 700; color: var(--fg); margin-bottom: .25rem;">🔔 Notifications sur ce téléphone</p>
+            <template x-if="!supported && iosBrowser"><p class="p-hint">Sur iPhone, installez d'abord l'application sur votre écran d'accueil (<a href="{{ path('app_install') }}" style="color: var(--primary);">voir comment</a>), puis ouvrez-la depuis son icône pour activer les notifications.</p></template>
+            <template x-if="!supported && !iosBrowser"><p class="p-hint">Ce navigateur ne permet pas les notifications. Essayez avec Chrome, ou installez l'application.</p></template>
+            <template x-if="supported && permission === 'denied'"><p class="p-hint">Les notifications sont bloquées pour KIINI SAWA. Autorisez-les dans les réglages du téléphone ou du navigateur, puis revenez ici.</p></template>
+            <template x-if="supported && permission !== 'denied'">
+                <div>
+                    <p class="p-hint" style="margin-bottom: .6rem;" x-text="subscribed ? 'Activées sur cet appareil : rituels du matin, revue du dimanche, défis, partenaires.' : 'Recevez vos rappels même quand l\'application est fermée.'"></p>
+                    <button type="button" class="ks-btn ks-btn--primary ks-btn--sm" x-show="!subscribed" @click="enable()" :disabled="busy">Activer sur ce téléphone</button>
+                    <button type="button" class="ks-btn ks-btn--secondary ks-btn--sm" x-show="subscribed" @click="disable()" :disabled="busy">Désactiver sur cet appareil</button>
+                </div>
+            </template>
+            <p class="p-hint" x-show="message" x-text="message" style="margin-top: .5rem; color: var(--primary);"></p>
+        </div>
+    {% endif %}
+</div>
+<script>
+if (!window.ksPush) {
+    window.ksPush = function (key) {
+        return {
+            ready: false, supported: false, iosBrowser: false, permission: 'default', subscribed: false, busy: false, message: '', showBanner: false,
+            async init() {
+                const standalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
+                this.iosBrowser = /iphone|ipad|ipod/i.test(navigator.userAgent) && !standalone;
+                this.supported = 'serviceWorker' in navigator && 'PushManager' in window && 'Notification' in window;
+                if (this.supported) {
+                    this.permission = Notification.permission;
+                    try {
+                        const reg = await navigator.serviceWorker.ready;
+                        this.subscribed = !!(await reg.pushManager.getSubscription());
+                    } catch (e) {}
+                }
+                let dismissed = false;
+                try { dismissed = !!localStorage.getItem('ks-push-dismissed'); } catch (e) {}
+                // Bannière d'accueil : seulement dans l'application installée, tant que rien n'est décidé
+                this.showBanner = standalone && this.supported && this.permission === 'default' && !this.subscribed && !dismissed;
+                this.ready = true;
+            },
+            keyBytes() {
+                const pad = '='.repeat((4 - key.length % 4) % 4);
+                const raw = atob((key + pad).replace(/-/g, '+').replace(/_/g, '/'));
+                return Uint8Array.from([...raw].map(c => c.charCodeAt(0)));
+            },
+            async save(sub, extra) {
+                const body = Object.assign(sub.toJSON(), extra || {});
+                const r = await fetch('{{ path('app_push_subscribe') }}', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
+                return r.ok;
+            },
+            async enable() {
+                this.busy = true; this.message = '';
+                try {
+                    this.permission = await Notification.requestPermission();
+                    if (this.permission !== 'granted') { this.message = 'Notifications non autorisées.'; this.showBanner = false; return; }
+                    const reg = await navigator.serviceWorker.ready;
+                    const sub = (await reg.pushManager.getSubscription()) || await reg.pushManager.subscribe({ userVisibleOnly: true, applicationServerKey: this.keyBytes() });
+                    if (await this.save(sub, { test: true })) { this.subscribed = true; this.showBanner = false; this.message = 'C\'est activé : une notification de test vient de partir.'; }
+                } catch (e) { this.message = 'Activation impossible sur cet appareil.'; }
+                finally { this.busy = false; }
+            },
+            async disable() {
+                this.busy = true;
+                try {
+                    const reg = await navigator.serviceWorker.ready;
+                    const sub = await reg.pushManager.getSubscription();
+                    if (sub) { await this.save(sub, { action: 'remove' }); await sub.unsubscribe(); }
+                    this.subscribed = false; this.message = 'Désactivées sur cet appareil.';
+                } finally { this.busy = false; }
+            },
+            dismiss() { this.showBanner = false; try { localStorage.setItem('ks-push-dismissed', '1'); } catch (e) {} },
+        };
+    };
+}
+</script>
+{% endif %}
