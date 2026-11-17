@@ -429,6 +429,7 @@
                             <span class="ti-icon"><i data-lucide="{{ sec.icon }}"></i></span><span>{{ sec.label }}</span><i data-lucide="chevron-down" class="ti-chevron"></i>
                         </button>
                         <div class="nav-panel" x-show="open === '{{ key }}'" x-cloak x-transition.opacity.duration.150ms>
+                            {% if sec.desc is defined %}<p style="font-size: .74rem; color: var(--fg-muted); padding: .4rem .75rem .2rem; line-height: 1.4;">{{ sec.desc }}</p>{% endif %}
                             {% for it in sec.items %}
                                 {% set href = path(it[1]) %}
                                 <a href="{{ href }}" class="{{ cp == href or cp == href ~ '/' ? 'current' }}">
@@ -580,6 +581,7 @@
                         </div>
                         {% for key, sec in nav_sections() %}
                             <p class="ks-sheet__title">{{ sec.label }}</p>
+                            {% if sec.desc is defined %}<p style="font-size: .75rem; color: var(--fg-muted); margin: -.2rem .25rem .45rem;">{{ sec.desc }}</p>{% endif %}
                             <div class="ks-sheet__grid">
                                 {% set links = sec.items is empty ? [[sec.label, sec.route, sec.icon]] : sec.items %}
                                 {% for it in links %}

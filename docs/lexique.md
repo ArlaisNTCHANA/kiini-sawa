@@ -21,5 +21,21 @@ méthode) restent ceux du livre.
 | Test des 8 domaines de vie | **Roue de la vie** | Wheel of Life |
 | Accroche sous le logo | **Plan de Vie** | Espace de croissance |
 
+## Les 5 plans de la méthode (référence, 17/11/2026)
+
+Diapositive « Les 5 plans de la méthode KIINI » du fondateur. **Ordre, questions et icônes à respecter partout**
+(source unique : `PlanCatalog::PLANS`). Le livre (chapitre 9) décrit encore l'ancienne version à 3 axes.
+
+| Plan | Question | Contenu | Icône |
+|---|---|---|---|
+| Plan de Vie | Qui suis-je, où vais-je ? | Raison d'être, valeurs, vision, objectifs | boussole |
+| Plan de Croissance | Qui est-ce que je deviens ? | Caractère & Conviction, Relation & Réseau, valeurs d'alignement | pousse |
+| Plan de Développement | Que dois-je maîtriser ? | Compétences, formations, livres d'étude | clé et tournevis |
+| Plan d'Hygiène de Vie | Qu'est-ce qui me soutient ? | Sommeil, nutrition, sport, méditation, environnement | cœur-pouls |
+| Plan de Transmission | Que vais-je laisser ? | Legs, mentorat, service | main et cœur |
+
+Puis **le Système** qui relie les 5 plans au quotidien : carte stratégique, rituels (habitudes), revues — dans
+l'application, la rubrique « Mon quotidien ».
+
 Codes techniques : les catégories restent stockées en BE/DO/HAVE/GIVE ; l'affichage passe par le filtre Twig
 `categorie_objectif`.

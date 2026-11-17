@@ -11,6 +11,16 @@ Ne jamais afficher ni demander de mot de passe ; ne pas publier son nom (mention
 
 ---
 
+## 2026-11-17 · Les 5 plans : questions, ordre et icônes de la méthode
+
+- Référence fournie par le fondateur (diapositive « Les 5 plans de la méthode KIINI ») : une question par plan, ordre
+  Vie → Croissance → Développement → **Hygiène → Transmission**, puis « le Système » (carte, habitudes, revues).
+- `PlanCatalog::PLANS` porte désormais `question` et `desc` dans cet ordre (source unique) ; menu, vue d'ensemble
+  (cartes réordonnées, question en italique, icônes sprout / wrench / heart-pulse / hand-heart), en-tête de chaque plan
+  ouvert et du Plan de Vie. Hygiène : sous-titre « Le soutien » (et non plus « Le Système »).
+- « Mon quotidien » présenté comme le Système (description dans le panneau et le menu du téléphone).
+- Grille ajoutée à `docs/lexique.md` ; `NavigationTest` vérifie questions, contenus et ordre.
+
 ## 2026-11-17 · Correction : contenu du Plan de Croissance
 
 - **Erreur commise** : le menu décrivait la Croissance avec « compétences » (ancienne version à 3 axes du livre).

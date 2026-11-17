@@ -24,15 +24,15 @@ final class NavigationExtension extends AbstractExtension
             ['Feedback nourricier', 'app_feedback', 'message-circle-heart', 'Le regard bienveillant de vos proches'],
         ]],
         'plans' => ['label' => 'Mes plans', 'icon' => 'compass', 'match' => ['/plan-de-vie', '/mes-strategies', '/plan-de-croissance', '/plan-de-developpement', '/plan-de-transmission', '/plan-d-hygiene'], 'items' => [
-            // Descriptions : source unique PlanCatalog (le contenu de chaque plan a changé le 15/11/2026)
-            ['Plan de Vie', 'app_plan_de_vie', 'compass', PlanCatalog::PLANS['VIE']['desc']],
-            ['Plan de Croissance', 'app_plan_de_croissance', 'sprout', PlanCatalog::PLANS['CROISSANCE']['desc'], 'pro'],
-            ['Plan de Développement', 'app_plan_de_developpement', 'graduation-cap', PlanCatalog::PLANS['DEVELOPPEMENT']['desc'], 'pro'],
-            ['Plan de Transmission', 'app_plan_de_transmission', 'hand-heart', PlanCatalog::PLANS['TRANSMISSION']['desc'], 'pro'],
-            ['Plan d\'Hygiène de Vie', 'app_plan_d_hygiene', 'heart-pulse', PlanCatalog::PLANS['HYGIENE']['desc'], 'pro'],
+            // Question et contenu : source unique PlanCatalog ; ordre et icônes de la méthode
+            ['Plan de Vie', 'app_plan_de_vie', 'compass', PlanCatalog::PLANS['VIE']['question'].' '.PlanCatalog::PLANS['VIE']['desc']],
+            ['Plan de Croissance', 'app_plan_de_croissance', 'sprout', PlanCatalog::PLANS['CROISSANCE']['question'].' '.PlanCatalog::PLANS['CROISSANCE']['desc'], 'pro'],
+            ['Plan de Développement', 'app_plan_de_developpement', 'wrench', PlanCatalog::PLANS['DEVELOPPEMENT']['question'].' '.PlanCatalog::PLANS['DEVELOPPEMENT']['desc'], 'pro'],
+            ['Plan d\'Hygiène de Vie', 'app_plan_d_hygiene', 'heart-pulse', PlanCatalog::PLANS['HYGIENE']['question'].' '.PlanCatalog::PLANS['HYGIENE']['desc'], 'pro'],
+            ['Plan de Transmission', 'app_plan_de_transmission', 'hand-heart', PlanCatalog::PLANS['TRANSMISSION']['question'].' '.PlanCatalog::PLANS['TRANSMISSION']['desc'], 'pro'],
             ['Vue d\'ensemble de mes plans', 'app_strategies', 'layout-grid', 'Vos quatre plans côte à côte : Être, Faire, Donner'],
         ]],
-        'daily' => ['label' => 'Mon quotidien', 'icon' => 'calendar-check', 'match' => ['/mes-plans/rituels', '/planner', '/journal', '/bilan'], 'items' => [
+        'daily' => ['label' => 'Mon quotidien', 'icon' => 'calendar-check', 'desc' => 'Le système qui relie vos 5 plans au quotidien : rituels, agenda, journal, revues.', 'match' => ['/mes-plans/rituels', '/planner', '/journal', '/bilan'], 'items' => [
             ['Rituels', 'app_user_habits', 'activity', 'Les petites actions qui nourrissent vos objectifs'],
             ['Agenda', 'app_planner', 'calendar', 'Tâches, jalons et frise'],
             ['Journal', 'app_journal', 'notebook-pen', 'Pensées, prières, victoires'],

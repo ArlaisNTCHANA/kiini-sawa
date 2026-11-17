@@ -46,12 +46,18 @@ class NavigationTest extends WebTestCase
         $catalog = \App\PlanDeVie\Service\PlanCatalog::PLANS;
         $this->assertStringNotContainsStringIgnoringCase('compétence', $catalog['CROISSANCE']['desc']);
         $this->assertStringContainsStringIgnoringCase('compétence', $catalog['DEVELOPPEMENT']['desc']);
-        $byRoute = array_column($catalog, 'desc', 'route');
+        $byRoute = array_column($catalog, null, 'route');
+        $menuOrder = [];
         foreach (NavigationExtension::SECTIONS['plans']['items'] as $item) {
             if (isset($byRoute[$item[1]])) {
-                $this->assertSame($byRoute[$item[1]], $item[3], $item[0].' : même description que la vue d\'ensemble');
+                $plan = $byRoute[$item[1]];
+                $this->assertSame($plan['question'].' '.$plan['desc'], $item[3], $item[0].' : question et contenu du catalogue');
+                $menuOrder[] = $item[1];
             }
         }
+        // Ordre de la méthode : Vie, Croissance, Développement, Hygiène, Transmission
+        $this->assertSame(array_column($catalog, 'route'), $menuOrder);
+        $this->assertSame(['VIE', 'CROISSANCE', 'DEVELOPPEMENT', 'HYGIENE', 'TRANSMISSION'], array_keys($catalog));
     }
 
     public function testHeaderShowsSixSectionsAndLeanAccountMenu(): void

@@ -718,7 +718,7 @@
             </div>
             <h1 class="strat-title">Vue d'ensemble de mes plans</h1>
             <p class="strat-desc">
-                Vos quatre plans, au service de votre Plan de Vie : Croissance, Développement, Transmission et Hygiène de vie. C'est ici que vos objectifs de vie deviennent des actions concrètes.
+                Vos quatre plans, au service de votre Plan de Vie : Croissance, Développement, Hygiène de vie et Transmission. C'est ici que vos objectifs de vie deviennent des actions concrètes.
             </p>
         </header>
 
@@ -727,11 +727,12 @@
             <div @click="{% if 'CROISSANCE' in (lockedPlans ?? []) %}window.location.href = '{{ path('app_subscription', {fonction: 'croissance'}) }}'{% else %}activePlan = 'CROISSANCE'; activeTab = 'INTENTION'{% endif %}" class="plan-hub-card">
                 <div class="plan-card-decor bg-gradient-to-br from-amber-400 to-orange-500"></div>
                 <div class="plan-card-icon" style="background: var(--warning-soft); color: var(--warning);">
-                    <i data-lucide="zap" style="width: 22px; height: 22px;"></i>
+                    <i data-lucide="sprout" style="width: 22px; height: 22px;"></i>
                 </div>
                 <div>
                     <div class="plan-card-subtitle">L'Évolution (Être)</div>
                     <h2 class="plan-card-title">Croissance</h2>{% if 'CROISSANCE' in (lockedPlans ?? []) %}<span style="display:inline-block;margin-top:.25rem;font-size:.68rem;font-weight:800;letter-spacing:.06em;padding:.15rem .5rem;border-radius:999px;background:#FEF3C7;color:#92400E;">🔒 PRO</span>{% endif %}
+                    <p class="plan-card-desc" style="font-family: var(--font-serif); font-style: italic; color: var(--fg); margin-bottom: .3rem;">{{ constant('App\\PlanDeVie\\Service\\PlanCatalog::PLANS').CROISSANCE.question }}</p>
                     <p class="plan-card-desc">{{ constant('App\\PlanDeVie\\Service\\PlanCatalog::PLANS').CROISSANCE.desc }}</p>
                 </div>
                 <div class="plan-card-footer">
@@ -749,11 +750,12 @@
             <div @click="{% if 'DEVELOPPEMENT' in (lockedPlans ?? []) %}window.location.href = '{{ path('app_subscription', {fonction: 'developpement'}) }}'{% else %}activePlan = 'DEVELOPPEMENT'; activeTab = 'INTENTION'{% endif %}" class="plan-hub-card">
                 <div class="plan-card-decor bg-gradient-to-br from-blue-400 to-indigo-600"></div>
                 <div class="plan-card-icon" style="background: var(--info-soft); color: var(--info);">
-                    <i data-lucide="graduation-cap" style="width: 22px; height: 22px;"></i>
+                    <i data-lucide="wrench" style="width: 22px; height: 22px;"></i>
                 </div>
                 <div>
                     <div class="plan-card-subtitle">L'Exécution (Faire)</div>
                     <h2 class="plan-card-title">Développement</h2>{% if 'DEVELOPPEMENT' in (lockedPlans ?? []) %}<span style="display:inline-block;margin-top:.25rem;font-size:.68rem;font-weight:800;letter-spacing:.06em;padding:.15rem .5rem;border-radius:999px;background:#FEF3C7;color:#92400E;">🔒 PRO</span>{% endif %}
+                    <p class="plan-card-desc" style="font-family: var(--font-serif); font-style: italic; color: var(--fg); margin-bottom: .3rem;">{{ constant('App\\PlanDeVie\\Service\\PlanCatalog::PLANS').DEVELOPPEMENT.question }}</p>
                     <p class="plan-card-desc">{{ constant('App\\PlanDeVie\\Service\\PlanCatalog::PLANS').DEVELOPPEMENT.desc }}</p>
                 </div>
                 <div class="plan-card-footer">
@@ -767,15 +769,38 @@
                 </div>
             </div>
 
-            {# 3. Plan de Transmission #}
+            {# 3. Plan d'Hygiène de Vie #}
+            <div @click="{% if 'HYGIENE' in (lockedPlans ?? []) %}window.location.href = '{{ path('app_subscription', {fonction: 'hygiene'}) }}'{% else %}activePlan = 'HYGIENE'; activeTab = 'INTENTION'{% endif %}" class="plan-hub-card">
+                <div class="plan-card-decor bg-gradient-to-br from-emerald-400 to-teal-600"></div>
+                <div class="plan-card-icon" style="background: var(--success-soft); color: var(--success);">
+                    <i data-lucide="heart-pulse" style="width: 22px; height: 22px;"></i>
+                </div>
+                <div>
+                    <div class="plan-card-subtitle">Le soutien</div>
+                    <h2 class="plan-card-title">Hygiène de Vie</h2>{% if 'HYGIENE' in (lockedPlans ?? []) %}<span style="display:inline-block;margin-top:.25rem;font-size:.68rem;font-weight:800;letter-spacing:.06em;padding:.15rem .5rem;border-radius:999px;background:#FEF3C7;color:#92400E;">🔒 PRO</span>{% endif %}
+                    <p class="plan-card-desc" style="font-family: var(--font-serif); font-style: italic; color: var(--fg); margin-bottom: .3rem;">{{ constant('App\\PlanDeVie\\Service\\PlanCatalog::PLANS').HYGIENE.question }}</p>
+                    <p class="plan-card-desc">{{ constant('App\\PlanDeVie\\Service\\PlanCatalog::PLANS').HYGIENE.desc }}</p>
+                </div>
+                <div class="plan-card-footer">
+                    <div class="plan-card-count">
+                        <span class="plan-card-number">{{ hygieneDomains|length }}</span>
+                        <span class="plan-card-label">domaines</span>
+                    </div>
+                    <div class="plan-card-arrow" style="background: var(--success-soft); color: var(--success);">
+                        <i data-lucide="chevron-right" style="width: 16px; height: 16px;"></i>
+                    </div>
+                </div>
+            </div>
+            {# 4. Plan de Transmission #}
             <div @click="{% if 'TRANSMISSION' in (lockedPlans ?? []) %}window.location.href = '{{ path('app_subscription', {fonction: 'transmission'}) }}'{% else %}activePlan = 'TRANSMISSION'; activeTab = 'INTENTION'{% endif %}" class="plan-hub-card">
                 <div class="plan-card-decor bg-gradient-to-br from-pink-400 to-rose-600"></div>
                 <div class="plan-card-icon" style="background: var(--couple-soft); color: var(--couple);">
-                    <i data-lucide="heart" style="width: 22px; height: 22px;"></i>
+                    <i data-lucide="hand-heart" style="width: 22px; height: 22px;"></i>
                 </div>
                 <div>
                     <div class="plan-card-subtitle">L'Impact (Donner)</div>
                     <h2 class="plan-card-title">Transmission</h2>{% if 'TRANSMISSION' in (lockedPlans ?? []) %}<span style="display:inline-block;margin-top:.25rem;font-size:.68rem;font-weight:800;letter-spacing:.06em;padding:.15rem .5rem;border-radius:999px;background:#FEF3C7;color:#92400E;">🔒 PRO</span>{% endif %}
+                    <p class="plan-card-desc" style="font-family: var(--font-serif); font-style: italic; color: var(--fg); margin-bottom: .3rem;">{{ constant('App\\PlanDeVie\\Service\\PlanCatalog::PLANS').TRANSMISSION.question }}</p>
                     <p class="plan-card-desc">{{ constant('App\\PlanDeVie\\Service\\PlanCatalog::PLANS').TRANSMISSION.desc }}</p>
                 </div>
                 <div class="plan-card-footer">
@@ -789,27 +814,6 @@
                 </div>
             </div>
 
-            {# 4. Plan d'Hygiène #}
-            <div @click="{% if 'HYGIENE' in (lockedPlans ?? []) %}window.location.href = '{{ path('app_subscription', {fonction: 'hygiene'}) }}'{% else %}activePlan = 'HYGIENE'; activeTab = 'INTENTION'{% endif %}" class="plan-hub-card">
-                <div class="plan-card-decor bg-gradient-to-br from-emerald-400 to-teal-600"></div>
-                <div class="plan-card-icon" style="background: var(--success-soft); color: var(--success);">
-                    <i data-lucide="shield" style="width: 22px; height: 22px;"></i>
-                </div>
-                <div>
-                    <div class="plan-card-subtitle">Le Système</div>
-                    <h2 class="plan-card-title">Hygiène de Vie</h2>{% if 'HYGIENE' in (lockedPlans ?? []) %}<span style="display:inline-block;margin-top:.25rem;font-size:.68rem;font-weight:800;letter-spacing:.06em;padding:.15rem .5rem;border-radius:999px;background:#FEF3C7;color:#92400E;">🔒 PRO</span>{% endif %}
-                    <p class="plan-card-desc">{{ constant('App\\PlanDeVie\\Service\\PlanCatalog::PLANS').HYGIENE.desc }}</p>
-                </div>
-                <div class="plan-card-footer">
-                    <div class="plan-card-count">
-                        <span class="plan-card-number">{{ hygieneDomains|length }}</span>
-                        <span class="plan-card-label">domaines</span>
-                    </div>
-                    <div class="plan-card-arrow" style="background: var(--success-soft); color: var(--success);">
-                        <i data-lucide="chevron-right" style="width: 16px; height: 16px;"></i>
-                    </div>
-                </div>
-            </div>
         </div>
     </div>
 
@@ -825,21 +829,22 @@
                          (activePlan === 'DEVELOPPEMENT' ? 'background: #EFF6FF; color: #2563EB; border-color: rgba(37, 99, 235, 0.15);' : 
                           (activePlan === 'TRANSMISSION' ? 'background: #FDF2F8; color: #DB2777; border-color: rgba(219, 39, 119, 0.15);' : 
                            'background: #ECFDF5; color: #059669; border-color: rgba(5, 150, 105, 0.15);'))">
-                <template x-if="activePlan === 'CROISSANCE'"><span style="display:flex; align-items:center; gap:0.25rem;"><i data-lucide="zap" style="width: 14px; height: 14px;"></i> Plan de Croissance</span></template>
-                <template x-if="activePlan === 'DEVELOPPEMENT'"><span style="display:flex; align-items:center; gap:0.25rem;"><i data-lucide="graduation-cap" style="width: 14px; height: 14px;"></i> Plan de Développement</span></template>
-                <template x-if="activePlan === 'TRANSMISSION'"><span style="display:flex; align-items:center; gap:0.25rem;"><i data-lucide="heart" style="width: 14px; height: 14px;"></i> Plan de Transmission</span></template>
-                <template x-if="activePlan === 'HYGIENE'"><span style="display:flex; align-items:center; gap:0.25rem;"><i data-lucide="shield" style="width: 14px; height: 14px;"></i> Plan d'Hygiène de Vie</span></template>
+                <template x-if="activePlan === 'CROISSANCE'"><span style="display:flex; align-items:center; gap:0.25rem;"><i data-lucide="sprout" style="width: 14px; height: 14px;"></i> Plan de Croissance</span></template>
+                <template x-if="activePlan === 'DEVELOPPEMENT'"><span style="display:flex; align-items:center; gap:0.25rem;"><i data-lucide="wrench" style="width: 14px; height: 14px;"></i> Plan de Développement</span></template>
+                <template x-if="activePlan === 'TRANSMISSION'"><span style="display:flex; align-items:center; gap:0.25rem;"><i data-lucide="hand-heart" style="width: 14px; height: 14px;"></i> Plan de Transmission</span></template>
+                <template x-if="activePlan === 'HYGIENE'"><span style="display:flex; align-items:center; gap:0.25rem;"><i data-lucide="heart-pulse" style="width: 14px; height: 14px;"></i> Plan d'Hygiène de Vie</span></template>
             </div>
             <h1 class="hero-title"
                 x-text="activePlan === 'CROISSANCE' ? 'Plan de Croissance' : 
                         (activePlan === 'DEVELOPPEMENT' ? 'Plan de Développement' : 
                          (activePlan === 'TRANSMISSION' ? 'Plan de Transmission' : 'Plan d\'Hygiène de Vie'))">
             </h1>
+            <p style="font-family: var(--font-serif); font-style: italic; font-size: 1.25rem; color: var(--fg); margin: -.25rem 0 .5rem;" x-text="{{ {CROISSANCE: constant('App\\PlanDeVie\\Service\\PlanCatalog::PLANS').CROISSANCE.question, DEVELOPPEMENT: constant('App\\PlanDeVie\\Service\\PlanCatalog::PLANS').DEVELOPPEMENT.question, HYGIENE: constant('App\\PlanDeVie\\Service\\PlanCatalog::PLANS').HYGIENE.question, TRANSMISSION: constant('App\\PlanDeVie\\Service\\PlanCatalog::PLANS').TRANSMISSION.question}|json_encode|e('html_attr') }}[activePlan] || ''"></p>
             <p class="hero-desc"
                x-text="activePlan === 'CROISSANCE' ? 'Pilotez l\'évolution de votre Être (Être). Alignez votre caractère, vos convictions et vos valeurs.' : 
                        (activePlan === 'DEVELOPPEMENT' ? 'Pilotez l\'exécution de votre Talent (Faire). Développez vos compétences et vos connaissances.' : 
                         (activePlan === 'TRANSMISSION' ? 'Pilotez l\'impact de votre Vision (Donner). Organisez votre mentorat, service et projets de legs.' : 
-                         'Gériez vos systèmes quotidiens : sommeil, nutrition, sport et environnement vital.'))">
+                         'Prenez soin de ce qui vous soutient : sommeil, nutrition, sport, méditation et environnement.'))">
             </p>
             {# Une action principale ; le reste dans « Plus » (audit du 16/11/2026) #}
             {% set visualizeUrls = {CROISSANCE: path('app_plan_de_croissance_visualize'), DEVELOPPEMENT: path('app_plan_de_developpement_visualize'), TRANSMISSION: path('app_plan_de_transmission_visualize'), HYGIENE: path('app_plan_d_hygiene_visualize')} %}
