@@ -141,7 +141,8 @@ class PsychometricsTest extends WebTestCase
         }
         $client->request('POST', '/mes-tests/questionnaire/enneagramme', ['answers' => $answers, '_csrf_token' => $crawler->filter('input[name=_csrf_token]')->attr('value'), 'startedAt' => time() - 600]);
         $client->followRedirect();
-        $this->assertSelectorTextContains('h2', 'Type 9 · L\'Artisan de paix');
+        $this->assertAnySelectorTextContains('h2', 'Type 9 · L\'Artisan de paix');
+        $this->assertAnySelectorTextContains('h2', 'Bon usage de ce rapport');
 
         $crawler = $client->request('GET', '/mes-tests/questionnaire/dons-spirituels');
         $answers = [];
@@ -152,6 +153,7 @@ class PsychometricsTest extends WebTestCase
         $client->request('POST', '/mes-tests/questionnaire/dons-spirituels', ['answers' => $answers, '_csrf_token' => $crawler->filter('input[name=_csrf_token]')->attr('value'), 'startedAt' => time() - 600]);
         $client->followRedirect();
         $this->assertSelectorTextContains('main', 'Hospitalité');
+        $this->assertAnySelectorTextContains('h2', 'Mettre vos dons au service');
     }
 
     public function testLegacyLinksRedirectToNewQuestionnaires(): void
