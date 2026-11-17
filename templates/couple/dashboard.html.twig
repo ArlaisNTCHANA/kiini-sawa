@@ -25,11 +25,11 @@
 <div class="cp-wrap">
     <p class="ks-header__eyebrow" style="color: var(--couple);">Notre couple</p>
     <h1 class="ks-header__title">{{ couple.partnerA.displayName }} &amp; {{ couple.partnerB.displayName }}</h1>
-    <p class="cp-mini" style="margin-bottom: 1.25rem;">Ensemble sur KIINI SAWA depuis {{ couple.joinedAt|format_date(pattern: 'MMMM y', locale: 'fr') }} · <a href="{{ path('app_couple_report') }}" style="color: var(--primary); font-weight: 700;">🔍 Notre rapport croisé</a></p>
+    <p class="cp-mini" style="margin-bottom: 1.25rem;">Ensemble sur KIINI SAWA depuis {{ couple.joinedAt|format_date(pattern: 'MMMM y', locale: 'fr') }} · <a href="{{ path('app_couple_report') }}" style="color: var(--primary); font-weight: 700;"><i data-lucide="search" class="ks-ico" aria-hidden="true"></i> Notre rapport croisé</a></p>
 
     {# ── Vision ───────────────────────────── #}
     <section class="cp-card" id="vision">
-        <h2>🧭 Notre vision commune</h2>
+        <h2><i data-lucide="compass" class="ks-ico" aria-hidden="true"></i> Notre vision commune</h2>
         <p class="cp-sub">Pourquoi sommes-nous ensemble ? Ce que nous voulons bâtir et laisser.</p>
         <form method="post" action="{{ path('app_couple_vision') }}">
             <textarea name="vision" class="cp-input" rows="4" style="width: 100%;" placeholder="Ex. : Bâtir un foyer où Dieu est au centre, où chacun grandit dans sa vocation, et ouvert à ceux qui ont besoin d'une famille." aria-label="Vision commune">{{ couple.vision }}</textarea>
@@ -41,7 +41,7 @@
 
     {# ── Valeurs ───────────────────────────── #}
     <section class="cp-card" id="value">
-        <h2>💎 Nos valeurs communes</h2>
+        <h2><i data-lucide="gem" class="ks-ico" aria-hidden="true"></i> Nos valeurs communes</h2>
         <p class="cp-sub">Ce qui guide nos décisions de couple, même quand c'est difficile.</p>
         <div style="display: flex; flex-wrap: wrap; gap: .5rem; margin-bottom: .75rem;">
             {% for v in couple.itemsOfKind('VALUE') %}
@@ -63,7 +63,7 @@
 
     {# ── Projets ───────────────────────────── #}
     <section class="cp-card" id="project">
-        <h2>🎯 Nos projets communs</h2>
+        <h2><i data-lucide="target" class="ks-ico" aria-hidden="true"></i> Nos projets communs</h2>
         <p class="cp-sub">Ce que nous voulons être, faire, avoir et donner ensemble.</p>
         {% for p in couple.itemsOfKind('PROJECT') %}
             <div class="cp-item">
@@ -98,7 +98,7 @@
 
     {# ── Thèmes de croissance ───────────────── #}
     <section class="cp-card" id="theme">
-        <h2>🌱 Nos thèmes de croissance</h2>
+        <h2><i data-lucide="sprout" class="ks-ico" aria-hidden="true"></i> Nos thèmes de croissance</h2>
         <p class="cp-sub">Choisissez un à trois thèmes à travailler en ce moment, et notez votre engagement.</p>
         {% set chosen = couple.itemsOfKind('THEME') %}
         {% for t in chosen %}
@@ -135,7 +135,7 @@
 
     {# ── Rituels ───────────────────────────── #}
     <section class="cp-card" id="ritual">
-        <h2>🔁 Nos rituels de couple</h2>
+        <h2><i data-lucide="repeat" class="ks-ico" aria-hidden="true"></i> Nos rituels de couple</h2>
         <p class="cp-sub">Les petites habitudes qui font les grands couples.</p>
         {% for r in couple.itemsOfKind('RITUAL') %}
             <div class="cp-item">
@@ -158,7 +158,7 @@
 
     {# ── Revue de couple ───────────────────── #}
     <section class="cp-card" id="revue">
-        <h2>📅 Notre revue de {{ month|format_date(pattern: 'MMMM', locale: 'fr') }}</h2>
+        <h2><i data-lucide="calendar" class="ks-ico" aria-hidden="true"></i> Notre revue de {{ month|format_date(pattern: 'MMMM', locale: 'fr') }}</h2>
         <p class="cp-sub">À faire ensemble, une fois par mois, dans un moment calme. Chacun peut la compléter.</p>
         <form method="post" action="{{ path('app_couple_review') }}">
             {% for key, q in questions %}
@@ -182,7 +182,7 @@
 
     {# ── Réglages ──────────────────────────── #}
     <section class="cp-card">
-        <h2>⚙️ Réglages</h2>
+        <h2><i data-lucide="settings" class="ks-ico" aria-hidden="true"></i> Réglages</h2>
         <form method="post" action="{{ path('app_couple_settings') }}">
             <label style="display: flex; gap: .6rem; align-items: center; cursor: pointer;">
                 <input type="checkbox" name="shareTests" value="1" {{ sharesTests ? 'checked' }} style="accent-color: var(--primary);">

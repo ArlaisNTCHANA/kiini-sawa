@@ -29,7 +29,7 @@ class UserPlanControllerTest extends WebTestCase
         
         // Assert harmonized vocabulary is present in templates/plan_de_vie/index.html.twig
         $this->assertSelectorTextContains('body', 'But de Dieu');
-        $this->assertSelectorTextContains('body', 'Objectifs Spécifiques');
+        $this->assertSelectorTextContains('body', 'Objectifs spécifiques');
         $this->assertSelectorTextContains('body', 'Compétence & Connaissance');
         $this->assertSelectorTextContains('body', 'Compétences');
         $this->assertSelectorTextContains('body', 'Connaissances');
@@ -45,7 +45,7 @@ class UserPlanControllerTest extends WebTestCase
         
         // Assert new dashboard tabs are present
         $this->assertSelectorTextContains('body', 'Échéancier');
-        $this->assertSelectorTextContains('body', 'Carte');
+        $this->assertSelectorTextContains('body', 'carte');
         $this->assertSelectorTextContains('body', 'Analyse');
     }
 
@@ -831,7 +831,7 @@ class UserPlanControllerTest extends WebTestCase
         $this->assertResponseIsSuccessful();
         $this->assertSelectorTextContains('h1', 'Plan de Croissance');
         $this->assertSelectorTextContains('body', 'Intention & Raison d\'être');
-        $this->assertSelectorTextContains('body', 'Axes de Croissance');
+        $this->assertSelectorTextContains('body', 'Axes de croissance');
     }
 
     public function testCroissancePlanSendEmail(): void
@@ -864,7 +864,7 @@ class UserPlanControllerTest extends WebTestCase
         $this->assertResponseIsSuccessful();
         $this->assertSelectorTextContains('h1', 'Plan de Croissance');
         $this->assertSelectorNotExists('div[data-step-title="But de Dieu"]');
-        $this->assertSelectorExists('div[data-step-title="Balance Interne"]');
+        $this->assertSelectorExists('div[data-step-title="Balance interne"]');
         $this->assertSelectorExists('div[data-step-title="Caractère & Conviction"]');
         $this->assertSelectorExists('div[data-step-title="Relation & Réseau"]');
 

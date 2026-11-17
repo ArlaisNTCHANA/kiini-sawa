@@ -417,16 +417,16 @@
         </div>
     </section>
 
-    {# ════════════════ 2. Balance Interne ════════════════ #}
+    {# ════════════════ 2. Balance interne ════════════════ #}
     <section class="no-break">
-        <div class="section-header">2. Ma Balance Interne</div>
+        <div class="section-header">2. Ma Balance interne</div>
         
         <table class="column-table" style="width: 100%; border-collapse: separate; border-spacing: 20px 0;">
             <tr>
                 {# Valeurs #}
                 <td class="column-cell" style="width: 50%; vertical-align: top; padding: 0;">
                     <div class="inner-card">
-                        <div class="sub-title" style="color: #1F4D3A;">♥ Mes Valeurs</div>
+                        <div class="sub-title" style="color: #1F4D3A;"><i data-lucide="heart" class="ks-ico" aria-hidden="true"></i> Mes Valeurs</div>
                         
                         {% if valuesReal|length > 0 or valuesDeclared|length > 0 or valuesCounter|length > 0 %}
                             <div style="display: flex; flex-direction: column; gap: 12px;">
@@ -472,7 +472,7 @@
                 {# Convictions #}
                 <td class="column-cell" style="width: 50%; vertical-align: top; padding: 0;">
                     <div class="inner-card">
-                        <div class="sub-title" style="color: #2E6B53;">🛡️ Mes Convictions</div>
+                        <div class="sub-title" style="color: #2E6B53;"><i data-lucide="shield" class="ks-ico" aria-hidden="true"></i> Mes Convictions</div>
                         
                         {% if convictionsDeep|length > 0 or convictionsMedium|length > 0 or convictionsLight|length > 0 %}
                             <div style="display: flex; flex-direction: column; gap: 10px;">
@@ -514,7 +514,7 @@
         {# Croyances limitantes #}
         {% if limitingBeliefs|length > 0 %}
             <div class="limiting-beliefs-box">
-                <div class="sub-title" style="color: #dc2626; margin-bottom: 8px;">⚠️ Croyances Limitantes</div>
+                <div class="sub-title" style="color: #dc2626; margin-bottom: 8px;"><i data-lucide="triangle-alert" class="ks-ico" aria-hidden="true"></i> Croyances Limitantes</div>
                 <ul style="padding-left: 20px; color: #7f1d1d; margin: 0; line-height: 1.6; font-size: 0.92rem;">
                     {% for lb in limitingBeliefs %}
                         <li style="font-style: italic; margin-bottom: 4px;">« {{ lb.text }} »</li>
@@ -526,12 +526,12 @@
 
     {# ════════════════ 3. Passions & Intérêts ════════════════ #}
     <section class="no-break">
-        <div class="section-header">3. Mes Passions & Intérêts</div>
+        <div class="section-header">3. Mes passions & Intérêts</div>
         <div class="tag-list">
             {% if planDeVie and planDeVie.passions|length > 0 %}
                 {% for p in planDeVie.passions %}
                     <span class="tag" style="background: #FAF4E6; color: #A87A1F; border: 1px solid #fbcfe8;">
-                        ❤️ {{ p.name }}
+                        <i data-lucide="heart" class="ks-ico" aria-hidden="true"></i> {{ p.name }}
                     </span>
                 {% endfor %}
             {% else %}
@@ -542,12 +542,12 @@
 
     {# ════════════════ 4. Dons & Talents ════════════════ #}
     <section class="no-break">
-        <div class="section-header">4. Don & Talent</div>
+        <div class="section-header">4. Don & talent</div>
         <div class="tag-list">
             {% if talents|length > 0 %}
                 {% for t in talents %}
                     <span class="tag tag-talent">
-                        ★ {{ t.text }}
+                        <i data-lucide="star" class="ks-ico" aria-hidden="true"></i> {{ t.text }}
                     </span>
                 {% endfor %}
             {% else %}
@@ -595,7 +595,7 @@
         <div class="vision-box">
             {% if planDeVie and planDeVie.vision and planDeVie.vision.content %}
                 <div style="font-size: 0.72rem; font-weight: 800; color: #64748b; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 10px;">
-                    Ma Vision à Moyen/Long Terme {% if planDeVie.vision.horizon %}(Horizon {{ planDeVie.vision.horizon }}){% endif %}
+                    Ma Vision à moyen/Long Terme {% if planDeVie.vision.horizon %}(Horizon {{ planDeVie.vision.horizon }}){% endif %}
                 </div>
                 <div style="white-space: pre-wrap;">{{ planDeVie.vision.content }}</div>
             {% else %}
@@ -604,9 +604,9 @@
         </div>
     </section>
 
-    {# ════════════════ 7. Mes Objectifs Spécifiques ════════════════ #}
+    {# ════════════════ 7. Mes Objectifs spécifiques ════════════════ #}
     <section>
-        <div class="section-header">7. Mes Objectifs Spécifiques</div>
+        <div class="section-header">7. Mes Objectifs spécifiques</div>
         {% set hasLifeGoals = false %}
         {% for cat, list in lifeGoals %}
             {% if list|length > 0 %}
@@ -634,7 +634,7 @@
                                         <strong>{{ goal.title }}</strong>
                                         {% if goal.deadline %}
                                             <span style="display: block; font-size: 0.78rem; color: #64748b; margin-top: 2px;">
-                                                📅 Échéance : {{ goal.deadline|date('d/m/Y') }}
+                                                <i data-lucide="calendar" class="ks-ico" aria-hidden="true"></i> Échéance : {{ goal.deadline|date('d/m/Y') }}
                                             </span>
                                         {% endif %}
                                     </li>
@@ -656,10 +656,10 @@
         
         {% if allCompGoals|length > 0 %}
             {% set statusMap = {
-                'leverage': { 'label': 'À mettre à profit', 'emoji': '✅', 'color': '#3F5249', 'bg': '#ECEFED', 'border': '#DDE4E0' },
-                'consolidate': { 'label': 'À consolider', 'emoji': '🔄', 'color': '#2E6B53', 'bg': '#E9F1EC', 'border': '#D5E5DB' },
-                'build': { 'label': 'À construire', 'emoji': '🏗️', 'color': '#173D2E', 'bg': '#E4ECE7', 'border': '#D5E2DA' },
-                'absence': { 'label': 'Absence assumée', 'emoji': '⚪', 'color': '#475569', 'bg': '#f8fafc', 'border': '#e2e8f0' }
+                'leverage': { 'label': 'À mettre à profit', 'emoji': '<i data-lucide="check" class="ks-ico" aria-hidden="true"></i>', 'color': '#3F5249', 'bg': '#ECEFED', 'border': '#DDE4E0' },
+                'consolidate': { 'label': 'À consolider', 'emoji': '<i data-lucide="refresh-cw" class="ks-ico" aria-hidden="true"></i>', 'color': '#2E6B53', 'bg': '#E9F1EC', 'border': '#D5E5DB' },
+                'build': { 'label': 'À construire', 'emoji': '<i data-lucide="hammer" class="ks-ico" aria-hidden="true"></i>', 'color': '#173D2E', 'bg': '#E4ECE7', 'border': '#D5E2DA' },
+                'absence': { 'label': 'Absence assumée', 'emoji': '<i data-lucide="circle" class="ks-ico" aria-hidden="true"></i>', 'color': '#475569', 'bg': '#f8fafc', 'border': '#e2e8f0' }
             } %}
             <div class="grid-blocks-2">
                 {% for statusKey, sInfo in statusMap %}
@@ -708,10 +708,10 @@
 
         {% if allCharGoals|length > 0 %}
             {% set statusMap = {
-                'leverage': { 'label': 'À mettre à profit', 'emoji': '💪', 'color': '#3F5249', 'bg': '#ECEFED', 'border': '#DDE4E0' },
-                'consolidate': { 'label': 'À consolider', 'emoji': '🌱', 'color': '#2E6B53', 'bg': '#E9F1EC', 'border': '#D5E5DB' },
-                'build': { 'label': 'À construire', 'emoji': '🏗️', 'color': '#173D2E', 'bg': '#E4ECE7', 'border': '#D5E2DA' },
-                'absence': { 'label': 'Absence assumée', 'emoji': '⚪', 'color': '#475569', 'bg': '#f8fafc', 'border': '#e2e8f0' }
+                'leverage': { 'label': 'À mettre à profit', 'emoji': '', 'color': '#3F5249', 'bg': '#ECEFED', 'border': '#DDE4E0' },
+                'consolidate': { 'label': 'À consolider', 'emoji': '<i data-lucide="sprout" class="ks-ico" aria-hidden="true"></i>', 'color': '#2E6B53', 'bg': '#E9F1EC', 'border': '#D5E5DB' },
+                'build': { 'label': 'À construire', 'emoji': '<i data-lucide="hammer" class="ks-ico" aria-hidden="true"></i>', 'color': '#173D2E', 'bg': '#E4ECE7', 'border': '#D5E2DA' },
+                'absence': { 'label': 'Absence assumée', 'emoji': '<i data-lucide="circle" class="ks-ico" aria-hidden="true"></i>', 'color': '#475569', 'bg': '#f8fafc', 'border': '#e2e8f0' }
             } %}
             <div class="grid-blocks-2">
                 {% for statusKey, sInfo in statusMap %}
@@ -760,16 +760,16 @@
 
         {% if allRelGoals|length > 0 %}
             {% set statusMap = {
-                'leverage': { 'label': 'À mettre à profit', 'emoji': '🤝', 'color': '#3F5249', 'bg': '#ECEFED', 'border': '#DDE4E0' },
-                'consolidate': { 'label': 'À consolider', 'emoji': '🔄', 'color': '#2E6B53', 'bg': '#E9F1EC', 'border': '#D5E5DB' },
-                'build': { 'label': 'À construire', 'emoji': '🏗️', 'color': '#173D2E', 'bg': '#E4ECE7', 'border': '#D5E2DA' },
-                'absence': { 'label': 'Absence assumée', 'emoji': '⚪', 'color': '#475569', 'bg': '#f8fafc', 'border': '#e2e8f0' }
+                'leverage': { 'label': 'À mettre à profit', 'emoji': '<i data-lucide="handshake" class="ks-ico" aria-hidden="true"></i>', 'color': '#3F5249', 'bg': '#ECEFED', 'border': '#DDE4E0' },
+                'consolidate': { 'label': 'À consolider', 'emoji': '<i data-lucide="refresh-cw" class="ks-ico" aria-hidden="true"></i>', 'color': '#2E6B53', 'bg': '#E9F1EC', 'border': '#D5E5DB' },
+                'build': { 'label': 'À construire', 'emoji': '<i data-lucide="hammer" class="ks-ico" aria-hidden="true"></i>', 'color': '#173D2E', 'bg': '#E4ECE7', 'border': '#D5E2DA' },
+                'absence': { 'label': 'Absence assumée', 'emoji': '<i data-lucide="circle" class="ks-ico" aria-hidden="true"></i>', 'color': '#475569', 'bg': '#f8fafc', 'border': '#e2e8f0' }
             } %}
             {% set netMap = {
                 'orientation': 'Réseau d\'Orientation (Mentors)',
-                'croissance': 'Réseau de Croissance (Pairs)',
-                'soutien': 'Réseau de Soutien (Famille/Proches)',
-                'responsabilite': 'Réseau de Responsabilité (Binômes)',
+                'croissance': 'Réseau de croissance (Pairs)',
+                'soutien': 'Réseau de soutien (Famille/Proches)',
+                'responsabilite': 'Réseau de responsabilité (Binômes)',
                 'environnement': 'Réseau d\'Environnement (Écosystème)'
             } %}
             <div class="grid-blocks-2">
@@ -791,7 +791,7 @@
                                     <li style="margin-bottom: 8px;">
                                         <strong style="opacity: 0.95;">{{ goal.title }}</strong>
                                         <span style="display: block; font-size: 0.75rem; opacity: 0.8; font-weight: 600; margin-top: 2px;">
-                                            📁 Type : {{ netMap[goal.type] ?? goal.type|capitalize }}
+                                            <i data-lucide="folder" class="ks-ico" aria-hidden="true"></i> Type : {{ netMap[goal.type] ?? goal.type|capitalize }}
                                         </span>
                                         {% if goal.strategy %}
                                             <span style="display: block; font-size: 0.78rem; opacity: 0.75; font-style: italic; margin-top: 2px;">
@@ -821,10 +821,10 @@
         
         {% if legacyGoals|length > 0 %}
             {% set statusMap = {
-                'leverage': { 'label': 'Transmission active', 'emoji': '🤝', 'color': '#3F5249', 'bg': '#ECEFED', 'border': '#DDE4E0' },
-                'consolidate': { 'label': 'À consolider', 'emoji': '🔄', 'color': '#2E6B53', 'bg': '#E9F1EC', 'border': '#D5E5DB' },
-                'build': { 'label': 'À construire', 'emoji': '🏗️', 'color': '#173D2E', 'bg': '#E4ECE7', 'border': '#D5E2DA' },
-                'absence': { 'label': 'Absence assumée', 'emoji': '⚪', 'color': '#475569', 'bg': '#f8fafc', 'border': '#e2e8f0' }
+                'leverage': { 'label': 'Transmission active', 'emoji': '<i data-lucide="handshake" class="ks-ico" aria-hidden="true"></i>', 'color': '#3F5249', 'bg': '#ECEFED', 'border': '#DDE4E0' },
+                'consolidate': { 'label': 'À consolider', 'emoji': '<i data-lucide="refresh-cw" class="ks-ico" aria-hidden="true"></i>', 'color': '#2E6B53', 'bg': '#E9F1EC', 'border': '#D5E5DB' },
+                'build': { 'label': 'À construire', 'emoji': '<i data-lucide="hammer" class="ks-ico" aria-hidden="true"></i>', 'color': '#173D2E', 'bg': '#E4ECE7', 'border': '#D5E2DA' },
+                'absence': { 'label': 'Absence assumée', 'emoji': '<i data-lucide="circle" class="ks-ico" aria-hidden="true"></i>', 'color': '#475569', 'bg': '#f8fafc', 'border': '#e2e8f0' }
             } %}
             <div class="grid-blocks-2">
                 {% for statusKey, sInfo in statusMap %}
@@ -867,10 +867,10 @@
 
         {% if hygieneDomains|length > 0 %}
             {% set statusMap = {
-                'leverage': { 'label': 'Excellente / À profit', 'emoji': '⭐', 'color': '#3F5249', 'bg': '#ECEFED', 'border': '#DDE4E0' },
-                'consolidate': { 'label': 'À consolider', 'emoji': '🔄', 'color': '#2E6B53', 'bg': '#E9F1EC', 'border': '#D5E5DB' },
-                'build': { 'label': 'À construire', 'emoji': '🏗️', 'color': '#173D2E', 'bg': '#E4ECE7', 'border': '#D5E2DA' },
-                'absence': { 'label': 'Absence assumée', 'emoji': '⚪', 'color': '#475569', 'bg': '#f8fafc', 'border': '#e2e8f0' }
+                'leverage': { 'label': 'Excellente / À profit', 'emoji': '<i data-lucide="star" class="ks-ico" aria-hidden="true"></i>', 'color': '#3F5249', 'bg': '#ECEFED', 'border': '#DDE4E0' },
+                'consolidate': { 'label': 'À consolider', 'emoji': '<i data-lucide="refresh-cw" class="ks-ico" aria-hidden="true"></i>', 'color': '#2E6B53', 'bg': '#E9F1EC', 'border': '#D5E5DB' },
+                'build': { 'label': 'À construire', 'emoji': '<i data-lucide="hammer" class="ks-ico" aria-hidden="true"></i>', 'color': '#173D2E', 'bg': '#E4ECE7', 'border': '#D5E2DA' },
+                'absence': { 'label': 'Absence assumée', 'emoji': '<i data-lucide="circle" class="ks-ico" aria-hidden="true"></i>', 'color': '#475569', 'bg': '#f8fafc', 'border': '#e2e8f0' }
             } %}
             <div class="grid-blocks-2">
                 {% for statusKey, sInfo in statusMap %}
@@ -907,9 +907,9 @@
         {% endif %}
     </section>
 
-    {# ════════════════ 13. Mon Échéancier ════════════════ #}
+    {# ════════════════ 13. Mon échéancier ════════════════ #}
     <section class="no-break" style="margin-top: 40px; margin-bottom: 20px;">
-        <div class="section-header">13. Mon Échéancier</div>
+        <div class="section-header">13. Mon échéancier</div>
         {% if timelineGoals|length > 0 %}
             <div class="timeline" style="margin-top: 20px;">
                 {% for goal in timelineGoals %}

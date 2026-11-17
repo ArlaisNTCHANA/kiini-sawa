@@ -285,15 +285,15 @@
         </div>
     </section>
 
-    {# 2. Compétences & Connaissances #}
+    {# 2. Compétence & Connaissance #}
     <section>
-        <div class="section-header">2. Axes de Développement</div>
+        <div class="section-header">2. Axes de développement</div>
         
         <div style="display: flex; flex-direction: column; gap: 20px;">
             {# Section Compétences #}
             <div class="no-break" style="background: white; border-radius: 12px; border: 1px solid #D5E5DB; padding: 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.02);">
                 <h3 style="font-size: 1.1rem; font-weight: 700; color: #2E6B53; margin: 0 0 15px 0; border-bottom: 1px dashed #D5E5DB; padding-bottom: 8px;">
-                    🛠️ Compétences Pratiques (Skills)
+                    <i data-lucide="wrench" class="ks-ico" aria-hidden="true"></i> Compétences Pratiques (Skills)
                 </h3>
                 <div style="display: flex; flex-direction: column; gap: 15px;">
                     {% for item in competences.COMPETENCE %}
@@ -322,7 +322,7 @@
             {# Section Connaissances #}
             <div class="no-break" style="background: white; border-radius: 12px; border: 1px solid #D5E5DB; padding: 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.02);">
                 <h3 style="font-size: 1.1rem; font-weight: 700; color: #2E6B53; margin: 0 0 15px 0; border-bottom: 1px dashed #D5E5DB; padding-bottom: 8px;">
-                    📚 Connaissances Théoriques (Knowledges)
+                    <i data-lucide="library" class="ks-ico" aria-hidden="true"></i> Connaissances Théoriques (Knowledges)
                 </h3>
                 <div style="display: flex; flex-direction: column; gap: 15px;">
                     {% for item in competences.CONNAISSANCE %}
@@ -384,7 +384,7 @@
                                 {# Habits #}
                                 <div style="background: #f8fafc; padding: 15px; border-radius: 8px; border: 1px solid rgba(0,0,0,0.02);">
                                     <div style="font-size: 0.72rem; font-weight: 850; color: #64748b; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 10px;">
-                                        ⚡ Rituels
+                                        <i data-lucide="zap" class="ks-ico" aria-hidden="true"></i> Rituels
                                     </div>
                                     {% if gg.habits|length > 0 %}
                                         <ul style="padding-left: 20px; margin: 0; line-height: 1.6; font-size: 0.9rem; color: #334155;">
@@ -405,7 +405,7 @@
                                 {# Actions #}
                                 <div style="background: #f8fafc; padding: 15px; border-radius: 8px; border: 1px solid rgba(0,0,0,0.02);">
                                     <div style="font-size: 0.72rem; font-weight: 850; color: #64748b; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 10px;">
-                                        🎯 Actions spécifiques
+                                        <i data-lucide="target" class="ks-ico" aria-hidden="true"></i> Actions spécifiques
                                     </div>
                                     {% if gg.actions|length > 0 %}
                                         <ul style="padding-left: 20px; margin: 0; line-height: 1.6; font-size: 0.9rem; color: #334155;">
@@ -414,7 +414,7 @@
                                                     <strong>{{ act.title }}</strong>
                                                     {% if act.deadline %}
                                                         <span style="font-size: 0.75rem; color: #dc2626; font-weight: 600; display: block; margin-top: 2px;">
-                                                            📅 Échéance : {{ act.deadline|date('d/m/Y') }}
+                                                            <i data-lucide="calendar" class="ks-ico" aria-hidden="true"></i> Échéance : {{ act.deadline|date('d/m/Y') }}
                                                         </span>
                                                     {% endif %}
                                                 </li>

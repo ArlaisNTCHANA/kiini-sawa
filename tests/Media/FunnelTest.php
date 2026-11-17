@@ -53,4 +53,17 @@ class FunnelTest extends WebTestCase
         $this->assertSame($before[1]['count'] + 1, $after[1]['count'], 'comptes créés');
         $this->assertSame($before[3]['count'] + 1, $after[3]['count'], 'onboarding terminé');
     }
+
+    /** La page d'administration s'affiche (un filtre Twig inexistant l'avait fait échouer au premier déploiement). */
+    public function testFunnelPageRendersForAdmin(): void
+    {
+        $client = static::createClient();
+        $client->loginUser(static::getContainer()->get(\App\Compte\Repository\UserRepository::class)->findOneByEmail('admin@kiinisawa.com'));
+        foreach ([7, 30, 90] as $days) {
+            $client->request('GET', '/admin/entonnoir?jours='.$days);
+            $this->assertResponseIsSuccessful();
+            $this->assertSelectorTextContains('body', 'Visites de la vitrine');
+            $this->assertSelectorTextContains('body', 'Onboarding terminé');
+        }
+    }
 }

@@ -8,7 +8,7 @@
     {% if compact|default(false) %}
         <section class="ks-card" style="margin-top: 1.5rem; display: flex; gap: 1rem; align-items: center; flex-wrap: wrap; justify-content: space-between;">
             <div style="flex: 1; min-width: 220px;">
-                <p style="font-weight: 700; color: var(--fg);">🔔 Recevoir vos rappels sur ce téléphone</p>
+                <p style="font-weight: 700; color: var(--fg);">Recevoir vos rappels sur ce téléphone</p>
                 <p style="color: var(--fg-muted); font-size: .9rem;">Vos rituels du matin, votre revue du dimanche et l'action du jour de vos défis.</p>
             </div>
             <div style="display: flex; gap: .5rem;">
@@ -18,7 +18,7 @@
         </section>
     {% else %}
         <div class="ks-card ks-card--flat" style="margin-bottom: 1rem;">
-            <p style="font-weight: 700; color: var(--fg); margin-bottom: .25rem;">🔔 Notifications sur ce téléphone</p>
+            <p style="font-weight: 700; color: var(--fg); margin-bottom: .25rem;">Notifications sur ce téléphone</p>
             <template x-if="!supported && iosBrowser"><p class="p-hint">Sur iPhone, installez d'abord l'application sur votre écran d'accueil (<a href="{{ path('app_install') }}" style="color: var(--primary);">voir comment</a>), puis ouvrez-la depuis son icône pour activer les notifications.</p></template>
             <template x-if="!supported && !iosBrowser"><p class="p-hint">Ce navigateur ne permet pas les notifications. Essayez avec Chrome, ou installez l'application.</p></template>
             <template x-if="supported && permission === 'denied'"><p class="p-hint">Les notifications sont bloquées pour KIINI SAWA. Autorisez-les dans les réglages du téléphone ou du navigateur, puis revenez ici.</p></template>

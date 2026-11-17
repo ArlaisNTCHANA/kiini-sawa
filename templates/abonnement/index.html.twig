@@ -62,7 +62,7 @@
 
     {% if pending %}
         <div class="ab-card" style="border-left: 4px solid var(--warning);">
-            <p style="font-weight: 700;">⏳ Paiement en cours de vérification</p>
+            <p style="font-weight: 700;"><i data-lucide="hourglass" class="ks-ico" aria-hidden="true"></i> Paiement en cours de vérification</p>
             <p style="color: var(--fg-light); margin-top: .25rem;">{{ pending.methodLabel }} de {{ (pending.amount)|money(pending.currency) }} déclaré le {{ pending.createdAt|format_date(pattern: 'd MMMM', locale: 'fr') }} (réf. {{ pending.reference ?: '—' }}). Vous serez prévenu dès sa validation, généralement sous 24 à 48 h ouvrées.</p>
         </div>
     {% endif %}

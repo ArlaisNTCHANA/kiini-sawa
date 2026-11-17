@@ -299,9 +299,9 @@
         </div>
     </section>
 
-    {# 2. Axes de Croissance #}
+    {# 2. Axes de croissance #}
     <section>
-        <div class="section-header">2. Axes de Croissance</div>
+        <div class="section-header">2. Axes de croissance</div>
         
         {% set categoriesMeta = {
             'LIMITING_BELIEF': {'label': 'Croyances Limitantes', 'color': '#EF4444', 'bg': '#FEF2F2', 'border': '#FEE2E2'},
@@ -369,7 +369,7 @@
         <div style="display: flex; flex-direction: column; gap: 20px;">
             <div class="no-break" style="background: white; border-radius: 12px; border: 1px solid #fbcfe8; padding: 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.02);">
                 <h3 style="font-size: 1.1rem; font-weight: 700; color: #A87A1F; margin: 0 0 15px 0; border-bottom: 1px dashed #fbcfe8; padding-bottom: 8px;">
-                    👥 Relations & Alliances Stratégiques
+                    <i data-lucide="users" class="ks-ico" aria-hidden="true"></i> Relations & Alliances Stratégiques
                 </h3>
                 <div style="display: flex; flex-direction: column; gap: 15px;">
                     {% for item in growthGoals.RELATION %}
@@ -431,7 +431,7 @@
                                 {# Habits #}
                                 <div style="background: #fafaf9; padding: 15px; border-radius: 8px; border: 1px solid rgba(0,0,0,0.02);">
                                     <div style="font-size: 0.72rem; font-weight: 850; color: #78716c; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 10px;">
-                                        ⚡ Rituels
+                                        <i data-lucide="zap" class="ks-ico" aria-hidden="true"></i> Rituels
                                     </div>
                                     {% if gg.habits|length > 0 %}
                                         <ul style="padding-left: 20px; margin: 0; line-height: 1.6; font-size: 0.9rem; color: #44403c;">
@@ -452,7 +452,7 @@
                                 {# Actions #}
                                 <div style="background: #fafaf9; padding: 15px; border-radius: 8px; border: 1px solid rgba(0,0,0,0.02);">
                                     <div style="font-size: 0.72rem; font-weight: 850; color: #78716c; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 10px;">
-                                        🎯 Actions spécifiques
+                                        <i data-lucide="target" class="ks-ico" aria-hidden="true"></i> Actions spécifiques
                                     </div>
                                     {% if gg.actions|length > 0 %}
                                         <ul style="padding-left: 20px; margin: 0; line-height: 1.6; font-size: 0.9rem; color: #44403c;">
@@ -461,7 +461,7 @@
                                                     <strong>{{ act.title }}</strong>
                                                     {% if act.deadline %}
                                                         <span style="font-size: 0.75rem; color: #dc2626; font-weight: 600; display: block; margin-top: 2px;">
-                                                            📅 Échéance : {{ act.deadline|date('d/m/Y') }}
+                                                            <i data-lucide="calendar" class="ks-ico" aria-hidden="true"></i> Échéance : {{ act.deadline|date('d/m/Y') }}
                                                         </span>
                                                     {% endif %}
                                                 </li>

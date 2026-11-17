@@ -216,7 +216,7 @@ final class ReminderService
         if (0 === $count) {
             return false;
         }
-        $title = 'Vos rituels du jour 🌱';
+        $title = 'Vos rituels du jour';
         $message = 1 === $count ? 'Un petit rituel vous attend aujourd\'hui. Un pas après l\'autre.' : $count.' rituels vous attendent aujourd\'hui. Commencez par le plus simple.';
 
         return $this->notifier->notify($user, NotificationType::DAILY_RITUALS, $title, $message, '/dashboard', 'rituels '.$today->format('Y-m-d'));

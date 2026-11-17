@@ -146,3 +146,6 @@
     border-radius: var(--r-md) !important;
     font-family: var(--font-sans) !important;
 }
+
+/* Icône Lucide placée dans une ligne de texte (remplace les anciens émojis) */
+.ks-ico { display: inline-block; width: 1.05em; height: 1.05em; vertical-align: -0.15em; flex-shrink: 0; }

@@ -287,12 +287,12 @@
 
     {# 2. Héritage & Transmission (Legs) #}
     <section>
-        <div class="section-header">2. Héritage & Projets de Legs</div>
+        <div class="section-header">2. Héritage & Projets de legs</div>
         
         <div style="display: flex; flex-direction: column; gap: 20px;">
             <div class="no-break" style="background: white; border-radius: 12px; border: 1px solid #fbcfe8; padding: 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.02);">
                 <h3 style="font-size: 1.1rem; font-weight: 700; color: #A87A1F; margin: 0 0 15px 0; border-bottom: 1px dashed #fbcfe8; padding-bottom: 8px;">
-                    🏺 Projets de Legs & Transmission (Legacy)
+                    Projets de legs & Transmission (Legacy)
                 </h3>
                 <div style="display: flex; flex-direction: column; gap: 15px;">
                     {% for item in legacyGoals %}
@@ -356,7 +356,7 @@
                                 {# Habits #}
                                 <div style="background: #FAF4E6; padding: 15px; border-radius: 8px; border: 1px solid rgba(0,0,0,0.02);">
                                     <div style="font-size: 0.72rem; font-weight: 850; color: #64748b; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 10px;">
-                                        ⚡ Rituels
+                                        <i data-lucide="zap" class="ks-ico" aria-hidden="true"></i> Rituels
                                     </div>
                                     {% if gg.habits|length > 0 %}
                                         <ul style="padding-left: 20px; margin: 0; line-height: 1.6; font-size: 0.9rem; color: #334155;">
@@ -377,7 +377,7 @@
                                 {# Actions #}
                                 <div style="background: #FAF4E6; padding: 15px; border-radius: 8px; border: 1px solid rgba(0,0,0,0.02);">
                                     <div style="font-size: 0.72rem; font-weight: 850; color: #64748b; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 10px;">
-                                        🎯 Actions spécifiques
+                                        <i data-lucide="target" class="ks-ico" aria-hidden="true"></i> Actions spécifiques
                                     </div>
                                     {% if gg.transmissionActions|length > 0 %}
                                         <ul style="padding-left: 20px; margin: 0; line-height: 1.6; font-size: 0.9rem; color: #334155;">
@@ -386,7 +386,7 @@
                                                     <strong>{{ act.title }}</strong>
                                                     {% if act.deadline %}
                                                         <span style="font-size: 0.75rem; color: #dc2626; font-weight: 600; display: block; margin-top: 2px;">
-                                                            📅 Échéance : {{ act.deadline|date('d/m/Y') }}
+                                                            <i data-lucide="calendar" class="ks-ico" aria-hidden="true"></i> Échéance : {{ act.deadline|date('d/m/Y') }}
                                                         </span>
                                                     {% endif %}
                                                 </li>

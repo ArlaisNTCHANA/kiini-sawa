@@ -29,7 +29,7 @@
 }
 .progress-bar-fill {
     height: 100%;
-    background: linear-gradient(90deg, #6366f1, #8b5cf6);
+    background: linear-gradient(90deg, #5E8463, #5E8463);
     border-radius: 99px;
     transition: width 0.8s ease;
 }
@@ -250,7 +250,7 @@
                         </div>
                     </div>
                     <div class="test-card-body"><p>{{ def.description }}</p></div>
-                    <div class="questions-count" style="color:{{ def.color }};" title="{{ levels[def.level] ?? '' }}">⏱ {{ def.minutes }} min · {{ def.level }}</div>
+                    <div class="questions-count" style="color:{{ def.color }};" title="{{ levels[def.level] ?? '' }}"><i data-lucide="timer" class="ks-ico" aria-hidden="true"></i> {{ def.minutes }} min · {{ def.level }}</div>
                     <div class="test-card-footer">
                         <a href="{{ path('app_assessment_take', {slug: slug}) }}" class="btn-take" style="background:{{ def.color }};">{{ done ? 'Refaire' : 'Faire le test' }}</a>
                         {% if done %}<a href="{{ path('app_assessment_report', {id: done.id}) }}" class="btn-result">Résultats</a>{% endif %}
@@ -274,7 +274,7 @@
                 <div class="test-card-meta"><div class="subtitle">Le regard des autres</div><h3>Feedback nourricier</h3></div>
             </div>
             <div class="test-card-body"><p>Demandez à vos proches les qualités qu'ils voient en vous, ce que vous faites de mieux et où vous pourriez grandir. Anonyme si vous le souhaitez.</p></div>
-            <div class="questions-count" style="color:var(--couple);">⏱ 3 min pour chaque proche · Regard extérieur</div>
+            <div class="questions-count" style="color:var(--couple);"><i data-lucide="timer" class="ks-ico" aria-hidden="true"></i> 3 min pour chaque proche · Regard extérieur</div>
             <div class="test-card-footer"><a href="{{ path('app_feedback') }}" class="btn-take" style="background:var(--couple);">Demander un feedback</a></div>
         </div>
     </div>

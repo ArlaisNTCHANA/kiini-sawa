@@ -53,7 +53,7 @@
                     {% set s = stats[m.id] %}
                     <tr>
                         <td><strong>{{ m.user.displayName }}</strong>{% if m == me %} <span class="og-mini">(vous)</span>{% endif %}<br><span class="og-mini">{{ m.roleLabel }}{{ m.mentor ? ' · suivi par ' ~ m.mentor.user.displayName }}</span>
-                            {% if m != me and m.sharePlans %}<br><a href="{{ path('app_organisation_member_plan', {id: org.id, memberId: m.id}) }}" style="font-size: .8rem; color: var(--primary); font-weight: 600;">Lire ses plans →</a>{% elseif m != me %}<br><span class="og-mini">🔒 plans non partagés</span>{% endif %}
+                            {% if m != me and m.sharePlans %}<br><a href="{{ path('app_organisation_member_plan', {id: org.id, memberId: m.id}) }}" style="font-size: .8rem; color: var(--primary); font-weight: 600;">Lire ses plans →</a>{% elseif m != me %}<br><span class="og-mini"><i data-lucide="lock" class="ks-ico" aria-hidden="true"></i> plans non partagés</span>{% endif %}
                         </td>
                         <td>{% if not s.onboarded %}<span class="og-pill" style="background: var(--gold-soft); color: var(--accent);">Pas démarré</span>{% elseif s.activeThisWeek %}<span class="og-pill" style="background: #DCFCE7; color: #166534;">Actif</span>{% else %}<span class="og-pill">Inactif</span>{% endif %}
                             <br><span class="og-mini">{{ s.lastActive ? 'vu le ' ~ s.lastActive|date('d/m') : 'jamais connecté' }}</span></td>
@@ -123,7 +123,7 @@
         <section class="og-card" x-data="{ seats: {{ (org.seats in packs|map(p => p.seats)) ? org.seats : 25 }}, currency: 'EUR', method: '{{ bankInstructions ? 'BANK_TRANSFER' : 'MOBILE_MONEY' }}' }">
             <h2>{{ org.licenseValid ? 'Renouveler ou changer de pack' : 'Activer les places' }}</h2>
             {% if pendingOrder %}
-                <p style="border-left: 4px solid var(--warning); padding-left: .75rem;">⏳ Commande de {{ pendingOrder.seats }} places ({{ pendingOrder.amount|money(pendingOrder.currency) }}) en cours de vérification.</p>
+                <p style="border-left: 4px solid var(--warning); padding-left: .75rem;"><i data-lucide="hourglass" class="ks-ico" aria-hidden="true"></i> Commande de {{ pendingOrder.seats }} places ({{ pendingOrder.amount|money(pendingOrder.currency) }}) en cours de vérification.</p>
             {% elseif not bankInstructions and not mobileMoneyInstructions %}
                 <p class="og-mini">Le paiement en ligne n'est pas encore ouvert : écrivez-nous pour activer vos places.</p>
             {% else %}

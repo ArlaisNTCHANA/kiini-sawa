@@ -295,7 +295,7 @@
             </div>
         </div>
         <div class="bilan-stat-card">
-            <div style="padding: 0.6rem; background: rgba(99,102,241,0.08); border-radius: 0.75rem; color: #4F46E5;">
+            <div style="padding: 0.6rem; background: rgba(94, 148, 121,0.08); border-radius: 0.75rem; color: #2E6B53;">
                 <i data-lucide="trending-up" class="w-4 h-4"></i>
             </div>
             <div>
@@ -304,7 +304,7 @@
             </div>
         </div>
         <div class="bilan-stat-card">
-            <div style="padding: 0.6rem; background: rgba(245,158,11,0.08); border-radius: 0.75rem; color: var(--warning);">
+            <div style="padding: 0.6rem; background: rgba(200, 150, 46,0.08); border-radius: 0.75rem; color: var(--warning);">
                 <i data-lucide="smile" class="w-4 h-4"></i>
             </div>
             <div>
@@ -526,7 +526,7 @@
                 class="w-full p-5 flex items-center justify-between bg-white border border-slate-200 rounded-2xl cursor-pointer text-left shadow-sm/5">
             <span class="text-sm font-bold text-slate-700 flex items-center gap-3">
                 <span class="p-2 bg-teal-50 rounded-full text-teal-700"><i data-lucide="book-open" class="w-4 h-4"></i></span>
-                Note du Coach : Comprendre votre dynamique
+                Note du coach : Comprendre votre dynamique
             </span>
             <i data-lucide="chevron-down" class="w-5 h-5 text-slate-400 transition-transform" :class="guideOpen ? 'rotate-180' : ''"></i>
         </button>
@@ -895,10 +895,10 @@ function bilanData() {
             const r = this.calculateHabitRate(goal);
             const p = goal.progress;
             
-            if (r < 40) return '<span>🏗️ Discipline à bâtir</span>';
-            if (r >= 80 && p < 20) return '<span>🌱 Semis (Patience)</span>';
-            if (p >= 90) return '<span>🏆 Victoire proche</span>';
-            return '<span>⚡ En action</span>';
+            if (r < 40) return '<span>Discipline à bâtir</span>';
+            if (r >= 80 && p < 20) return '<span>Semis (Patience)</span>';
+            if (p >= 90) return '<span>Victoire proche</span>';
+            return '<span>En action</span>';
         },
 
         // SVG graphing helpers

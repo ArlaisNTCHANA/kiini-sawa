@@ -549,7 +549,7 @@ class PlannerController extends AbstractController
                     $activity->setChallenge($participation->getChallenge());
                     $activity->setUser($user);
                     $activity->setType('SYSTEM');
-                    $activity->setContent(($user->getUserProfile() ? $user->getUserProfile()->getFirstName() : $user->getEmail()) . ' a validé son défi depuis le calendrier ! 📅');
+                    $activity->setContent(($user->getUserProfile() ? $user->getUserProfile()->getFirstName() : $user->getEmail()) . ' a validé son défi depuis le calendrier !');
                     $em->persist($activity);
                 }
 

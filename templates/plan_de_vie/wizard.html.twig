@@ -39,7 +39,7 @@
             position: absolute;
             bottom: -10%; right: -10%;
             width: 55vw; height: 55vh;
-            background: radial-gradient(circle, rgba(245, 158, 11, 0.12) 0%, transparent 70%);
+            background: radial-gradient(circle, rgba(200, 150, 46, 0.12) 0%, transparent 70%);
             filter: blur(80px);
             pointer-events: none;
         }
@@ -165,12 +165,12 @@
                 </a>
                 <h1 style="font-family: var(--font-serif); font-size: 2.25rem; color: var(--primary); margin-top: 0.5rem; font-weight: 700; letter-spacing: -0.02em;">
                     {% if step == 1 %}Modifier mon But de Dieu
-                    {% elseif step == 2 %}Modifier ma Balance Interne
+                    {% elseif step == 2 %}Modifier ma Balance interne
                     {% elseif step == 3 %}Modifier mes Passions & Intérêts
                     {% elseif step == 4 %}Modifier mes Dons & Talents
-                    {% elseif step == 5 %}Modifier mon Profil de Personnalité
+                    {% elseif step == 5 %}Modifier mon Profil de personnalité
                     {% elseif step == 6 %}Modifier ma Vision Personnelle
-                    {% elseif step == 7 %}Modifier mes Objectifs Spécifiques
+                    {% elseif step == 7 %}Modifier mes Objectifs spécifiques
                     {% elseif step == 8 %}Modifier Compétence & Connaissance
                     {% elseif step == 9 %}Modifier Caractère & Conviction
                     {% elseif step == 10 %}Modifier Relation & Réseau
@@ -277,10 +277,10 @@
 
                 {# ETAPE 2: BALANCE INTERNE (VALUES, CONVICTIONS, LIMITING BELIEFS) #}
                 {% if (not single and 2 in allowedSteps) or (single and step == 2) %}
-                <div data-wizard-target="step" data-step-number="2" class="{% if step != 2 %}hidden{% endif %} animate-fade-in" data-step-title="Balance Interne">
+                <div data-wizard-target="step" data-step-number="2" class="{% if step != 2 %}hidden{% endif %} animate-fade-in" data-step-title="Balance interne">
                     <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.75rem; color: var(--primary);">
                         <i data-lucide="activity" style="width: 24px; height: 24px;"></i>
-                        <h2 style="font-family: var(--font-serif); font-size: 1.75rem; font-weight: 500;">Balance Interne</h2>
+                        <h2 style="font-family: var(--font-serif); font-size: 1.75rem; font-weight: 500;">Balance interne</h2>
                     </div>
                     <p style="color: var(--fg-muted); font-size: 0.95rem; margin-bottom: 1.75rem; line-height: 1.6;">
                         Vos fondations psychologiques : vos valeurs cardinales, convictions profondes et croyances limitantes à surmonter.
@@ -578,10 +578,10 @@
 
                 {# ETAPE 5: PERSONNALITÉ #}
                 {% if (not single and 5 in allowedSteps) or (single and step == 5) %}
-                <div data-wizard-target="step" data-step-number="5" class="{% if step != 5 %}hidden{% endif %} animate-fade-in" data-step-title="Profil de Personnalité">
+                <div data-wizard-target="step" data-step-number="5" class="{% if step != 5 %}hidden{% endif %} animate-fade-in" data-step-title="Profil de personnalité">
                     <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.75rem; color: var(--primary);">
                         <i data-lucide="user" style="width: 24px; height: 24px;"></i>
-                        <h2 style="font-family: var(--font-serif); font-size: 1.75rem; font-weight: 500;">Profil de Personnalité</h2>
+                        <h2 style="font-family: var(--font-serif); font-size: 1.75rem; font-weight: 500;">Profil de personnalité</h2>
                     </div>
                     <p style="color: var(--fg-muted); font-size: 0.95rem; margin-bottom: 1rem; line-height: 1.6;">
                         Vos résultats aux tests de personnalité enrichissent votre plan. Ceux que vous avez passés dans KIINI SAWA sont repris automatiquement ; vous pouvez toujours les modifier.
@@ -690,10 +690,10 @@
 
                 {# ETAPE 7: OBJECTIFS SPÉCIFIQUES (BE, DO, HAVE, GIVE) #}
                 {% if (not single and 7 in allowedSteps) or (single and step == 7) %}
-                <div data-wizard-target="step" data-step-number="7" class="{% if step != 7 %}hidden{% endif %} animate-fade-in" data-step-title="Objectifs Spécifiques">
+                <div data-wizard-target="step" data-step-number="7" class="{% if step != 7 %}hidden{% endif %} animate-fade-in" data-step-title="Objectifs spécifiques">
                     <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.75rem; color: var(--primary);">
                         <i data-lucide="target" style="width: 24px; height: 24px;"></i>
-                        <h2 style="font-family: var(--font-serif); font-size: 1.75rem; font-weight: 500;">Objectifs Spécifiques (BE, DO, HAVE, GIVE)</h2>
+                        <h2 style="font-family: var(--font-serif); font-size: 1.75rem; font-weight: 500;">Objectifs spécifiques (BE, DO, HAVE, GIVE)</h2>
                     </div>
                     <p style="color: var(--fg-muted); font-size: 0.95rem; margin-bottom: 1.75rem; line-height: 1.6;">
                         Déclinez votre vision générale en objectifs catégorisés selon 4 angles fondamentaux.
@@ -1157,13 +1157,13 @@
                                             <input type="text" name="growth_relation_title[{{ loop.index0 }}]" class="wiz-input" value="{{ goal.title }}" required><input type="hidden" name="growth_relation_id[{{ loop.index0 }}]" value="{{ goal.id }}">
                                         </div>
                                         <div style="display: flex; flex-direction: column; gap: 0.25rem;">
-                                            <label style="font-size: 0.7rem; font-weight: 700; color: var(--fg-light); text-transform: uppercase;">Catégorie de Réseau</label>
+                                            <label style="font-size: 0.7rem; font-weight: 700; color: var(--fg-light); text-transform: uppercase;">Catégorie de réseau</label>
                                             <select name="growth_relation_type[{{ loop.index0 }}]" class="wiz-input" style="height: 42px; padding: 0.5rem 1rem;">
-                                                <option value="orientation" {% if goal.type == 'orientation' %}selected{% endif %}>Réseau d'Orientation (Mentors, conseillers)</option>
-                                                <option value="croissance" {% if goal.type == 'croissance' %}selected{% endif %}>Réseau de Croissance (Pairs, masterminds)</option>
-                                                <option value="soutien" {% if goal.type == 'soutien' %}selected{% endif %}>Réseau de Soutien (Amis proches, famille)</option>
-                                                <option value="responsabilite" {% if goal.type == 'responsabilite' %}selected{% endif %}>Réseau de Responsabilité (Binômes d'imputabilité)</option>
-                                                <option value="environnement" {% if goal.type == 'environnement' %}selected{% endif %}>Réseau d'Environnement (Écosystème, bureau)</option>
+                                                <option value="orientation" {% if goal.type == 'orientation' %}selected{% endif %}>Réseau d'orientation (Mentors, conseillers)</option>
+                                                <option value="croissance" {% if goal.type == 'croissance' %}selected{% endif %}>Réseau de croissance (Pairs, masterminds)</option>
+                                                <option value="soutien" {% if goal.type == 'soutien' %}selected{% endif %}>Réseau de soutien (Amis proches, famille)</option>
+                                                <option value="responsabilite" {% if goal.type == 'responsabilite' %}selected{% endif %}>Réseau de responsabilité (Binômes d'imputabilité)</option>
+                                                <option value="environnement" {% if goal.type == 'environnement' %}selected{% endif %}>Réseau d'environnement (Écosystème, bureau)</option>
                                             </select>
                                         </div>
                                         <div style="display: flex; flex-direction: column; gap: 0.25rem;">
@@ -1199,13 +1199,13 @@
                                         <input type="text" name="growth_relation_title[0]" class="wiz-input" placeholder="Ex: Un mentor expert en levée de fonds" required>
                                     </div>
                                     <div style="display: flex; flex-direction: column; gap: 0.25rem;">
-                                        <label style="font-size: 0.7rem; font-weight: 700; color: var(--fg-light); text-transform: uppercase;">Catégorie de Réseau</label>
+                                        <label style="font-size: 0.7rem; font-weight: 700; color: var(--fg-light); text-transform: uppercase;">Catégorie de réseau</label>
                                         <select name="growth_relation_type[0]" class="wiz-input" style="height: 42px; padding: 0.5rem 1rem;">
-                                            <option value="orientation" selected>Réseau d'Orientation (Mentors, conseillers)</option>
-                                            <option value="croissance">Réseau de Croissance (Pairs, masterminds)</option>
-                                            <option value="soutien">Réseau de Soutien (Amis proches, famille)</option>
-                                            <option value="responsabilite">Réseau de Responsabilité (Binômes d'imputabilité)</option>
-                                            <option value="environnement">Réseau d'Environnement (Écosystème, bureau)</option>
+                                            <option value="orientation" selected>Réseau d'orientation (Mentors, conseillers)</option>
+                                            <option value="croissance">Réseau de croissance (Pairs, masterminds)</option>
+                                            <option value="soutien">Réseau de soutien (Amis proches, famille)</option>
+                                            <option value="responsabilite">Réseau de responsabilité (Binômes d'imputabilité)</option>
+                                            <option value="environnement">Réseau d'environnement (Écosystème, bureau)</option>
                                         </select>
                                     </div>
                                     <div style="display: flex; flex-direction: column; gap: 0.25rem;">
@@ -1364,7 +1364,7 @@
                         <div style="padding: 1rem 1.25rem; background: rgba(46, 107, 83, 0.05); border: 1px dashed rgba(46, 107, 83, 0.3); border-radius: 1rem; margin-bottom: 1.25rem; display: flex; align-items: flex-start; gap: 0.75rem;">
                             <i data-lucide="info" style="width: 20px; height: 20px; color: var(--primary); flex-shrink: 0; margin-top: 0.1rem;"></i>
                             <div style="font-size: 0.88rem; color: var(--fg-light); line-height: 1.5;">
-                                <strong style="color: var(--primary);">Test d'Hygiène détecté !</strong> Les domaines et statuts de mobilisation ci-dessous ont été pré-remplis à partir de vos scores d'auto-évaluation du test passé le {{ hygieneTest.date|date('d/m/Y') }}.
+                                <strong style="color: var(--primary);">Test d'hygiène détecté !</strong> Les domaines et statuts de mobilisation ci-dessous ont été pré-remplis à partir de vos scores d'auto-évaluation du test passé le {{ hygieneTest.date|date('d/m/Y') }}.
                             </div>
                         </div>
 
@@ -1417,7 +1417,7 @@
                         <div style="padding: 1rem 1.25rem; background: rgba(236, 72, 153, 0.05); border: 1px dashed rgba(236, 72, 153, 0.3); border-radius: 1rem; margin-bottom: 1.75rem; display: flex; align-items: flex-start; gap: 0.75rem;">
                             <i data-lucide="help-circle" style="width: 20px; height: 20px; color: var(--couple); flex-shrink: 0; margin-top: 0.1rem;"></i>
                             <div style="font-size: 0.88rem; color: var(--fg-light); line-height: 1.5;">
-                                <strong style="color: var(--couple);">Audit d'Hygiène non détecté.</strong> Vous pouvez <a href="{{ path('app_personality_take', { type: 'HYGIENE' }) }}" style="color: var(--couple); text-decoration: underline; font-weight: 600;">passer le test d'Hygiène de vie</a> pour pré-remplir automatiquement ces domaines selon vos forces et faiblesses actuelles.
+                                <strong style="color: var(--couple);">Audit d'hygiène non détecté.</strong> Vous pouvez <a href="{{ path('app_personality_take', { type: 'HYGIENE' }) }}" style="color: var(--couple); text-decoration: underline; font-weight: 600;">passer le test d'Hygiène de vie</a> pour pré-remplir automatiquement ces domaines selon vos forces et faiblesses actuelles.
                             </div>
                         </div>
                     {% endif %}
@@ -1509,10 +1509,10 @@
 
                 {# ETAPE 13: ECHEANCIER #}
                 {% if (not single and 13 in allowedSteps) or (single and step == 13) %}
-                <div data-wizard-target="step" data-step-number="13" class="{% if step != 13 %}hidden{% endif %} animate-fade-in" data-step-title="Mon Échéancier">
+                <div data-wizard-target="step" data-step-number="13" class="{% if step != 13 %}hidden{% endif %} animate-fade-in" data-step-title="Mon échéancier">
                     <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.75rem; color: var(--primary);">
                         <i data-lucide="calendar" style="width: 24px; height: 24px;"></i>
-                        <h2 style="font-family: var(--font-serif); font-size: 1.75rem; font-weight: 500;">Mon Échéancier</h2>
+                        <h2 style="font-family: var(--font-serif); font-size: 1.75rem; font-weight: 500;">Mon échéancier</h2>
                     </div>
                     
                     <div style="display: flex; flex-direction: column; align-items: center; text-align: center; padding: 2.5rem 1.5rem; background: rgba(46, 107, 83, 0.04); border: 1px solid rgba(46, 107, 83, 0.1); border-radius: 1.5rem; margin-top: 1rem; gap: 1rem;">
@@ -1827,13 +1827,13 @@
 
         const typeSelectHtml = axis !== 'relation' ? '' : `
             <div style="display: flex; flex-direction: column; gap: 0.25rem;">
-                <label style="font-size: 0.7rem; font-weight: 700; color: var(--fg-light); text-transform: uppercase;">Catégorie de Réseau</label>
+                <label style="font-size: 0.7rem; font-weight: 700; color: var(--fg-light); text-transform: uppercase;">Catégorie de réseau</label>
                 <select name="growth_${axis}_type[${index}]" class="wiz-input" style="height: 42px; padding: 0.5rem 1rem;">
-                    <option value="orientation" selected>Réseau d'Orientation (Mentors, conseillers)</option>
-                    <option value="croissance">Réseau de Croissance (Pairs, masterminds)</option>
-                    <option value="soutien">Réseau de Soutien (Amis proches, famille)</option>
-                    <option value="responsabilite">Réseau de Responsabilité (Binômes d'imputabilité)</option>
-                    <option value="environnement">Réseau d'Environnement (Écosystème, bureau)</option>
+                    <option value="orientation" selected>Réseau d'orientation (Mentors, conseillers)</option>
+                    <option value="croissance">Réseau de croissance (Pairs, masterminds)</option>
+                    <option value="soutien">Réseau de soutien (Amis proches, famille)</option>
+                    <option value="responsabilite">Réseau de responsabilité (Binômes d'imputabilité)</option>
+                    <option value="environnement">Réseau d'environnement (Écosystème, bureau)</option>
                 </select>
             </div>
         `;

@@ -327,7 +327,7 @@
             { id: 'CROISSANCE',   label: 'Croissance',    color: '#D97706', glow: 'rgba(217, 119, 6, 0.15)' },
             { id: 'DEVELOPPEMENT',label: 'Développement', color: '#059669', glow: 'rgba(5, 150, 105, 0.15)' },
             { id: 'TRANSMISSION', label: 'Transmission',  color: '#DB2777', glow: 'rgba(219, 39, 119, 0.15)' },
-            { id: 'HYGIENE',      label: 'Hygiène',       color: '#4F46E5', glow: 'rgba(79, 70, 229, 0.15)' },
+            { id: 'HYGIENE',      label: 'Hygiène',       color: '#2E6B53', glow: 'rgba(79, 70, 229, 0.15)' },
         ] %}
         <div style="display: flex; flex-wrap: wrap; gap: 0.5rem; justify-content: center; margin-bottom: 0.5rem;">
             {% for p in pillars %}
@@ -398,7 +398,7 @@
                                             {% set pText = 'Transmission' %}
                                         {% elseif habit.hygieneDomain is not null %}
                                             {% set hPillar = 'HYGIENE' %}
-                                            {% set pColor = '#4F46E5' %}
+                                            {% set pColor = '#2E6B53' %}
                                             {% set pGlow = 'rgba(79, 70, 229, 0.08)' %}
                                             {% set pText = 'Hygiène' %}
                                         {% endif %}
@@ -520,7 +520,7 @@
                     {% set pText = 'Transmission' %}
                 {% elseif habit.hygieneDomain is not null %}
                     {% set hPillar = 'HYGIENE' %}
-                    {% set pColor = '#4F46E5' %}
+                    {% set pColor = '#2E6B53' %}
                     {% set pGlow = 'rgba(79, 70, 229, 0.08)' %}
                     {% set pText = 'Hygiène' %}
                 {% endif %}
@@ -624,12 +624,12 @@
                         </div>
                         <div style="flex: 1;">
                             <span style="display: block; font-size: 0.725rem; font-weight: 800; color: var(--fg-muted); letter-spacing: 0.05em; text-transform: uppercase; margin-bottom: 0.5rem;">
-                                Formule d'Ancrage Mental
+                                Formule d'ancrage Mental
                             </span>
                             <p style="font-family: var(--font-serif); font-size: 1.15rem; line-height: 1.6; color: var(--fg); margin: 0;">
                                 Quand je <span style="border-bottom: 2px dashed var(--primary-light); padding: 0 4px; font-weight: 600;" :style="rooting.rootingAnchor ? 'color: #3D7A5F; border-bottom-style: solid;' : 'color: #94A3B8;'" x-text="rooting.rootingAnchor || '... routine ancre ...'"></span>, 
                                 je vais <span style="border-bottom: 2px dashed var(--warning); padding: 0 4px; font-weight: 600;" :style="rooting.rootingAction ? 'color: #D97706; border-bottom-style: solid;' : 'color: #94A3B8;'" x-text="rooting.rootingAction || '... action minimale ...'"></span> 
-                                à/en <span style="border-bottom: 2px dashed #4F46E5; padding: 0 4px; font-weight: 600;" :style="rooting.rootingMoment ? 'color: #4F46E5; border-bottom-style: solid;' : 'color: #94A3B8;'" x-text="rooting.rootingMoment || '... moment ...'"></span> 
+                                à/en <span style="border-bottom: 2px dashed #2E6B53; padding: 0 4px; font-weight: 600;" :style="rooting.rootingMoment ? 'color: #2E6B53; border-bottom-style: solid;' : 'color: #94A3B8;'" x-text="rooting.rootingMoment || '... moment ...'"></span> 
                                 pour obtenir <span style="border-bottom: 2px dashed var(--couple); padding: 0 4px; font-weight: 600;" :style="rooting.rootingBenefit ? 'color: #DB2777; border-bottom-style: solid;' : 'color: #94A3B8;'" x-text="rooting.rootingBenefit || '... récompense ...'"></span>.
                             </p>
                         </div>
@@ -645,7 +645,7 @@
                                       placeholder="Pourquoi cette habitude est-elle essentielle pour vous ? Quel est votre engagement ?"></textarea>
                         </div>
 
-                        {# Fréquence et Recurrence #}
+                        {# Fréquence et récurrence #}
                         <div style="grid-column: span 2; display: flex; flex-wrap: wrap; align-items: center; gap: 1rem; background: rgba(248, 250, 252, 0.6); padding: 0.75rem 1.25rem; border-radius: 1rem; border: 1px solid rgba(46, 107, 83,0.08);">
                             <div style="display: flex; align-items: center; gap: 0.5rem;">
                                 <span style="font-size: 0.75rem; font-weight: 800; color: var(--fg-muted); text-transform: uppercase; letter-spacing: 0.05em;">Fréquence :</span>
@@ -830,7 +830,7 @@
                         {% set pText = 'Transmission' %}
                     {% elseif habit.hygieneDomain is not null %}
                         {% set hPillar = 'HYGIENE' %}
-                        {% set pColor = '#4F46E5' %}
+                        {% set pColor = '#2E6B53' %}
                         {% set pGlow = 'rgba(79, 70, 229, 0.08)' %}
                         {% set pText = 'Hygiène' %}
                     {% endif %}

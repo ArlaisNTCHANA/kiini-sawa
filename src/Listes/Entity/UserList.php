@@ -26,7 +26,7 @@ class UserList
     private ?string $name = null;
 
     #[ORM\Column(length: 50)]
-    private string $icon = '📋';
+    private string $icon = 'clipboard-list'; // nom d'icône Lucide (module dormant)
 
     #[ORM\Column(length: 50)]
     private string $color = '#6366f1';

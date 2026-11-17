@@ -18,7 +18,7 @@
             <a href="{{ path('app_methode_chapter', {slug: c.slug}) }}" style="display: block; text-decoration: none; background: var(--card-bg); border-radius: var(--r-lg); box-shadow: var(--card-shadow); padding: 1.1rem 1.35rem;">
                 <div style="display: flex; justify-content: space-between; gap: 1rem; align-items: baseline;">
                     <h2 style="font-family: var(--font-serif); font-size: 1.15rem; color: var(--fg);">{{ c.title }}</h2>
-                    <span style="flex-shrink: 0; font-size: .75rem; color: var(--fg-muted);">{% if not app.user and loop.index > publicCount %}🔒 Compte gratuit{% else %}{{ c.minutes }} min{% endif %}</span>
+                    <span style="flex-shrink: 0; font-size: .75rem; color: var(--fg-muted);">{% if not app.user and loop.index > publicCount %}<i data-lucide="lock" class="ks-ico" aria-hidden="true"></i> Compte gratuit{% else %}{{ c.minutes }} min{% endif %}</span>
                 </div>
                 <p style="color: var(--fg-muted); font-size: .9rem; margin-top: .3rem; line-height: 1.5;">{{ c.excerpt }}</p>
             </a>

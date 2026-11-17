@@ -9,10 +9,10 @@
 
     <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem; margin-bottom: 2rem;">
         {% for f in [
-            ['👥', 'Chaque membre devient PRO', 'Tous les plans, la carte, le PDF, les revues, sans limite.'],
-            ['📊', 'Un tableau de bord d\'engagement', 'Qui a démarré, qui fait ses revues, qui est actif cette semaine.'],
-            ['🤝', 'Des accompagnateurs', 'Responsables de cellule ou mentors : chacun suit les membres qui lui sont confiés.'],
-            ['🔒', 'Le respect de l\'intimité', 'Les plans ne sont visibles qu\'avec l\'accord du membre. Le journal, jamais.'],
+            ['<i data-lucide="users" class="ks-ico" aria-hidden="true"></i>', 'Chaque membre devient PRO', 'Tous les plans, la carte, le PDF, les revues, sans limite.'],
+            ['<i data-lucide="chart-no-axes-column" class="ks-ico" aria-hidden="true"></i>', 'Un tableau de bord d\'engagement', 'Qui a démarré, qui fait ses revues, qui est actif cette semaine.'],
+            ['<i data-lucide="handshake" class="ks-ico" aria-hidden="true"></i>', 'Des accompagnateurs', 'Responsables de cellule ou mentors : chacun suit les membres qui lui sont confiés.'],
+            ['<i data-lucide="lock" class="ks-ico" aria-hidden="true"></i>', 'Le respect de l\'intimité', 'Les plans ne sont visibles qu\'avec l\'accord du membre. Le journal, jamais.'],
         ] %}
             <div style="background: var(--card-bg); box-shadow: var(--card-shadow); border-radius: var(--r-lg); padding: 1.25rem;">
                 <div style="font-size: 1.5rem;">{{ f[0] }}</div>

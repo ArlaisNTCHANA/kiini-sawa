@@ -314,17 +314,17 @@
                     <div class="subtheme-card-header" style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--bg-alt); padding-bottom: 0.75rem;">
                         <span style="font-size: 1.05rem; font-weight: 700; color: var(--fg-light); text-transform: capitalize;">
                             {% if axisKey == 'physique' %}
-                                🏃‍♂️ Physique
+                                <i data-lucide="activity" class="ks-ico" aria-hidden="true"></i>‍ Physique
                             {% elseif axisKey == 'mental' %}
-                                🧠 Mental
+                                <i data-lucide="brain" class="ks-ico" aria-hidden="true"></i> Mental
                             {% elseif axisKey == 'relationnel' %}
-                                🤝 Relationnel
+                                <i data-lucide="handshake" class="ks-ico" aria-hidden="true"></i> Relationnel
                             {% elseif axisKey == 'spirituel' %}
-                                ✨ Spirituel
+                                <i data-lucide="sparkles" class="ks-ico" aria-hidden="true"></i> Spirituel
                             {% elseif axisKey == 'ressources' %}
-                                ⚡ Ressources
+                                <i data-lucide="zap" class="ks-ico" aria-hidden="true"></i> Ressources
                             {% elseif axisKey == 'environnement' %}
-                                🏡 Environnement
+                                <i data-lucide="house" class="ks-ico" aria-hidden="true"></i> Environnement
                             {% else %}
                                 {{ axisKey|capitalize }}
                             {% endif %}

@@ -97,7 +97,7 @@
     .event-bar.challenge-bar {
         background: #fff7ed;
         color: #c2410c;
-        border-left-color: #f97316;
+        border-left-color: #C8962E;
     }
     .event-bar.completed {
         opacity: 0.5;
@@ -366,7 +366,7 @@
         <div x-show="currentView === 'day'" x-transition class="flex-1 p-6 bg-slate-50/30 grid grid-cols-1 md:grid-cols-12 gap-8 w-full border-t border-slate-100 animate-fade-in">
             {# Left column: Rituels #}
             <div class="col-span-12 md:col-span-5 bg-white rounded-2xl border border-slate-200/60 p-5 shadow-sm">
-                <h3 class="text-sm !font-sans font-extrabold text-slate-500 uppercase tracking-wider mb-4">Rituels du Jour</h3>
+                <h3 class="text-sm !font-sans font-extrabold text-slate-500 uppercase tracking-wider mb-4">Rituels du jour</h3>
                 <div class="space-y-3 max-h-[480px] overflow-y-auto pr-1 ks-scroll">
                     <template x-if="filteredEventsByDate(selectedDate).filter(e => e.type === 'HABIT').length === 0">
                         <div class="text-center py-12">

@@ -13,7 +13,7 @@
         <summary class="stw-item__summary">
             <span class="stw-item__label">{{ it.label }}</span>
             <span class="stw-item__tags">
-                {% if it.priority %}<span class="ks-badge" title="Élément prioritaire">★ Priorité</span>{% endif %}
+                {% if it.priority %}<span class="ks-badge" title="Élément prioritaire"><i data-lucide="star" class="ks-ico" aria-hidden="true"></i> Priorité</span>{% endif %}
                 {% if it.status %}<span class="stw-pill" style="color: {{ statuses[it.status].color }}; background: {{ statuses[it.status].bg }};">{{ statuses[it.status].label }}</span>{% else %}<span class="ks-badge ks-badge--muted">À évaluer</span>{% endif %}
                 {% if it.decision %}<span class="ks-badge ks-badge--muted">{{ decisions[it.decision].label }}</span>{% endif %}
             </span>

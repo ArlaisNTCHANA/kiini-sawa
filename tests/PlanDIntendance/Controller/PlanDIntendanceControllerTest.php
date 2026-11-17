@@ -205,7 +205,7 @@ class PlanDIntendanceControllerTest extends WebTestCase
         $this->assertSame($goal->getId(), $this->items($user)[0]->getLifeGoal()?->getId());
 
         $crawler = $this->client->request('GET', '/plan-de-vie');
-        $this->assertStringContainsString('Stew'.$item->getId().'["⚖️ Deux soirées par mois"]', $crawler->filter('#mermaid-code-src')->text());
+        $this->assertStringContainsString('Stew'.$item->getId().'["Deux soirées par mois"]', $crawler->filter('#mermaid-code-src')->text());
         $this->assertSelectorTextNotContains('[data-map-missing-plans]', 'Intendance');
     }
 }

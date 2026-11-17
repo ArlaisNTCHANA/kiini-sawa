@@ -11,6 +11,23 @@ Ne jamais afficher ni demander de mot de passe ; ne pas publier son nom (mention
 
 ---
 
+## 2026-11-17 · Lot A de l'audit design : zéro émoji, couleurs, casse
+
+- **Zéro émoji dans l'interface** : 208 pictogrammes remplacés par des icônes Lucide (`<i data-lucide="…" class="ks-ico">`,
+  style `.ks-ico` dans `app.css`) dans les textes, retirés dans les attributs, scripts, pages imprimables et libellés de
+  carte. Messages PHP nettoyés. Restent permis : ✓ ✗ → ← (signes typographiques) et les sorties console.
+- **Garde-fou** : `tests/Shared/DesignRulesTest.php` refuse tout émoji dans `templates/` et `src/` (hors `Command/` et emails)
+  et l'ancien turquoise. Pour une icône : `<i data-lucide="nom" class="ks-ico" aria-hidden="true"></i>`.
+- **Couleurs** : bandeau d'accueil en vert forêt avec halos sauge et or (plus de bleu ni d'indigo) ; teintes vives restantes
+  (bleu, indigo, violet, rose, ambre) ramenées à la palette du livre dans les écrans de l'application. Les **rapports de
+  tests** (DISC, ennéagramme…) et les pages « visualiser » gardent leurs couleurs propres, voulues.
+- **Casse française** : « Balance interne », « Objectifs spécifiques », « Réseau de croissance »… (le livre garde les titres
+  « X & Y » en majuscules : conservés). « Défis & Challenges Collectifs » → « Défis collectifs ».
+- **Bug corrigé** : la page d'administration « Entonnoir » (déployée le 17/11) utilisait un filtre Twig `|min` inexistant et
+  aurait donné une erreur 500 ; corrigé (`min()`), test de rendu ajouté. **À déployer.**
+- **Reste de l'audit** : lot B (un seul modèle de bouton, d'en-tête, de carte ; styles en ligne), lot C (accueil « Ma
+  prochaine étape », « Mes rythmes », une action principale par écran), visuels interactifs.
+
 ## 2026-11-17 · Audit design n° 2 : noms, vitrine, entonnoir
 
 Audit : `docs/audit-design-2-strategique-2026-11-17.md` (vitrine, premier usage, interactivité, noms).

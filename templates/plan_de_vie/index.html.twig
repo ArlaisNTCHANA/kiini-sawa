@@ -697,9 +697,9 @@
         border-color: rgba(239, 68, 68, 0.15);
     }
     .timeline-priority--MEDIUM {
-        background: rgba(245, 158, 11, 0.08);
+        background: rgba(200, 150, 46, 0.08);
         color: var(--warning);
-        border-color: rgba(245, 158, 11, 0.15);
+        border-color: rgba(200, 150, 46, 0.15);
     }
     .timeline-priority--LOW {
         background: rgba(100, 116, 139, 0.08);
@@ -963,7 +963,7 @@
     <!-- Tab navigation -->
     <div style="max-width: 1100px; margin: 0 auto; padding: 0 1rem;">
         {{ book_panel('plan_de_vie') }}
-        <p style="text-align: right; font-size: .85rem; margin: -.5rem 0 1rem;"><a href="{{ path('app_plan_history') }}" style="color: var(--primary); font-weight: 600; text-decoration: none;">🕰️ Historique de mes plans</a> · <a href="{{ path('app_plan_de_vie_pdf') }}" data-turbo="false" style="color: var(--primary); font-weight: 600; text-decoration: none;">Télécharger en PDF</a></p>
+        <p style="text-align: right; font-size: .85rem; margin: -.5rem 0 1rem;"><a href="{{ path('app_plan_history') }}" style="color: var(--primary); font-weight: 600; text-decoration: none;"><i data-lucide="history" class="ks-ico" aria-hidden="true"></i> Historique de mes plans</a> · <a href="{{ path('app_plan_de_vie_pdf') }}" data-turbo="false" style="color: var(--primary); font-weight: 600; text-decoration: none;">Télécharger en PDF</a></p>
     </div>
     <div id="rubrics-start">
         <nav class="tabs-nav">
@@ -1016,14 +1016,14 @@
                 </div>
             </div>
 
-            <!-- 2. Balance Interne (Convictions, Values, Limiting Beliefs) -->
+            <!-- 2. Balance interne (Convictions, Values, Limiting Beliefs) -->
             <div class="plan-card">
                 <div class="card-header">
                     <div class="card-title-group">
-                        <div class="card-icon" style="background: rgba(99, 102, 241, 0.08); color: #A87A1F;">
+                        <div class="card-icon" style="background: rgba(94, 148, 121, 0.08); color: #A87A1F;">
                             <i data-lucide="activity" style="width: 18px; height: 18px;"></i>
                         </div>
-                        <h2 class="card-title">Balance Interne</h2>
+                        <h2 class="card-title">Balance interne</h2>
                     </div>
                     <a href="{{ path('app_plan_wizard', { step: 2, single: 1 }) }}" class="btn-edit-card" title="Modifier">
                         <i data-lucide="pencil" style="width: 14px; height: 14px;"></i>
@@ -1119,7 +1119,7 @@
                         <div class="card-icon" style="background: rgba(244, 114, 182, 0.08); color: #f472b6;">
                             <i data-lucide="heart" style="width: 18px; height: 18px;"></i>
                         </div>
-                        <h2 class="card-title">Mes Passions</h2>
+                        <h2 class="card-title">Mes passions</h2>
                     </div>
                     <a href="{{ path('app_plan_wizard', { step: 3, single: 1 }) }}" class="btn-edit-card" title="Modifier">
                         <i data-lucide="pencil" style="width: 14px; height: 14px;"></i>
@@ -1149,7 +1149,7 @@
             <div class="plan-card">
                 <div class="card-header">
                     <div class="card-title-group">
-                        <div class="card-icon" style="background: rgba(245, 158, 11, 0.08); color: var(--warning);">
+                        <div class="card-icon" style="background: rgba(200, 150, 46, 0.08); color: var(--warning);">
                             <i data-lucide="sparkles" style="width: 18px; height: 18px;"></i>
                         </div>
                         <h2 class="card-title">Dons & Talents</h2>
@@ -1185,7 +1185,7 @@
                         <div class="card-icon" style="background: rgba(16, 185, 129, 0.08); color: var(--success);">
                             <i data-lucide="user" style="width: 18px; height: 18px;"></i>
                         </div>
-                        <h2 class="card-title">Ma Personnalité & Profils</h2>
+                        <h2 class="card-title">Ma personnalité & profils</h2>
                     </div>
                     <a href="{{ path('app_plan_wizard', { step: 5, single: 1 }) }}" class="btn-edit-card" title="Modifier manuellement">
                         <i data-lucide="pencil" style="width: 14px; height: 14px;"></i>
@@ -1306,14 +1306,14 @@
                 </div>
             </div>
 
-            <!-- 7. Objectifs Spécifiques (BE, DO, HAVE, GIVE) -->
+            <!-- 7. Objectifs spécifiques (BE, DO, HAVE, GIVE) -->
             <div class="plan-card">
                 <div class="card-header">
                     <div class="card-title-group">
                         <div class="card-icon" style="background: rgba(148, 163, 184, 0.08); color: var(--fg-muted);">
                             <i data-lucide="target" style="width: 18px; height: 18px;"></i>
                         </div>
-                        <h2 class="card-title">Objectifs Spécifiques</h2>
+                        <h2 class="card-title">Objectifs spécifiques</h2>
                     </div>
                     <a href="{{ path('app_plan_wizard', { step: 7, single: 1 }) }}" class="btn-edit-card" title="Modifier">
                         <i data-lucide="pencil" style="width: 14px; height: 14px;"></i>
@@ -1336,7 +1336,7 @@
                                                 <span>{{ goal.title }}</span>
                                             </div>
                                             {% if goal.deadline %}
-                                                <span style="font-size: 0.75rem; color: var(--fg-muted); background: rgba(99, 102, 241, 0.05); padding: 0.15rem 0.4rem; border-radius: 0.25rem; font-weight: 500; white-space: nowrap; margin-left: 0.5rem;">
+                                                <span style="font-size: 0.75rem; color: var(--fg-muted); background: rgba(94, 148, 121, 0.05); padding: 0.15rem 0.4rem; border-radius: 0.25rem; font-weight: 500; white-space: nowrap; margin-left: 0.5rem;">
                                                     Échéance : {{ goal.deadline|date('d/m/Y') }}
                                                 </span>
                                             {% endif %}
@@ -1358,7 +1358,7 @@
                                                 <span>{{ goal.title }}</span>
                                             </div>
                                             {% if goal.deadline %}
-                                                <span style="font-size: 0.75rem; color: var(--fg-muted); background: rgba(59, 130, 246, 0.05); padding: 0.15rem 0.4rem; border-radius: 0.25rem; font-weight: 500; white-space: nowrap; margin-left: 0.5rem;">
+                                                <span style="font-size: 0.75rem; color: var(--fg-muted); background: rgba(61, 122, 95, 0.05); padding: 0.15rem 0.4rem; border-radius: 0.25rem; font-weight: 500; white-space: nowrap; margin-left: 0.5rem;">
                                                     Échéance : {{ goal.deadline|date('d/m/Y') }}
                                                 </span>
                                             {% endif %}
@@ -1426,16 +1426,16 @@
     <!-- Tab 3: Croissance -->
     <div class="tab-content hidden" id="tab-growth">
         <div class="cards-grid">
-            <!-- Fondations de Croissance (Valeurs & Croyances) -->
-            <div class="plan-card grid-full" style="background: linear-gradient(135deg, rgba(99, 102, 241, 0.02) 0%, rgba(16, 185, 129, 0.02) 100%); border: 1px solid rgba(99, 102, 241, 0.1);">
+            <!-- Fondations de croissance (Valeurs & Croyances) -->
+            <div class="plan-card grid-full" style="background: linear-gradient(135deg, rgba(94, 148, 121, 0.02) 0%, rgba(16, 185, 129, 0.02) 100%); border: 1px solid rgba(94, 148, 121, 0.1);">
                 <div class="card-header">
                     <div class="card-title-group">
                         <div class="card-icon" style="background: rgba(16, 185, 129, 0.08); color: var(--success);">
                             <i data-lucide="trending-up" style="width: 18px; height: 18px;"></i>
                         </div>
-                        <h2 class="card-title">Fondations de Croissance</h2>
+                        <h2 class="card-title">Fondations de croissance</h2>
                     </div>
-                    <span style="font-size: 0.75rem; color: var(--text-muted); font-weight: 500; background: rgba(99, 102, 241, 0.05); padding: 4px 10px; border-radius: 9999px;">
+                    <span style="font-size: 0.75rem; color: var(--text-muted); font-weight: 500; background: rgba(94, 148, 121, 0.05); padding: 4px 10px; border-radius: 9999px;">
                         Alimente le plan de croissance
                     </span>
                 </div>
@@ -1510,8 +1510,8 @@
                     {% if competences.COMPETENCE|length > 0 or competences.CONNAISSANCE|length > 0 %}
                         {% set statusInfo = {
                             'leverage': {'label': 'À mettre à profit', 'bg': 'rgba(16, 185, 129, 0.08)', 'color': '#7A8F84'},
-                            'consolidate': {'label': 'À consolider', 'bg': 'rgba(59, 130, 246, 0.08)', 'color': '#3D7A5F'},
-                            'build': {'label': 'À construire', 'bg': 'rgba(245, 158, 11, 0.08)', 'color': '#2E5B47'},
+                            'consolidate': {'label': 'À consolider', 'bg': 'rgba(61, 122, 95, 0.08)', 'color': '#3D7A5F'},
+                            'build': {'label': 'À construire', 'bg': 'rgba(200, 150, 46, 0.08)', 'color': '#2E5B47'},
                             'absence': {'label': 'Absence assumée', 'bg': 'rgba(107, 114, 128, 0.08)', 'color': '#6b7280'}
                         } %}
 
@@ -1592,7 +1592,7 @@
             <div class="plan-card">
                 <div class="card-header">
                     <div class="card-title-group">
-                        <div class="card-icon" style="background: rgba(245, 158, 11, 0.08); color: var(--warning);">
+                        <div class="card-icon" style="background: rgba(200, 150, 46, 0.08); color: var(--warning);">
                             <i data-lucide="shield" style="width: 18px; height: 18px;"></i>
                         </div>
                         <h2 class="card-title">Caractère & Conviction</h2>
@@ -1605,8 +1605,8 @@
                     {% if growthGoals.CHARACTER|length > 0 %}
                         {% set statusInfo = {
                             'leverage': {'label': 'À mettre à profit', 'bg': 'rgba(16, 185, 129, 0.08)', 'color': '#7A8F84'},
-                            'consolidate': {'label': 'À consolider', 'bg': 'rgba(59, 130, 246, 0.08)', 'color': '#3D7A5F'},
-                            'build': {'label': 'À construire', 'bg': 'rgba(245, 158, 11, 0.08)', 'color': '#2E5B47'},
+                            'consolidate': {'label': 'À consolider', 'bg': 'rgba(61, 122, 95, 0.08)', 'color': '#3D7A5F'},
+                            'build': {'label': 'À construire', 'bg': 'rgba(200, 150, 46, 0.08)', 'color': '#2E5B47'},
                             'absence': {'label': 'Absence assumée', 'bg': 'rgba(107, 114, 128, 0.08)', 'color': '#6b7280'}
                         } %}
                         <div style="display:flex; flex-direction:column; gap:0.75rem;">
@@ -1649,7 +1649,7 @@
             <div class="plan-card grid-full">
                 <div class="card-header">
                     <div class="card-title-group">
-                        <div class="card-icon" style="background: rgba(99, 102, 241, 0.08); color: #A87A1F;">
+                        <div class="card-icon" style="background: rgba(94, 148, 121, 0.08); color: #A87A1F;">
                             <i data-lucide="users" style="width: 18px; height: 18px;"></i>
                         </div>
                         <h2 class="card-title">Relation & Réseau</h2>
@@ -1662,8 +1662,8 @@
                     {% if growthGoals.RELATION|length > 0 %}
                         {% set statusInfo = {
                             'leverage': {'label': 'À mettre à profit', 'bg': 'rgba(16, 185, 129, 0.08)', 'color': '#7A8F84'},
-                            'consolidate': {'label': 'À consolider', 'bg': 'rgba(59, 130, 246, 0.08)', 'color': '#3D7A5F'},
-                            'build': {'label': 'À construire', 'bg': 'rgba(245, 158, 11, 0.08)', 'color': '#2E5B47'},
+                            'consolidate': {'label': 'À consolider', 'bg': 'rgba(61, 122, 95, 0.08)', 'color': '#3D7A5F'},
+                            'build': {'label': 'À construire', 'bg': 'rgba(200, 150, 46, 0.08)', 'color': '#2E5B47'},
                             'absence': {'label': 'Absence assumée', 'bg': 'rgba(107, 114, 128, 0.08)', 'color': '#6b7280'}
                         } %}
                         
@@ -1690,11 +1690,11 @@
                         {% endfor %}
                         
                         {% set networkCategories = {
-                            'orientation': {'label': "Réseau d'Orientation", 'icon': 'compass', 'goals': orientationGoals, 'bg': 'rgba(46, 107, 83, 0.05)', 'color': '#2E6B53'},
-                            'croissance': {'label': 'Réseau de Croissance', 'icon': 'trending-up', 'goals': croissanceGoals, 'bg': 'rgba(59, 130, 246, 0.05)', 'color': '#3D7A5F'},
-                            'soutien': {'label': 'Réseau de Soutien', 'icon': 'heart', 'goals': soutienGoals, 'bg': 'rgba(239, 68, 68, 0.05)', 'color': '#ef4444'},
-                            'responsabilite': {'label': 'Réseau de Responsabilité', 'icon': 'check-square', 'goals': responsabiliteGoals, 'bg': 'rgba(139, 92, 246, 0.05)', 'color': '#8b5cf6'},
-                            'environnement': {'label': 'Réseau d\'Environnement', 'icon': 'map-pin', 'goals': environnementGoals, 'bg': 'rgba(245, 158, 11, 0.05)', 'color': '#2E5B47'}
+                            'orientation': {'label': "Réseau d'orientation", 'icon': 'compass', 'goals': orientationGoals, 'bg': 'rgba(46, 107, 83, 0.05)', 'color': '#2E6B53'},
+                            'croissance': {'label': 'Réseau de croissance', 'icon': 'trending-up', 'goals': croissanceGoals, 'bg': 'rgba(61, 122, 95, 0.05)', 'color': '#3D7A5F'},
+                            'soutien': {'label': 'Réseau de soutien', 'icon': 'heart', 'goals': soutienGoals, 'bg': 'rgba(239, 68, 68, 0.05)', 'color': '#ef4444'},
+                            'responsabilite': {'label': 'Réseau de responsabilité', 'icon': 'check-square', 'goals': responsabiliteGoals, 'bg': 'rgba(94, 148, 121, 0.05)', 'color': '#5E8463'},
+                            'environnement': {'label': 'Réseau d\'Environnement', 'icon': 'map-pin', 'goals': environnementGoals, 'bg': 'rgba(200, 150, 46, 0.05)', 'color': '#2E5B47'}
                         } %}
                         
                         <div style="display: flex; flex-direction: column; gap: 2rem;">
@@ -1721,7 +1721,7 @@
                                                         {% if goal.supportedLifeGoals|length > 0 %}
                                                             <div style="display: flex; flex-wrap: wrap; gap: 0.25rem; margin-top: 0.5rem;">
                                                                 {% for lg in goal.supportedLifeGoals %}
-                                                                    <span style="font-size: 0.65rem; padding: 2px 6px; border-radius: 4px; background: rgba(99, 102, 241, 0.05); color: #A87A1F; border: 1px solid rgba(99, 102, 241, 0.1);">
+                                                                    <span style="font-size: 0.65rem; padding: 2px 6px; border-radius: 4px; background: rgba(94, 148, 121, 0.05); color: #A87A1F; border: 1px solid rgba(94, 148, 121, 0.1);">
                                                                         [{{ lg.category|categorie_objectif }}] {{ lg.title }}
                                                                     </span>
                                                                 {% endfor %}
@@ -1757,7 +1757,7 @@
             <div class="plan-card">
                 <div class="card-header">
                     <div class="card-title-group">
-                        <div class="card-icon" style="background: rgba(244, 63, 94, 0.08); color: #f43f5e;">
+                        <div class="card-icon" style="background: rgba(244, 63, 94, 0.08); color: #B3402A;">
                             <i data-lucide="gift" style="width: 18px; height: 18px;"></i>
                         </div>
                         <h2 class="card-title">Héritage & Transmission</h2>
@@ -1770,8 +1770,8 @@
                     {% if legacyGoals|length > 0 %}
                         {% set statusInfo = {
                             'leverage': {'label': 'À mettre à profit', 'bg': 'rgba(16, 185, 129, 0.08)', 'color': '#7A8F84'},
-                            'consolidate': {'label': 'À consolider', 'bg': 'rgba(59, 130, 246, 0.08)', 'color': '#3D7A5F'},
-                            'build': {'label': 'À construire', 'bg': 'rgba(245, 158, 11, 0.08)', 'color': '#2E5B47'},
+                            'consolidate': {'label': 'À consolider', 'bg': 'rgba(61, 122, 95, 0.08)', 'color': '#3D7A5F'},
+                            'build': {'label': 'À construire', 'bg': 'rgba(200, 150, 46, 0.08)', 'color': '#2E5B47'},
                             'absence': {'label': 'Absence assumée', 'bg': 'rgba(107, 114, 128, 0.08)', 'color': '#6b7280'}
                         } %}
                         <div style="display:flex; flex-direction:column; gap:0.75rem;">
@@ -1781,7 +1781,7 @@
                                 <div style="padding: 0.85rem; background: var(--bg); border-radius: 0.75rem; border: 1px solid rgba(46, 107, 83, 0.04); display: flex; justify-content: space-between; align-items: flex-start; gap: 1rem;">
                                     <div style="flex: 1;">
                                         <div style="font-weight: 600; color: var(--fg-dark); font-size: 0.925rem; display: flex; align-items: center; gap: 0.5rem;">
-                                            <i data-lucide="gift" style="width: 14px; height: 14px; color: #f43f5e; flex-shrink: 0;"></i>
+                                            <i data-lucide="gift" style="width: 14px; height: 14px; color: #B3402A; flex-shrink: 0;"></i>
                                             {{ lg.title }}
                                         </div>
                                         {% if lg.targetBeneficiary %}
@@ -1790,7 +1790,7 @@
                                         {% if lg.supportedLifeGoals|length > 0 %}
                                             <div style="display: flex; flex-wrap: wrap; gap: 0.25rem; margin-top: 0.5rem;">
                                                 {% for lg_item in lg.supportedLifeGoals %}
-                                                    <span style="font-size: 0.65rem; padding: 2px 6px; border-radius: 4px; background: rgba(99, 102, 241, 0.05); color: #A87A1F; border: 1px solid rgba(99, 102, 241, 0.1);">
+                                                    <span style="font-size: 0.65rem; padding: 2px 6px; border-radius: 4px; background: rgba(94, 148, 121, 0.05); color: #A87A1F; border: 1px solid rgba(94, 148, 121, 0.1);">
                                                         [{{ lg_item.category|categorie_objectif }}] {{ lg_item.title }}
                                                     </span>
                                                 {% endfor %}
@@ -1830,8 +1830,8 @@
                     {% if hygieneDomains|length > 0 %}
                         {% set statusInfo = {
                             'leverage': {'label': 'À mettre à profit', 'bg': 'rgba(16, 185, 129, 0.08)', 'color': '#7A8F84'},
-                            'consolidate': {'label': 'À consolider', 'bg': 'rgba(59, 130, 246, 0.08)', 'color': '#3D7A5F'},
-                            'build': {'label': 'À construire', 'bg': 'rgba(245, 158, 11, 0.08)', 'color': '#2E5B47'},
+                            'consolidate': {'label': 'À consolider', 'bg': 'rgba(61, 122, 95, 0.08)', 'color': '#3D7A5F'},
+                            'build': {'label': 'À construire', 'bg': 'rgba(200, 150, 46, 0.08)', 'color': '#2E5B47'},
                             'absence': {'label': 'Absence assumée', 'bg': 'rgba(107, 114, 128, 0.08)', 'color': '#6b7280'}
                         } %}
                         <div style="display:flex; flex-direction:column; gap:1.25rem;">
@@ -1855,7 +1855,7 @@
                                                         {% if hd.supportedLifeGoals|length > 0 %}
                                                             <div style="display: flex; flex-wrap: wrap; gap: 0.25rem; margin-top: 0.4rem;">
                                                                 {% for lg in hd.supportedLifeGoals %}
-                                                                    <span style="font-size: 0.65rem; padding: 1px 5px; border-radius: 4px; background: rgba(99, 102, 241, 0.05); color: #A87A1F; border: 1px solid rgba(99, 102, 241, 0.1);">
+                                                                    <span style="font-size: 0.65rem; padding: 1px 5px; border-radius: 4px; background: rgba(94, 148, 121, 0.05); color: #A87A1F; border: 1px solid rgba(94, 148, 121, 0.1);">
                                                                         [{{ lg.category|categorie_objectif }}] {{ lg.title }}
                                                                     </span>
                                                                 {% endfor %}
@@ -1888,9 +1888,9 @@
     <div class="tab-content hidden" id="tab-timeline">
         <div x-data="{ activeCategory: 'ALL', activeYear: 'ALL' }" style="background: white; border-radius: 1.5rem; padding: 2.5rem; border: 1px solid rgba(46, 107, 83, 0.08); box-shadow: var(--card-shadow);">
             <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 2rem;">
-                <h2 style="font-family: var(--font-serif); font-size: 1.5rem; color: var(--primary); margin: 0;">📅 Mon Échéancier</h2>
+                <h2 style="font-family: var(--font-serif); font-size: 1.5rem; color: var(--primary); margin: 0;"><i data-lucide="calendar" class="ks-ico" aria-hidden="true"></i> Mon échéancier</h2>
                 <a href="{{ path('app_plan_wizard', { step: 7, single: 1 }) }}" class="btn-hero-primary" style="padding: 0.5rem 1rem; font-size: 0.85rem; box-shadow: none;">
-                    <i data-lucide="pencil" style="width: 14px; height: 14px;"></i> Modifier les Objectifs
+                    <i data-lucide="pencil" style="width: 14px; height: 14px;"></i> Modifier les objectifs
                 </a>
             </div>
 
@@ -2027,7 +2027,7 @@
     <div class="tab-content hidden" id="tab-map">
         {% if not can('map') %}
         <div class="map-card" style="text-align: center; padding: 3rem 1.5rem;">
-            <div style="font-size: 2rem;">🗺️</div>
+            <div style="font-size: 2rem;"><i data-lucide="map" class="ks-ico" aria-hidden="true"></i></div>
             <h2 style="font-family: var(--font-serif); color: var(--primary); margin: .5rem 0;">La carte stratégique fait partie de PRO</h2>
             <p style="color: var(--fg-muted); max-width: 32rem; margin: 0 auto 1.25rem;">Voyez d'un coup d'œil comment votre vision, vos objectifs, vos axes de croissance et vos rituels s'enchaînent.</p>
             <a href="{{ path('app_subscription', {fonction: 'map'}) }}" style="display: inline-block; background: var(--primary); color: #fff; padding: .8rem 1.4rem; border-radius: var(--r-md); font-weight: 700; text-decoration: none;">Découvrir PRO</a>
@@ -2036,11 +2036,11 @@
         <div class="map-card">
             <div style="width: 100%; display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.5rem; flex-wrap: wrap; gap: 1rem;">
                 <div>
-                    <h2 style="font-family: var(--font-serif); font-size: 1.5rem; color: var(--primary); margin: 0;">🗺️ Ma Carte Stratégique</h2>
+                    <h2 style="font-family: var(--font-serif); font-size: 1.5rem; color: var(--primary); margin: 0;"><i data-lucide="map" class="ks-ico" aria-hidden="true"></i> Ma carte stratégique</h2>
                     <p style="color: var(--fg-muted); font-size: 0.875rem; margin: 0.25rem 0 0 0;">De votre vision à vos objectifs, et de chaque objectif aux plans qui le soutiennent.</p>
                 </div>
                 <button onclick="window.print()" class="btn-hero-primary" style="padding: 0.5rem 1rem; font-size: 0.85rem; box-shadow: none;">
-                    <i data-lucide="printer" style="width: 14px; height: 14px;"></i> Imprimer la Carte
+                    <i data-lucide="printer" style="width: 14px; height: 14px;"></i> Imprimer la carte
                 </button>
             </div>
 
@@ -2049,7 +2049,7 @@
                 <!-- Hidden source container for the raw mermaid code -->
                 <div id="mermaid-code-src" style="display:none;">
 graph TD
-  Vision["✨ {{ planDeVie.vision.content|default('Ma Vision')|slice(0, 60)|escape('html') }}..."]
+  Vision["{{ planDeVie.vision.content|default('Ma Vision')|slice(0, 60)|escape('html') }}..."]
   
   {# Define goals and index them #}
   {% set allGoals = [] %}
@@ -2058,7 +2058,7 @@ graph TD
   {% endfor %}
 
   {% for g in allGoals %}
-      Goal{{ g.id }}["🎯 {{ g.title|escape('html') }}"]
+      Goal{{ g.id }}["<i data-lucide="target" class="ks-ico" aria-hidden="true"></i> {{ g.title|escape('html') }}"]
       Vision --> Goal{{ g.id }}
   {% endfor %}
 
@@ -2069,7 +2069,7 @@ graph TD
   {% endfor %}
 
   {% for gg in allGrowth %}
-      {% set axisLabel = gg.axis == 'COMPETENCE' ? '📚' : (gg.axis == 'CHARACTER' ? '💎' : '🤝') %}
+      {% set axisLabel = gg.axis == 'COMPETENCE' ? '' : (gg.axis == 'CHARACTER' ? '' : '') %}
       GG{{ gg.id }}["{{ axisLabel }} {{ gg.title|escape('html') }}"]
       
       {# Link to supported life goals #}
@@ -2080,7 +2080,7 @@ graph TD
 
   {# Define legacy goals #}
   {% for lg in legacyGoals %}
-      Legacy{{ lg.id }}["🌱 {{ lg.title|escape('html') }}"]
+      Legacy{{ lg.id }}["<i data-lucide="sprout" class="ks-ico" aria-hidden="true"></i> {{ lg.title|escape('html') }}"]
       {% for sg in lg.supportedLifeGoals %}
           Goal{{ sg.id }} --> Legacy{{ lg.id }}
       {% endfor %}
@@ -2088,7 +2088,7 @@ graph TD
 
   {# Define hygiene domains #}
   {% for hd in hygieneDomains %}
-      Hygiene{{ hd.id }}["⭐ {{ hd.name|escape('html') }}"]
+      Hygiene{{ hd.id }}["<i data-lucide="star" class="ks-ico" aria-hidden="true"></i> {{ hd.name|escape('html') }}"]
       {% for sg in hd.supportedLifeGoals %}
           Goal{{ sg.id }} --> Hygiene{{ hd.id }}
       {% endfor %}
@@ -2096,7 +2096,7 @@ graph TD
 
   {# Plan d'Intendance : éléments reliés à un objectif #}
   {% for st in stewardshipItems|default([]) %}
-      Stew{{ st.id }}["⚖️ {{ st.label|slice(0, 60)|escape('html') }}"]
+      Stew{{ st.id }}["{{ st.label|slice(0, 60)|escape('html') }}"]
       Goal{{ st.lifeGoal.id }} --> Stew{{ st.id }}
   {% endfor %}
 
@@ -2139,35 +2139,35 @@ graph TD
             <div class="map-legend">
                 <div class="legend-item">
                     <div class="legend-color" style="background: var(--plan-vie);"></div>
-                    <span class="legend-label">✨ Vision</span>
+                    <span class="legend-label"><i data-lucide="sparkles" class="ks-ico" aria-hidden="true"></i> Vision</span>
                 </div>
                 <div class="legend-item">
                     <div class="legend-color" style="background: #FFFFFF; border: 2px solid #1F4D3A;"></div>
-                    <span class="legend-label">🎯 Objectifs Spécifiques</span>
+                    <span class="legend-label"><i data-lucide="target" class="ks-ico" aria-hidden="true"></i> Objectifs spécifiques</span>
                 </div>
                 <div class="legend-item">
                     <div class="legend-color" style="background: var(--plan-developpement);"></div>
-                    <span class="legend-label">📚 Compétences & Connaissances</span>
+                    <span class="legend-label"><i data-lucide="library" class="ks-ico" aria-hidden="true"></i> Compétence & Connaissance</span>
                 </div>
                 <div class="legend-item">
                     <div class="legend-color" style="background: var(--plan-croissance);"></div>
-                    <span class="legend-label">💎 Caractère & Rituels</span>
+                    <span class="legend-label"><i data-lucide="gem" class="ks-ico" aria-hidden="true"></i> Caractère & Rituels</span>
                 </div>
                 <div class="legend-item">
                     <div class="legend-color" style="background: var(--plan-croissance);"></div>
-                    <span class="legend-label">🤝 Relation & Réseau</span>
+                    <span class="legend-label"><i data-lucide="handshake" class="ks-ico" aria-hidden="true"></i> Relation & Réseau</span>
                 </div>
                 <div class="legend-item">
                     <div class="legend-color" style="background: var(--plan-transmission);"></div>
-                    <span class="legend-label">🌱 Héritage & Transmission</span>
+                    <span class="legend-label"><i data-lucide="sprout" class="ks-ico" aria-hidden="true"></i> Héritage & Transmission</span>
                 </div>
                 <div class="legend-item">
                     <div class="legend-color" style="background: var(--plan-hygiene);"></div>
-                    <span class="legend-label">⭐ Hygiène de vie</span>
+                    <span class="legend-label"><i data-lucide="star" class="ks-ico" aria-hidden="true"></i> Hygiène de vie</span>
                 </div>
                 <div class="legend-item">
                     <div class="legend-color" style="background: var(--plan-intendance);"></div>
-                    <span class="legend-label">⚖️ Intendance</span>
+                    <span class="legend-label"><i data-lucide="scale" class="ks-ico" aria-hidden="true"></i> Intendance</span>
                 </div>
             </div>
 
@@ -2190,7 +2190,7 @@ graph TD
     {% endif %}
     </div>
 
-    <!-- Tab 7: Analyse de Cohérence -->
+    <!-- Tab 7: Analyse de cohérence -->
     <div class="tab-content hidden" id="tab-analysis">
         {# Compute coherence analysis #}
         {% set issues = [] %}
@@ -2354,7 +2354,7 @@ graph TD
         <div class="analysis-card">
             <div class="analysis-header">
                 <div>
-                    <h2 style="font-family: var(--font-serif); font-size: 1.5rem; color: var(--primary); margin: 0;">🔍 Analyse de Cohérence</h2>
+                    <h2 style="font-family: var(--font-serif); font-size: 1.5rem; color: var(--primary); margin: 0;"><i data-lucide="search" class="ks-ico" aria-hidden="true"></i> Analyse de cohérence</h2>
                     <p style="color: var(--fg-muted); font-size: 0.875rem; margin: 0.25rem 0 0 0;">Évaluation automatique de la clarté et de l'alignement de votre plan de vie.</p>
                 </div>
                 {% set scoreColor = healthScore > 80 ? '#3F5249' : (healthScore > 50 ? '#854d0e' : '#991b1b') %}
@@ -2498,7 +2498,7 @@ graph TD
                 newEmailDashBtn.disabled = true;
                 newEmailDashBtn.style.opacity = '0.7';
                 const originalText = newEmailDashBtn.innerHTML;
-                newEmailDashBtn.innerHTML = '<span style="margin-right: 5px;">⏳</span> Envoi...';
+                newEmailDashBtn.innerHTML = '<span style="margin-right: 5px;"></span> Envoi...';
 
                 try {
                     const response = await fetch("{{ path('app_plan_de_vie_email') }}", {

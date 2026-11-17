@@ -109,7 +109,7 @@ class ChallengeController extends AbstractController
         $wasSuccessful = $this->challenges->isSuccessful($participation);
         if ($this->challenges->checkIn($participation, $today)) {
             $this->addFlash('success', !$wasSuccessful && $this->challenges->isSuccessful($participation)
-                ? '🏆 Défi relevé ! Vous avez atteint le seuil de réussite. Continuez jusqu\'au bout.'
+                ? 'Défi relevé ! Vous avez atteint le seuil de réussite. Continuez jusqu\'au bout.'
                 : 'Jour '.$this->challenges->dayNumber($challenge, $today).' validé. Fidèle dans les petites choses !');
         }
 
