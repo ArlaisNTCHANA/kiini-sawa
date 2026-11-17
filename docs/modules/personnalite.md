@@ -122,3 +122,14 @@ vivent dans la table `content_override` (chemin → texte) et s'appliquent via `
   `test_action` ; `ReminderService::testFollowUps` relance une fois à 30 jours (« Où en êtes-vous ? »).
 - PDF : polices Inter et Playfair Display (`resources/fonts/pdf`, OFL) enregistrées par `PdfFactory` ; icônes et logo par
   `Twig/ReportVisualsExtension` (`report_icon()`, `brand_logo()`) ; « L'essentiel en une page » (`_essentials`).
+
+## Nuances, contextes et regard des proches
+
+- Intensité : netteté DISC (`ReportBuilder::discIntensity`), niveau des dons (`giftStrength`), netteté du type
+  d'ennéagramme, traits Big Five extrêmes (≤ 20 ou ≥ 80).
+- DISC : lecture combinée quand la dimension adaptée diffère de la naturelle (`DiscProfiles::ADAPTATION`, 12 cas).
+- Famille élargie et communauté : `DiscCombos::COMMUNITY`, `EnneagramProfiles::COMMUNITY`, `TypeProfiles::COMMUNITY`.
+- Confirmation par les proches (DISC, dons) : `ConfirmationService`, `ConfirmationController`, tables
+  `confirmation_request` / `confirmation_answer`. Lien public `/confirmer/{jeton}` (sans compte, anonyme, champ piège,
+  une réponse par session, 50 au plus) ; descriptions DISC sans lettre (`DiscProfiles::OBSERVED`) ; résultat dans le
+  rapport à partir de 3 réponses ; notification `FEEDBACK_RECEIVED` à chaque réponse.

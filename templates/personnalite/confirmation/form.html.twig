@@ -1,0 +1,61 @@
+{% extends 'base.html.twig' %}
+
+{% set disc = req.instrument == 'disc' %}
+{% block title %}Votre regard sur {{ firstName }}{% endblock %}
+{% block head_meta %}<meta name="robots" content="noindex"><meta property="og:title" content="{{ firstName }} aimerait votre regard"><meta property="og:description" content="2 minutes pour dire à {{ firstName }} comment vous la ou le voyez."><meta property="og:image" content="{{ absolute_url('/icons/icon-512.png') }}">{% endblock %}
+
+{% block body %}
+{% if not app.user %}{% include 'shared/_public_header.html.twig' %}{% endif %}
+<div class="ks-page ks-page--narrow">
+    {% include 'shared/_page_header.html.twig' with {
+        eyebrow: disc ? 'Manière d\'agir' : 'Dons spirituels', icon: disc ? 'compass' : 'flame',
+        title: firstName ~ ' aimerait votre regard',
+        lead: disc
+            ? firstName ~ ' a passé un test sur sa manière d\'agir et vous demande de le confirmer par votre regard. 2 minutes, réponses anonymes.'
+            : firstName ~ ' cherche à discerner ses dons spirituels et vous demande quels dons vous reconnaissez en lui ou en elle. 2 minutes, réponses anonymes.',
+    } %}
+    {% if alreadyDone %}
+        <p class="ks-alert ks-alert--success">Vous avez déjà répondu. Merci pour votre regard !</p>
+    {% else %}
+    {% for e in errors %}<p class="ks-alert ks-alert--danger" style="margin-bottom: .6rem;">{{ e }}</p>{% endfor %}
+    <form method="post" class="ks-card">
+        <input type="hidden" name="_csrf_token" value="{{ csrf_token('confirmation_form') }}">
+        <div style="position: absolute; left: -9999px;" aria-hidden="true"><input name="website" tabindex="-1" autocomplete="off"></div>
+        <div class="ks-field" style="margin-bottom: 1.25rem;">
+            <label class="ks-label" for="relationship">Vous êtes…</label>
+            <select class="ks-input" id="relationship" name="relationship">{% for k, v in relationships %}<option value="{{ k }}" {{ data.relationship == k ? 'selected' }}>{{ v }}</option>{% endfor %}</select>
+        </div>
+
+        {% if disc %}
+            <p class="ks-label" style="margin-bottom: .5rem;">Laquelle de ces descriptions ressemble <strong>le plus</strong> à {{ firstName }} ? Et laquelle <strong>le moins</strong> ?</p>
+            <div style="display: flex; flex-direction: column; gap: .6rem; margin-bottom: 1.25rem;">
+                {% for letter, text in choices %}
+                    <div style="border: 1.5px solid var(--border); border-radius: 14px; padding: .8rem 1rem;">
+                        <p style="margin: 0 0 .5rem; color: var(--fg);">{{ text }}</p>
+                        <label style="margin-right: 1rem; font-size: .9rem; cursor: pointer;"><input type="radio" name="most" value="{{ letter }}" {{ data.most == letter ? 'checked' }}> Le plus</label>
+                        <label style="font-size: .9rem; cursor: pointer;"><input type="radio" name="least" value="{{ letter }}" {{ data.least == letter ? 'checked' }}> Le moins</label>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <p class="ks-label" style="margin-bottom: .5rem;">Quels dons reconnaissez-vous en {{ firstName }} ? ({{ maxGifts }} au plus)</p>
+            <div style="display: flex; flex-direction: column; gap: .45rem; margin-bottom: 1.25rem;">
+                {% for code, g in gifts %}
+                    <label style="display: flex; gap: .6rem; align-items: flex-start; border: 1.5px solid var(--border); border-radius: 12px; padding: .6rem .8rem; cursor: pointer;">
+                        <input type="checkbox" name="gifts[]" value="{{ code }}" {{ code in data.gifts ? 'checked' }} style="margin-top: .25rem;">
+                        <span><strong>{{ g.name }}</strong><br><span style="font-size: .85rem; color: var(--fg-muted);">{{ g.desc }}</span></span>
+                    </label>
+                {% endfor %}
+            </div>
+        {% endif %}
+
+        <div class="ks-field" style="margin-bottom: 1.25rem;">
+            <label class="ks-label" for="name">Votre prénom (facultatif : laissez vide pour rester anonyme)</label>
+            <input class="ks-input" id="name" name="name" value="{{ data.name }}" maxlength="100">
+        </div>
+        <button type="submit" class="ks-btn ks-btn--primary">Envoyer mon regard</button>
+        <p style="font-size: .78rem; color: var(--fg-muted); margin-top: .75rem;">{{ firstName }} ne voit le détail des réponses qu'à partir de 3 réponses, pour protéger l'anonymat.</p>
+    </form>
+    {% endif %}
+</div>
+{% endblock %}

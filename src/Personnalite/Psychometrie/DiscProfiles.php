@@ -120,6 +120,14 @@ final class DiscProfiles
     ];
 
 
+    /** Descriptions vues de l'extérieur, sans lettre ni nom (formulaire de confirmation par les proches). */
+    public const OBSERVED = [
+        'D' => 'Va droit au but, décide vite, aime les défis et cherche le résultat.',
+        'I' => 'Communique avec enthousiasme, entraîne les autres et voit le bon côté des choses.',
+        'S' => 'Écoute, soutient, cherche l\'harmonie et tient ses engagements dans la durée.',
+        'C' => 'Analyse, vérifie, cherche la justesse et soigne la qualité du travail.',
+    ];
+
     /** Lecture combinée : ADAPTATION[naturel][adapté] quand la dimension dominante change selon le contexte. */
     public const ADAPTATION = [
         'D' => [

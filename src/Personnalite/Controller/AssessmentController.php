@@ -72,7 +72,8 @@ class AssessmentController extends AbstractController
         $data = $this->reports->build($assessment);
 
         return $this->render('personnalite/assessment/report.html.twig', $data + ['shareCard' => \App\Personnalite\Psychometrie\ShareCard::from($data),
-            'addedActions' => $em->getRepository(\App\Personnalite\Entity\TestAction::class)->addedBy($this->user())]);
+            'addedActions' => $em->getRepository(\App\Personnalite\Entity\TestAction::class)->addedBy($this->user()),
+            'confirmation' => $this->confirmationFor($assessment, $data)]);
     }
 
     /** Partager le résultat (page publique : prénom + résultat principal) ou arrêter le partage. */
@@ -93,11 +94,27 @@ class AssessmentController extends AbstractController
     {
         $this->denyUnlessOwner($assessment);
         $data = $this->reports->build($assessment) + ['name' => $this->user()->getDisplayName()];
+        $data['confirmation'] = $this->confirmationFor($assessment, $data);
 
         return new Response($pdf->render($this->renderView($data['template'] ? 'personnalite/assessment/report/pdf.html.twig' : 'personnalite/assessment/report_pdf.html.twig', $data + ['body' => $data['template']])), 200, [
             'Content-Type' => 'application/pdf',
             'Content-Disposition' => HeaderUtils::makeDisposition(HeaderUtils::DISPOSITION_ATTACHMENT, 'kiini-sawa-'.$assessment->getInstrument().'-'.$assessment->getTakenAt()->format('Y-m-d').'.pdf'),
         ]);
+    }
+
+    private function confirmationFor(Assessment $assessment, array $data): ?array
+    {
+        if (!isset(\App\Personnalite\Service\ConfirmationService::INSTRUMENTS[$assessment->getInstrument()])) {
+            return null;
+        }
+        $service = $this->container->get('confirmations');
+
+        return $service->summary($service->current($this->user(), $assessment->getInstrument()), $data);
+    }
+
+    public static function getSubscribedServices(): array
+    {
+        return parent::getSubscribedServices() + ['confirmations' => \App\Personnalite\Service\ConfirmationService::class];
     }
 
     private function denyUnlessOwner(Assessment $assessment): void

@@ -1,0 +1,59 @@
+{# « Le regard de vos proches » (DISC, dons). Variables : confirmation (synthèse ou null), slug, pdf. #}
+{% set cf = confirmation|default(null) %}
+{% if not pdf or (cf and cf.enough) %}
+<div class="dr-page" id="regard-proches">
+    <div class="dr-kicker">{{ report_icon('users', pc) }}Le regard de vos proches</div>
+    <h2>{{ slug == 'disc' ? 'Vos proches vous reconnaissent-ils ?' : 'Vos proches reconnaissent-ils ces dons ?' }}</h2>
+    <p class="dr-lead">Un test reste votre propre regard. Celui de personnes qui vous connaissent le confirme, le nuance ou le complète{{ slug == 'dons-spirituels' ? ' : un don se confirme aussi par la communauté' }}.</p>
+
+    {% if cf and cf.enough %}
+        <p class="dr-small">{{ cf.count }} proche{{ cf.count > 1 ? 's ont' : ' a' }} répondu.</p>
+        {% if cf.instrument == 'disc' %}
+            <table class="dr-table">
+                {% for m in cf.most %}
+                    <tr><td style="width: 28%;"><strong style="color: {{ m.color }};">{{ m.letter }}</strong> · {{ m.name }}</td>
+                        <td><div style="background: #E2E8F0; border-radius: 4px; height: 10px;"><div style="background: {{ m.color }}; height: 10px; border-radius: 4px; width: {{ max(2, (m.count / cf.count * 100)|round) }}%;"></div></div></td>
+                        <td style="width: 110px;" class="dr-small">{{ m.count }} « le plus »</td></tr>
+                {% endfor %}
+            </table>
+            <div class="dr-tile" style="margin-top: 10px; background: {{ cf.agree ? '#F0FDF4' : '#FFFBEB' }}; border-color: {{ cf.agree ? '#BBF7D0' : '#FDE68A' }};"><p style="margin: 0;">{{ cf.reading }}</p></div>
+        {% else %}
+            <table class="dr-grid"><tr>
+                <td><div class="dr-tile" style="background: #F0FDF4; border-color: #BBF7D0;"><div class="dr-label" style="color: #166534;">{{ report_icon('check', '#16A34A') }}Confirmés par vos proches</div>
+                    {% for g in cf.confirmed %}<p style="margin: 0 0 4px;"><strong>{{ g.name }}</strong> <span class="dr-small">· cité {{ g.count }} fois</span></p>{% else %}<p class="dr-small" style="margin: 0;">Aucun de vos trois dons principaux n'a encore été cité.</p>{% endfor %}
+                </div></td>
+                <td><div class="dr-tile"><div class="dr-label">{{ report_icon('star', '#D97706') }}Vos proches voient aussi</div>
+                    {% for g in cf.others %}<p style="margin: 0 0 4px;"><strong>{{ g.name }}</strong> <span class="dr-small">· cité {{ g.count }} fois</span></p>{% else %}<p class="dr-small" style="margin: 0;">Pas d'autre don cité plusieurs fois.</p>{% endfor %}
+                </div></td>
+            </tr></table>
+            {% if cf.unseen|length %}<p class="dr-small" style="margin-top: 6px;">Pas encore reconnu par vos proches : {{ cf.unseen|join(', ')|lower }}. Peut-être un don encore discret : exercez-le, il se révélera.</p>{% endif %}
+        {% endif %}
+    {% elseif cf %}
+        <p class="dr-small">{{ cf.count }} réponse{{ cf.count > 1 ? 's' }} pour l'instant. Le résultat s'affiche à partir de {{ cf.min }} réponses, pour protéger l'anonymat de chacun.</p>
+    {% endif %}
+
+    {% if not pdf %}
+        {% if cf and cf.request.open %}
+            {% set link = url('app_confirmation_form', {token: cf.request.token}) %}
+            <div class="dr-tile" style="margin-top: 10px;" x-data="{ copied: false }">
+                <div class="dr-label">Votre lien à partager</div>
+                <p style="margin: 0 0 8px; word-break: break-all; font-size: .85rem;">{{ link }}</p>
+                <div style="display: flex; gap: .5rem; flex-wrap: wrap;">
+                    <a class="ks-btn ks-btn--secondary" style="color: #128C7E;" target="_blank" rel="noopener" href="https://wa.me/?text={{ ('J\'ai passé un test sur KIINI SAWA et j\'aimerais ton regard (2 minutes, anonyme) : ' ~ link)|url_encode }}"><i data-lucide="message-circle"></i> WhatsApp</a>
+                    <button type="button" class="ks-btn ks-btn--secondary" @click="navigator.clipboard.writeText('{{ link|e('js') }}'); copied = true; setTimeout(() => copied = false, 2000)"><i data-lucide="link"></i> <span x-text="copied ? 'Lien copié' : 'Copier le lien'">Copier le lien</span></button>
+                    <form method="post" action="{{ path('app_confirmation_toggle', {instrument: slug, action: 'fermer'}) }}" style="margin: 0;">
+                        <input type="hidden" name="_csrf_token" value="{{ csrf_token('confirmation_' ~ slug) }}"><input type="hidden" name="back" value="{{ app.request.pathInfo }}">
+                        <button type="submit" class="ks-btn ks-btn--secondary">Fermer le lien</button>
+                    </form>
+                </div>
+            </div>
+        {% else %}
+            <form method="post" action="{{ path('app_confirmation_toggle', {instrument: slug, action: 'ouvrir'}) }}" style="margin-top: 10px;">
+                <input type="hidden" name="_csrf_token" value="{{ csrf_token('confirmation_' ~ slug) }}"><input type="hidden" name="back" value="{{ app.request.pathInfo }}">
+                <button type="submit" class="ks-btn ks-btn--primary"><i data-lucide="users"></i> {{ cf ? 'Rouvrir mon lien' : 'Demander à mes proches de confirmer' }}</button>
+            </form>
+            <p class="dr-small" style="margin-top: 6px;">Vos proches répondent en 2 minutes, sans créer de compte, de façon anonyme. Envoyez le lien à au moins trois personnes qui vous connaissent bien.</p>
+        {% endif %}
+    {% endif %}
+</div>
+{% endif %}

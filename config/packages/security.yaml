@@ -64,6 +64,7 @@ security:
         - { path: ^/i/, roles: PUBLIC_ACCESS }
         - { path: ^/resultat/, roles: PUBLIC_ACCESS }
         - { path: ^/avis/, roles: PUBLIC_ACCESS }
+        - { path: ^/confirmer/, roles: PUBLIC_ACCESS }
         - { path: ^/admin, roles: ROLE_ADMIN }
         - { path: ^/, roles: ROLE_USER }
 
