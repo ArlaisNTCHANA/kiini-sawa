@@ -34,3 +34,23 @@ n'y fonctionnent pas), graphiques et cartes (JavaScript).
 | État vide | `.ks-empty` (`__icon`, `__title`, `__text`) + un bouton principal |
 | Messages | `.ks-alert--info / success / warning / danger`, pastille `.ks-badge` |
 | Formulaires | `.ks-field` > `.ks-label` + `.ks-input` |
+
+## Navigation (17/11/2026)
+
+Une seule définition pour l'ordinateur et le téléphone : `App\Shared\Twig\NavigationExtension` (`nav_sections()`,
+`nav_mobile_bar()`, `nav_active_section()`). Six rubriques qui suivent la méthode :
+
+| Rubrique | Pages |
+|---|---|
+| Aujourd'hui | Accueil |
+| Me connaître | Mes tests, Mon profil KIINI SAWA, Mon évolution, Feedback nourricier |
+| Mes plans | Plan de Vie, Mes stratégies (4 plans) |
+| Mon quotidien | Rituels, Agenda, Journal, Bilan |
+| Ensemble | Partenaires, Notre couple, Défis, Mon organisation, Inviter mes proches |
+| La Méthode | Les chapitres du livre |
+
+- Ordinateur : barre du haut, un panneau par rubrique (survol ou clic, Échap pour fermer).
+- Téléphone : barre du bas (Aujourd'hui, Mes plans, Rituels, Journal, Menu) ; « Menu » ouvre les six rubriques puis le compte.
+- Menu du compte : profil, abonnement, notifications, installation, avis, déconnexion ; **jamais de fonctionnalité**.
+- Ajouter une page : l'inscrire dans `NavigationExtension::SECTIONS` (et son préfixe d'adresse dans `match`) ;
+  `tests/Shared/NavigationTest.php` vérifie que chaque page du menu s'ouvre.

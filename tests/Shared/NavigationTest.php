@@ -1,0 +1,58 @@
+<?php
+
+namespace App\Tests\Shared;
+
+use App\Shared\Twig\NavigationExtension;
+use App\Tests\Compte\AccountTestTrait;
+use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+
+/**
+ * Navigation par rubriques : chaque page du menu s'ouvre, la rubrique active est mise en avant, et le menu du compte
+ * ne contient plus que le compte.
+ */
+class NavigationTest extends WebTestCase
+{
+    use AccountTestTrait;
+
+    public function testEveryMenuPageOpensAndHighlightsItsSection(): void
+    {
+        $client = static::createClient();
+        $client->loginUser($this->createUser(pro: true));
+        $router = static::getContainer()->get('router');
+        foreach (NavigationExtension::SECTIONS as $key => $section) {
+            $routes = $section['items'] ? array_column($section['items'], 1) : [$section['route']];
+            foreach ($routes as $route) {
+                $client->request('GET', $router->generate($route));
+                $code = $client->getResponse()->getStatusCode();
+                if (302 === $code) {
+                    $client->followRedirect();
+                    $code = $client->getResponse()->getStatusCode();
+                }
+                $this->assertSame(200, $code, $route);
+                if ('app_dashboard' === $route) {
+                    continue;
+                }
+                $active = $client->getCrawler()->filter('#ks-top-nav .topnav-item.active');
+                if ($active->count()) {
+                    $this->assertStringContainsString($section['label'], $active->text(), $route.' met en avant sa rubrique');
+                }
+            }
+        }
+    }
+
+    public function testHeaderShowsSixSectionsAndLeanAccountMenu(): void
+    {
+        $client = static::createClient();
+        $client->loginUser($this->createUser());
+        $crawler = $client->request('GET', '/mes-tests/');
+        $top = $crawler->filter('#ks-top-nav .topnav-links')->text();
+        foreach (['Aujourd\'hui', 'Me connaître', 'Mes plans', 'Mon quotidien', 'Ensemble', 'La Méthode'] as $label) {
+            $this->assertStringContainsString($label, $top);
+        }
+        $this->assertStringContainsString('Me connaître', $crawler->filter('#ks-top-nav .topnav-item.active')->text());
+        $account = $crawler->filter('.topnav-user-dropdown')->text();
+        $this->assertStringContainsString('Mon profil', $account);
+        $this->assertStringNotContainsString('Mes tests', $account, 'Les fonctionnalités ne sont plus dans le menu du compte');
+        $this->assertSelectorTextContains('.ks-sheet', 'Ensemble');
+    }
+}

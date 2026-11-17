@@ -48,6 +48,7 @@ Un **module par dossier** : `src/<Module>/{Controller,Entity,Repository,Service,
   `PlanDeTransmission`, `PlanDHygiene`), `Rituels`, `Journal`, `Planner` (agenda), `Bilan`, `Social` (partenaires),
   `Personnalite` (tests, dont `Psychometrie/` : banque IPIP-NEO, scores, normes), `Couple`, `Organisation`,
   `Abonnement`, `Notification`, `Methode` (livre), `Media` (provenance des inscrits, liens suivis), `Admin`, `Shared`.
+- Navigation : une seule définition, `App\Shared\Twig\NavigationExtension` (6 rubriques ; voir `docs/design.md`).
 - Droits PRO : `App\Abonnement\Service\Entitlements` (`can`, `require`, `requireBelowLimit`) ; une exception
   `ProRequiredException` redirige vers `/abonnement`.
 - Textes des tests : toujours via `App\Personnalite\Psychometrie\Content::get()` (l'administrateur peut les modifier

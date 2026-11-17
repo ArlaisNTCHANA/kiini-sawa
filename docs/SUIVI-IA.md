@@ -11,6 +11,19 @@ Ne jamais afficher ni demander de mot de passe ; ne pas publier son nom (mention
 
 ---
 
+## 2026-11-17 · Navigation par rubriques
+
+- Constat (audit de navigation) : fonctionnalités majeures cachées dans le menu du compte (Mes tests, Agenda,
+  Partenaires, Couple…), menu « Plus » du téléphone en liste plate de 15 entrées, ordinateur et téléphone différents.
+- Refonte : `Shared/Twig/NavigationExtension` = **une seule définition** ; six rubriques (Aujourd'hui, Me connaître,
+  Mes plans, Mon quotidien, Ensemble, La Méthode) avec panneaux sur ordinateur et menu groupé sur téléphone ; menu du
+  compte réduit au compte. Adresses des pages inchangées. Détail : `docs/design.md` (Navigation).
+- **Piège Alpine** : un `@click.outside` sur chaque panneau (même masqué) referme le menu juste après l'avoir ouvert ;
+  un seul `@click.outside` sur la barre.
+- Vérifié : le message « Plan de Croissance envoyé… » vu dans le texte de « Mes stratégies » est une notification
+  masquée hors écran (pas visible).
+- Tests : `tests/Shared/NavigationTest.php`.
+
 ## 2026-11-17 · Historique et évolution des tests
 
 - Les passations étaient déjà toutes conservées (`assessment`, `profile_test`), sans interface. Ajouté :

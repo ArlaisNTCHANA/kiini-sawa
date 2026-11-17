@@ -346,6 +346,28 @@
         .pill-label { display: none; }
         .pill-item.active .pill-label { display: block; }
 
+        /* ── Navigation par rubriques (NavigationExtension) ── */
+        .topnav-section { position: relative; height: 100%; display: flex; align-items: center; }
+        .topnav-item .ti-chevron { width: 13px; height: 13px; opacity: .55; margin-left: -.15rem; }
+        .nav-panel { position: absolute; top: calc(100% - .35rem); left: 50%; transform: translateX(-50%); z-index: 60; width: 21rem;
+            background: #fff; border-radius: 18px; padding: .5rem; box-shadow: 0 18px 44px rgba(15,23,42,.14), 0 0 0 1px rgba(15,23,42,.05); }
+        .nav-panel a { display: flex; gap: .75rem; align-items: flex-start; padding: .65rem .75rem; border-radius: 12px; text-decoration: none; color: var(--fg); }
+        .nav-panel a:hover, .nav-panel a.current { background: var(--bg-alt); }
+        .nav-panel a.current .np-title { color: var(--primary); }
+        .np-icon { flex: none; width: 2.1rem; height: 2.1rem; border-radius: 10px; background: rgba(15,118,110,.08); color: var(--primary); display: flex; align-items: center; justify-content: center; }
+        .np-icon svg { width: 17px; height: 17px; }
+        .np-title { font-weight: 700; font-size: .9rem; line-height: 1.25; }
+        .np-desc { font-size: .75rem; color: var(--fg-muted); line-height: 1.35; margin-top: 1px; }
+        @media (max-width: 1240px) { .topnav-item .ti-label-long { display: none; } }
+        /* Menu du téléphone */
+        .ks-sheet { position: fixed; inset: 0; z-index: 120; background: rgba(15,23,42,.35); display: flex; align-items: flex-end; }
+        .ks-sheet__panel { width: 100%; max-height: 86vh; overflow-y: auto; background: #fff; border-radius: 22px 22px 0 0; padding: 1rem 1rem 6.5rem; }
+        .ks-sheet__title { font-size: .68rem; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; color: var(--fg-muted); margin: 1rem .25rem .4rem; }
+        .ks-sheet__grid { display: grid; grid-template-columns: 1fr 1fr; gap: .4rem; }
+        .ks-sheet__link { display: flex; align-items: center; gap: .55rem; padding: .7rem .75rem; border-radius: 12px; background: var(--bg-alt); color: var(--fg); text-decoration: none; font-size: .85rem; font-weight: 600; }
+        .ks-sheet__link.current { background: var(--primary); color: #fff; }
+        .ks-sheet__link svg { width: 16px; height: 16px; flex: none; }
+
         /* ── Main content ── */
         .ks-main {
             flex: 1;
@@ -392,26 +414,31 @@
             </div>
         </a>
 
-        {# Navigation Links #}
-        <nav class="topnav-links">
-        {# 6 entrées au plus (audit du 16/11/2026) ; le reste est dans le menu du compte #}
-        {% set mainNav = [
-                { label: 'Accueil',     path: path('app_dashboard'),   icon: 'home' },
-                { label: 'Plan de Vie', path: path('app_plan_de_vie'), icon: 'compass' },
-                { label: 'Stratégies',  path: path('app_strategies'),  icon: 'trending-up' },
-                { label: 'Rituels',     path: path('app_user_habits'), icon: 'activity' },
-                { label: 'Journal',     path: path('app_journal'),     icon: 'book-open' },
-                { label: 'Bilan',       path: path('app_bilan'),       icon: 'bar-chart-2' },
-            ] %}
-
-            {% for item in mainNav %}
-            {% set active = (item.path != '#' and (cp == item.path or (item.path != path('app_dashboard') and cp starts with item.path))) %}
-            <a href="{{ item.path }}" class="topnav-item {% if active %}active{% endif %}">
-                <span class="ti-icon">
-                    <i data-lucide="{{ item.icon }}"></i>
-                </span>
-                <span>{{ item.label }}</span>
-            </a>
+        {# Navigation : six rubriques (une seule définition : App\Shared\Twig\NavigationExtension) #}
+        {% set activeSection = nav_active_section() %}
+        <nav class="topnav-links" x-data="{ open: null }" @keydown.escape.window="open = null" @click.outside="open = null">
+            {% for key, sec in nav_sections() %}
+                {% if sec.items is empty %}
+                    <a href="{{ path(sec.route) }}" class="topnav-item {{ activeSection == key ? 'active' }}">
+                        <span class="ti-icon"><i data-lucide="{{ sec.icon }}"></i></span><span>{{ sec.label }}</span>
+                    </a>
+                {% else %}
+                    <div class="topnav-section" @mouseenter="open = '{{ key }}'" @mouseleave="open = null">
+                        <button type="button" class="topnav-item {{ activeSection == key ? 'active' }}" style="border: none; font: inherit; font-size: .875rem; font-weight: 600; background: {{ activeSection == key ? 'var(--primary)' : 'transparent' }};"
+                                @click="open = '{{ key }}'" @focus="open = '{{ key }}'" :aria-expanded="open === '{{ key }}'" aria-haspopup="true">
+                            <span class="ti-icon"><i data-lucide="{{ sec.icon }}"></i></span><span>{{ sec.label }}</span><i data-lucide="chevron-down" class="ti-chevron"></i>
+                        </button>
+                        <div class="nav-panel" x-show="open === '{{ key }}'" x-cloak x-transition.opacity.duration.150ms>
+                            {% for it in sec.items %}
+                                {% set href = path(it[1]) %}
+                                <a href="{{ href }}" class="{{ cp == href or cp == href ~ '/' ? 'current' }}">
+                                    <span class="np-icon"><i data-lucide="{{ it[2] }}"></i></span>
+                                    <span><span class="np-title" style="display: block;">{{ it[0] }}</span><span class="np-desc" style="display: block;">{{ it[3] }}</span></span>
+                                </a>
+                            {% endfor %}
+                        </div>
+                    </div>
+                {% endif %}
             {% endfor %}
         </nav>
 
@@ -456,22 +483,12 @@
                         </p>
                     </div>
 
-                    {# Groupe 1 #}
+                    {# Compte uniquement : les fonctionnalités sont dans les rubriques #}
                     <div style="padding: 0.375rem 0;">
-                        <p class="dd-section-label">Moi & Ma Croissance</p>
-                        {# Règle : n'afficher que des pages qui existent. À réactiver avec leur module :
-                           Mon Coaching (phase 6), Mes Listes (plus tard). #}
                         {% set ddItems1 = [
-                            { label: 'Mon Profil',      icon: 'user',          href: path('app_profile'),                desc: 'Compte & données' },
+                            { label: 'Mon profil',      icon: 'user',          href: path('app_profile'),                desc: 'Compte, préférences et données' },
                             { label: is_pro() ? (is_trialing() ? 'Essai PRO' : 'Mon abonnement') : 'Passer à PRO', icon: 'crown', href: path('app_subscription'), desc: is_trialing() ? 'Jusqu\'au ' ~ pro_until()|date('d/m') : (is_pro() ? 'Offre PRO' : 'Débloquer les 4 plans') },
-                            { label: 'Agenda',          icon: 'calendar',      href: path('app_planner'),                desc: 'Tâches, jalons, frise' },
-                            { label: 'Partenaires',     icon: 'users',         href: path('app_social'),                 desc: 'Redevabilité et partages' },
-                            { label: 'Défis',           icon: 'trophy',        href: path('app_challenges'),             desc: 'Avancer ensemble' },
-                            { label: 'Inviter mes proches', icon: 'gift',      href: path('app_referral'),               desc: '1 mois PRO par ami' },
-                            { label: 'Mes tests',       icon: 'sparkles',      href: path('app_personality_index'),      desc: 'Personnalité, dons, bilans' },
-                            { label: 'Notre couple',    icon: 'heart',         href: path('app_couple'), desc: 'Vision et projets à deux' },
-                            { label: 'Mon organisation', icon: 'building-2',  href: path('app_organisation_index'), desc: 'Église, association…' },
-                            { label: 'La Méthode',      icon: 'book-open',     href: path('app_methode_index'), desc: 'Les chapitres du livre' },
+                            { label: 'Notifications',   icon: 'bell',          href: path('app_notifications'),          desc: unread_notifications() ? unread_notifications() ~ ' non lue' ~ (unread_notifications() > 1 ? 's') : 'Tout est lu' },
                             { label: 'Installer l\'application', icon: 'smartphone', href: path('app_install'), desc: 'Sur votre téléphone' },
                         ] %}
                         {% for it in ddItems1 %}
@@ -538,69 +555,51 @@
                 width: calc(100% - 2rem); max-width: 420px;
                 align-items: center; gap: 2px;">
 
-        {% set mobileNav = [
-            { label: 'Accueil',  path: path('app_dashboard'),   icon: 'home' },
-            { label: 'Plan',     path: path('app_plan_de_vie'),   icon: 'compass' },
-            { label: 'Journal',  path: path('app_journal'),     icon: 'book-open' },
-            { label: 'Rituels',  path: path('app_user_habits'),      icon: 'activity' },
-        ] %}
-        {% for item in mobileNav %}
-        {% set active = (item.path != '#' and (cp == item.path or (item.path != path('app_dashboard') and cp starts with item.path))) %}
-        <a href="{{ item.path }}" class="pill-item {% if active %}active{% endif %}">
-            <i data-lucide="{{ item.icon }}" style="width:20px;height:20px;stroke-width:{% if active %}2.5{% else %}2{% endif %};"></i>
-            <span class="pill-label">{{ item.label }}</span>
+        {% set activeSection = nav_active_section() %}
+        {% for item in nav_mobile_bar() %}
+        {% set href = path(item[1]) %}
+        {% set active = cp == href or cp starts with href ~ '/' or (item[3] == 'plans' and activeSection == 'plans') %}
+        <a href="{{ href }}" class="pill-item {% if active %}active{% endif %}">
+            <i data-lucide="{{ item[2] }}" style="width:20px;height:20px;stroke-width:{% if active %}2.5{% else %}2{% endif %};"></i>
+            <span class="pill-label">{{ item[0] }}</span>
         </a>
         {% endfor %}
 
-        {# More — mobile #}
-        <div style="position:relative;flex:1;" x-data="{ o: false }" @click.outside="o = false">
-            <button @click="o = !o" class="pill-item" :class="o ? 'active' : ''" style="width:100%;">
-                <i data-lucide="grid-3x3" style="width:20px;height:20px;" :style="o ? 'stroke-width:2.5' : 'stroke-width:2'"></i>
-                <span class="pill-label">Plus</span>
+        {# Menu complet : les six rubriques, puis le compte #}
+        <div style="flex:1;" x-data="{ o: false }" @keydown.escape.window="o = false">
+            <button @click="o = true" class="pill-item" :class="o ? 'active' : ''" style="width:100%;" aria-label="Menu">
+                <i data-lucide="layout-grid" style="width:20px;height:20px;"></i>
+                <span class="pill-label">Menu</span>
             </button>
-            <div x-show="o" x-cloak
-                 x-transition:enter="transition ease-out duration-200"
-                 x-transition:enter-start="opacity-0 scale-95 translate-y-2"
-                 x-transition:enter-end="opacity-100 scale-100 translate-y-0"
-                 style="position:absolute;bottom:calc(100% + 1rem);right:0;width:13rem;max-height:calc(100vh - 7rem);overflow-y:auto;
-                        background:rgba(255,255,255,0.97);backdrop-filter:blur(24px);
-                        border-radius:1.25rem;padding:0.5rem;
-                        box-shadow:0 16px 40px rgba(44,85,89,0.15),0 0 0 1px rgba(44,85,89,0.06);">
-                {% set mobileMore = [
-                    { label: 'Notifications' ~ (unread_notifications() ? ' (' ~ unread_notifications() ~ ')' : ''), path: path('app_notifications'), icon: 'bell' },
-                    { label: 'Mes Stratégies', path: path('app_strategies'),  icon: 'trending-up' },
-                    { label: 'Agenda',       path: path('app_planner'),        icon: 'calendar' },
-                    { label: 'Bilan',        path: path('app_bilan'),          icon: 'bar-chart-2' },
-                    { label: 'Partenaires',  path: path('app_social'),         icon: 'users' },
-                    { label: 'Défis',        path: path('app_challenges'),     icon: 'trophy' },
-                    { label: 'Inviter mes proches', path: path('app_referral'), icon: 'gift' },
-                    { label: 'Donner mon avis', path: path('app_app_feedback'), icon: 'message-square' },
-                    { label: 'Mes tests', path: path('app_personality_index'), icon: 'sparkles' },
-                    { label: 'Notre couple', path: path('app_couple'),         icon: 'heart' },
-                    { label: 'Mon organisation', path: path('app_organisation_index'), icon: 'building-2' },
-                    { label: 'La Méthode',   path: path('app_methode_index'),  icon: 'book-open' },
-                    { label: 'Installer l\'application', path: path('app_install'), icon: 'smartphone' },
-                    { label: is_pro() ? (is_trialing() ? 'Essai PRO' : 'Mon abonnement') : 'Passer à PRO', path: path('app_subscription'), icon: 'crown' },
-                ] %}
-                {% for mm in mobileMore %}
-                <a href="{{ mm.path }}" @click="o = false"
-                   style="display:flex;align-items:center;gap:0.625rem;padding:0.625rem 0.75rem;
-                          border-radius:0.75rem;color:var(--fg-light);font-size:0.825rem;font-weight:500;
-                          transition:all 0.2s;text-decoration:none;"
-                   onmouseover="this.style.background='var(--bg-alt)';this.style.color='var(--fg)'"
-                   onmouseout="this.style.background='';this.style.color='var(--fg-light)'">
-                    <i data-lucide="{{ mm.icon }}" style="width:16px;height:16px;color:var(--fg-muted);flex-shrink:0;"></i>
-                    {{ mm.label }}
-                </a>
-                {% endfor %}
-                <div style="height:1px;background:rgba(44,85,89,0.06);margin:0.375rem 0.375rem;"></div>
-                <a href="{{ path('app_profile') }}" @click="o = false"
-                   style="display:flex;align-items:center;gap:0.625rem;padding:0.625rem 0.75rem;
-                          border-radius:0.75rem;color:var(--fg-light);font-size:0.825rem;font-weight:500;text-decoration:none;">
-                    <i data-lucide="user" style="width:16px;height:16px;color:var(--fg-muted);flex-shrink:0;"></i>
-                    Mon Profil
-                </a>
-            </div>
+            <template x-teleport="body">
+                <div class="ks-sheet" x-show="o" x-cloak x-transition.opacity @click.self="o = false">
+                    <div class="ks-sheet__panel" x-show="o" x-transition:enter="transition ease-out duration-200" x-transition:enter-start="translate-y-8 opacity-0" x-transition:enter-end="translate-y-0 opacity-100">
+                        <div style="display:flex;justify-content:space-between;align-items:center;">
+                            <strong style="font-family: var(--font-serif); font-size: 1.2rem; color: var(--fg);">Menu</strong>
+                            <button type="button" @click="o = false" aria-label="Fermer" style="border:none;background:var(--bg-alt);border-radius:50%;width:2.2rem;height:2.2rem;display:flex;align-items:center;justify-content:center;"><i data-lucide="x" style="width:18px;height:18px;"></i></button>
+                        </div>
+                        {% for key, sec in nav_sections() %}
+                            <p class="ks-sheet__title">{{ sec.label }}</p>
+                            <div class="ks-sheet__grid">
+                                {% set links = sec.items is empty ? [[sec.label, sec.route, sec.icon]] : sec.items %}
+                                {% for it in links %}
+                                    {% set href = path(it[1]) %}
+                                    <a href="{{ href }}" class="ks-sheet__link {{ cp == href or cp == href ~ '/' ? 'current' }}" @click="o = false"><i data-lucide="{{ it[2] }}"></i>{{ it[0] }}</a>
+                                {% endfor %}
+                            </div>
+                        {% endfor %}
+                        <p class="ks-sheet__title">Mon compte</p>
+                        <div class="ks-sheet__grid">
+                            <a href="{{ path('app_profile') }}" class="ks-sheet__link" @click="o = false"><i data-lucide="user"></i>Mon profil</a>
+                            <a href="{{ path('app_notifications') }}" class="ks-sheet__link" @click="o = false"><i data-lucide="bell"></i>Notifications{{ unread_notifications() ? ' (' ~ unread_notifications() ~ ')' }}</a>
+                            <a href="{{ path('app_subscription') }}" class="ks-sheet__link" @click="o = false"><i data-lucide="crown"></i>{{ is_pro() ? (is_trialing() ? 'Essai PRO' : 'Mon abonnement') : 'Passer à PRO' }}</a>
+                            <a href="{{ path('app_install') }}" class="ks-sheet__link" @click="o = false"><i data-lucide="smartphone"></i>Installer l'application</a>
+                            <a href="{{ path('app_app_feedback', {page: app.request.pathInfo}) }}" class="ks-sheet__link" @click="o = false"><i data-lucide="message-square"></i>Donner mon avis</a>
+                            <a href="{{ path('app_logout') }}" class="ks-sheet__link" style="color: var(--danger);"><i data-lucide="log-out"></i>Déconnexion</a>
+                        </div>
+                    </div>
+                </div>
+            </template>
         </div>
     </nav>
     {% endif %}
