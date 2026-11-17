@@ -1,0 +1,103 @@
+{#
+    Le cercle des six plans, vivant (livre : « Les six plans », figure du Système) : chaque plan est un lien, entouré d'un
+    anneau de progression ; survol, focus ou premier toucher affichent ses étapes et la prochaine à franchir.
+    Variables : planProgress (PlanProgress::forUser), lockedPlans. Couleurs : --plan-* (docs/design.md).
+#}
+{% set plans = constant('App\\PlanDeVie\\Service\\PlanCatalog::PLANS') %}
+{% set pos = {
+    VIE:           {x: 360, y: 300, r: 84, name: 'Plan de Vie',   css: 'vie'},
+    CROISSANCE:    {x: 360, y: 82,  r: 62, name: 'Croissance',    css: 'croissance'},
+    DEVELOPPEMENT: {x: 566, y: 232, r: 62, name: 'Développement', css: 'developpement'},
+    HYGIENE:       {x: 488, y: 474, r: 62, name: 'Hygiène de vie', css: 'hygiene'},
+    INTENDANCE:    {x: 232, y: 474, r: 62, name: 'Intendance',    css: 'intendance'},
+    TRANSMISSION:  {x: 154, y: 232, r: 62, name: 'Transmission',  css: 'transmission'},
+} %}
+{% set firstOpen = null %}
+{% for key in pos|keys %}{% if firstOpen is null and planProgress[key].percent < 100 and key not in (lockedPlans ?? []) %}{% set firstOpen = key %}{% endif %}{% endfor %}
+{% set initial = firstOpen ?? 'VIE' %}
+
+<section class="pc" data-plans-circle data-initial="{{ initial }}" aria-label="Mes six plans et leur progression">
+    <svg viewBox="0 0 720 560" class="pc__svg" role="group" aria-label="Le cercle des six plans">
+        <circle cx="360" cy="300" r="268" class="pc__system"/>
+        <text x="360" y="22" text-anchor="middle" class="pc__system-label">LE SYSTÈME</text>
+        {% for key, p in pos %}
+            {% set pr = planProgress[key] %}
+            {% set locked = key in (lockedPlans ?? []) %}
+            {% set ringR = p.r + 8 %}
+            {% set circ = 2 * 3.14159 * ringR %}
+            <a href="{{ locked ? path('app_subscription', {fonction: key|lower}) : path(plans[key].route) }}" class="pc__node{{ locked ? ' is-locked' }}" data-plan="{{ key }}"
+               aria-label="{{ plans[key].label }} : {{ pr.percent }} % des étapes franchies{{ locked ? ' (réservé à PRO)' : '' }}">
+                <circle cx="{{ p.x }}" cy="{{ p.y }}" r="{{ ringR }}" class="pc__track"/>
+                <circle cx="{{ p.x }}" cy="{{ p.y }}" r="{{ ringR }}" class="pc__ring" style="stroke: var(--plan-{{ p.css }}); stroke-dasharray: {{ (circ * pr.percent / 100)|round(1) }} {{ circ|round(1) }};" transform="rotate(-90 {{ p.x }} {{ p.y }})"/>
+                <circle cx="{{ p.x }}" cy="{{ p.y }}" r="{{ p.r }}" class="pc__disc" style="fill: var(--plan-{{ p.css }});"/>
+                <text x="{{ p.x }}" y="{{ p.y - (key == 'VIE' ? 4 : 6) }}" text-anchor="middle" class="pc__name{{ key == 'VIE' ? ' pc__name--big' }}">{{ p.name }}</text>
+                <text x="{{ p.x }}" y="{{ p.y + (key == 'VIE' ? 24 : 18) }}" text-anchor="middle" class="pc__pct">{{ locked ? 'PRO' : pr.percent ~ ' %' }}</text>
+            </a>
+        {% endfor %}
+    </svg>
+
+    <div class="pc__panel" aria-live="polite">
+        {% for key, p in pos %}
+            {% set pr = planProgress[key] %}
+            {% set locked = key in (lockedPlans ?? []) %}
+            <div class="pc__info" data-plan-info="{{ key }}" hidden>
+                <p class="ks-eyebrow">{{ plans[key].question }}</p>
+                <h3 class="pc__title">{{ plans[key].label }} <span class="ks-badge">{{ pr.done }} étape{{ pr.done > 1 ? 's' }} sur {{ pr.total }}</span></h3>
+                <ul class="pc__steps">
+                    {% for s in pr.steps %}<li class="{{ s.done ? 'is-done' }}"><i data-lucide="{{ s.done ? 'circle-check' : 'circle' }}" class="ks-ico" aria-hidden="true"></i> {{ s.label }}</li>{% endfor %}
+                </ul>
+                {% if locked %}
+                    <a class="ks-btn ks-btn--primary ks-btn--sm" href="{{ path('app_subscription', {fonction: key|lower}) }}">Découvrir PRO</a>
+                {% elseif pr.next %}
+                    <a class="ks-btn ks-btn--primary ks-btn--sm" href="{{ path(pr.next.route, pr.next.params) }}">Prochaine étape : {{ pr.next.label|lower }}</a>
+                {% else %}
+                    <a class="ks-btn ks-btn--secondary ks-btn--sm" href="{{ path(plans[key].route) }}">Ouvrir ce plan</a>
+                {% endif %}
+            </div>
+        {% endfor %}
+    </div>
+</section>
+
+<style>
+    .pc { display: grid; gap: 1rem; background: #fff; border-radius: 22px; padding: 1.25rem; box-shadow: var(--card-shadow); margin: 0 0 1.5rem; }
+    @media (min-width: 900px) { .pc { grid-template-columns: 1.25fr 1fr; align-items: center; } }
+    .pc__svg { width: 100%; height: auto; max-width: 620px; margin: 0 auto; display: block; }
+    .pc__system { fill: var(--primary-soft); stroke: var(--sage); stroke-width: 2; stroke-dasharray: 8 7; }
+    .pc__system-label { font: 700 12px var(--font-sans); letter-spacing: .18em; fill: var(--primary-dark); }
+    .pc__node { cursor: pointer; outline: none; }
+    .pc__track { fill: none; stroke: var(--mist); stroke-width: 6; }
+    .pc__ring { fill: none; stroke-width: 6; stroke-linecap: round; transition: stroke-dasharray .6s var(--ease); }
+    .pc__disc { transition: transform .2s var(--ease); transform-box: fill-box; transform-origin: center; }
+    .pc__node:hover .pc__disc, .pc__node:focus-visible .pc__disc, .pc__node.is-active .pc__disc { transform: scale(1.06); }
+    .pc__node:focus-visible .pc__track, .pc__node.is-active .pc__track { stroke: var(--gold); }
+    .pc__node.is-locked { opacity: .55; }
+    .pc__name { font: 700 14px var(--font-sans); fill: #fff; pointer-events: none; }
+    .pc__name--big { font: 600 20px var(--font-serif); }
+    .pc__pct { font: 600 13px var(--font-sans); fill: rgba(255,255,255,.85); pointer-events: none; }
+    .pc__title { font-family: var(--font-serif); font-size: 1.25rem; margin: .1rem 0 .6rem; display: flex; align-items: center; gap: .5rem; flex-wrap: wrap; }
+    .pc__steps { list-style: none; padding: 0; margin: 0 0 1rem; display: grid; gap: .35rem; font-size: .92rem; color: var(--fg-light); }
+    .pc__steps li.is-done { color: var(--fg-muted); text-decoration: line-through; text-decoration-color: var(--border-strong); }
+    .pc__steps li.is-done .ks-ico { color: var(--success); }
+    .pc__steps li:not(.is-done) .ks-ico { color: var(--fg-subtle); }
+</style>
+<script>
+    (function () {
+        const root = document.querySelector('[data-plans-circle]');
+        if (!root) { return; }
+        const show = (key) => {
+            root.querySelectorAll('[data-plan-info]').forEach(p => { p.hidden = p.dataset.planInfo !== key; });
+            root.querySelectorAll('.pc__node').forEach(n => n.classList.toggle('is-active', n.dataset.plan === key));
+            if (window.lucide) { lucide.createIcons(); }
+        };
+        const touchOnly = () => window.matchMedia('(hover: none)').matches;
+        root.querySelectorAll('.pc__node').forEach(n => {
+            n.addEventListener('mouseenter', () => show(n.dataset.plan));
+            n.addEventListener('focus', () => show(n.dataset.plan));
+            // Au toucher : un premier appui présente le plan, le second l'ouvre
+            n.addEventListener('click', (e) => {
+                if (touchOnly() && !n.classList.contains('is-active')) { e.preventDefault(); show(n.dataset.plan); }
+            });
+        });
+        show(root.dataset.initial);
+    })();
+</script>

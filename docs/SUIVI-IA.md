@@ -11,6 +11,20 @@ Ne jamais afficher ni demander de mot de passe ; ne pas publier son nom (mention
 
 ---
 
+## 2026-11-17 · Lot C (début) : le cercle des plans vivant
+
+- **« Mes plans »** : la figure fixe des 6 plans est remplacée par un cercle SVG interactif
+  (`plan_de_vie/_plans_circle.html.twig`) : chaque plan est un lien, entouré d'un **anneau de progression** ; survol, focus
+  clavier ou premier toucher (mobile) affichent ses étapes et un bouton « Prochaine étape ». Plans PRO verrouillés : lien
+  vers l'abonnement. Couleurs `--plan-*`.
+- **`PlanDeVie\Service\PlanProgress`** : 3 ou 4 étapes simples par plan, tirées du livre (écrire, relier à un objectif,
+  évaluer, rendre compte). Ce n'est pas un score de qualité : « 100 % » = étapes de départ franchies. Pour changer les étapes
+  d'un plan, modifier ce seul fichier ; `tests/PlanDeVie/PlanProgressTest.php` vérifie les routes.
+- Données ajoutées par `AbstractPlanController::renderStrategies` (`planProgress`).
+- **Photo** : le fondateur ne veut pas de photo de lui sur la vitrine (mémoire `kiini-no-personal-photo`).
+- **Reste (lot C)** : accueil « Ma prochaine étape » (réutiliser `PlanProgress` + parcours + bilan du jour), page « Mes
+  rythmes », une action principale par écran ; lot B (composants uniques).
+
 ## 2026-11-17 · Lot A de l'audit design : zéro émoji, couleurs, casse
 
 - **Zéro émoji dans l'interface** : 208 pictogrammes remplacés par des icônes Lucide (`<i data-lucide="…" class="ks-ico">`,
