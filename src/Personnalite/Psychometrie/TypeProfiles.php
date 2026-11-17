@@ -218,6 +218,26 @@ final class TypeProfiles
         ],
     ];
 
+    /** Dans la famille élargie et la communauté (contextes africains et communautaires). */
+    public const COMMUNITY = [
+        'ISTJ' => 'Dans la famille élargie, vous êtes le gardien des engagements et des traditions : on sait que vous tiendrez parole.',
+        'ISFJ' => 'Vous prenez soin des aînés et des enfants de la famille avec une fidélité discrète ; acceptez aussi d\'être aidé.',
+        'INFJ' => 'On vient vers vous pour un conseil profond ; dans la communauté, vous percevez avant les autres ce qui ne va pas.',
+        'INTJ' => 'Vous pensez l\'avenir de la famille ou de l\'association à long terme ; expliquez vos plans pour embarquer les autres.',
+        'ISTP' => 'Dans la famille et le quartier, on fait appel à vous pour réparer, installer, résoudre : c\'est votre manière d\'aimer.',
+        'ISFP' => 'Vous embellissez les moments de la communauté par votre sensibilité ; osez aussi dire ce que vous pensez.',
+        'INFP' => 'L\'injustice et la souffrance autour de vous vous touchent ; transformez cette sensibilité en action concrète.',
+        'INTP' => 'On vous pose les questions difficiles ; partagez vos idées simplement, sans vous isoler du groupe.',
+        'ESTP' => 'Dans le commerce et les affaires, vous saisissez vite les occasions ; gardez une part de prudence pour la famille.',
+        'ESFP' => 'Vous mettez de la vie dans les fêtes et les rassemblements ; restez aussi présent dans les moments difficiles.',
+        'ENFP' => 'Vous rassemblez autour de projets communautaires et vous encouragez les jeunes ; menez ces projets jusqu\'au bout.',
+        'ENTP' => 'Vous lancez des initiatives nouvelles dans votre communauté ; écoutez aussi la sagesse des aînés.',
+        'ESTJ' => 'On vous confie l\'organisation des grands événements familiaux et associatifs ; laissez de la place aux idées des autres.',
+        'ESFJ' => 'Vous tissez les liens de la famille élargie et vous veillez à ce que personne ne soit oublié.',
+        'ENFJ' => 'Vous faites grandir les jeunes de votre famille ou de votre Église ; prenez aussi soin de vous.',
+        'ENTJ' => 'Vous prenez naturellement la tête des projets collectifs ; dirigez en serviteur, à l\'écoute de chacun.',
+    ];
+
     public static function familyOf(string $code): string
     {
         return $code[1].('S' === $code[1] ? ('J' === $code[3] ? 'J' : 'P') : $code[2]);

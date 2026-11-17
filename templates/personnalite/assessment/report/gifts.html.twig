@@ -47,11 +47,12 @@
     <h2>{{ g.name }}</h2>
     <p class="dr-lead">{{ g.desc }} <span class="dr-small">({{ g.ref }})</span></p>
     <table class="dr-grid"><tr>
-        <td style="width: 62%;"><p style="font-size: {{ pdf ? '10.5pt' : '1.05rem' }}; margin: 0;">{{ g.portrait }}</p></td>
+        <td style="width: 62%;"><p style="font-size: {{ pdf ? '10.5pt' : '1.05rem' }}; margin: 0 0 6px;">{{ g.portrait }}</p><p class="dr-small" style="margin: 0; color: #334155;">{{ g.strength[1] }}</p></td>
         <td><div class="dr-tile" style="background: {{ g.family.light }}; border-color: {{ g.family.light }}; text-align: center;">
             <div class="dr-label" style="color: {{ g.family.dark }};">Votre score</div>
             <div style="font-size: {{ pdf ? '30pt' : '2.6rem' }}; font-weight: bold; color: {{ g.family.color }}; line-height: 1.1;">{{ g.score|round }}</div>
             <div class="dr-small" style="color: {{ g.family.dark }};">sur 100</div>
+            <div style="margin-top: 6px;"><span class="dr-chip" style="background: #fff; color: {{ g.family.dark }}; font-size: {{ pdf ? '7.5pt' : '.72rem' }};">{{ g.strength[0] }}</span></div>
         </div></td>
     </tr></table>
     <table class="dr-grid" style="margin-top: 6px;"><tr>

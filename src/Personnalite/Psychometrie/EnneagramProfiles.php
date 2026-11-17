@@ -218,6 +218,19 @@ final class EnneagramProfiles
         ],
     ];
 
+    /** Dans la famille élargie et la communauté (contextes africains et communautaires). */
+    public const COMMUNITY = [
+        1 => 'Dans la famille et la communauté, vous défendez les règles, la justice et le respect des engagements. Veillez à ne pas devenir le juge de tous : la grâce rapproche plus que la correction.',
+        2 => 'Dans la famille élargie, vous êtes celle ou celui qui aide tout le monde, souvent au-delà de vos moyens. Recevoir est aussi une manière d\'aimer.',
+        3 => 'La famille attend souvent beaucoup de vous : diplômes, situation, soutien financier. Votre valeur ne dépend pas de ce que vous rapportez ; osez en parler.',
+        4 => 'Vous pouvez vous sentir à part dans la famille ou la communauté, parfois entre deux cultures. Votre regard singulier est un don : partagez-le.',
+        5 => 'Dans une vie très communautaire, votre besoin de retrait peut surprendre. Expliquez-le avec douceur, et offrez votre savoir au groupe.',
+        6 => 'La famille et la communauté sont vos repères de sécurité, et vous y êtes d\'une grande loyauté. Apprenez aussi à décider par vous-même, sans attendre l\'accord de tous.',
+        7 => 'Vous mettez de la joie dans les fêtes et les rassemblements. Restez aussi présent dans les deuils et les épreuves, où votre présence compte autant.',
+        8 => 'Vous prenez la défense des plus fragiles de la famille ou du quartier. Mettez votre force au service du dialogue, dans le respect de la parole des aînés.',
+        9 => 'Vous êtes l\'artisan de paix des conflits familiaux ou communautaires. Votre avis compte aussi : une paix durable passe parfois par une parole claire.',
+    ];
+
     public static function centerOf(int $type): string
     {
         return self::TYPES[$type]['center'];

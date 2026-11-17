@@ -72,6 +72,7 @@
     <h2>Vos neuf scores</h2>
     <p class="dr-lead">Chacun porte un peu des neuf types. Le plus élevé indique votre type probable ; les couleurs montrent les trois centres.</p>
     <img class="dr-img" src="{{ e.charts.bars }}" alt="Scores des neuf types">
+    {% if e.clarityLabel %}<p class="dr-small" style="margin-top: 8px; color: #334155;"><span class="dr-chip" style="background: {{ ce.light }}; color: {{ ce.dark }}; font-size: {{ pdf ? '7.5pt' : '.72rem' }};">{{ e.clarityLabel[0] }}</span> {{ e.clarityLabel[1] }}</p>{% endif %}
     {% if e.clarity < 8 %}
         <div class="dr-tile" style="margin-top: 8px; background: #FFFBEB; border-color: #FDE68A;"><p class="dr-small" style="margin: 0; color: #92400E;">Plusieurs types sont proches dans vos réponses (écart de {{ e.clarity }} points). Lisez aussi les profils suivants et retenez celui dont la peur profonde vous parle le plus.</p></div>
     {% endif %}
@@ -103,6 +104,7 @@
         <td><div class="dr-tile"><div class="dr-label">{{ report_icon('heart', '#DB2777') }}En couple et en famille</div><p style="margin: 0;">{{ x.relations }}</p></div></td>
         <td><div class="dr-tile"><div class="dr-label">{{ report_icon('cross', '#7C3AED') }}À l'Église</div><p style="margin: 0;">{{ x.church }}</p></div></td>
     </tr></table>
+    {% if x.community %}<div class="dr-tile" style="margin-top: 4px; background: #FFFBEB; border-color: #FDE68A;"><div class="dr-label" style="color: #92400E;">{{ report_icon('users', '#B45309') }}Dans la famille élargie et la communauté</div><p style="margin: 0; color: #78350F;">{{ x.community }}</p></div>{% endif %}
 </div>
 
 {# ═══ Croissance et stress ═══ #}

@@ -86,6 +86,7 @@
         <td><div class="dr-tile"><div class="dr-label">{{ report_icon('cross', '#7C3AED') }}À l'Église</div><p style="margin: 0;">{{ x.church }}</p></div></td>
         <td><div class="dr-tile" style="background: #FEF2F2; border-color: #FECACA;"><div class="dr-label" style="color: #991B1B;">Sous pression</div><p style="margin: 0; color: #991B1B;">{{ x.stress }}</p></div></td>
     </tr></table>
+    {% if x.community %}<div class="dr-tile" style="margin-top: 4px; background: #FFFBEB; border-color: #FDE68A;"><div class="dr-label" style="color: #92400E;">{{ report_icon('users', '#B45309') }}Dans la famille élargie et la communauté</div><p style="margin: 0; color: #78350F;">{{ x.community }}</p></div>{% endif %}
 </div>
 
 {# ═══ Figures bibliques ═══ #}

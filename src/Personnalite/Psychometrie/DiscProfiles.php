@@ -119,6 +119,31 @@ final class DiscProfiles
         ],
     ];
 
+
+    /** Lecture combinée : ADAPTATION[naturel][adapté] quand la dimension dominante change selon le contexte. */
+    public const ADAPTATION = [
+        'D' => [
+            'I' => 'Votre nature va droit au résultat, mais votre contexte vous demande de convaincre, d\'animer et de prendre le temps des relations. Vous y arrivez, au prix d\'une patience qui ne vous est pas naturelle : gardez des espaces où décider vite.',
+            'S' => 'Votre nature est faite pour trancher et avancer, mais votre contexte vous demande patience, écoute et constance. Cette retenue coûte cher à la longue : surveillez l\'impatience rentrée et cherchez un projet où prendre l\'initiative.',
+            'C' => 'Votre nature aime décider vite, mais votre contexte exige précision, vérification et respect des procédures. Vous freinez votre élan : gardez des objectifs motivants et des marges d\'autonomie.',
+        ],
+        'I' => [
+            'D' => 'Votre nature est tournée vers les personnes et l\'enthousiasme, mais votre contexte vous demande fermeté, décisions et résultats. Cela peut vous couper de ce qui vous nourrit : les échanges et la reconnaissance. Protégez ces moments.',
+            'S' => 'Votre nature est expressive et spontanée, mais votre contexte vous demande calme, régularité et discrétion. Prévoyez des moments où parler, créer et rencontrer.',
+            'C' => 'Votre nature est spontanée et communicante, mais votre contexte exige rigueur, détails et procédures. C\'est l\'adaptation la plus coûteuse pour votre profil : fractionnez les tâches minutieuses et gardez du lien.',
+        ],
+        'S' => [
+            'D' => 'Votre nature est posée et à l\'écoute, mais votre contexte vous demande de décider vite, de vous imposer et de bousculer. Vous le faites par loyauté ; si cela dure, la fatigue peut s\'installer sans bruit : dites vos limites.',
+            'I' => 'Votre nature est calme et discrète, mais votre contexte vous demande d\'être visible, d\'animer et de convaincre. Accordez-vous des temps de retrait pour récupérer.',
+            'C' => 'Votre nature est patiente et relationnelle, et votre contexte vous demande en plus précision et rigueur. Cette adaptation est souvent bien vécue ; veillez à garder le lien avec les personnes.',
+        ],
+        'C' => [
+            'D' => 'Votre nature aime analyser et vérifier, mais votre contexte vous demande de trancher vite, parfois sans toutes les informations. Fixez-vous un niveau de preuve suffisant pour décider sans vous épuiser.',
+            'I' => 'Votre nature est réservée et précise, mais votre contexte vous demande d\'être expressive, d\'animer et de convaincre. Préparez vos interventions : la préparation vous met à l\'aise.',
+            'S' => 'Votre nature est rigoureuse et indépendante, et votre contexte vous demande disponibilité et patience envers les personnes. Cette adaptation vous fait grandir ; prévoyez des temps seuls pour travailler au calme.',
+        ],
+    ];
+
     /** Lecture de l'écart entre profil naturel et adapté. */
     public static function gapReading(int $gap): array
     {

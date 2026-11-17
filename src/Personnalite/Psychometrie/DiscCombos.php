@@ -116,7 +116,7 @@ final class DiscCombos
 
         // ── Dominance + … ───────────────────────────────────────────────
         'DI' => [
-            'name' => 'L\'entraîneur', 'tagline' => 'Il avance, et tout le monde suit.',
+            'name' => 'L\'entraîneur', 'tagline' => 'Vous avancez, et tout le monde suit.',
             'keywords' => ['Audace', 'Conviction', 'Mouvement'],
             'portrait' => 'Vous combinez l\'énergie du résultat et la force de conviction. Vous voyez où aller et vous savez donner envie d\'y aller. Vous lancez, vous mobilisez, vous ouvrez des chemins. Votre présence change le rythme d\'une équipe.',
             'strengths' => ['Mobilise rapidement un groupe autour d\'un objectif', 'Ose les initiatives et les nouveaux projets', 'Convainc par l\'énergie et la vision', 'Rebondit vite après un échec'],
@@ -141,7 +141,7 @@ final class DiscCombos
             'actions' => ['Avant votre prochain lancement, désigner qui assure le suivi', 'Demander à un proche ce que votre rythme lui coûte', 'Terminer un projet commencé avant d\'en lancer un nouveau'],
         ],
         'DS' => [
-            'name' => 'Le bâtisseur', 'tagline' => 'Il vise loin et tient jusqu\'au bout.',
+            'name' => 'Le bâtisseur', 'tagline' => 'Viser loin, et tenir jusqu\'au bout.',
             'keywords' => ['Détermination', 'Constance', 'Fiabilité'],
             'portrait' => 'Vous alliez la volonté d\'atteindre un objectif et la constance pour y arriver. Vous ne lâchez pas. Vous construisez pierre après pierre, avec ténacité, et vous protégez ceux qui travaillent avec vous. On vous fait confiance pour les projets de longue haleine.',
             'strengths' => ['Persévère quand d\'autres abandonnent', 'Allie fermeté et loyauté', 'Construit des choses solides et durables', 'Protège son équipe'],
@@ -193,7 +193,7 @@ final class DiscCombos
 
         // ── Influence + … ───────────────────────────────────────────────
         'ID' => [
-            'name' => 'Le promoteur', 'tagline' => 'Il convainc et fait bouger les lignes.',
+            'name' => 'Le promoteur', 'tagline' => 'Convaincre, et faire bouger les lignes.',
             'keywords' => ['Persuasion', 'Audace', 'Rayonnement'],
             'portrait' => 'Vous êtes communicant et audacieux. Vous savez porter une idée, la défendre et convaincre. Vous aimez être au cœur de l\'action, créer des opportunités et rassembler autour d\'un projet. Votre énergie attire.',
             'strengths' => ['Convainc et négocie avec aisance', 'Saisit les opportunités', 'Prend la parole avec assurance', 'Crée un réseau large'],
@@ -218,7 +218,7 @@ final class DiscCombos
             'actions' => ['Lors de la prochaine réunion, parler en dernier', 'Faire relire vos chiffres ou promesses par une personne rigoureuse', 'Mettre en avant la réussite d\'un autre cette semaine'],
         ],
         'IS' => [
-            'name' => 'Le conseiller', 'tagline' => 'Il crée du lien et met chacun à l\'aise.',
+            'name' => 'Le conseiller', 'tagline' => 'Créer du lien, et mettre chacun à l\'aise.',
             'keywords' => ['Chaleur', 'Encouragement', 'Harmonie'],
             'portrait' => 'Vous êtes chaleureux et attentif. Vous aimez les gens, sincèrement, et vous savez les mettre à l\'aise. Vous encouragez, vous réconfortez, vous rassemblez. Les autres viennent naturellement vous confier ce qu\'ils vivent.',
             'strengths' => ['Met les gens à l\'aise immédiatement', 'Encourage et redonne confiance', 'Crée une ambiance d\'équipe chaleureuse', 'Écoute avec empathie'],
@@ -243,7 +243,7 @@ final class DiscCombos
             'actions' => ['Dire un non bienveillant à une demande de trop', 'Avoir une conversation de recadrage que vous repoussez', 'Prendre un temps pour vous, sans culpabilité'],
         ],
         'IC' => [
-            'name' => 'Le créatif structuré', 'tagline' => 'Il sait donner envie et donner forme.',
+            'name' => 'Le créatif structuré', 'tagline' => 'Donner envie, et donner forme.',
             'keywords' => ['Créativité', 'Soin', 'Expression'],
             'portrait' => 'Vous unissez l\'élan créatif et le souci de bien faire. Vous avez des idées et vous savez les mettre en forme avec goût et précision. Vous communiquez avec aisance, mais avec des arguments. Vous aimez que les choses soient belles et justes.',
             'strengths' => ['Transforme des idées en réalisations soignées', 'Communique avec clarté et élégance', 'Allie créativité et rigueur', 'Rend un sujet complexe attrayant'],
@@ -270,7 +270,7 @@ final class DiscCombos
 
         // ── Stabilité + … ───────────────────────────────────────────────
         'SD' => [
-            'name' => 'Le pilier engagé', 'tagline' => 'On peut compter sur lui, jusqu\'au bout.',
+            'name' => 'Le pilier engagé', 'tagline' => 'On peut compter sur vous, jusqu\'au bout.',
             'keywords' => ['Loyauté', 'Ténacité', 'Engagement'],
             'portrait' => 'Vous êtes fiable et tenace. Calme en apparence, vous avez une volonté ferme quand une cause compte pour vous. Vous tenez vos engagements, vous protégez les vôtres et vous menez les choses à terme sans bruit.',
             'strengths' => ['Tient ses engagements coûte que coûte', 'Reste calme et ferme dans la difficulté', 'Mène les projets jusqu\'au bout', 'Protège et défend son équipe'],
@@ -295,7 +295,7 @@ final class DiscCombos
             'actions' => ['Exprimer un désaccord dès cette semaine, calmement', 'Essayer une nouvelle façon de faire une tâche habituelle', 'Expliquer à votre entourage une décision que vous avez prise'],
         ],
         'SI' => [
-            'name' => 'L\'accompagnateur', 'tagline' => 'Il soutient et encourage.',
+            'name' => 'L\'accompagnateur', 'tagline' => 'Soutenir, et encourager.',
             'keywords' => ['Bienveillance', 'Présence', 'Soutien'],
             'portrait' => 'Vous êtes à l\'écoute et bienveillant. Vous aimez aider, accompagner et voir les autres grandir. Votre présence douce rassure, et votre gentillesse crée des liens durables. Vous êtes souvent le confident discret d\'un groupe.',
             'strengths' => ['Accompagne avec patience', 'Crée des liens durables', 'Encourage sans juger', 'Remarque ceux qu\'on oublie'],
@@ -347,7 +347,7 @@ final class DiscCombos
 
         // ── Conformité + … ──────────────────────────────────────────────
         'CD' => [
-            'name' => 'L\'architecte', 'tagline' => 'Il construit des solutions solides.',
+            'name' => 'L\'architecte', 'tagline' => 'Construire des solutions solides.',
             'keywords' => ['Analyse', 'Fermeté', 'Solidité'],
             'portrait' => 'Vous êtes analytique et décidé. Vous étudiez un problème à fond, puis vous agissez avec détermination. Vous aimez concevoir des systèmes efficaces et vous ne transigez pas sur la qualité.',
             'strengths' => ['Conçoit des solutions robustes', 'Décide sur des bases solides', 'Tient ses positions avec arguments', 'Améliore les processus'],
@@ -372,7 +372,7 @@ final class DiscCombos
             'actions' => ['Déléguer une décision à quelqu\'un d\'autre cette semaine', 'Demander à un proche comment il se sent avant de parler du problème', 'Accepter une solution différente de la vôtre'],
         ],
         'CI' => [
-            'name' => 'Le pédagogue', 'tagline' => 'Il rend clair ce qui est complexe.',
+            'name' => 'Le pédagogue', 'tagline' => 'Rendre clair ce qui est complexe.',
             'keywords' => ['Clarté', 'Précision', 'Transmission'],
             'portrait' => 'Vous êtes précis et communicant. Vous aimez comprendre en profondeur, puis expliquer. Vous savez rendre clair un sujet complexe, avec des exemples et une bonne structure. Vous inspirez confiance par votre maîtrise et votre aisance.',
             'strengths' => ['Explique avec clarté', 'Allie rigueur et aisance relationnelle', 'Transmet avec passion', 'Rend un sujet difficile accessible'],
@@ -397,7 +397,7 @@ final class DiscCombos
             'actions' => ['Résumer votre prochaine présentation en une phrase', 'Demander un retour honnête sur votre façon d\'expliquer', 'Partager une conviction personnelle, pas seulement un savoir'],
         ],
         'CS' => [
-            'name' => 'Le gardien de la qualité', 'tagline' => 'Il assure la fiabilité dans la durée.',
+            'name' => 'Le gardien de la qualité', 'tagline' => 'La fiabilité, dans la durée.',
             'keywords' => ['Exactitude', 'Constance', 'Fidélité'],
             'portrait' => 'Vous êtes rigoureux et constant. Vous aimez les choses bien faites, vérifiées, durables. Vous êtes discret, fiable et attentif aux règles. On vous confie ce qui ne doit pas échouer.',
             'strengths' => ['Garantit l\'exactitude et la conformité', 'Travaille avec constance', 'Repère les erreurs que d\'autres ne voient pas', 'Respecte les engagements et les règles'],
@@ -421,6 +421,26 @@ final class DiscCombos
             ],
             'actions' => ['Prendre une décision en attente avec les éléments déjà réunis', 'Confier une inquiétude à un proche ou dans la prière', 'Essayer une nouvelle méthode sur un sujet sans enjeu'],
         ],
+    ];
+
+    /** Dans la famille élargie et la communauté (contextes africains et communautaires). */
+    public const COMMUNITY = [
+        'D' => 'Dans la famille élargie, on vous confie volontiers les décisions difficiles et l\'organisation des grands événements (mariages, funérailles). Consultez les aînés avant de trancher : votre autorité grandit quand elle respecte la leur.',
+        'I' => 'Dans la famille élargie et le quartier, vous êtes celle ou celui qui rassemble, anime les fêtes et entretient les liens, y compris avec la diaspora. Attention aux promesses faites à tout le monde : tenez d\'abord les plus importantes.',
+        'S' => 'Dans la famille élargie, vous êtes souvent le recours discret : on vient vers vous pour une écoute, un soutien, un service. Apprenez à dire non aux sollicitations répétées, même venant d\'un proche, sans culpabilité.',
+        'C' => 'Dans une association, une tontine ou une famille, on vous confie les comptes, les registres et l\'organisation précise. Votre rigueur protège la confiance du groupe ; expliquez vos règles avec douceur.',
+        'DI' => 'Dans la communauté, vous lancez les projets collectifs (cotisations, événements, entraide) et vous savez mobiliser. Associez une personne rigoureuse à la gestion de l\'argent commun.',
+        'DS' => 'Dans la famille élargie, vous portez souvent des responsabilités lourdes et durables (aider un frère, scolariser un neveu). Partagez la charge : votre fidélité ne doit pas devenir un fardeau solitaire.',
+        'DC' => 'Dans une association ou une tontine, vous structurez, fixez des règles claires et faites respecter les engagements. Gardez la chaleur des relations, au cœur de la vie communautaire.',
+        'ID' => 'Dans le commerce et l\'entrepreneuriat, votre aisance à convaincre et votre réseau sont de vrais atouts. Dans la famille, gardez du temps pour écouter les aînés comme les plus jeunes.',
+        'IS' => 'Vous êtes le cœur chaleureux des rassemblements familiaux et communautaires : chez vous, chacun se sent accueilli. Veillez à ne pas vous épuiser à recevoir tout le monde.',
+        'IC' => 'Vous savez donner une belle forme aux moments de la communauté (cérémonies, cultes, fêtes), avec goût et précision. Acceptez que tout ne soit pas parfait le jour venu.',
+        'SD' => 'Dans la famille élargie, vous êtes un pilier sur lequel on compte dans les épreuves. Dites ce que vous portez : vos proches ne le devinent pas toujours.',
+        'SI' => 'Dans le quartier, la famille ou l\'Église, vous êtes la présence qui visite, console et accompagne. Protégez vos temps de repos face aux sollicitations constantes.',
+        'SC' => 'Dans une tontine, une association ou l\'entreprise familiale, vous êtes la garantie d\'un travail régulier et fiable. Osez donner votre avis lors des décisions collectives.',
+        'CD' => 'Dans les projets communautaires, vous apportez la structure et la vision d\'ensemble. Prenez le temps d\'expliquer : la décision collective compte autant que la bonne solution.',
+        'CI' => 'On vous sollicite pour expliquer, conseiller ou former (études des jeunes, démarches administratives). Simplifiez sans craindre de perdre en justesse.',
+        'CS' => 'Dans la famille ou l\'association, vous veillez aux comptes, aux papiers et aux engagements pris. Votre fiabilité est précieuse ; dites aussi votre affection et vos inquiétudes.',
     ];
 
     /** Une parole pour chaque dimension dominante (Louis Segond 1910, domaine public). */

@@ -101,7 +101,7 @@ final class ReportBuilder
         $primary = $scores['primary'];
         $secondary = $scores['secondary'];
         $code = DiscCombos::code($primary, $secondary);
-        $combo = Content::get('disc.profiles')[$code] + ['code' => $code];
+        $combo = Content::get('disc.profiles')[$code] + ['code' => $code, 'community' => Content::get('disc.community')[$code] ?? null];
         $others = [];
         foreach (DiscBank::LETTERS as $l) {
             $others[$l] = ['profile' => $p[$l], 'perception' => Content::get('disc.perception')[$primary][$l], 'interaction' => Content::get('disc.interaction')[$primary][$l]];
@@ -121,6 +121,8 @@ final class ReportBuilder
             'secondaryProfile' => $secondary ? $p[$secondary] : null,
             'adaptedProfile' => $p[$scores['adaptedPrimary']],
             'combo' => $combo,
+            'intensity' => self::discIntensity($scores['natural'][$primary], $p[$primary]['name'], $secondary ? $p[$secondary]['name'] : null),
+            'adaptation' => $scores['adaptedPrimary'] !== $primary ? (Content::get('disc.adaptation')[$primary][$scores['adaptedPrimary']] ?? null) : null,
             'verse' => Content::get('disc.verses')[$primary],
             'meditation' => Content::get('disc.meditations')[$primary],
             'familyFigures' => DiscCombos::familyFigures($primary, $code),
@@ -148,6 +150,7 @@ final class ReportBuilder
             $axes[$d] = ['label' => $dom['label'], 'value' => $value];
             $rows = array_map(fn ($f) => ['label' => $f['label'], 'value' => $f['percentile'] ?? $f['score'], 'color' => $x['color'], 'strong' => 'mid' !== $f['level']], $dom['facets']);
             $out[$d] = $dom + ['x' => $x, 'level' => $dom['level'], 'lx' => $x[$dom['level']], 'value' => $value,
+                'extreme' => $value >= 80 ? 'Ce trait est très marqué chez vous : ses forces comme ses points de vigilance seront nettement visibles dans votre vie.' : ($value <= 20 ? 'Ce trait est très peu présent chez vous : c\'est une vraie singularité, qui a ses forces et ses points de vigilance.' : null),
                 'gauge' => ReportCharts::uri(ReportCharts::levelGauge($value, $x['color'])),
                 'facetChart' => $rows ? ReportCharts::uri(ReportCharts::hbars(array_values($rows), 200)) : null];
         }
@@ -174,9 +177,29 @@ final class ReportBuilder
         }
         $names = array_map(fn ($t) => $t[0], Content::get('type.types'));
 
-        return Content::get('type.profiles')[$code] + ['family' => $family, 'familyKey' => TypeProfiles::familyOf($code), 'families' => Content::get('type.families'),
+        return Content::get('type.profiles')[$code] + ['community' => Content::get('type.community')[$code] ?? null, 'family' => $family, 'familyKey' => TypeProfiles::familyOf($code), 'families' => Content::get('type.families'),
             'axesChart' => ReportCharts::uri(ReportCharts::typeAxes($rows, $family['color'])),
             'grid' => ReportCharts::uri(ReportCharts::typeGrid($code, $family['color'], $names))];
+    }
+
+    /** Netteté de la dimension DISC dominante (part du profil naturel). */
+    public static function discIntensity(int $share, string $name, ?string $secondary): array
+    {
+        return match (true) {
+            $share >= 45 => ['Très marquée', sprintf('Votre dimension %s est très marquée (%d %%) : ce portrait devrait vous ressembler fortement, avec ses forces comme ses angles morts.', mb_strtolower($name), $share)],
+            $share >= 35 => ['Marquée', sprintf('Votre dimension %s est nettement présente (%d %%)%s.', mb_strtolower($name), $share, $secondary ? ', colorée par votre côté '.mb_strtolower($secondary) : '')],
+            default => ['Modérée', sprintf('Votre dimension %s ressort, mais de peu (%d %%) : vos quatre dimensions sont assez équilibrées. Lisez aussi les autres profils : certains traits vous ressembleront autant.', mb_strtolower($name), $share)],
+        };
+    }
+
+    /** Niveau d'un don (score sur 100). */
+    public static function giftStrength(float $score): array
+    {
+        return match (true) {
+            $score >= 80 => ['Très présent', 'Ce don est très présent dans vos réponses.'],
+            $score >= 60 => ['Présent', 'Ce don est bien présent dans vos réponses.'],
+            default => ['En germe', 'Ce don est encore discret : il demande à être exercé pour se révéler.'],
+        };
     }
 
     private function enneagram(array $scores): array
@@ -187,7 +210,7 @@ final class ReportBuilder
         }
 
         $t = $scores['type'];
-        $x = Content::get('enn.profiles')[$t];
+        $x = Content::get('enn.profiles')[$t] + ['community' => Content::get('enn.community')[$t] ?? null];
         [$grow, $stress] = EnneagramProfiles::ARROWS[$t];
         $rows = [];
         foreach ($scores['scores'] as $k => $v) {
@@ -196,6 +219,7 @@ final class ReportBuilder
 
         return ['enneagram' => $scores + [
             'profile' => Content::get('enn.types')[$t], 'wingProfile' => Content::get('enn.types')[$scores['wing']], 'bars' => $bars,
+            'clarityLabel' => $scores['clarity'] >= 15 ? ['Type net', 'Votre type ressort nettement des autres : ce portrait devrait vous parler fortement.'] : ($scores['clarity'] >= 8 ? ['Type assez net', 'Votre type ressort, mais un ou deux autres types sont proches : lisez aussi leurs portraits.'] : null),
             'x' => $x, 'center' => Content::get('enn.centers')[$x['center']], 'centerKey' => $x['center'],
             'wingName' => Content::get('enn.wings')[$t][$scores['wing']],
             'grow' => ['n' => $grow, 'name' => Content::get('enn.types')[$grow]['name']], 'stress' => ['n' => $stress, 'name' => Content::get('enn.types')[$stress]['name']],
@@ -220,7 +244,7 @@ final class ReportBuilder
             $vals = array_map(fn ($g) => $scores['scores'][$g] ?? 0, $f['gifts']);
             $families[$key] = $f + ['avg' => (int) round(array_sum($vals) / \count($vals))];
         }
-        $top = array_map(fn ($g) => Content::get('gifts.gifts')[$g] + Content::get('gifts.profiles')[$g] + ['score' => $scores['scores'][$g], 'code' => $g,
+        $top = array_map(fn ($g) => Content::get('gifts.gifts')[$g] + Content::get('gifts.profiles')[$g] + ['score' => $scores['scores'][$g], 'code' => $g, 'strength' => self::giftStrength($scores['scores'][$g]),
             'family' => Content::get('gifts.families')[GiftProfiles::familyOf($g)]], $scores['top']);
         uasort($families, fn ($a, $b) => $b['avg'] <=> $a['avg']);
 

@@ -73,6 +73,7 @@
     <table class="dr-grid"><tr>
         <td style="width: 58%;">
             <p style="font-size: {{ pdf ? '10.5pt' : '1.05rem' }};">{{ c.portrait }}</p>
+            <p class="dr-small" style="margin: 0 0 6px; color: #334155;"><span class="dr-chip" style="background: {{ lights[disc.primary] }}; color: {{ darks[disc.primary] }}; font-size: {{ pdf ? '7.5pt' : '.72rem' }};">{{ disc.intensity[0] }}</span> {{ disc.intensity[1] }}</p>
             <div style="margin-top: 8px;">{% for k in c.keywords %}<span class="dr-chip" style="background: {{ lights[disc.primary] }}; color: {{ darks[disc.primary] }};">{{ k }}</span>{% endfor %}</div>
         </td>
         <td>
@@ -112,6 +113,12 @@
     {% if disc.more|length %}<p>• Votre contexte vous demande de <strong>{{ disc.more|join(', ') }}</strong>.</p>{% endif %}
     {% if disc.less|length %}<p>• Vous mettez en retrait une part de votre côté <strong>{{ disc.less|join(', ')|lower }}</strong>.</p>{% endif %}
     {% if disc.adaptedPrimary != disc.primary %}<p>• Dans votre contexte actuel, on vous voit surtout <strong style="color: {{ disc.adaptedProfile.color }};">{{ disc.adaptedProfile.name }}</strong>. Votre entourage ne connaît peut-être pas votre nature <strong>{{ p.name|lower }}</strong> : dites-leur ce dont vous avez besoin.</p>{% endif %}
+    {% if disc.adaptation %}
+        <div class="dr-tile" style="margin-top: 10px; background: {{ lights[disc.adaptedPrimary] }}; border-color: {{ lights[disc.adaptedPrimary] }};">
+            <div class="dr-label" style="color: {{ darks[disc.adaptedPrimary] }};">{{ report_icon('compass', darks[disc.adaptedPrimary]) }}Naturel {{ p.name|lower }}, adapté {{ disc.adaptedProfile.name|lower }} : ce que cela veut dire</div>
+            <p style="margin: 0; color: {{ darks[disc.adaptedPrimary] }};">{{ disc.adaptation }}</p>
+        </div>
+    {% endif %}
     <div class="dr-tile" style="margin-top: 10px;">
         <div class="dr-label">Une question pour réfléchir</div>
         <p style="margin: 0;">Dans quelles situations vous sentez-vous le plus vous-même ? Lesquelles vous demandent le plus d'énergie ? Notez-les : elles éclairent votre Plan d'Hygiène de Vie.</p>
@@ -169,12 +176,14 @@
         <td><div class="dr-tile"><div class="dr-label">{{ report_icon('cross', '#7C3AED') }}À l'Église et dans le service</div><p style="margin: 0;">{{ c.church }}</p></div></td>
         <td><div class="dr-tile"><div class="dr-label">{{ report_icon('star', '#D97706') }}Comme leader</div><p style="margin: 0;">{{ c.leader }}</p></div></td>
     </tr></table>
+
+    {% if c.community %}<div class="dr-tile" style="margin-top: 4px; background: #FFFBEB; border-color: #FDE68A;"><div class="dr-label" style="color: #92400E;">{{ report_icon('users', '#B45309') }}Dans la famille élargie et la communauté</div><p style="margin: 0; color: #78350F;">{{ c.community }}</p></div>{% endif %}
     <table class="dr-table" style="margin-top: 8px;">
         <tr><td style="width: 30%;"><strong>Comment vous décidez</strong></td><td>{{ c.decide }}</td></tr>
         <tr><td><strong>Comment vous communiquez</strong></td><td>{{ c.communicate }}</td></tr>
         <tr><td><strong>Face à un conflit</strong></td><td>{{ c.conflict }}</td></tr>
         <tr><td><strong>Dans un désaccord</strong></td><td>{{ p.disagree }}</td></tr>
-        <tr><td><strong>Comment les autres vous repèrent</strong></td><td>Débit {{ p.cues.speech|lower }}, gestuelle {{ p.cues.gesture|lower }}, mails {{ p.cues.mail|lower }}.</td></tr>
+        <tr><td><strong>Comment les autres vous repèrent</strong></td><td>Débit {{ p.cues.speech|lower }}, gestuelle {{ p.cues.gesture|lower }}, messages {{ p.cues.mail|lower }}.</td></tr>
     </table>
 </div>
 
@@ -213,7 +222,7 @@
         <div class="dr-tile" style="background: {{ lights[l] }}; border-color: {{ lights[l] }}; min-height: 150px;">
             <div style="font-weight: bold; color: {{ darks[l] }};">Avec un profil {{ o[l].profile.name }} ({{ l }})</div>
             <p class="dr-small" style="margin: 6px 0 2px; color: {{ darks[l] }};"><strong>Vous voyez :</strong> {{ o[l].perception[0] }}</p>
-            <p class="dr-small" style="margin: 0 0 2px; color: {{ darks[l] }};"><strong>Il voit :</strong> {{ o[l].perception[1] }}</p>
+            <p class="dr-small" style="margin: 0 0 2px; color: {{ darks[l] }};"><strong>Ce profil voit :</strong> {{ o[l].perception[1] }}</p>
             <p class="dr-small" style="margin: 0; color: {{ darks[l] }};"><strong>Friction :</strong> {{ o[l].perception[2] }}</p>
         </div>
     {% endmacro %}

@@ -26,7 +26,7 @@ final class ContentAdminController extends AbstractController
         'name' => 'Nom', 'tagline' => 'Accroche', 'keywords' => 'Mot-clé', 'portrait' => 'Portrait', 'strengths' => 'Force',
         'watch' => 'Point de vigilance', 'motivators' => 'Ce qui motive', 'drains' => 'Ce qui épuise', 'environment' => 'Environnement idéal',
         'work' => 'Au travail', 'family' => 'En famille et en couple', 'relations' => 'En couple et en famille', 'church' => 'À l\'Église',
-        'leader' => 'Comme leader', 'decide' => 'Comment il décide', 'communicate' => 'Comment il communique', 'conflict' => 'Face au conflit',
+        'leader' => 'Comme leader', 'decide' => 'Façon de décider', 'communicate' => 'Façon de communiquer', 'conflict' => 'Face au conflit',
         'signs' => 'Signaux d\'alerte', 'recharge' => 'Ce qui ressource', 'grow' => 'Pour grandir', 'figures' => 'Figure biblique',
         'actions' => 'Action', 'action' => 'Premier pas', 'text' => 'Texte', 'ref' => 'Référence', 'verse' => 'Verset', 'meditation' => 'Question à méditer',
         'motivation' => 'Motivation', 'fear' => 'Peur profonde', 'gift' => 'Don', 'growth' => 'Chemin de croissance', 'growthText' => 'En croissance',
@@ -34,7 +34,7 @@ final class ContentAdminController extends AbstractController
         'dangers' => 'Piège', 'read' => 'À lire', 'what' => 'Définition', 'high' => 'Niveau haut', 'mid' => 'Niveau moyen', 'low' => 'Niveau bas',
         'label' => 'Libellé', 'spirit' => 'Vie spirituelle', 'question' => 'Question', 'plan' => 'Plan KIINI SAWA', 'habits' => 'Habitude',
         'emotion' => 'Émotion clé', 'essence' => 'En une phrase', 'axis' => 'Axes', 'needs' => 'Besoin', 'pressure' => 'Sous pression',
-        'adapted' => 'Quand il s\'adapte', 'natural' => 'Réflexe naturel', 'tension' => 'Tension durable', 'cues' => 'Indice', 'speech' => 'Débit',
+        'adapted' => 'En adaptation', 'natural' => 'Réflexe naturel', 'tension' => 'Tension durable', 'cues' => 'Indice', 'speech' => 'Débit',
         'gesture' => 'Gestuelle', 'mail' => 'Mails', 'disagree' => 'Dans un désaccord', 'more' => 'Ce que le contexte demande en plus',
         'colorName' => 'Nom de la couleur', 'portraitShort' => 'Portrait court',
     ];
