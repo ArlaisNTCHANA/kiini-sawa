@@ -1,0 +1,142 @@
+{# Rapport « Type de fonctionnement » (écran et PDF). Variables : type, typeX, strengths, assessment, quality, pdf, name. #}
+{% set t = type %}
+{% set x = typeX %}
+{% set fam = x.family %}
+{% set pc = fam.color %}
+{% set serif = pdf ? "'DejaVu Serif', serif" : 'var(--font-serif)' %}
+{% include 'personnalite/assessment/report/_styles.html.twig' with {pcLight: fam.light, pcDark: fam.dark} %}
+
+<div class="dr">
+{% include 'personnalite/assessment/report/_cover.html.twig' with {
+    title: 'Type de fonctionnement', subtitle: 'Vos préférences naturelles · approche de Carl Jung',
+    badges: t.code|split('')|map(l => {t: l, color: pc}), headline: t.code ~ ' · ' ~ t.name, tagline: x.tagline, keywords: x.keywords,
+} %}
+
+{# ═══ Lire ce rapport ═══ #}
+<div class="dr-page">
+    <div class="dr-kicker">Avant de commencer</div>
+    <h2>Comment lire ce rapport</h2>
+    <p class="dr-lead">Votre type décrit quatre préférences naturelles : où vous puisez votre énergie, comment vous percevez, comment vous décidez, comment vous vous organisez. Une préférence n'est pas une capacité : vous savez utiliser les deux côtés, mais l'un vous est plus naturel, comme écrire de votre main habituelle.</p>
+    <table class="dr-table">
+        <tr><th>Question</th><th>Préférence</th><th>ou</th></tr>
+        <tr><td>D'où vient votre énergie ?</td><td><strong>E</strong> · Extraversion</td><td><strong>I</strong> · Introversion</td></tr>
+        <tr><td>Comment percevez-vous ?</td><td><strong>S</strong> · Sensation (le concret)</td><td><strong>N</strong> · Intuition (les possibles)</td></tr>
+        <tr><td>Comment décidez-vous ?</td><td><strong>T</strong> · Pensée (la logique)</td><td><strong>F</strong> · Sentiment (les valeurs)</td></tr>
+        <tr><td>Comment vous organisez-vous ?</td><td><strong>J</strong> · Jugement (planifier)</td><td><strong>P</strong> · Perception (s'adapter)</td></tr>
+    </table>
+    <h3 style="margin-top: 14px;">Quatre familles</h3>
+    <table class="dr-grid"><tr>
+        {% for key, f in x.families %}
+            <td><div class="dr-tile" style="background: {{ f.light }}; border-color: {{ key == x.familyKey ? f.color : f.light }}; {{ key == x.familyKey ? 'border-width: 2px;' : '' }} min-height: 130px;">
+                <div style="font-weight: bold; color: {{ f.dark }};">{{ f.name }} <span class="dr-small">({{ key }})</span></div>
+                <p class="dr-small" style="margin: 4px 0 0; color: {{ f.dark }};">{{ f.desc }}</p>
+            </div></td>
+        {% endfor %}
+    </tr></table>
+    <div class="dr-tile" style="margin-top: 8px; background: #FFFBEB; border-color: #FDE68A;">
+        <h3 style="color: #92400E;">À garder en tête</h3>
+        <p class="dr-small" style="color: #92400E; margin: 0;">Aucun type n'est meilleur qu'un autre. Votre type est une lecture simplifiée de vos réponses à des questions issues de la recherche (IPIP) : lorsqu'une préférence est peu nette, vous êtes à l'aise des deux côtés. C'est une richesse, pas une indécision.</p>
+    </div>
+</div>
+
+{# ═══ Votre type ═══ #}
+<div class="dr-page">
+    <div class="dr-kicker">Votre type · {{ fam.name }}</div>
+    <h2>{{ t.code }} · {{ t.name }}</h2>
+    <p class="dr-lead">{{ x.tagline }} {{ t.desc }}</p>
+    <p style="font-size: {{ pdf ? '10.5pt' : '1.05rem' }};">{{ x.portrait }}</p>
+    <div style="margin: 8px 0 12px;">{% for k in x.keywords %}<span class="dr-chip" style="background: {{ fam.light }}; color: {{ fam.dark }};">{{ k }}</span>{% endfor %}</div>
+    <h3>Votre place parmi les seize types</h3>
+    <img class="dr-img" src="{{ x.grid }}" alt="Grille des seize types, le vôtre en couleur">
+</div>
+
+{# ═══ Les quatre préférences ═══ #}
+<div class="dr-page">
+    <div class="dr-kicker">Vos quatre préférences</div>
+    <h2>Le détail de votre type</h2>
+    <p class="dr-lead">Plus la barre est longue, plus la préférence est nette. Une netteté inférieure à 20 signifie que vous êtes à l'aise des deux côtés.</p>
+    <img class="dr-img" src="{{ x.axesChart }}" alt="Vos quatre préférences et leur netteté">
+    <table class="dr-table" style="margin-top: 10px;">
+        {% for key, axis in t.axes %}
+            <tr><td style="width: 48px; font-size: {{ pdf ? '14pt' : '1.3rem' }}; font-weight: bold; color: {{ pc }};">{{ axis.letter }}</td><td>{{ axis.text }}{% if axis.clarity < 20 %} <span class="dr-small">(préférence peu nette)</span>{% endif %}</td></tr>
+        {% endfor %}
+    </table>
+</div>
+
+{# ═══ Forces, vigilances, situations ═══ #}
+<div class="dr-page">
+    <div class="dr-kicker">Vos talents et vos angles morts</div>
+    <h2>Forces et points de vigilance</h2>
+    <table class="dr-grid"><tr>
+        <td><div class="dr-tile" style="background: #F0FDF4; border-color: #BBF7D0;"><div class="dr-label" style="color: #166534;">✓ Vos forces</div><ul>{% for s in x.strengths %}<li>{{ s }}</li>{% endfor %}</ul></div></td>
+        <td><div class="dr-tile" style="background: #FFF7ED; border-color: #FED7AA;"><div class="dr-label" style="color: #9A3412;">▲ Vos points de vigilance</div><ul>{% for s in x.watch %}<li>{{ s }}</li>{% endfor %}</ul></div></td>
+    </tr></table>
+    <h3 style="margin-top: 12px;">Votre type en situation</h3>
+    <table class="dr-grid"><tr>
+        <td><div class="dr-tile"><div class="dr-label">◆ Au travail</div><p style="margin: 0;">{{ x.work }}</p></div></td>
+        <td><div class="dr-tile"><div class="dr-label">♥ En couple et en famille</div><p style="margin: 0;">{{ x.relations }}</p></div></td>
+    </tr><tr>
+        <td><div class="dr-tile"><div class="dr-label">✦ À l'Église</div><p style="margin: 0;">{{ x.church }}</p></div></td>
+        <td><div class="dr-tile" style="background: #FEF2F2; border-color: #FECACA;"><div class="dr-label" style="color: #991B1B;">Sous pression</div><p style="margin: 0; color: #991B1B;">{{ x.stress }}</p></div></td>
+    </tr></table>
+</div>
+
+{# ═══ Figures bibliques ═══ #}
+<div class="dr-page">
+    <div class="dr-kicker">Dans les Écritures</div>
+    <h2>Des figures bibliques qui vous ressemblent</h2>
+    <p class="dr-lead">Dieu appelle des personnes de tous les tempéraments. Ces rapprochements avec votre type sont des illustrations, non une interprétation savante des textes.</p>
+    {% for f in x.figures %}
+        <div class="dr-tile" style="margin-bottom: 10px; border-left: 6px solid {{ pc }}; border-radius: 0 14px 14px 0;">
+            <div style="font-family: {{ serif }}; font-size: {{ pdf ? '14pt' : '1.25rem' }}; font-weight: bold;">{{ f[0] }}</div>
+            <div class="dr-small" style="margin-bottom: 6px;">{{ f[1] }}</div>
+            <p style="margin: 0;">{{ f[2] }}</p>
+        </div>
+    {% endfor %}
+    <div class="dr-quote" style="margin-top: 14px;">« Car nous sommes son ouvrage, ayant été créés en Jésus-Christ pour de bonnes œuvres, que Dieu a préparées d'avance, afin que nous les pratiquions. »<div style="font-style: normal; font-weight: bold; margin-top: 6px; font-size: {{ pdf ? '9pt' : '.9rem' }};">Éphésiens 2.10</div></div>
+</div>
+
+{# ═══ Grandir ═══ #}
+<div class="dr-page">
+    <div class="dr-kicker">Passer à l'action</div>
+    <h2>Pour grandir</h2>
+    <p class="dr-lead">Grandir, c'est développer aussi le côté qui vous est moins naturel, sans renier vos préférences.</p>
+    <table class="dr-grid"><tr>
+        {% for g in x.grow %}
+            <td><div class="dr-tile" style="text-align: center; min-height: 120px;"><div style="font-size: {{ pdf ? '20pt' : '1.8rem' }}; font-weight: bold; color: {{ pc }}; line-height: 1;">{{ loop.index }}</div><p style="margin: 8px 0 0;">{{ g }}</p></div></td>
+        {% endfor %}
+    </tr></table>
+    <h3 style="margin-top: 14px;">Votre plan d'action pour les 30 prochains jours</h3>
+    <table class="dr-table">{% for a in x.actions %}<tr><td style="width: 34px; font-size: {{ pdf ? '13pt' : '1.2rem' }}; color: {{ pc }};">☐</td><td>{{ a }}</td></tr>{% endfor %}</table>
+    <p class="dr-small" style="margin-top: 10px;">Reportez ces actions dans votre Plan de Croissance et parlez-en à votre partenaire de redevabilité.</p>
+</div>
+
+{# ═══ Conclusion ═══ #}
+<div class="dr-page">
+    <div style="border-radius: 22px; background: {{ fam.light }}; padding: {{ pdf ? '10mm' : '28px' }};">
+        <div class="dr-kicker" style="color: {{ fam.dark }};">En résumé</div>
+        <h2 style="color: {{ fam.dark }};">{{ t.code }} · {{ t.name }}</h2>
+        <p style="color: {{ fam.dark }};">{{ x.tagline }} Famille : {{ fam.name|lower }}.</p>
+        <table class="dr-grid"><tr>
+            <td><div class="dr-tile" style="background: #fff; border-color: #fff;"><div class="dr-label">Vos atouts</div><ul>{% for s in x.strengths|slice(0, 3) %}<li>{{ s }}</li>{% endfor %}</ul></div></td>
+            <td><div class="dr-tile" style="background: #fff; border-color: #fff;"><div class="dr-label">À surveiller</div><ul>{% for s in x.watch|slice(0, 2) %}<li>{{ s }}</li>{% endfor %}</ul></div></td>
+        </tr></table>
+    </div>
+    <h3 style="margin-top: 18px;">Et maintenant ?</h3>
+    <table class="dr-table">
+        <tr><td style="width: 34px; color: {{ pc }};">1</td><td>Relisez le portrait de votre type et soulignez ce qui vous ressemble vraiment.</td></tr>
+        <tr><td style="color: {{ pc }};">2</td><td>Si une préférence est peu nette, lisez aussi le type voisin.</td></tr>
+        <tr><td style="color: {{ pc }};">3</td><td>Choisissez une action du plan et commencez-la cette semaine.</td></tr>
+        <tr><td style="color: {{ pc }};">4</td><td>Passez le profil complet pour découvrir vos 29 facettes de personnalité.</td></tr>
+    </table>
+    <p style="margin-top: 14px;">Votre type décrit une manière d'être, pas une limite. Dieu vous a façonné avec soin et vous invite à mettre vos préférences au service des autres.</p>
+    <p class="dr-small" style="text-align: right; margin-top: 18px;">KIINI SAWA · Bâtir sa vie avec Dieu</p>
+</div>
+
+{% include 'personnalite/assessment/report/_warnings.html.twig' with {
+    about: 'Le type de fonctionnement est déduit de questions issues de l\'International Personality Item Pool (IPIP-NEO, domaine public, utilisées en recherche), lues selon les quatre préférences décrites par Carl Jung. Le classement en seize types est une lecture simplifiée.',
+    variable: 'en particulier pour les préférences peu nettes',
+    marks: 'Les noms des types sont propres à KIINI SAWA. Cet outil s\'inspire de la typologie de Carl Jung, popularisée par le MBTI® ; il n\'est affilié ni au MBTI®, ni à la Myers-Briggs Company, ni à aucun autre éditeur.',
+    bible: true,
+} %}
+</div>

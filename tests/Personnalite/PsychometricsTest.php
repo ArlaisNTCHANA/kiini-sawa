@@ -98,7 +98,8 @@ class PsychometricsTest extends WebTestCase
         $assessment = $this->em()->getRepository(Assessment::class)->findOneBy(['user' => $user->getId()]);
         $this->assertResponseRedirects('/mes-tests/rapport/'.$assessment->getId());
         $client->followRedirect();
-        $this->assertSelectorTextContains('h2', 'Votre type de fonctionnement : ESTP');
+        $this->assertAnySelectorTextContains('h2', 'ESTP · Le Fonceur');
+        $this->assertAnySelectorTextContains('h2', 'Bon usage de ce rapport');
         $this->assertSelectorTextNotContains('body', 'Architecte');
 
         // Résultat repris par les plans (type stocké pour le Plan de Vie)

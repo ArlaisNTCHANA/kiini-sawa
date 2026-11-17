@@ -14,6 +14,9 @@ final class ReportBuilder
         'disc' => 'personnalite/assessment/disc/_report.html.twig',
         'enneagramme' => 'personnalite/assessment/report/enneagram.html.twig',
         'dons-spirituels' => 'personnalite/assessment/report/gifts.html.twig',
+        'profil-complet' => 'personnalite/assessment/report/bigfive.html.twig',
+        'big-five' => 'personnalite/assessment/report/bigfive.html.twig',
+        'type' => 'personnalite/assessment/report/type.html.twig',
     ];
 
     public function __construct(private readonly NormService $norms)
@@ -80,6 +83,8 @@ final class ReportBuilder
         ] : null;
 
         return [
+            'bf' => \in_array($slug, ['profil-complet', 'big-five'], true) ? $this->bigFiveExtras($domains) : null,
+            'typeX' => $type && 'style' !== $slug ? $this->typeExtras($type) : null,
             'domains' => \in_array($slug, ['type', 'style'], true) ? [] : $domains,
             'strengths' => \array_slice($favourable, 0, 5, true),
             'vigilance' => \in_array($slug, ['type', 'style'], true) ? [] : \array_slice($vigilance, 0, 4, true),
@@ -126,6 +131,52 @@ final class ReportBuilder
             'profiles' => $p,
             'others' => $others,
         ]];
+    }
+
+    /** Rapport Big Five illustré : profil par dimension, radar, jauges, facettes. */
+    private function bigFiveExtras(array $domains): array
+    {
+        $out = [];
+        $axes = [];
+        foreach (['E', 'O', 'A', 'C', 'N'] as $d) {
+            if (!isset($domains[$d])) {
+                continue;
+            }
+            $dom = $domains[$d];
+            $x = BigFiveProfiles::DOMAINS[$d];
+            $value = $dom['percentile'] ?? $dom['score'];
+            $axes[$d] = ['label' => $dom['label'], 'value' => $value];
+            $rows = array_map(fn ($f) => ['label' => $f['label'], 'value' => $f['percentile'] ?? $f['score'], 'color' => $x['color'], 'strong' => 'mid' !== $f['level']], $dom['facets']);
+            $out[$d] = $dom + ['x' => $x, 'level' => $dom['level'], 'lx' => $x[$dom['level']], 'value' => $value,
+                'gauge' => ReportCharts::uri(ReportCharts::levelGauge($value, $x['color'])),
+                'facetChart' => $rows ? ReportCharts::uri(ReportCharts::hbars(array_values($rows), 200)) : null];
+        }
+        // Les trois dimensions les plus marquées (loin de la moyenne) résument le profil
+        $marked = $out;
+        uasort($marked, fn ($a, $b) => abs($b['value'] - 50) <=> abs($a['value'] - 50));
+        $marked = \array_slice($marked, 0, 3, true);
+
+        return ['domains' => $out, 'marked' => $marked, 'headline' => implode(' · ', array_map(fn ($m) => $m['lx']['label'], $marked)),
+            'radar' => ReportCharts::uri(ReportCharts::radar($axes, '#0F766E'))];
+    }
+
+    /** Rapport « type de fonctionnement » illustré. */
+    private function typeExtras(array $type): array
+    {
+        $code = $type['code'];
+        $family = TypeProfiles::FAMILIES[TypeProfiles::familyOf($code)];
+        $rows = [];
+        $keys = array_keys(Instruments::TYPE_FACETS);
+        foreach (array_values($type['axes']) as $i => $axis) {
+            $key = $keys[$i];
+            $rows[] = ['left' => $key[0], 'right' => $key[1], 'leftName' => TypeProfiles::LETTERS[$key[0]], 'rightName' => TypeProfiles::LETTERS[$key[1]],
+                'letter' => $axis['letter'], 'clarity' => $axis['clarity']];
+        }
+        $names = array_map(fn ($t) => $t[0], Interpretations::TYPES);
+
+        return TypeProfiles::TYPES[$code] + ['family' => $family, 'familyKey' => TypeProfiles::familyOf($code), 'families' => TypeProfiles::FAMILIES,
+            'axesChart' => ReportCharts::uri(ReportCharts::typeAxes($rows, $family['color'])),
+            'grid' => ReportCharts::uri(ReportCharts::typeGrid($code, $family['color'], $names))];
     }
 
     private function enneagram(array $scores): array

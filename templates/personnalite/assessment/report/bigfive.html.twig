@@ -1,0 +1,139 @@
+{# Rapport Big Five (profil complet ou essentiel), écran et PDF. Variables : bf, type, typeX, strengths, vigilance, normsAvailable, slug, assessment, quality, pdf, name. #}
+{% set pc = '#0F766E' %}
+{% set serif = pdf ? "'DejaVu Serif', serif" : 'var(--font-serif)' %}
+{% include 'personnalite/assessment/report/_styles.html.twig' with {pcLight: '#CCFBF1', pcDark: '#134E4A'} %}
+
+<div class="dr">
+{% include 'personnalite/assessment/report/_cover.html.twig' with {
+    title: slug == 'profil-complet' ? 'Profil de personnalité' : 'Big Five essentiel',
+    subtitle: slug == 'profil-complet' ? 'Les 5 grandes dimensions, 29 facettes et votre type' : 'Les 5 grandes dimensions de votre personnalité',
+    badges: bf.domains|keys|map(d => {t: d, color: bf.domains[d].x.color}),
+    headline: bf.headline, tagline: 'Vos trois traits les plus marqués', keywords: [],
+} %}
+
+{# ═══ Lire ce rapport ═══ #}
+<div class="dr-page">
+    <div class="dr-kicker" style="color: {{ pc }};">Avant de commencer</div>
+    <h2>Comment lire ce rapport</h2>
+    <p class="dr-lead">Le modèle des « Big Five » est le modèle de la personnalité le plus étudié par la recherche. Il décrit cinq grandes dimensions, présentes chez chacun à des degrés différents. Vos réponses viennent d'un questionnaire du domaine public utilisé par les chercheurs (IPIP-NEO).</p>
+    <table class="dr-grid"><tr>
+        {% for d, dom in bf.domains %}
+            <td><div class="dr-tile" style="background: {{ dom.x.light }}; border-color: {{ dom.x.light }}; min-height: 150px;">
+                <div style="font-size: {{ pdf ? '18pt' : '1.6rem' }}; font-weight: bold; color: {{ dom.x.color }}; line-height: 1;">{{ d }}</div>
+                <div style="font-weight: bold; color: {{ dom.x.dark }}; margin: 4px 0;">{{ dom.label }}</div>
+                <p class="dr-small" style="margin: 0; color: {{ dom.x.dark }};">{{ dom.what }}</p>
+            </div></td>
+        {% endfor %}
+    </tr></table>
+    <table class="dr-grid" style="margin-top: 4px;"><tr>
+        <td><div class="dr-tile"><h3>Vos scores</h3><p class="dr-small" style="margin: 0;">{% if normsAvailable %}Le <strong>percentile</strong> indique votre position par rapport aux utilisateurs de KIINI SAWA : 50 correspond à la moyenne, 80 signifie que vous êtes au-dessus de 80 % des personnes.{% else %}Scores de 0 à 100 (pourcentage du maximum possible). La comparaison avec les autres utilisateurs (percentiles) apparaîtra dès que suffisamment de personnes auront répondu.{% endif %}</p></div></td>
+        <td><div class="dr-tile"><h3>Ni bon ni mauvais</h3><p class="dr-small" style="margin: 0;">Un score haut n'est pas meilleur qu'un score bas : chaque niveau a ses forces et ses points de vigilance. Seule la « sensibilité émotionnelle » demande une attention particulière quand elle est très élevée.</p></div></td>
+    </tr></table>
+</div>
+
+{# ═══ Vue d'ensemble ═══ #}
+<div class="dr-page">
+    <div class="dr-kicker" style="color: {{ pc }};">Vue d'ensemble</div>
+    <h2>Votre profil en un regard</h2>
+    <p class="dr-lead">Le cercle épais indique la moyenne (50). Plus la forme s'étend vers une dimension, plus celle-ci est marquée chez vous.</p>
+    <div style="text-align: center;"><img src="{{ bf.radar }}" alt="Radar des cinq dimensions" style="width: {{ pdf ? '140mm' : '100%' }}; max-width: 560px; height: auto;"></div>
+    <table class="dr-table" style="margin-top: 6px;">
+        {% for d, dom in bf.domains %}
+            <tr><td style="width: 34%;"><strong style="color: {{ dom.x.color }};">{{ dom.label }}</strong></td><td style="width: 30%;">{{ dom.lx.label }}</td><td class="dr-small">{{ dom.percentile is not null ? dom.percentile ~ 'e percentile' : dom.score|round ~ ' / 100' }}</td></tr>
+        {% endfor %}
+    </table>
+</div>
+
+{# ═══ Une page par dimension ═══ #}
+{% for d, dom in bf.domains %}
+<div class="dr-page">
+    <div class="dr-kicker" style="color: {{ dom.x.color }};">Dimension {{ loop.index }} sur 5</div>
+    <h2>{{ dom.label }} · <span style="color: {{ dom.x.color }};">{{ dom.lx.label }}</span></h2>
+    <p class="dr-lead">{{ dom.what }}</p>
+    <img src="{{ dom.gauge }}" alt="Votre niveau en {{ dom.label|lower }}" style="width: 100%; max-width: 560px; height: auto;">
+    <p style="font-size: {{ pdf ? '10.5pt' : '1.05rem' }}; margin-top: 8px;">{{ dom.text }}</p>
+    <table class="dr-grid"><tr>
+        <td><div class="dr-tile" style="background: #F0FDF4; border-color: #BBF7D0;"><div class="dr-label" style="color: #166534;">✓ Ce que cela vous apporte</div><ul>{% for s in dom.lx.strengths %}<li>{{ s }}</li>{% endfor %}</ul></div></td>
+        <td><div class="dr-tile" style="background: #FFF7ED; border-color: #FED7AA;"><div class="dr-label" style="color: #9A3412;">▲ À surveiller</div><p style="margin: 0;">{{ dom.lx.watch }}</p></div></td>
+    </tr><tr>
+        <td><div class="dr-tile"><div class="dr-label">◆ Au quotidien</div><p style="margin: 0;">{{ dom.lx.daily }}</p></div></td>
+        <td><div class="dr-tile" style="background: {{ dom.x.light }}; border-color: {{ dom.x.light }};"><div class="dr-label" style="color: {{ dom.x.dark }};">✦ Dans votre vie spirituelle</div><p style="margin: 0; color: {{ dom.x.dark }};">{{ dom.lx.spirit }}</p></div></td>
+    </tr></table>
+    {% if dom.facetChart %}
+        <h3 style="margin-top: 8px;">Vos facettes</h3>
+        <img class="dr-img" src="{{ dom.facetChart }}" alt="Facettes de la dimension {{ dom.label|lower }}">
+        {% set notable = dom.facets|filter(f => f.text) %}
+        {% if notable|length %}
+            <table class="dr-table" style="margin-top: 4px;">{% for f in notable %}<tr><td style="width: 30%;"><strong>{{ f.label }}</strong></td><td>{{ f.text }}</td></tr>{% endfor %}</table>
+        {% endif %}
+    {% endif %}
+</div>
+{% endfor %}
+
+{# ═══ Forces et vigilances ═══ #}
+<div class="dr-page">
+    <div class="dr-kicker" style="color: {{ pc }};">Synthèse</div>
+    <h2>Vos forces et vos points de vigilance</h2>
+    <p class="dr-lead">Les facettes les plus marquées de votre profil.</p>
+    <table class="dr-grid"><tr>
+        <td><div class="dr-tile" style="background: #F0FDF4; border-color: #BBF7D0;"><div class="dr-label" style="color: #166534;">✓ Vos forces</div>
+            {% for f in strengths %}<p style="margin: 0 0 6px;"><strong>{{ f.label }}</strong><br><span class="dr-small" style="color: #334155;">{{ f.text }}</span></p>{% else %}<p class="dr-small" style="margin: 0;">Pas de facette nettement au-dessus de la moyenne : un profil équilibré.</p>{% endfor %}
+        </div></td>
+        <td><div class="dr-tile" style="background: #FFF7ED; border-color: #FED7AA;"><div class="dr-label" style="color: #9A3412;">▲ Vos points de vigilance</div>
+            {% for f in vigilance %}<p style="margin: 0 0 6px;"><strong>{{ f.label }}</strong><br><span class="dr-small" style="color: #334155;">{{ f.text }}</span></p>{% else %}<p class="dr-small" style="margin: 0;">Aucun point de vigilance marqué.</p>{% endfor %}
+        </div></td>
+    </tr></table>
+    {% if typeX %}
+        <div class="dr-tile" style="margin-top: 10px; background: {{ typeX.family.light }}; border-color: {{ typeX.family.light }};">
+            <div class="dr-label" style="color: {{ typeX.family.dark }};">Votre type de fonctionnement</div>
+            <div style="font-family: {{ serif }}; font-size: {{ pdf ? '15pt' : '1.35rem' }}; font-weight: bold; color: {{ typeX.family.dark }};">{{ type.code }} · {{ type.name }}</div>
+            <p style="margin: 4px 0 0; color: {{ typeX.family.dark }};">{{ typeX.tagline }} {{ typeX.portrait }}</p>
+            <img class="dr-img" src="{{ typeX.axesChart }}" alt="Vos quatre préférences" style="margin-top: 8px; max-width: 560px;">
+        </div>
+    {% endif %}
+</div>
+
+{# ═══ Grandir ═══ #}
+<div class="dr-page">
+    <div class="dr-kicker" style="color: {{ pc }};">Passer à l'action</div>
+    <h2>Pour grandir</h2>
+    <p class="dr-lead">Trois pistes tirées des dimensions les plus marquées de votre profil.</p>
+    <table class="dr-grid"><tr>
+        {% for d, m in bf.marked %}
+            <td><div class="dr-tile" style="text-align: center; min-height: 140px;"><div style="font-size: {{ pdf ? '20pt' : '1.8rem' }}; font-weight: bold; color: {{ m.x.color }}; line-height: 1;">{{ loop.index }}</div><div class="dr-small" style="margin: 6px 0 2px;">{{ m.label }}</div><p style="margin: 0;">{{ m.lx.grow }}</p></div></td>
+        {% endfor %}
+    </tr></table>
+    <h3 style="margin-top: 14px;">Votre plan d'action pour les 30 prochains jours</h3>
+    <table class="dr-table">{% for d, m in bf.marked %}<tr><td style="width: 34px; font-size: {{ pdf ? '13pt' : '1.2rem' }}; color: {{ m.x.color }};">☐</td><td>{{ m.lx.grow }}</td></tr>{% endfor %}</table>
+    <p class="dr-small" style="margin-top: 10px;">Ces pistes peuvent nourrir votre Plan de Croissance (axe Caractère et conviction) et votre Plan d'Hygiène de Vie.</p>
+</div>
+
+{# ═══ Conclusion ═══ #}
+<div class="dr-page">
+    <div style="border-radius: 22px; background: #CCFBF1; padding: {{ pdf ? '10mm' : '28px' }};">
+        <div class="dr-kicker" style="color: #134E4A;">En résumé</div>
+        <h2 style="color: #134E4A;">{{ bf.headline }}</h2>
+        <table class="dr-grid"><tr>
+            {% for d, dom in bf.domains %}<td><div class="dr-tile" style="background: #fff; border-color: #fff; text-align: center;"><div style="font-weight: bold; color: {{ dom.x.color }}; font-size: {{ pdf ? '15pt' : '1.4rem' }};">{{ dom.value|round }}</div><div class="dr-small">{{ dom.label }}</div></div></td>{% endfor %}
+        </tr></table>
+    </div>
+    <h3 style="margin-top: 18px;">Et maintenant ?</h3>
+    <table class="dr-table">
+        <tr><td style="width: 34px; color: {{ pc }};">1</td><td>Relisez les pages de vos deux dimensions les plus marquées.</td></tr>
+        <tr><td style="color: {{ pc }};">2</td><td>Demandez à un proche s'il vous reconnaît : son regard complète le vôtre.</td></tr>
+        <tr><td style="color: {{ pc }};">3</td><td>Commencez une seule action du plan cette semaine.</td></tr>
+        <tr><td style="color: {{ pc }};">4</td><td>Refaites le questionnaire dans un an pour mesurer votre évolution.</td></tr>
+    </table>
+    <div class="dr-quote" style="margin-top: 16px; background: #CCFBF1; color: #134E4A;">« Je te loue de ce que je suis une créature si merveilleuse. Tes œuvres sont admirables, et mon âme le reconnaît bien. »<div style="font-style: normal; font-weight: bold; margin-top: 6px; font-size: {{ pdf ? '9pt' : '.9rem' }};">Psaume 139.14</div></div>
+    <p style="margin-top: 14px;">Votre personnalité est un don à connaître, à accueillir et à faire grandir. Utilisez ce que vous découvrez ici pour mieux aimer, mieux servir, et bâtir votre Plan de Vie.</p>
+    <p class="dr-small" style="text-align: right; margin-top: 18px;">KIINI SAWA · Bâtir sa vie avec Dieu</p>
+</div>
+
+{% include 'personnalite/assessment/report/_warnings.html.twig' with {
+    about: 'Les questions viennent de l\'International Personality Item Pool (IPIP-NEO, Johnson 2014, domaine public), utilisé en recherche ; la traduction et les textes d\'interprétation sont propres à KIINI SAWA.',
+    variable: 'en particulier pour les facettes mesurées par peu de questions',
+    extra: ['La sensibilité émotionnelle.', 'Un score élevé de sensibilité émotionnelle décrit une tendance à ressentir fortement le stress ; ce n\'est ni un diagnostic d\'anxiété ni de dépression. Si votre souffrance est réelle et durable, consultez un professionnel de santé.'],
+    marks: 'Cet outil s\'inspire du modèle des cinq grands facteurs de la personnalité (Big Five), un modèle scientifique public ; il n\'est affilié à aucun éditeur de tests commerciaux.',
+    bible: false,
+} %}
+</div>

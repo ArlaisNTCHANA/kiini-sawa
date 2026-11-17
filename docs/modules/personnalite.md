@@ -81,3 +81,16 @@ Privé par défaut. Depuis le rapport, « Partager mon résultat » crée un jet
 « Découvrir le mien gratuitement » et des balises d'aperçu pour les réseaux. Une image (1080×1350) est dessinée dans le
 navigateur et partagée avec le partage natif du téléphone (ou téléchargée). « Arrêter le partage » supprime le jeton.
 Liens suivis : `utm_source=partage-test`, campagne `test-{questionnaire}`. Tests : `tests/Personnalite/SharedResultTest.php`.
+
+## Rapports illustrés (novembre 2026)
+
+Chaque questionnaire a un rapport complet (écran et PDF) : page de garde, schémas SVG, contenu développé, figures
+bibliques (sauf Big Five), plan d'action, conclusion et page « Bon usage de ce rapport ».
+
+- Cadre commun : `templates/personnalite/assessment/report/` (`_styles`, `_cover`, `_warnings`, `pdf`) ;
+  `ReportBuilder::TEMPLATES` associe chaque questionnaire à son gabarit.
+- Contenus : `DiscCombos` (16 profils DISC), `EnneagramProfiles` (9 types, ailes, flèches), `GiftProfiles` (15 dons,
+  3 familles), `BigFiveProfiles` (5 dimensions × 3 niveaux), `TypeProfiles` (16 types, 4 familles).
+- Schémas : `DiscCharts` (boussole, graphiques, jauge) et `ReportCharts` (figure de l'ennéagramme, barres, radar,
+  jauges, préférences, grille des 16 types). SVG simples pour Dompdf (pas de text-anchor ni de marqueurs).
+- L'ancien « style » (DISC déduit du Big Five) garde l'ancien rapport (`_report_body`).
