@@ -3,8 +3,10 @@
     Paramètres : name (fichier sans .png), alt (texte du schéma, pour les lecteurs d'écran), caption (facultatif),
     collapsed (bool : replié sous « Voir le schéma du livre »), max (largeur max, défaut 640px).
 #}
+{% set cycle = book_figure_data(name) %}
+{% if cycle %}{% include 'shared/_cycle_figure.html.twig' with {items: cycle.items, title: cycle.title, hint: cycle.hint} only %}{% endif %}
 {% set img %}<img src="{{ asset('images/livre/' ~ name ~ '.png') }}" alt="{{ alt }}" loading="lazy" style="display: block; width: 100%; height: auto; max-width: {{ max|default('640px') }}; margin: 0 auto;">{% endset %}
-{% if collapsed|default(false) %}
+{% if collapsed|default(false) or cycle %}
     <details class="book-figure" data-book-figure="{{ name }}" style="margin: 0 0 1.25rem; border: 1px solid var(--border); border-radius: 12px; padding: .6rem .9rem; background: #FFFFFF;">
         <summary style="cursor: pointer; font-weight: 600; font-size: .88rem; color: var(--primary-dark); display: flex; align-items: center; gap: .4rem;"><i data-lucide="image" style="width: 14px; height: 14px; color: var(--gold);" aria-hidden="true"></i> Voir le schéma du livre{{ caption is defined and caption ? ' : ' ~ caption }}</summary>
         <div style="margin-top: .7rem;">{{ img }}</div>

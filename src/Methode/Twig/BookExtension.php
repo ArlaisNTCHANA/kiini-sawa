@@ -2,6 +2,7 @@
 
 namespace App\Methode\Twig;
 
+use App\Methode\Service\BookFigures;
 use App\Methode\Service\BookLibrary;
 use Twig\Environment;
 use Twig\Extension\AbstractExtension;
@@ -19,7 +20,10 @@ final class BookExtension extends AbstractExtension
 
     public function getFunctions(): array
     {
-        return [new TwigFunction('book_panel', $this->panel(...), ['is_safe' => ['html'], 'needs_environment' => true])];
+        return [
+            new TwigFunction('book_panel', $this->panel(...), ['is_safe' => ['html'], 'needs_environment' => true]),
+            new TwigFunction('book_figure_data', BookFigures::get(...)),
+        ];
     }
 
     public function panel(Environment $twig, string $step, bool $open = false): string
