@@ -136,7 +136,11 @@ class DiscTest extends WebTestCase
             $html = $twig->render('personnalite/assessment/report/pdf.html.twig', ['body' => 'personnalite/assessment/disc/_report.html.twig', 'instrument' => Instruments::CATALOG['disc'], 'slug' => 'disc',
                 'assessment' => ['takenAt' => new \DateTime()], 'quality' => [], 'name' => 'Test'] + $builder->disc($scores));
             $this->assertStringContainsString(htmlspecialchars(DiscCombos::PROFILES[$code]['name'], \ENT_QUOTES), $html, $code);
-            $this->assertStringContainsString('Dans la même famille', $html, "Figures de la même famille pour $code");
+            // Les mentions courtes de la « même famille » cèdent la place aux fiches complètes quand il y en a
+            $hasSheet = [] !== array_filter(array_map(fn ($f) => \App\Personnalite\Psychometrie\BiblicalFigures::find($f['name']), DiscCombos::PROFILES[$code]['figures']));
+            $hasSheet
+                ? $this->assertStringContainsString('Dans le texte', $html, "Fiche de personnage pour $code")
+                : $this->assertStringContainsString('Dans la même famille', $html, "Figures de la même famille pour $code");
             $this->assertStringContainsString('Bon usage de ce rapport', $html);
         }
     }
