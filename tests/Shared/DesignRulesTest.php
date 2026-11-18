@@ -55,4 +55,12 @@ class DesignRulesTest extends TestCase
         }
         $this->assertSame([], $found, 'Turquoise abandonné : utiliser var(--primary) (palette du livre).');
     }
+
+    /** Turbo remplace le <body> à chaque clic : les icônes doivent être recréées, sinon le menu perd ses pictogrammes. */
+    public function testIconsAreRecreatedAfterTurboNavigation(): void
+    {
+        $base = (string) file_get_contents(dirname(__DIR__, 2).'/templates/base.html.twig');
+        $this->assertStringContainsString("'turbo:load'", $base);
+        $this->assertStringContainsString("'turbo:render'", $base);
+    }
 }

@@ -643,6 +643,10 @@
     document.addEventListener('alpine:updated', () => {
         if (typeof lucide !== 'undefined') lucide.createIcons();
     });
+    // Turbo remplace le <body> à chaque navigation : sans ceci, les icônes (menu compris) disparaissent après un clic.
+    ['turbo:load', 'turbo:render', 'turbo:frame-load'].forEach((evt) => document.addEventListener(evt, () => {
+        if (typeof lucide !== 'undefined') lucide.createIcons();
+    }));
 </script>
 </body>
 </html>
