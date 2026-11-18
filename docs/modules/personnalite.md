@@ -154,3 +154,6 @@ pas relié à un plan. Affichage : page « Lectures croisées » de la synthèse
 chaque rapport (PRO ; un test gratuit voit seulement le nombre de lectures disponibles).
 **Limites assumées :** seuils posés à la main, pas validés sur des données réelles ; à recalibrer avec de vrais résultats d'utilisateurs.
 **Pour ajouter une règle :** une méthode privée qui renvoie `$this->insight(...)` ou `null`, l'ajouter à `analyze()`, un test.
+
+**Lectures internes (même jour) :** `BIGFIVE_PAIRS` (7 rapprochements de facettes : autorité sans foule, chaleureux mais intimidé, ambition et inquiétude, audace réfléchie, cœur tendre et voix franche, idées et finitions, irritation) et `GIFT_PAIRS` (7 paires de dons : enseigner en prenant soin, compassion lucide, vérité et tendresse, porte ouverte, générosité concrète, foi qui prie, conduire avec sagesse). Elles sont marquées `internal` (« Lu dans ce seul test : à recouper »), pèsent moins que les lectures croisées et n'apparaissent dans la synthèse que si elles dépassent les autres ; chaque rapport en montre au plus une, après ses lectures croisées.
+**Zone de vocation :** `ProfileSynthesis::vocationNuances()` précise comment l'exercer selon le tempérament (Big Five : ressourcement, attrait, rythme d'engagement, vigilance) ; la zone elle-même reste DISC × famille de dons.

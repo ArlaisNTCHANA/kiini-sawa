@@ -363,3 +363,11 @@ partial `report/_insight_card.html.twig`. Pagination PDF mesurée (synthèse 10 
 **Honnêteté :** règles et seuils écrits à la main, non validés statistiquement ; `ENNEAGRAM_EXPECTS` est une lecture usuelle, pas une
 preuve. **Reste :** recalibrer avec de vrais résultats ; lire aussi le regard des proches (ConfirmationService) dans le moteur ; lectures
 internes à chaque test (facettes Big Five qui se contredisent, combinaisons de dons) ; moteur de vocation qui pèse aussi ennéagramme et Big Five.
+
+## 18/11/2026 — Lectures internes et vocation nuancée
+
+Suite de l'InsightEngine : 7 rapprochements de facettes du Big Five et 7 paires de dons (lectures « internes », drapeau `internal`),
+`insightsFor()` renvoie jusqu'à 2 lectures croisées + 1 interne par rapport ; panneau titré « Une lecture au sein de ce test » quand il n'y a
+que de l'interne. Zone de vocation : bloc « Comment l'exercer, selon votre tempérament » (`vocationNuances`, Big Five). Tests :
+`InsightEngineTest` (10). Pagination PDF contrôlée. **Non vu à l'écran :** aucun profil de test local ne déclenche encore ces règles internes ;
+elles sont couvertes par des tests unitaires.

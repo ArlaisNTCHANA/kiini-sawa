@@ -60,21 +60,22 @@ final class ProfileSynthesis
     }
 
     /**
-     * Lectures croisées qui concernent un test donné (au moins deux tests en jeu, dont celui-ci), pour le rapport de ce test.
+     * Lectures qui concernent un test donné, pour son rapport : deux lectures croisées au plus, puis une lecture interne au test.
      *
      * @param string $key clé de test : disc, bigfive, type, enneagramme, dons
      *
      * @return list<array<string, mixed>>
      */
-    public function insightsFor(User $user, string $key, int $max = 2): array
+    public function insightsFor(User $user, string $key, int $max = 3): array
     {
         $r = $this->collect($user);
-        if (\count(array_filter($r)) < 2) {
-            return [];
-        }
-        $found = $this->insights->analyze($r, $this->convergence($r), $this->life($user));
+        $found = $this->insights->analyze($r, $this->convergence($r), $this->life($user), 50);
+        $mine = array_values(array_filter($found, fn ($i) => \in_array($key, $i['sources'], true)));
+        // Les lectures croisées d'abord, puis une lecture interne au test
+        $crossed = array_filter($mine, fn ($i) => !$i['internal']);
+        $internal = array_filter($mine, fn ($i) => $i['internal']);
 
-        return \array_slice(array_values(array_filter($found, fn ($i) => \in_array($key, $i['sources'], true) && \count($i['sources']) >= 2)), 0, $max);
+        return \array_slice(array_merge(\array_slice(array_values($crossed), 0, 2), \array_slice(array_values($internal), 0, 1)), 0, $max);
     }
 
     /** Derniers rapports de chaque test. */
@@ -187,7 +188,41 @@ final class ProfileSynthesis
         $v = Content::get('synth.vocations')[$primary][$family];
 
         return $v + ['familyName' => $r['dons']['gifts']['families'][$family]['name'], 'dimension' => $r['disc']['disc']['profile']['name'],
-            'gifts' => array_column($r['dons']['gifts']['top'], 'name'), 'motivation' => $r['enneagramme']['enneagram']['profile']['motivation'] ?? null];
+            'gifts' => array_column($r['dons']['gifts']['top'], 'name'), 'motivation' => $r['enneagramme']['enneagram']['profile']['motivation'] ?? null,
+            'nuances' => $this->vocationNuances($r)];
+    }
+
+    /**
+     * Comment exercer cette vocation selon le tempérament (Big Five) : le terrain, le rythme, la durée, la vigilance.
+     * Absent sans Big Five. Lectures d'usage, à éprouver : elles ne changent pas la zone de vocation, elles la précisent.
+     *
+     * @return list<array{0: string, 1: string}>
+     */
+    private function vocationNuances(array $r): array
+    {
+        $d = $r['bigfive']['bf']['domains'] ?? [];
+        $level = fn (string $k) => $d[$k]['level'] ?? null;
+        $out = [];
+        match ($level('E')) {
+            'high' => $out[] = ['Là où vous vous ressourcez', 'Dans le contact : équipes, accueil, animation, rencontres.'],
+            'low' => $out[] = ['Là où vous vous ressourcez', 'Dans le calme et la profondeur : accompagnement individuel, préparation, écriture.'],
+            default => null,
+        };
+        match ($level('O')) {
+            'high' => $out[] = ['Ce vers quoi vous êtes attiré', 'Ce qui est à inventer ou à renouveler : nouveaux projets, nouvelles approches.'],
+            'low' => $out[] = ['Ce vers quoi vous êtes attiré', 'Ce qui est éprouvé, à transmettre et à consolider : fidélité aux fondations.'],
+            default => null,
+        };
+        match ($level('C')) {
+            'high' => $out[] = ['Votre rythme d\'engagement', 'Des engagements précis, réguliers et durables : on peut compter sur vous.'],
+            'low' => $out[] = ['Votre rythme d\'engagement', 'Des missions variées et par périodes, plutôt qu\'un poste fixe sans fin.'],
+            default => null,
+        };
+        if ('high' === $level('N')) {
+            $out[] = ['Votre vigilance', 'Ménagez des temps de repos après les moments exigeants : votre sensibilité est une force qui se fatigue.'];
+        }
+
+        return $out;
     }
 
     private function fragile(array $r): array

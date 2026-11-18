@@ -102,6 +102,12 @@
             <td style="width: 60%;"><div class="dr-tile"><div class="dr-label">{{ report_icon('work', '#475569') }}Où l'exercer</div><ul>{% for i in vocation.ideas %}<li>{{ i }}</li>{% endfor %}</ul></div></td>
             <td><div class="dr-tile" style="background: #DCE7DF; border-color: #DCE7DF;"><div class="dr-label" style="color: #173D2E;">{{ report_icon('star', '#173D2E') }}Vos dons</div><p style="margin: 0 0 6px; color: #173D2E;">{{ vocation.gifts|join(' · ') }}</p><div class="dr-label" style="color: #173D2E;">Dans KIINI SAWA</div><p class="dr-small" style="margin: 0; color: #173D2E;">{{ vocation.plan }} · à lire : {{ vocation.read }}</p></div></td>
         </tr></table>
+        {% if vocation.nuances|length %}
+            <div class="dr-tile" style="margin-top: 10px;">
+                <div class="dr-label">{{ report_icon('compass', '#475569') }}Comment l'exercer, selon votre tempérament</div>
+                {% for n in vocation.nuances %}<p style="margin: 0 0 5px;"><strong>{{ n[0] }} :</strong> {{ n[1] }}</p>{% endfor %}
+            </div>
+        {% endif %}
         <p class="dr-small">Une zone de vocation est une piste à éprouver dans la prière, le service et le conseil de votre communauté, pas une assignation.</p>
     {% else %}
         <p class="dr-lead">Votre zone de vocation naît de la rencontre entre votre manière d'agir (DISC) et vos dons spirituels. Passez {{ parts.disc ? 'le test des dons spirituels' : (parts.dons ? 'le DISC' : 'le DISC et le test des dons spirituels') }} pour la découvrir.</p>

@@ -36,6 +36,70 @@ final class InsightEngine
     private const CONCRETE_GIFTS = ['SERVICE', 'LIBERALITE', 'HOSPITALITE', 'PRESIDENCE'];
     private const THOUGHT_GIFTS = ['PROPHETIE', 'SAGESSE', 'CONNAISSANCE', 'ENSEIGNEMENT'];
 
+
+    /**
+     * Lectures internes au Big Five : deux facettes d'un même profil qui, ensemble, disent plus que chacune seule.
+     * a et b : [facette, niveau attendu]. Ces rapprochements sont des hypothèses de lecture, non des résultats statistiques.
+     */
+    private const BIGFIVE_PAIRS = [
+        ['id' => 'authority-no-crowd', 'kind' => 'tension', 'a' => ['E3', 'high'], 'b' => ['E2', 'low'], 'weight' => 38,
+            'title' => 'Une autorité qui n\'a pas besoin de foule',
+            'text' => 'Vous savez vous affirmer et prendre la parole quand il le faut, sans chercher la compagnie des groupes. Vous conduisez mieux en petit comité ou en tête-à-tête qu\'en grande assemblée : choisissez vos cadres plutôt que de forcer ceux qui ne vous ressemblent pas.',
+            'question' => 'Dans quels cadres mon autorité est-elle naturelle et reçue ?', 'step' => 'Proposer de conduire un petit groupe plutôt qu\'une grande assemblée', 'plan' => 'CROISSANCE'],
+        ['id' => 'warm-but-shy', 'kind' => 'paradox', 'a' => ['E1', 'high'], 'b' => ['N4', 'high'], 'weight' => 40,
+            'title' => 'Chaleureux, mais vite intimidé',
+            'text' => 'Vous aimez vraiment les gens, et pourtant vous vous sentez facilement gêné en public. Ce n\'est pas de la froideur : c\'est de la timidité sur un fond de chaleur. Les autres ne la voient pas toujours ; un mot simple de votre part suffit souvent à la dissiper.',
+            'question' => 'Qu\'est-ce que je n\'ose pas dire alors que je le pense chaleureusement ?', 'step' => 'Dire un mot d\'appréciation sincère à une personne cette semaine', 'plan' => 'CROISSANCE'],
+        ['id' => 'drive-and-worry', 'kind' => 'risk', 'a' => ['C4', 'high'], 'b' => ['N1', 'high'], 'weight' => 46,
+            'title' => 'Une ambition portée par l\'inquiétude',
+            'text' => 'Votre goût d\'accomplir est élevé, et l\'inquiétude vous accompagne. Les deux se nourrissent : l\'ambition fait avancer, l\'inquiétude fait douter d\'en faire assez. À long terme, ce couple épuise ; il demande des moments où quelque chose est « assez bien ».',
+            'question' => 'Qu\'est-ce qui serait « assez » pour que je me repose ?', 'step' => 'Fixer un critère de « suffisant » pour un projet en cours', 'plan' => 'HYGIENE'],
+        ['id' => 'bold-and-careful', 'kind' => 'calling', 'a' => ['O4', 'high'], 'b' => ['C6', 'high'], 'weight' => 36,
+            'title' => 'Une audace qui réfléchit',
+            'text' => 'Vous aimez la nouveauté et vous pesez vos décisions. Cette combinaison est rare : elle permet d\'innover sans tout casser. Les communautés ont besoin de personnes capables de proposer du nouveau et d\'en mesurer le coût.',
+            'question' => 'Quelle idée nouvelle ai-je déjà bien examinée et pourrais-je proposer ?', 'step' => 'Présenter une idée nouvelle, avec ses risques, à une personne de confiance', 'plan' => 'DEVELOPPEMENT'],
+        ['id' => 'heart-and-edge', 'kind' => 'tension', 'a' => ['A6', 'high'], 'b' => ['A4', 'low'], 'weight' => 38,
+            'title' => 'Un cœur tendre, une voix qui s\'affirme',
+            'text' => 'Vous ressentez beaucoup de compassion et vous n\'hésitez pas à contredire. Ces deux élans peuvent se heurter : on vous perçoit parfois plus dur que vous ne l\'êtes. Dire d\'abord ce que vous ressentez pour la personne rend votre franchise plus facile à recevoir.',
+            'question' => 'Comment la personne perçoit-elle mon désaccord ?', 'step' => 'Commencer un désaccord par ce que vous appréciez chez la personne', 'plan' => 'CROISSANCE'],
+        ['id' => 'ideas-and-order', 'kind' => 'tension', 'a' => ['O1', 'high'], 'b' => ['C2', 'low'], 'weight' => 38,
+            'title' => 'Beaucoup d\'idées, des finitions fragiles',
+            'text' => 'Votre imagination produit plus de pistes que votre sens de l\'ordre n\'en peut finir. Ce n\'est pas un défaut de caractère mais une répartition d\'énergie : l\'élan est de votre côté, la structure peut venir d\'un cadre ou d\'un partenaire.',
+            'question' => 'Quelle idée mérite d\'être terminée avant d\'en ouvrir une autre ?', 'step' => 'Choisir une idée, la terminer, puis seulement en lancer une autre', 'plan' => 'INTENDANCE'],
+        ['id' => 'anger-and-edge', 'kind' => 'risk', 'a' => ['N2', 'high'], 'b' => ['A4', 'low'], 'weight' => 42,
+            'title' => 'Une irritation qui se voit',
+            'text' => 'Vous vous irritez assez vite et vous cédez peu dans les désaccords. Cela peut vous coûter des relations auxquelles vous tenez. Repérer ce qui déclenche l\'irritation et décider à l\'avance d\'une pause avant de répondre protège ces relations.',
+            'question' => 'Qu\'est-ce qui déclenche mon irritation, et quel est mon premier signe ?', 'step' => 'Convenir d\'un mot de pause avec une personne proche', 'plan' => 'HYGIENE'],
+    ];
+
+    /**
+     * Lectures internes aux dons : deux dons du podium qui, réunis, dessinent un appel plus précis que chacun.
+     * Les noms de rôles sont des illustrations, pas des fonctions officielles.
+     */
+    private const GIFT_PAIRS = [
+        ['id' => 'teacher-shepherd', 'codes' => ['ENSEIGNEMENT', 'PASTORAT'], 'kind' => 'calling', 'weight' => 40, 'title' => 'Enseigner en prenant soin',
+            'text' => 'Vous transmettez la vérité et vous veillez sur ceux qui la reçoivent : un enseignement qui accompagne ne laisse personne en route.',
+            'question' => 'Qui pourrais-je enseigner et suivre sur la durée ?', 'step' => 'Proposer d\'accompagner un petit groupe d\'étude', 'plan' => 'TRANSMISSION'],
+        ['id' => 'lucid-compassion', 'codes' => ['MISERICORDE', 'DISCERNEMENT'], 'kind' => 'calling', 'weight' => 40, 'title' => 'Une compassion lucide',
+            'text' => 'Vous ressentez la peine des autres et vous voyez clair dans les situations. Cette lucidité évite la compassion qui se laisse manipuler et protège ceux que vous aidez.',
+            'question' => 'Qui a besoin à la fois de mon écoute et de ma clarté ?', 'step' => 'Accompagner une personne en difficulté avec une écoute, puis un conseil précis', 'plan' => 'TRANSMISSION'],
+        ['id' => 'truth-and-mercy', 'codes' => ['PROPHETIE', 'MISERICORDE'], 'kind' => 'tension', 'weight' => 44, 'title' => 'La vérité et la tendresse',
+            'text' => 'Vous portez une parole franche et une compassion vive : deux élans qui tirent chacun de leur côté. Quand ils s\'accordent, vous dites des choses dures avec une douceur qui fait que l\'on peut les entendre. Quand ils s\'opposent, vous hésitez ou vous heurtez.',
+            'question' => 'Qu\'est-ce que je me retiens de dire par peur de blesser ?', 'step' => 'Dire une vérité difficile à une personne, avec ce que vous appréciez chez elle', 'plan' => 'CROISSANCE'],
+        ['id' => 'open-door', 'codes' => ['EVANGELISATION', 'HOSPITALITE'], 'kind' => 'calling', 'weight' => 40, 'title' => 'Une porte ouverte',
+            'text' => 'Vous annoncez et vous accueillez : les personnes qui franchissent votre seuil se sentent attendues. Votre maison ou votre table peut devenir un lieu où la foi se raconte sans pression.',
+            'question' => 'Qui pourrais-je inviter à ma table ce mois-ci ?', 'step' => 'Inviter une personne éloignée de l\'Église à un repas', 'plan' => 'TRANSMISSION'],
+        ['id' => 'concrete-generosity', 'codes' => ['SERVICE', 'LIBERALITE'], 'kind' => 'calling', 'weight' => 36, 'title' => 'Une générosité concrète',
+            'text' => 'Vous donnez votre temps et vos ressources : on peut compter sur vous quand il faut passer des paroles aux actes. Veillez à ne pas vous épuiser à répondre à tous les besoins.',
+            'question' => 'À quels besoins suis-je appelé à répondre, et lesquels ne sont pas pour moi ?', 'step' => 'Choisir une cause à soutenir et en laisser une autre', 'plan' => 'INTENDANCE'],
+        ['id' => 'faith-prayer', 'codes' => ['FOI', 'INTERCESSION'], 'kind' => 'calling', 'weight' => 40, 'title' => 'Une foi qui prie',
+            'text' => 'Vous croyez que Dieu agit et vous le lui demandez : la foi et l\'intercession forment ensemble un appel à soutenir d\'autres personnes et des projets dans la durée de la prière.',
+            'question' => 'Qui ou quoi Dieu me demande-t-il de porter dans la prière ?', 'step' => 'Tenir un carnet de prière de trois personnes ou projets', 'plan' => 'VIE'],
+        ['id' => 'wisdom-leads', 'codes' => ['PRESIDENCE', 'SAGESSE'], 'kind' => 'calling', 'weight' => 38, 'title' => 'Conduire avec sagesse',
+            'text' => 'Vous savez organiser et décider, et vous le faites avec discernement : on vous confie des responsabilités parce que vous pesez avant d\'agir.',
+            'question' => 'Quelle décision collective pourrais-je éclairer ?', 'step' => 'Offrir un avis réfléchi sur une décision à prendre dans votre communauté', 'plan' => 'TRANSMISSION'],
+    ];
+
     /** Nombre de lectures gardées. */
     public const MAX = 6;
 
@@ -46,7 +110,7 @@ final class InsightEngine
      *
      * @return list<array<string, mixed>>
      */
-    public function analyze(array $r, array $convergence = [], ?array $life = null): array
+    public function analyze(array $r, array $convergence = [], ?array $life = null, int $limit = self::MAX): array
     {
         $found = array_filter([
             $this->adaptationStrain($r, $life),
@@ -63,20 +127,22 @@ final class InsightEngine
             $this->divergence($convergence),
             $this->lifeGround($r, $life),
         ]);
+        $found = array_merge(array_values($found), $this->internalBigFive($r), $this->internalGifts($r));
         foreach ($found as &$f) {
             $count = \count($f['sources']);
             $f['weight'] += 6 * ($count - 1);
+            $f['internal'] = 1 === $count;
             $f['confidence'] = match (true) {
                 $count >= 3 => 'Recoupé par '.$count.' tests',
                 2 === $count => 'Recoupé par 2 tests',
-                default => 'Un seul test : à vérifier',
+                default => 'Lu dans ce seul test : à recouper',
             };
             $f['kindLabel'] = self::KINDS[$f['kind']]['label'];
         }
         unset($f);
         usort($found, fn ($a, $b) => $b['weight'] <=> $a['weight']);
 
-        return \array_slice($found, 0, self::MAX);
+        return \array_slice($found, 0, $limit);
     }
 
     // ───────────────────────────── Règles ─────────────────────────────
@@ -307,6 +373,57 @@ final class InsightEngine
             'Votre équilibre de vie signale des priorités ('.lcfirst(implode(', ', $life['priorities'])).'). Vos dons ne sont pas à exercer à côté de cette réalité mais à l\'intérieur : commencez par là où vous êtes, avant d\'ajouter un nouveau service.',
             [['Équilibre de vie', 'Priorités : '.lcfirst(implode(', ', $life['priorities'])).'.'], ['Dons spirituels', 'Dons principaux : '.implode(', ', array_column($r['dons']['gifts']['top'], 'name')).'.']],
             ['equilibre', 'dons'], 40, 'Où mes dons sont-ils déjà attendus, tout près de moi ?', 'Nommer une personne de votre entourage proche que votre don peut servir', 'INTENDANCE');
+    }
+
+    /** @return list<array<string, mixed>> */
+    private function internalBigFive(array $r): array
+    {
+        $domains = $r['bigfive']['bf']['domains'] ?? null;
+        if (!$domains) {
+            return [];
+        }
+        $facet = function (string $code) use ($domains): ?array {
+            foreach ($domains as $d) {
+                if (isset($d['facets'][$code])) {
+                    return $d['facets'][$code];
+                }
+            }
+
+            return null;
+        };
+        $out = [];
+        foreach (self::BIGFIVE_PAIRS as $rule) {
+            [$ca, $la] = $rule['a'];
+            [$cb, $lb] = $rule['b'];
+            $a = $facet($ca);
+            $b = $facet($cb);
+            if (!$a || !$b || $la !== $a['level'] || $lb !== $b['level']) {
+                continue;
+            }
+            $say = fn (array $f, string $level) => $f['label'].' : niveau '.('high' === $level ? 'élevé' : 'faible').'.';
+            $out[] = $this->insight($rule['id'], $rule['kind'], $rule['title'], $rule['text'], [['Big Five', $say($a, $la)], ['Big Five', $say($b, $lb)]], ['bigfive'], $rule['weight'],
+                $rule['question'], $rule['step'], $rule['plan']);
+        }
+
+        return $out;
+    }
+
+    /** @return list<array<string, mixed>> */
+    private function internalGifts(array $r): array
+    {
+        $top = $r['dons']['gifts']['top'] ?? [];
+        $names = array_column($top, 'name', 'code');
+        $out = [];
+        foreach (self::GIFT_PAIRS as $rule) {
+            [$a, $b] = $rule['codes'];
+            if (!isset($names[$a], $names[$b])) {
+                continue;
+            }
+            $out[] = $this->insight($rule['id'], $rule['kind'], $rule['title'], $rule['text'], [['Dons spirituels', $names[$a].' et '.$names[$b].' figurent parmi vos dons principaux.']], ['dons'], $rule['weight'],
+                $rule['question'], $rule['step'], $rule['plan']);
+        }
+
+        return $out;
     }
 
     // ───────────────────────────── Outils ─────────────────────────────

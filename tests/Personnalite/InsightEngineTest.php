@@ -126,4 +126,39 @@ class InsightEngineTest extends WebTestCase
         $this->assertSelectorTextContains('body', 'avec l\'offre PRO');
         $this->assertSelectorTextNotContains('body', 'Une question à vous poser');
     }
+
+    public function testInternalBigFivePairs(): void
+    {
+        $facets = fn (array $f) => array_map(fn ($level) => ['label' => 'Facette', 'level' => $level], $f);
+        $r = ['disc' => null, 'type' => null, 'enneagramme' => null, 'dons' => null,
+            'bigfive' => ['bf' => ['domains' => ['E' => ['level' => 'mid', 'value' => 50, 'facets' => $facets(['E3' => 'high', 'E2' => 'low'])]]]]];
+        $found = (new InsightEngine())->analyze($r);
+        $this->assertSame(['authority-no-crowd'], $this->ids($found));
+        $this->assertTrue($found[0]['internal']);
+        $this->assertSame(['bigfive'], $found[0]['sources']);
+        $this->assertSame('Lu dans ce seul test : à recouper', $found[0]['confidence']);
+        // Facette au mauvais niveau : rien
+        $r['bf'] = null;
+        $r['bigfive']['bf']['domains']['E']['facets'] = $facets(['E3' => 'high', 'E2' => 'mid']);
+        $this->assertSame([], (new InsightEngine())->analyze($r));
+    }
+
+    public function testInternalGiftPairsNeedBothGifts(): void
+    {
+        $base = ['disc' => null, 'type' => null, 'enneagramme' => null, 'bigfive' => null];
+        $found = (new InsightEngine())->analyze($base + ['dons' => $this->gifts(['PROPHETIE', 'MISERICORDE', 'SERVICE'])]);
+        $this->assertContains('truth-and-mercy', $this->ids($found));
+        $this->assertSame([], (new InsightEngine())->analyze($base + ['dons' => $this->gifts(['PROPHETIE', 'SERVICE'])]));
+    }
+
+    public function testVocationNuancesDependOnTemperament(): void
+    {
+        self::bootKernel();
+        $method = new \ReflectionMethod(\App\Personnalite\Service\ProfileSynthesis::class, 'vocationNuances');
+        $synthesis = static::getContainer()->get(\App\Personnalite\Service\ProfileSynthesis::class);
+        $out = $method->invoke($synthesis, ['bigfive' => $this->bf(['E' => 'low', 'O' => 'high', 'C' => 'high', 'N' => 'high'])]);
+        $this->assertCount(4, $out);
+        $this->assertSame([], $method->invoke($synthesis, ['bigfive' => null]));
+        $this->assertCount(1, $method->invoke($synthesis, ['bigfive' => $this->bf(['E' => 'mid', 'N' => 'high'])]));
+    }
 }
