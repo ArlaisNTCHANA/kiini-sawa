@@ -403,3 +403,9 @@ grâce, Christ au centre ; cadre doctrinal du fondateur ; LSG). Citations vérif
 honnêtes signalés dans les fiches : indices indirects (Timothée, Béréens, Luc), fiches minces (Lydie, Tabitha, Betsaleel), contre-indices (Moïse « fort
 patient » ; Jean « fils du tonnerre »), livre d'Esther qui ne nomme pas Dieu. **Non relues par le fondateur** (`reviewed: false`). Reste : relecture doctrinale,
 extension aux autres tests (ennéagramme, dons, type) avec la même bibliothèque.
+
+## 18/11/2026 — Fiches de personnages modifiables dans l'administration
+
+Demande du fondateur. Les fiches deviennent une source de `Content` (`figures.library`) : édition par la page « Textes des tests » existante, sans nouveau code d'écran.
+Champ `relecture` (« en cours » / « faite ») remplace `reviewed`. Citations LSG et noms de rattachement verrouillés. Libellés lisibles pour les indices du profil.
+Piège : `Content::defaults()` est appelé souvent ; `BiblicalFigures::raw()` met les fichiers JSON en cache.

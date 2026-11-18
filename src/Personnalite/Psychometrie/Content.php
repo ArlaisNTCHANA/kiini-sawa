@@ -58,6 +58,8 @@ final class Content
         'self.hygiene' => ['Équilibre et Hygiène de Vie', 'Hygiène de Vie : les 6 axes', []],
         'synth.vocations' => ['Mon profil KIINI SAWA', 'Les 12 zones de vocation (DISC × famille de dons)', []],
         'synth.axes' => ['Mon profil KIINI SAWA', 'Les 3 axes de convergence', []],
+        // Les citations bibliques (LSG), les noms servant à rattacher une fiche à un profil et les étiquettes restent dans le code
+        'figures.library' => ['Personnages bibliques', 'Les 32 fiches : profil et indices, récit, fragilité, grâce, Christ au centre', ['/\.quote\./', '/\.quotes\./', '/\.aliases\./', '/\.tags\./']],
     ];
 
     /** Contenu de référence (code). */
@@ -96,6 +98,7 @@ final class Content
             'self.hygiene' => SelfAssessmentProfiles::HYGIENE,
             'synth.vocations' => SynthesisContent::VOCATIONS,
             'synth.axes' => SynthesisContent::AXES,
+            'figures.library' => BiblicalFigures::raw(),
         };
     }
 

@@ -34,7 +34,7 @@
         <p style="margin: 0 0 4px; font-family: {{ serif }}; font-size: {{ pdf ? '11pt' : '1.05rem' }};">{{ fig.question }}</p>
         <p class="dr-small" style="margin: 0; color: #334155;"><strong>Un pas :</strong> {{ fig.step }}</p>
     </div>
-    {% if not fig.reviewed %}<p class="dr-small" style="margin: 6px 0 0;">Fiche en cours de relecture.</p>{% endif %}
+    {% if fig.relecture|default('en cours') != 'faite' %}<p class="dr-small" style="margin: 6px 0 0;">Fiche en cours de relecture.</p>{% endif %}
 {% endmacro %}
 
 {% if pdf %}<style>.fsheet .dr-table td { padding: 4px 8px; } .fsheet .dr-tile { padding: 8px 12px; } .fsheet p { margin-bottom: 4px; } .fsheet .dr-quote { padding: 6px 12px; }</style>{% endif %}

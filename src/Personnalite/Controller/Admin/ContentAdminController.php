@@ -37,6 +37,11 @@ final class ContentAdminController extends AbstractController
         'adapted' => 'En adaptation', 'natural' => 'Réflexe naturel', 'tension' => 'Tension durable', 'cues' => 'Indice', 'speech' => 'Débit',
         'gesture' => 'Gestuelle', 'mail' => 'Mails', 'disagree' => 'Dans un désaccord', 'more' => 'Ce que le contexte demande en plus',
         'colorName' => 'Nom de la couleur', 'portraitShort' => 'Portrait court',
+        // Fiches de personnages bibliques
+        'title' => 'Titre', 'refs' => 'Passages', 'who' => 'Qui est-il', 'weakness' => 'Là où il est fragile', 'grace' => 'Comment Dieu le relève',
+        'christ' => 'Le Christ au centre', 'step' => 'Un pas', 'why' => 'Pourquoi lui, pour vous', 'default' => 'Par défaut', 'profile' => 'Profil',
+        'dimensions' => 'Dimension', 'traits' => 'Indice', 'absent' => 'Ce que le texte ne montre pas', 'limits' => 'Limites de la lecture',
+        'solidity' => 'Solidité de la lecture', 'episodes' => 'Épisode', 'relecture' => 'Relecture (« en cours » ou « faite »)',
     ];
 
     public function __construct(private readonly ContentOverrideRepository $overrides, private readonly EntityManagerInterface $em)
@@ -189,6 +194,16 @@ final class ContentAdminController extends AbstractController
         $parts = \array_slice(explode('.', $path), 1);
         if (!$parts) {
             return 'Texte';
+        }
+        // Fiches bibliques : un indice = [le trait, ce que dit le texte, la référence] ; « ne montre pas » = [le point, le détail]
+        if (preg_match('/^profile\.dimensions\.([DISC])\.traits\.(\d+)\.(\d)$/', $path = implode('.', $parts), $m)) {
+            return 'Profil · '.$m[1].' · indice n° '.((int) $m[2] + 1).' · '.['Le trait', 'Ce que dit le texte', 'Référence'][(int) $m[3]];
+        }
+        if (preg_match('/^profile\.absent\.(\d+)\.(\d)$/', $path, $m)) {
+            return 'Ce que le texte ne montre pas · n° '.((int) $m[1] + 1).' · '.['Le point', 'Le détail'][(int) $m[2]];
+        }
+        if (preg_match('/^why\.(D|I|S|C|default)$/', $path, $m)) {
+            return 'Pourquoi lui, pour vous · '.('default' === $m[1] ? 'texte par défaut' : 'profil '.$m[1]);
         }
         $out = [];
         foreach ($parts as $p) {

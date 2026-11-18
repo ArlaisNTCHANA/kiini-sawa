@@ -15,13 +15,13 @@ namespace App\Personnalite\Psychometrie;
  *  - « Le Christ au centre » : comment ce personnage pointe vers le Christ et vers la grâce.
  *
  * Toutes les citations sont celles de la LSG ; `tests/Personnalite/BiblicalFiguresTest.php` les vérifie contre le texte quand il est
- * présent (var/bible/lsg.json, voir bin/outils/bible.py). Contenu marqué « à relire par le fondateur » tant que `reviewed` est faux.
+ * présent (var/bible/lsg.json, voir bin/outils/bible.py). Contenu marqué « en cours de relecture » tant que le champ `relecture` ne vaut pas « faite » (modifiable dans l'administration).
  */
 final class BiblicalFigures
 {
     public const FIGURES = [
         'ELIE' => [
-            'name' => 'Élie', 'aliases' => ['Élie'], 'reviewed' => false,
+            'name' => 'Élie', 'aliases' => ['Élie'], 'relecture' => 'en cours',
             'title' => 'Le prophète qui s\'effondre après la victoire',
             'refs' => '1 Rois 17–19 ; 2 Rois 2',
             'profile' => [
@@ -70,7 +70,7 @@ final class BiblicalFigures
         ],
 
         'JOSEPH' => [
-            'name' => 'Joseph de Nazareth', 'aliases' => ['Joseph de Nazareth', 'Joseph'], 'reviewed' => false,
+            'name' => 'Joseph de Nazareth', 'aliases' => ['Joseph de Nazareth', 'Joseph'], 'relecture' => 'en cours',
             'title' => 'L\'homme qui protège sans dire un mot',
             'refs' => 'Matthieu 1–2 ; Luc 2',
             'profile' => [
@@ -121,7 +121,7 @@ final class BiblicalFigures
         ],
 
         'TIMOTHEE' => [
-            'name' => 'Timothée', 'aliases' => ['Timothée'], 'reviewed' => false,
+            'name' => 'Timothée', 'aliases' => ['Timothée'], 'relecture' => 'en cours',
             'title' => 'Le jeune sensible que Paul n\'a pas laissé seul',
             'refs' => 'Actes 16 ; Philippiens 2 ; 1 et 2 Timothée',
             'profile' => [
@@ -173,25 +173,37 @@ final class BiblicalFigures
     ];
 
     /** @var ?array<string, array> */
-    private static ?array $all = null;
+    private static ?array $raw = null;
 
     /**
-     * Toutes les fiches : les fiches pilotes ci-dessus et celles de `content/personnages/*.json` (une fiche par clé, même structure).
+     * Fiches de référence (code et fichiers JSON) : les fiches pilotes ci-dessus et celles de `content/personnages/*.json`
+     * (une fiche par clé, même structure ; ces fichiers sont la source).
+     *
+     * @return array<string, array>
+     */
+    public static function raw(): array
+    {
+        if (null === self::$raw) {
+            self::$raw = self::FIGURES;
+            foreach (glob(\dirname(__DIR__, 3).'/content/personnages/*.json') ?: [] as $file) {
+                foreach (json_decode((string) file_get_contents($file), true, 512, \JSON_THROW_ON_ERROR) as $key => $fig) {
+                    self::$raw[$key] = $fig;
+                }
+            }
+        }
+
+        return self::$raw;
+    }
+
+    /**
+     * Toutes les fiches telles qu'on les affiche : référence + textes modifiés dans l'administration
+     * (Admin › Textes des tests › Personnages bibliques ; source `figures.library`).
      *
      * @return array<string, array>
      */
     public static function all(): array
     {
-        if (null === self::$all) {
-            self::$all = self::FIGURES;
-            foreach (glob(\dirname(__DIR__, 3).'/content/personnages/*.json') ?: [] as $file) {
-                foreach (json_decode((string) file_get_contents($file), true, 512, \JSON_THROW_ON_ERROR) as $key => $fig) {
-                    self::$all[$key] = $fig;
-                }
-            }
-        }
-
-        return self::$all;
+        return Content::get('figures.library');
     }
 
     /** Fiche d'un personnage d'après son nom tel qu'il apparaît dans les profils, ou null s'il n'a pas encore de fiche. */
