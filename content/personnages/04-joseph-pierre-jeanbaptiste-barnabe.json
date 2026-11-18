@@ -1,0 +1,718 @@
+{
+ "JOSEPH_JACOB": {
+  "name": "Joseph, fils de Jacob",
+  "aliases": [
+   "Joseph, fils de Jacob"
+  ],
+  "reviewed": false,
+  "title": "L'intendant qui organise, éprouve et pardonne",
+  "refs": "Genèse 37–50 ; Actes 7",
+  "profile": {
+   "code": "DC",
+   "solidity": "D : indices nombreux et convergents · C : indices nombreux et convergents",
+   "dimensions": {
+    "D": {
+     "level": 3,
+     "traits": [
+      [
+       "Il prend l'initiative devant le pouvoir",
+       "Après avoir interprété les songes, il conseille à Pharaon de choisir un homme sage pour diriger le pays.",
+       "Genèse 41:33"
+      ],
+      [
+       "Il commande et obtient l'obéissance",
+       "Pharaon : « Tout mon peuple obéira à tes ordres. Le trône seul m'élèvera au-dessus de toi. »",
+       "Genèse 41:40"
+      ],
+      [
+       "Il mène à terme un projet immense",
+       "Il amasse du blé « comme le sable de la mer, en quantité si considérable que l'on cessa de compter ».",
+       "Genèse 41:46-49"
+      ],
+      [
+       "Il tient ferme devant la pression",
+       "Devant la femme de Potiphar : « Comment ferais-je un aussi grand mal et pécherais-je contre Dieu ? »",
+       "Genèse 39:7-9"
+      ]
+     ]
+    },
+    "C": {
+     "level": 3,
+     "traits": [
+      [
+       "Il planifie avec méthode",
+       "Il propose des commissaires, un cinquième des récoltes, des réserves dans les villes pour les années de famine.",
+       "Genèse 41:34-36"
+      ],
+      [
+       "Il est un gestionnaire fiable",
+       "Potiphar lui confie tout : il « n'avait avec lui d'autre soin que celui de prendre sa nourriture ».",
+       "Genèse 39:4-6"
+      ],
+      [
+       "Il vérifie avant de faire confiance",
+       "À ses frères : « Vos paroles seront éprouvées, et je saurai si la vérité est chez vous. »",
+       "Genèse 42:15-16"
+      ]
+     ]
+    }
+   },
+   "absent": [
+    [
+     "Recherche de la popularité (I)",
+     "Jeune, il raconte ses songes sans mesurer l'effet : ses frères le haïssent « à cause de ses paroles » (Genèse 37:5-8)."
+    ],
+    [
+     "Chaleur immédiate (S)",
+     "Il met ses frères à l'épreuve avant de se faire connaître, et s'écarte pour pleurer (Genèse 42:15-24)."
+    ]
+   ],
+   "limits": "Joseph est l'un des personnages les plus longuement racontés de la Genèse : les indices sont nombreux, mais certains peuvent se lire autrement. Nous repérons des indices, nous ne mesurons rien."
+  },
+  "why": {
+   "D": "Comme lui, vous prenez les choses en main et vous menez un grand projet à son terme. Son récit montre ce qui oriente ce tempérament : il reconnaît que Dieu l'a envoyé, et qu'il n'est pas à sa place.",
+   "C": "Comme lui, vous organisez avec méthode et vous vérifiez avant de faire confiance. Son récit montre ce que cette rigueur peut cacher : une émotion forte et un pardon difficile.",
+   "default": "Son sens de l'organisation et sa maîtrise de soi éclairent les tempéraments exigeants."
+  },
+  "who": "Joseph est le fils préféré de Jacob. Vendu par ses frères jaloux, il est emmené en Égypte, devient intendant de Potiphar, est emprisonné à tort, puis, après avoir interprété les songes de Pharaon, devient le gouverneur de toute l'Égypte (Genèse 37–41).",
+  "episodes": [
+   {
+    "title": "Les songes",
+    "ref": "Genèse 37:5-8",
+    "tags": [
+     [
+      "D",
+      "sûr de lui"
+     ]
+    ],
+    "text": "Jeune, il raconte à ses frères un songe où leurs gerbes se prosternent devant la sienne. Ils lui demandent : « Est-ce que tu règneras sur nous ? » et le haïssent davantage.",
+    "quote": {
+     "ref": "Genèse 37:8",
+     "text": "Est-ce que tu règneras sur nous? est-ce que tu nous gouverneras?"
+    }
+   },
+   {
+    "title": "L'intendant de Potiphar",
+    "ref": "Genèse 39:4-9",
+    "tags": [
+     [
+      "C",
+      "fiabilité"
+     ],
+     [
+      "D",
+      "tient ferme"
+     ]
+    ],
+    "text": "Dans la maison de Potiphar, tout lui est confié. Quand la femme de son maître le presse, il refuse en invoquant d'abord la confiance reçue, puis Dieu."
+   },
+   {
+    "title": "Le plan pour l'Égypte",
+    "ref": "Genèse 41:33-41",
+    "tags": [
+     [
+      "C",
+      "méthode"
+     ],
+     [
+      "D",
+      "initiative"
+     ]
+    ],
+    "text": "Devant Pharaon, il ne s'arrête pas à l'interprétation : il expose un plan complet pour les sept années d'abondance et de famine. Pharaon lui donne le commandement du pays."
+   },
+   {
+    "title": "Sept années d'abondance",
+    "ref": "Genèse 41:46-49",
+    "tags": [
+     [
+      "D",
+      "mène à terme"
+     ]
+    ],
+    "text": "Il parcourt le pays et amasse le blé dans les villes, en quantité si considérable qu'on cesse de compter."
+   },
+   {
+    "title": "L'épreuve des frères",
+    "ref": "Genèse 42:15-24",
+    "tags": [
+     [
+      "C",
+      "éprouve"
+     ],
+     [
+      "D",
+      "garde le contrôle"
+     ]
+    ],
+    "text": "Quand ses frères viennent acheter du blé, il ne se fait pas connaître. Il les accuse d'être des espions, les éprouve, puis s'écarte d'eux pour pleurer.",
+    "quote": {
+     "ref": "Genèse 42:15",
+     "text": "Voici comment vous serez éprouvés."
+    }
+   },
+   {
+    "title": "Je suis Joseph",
+    "ref": "Genèse 45:1-8",
+    "text": "Il ne peut plus se contenir. Il éloigne tout le monde, éclate en sanglots et se fait connaître : « c'est pour vous sauver la vie que Dieu m'a envoyé devant vous ».",
+    "quote": {
+     "ref": "Genèse 45:5",
+     "text": "c'est pour vous sauver la vie que Dieu m'a envoyé devant vous."
+    }
+   },
+   {
+    "title": "Dieu l'a changé en bien",
+    "ref": "Genèse 50:19-20",
+    "text": "Après la mort de Jacob, les frères craignent sa vengeance. Joseph les rassure : il ne se met pas à la place de Dieu.",
+    "quote": {
+     "ref": "Genèse 50:20",
+     "text": "Vous aviez médité de me faire du mal: Dieu l'a changé en bien"
+    }
+   }
+  ],
+  "weakness": "Jeune, sûr de lui, il raconte ses songes à des frères déjà jaloux (Genèse 37:5-8), sans mesurer l'effet de ses paroles. Plus tard, la maîtrise de soi peut devenir distance : il éprouve durement ses frères avant de se dévoiler (42:15-24). Le texte montre ce qu'il cache : il s'écarte pour pleurer (42:24), et finit par « ne plus pouvoir se contenir » (45:1).",
+  "grace": "Joseph n'attribue rien à son habileté : « c'est pour vous sauver la vie que Dieu m'a envoyé devant vous » (Genèse 45:5) ; « Dieu l'a changé en bien » (50:20). Il refuse de se tenir à la place de Dieu : « suis-je à la place de Dieu ? » (50:19). Le pardon qu'il accorde à ses frères est celui qu'il a lui-même reçu de la providence de Dieu.",
+  "christ": "Joseph est vendu par ses frères jaloux, puis devient celui qui les sauve (Actes 7:9-14). Étienne le souligne : « la seconde fois, Joseph fut reconnu par ses frères » (7:13). Comme lui, le Christ, rejeté par les siens, est reconnu et sauve : « Ne fallait-il pas que le Christ souffrît ces choses, et qu'il entrât dans sa gloire ? » (Luc 24:26). Joseph est un reflet, non le sauveur.",
+  "quotes": [
+   {
+    "ref": "Genèse 50:20",
+    "text": "Vous aviez médité de me faire du mal: Dieu l'a changé en bien"
+   },
+   {
+    "ref": "Luc 24:26",
+    "text": "Ne fallait-il pas que le Christ souffrît ces choses, et qu'il entrât dans sa gloire?"
+   }
+  ],
+  "question": "Qui devrais-je laisser entrer dans ce que je ressens, plutôt que de tout gérer à distance ?",
+  "step": "Raconter à une personne de confiance une émotion que vous gardez pour vous."
+ },
+ "PIERRE": {
+  "name": "Pierre",
+  "aliases": [
+   "Pierre"
+  ],
+  "reviewed": false,
+  "title": "Le fonceur qui tombe, et que Christ relève",
+  "refs": "Matthieu 14 ; 16 ; 26 ; Jean 21 ; Actes 2 ; 4",
+  "profile": {
+   "code": "ID",
+   "solidity": "I : indices nombreux et convergents · D : indices nombreux et convergents",
+   "dimensions": {
+    "I": {
+     "level": 3,
+     "traits": [
+      [
+       "Il parle le premier",
+       "« Seigneur, si c'est toi, ordonne que j'aille vers toi sur les eaux. » Et à la question de Jésus : « Tu es le Christ, le Fils du Dieu vivant. »",
+       "Matthieu 14:28 ; 16:16"
+      ],
+      [
+       "Il s'exprime avec élan devant la foule",
+       "À la Pentecôte, il « éleva la voix » et s'adressa à tout Jérusalem.",
+       "Actes 2:14"
+      ],
+      [
+       "Il touche et rassemble",
+       "Ceux qui acceptent sa parole sont baptisés : environ trois mille âmes ce jour-là.",
+       "Actes 2:41"
+      ]
+     ]
+    },
+    "D": {
+     "level": 3,
+     "traits": [
+      [
+       "Il saute dans l'action",
+       "Il sort de la barque et marche sur les eaux pour aller vers Jésus.",
+       "Matthieu 14:29"
+      ],
+      [
+       "Il ose reprendre même son maître",
+       "Il prend Jésus à part et « se mit à le reprendre ».",
+       "Matthieu 16:22"
+      ],
+      [
+       "Il s'engage sans réserve",
+       "« Quand il me faudrait mourir avec toi, je ne te renierai pas. »",
+       "Matthieu 26:33-35"
+      ]
+     ]
+    }
+   },
+   "absent": [
+    [
+     "Constance sous pression (S)",
+     "Le soir de l'arrestation, il dit trois fois ne pas connaître Jésus (Matthieu 26:69-75)."
+    ],
+    [
+     "Réflexion avant de parler (C)",
+     "Il parle et propose avant de mesurer, comme quand il reprend Jésus (Matthieu 16:22)."
+    ]
+   ],
+   "limits": "Pierre est l'un des personnages les plus présents des évangiles et des Actes : les indices sont nombreux, et ils vont tous dans le même sens. Nous repérons des indices, nous ne mesurons rien."
+  },
+  "why": {
+   "I": "Comme lui, vous parlez avec élan, vous entraînez et vous osez vous exprimer devant tous. Son récit montre aussi ce que cet élan peut promettre au-delà de ses forces.",
+   "D": "Comme lui, vous vous lancez et vous prenez position sans attendre. Son récit montre que ce n'est pas votre force qui vous porte, mais la main qui vous retient quand vous tombez.",
+   "default": "Son élan et sa franchise éclairent les tempéraments enthousiastes."
+  },
+  "who": "Pierre (Simon) est un pêcheur de Galilée, l'un des premiers disciples de Jésus et le porte-parole des douze. On le voit confesser Jésus, le renier, être restauré, puis prêcher à la Pentecôte.",
+  "episodes": [
+   {
+    "title": "Sur les eaux",
+    "ref": "Matthieu 14:28-31",
+    "tags": [
+     [
+      "I",
+      "parle le premier"
+     ],
+     [
+      "D",
+      "se lance"
+     ]
+    ],
+    "text": "Il demande à Jésus de l'appeler vers lui sur l'eau, descend de la barque et marche. Mais quand il voit que le vent est fort, il a peur et enfonce. Jésus le saisit aussitôt.",
+    "quote": {
+     "ref": "Matthieu 14:30",
+     "text": "Seigneur, sauve-moi!"
+    }
+   },
+   {
+    "title": "Tu es le Christ",
+    "ref": "Matthieu 16:15-19",
+    "tags": [
+     [
+      "I",
+      "parle le premier"
+     ]
+    ],
+    "text": "À la question de Jésus sur son identité, Pierre répond le premier. Jésus lui dit que ce n'est pas la chair et le sang qui le lui ont révélé, mais son Père. Il ajoute : « je bâtirai mon Église ».",
+    "quote": {
+     "ref": "Matthieu 16:16",
+     "text": "Tu es le Christ, le Fils du Dieu vivant."
+    }
+   },
+   {
+    "title": "Arrière de moi",
+    "ref": "Matthieu 16:22-23",
+    "tags": [
+     [
+      "D",
+      "reprend son maître"
+     ]
+    ],
+    "text": "Jésus annonce sa mort. Pierre le reprend : « A Dieu ne plaise ! » Jésus se retourne : « Arrière de moi, Satan ! tu m'es en scandale ; car tes pensées ne sont pas les pensées de Dieu. »"
+   },
+   {
+    "title": "Je ne te renierai pas",
+    "ref": "Matthieu 26:33-35",
+    "tags": [
+     [
+      "D",
+      "promet haut"
+     ]
+    ],
+    "text": "Il affirme qu'il ne tombera jamais, même si tous tombent. Jésus lui annonce qu'il le reniera trois fois avant le chant du coq."
+   },
+   {
+    "title": "Les trois reniements",
+    "ref": "Matthieu 26:69-75",
+    "text": "Une servante, puis une autre, puis ceux qui l'entourent : trois fois il nie, la dernière fois avec des imprécations. Le coq chante, il se souvient de la parole de Jésus, sort et pleure amèrement.",
+    "quote": {
+     "ref": "Matthieu 26:75",
+     "text": "il pleura amèrement."
+    }
+   },
+   {
+    "title": "M'aimes-tu ?",
+    "ref": "Jean 21:15-17",
+    "text": "Après la résurrection, Jésus lui pose trois fois la question de son amour, puis lui confie son troupeau. Pas un mot de reproche : il lui redonne sa place.",
+    "quote": {
+     "ref": "Jean 21:17",
+     "text": "Seigneur, tu sais toutes choses, tu sais que je t'aime."
+    }
+   },
+   {
+    "title": "La Pentecôte",
+    "ref": "Actes 2:14-41",
+    "tags": [
+     [
+      "I",
+      "prêche"
+     ]
+    ],
+    "text": "Le même homme qui avait renié se tient devant la foule et annonce que Dieu a fait Seigneur et Christ ce Jésus crucifié. Environ trois mille personnes se joignent aux disciples."
+   }
+  ],
+  "weakness": "Les promesses plus fortes que les forces : « Quand il me faudrait mourir avec toi, je ne te renierai pas » (Matthieu 26:35), et quelques heures plus tard il nie trois fois. Il parle avant de mesurer (16:22) et la peur le saisit quand il regarde le vent (14:30). Pour ce tempérament, la vigilance : l'élan promet ce que la fragilité ne peut tenir.",
+  "grace": "À chaque chute, Jésus tend la main : « Aussitôt Jésus étendit la main, le saisit » (Matthieu 14:31). Il avertit avant (26:34), puis il restaure, non par un reproche mais par trois questions d'amour et une mission : « Pais mes brebis » (Jean 21:15-17). Pierre n'est pas relevé parce qu'il a bien promis, mais parce que Jésus l'aime.",
+  "christ": "Pierre confesse : « Tu es le Christ, le Fils du Dieu vivant » (Matthieu 16:16), et sa prédication se résume ainsi : « Il n'y a de salut en aucun autre » (Actes 4:12). Jésus dit « je bâtirai mon Église » (16:18) : c'est lui qui bâtit, non la force de Pierre, qui s'est effondrée. L'élan ne sauve pas ; le Christ sauve et relève.",
+  "quotes": [
+   {
+    "ref": "Actes 4:12",
+    "text": "Il n'y a de salut en aucun autre"
+   },
+   {
+    "ref": "Matthieu 16:16",
+    "text": "Tu es le Christ, le Fils du Dieu vivant."
+   }
+  ],
+  "question": "Qu'est-ce que j'ai promis à Dieu ou aux autres avec plus d'élan que de lucidité ?",
+  "step": "Avant de promettre quelque chose cette semaine, attendre un jour et demander à Dieu ce qu'il veut vraiment."
+ },
+ "JEAN_BAPTISTE": {
+  "name": "Jean-Baptiste",
+  "aliases": [
+   "Jean-Baptiste"
+  ],
+  "reviewed": false,
+  "title": "La voix qui désigne un autre, et s'efface",
+  "refs": "Matthieu 3 ; 11 ; Marc 6 ; Jean 1 ; 3",
+  "profile": {
+   "code": "ID",
+   "solidity": "I : indices convergents · D : indices nombreux et convergents",
+   "dimensions": {
+    "I": {
+     "level": 2,
+     "traits": [
+      [
+       "Il attire les foules",
+       "Les habitants de Jérusalem, de toute la Judée et des bords du Jourdain se rendaient auprès de lui.",
+       "Matthieu 3:5-6"
+      ],
+      [
+       "Il parle en public avec force",
+       "« Repentez-vous, car le royaume des cieux est proche. »",
+       "Matthieu 3:2"
+      ],
+      [
+       "Il influence : ses disciples suivent Jésus sur sa parole",
+       "Il dit : « Voilà l'Agneau de Dieu », et deux de ses disciples suivent Jésus.",
+       "Jean 1:35-37"
+      ]
+     ]
+    },
+    "D": {
+     "level": 3,
+     "traits": [
+      [
+       "Il parle sans détour",
+       "Il appelle les pharisiens qui viennent à lui : « Races de vipères ».",
+       "Matthieu 3:7"
+      ],
+      [
+       "Il confronte le pouvoir",
+       "À Hérode : « Il ne t'est pas permis d'avoir la femme de ton frère. » Hérode le fait arrêter.",
+       "Marc 6:17-18"
+      ],
+      [
+       "Il est sûr de sa mission",
+       "« Je ne suis pas le Christ, mais j'ai été envoyé devant lui. »",
+       "Jean 3:28"
+      ],
+      [
+       "Il vit avec radicalité",
+       "Vêtement de poils de chameau, ceinture de cuir, sauterelles et miel sauvage.",
+       "Matthieu 3:4"
+      ]
+     ]
+    }
+   },
+   "absent": [
+    [
+     "Douceur et ménagement (S)",
+     "On ne le voit pas ménager ceux qu'il reprend, du peuple jusqu'au roi."
+    ],
+    [
+     "Nuance et prudence (C)",
+     "Ses paroles sont tranchées : « Races de vipères » (Matthieu 3:7)."
+    ]
+   ],
+   "limits": "Les évangiles disent peu de la personnalité de Jean-Baptiste en dehors de sa mission. D est solidement appuyé ; I repose sur des indices réels, moins nombreux, et liés à sa fonction. Nous repérons des indices, nous ne mesurons rien."
+  },
+  "why": {
+   "I": "Comme lui, vous savez parler à une foule et attirer les gens vers ce qui compte. Son récit montre la plus grande liberté de ce tempérament : celui qui rassemble peut désigner un autre.",
+   "D": "Comme lui, vous dites les choses sans détour, même face au pouvoir. Son récit montre aussi le coût de cette franchise, et le doute qui peut suivre.",
+   "default": "Sa franchise et son influence éclairent les tempéraments de porte-parole."
+  },
+  "who": "Jean-Baptiste est le prophète qui prépare l'arrivée de Jésus. Il prêche dans le désert de Judée et baptise dans le Jourdain. Il sera emprisonné puis exécuté par Hérode (Marc 6).",
+  "episodes": [
+   {
+    "title": "La voix dans le désert",
+    "ref": "Matthieu 3:1-6",
+    "tags": [
+     [
+      "I",
+      "attire les foules"
+     ]
+    ],
+    "text": "Vêtu comme un prophète, il appelle à la repentance. Jérusalem, toute la Judée et les bords du Jourdain viennent à lui et confessent leurs péchés."
+   },
+   {
+    "title": "Races de vipères",
+    "ref": "Matthieu 3:7-12",
+    "tags": [
+     [
+      "D",
+      "franchise"
+     ]
+    ],
+    "text": "Devant des pharisiens et des sadducéens venus au baptême, il parle sans détour, puis annonce quelqu'un de plus puissant que lui.",
+    "quote": {
+     "ref": "Matthieu 3:11",
+     "text": "celui qui vient après moi est plus puissant que moi, et je ne suis pas digne de porter ses souliers."
+    }
+   },
+   {
+    "title": "Voici l'Agneau de Dieu",
+    "ref": "Jean 1:29-37",
+    "tags": [
+     [
+      "I",
+      "influence"
+     ]
+    ],
+    "text": "Il désigne Jésus publiquement. Deux de ses disciples le quittent pour le suivre : il ne les retient pas.",
+    "quote": {
+     "ref": "Jean 1:29",
+     "text": "Voici l'Agneau de Dieu, qui ôte le péché du monde."
+    }
+   },
+   {
+    "title": "Il faut qu'il croisse",
+    "ref": "Jean 3:26-30",
+    "text": "Ses disciples s'inquiètent : tous vont à Jésus. Jean répond qu'il n'est pas le Christ, mais l'ami de l'époux, qui se réjouit de sa voix.",
+    "quote": {
+     "ref": "Jean 3:30",
+     "text": "Il faut qu'il croisse, et que je diminue."
+    }
+   },
+   {
+    "title": "Face à Hérode",
+    "ref": "Marc 6:17-18",
+    "tags": [
+     [
+      "D",
+      "confronte le pouvoir"
+     ]
+    ],
+    "text": "Il reproche au roi d'avoir pris la femme de son frère. Hérode le fait arrêter et lier en prison."
+   },
+   {
+    "title": "La question depuis la prison",
+    "ref": "Matthieu 11:2-6",
+    "text": "Entendant parler des œuvres du Christ, il envoie demander : « Es-tu celui qui doit venir, ou devons-nous en attendre un autre ? »",
+    "quote": {
+     "ref": "Matthieu 11:3",
+     "text": "Es-tu celui qui doit venir, ou devons-nous en attendre un autre?"
+    }
+   },
+   {
+    "title": "Le plus grand",
+    "ref": "Matthieu 11:11",
+    "text": "Après son départ, Jésus rend témoignage de lui : parmi ceux qui sont nés de femmes, il n'en a point paru de plus grand."
+   }
+  ],
+  "weakness": "Le doute sous la contrainte. Après avoir désigné l'Agneau de Dieu, le voilà en prison à demander : « Es-tu celui qui doit venir ? » (Matthieu 11:3). Un tempérament de conviction supporte mal l'inaction et le silence : quand les événements ne vont pas comme attendu, la certitude peut vaciller.",
+  "grace": "Jésus ne le reprend pas. Il répond par les œuvres : les aveugles voient, les morts ressuscitent (Matthieu 11:4-5), puis il adresse à Jean une parole tendre : « Heureux celui pour qui je ne serai pas une occasion de chute ! » (11:6). Et il dit de lui qu'il n'y en a pas de plus grand (11:11). La question du doute ne lui retire pas sa place.",
+  "christ": "« Voici l'Agneau de Dieu, qui ôte le péché du monde » (Jean 1:29). Toute sa mission tient là : désigner le Christ. Et sa plus belle phrase est un effacement : « Il faut qu'il croisse, et que je diminue » (3:30). Le plus influent n'est pas la source : il montre celui qui sauve.",
+  "quotes": [
+   {
+    "ref": "Jean 1:29",
+    "text": "Voici l'Agneau de Dieu, qui ôte le péché du monde."
+   },
+   {
+    "ref": "Jean 3:30",
+    "text": "Il faut qu'il croisse, et que je diminue."
+   }
+  ],
+  "question": "Où est-ce que je cherche à croître, alors que je suis appelé à désigner un autre ?",
+  "step": "Cette semaine, orienter vers Christ ou vers une autre personne un mérite qu'on vous attribue."
+ },
+ "BARNABE": {
+  "name": "Barnabé",
+  "aliases": [
+   "Barnabé"
+  ],
+  "reviewed": false,
+  "title": "Le fils d'exhortation qui ouvre les portes",
+  "refs": "Actes 4 ; 9 ; 11 ; 15 ; Galates 2",
+  "profile": {
+   "code": "IS",
+   "solidity": "I : indices nombreux et convergents · S : indices nombreux et convergents",
+   "dimensions": {
+    "I": {
+     "level": 3,
+     "traits": [
+      [
+       "Il encourage",
+       "Son surnom, Barnabas, signifie « fils d'exhortation ».",
+       "Actes 4:36"
+      ],
+      [
+       "Il se réjouit de ce que Dieu fait chez les autres",
+       "À Antioche, « il eut vu la grâce de Dieu, il s'en réjouit, et il les exhorta tous ».",
+       "Actes 11:23"
+      ],
+      [
+       "Il présente et rassemble",
+       "Il prend Saul avec lui, le conduit aux apôtres et raconte son histoire.",
+       "Actes 9:27"
+      ],
+      [
+       "Il donne généreusement",
+       "Il vend un champ et en dépose le prix aux pieds des apôtres.",
+       "Actes 4:37"
+      ]
+     ]
+    },
+    "S": {
+     "level": 3,
+     "traits": [
+      [
+       "Il accueille ceux qui font peur aux autres",
+       "Quand tous craignent Saul, c'est Barnabas qui le prend avec lui.",
+       "Actes 9:26-27"
+      ],
+      [
+       "Il persévère pour une personne",
+       "Il va chercher Saul à Tarse ; plus tard, il veut reprendre Marc, quitte à se séparer de Paul.",
+       "Actes 11:25-26 ; 15:37-39"
+      ],
+      [
+       "Il est stable et reconnu",
+       "« Un homme de bien, plein d'Esprit-Saint et de foi. »",
+       "Actes 11:24"
+      ],
+      [
+       "Il cède à la pression du groupe",
+       "À Antioche, « Barnabas même fut entraîné par leur hypocrisie ».",
+       "Galates 2:13"
+      ]
+     ]
+    }
+   },
+   "absent": [
+    [
+     "Prise de première place (D)",
+     "Il va chercher Saul à Tarse pour partager l'enseignement avec lui (Actes 11:25-26), au lieu de garder la place."
+    ],
+    [
+     "Esprit critique (C)",
+     "Il se laisse entraîner dans la dissimulation de Pierre sans la questionner (Galates 2:13)."
+    ]
+   ],
+   "limits": "Barnabas apparaît dans les Actes et les lettres de Paul, souvent à côté de lui : nous le voyons en partie par les yeux de Paul. Nous repérons des indices, nous ne mesurons rien."
+  },
+  "why": {
+   "I": "Comme lui, vous encouragez, vous présentez les personnes les unes aux autres et vous vous réjouissez de ce que Dieu fait chez elles. Son récit montre le prix de cette bonté : la peur de déplaire.",
+   "S": "Comme lui, vous tenez à vos relations et vous restez fidèle à une personne qu'on ne croit plus. Son récit montre que cette fidélité peut changer une vie.",
+   "default": "Son encouragement et sa fidélité éclairent les tempéraments chaleureux."
+  },
+  "who": "Joseph, surnommé Barnabas, est un Lévite originaire de Chypre. Membre de l'Église de Jérusalem, il est envoyé à Antioche, va chercher Saul à Tarse et part avec lui en mission (Actes 4 ; 9 ; 11 ; 13).",
+  "episodes": [
+   {
+    "title": "Le fils d'exhortation",
+    "ref": "Actes 4:36-37",
+    "tags": [
+     [
+      "I",
+      "encourage"
+     ],
+     [
+      "I",
+      "généreux"
+     ]
+    ],
+    "text": "Les apôtres l'appellent Barnabas. Il vend un champ et en dépose le prix aux pieds des apôtres.",
+    "quote": {
+     "ref": "Actes 4:36",
+     "text": "Joseph, surnommé par les apôtres Barnabas, ce qui signifie fils d'exhortation"
+    }
+   },
+   {
+    "title": "Il prend Saul avec lui",
+    "ref": "Actes 9:26-27",
+    "tags": [
+     [
+      "S",
+      "accueille"
+     ]
+    ],
+    "text": "À Jérusalem, tous craignent Saul et doutent de sa conversion. Barnabas l'amène aux apôtres et raconte comment Saul a vu le Seigneur."
+   },
+   {
+    "title": "La grâce de Dieu à Antioche",
+    "ref": "Actes 11:22-24",
+    "tags": [
+     [
+      "I",
+      "se réjouit"
+     ]
+    ],
+    "text": "Envoyé à Antioche, il voit la grâce de Dieu à l'œuvre, s'en réjouit et exhorte les croyants à rester fermement attachés au Seigneur.",
+    "quote": {
+     "ref": "Actes 11:23",
+     "text": "il eut vu la grâce de Dieu, il s'en réjouit, et il les exhorta tous à rester d'un coeur ferme attachés au Seigneur."
+    }
+   },
+   {
+    "title": "Chercher Saul",
+    "ref": "Actes 11:25-26",
+    "tags": [
+     [
+      "S",
+      "persévère"
+     ]
+    ],
+    "text": "Il se rend à Tarse chercher Saul et l'amène à Antioche. Pendant un an, ils enseignent ensemble beaucoup de personnes : c'est là que les disciples sont appelés chrétiens pour la première fois.",
+    "quote": {
+     "ref": "Actes 11:26",
+     "text": "Ce fut à Antioche que, pour la première fois, les disciples furent appelés chrétiens."
+    }
+   },
+   {
+    "title": "Entraîné par l'hypocrisie",
+    "ref": "Galates 2:11-13",
+    "tags": [
+     [
+      "S",
+      "cède au groupe"
+     ]
+    ],
+    "text": "Quand Pierre s'écarte des chrétiens d'origine païenne par crainte des circoncis, les autres Juifs font de même. Barnabas est lui aussi entraîné."
+   },
+   {
+    "title": "Une seconde chance pour Marc",
+    "ref": "Actes 15:37-39",
+    "tags": [
+     [
+      "S",
+      "fidèle à une personne"
+     ]
+    ],
+    "text": "Barnabas veut reprendre Marc ; Paul refuse, car Marc les avait quittés. Le dissentiment est assez vif pour les séparer."
+   },
+   {
+    "title": "Marc est utile",
+    "ref": "2 Timothée 4:11",
+    "text": "Des années plus tard, Paul demande : « Prends Marc, et amène-le avec toi, car il m'est utile pour le ministère »."
+   }
+  ],
+  "weakness": "La peur de déplaire. À Antioche, « Barnabas même fut entraîné par leur hypocrisie » (Galates 2:13) : porté par le groupe, il ne s'y est pas opposé. Son attachement à Marc le conduit aussi à un dissentiment vif avec Paul (Actes 15:39). Pour ce tempérament, la vigilance : l'envie de préserver les liens peut faire taire la vérité.",
+  "grace": "Barnabas pratique la grâce : il accueille Saul quand tous le craignent, et il donne une seconde chance à Marc, que Paul avait écarté. Les années montrent qu'il avait vu juste : Paul lui-même demande plus tard Marc, « utile pour le ministère » (2 Timothée 4:11). Ce qu'il fait pour les autres, Dieu l'a fait pour lui : sa bonté est une grâce reçue, transmise.",
+  "christ": "À Antioche, Barnabas voit « la grâce de Dieu » et dirige les croyants vers le Seigneur, non vers lui-même (Actes 11:23). Ce fut là que, pour la première fois, les disciples furent appelés « chrétiens » (11:26), du nom du Christ. Son encouragement n'est pas un charisme personnel mais un relais : il pointe vers celui qui donne la grâce.",
+  "quotes": [
+   {
+    "ref": "Actes 11:23",
+    "text": "il eut vu la grâce de Dieu, il s'en réjouit"
+   },
+   {
+    "ref": "2 Timothée 4:11",
+    "text": "Prends Marc, et amène-le avec toi, car il m'est utile pour le ministère."
+   }
+  ],
+  "question": "Qui n'est pas encore accueilli, que je pourrais présenter aux autres ?",
+  "step": "Présenter à deux personnes de confiance quelqu'un que le groupe n'accueille pas encore, en racontant ce que vous avez vu en lui."
+ }
+}
