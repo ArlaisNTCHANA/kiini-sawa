@@ -27,7 +27,7 @@ class SecurityGuardsTest extends WebTestCase
         'app_login', 'app_logout',
         'app_register', 'app_forgot_password', 'app_reset_password', 'app_reset_password_form',
         'app_legal',
-        'app_install', 'app_offline', // application installable
+        'app_install', 'app_offline', 'app_quick', // application installable (le mode rapide : coquille sans donnée personnelle, les données passent par /api/rapide/*)
         'app_referral_link', // lien de parrainage partagé
         'app_shared_result', // résultat de test partagé par son auteur
         'app_feedback_form', // formulaire de feedback envoyé aux proches

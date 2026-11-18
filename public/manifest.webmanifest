@@ -18,6 +18,7 @@
     { "src": "/icons/icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
   ],
   "shortcuts": [
+    { "name": "Aujourd'hui en un geste", "url": "/rapide", "icons": [{ "src": "/icons/icon-192.png", "sizes": "192x192" }] },
     { "name": "Mes rituels", "url": "/mes-plans/rituels", "icons": [{ "src": "/icons/icon-192.png", "sizes": "192x192" }] },
     { "name": "Mon journal", "url": "/journal", "icons": [{ "src": "/icons/icon-192.png", "sizes": "192x192" }] },
     { "name": "Revue de la semaine", "url": "/bilan/revue-hebdomadaire", "icons": [{ "src": "/icons/icon-192.png", "sizes": "192x192" }] }

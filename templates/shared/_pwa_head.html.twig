@@ -9,6 +9,8 @@
     if ('serviceWorker' in navigator) {
         window.addEventListener('load', function () { navigator.serviceWorker.register('/sw.js').catch(function () {}); });
     }
+    // Déconnexion : la copie du mode rapide gardée sur ce téléphone est effacée (appareil partagé)
+    document.addEventListener('click', function (e) { var a = e.target.closest && e.target.closest('a[href$="/logout"], a[href*="/logout?"]'); if (a && window.indexedDB) { try { indexedDB.deleteDatabase('ks-rapide'); } catch (x) {} } });
     // Invitation d'installation (Android, Chrome, Edge) gardée pour le bouton « Installer l'application »
     window.addEventListener('beforeinstallprompt', function (e) { e.preventDefault(); window.ksInstallPrompt = e; document.dispatchEvent(new Event('ks-install-ready')); });
 </script>

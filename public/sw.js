@@ -1,11 +1,15 @@
 /*
  * KIINI SAWA — service worker de l'application installable.
- * - Pages : toujours depuis le réseau (données personnelles, jamais mises en cache) ; hors connexion : page « hors ligne ».
+ * - Pages : toujours depuis le réseau (données personnelles, jamais mises en cache) ; hors connexion : le mode rapide (/rapide, qui
+ *   lit la copie gardée sur le téléphone) pour les écrans du quotidien, sinon la page « hors ligne ».
  * - Fichiers compilés (/assets/…, noms versionnés) et icônes : mis en cache pour un chargement rapide.
  */
-const VERSION = 'ks-v2';
+const VERSION = 'ks-v3';
 const OFFLINE_URL = '/hors-ligne';
-const PRECACHE = [OFFLINE_URL, '/icons/icon-192.png', '/icons/apple-touch-icon.png'];
+// « Aujourd'hui en un geste » : la coquille (sans donnée personnelle) est gardée pour fonctionner sans réseau
+const QUICK_URL = '/rapide';
+const QUICK_FALLBACK = ['/dashboard', '/mes-plans/rituels', '/journal', '/bilan/du-jour', QUICK_URL];
+const PRECACHE = [OFFLINE_URL, QUICK_URL, '/icons/icon-192.png', '/icons/apple-touch-icon.png'];
 
 self.addEventListener('install', (event) => {
   event.waitUntil(caches.open(VERSION).then((cache) => cache.addAll(PRECACHE)).then(() => self.skipWaiting()));
@@ -25,9 +29,18 @@ self.addEventListener('fetch', (event) => {
   const url = new URL(request.url);
   if (url.origin !== self.location.origin) return;
 
-  // Navigation : réseau d'abord, page hors ligne si pas de connexion
+  // Navigation : réseau d'abord ; sans réseau, le mode rapide pour les écrans du quotidien, sinon la page hors ligne
   if (request.mode === 'navigate') {
-    event.respondWith(fetch(request).catch(() => caches.match(OFFLINE_URL)));
+    event.respondWith(
+      fetch(request).then((response) => {
+        // La coquille du mode rapide est rafraîchie à chaque visite (elle ne contient aucune donnée personnelle)
+        if (url.pathname === QUICK_URL && response.ok) {
+          const copy = response.clone();
+          caches.open(VERSION).then((cache) => cache.put(QUICK_URL, copy));
+        }
+        return response;
+      }).catch(() => caches.match(QUICK_FALLBACK.includes(url.pathname) ? QUICK_URL : OFFLINE_URL).then((r) => r || caches.match(OFFLINE_URL)))
+    );
     return;
   }
 

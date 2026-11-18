@@ -459,3 +459,10 @@ phrase courte), fichiers JSON nettoyés, nouveau `08-…json`. Pagination PDF co
 - La conversion de la vitrine a été faite par script puis comparée au rendu d'origine (HTML identique) ; les codes sont `vitrine.sN.NN` (N = section, ordre), stables tant qu'on n'en réutilise pas.
 - Migration `Version20261118194935` (tables `site_text`, `site_text_version`) : à jouer en production (le déploiement le fait).
 - Reste (phases 2 à 4) : textes écrits en PHP, emails/notifications et reçus, livre, et brouillon/publication pour les textes des tests.
+
+## 18/11/2026 — PWA : « Aujourd'hui en un geste » hors connexion (étape 1)
+- Demande : améliorer l'application installable avant de lancer l'application native (qui réutilisera l'API). Détail et règles dans `docs/modules/rapide.md`.
+- Page `/rapide` + `GET /api/rapide/aujourdhui` + `POST /api/rapide/sync` : rituels, bilan du jour, journal, prochaine étape ; saisies faites hors ligne gardées dans IndexedDB puis envoyées sans doublon (`sync_operation`, migration `Version20261118203319`). Service worker v3 : garde la coquille, renvoie les écrans du quotidien vers `/rapide` hors connexion. Lien dans le menu mobile, raccourci du manifeste, page « hors ligne » qui y mène.
+- Vérifié dans le navigateur : saisie hors ligne simulée → rechargement → envoi automatique. **Reste à vérifier sur un vrai téléphone** (iPhone : installer sur l'écran d'accueil ; couper le réseau ; cocher un rituel ; rétablir).
+- Piège de test : `createUser` laisse la collection `habits` vide en mémoire ; vider l'EM (`clear()`) avant la requête. Et `DailyLog` est dans `App\PlanDHygiene\Entity` (l'import erroné a été commis deux fois).
+- Reste (étapes suivantes de la PWA) : lecture hors ligne des plans et du journal complet, revues de la semaine et du mois hors ligne, notifications iPhone à vérifier sur appareil.

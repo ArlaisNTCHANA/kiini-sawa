@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+{# Mode rapide : la coquille est identique pour tout le monde (aucune donnée personnelle dans cette page) ; les données viennent de
+   /api/rapide/* ou de la copie gardée sur le téléphone (IndexedDB). Voir src/Rapide/Controller/QuickDayController.php. #}
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ t('rapide.titre_page', 'Aujourd\'hui en un geste') }} — KIINI SAWA</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="robots" content="noindex">
+    <meta name="theme-color" content="#2E6B53">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    {% include 'shared/_pwa_head.html.twig' %}
+    <style>
+        :root { --primary: #2E6B53; --primary-dark: #1F4D3A; --gold: #C8962E; --bg: #F6F5F0; --card: #fff; --fg: #1e293b; --muted: #64748b; --border: #e2e8f0; --ok: #16A34A; --warn: #B45309; }
+        * { box-sizing: border-box; }
+        body { margin: 0; background: var(--bg); color: var(--fg); font-family: 'Inter', -apple-system, 'Segoe UI', Arial, sans-serif; line-height: 1.5; padding: env(safe-area-inset-top) 0 calc(2rem + env(safe-area-inset-bottom)); }
+        main { max-width: 560px; margin: 0 auto; padding: 1rem 1rem 2rem; }
+        h1, h2 { font-family: 'Playfair Display', Georgia, serif; margin: 0; }
+        h1 { font-size: 1.7rem; color: var(--primary-dark); }
+        h2 { font-size: 1.15rem; margin-bottom: .6rem; }
+        .top { display: flex; flex-direction: column; align-items: flex-start; gap: .5rem; margin-bottom: 1rem; }
+        .sub { color: var(--muted); font-size: .9rem; margin: .15rem 0 0; }
+        .status { font-size: .75rem; font-weight: 700; padding: .25rem .65rem; border-radius: 999px; white-space: nowrap; background: #ECFDF3; color: #166534; }
+        .status.off { background: #FEF3C7; color: var(--warn); }
+        .banner { background: #FEF2F2; color: #991B1B; border-radius: 12px; padding: .75rem 1rem; margin-bottom: 1rem; font-size: .9rem; }
+        .banner a { color: inherit; font-weight: 700; }
+        .card { background: var(--card); border-radius: 18px; padding: 1.1rem; margin-bottom: 1rem; box-shadow: 0 6px 20px rgba(15, 23, 42, .05); }
+        .next { border-left: 5px solid var(--gold); }
+        .next .eyebrow { font-size: .7rem; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+        .next a { display: inline-block; margin-top: .6rem; padding: .6rem 1rem; border-radius: 12px; background: var(--primary); color: #fff; font-weight: 700; text-decoration: none; }
+        .habit { display: flex; align-items: center; gap: .85rem; width: 100%; padding: .85rem .5rem; border: 0; border-top: 1px solid var(--border); background: transparent; font: inherit; color: inherit; text-align: left; cursor: pointer; min-height: 56px; }
+        .habit:first-of-type { border-top: 0; }
+        .box { flex: none; width: 1.9rem; height: 1.9rem; border-radius: 10px; border: 2px solid var(--border); display: flex; align-items: center; justify-content: center; font-weight: 800; color: #fff; }
+        .habit[aria-checked="true"] .box { background: var(--ok); border-color: var(--ok); }
+        .habit[aria-checked="true"] .name { color: var(--muted); text-decoration: line-through; }
+        .tag { margin-left: auto; font-size: .7rem; color: var(--muted); }
+        .chips { display: flex; gap: .4rem; flex-wrap: wrap; margin: .25rem 0 .9rem; }
+        .chip { min-width: 2.6rem; min-height: 2.6rem; padding: 0 .8rem; border-radius: 12px; border: 2px solid var(--border); background: #fff; font: inherit; font-weight: 700; cursor: pointer; }
+        .chip[aria-pressed="true"] { border-color: var(--primary); background: #E9F1EC; color: var(--primary-dark); }
+        label.l { display: block; font-size: .75rem; font-weight: 800; letter-spacing: .05em; text-transform: uppercase; color: var(--muted); margin-bottom: .25rem; }
+        input[type=text], textarea, select { width: 100%; font: inherit; padding: .7rem .8rem; border: 2px solid var(--border); border-radius: 12px; background: #fff; color: inherit; margin-bottom: .9rem; }
+        textarea { min-height: 5.5rem; resize: vertical; }
+        .btn { display: inline-flex; align-items: center; justify-content: center; min-height: 48px; padding: 0 1.2rem; border-radius: 12px; border: 0; background: var(--primary); color: #fff; font: inherit; font-weight: 700; cursor: pointer; }
+        .btn:disabled { opacity: .5; }
+        .entry { border-top: 1px solid var(--border); padding: .7rem 0; font-size: .92rem; }
+        .entry small { color: var(--muted); }
+        .pending { color: var(--warn); font-weight: 700; font-size: .75rem; }
+        .empty { color: var(--muted); font-size: .92rem; }
+        .foot { text-align: center; font-size: .85rem; margin-top: 1.25rem; }
+        .foot a { color: var(--primary); font-weight: 600; }
+        .saved { color: var(--ok); font-weight: 700; font-size: .85rem; margin-left: .6rem; }
+    </style>
+</head>
+<body>
+<main id="app" aria-live="polite">
+    <p class="empty">{{ t('rapide.chargement', 'Chargement…') }}</p>
+</main>
+<script>
+(function () {
+    'use strict';
+    var L = {{ {
+        hello: t('rapide.bonjour', 'Bonjour {name}'),
+        subtitle: t('rapide.sous_titre', 'L\'essentiel du jour, même sans réseau.'),
+        online: t('rapide.etat_ok', 'À jour'),
+        syncing: t('rapide.etat_envoi', 'Envoi…'),
+        offline: t('rapide.etat_hors_ligne', 'Hors connexion'),
+        pending: t('rapide.en_attente', '{n} en attente d\'envoi'),
+        login: t('rapide.reconnexion', 'Votre connexion a expiré. Reconnectez-vous pour envoyer vos saisies (elles sont gardées sur ce téléphone).'),
+        loginBtn: t('rapide.se_connecter', 'Se connecter'),
+        first: t('rapide.premiere_fois', 'Ouvrez cette page une première fois avec du réseau, connecté à votre compte : elle sera ensuite disponible hors connexion.'),
+        stale: t('rapide.donnees_du', 'Données du {date}'),
+        habits: t('rapide.rituels', 'Mes rituels'),
+        noHabits: t('rapide.aucun_rituel', 'Aucun rituel pour le moment. Créez-en depuis l\'application.'),
+        review: t('rapide.bilan', 'Mon bilan du jour'),
+        intention: t('rapide.intention', 'Mon intention du jour'),
+        kept: t('rapide.intention_tenue', 'Je l\'ai tenue ?'),
+        yes: t('rapide.oui', 'Oui'),
+        no: t('rapide.non', 'Non'),
+        energy: t('rapide.energie', 'Énergie'),
+        mood: t('rapide.humeur', 'Humeur'),
+        stress: t('rapide.stress', 'Stress'),
+        gratitude: t('rapide.gratitude', 'Un motif de gratitude'),
+        saveReview: t('rapide.enregistrer_bilan', 'Enregistrer mon bilan'),
+        journal: t('rapide.journal', 'Journal'),
+        journalPh: t('rapide.journal_ph', 'Une pensée, une idée, une victoire…'),
+        add: t('rapide.ajouter', 'Ajouter'),
+        saved: t('rapide.enregistre', 'Enregistré'),
+        recent: t('rapide.recent', 'Récemment'),
+        open: t('rapide.ouvrir_app', 'Ouvrir l\'application complète'),
+        weekly: t('rapide.cette_semaine', 'cette semaine'),
+        monthly: t('rapide.ce_mois', 'ce mois-ci'),
+        types: journalTypes
+    }|json_encode(constant('JSON_HEX_TAG') b-or constant('JSON_HEX_AMP'))|raw }};
+
+    // ── Stockage local (IndexedDB) ────────────────────────────────────────────
+    var DB = 'ks-rapide';
+    function idb() {
+        return new Promise(function (ok, ko) {
+            var r = indexedDB.open(DB, 1);
+            r.onupgradeneeded = function () { r.result.createObjectStore('kv'); };
+            r.onsuccess = function () { ok(r.result); };
+            r.onerror = function () { ko(r.error); };
+        });
+    }
+    function kvGet(k) {
+        return idb().then(function (db) { return new Promise(function (ok) { var q = db.transaction('kv').objectStore('kv').get(k); q.onsuccess = function () { ok(q.result); }; q.onerror = function () { ok(undefined); }; }); }).catch(function () { return undefined; });
+    }
+    function kvSet(k, v) {
+        return idb().then(function (db) { return new Promise(function (ok) { var t = db.transaction('kv', 'readwrite'); t.objectStore('kv').put(v, k); t.oncomplete = ok; t.onerror = ok; }); }).catch(function () {});
+    }
+
+    // ── État ─────────────────────────────────────────────────────────────────
+    var S = { snap: null, queue: [], syncing: false, auth: true, form: { kept: null, energy: null, mood: null, stress: null }, formFor: null, savedMsg: false };
+    var root = document.getElementById('app');
+
+    function today() { var d = new Date(); return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0'); }
+    function uid() { return (window.crypto && crypto.randomUUID) ? crypto.randomUUID() : 'u' + Date.now().toString(36) + Math.random().toString(36).slice(2, 10); }
+    function clone(o) { return JSON.parse(JSON.stringify(o)); }
+
+    /** L'état affiché : la copie du serveur + les saisies pas encore envoyées (affichées tout de suite). */
+    function view() {
+        if (!S.snap) return null;
+        var v = clone(S.snap);
+        S.queue.forEach(function (op) {
+            if (op.type === 'habit.log') { v.habits.forEach(function (h) { if (h.id === op.habit) h.done = op.status; }); }
+            if (op.type === 'review.save') { v.review = { intention: op.intention || (v.review && v.review.intention) || '', kept: op.kept, energy: op.energy, mood: op.mood, stress: op.stress, gratitude: op.gratitude }; }
+            if (op.type === 'journal.add') { v.journal.unshift({ id: null, text: op.content, type: op.entryType, at: op.at, pending: true }); }
+        });
+        return v;
+    }
+
+    function persist() { return Promise.all([kvSet('queue', S.queue), kvSet('snap', S.snap)]); }
+    function enqueue(op, coalesce) {
+        op.uid = uid(); op.date = today(); op.at = new Date().toISOString();
+        if (coalesce) { S.queue = S.queue.filter(function (o) { return !(o.type === op.type && o.date === op.date && coalesce(o, op)); }); }
+        S.queue.push(op);
+        persist().then(function () { render(); sync(); });
+    }
+
+    // ── Envoi et lecture ─────────────────────────────────────────────────────
+    function handle(res) {
+        if (res.status === 401 || res.redirected || !/json/.test(res.headers.get('content-type') || '')) { S.auth = false; throw new Error('auth'); }
+        S.auth = true;
+        return res.json();
+    }
+    function sync() {
+        if (S.syncing || !navigator.onLine) return Promise.resolve();
+        S.syncing = true; render();
+        var p = S.queue.length
+            ? fetch('/api/rapide/sync', { method: 'POST', credentials: 'same-origin', headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' }, body: JSON.stringify({ ops: S.queue }) }).then(handle).then(function (d) {
+                var done = d.results || {};
+                S.queue = S.queue.filter(function (o) { return !(o.uid in done); });
+                S.snap = d.snapshot;
+            })
+            : fetch('/api/rapide/aujourdhui', { credentials: 'same-origin', headers: { 'Accept': 'application/json' } }).then(handle).then(function (d) { S.snap = d; });
+        return p.catch(function () {}).then(function () { S.syncing = false; return persist(); }).then(render);
+    }
+
+    // ── Affichage (textContent uniquement : aucune donnée n'est insérée comme HTML) ──
+    function el(tag, attrs, kids) {
+        var e = document.createElement(tag);
+        Object.keys(attrs || {}).forEach(function (k) {
+            if (k === 'text') e.textContent = attrs[k];
+            else if (k.indexOf('on') === 0) e.addEventListener(k.slice(2), attrs[k]);
+            else e.setAttribute(k, attrs[k]);
+        });
+        (kids || []).forEach(function (c) { if (c) e.appendChild(c); });
+        return e;
+    }
+    function fmtDate(s) { try { return new Date(s + 'T12:00:00').toLocaleDateString('fr-FR', { day: 'numeric', month: 'long' }); } catch (e) { return s; } }
+
+    function chips(name, value, set) {
+        var wrap = el('div', { class: 'chips', role: 'group', 'aria-label': name });
+        [1, 2, 3, 4, 5].forEach(function (n) {
+            wrap.appendChild(el('button', { type: 'button', class: 'chip', 'aria-pressed': String(value === n), text: String(n), onclick: function () { set(value === n ? null : n); } }));
+        });
+        return wrap;
+    }
+
+    function render() {
+        var v = view();
+        var scroll = window.scrollY;
+        var keep = {};
+        ['intention', 'gratitude', 'entry'].forEach(function (id) { var f = document.getElementById(id); if (f) keep[id] = f.value; });
+        root.textContent = '';
+        var off = !navigator.onLine;
+        var status = el('span', { class: 'status' + (off || S.queue.length ? ' off' : ''), text: off ? L.offline + (S.queue.length ? ' · ' + L.pending.replace('{n}', S.queue.length) : '') : (S.syncing ? L.syncing : (S.queue.length ? L.pending.replace('{n}', S.queue.length) : L.online)) });
+        root.appendChild(el('div', { class: 'top' }, [el('div', {}, [el('h1', { text: v ? L.hello.replace('{name}', v.name) : 'KIINI SAWA' }), el('p', { class: 'sub', text: L.subtitle })]), status]));
+
+        if (!S.auth) {
+            root.appendChild(el('div', { class: 'banner' }, [document.createTextNode(L.login + ' '), el('a', { href: '/login', text: L.loginBtn })]));
+        }
+        if (!v) {
+            root.appendChild(el('p', { class: 'empty', text: L.first }));
+            root.appendChild(el('p', { class: 'foot' }, [el('a', { href: '/login', text: L.loginBtn })]));
+            return;
+        }
+        if (v.date !== today()) {
+            root.appendChild(el('p', { class: 'sub', text: L.stale.replace('{date}', fmtDate(v.date)) }));
+        }
+
+        // Prochaine étape
+        root.appendChild(el('section', { class: 'card next' }, [el('div', { class: 'eyebrow', text: v.next.eyebrow }), el('h2', { text: v.next.title }), el('p', { class: 'sub', text: v.next.text }), off ? null : el('a', { href: v.next.url, text: v.next.cta })]));
+
+        // Rituels
+        var hs = el('section', { class: 'card' }, [el('h2', { text: L.habits })]);
+        if (!v.habits.length) hs.appendChild(el('p', { class: 'empty', text: L.noHabits }));
+        v.habits.forEach(function (h) {
+            var tag = h.frequency === 'WEEKLY' ? L.weekly : (h.frequency === 'MONTHLY' ? L.monthly : '');
+            hs.appendChild(el('button', { type: 'button', class: 'habit', role: 'checkbox', 'aria-checked': String(h.done), onclick: function () {
+                enqueue({ type: 'habit.log', habit: h.id, status: !h.done }, function (o, n) { return o.habit === n.habit; });
+            } }, [el('span', { class: 'box', text: h.done ? '✓' : '' }), el('span', { class: 'name', text: h.title }), tag ? el('span', { class: 'tag', text: tag }) : null]));
+        });
+        root.appendChild(hs);
+
+        // Bilan du jour
+        if (S.formFor !== v.date) { var r = v.review || {}; S.form = { kept: r.kept === undefined ? null : r.kept, energy: r.energy || null, mood: r.mood || null, stress: r.stress || null }; S.formFor = v.date; }
+        var rv = el('section', { class: 'card' }, [el('h2', { text: L.review })]);
+        rv.appendChild(el('label', { class: 'l', for: 'intention', text: L.intention }));
+        rv.appendChild(el('input', { type: 'text', id: 'intention', maxlength: '255', value: (keep.intention !== undefined ? keep.intention : (v.review && v.review.intention) || '') }));
+        rv.appendChild(el('label', { class: 'l', text: L.kept }));
+        var kw = el('div', { class: 'chips', role: 'group' });
+        [[true, L.yes], [false, L.no]].forEach(function (o) { kw.appendChild(el('button', { type: 'button', class: 'chip', 'aria-pressed': String(S.form.kept === o[0]), text: o[1], onclick: function () { S.form.kept = S.form.kept === o[0] ? null : o[0]; render(); } })); });
+        rv.appendChild(kw);
+        [['energy', L.energy], ['mood', L.mood], ['stress', L.stress]].forEach(function (f) {
+            rv.appendChild(el('label', { class: 'l', text: f[1] }));
+            rv.appendChild(chips(f[1], S.form[f[0]], function (n) { S.form[f[0]] = n; render(); }));
+        });
+        rv.appendChild(el('label', { class: 'l', for: 'gratitude', text: L.gratitude }));
+        var g = el('textarea', { id: 'gratitude', maxlength: '2000' }); g.value = keep.gratitude !== undefined ? keep.gratitude : ((v.review && v.review.gratitude) || '');
+        rv.appendChild(g);
+        rv.appendChild(el('button', { type: 'button', class: 'btn', text: L.saveReview, onclick: function () {
+            enqueue({ type: 'review.save', intention: document.getElementById('intention').value, kept: S.form.kept, energy: S.form.energy, mood: S.form.mood, stress: S.form.stress, gratitude: document.getElementById('gratitude').value }, function () { return true; });
+            S.savedMsg = true; setTimeout(function () { S.savedMsg = false; render(); }, 2500);
+        } }));
+        if (S.savedMsg) rv.appendChild(el('span', { class: 'saved', text: '✓ ' + L.saved }));
+        root.appendChild(rv);
+
+        // Journal
+        var jn = el('section', { class: 'card' }, [el('h2', { text: L.journal })]);
+        var ta = el('textarea', { id: 'entry', placeholder: L.journalPh, maxlength: '5000' }); ta.value = keep.entry || '';
+        var sel = el('select', { id: 'entryType', 'aria-label': L.journal });
+        Object.keys(L.types).forEach(function (k) { sel.appendChild(el('option', { value: k, text: L.types[k] })); });
+        jn.appendChild(ta); jn.appendChild(sel);
+        jn.appendChild(el('button', { type: 'button', class: 'btn', text: L.add, onclick: function () {
+            var text = document.getElementById('entry').value.trim();
+            if (!text) return;
+            enqueue({ type: 'journal.add', content: text, entryType: document.getElementById('entryType').value });
+            document.getElementById('entry').value = '';
+        } }));
+        if (v.journal.length) {
+            jn.appendChild(el('h2', { text: L.recent, style: 'margin-top:1rem;font-size:1rem' }));
+            v.journal.forEach(function (n) {
+                jn.appendChild(el('div', { class: 'entry' }, [el('small', { text: (L.types[n.type] || '') + (n.at ? ' · ' + new Date(n.at).toLocaleDateString('fr-FR', { day: 'numeric', month: 'short' }) : '') + ' ' }), n.pending ? el('span', { class: 'pending', text: '· ' + L.pending.replace('{n}', 1) }) : null, el('div', { text: n.text })]));
+            });
+        }
+        root.appendChild(jn);
+        root.appendChild(el('p', { class: 'foot' }, [off ? null : el('a', { href: '/dashboard', text: L.open })]));
+        window.scrollTo(0, scroll);
+    }
+
+    // ── Démarrage ────────────────────────────────────────────────────────────
+    window.addEventListener('online', function () { sync(); });
+    window.addEventListener('offline', render);
+    document.addEventListener('visibilitychange', function () { if (document.visibilityState === 'visible') sync(); });
+    Promise.all([kvGet('snap'), kvGet('queue')]).then(function (r) {
+        S.snap = r[0] || null; S.queue = Array.isArray(r[1]) ? r[1] : [];
+        render();
+        return sync();
+    });
+})();
+</script>
+</body>
+</html>

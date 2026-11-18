@@ -607,6 +607,7 @@
                         {% endfor %}
                         <p class="ks-sheet__title">Mon compte</p>
                         <div class="ks-sheet__grid">
+                            <a href="{{ path('app_quick') }}" class="ks-sheet__link" @click="o = false"><i data-lucide="zap"></i>Aujourd'hui en un geste</a>
                             <a href="{{ path('app_profile') }}" class="ks-sheet__link" @click="o = false"><i data-lucide="user"></i>Mon profil</a>
                             <a href="{{ path('app_notifications') }}" class="ks-sheet__link" @click="o = false"><i data-lucide="bell"></i>Notifications{{ unread_notifications() ? ' (' ~ unread_notifications() ~ ')' }}</a>
                             <a href="{{ path('app_subscription') }}" class="ks-sheet__link" @click="o = false"><i data-lucide="crown"></i>{{ is_pro() ? (is_trialing() ? 'Essai PRO' : 'Mon abonnement') : 'Passer à PRO' }}</a>
