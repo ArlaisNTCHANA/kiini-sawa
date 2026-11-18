@@ -1,0 +1,1027 @@
+{
+ "NICODEME": {
+  "name": "Nicodème",
+  "aliases": [
+   "Nicodème"
+  ],
+  "relecture": "en cours",
+  "title": "Le docteur qui pose ses questions de nuit, et qui reste jusqu'à la croix",
+  "refs": "Jean 3 ; 7 ; 19",
+  "profile": {
+   "code": "C",
+   "solidity": "Indices clairs et convergents (trois scènes)",
+   "dimensions": {
+    "C": {
+     "level": 3,
+     "traits": [
+      [
+       "Il veut comprendre avant de s'engager",
+       "« Comment un homme peut-il naître quand il est vieux ? » ; puis : « Comment cela peut-il se faire ? »",
+       "Jean 3:4, 9"
+      ],
+      [
+       "Il examine dans les formes",
+       "Devant ses collègues : « Notre loi condamne-t-elle un homme avant qu'on l'entende et qu'on sache ce qu'il a fait ? »",
+       "Jean 7:51"
+      ],
+      [
+       "Il avance avec prudence",
+       "Il vient « de nuit » auprès de Jésus, loin des regards.",
+       "Jean 3:2"
+      ],
+      [
+       "Il fait les choses avec soin",
+       "Il apporte « environ cent livres de myrrhe et d'aloès » pour ensevelir Jésus « comme c'est la coutume ».",
+       "Jean 19:39-40"
+      ]
+     ]
+    }
+   },
+   "absent": [
+    [
+     "Prise de position publique (D)",
+     "Au conseil, il plaide pour la procédure, non pour Jésus ; on ne l'entend pas affirmer sa foi (Jean 7:51)."
+    ],
+    [
+     "Recherche de la scène (I)",
+     "Il vient de nuit, parle peu, et s'efface aussitôt (Jean 3:2)."
+    ]
+   ],
+   "limits": "Nicodème n'apparaît que dans trois scènes de l'évangile de Jean, mais elles vont toutes dans le même sens. Nous repérons des indices, nous ne mesurons rien."
+  },
+  "why": {
+   "C": "Comme lui, vous voulez comprendre avant de suivre, vous respectez les règles et vous avancez avec prudence. Son récit montre que ce chemin lent peut mener jusqu'à un engagement entier.",
+   "default": "Ses questions et sa prudence éclairent les tempéraments analytiques."
+  },
+  "who": "Nicodème est un pharisien, « un chef des Juifs » (Jean 3:1), membre du conseil. Il va trouver Jésus de nuit, le défend ensuite devant ses collègues, puis apporte les aromates pour l'ensevelir.",
+  "episodes": [
+   {
+    "title": "De nuit",
+    "ref": "Jean 3:1-2",
+    "tags": [
+     [
+      "C",
+      "prudence"
+     ]
+    ],
+    "text": "Un pharisien instruit vient trouver Jésus, de nuit, et commence par reconnaître : personne ne peut faire ces signes si Dieu n'est avec lui.",
+    "quote": {
+     "ref": "Jean 3:2",
+     "text": "Rabbi, nous savons que tu es un docteur venu de Dieu"
+    }
+   },
+   {
+    "title": "Naître de nouveau",
+    "ref": "Jean 3:3-8",
+    "tags": [
+     [
+      "C",
+      "pose la question"
+     ]
+    ],
+    "text": "Jésus lui dit qu'il faut naître de nouveau pour voir le royaume de Dieu. Nicodème s'étonne et demande comment : on ne rentre pas dans le sein de sa mère.",
+    "quote": {
+     "ref": "Jean 3:4",
+     "text": "Comment un homme peut-il naître quand il est vieux?"
+    }
+   },
+   {
+    "title": "Comment cela peut-il se faire ?",
+    "ref": "Jean 3:9-10",
+    "tags": [
+     [
+      "C",
+      "veut comprendre"
+     ]
+    ],
+    "text": "Il insiste. Jésus lui répond : « Tu es le docteur d'Israël, et tu ne sais pas ces choses ! » Il est repris sur ce qu'il croyait maîtriser."
+   },
+   {
+    "title": "La loi et la procédure",
+    "ref": "Jean 7:50-52",
+    "tags": [
+     [
+      "C",
+      "respect de la procédure"
+     ]
+    ],
+    "text": "Au conseil, les pharisiens veulent condamner Jésus. Nicodème rappelle la loi : on doit entendre un homme avant de le juger. On lui répond avec mépris : « Es-tu aussi Galiléen ? »",
+    "quote": {
+     "ref": "Jean 7:51",
+     "text": "Notre loi condamne-t-elle un homme avant qu'on l'entende et qu'on sache ce qu'il a fait?"
+    }
+   },
+   {
+    "title": "Les aromates",
+    "ref": "Jean 19:38-40",
+    "tags": [
+     [
+      "C",
+      "soin"
+     ]
+    ],
+    "text": "Après la mort de Jésus, Nicodème vient avec Joseph d'Arimathée. Il apporte une quantité considérable de myrrhe et d'aloès, et ils ensevelissent le corps selon la coutume.",
+    "quote": {
+     "ref": "Jean 19:39",
+     "text": "vint aussi, apportant un mélange d'environ cent livres de myrrhe et d'aloès"
+    }
+   }
+  ],
+  "weakness": "La prudence qui retarde l'engagement. Il vient « de nuit » (Jean 3:2), et devant le conseil sa défense reste procédurale (7:51) : il ne dit pas « je crois ». Pour ce tempérament, la vigilance : vouloir tout comprendre et tout vérifier avant de se montrer peut retarder ce que le cœur a déjà reconnu.",
+  "grace": "Jésus ne le chasse pas et ne se moque pas de ses questions : il lui explique, longuement. Et il lui dit que la nouvelle naissance n'est pas quelque chose que l'on obtient en comprenant ou en méritant : on y est conduit par « l'Esprit » (Jean 3:5-8). Nicodème ne peut pas se la donner, comme personne ne peut naître de sa propre décision.",
+  "christ": "Jésus lui dit : « comme Moïse éleva le serpent dans le désert, il faut de même que le Fils de l'homme soit élevé, afin que quiconque croit en lui ait la vie éternelle » (Jean 3:14-15). Et c'est près de la croix, où le Fils de l'homme est élevé, que Nicodème réapparaît (19:39). Celui qui voulait comprendre est devant la réponse : « Dieu a tant aimé le monde qu'il a donné son Fils unique » (3:16).",
+  "quotes": [
+   {
+    "ref": "Jean 3:3",
+    "text": "si un homme ne naît de nouveau, il ne peut voir le royaume de Dieu"
+   },
+   {
+    "ref": "Jean 3:16",
+    "text": "Car Dieu a tant aimé le monde qu'il a donné son Fils unique, afin que quiconque croit en lui ne périsse point, mais qu'il ait la vie éternelle."
+   }
+  ],
+  "question": "Qu'est-ce que j'ai déjà compris dans mon cœur, mais que je retarde en voulant tout vérifier ?",
+  "step": "Dire à une personne de confiance, cette semaine, une conviction que vous gardiez pour vous, sans attendre d'avoir toutes les réponses."
+ },
+ "AQUILAS_PRISCILLE": {
+  "name": "Aquilas et Priscille",
+  "aliases": [
+   "Aquilas et Priscille"
+  ],
+  "relecture": "en cours",
+  "title": "Le couple qui accueille, qui explique avec exactitude, et qui s'expose",
+  "refs": "Actes 18 ; Romains 16 ; 1 Corinthiens 16 ; 2 Timothée 4",
+  "profile": {
+   "code": "CI",
+   "solidity": "C : indices réels · I : indices nombreux et convergents",
+   "dimensions": {
+    "C": {
+     "level": 2,
+     "traits": [
+      [
+       "Ils expliquent avec exactitude",
+       "Ils exposent à Apollos « plus exactement la voie de Dieu ».",
+       "Actes 18:26"
+      ],
+      [
+       "Ils corrigent avec tact",
+       "Ils « le prirent avec eux » : ils ne le reprennent pas en public.",
+       "Actes 18:26"
+      ],
+      [
+       "Ils tiennent dans la durée",
+       "On les retrouve à Corinthe, à Éphèse, à Rome, puis de nouveau à Éphèse.",
+       "Actes 18:2, 19 ; Romains 16:3 ; 2 Timothée 4:19"
+      ]
+     ]
+    },
+    "I": {
+     "level": 3,
+     "traits": [
+      [
+       "Ils accueillent",
+       "Paul « demeura chez eux et y travailla : ils étaient faiseurs de tentes ».",
+       "Actes 18:3"
+      ],
+      [
+       "Ils ouvrent leur maison à l'Église",
+       "« L'Église qui est dans leur maison. »",
+       "Romains 16:5 ; 1 Corinthiens 16:19"
+      ],
+      [
+       "Ils sont chaleureux",
+       "Ils « vous saluent beaucoup dans le Seigneur ».",
+       "1 Corinthiens 16:19"
+      ],
+      [
+       "Ils se dévouent jusqu'au risque",
+       "Ils « ont exposé leur tête pour sauver ma vie » ; toutes les Églises des païens leur rendent grâces.",
+       "Romains 16:4"
+      ]
+     ]
+    }
+   },
+   "absent": [
+    [
+     "Prise de commandement (D)",
+     "Ils soutiennent la mission de Paul et d'Apollos sans la diriger."
+    ],
+    [
+     "Recherche de la scène (I)",
+     "Même leur geste le plus marquant, corriger Apollos, se fait à l'écart (Actes 18:26)."
+    ]
+   ],
+   "limits": "Il s'agit d'un couple : le texte ne permet pas de séparer le tempérament de chacun. Les indices viennent de quatre livres, et ils convergent, mais C repose sur des indices moins nombreux que I. Nous repérons des indices, nous ne mesurons rien."
+  },
+  "why": {
+   "C": "Comme eux, vous tenez à ce que ce qu'on enseigne soit exact, et vous savez le dire sans humilier. Leur récit montre l'exactitude au service d'une personne.",
+   "I": "Comme eux, vous ouvrez votre maison, vous êtes chaleureux et vous vous donnez pour les autres. Leur récit montre que cette chaleur fait vivre l'Église.",
+   "default": "Leur accueil et leur justesse éclairent les tempéraments à la fois exacts et chaleureux."
+  },
+  "who": "Aquilas, Juif originaire du Pont, et sa femme Priscille (Prisca) ont dû quitter Rome sur ordre de l'empereur Claude. À Corinthe, ils rencontrent Paul, qui partage leur métier de faiseur de tentes. Ils le suivent à Éphèse et l'aident dans son œuvre (Actes 18:1-3, 18-19).",
+  "episodes": [
+   {
+    "title": "Faiseurs de tentes",
+    "ref": "Actes 18:1-3",
+    "tags": [
+     [
+      "I",
+      "accueillent"
+     ]
+    ],
+    "text": "À Corinthe, Paul les rencontre. Il se lie avec eux, demeure chez eux et travaille avec eux.",
+    "quote": {
+     "ref": "Actes 18:3",
+     "text": "il demeura chez eux et y travailla: ils étaient faiseurs de tentes"
+    }
+   },
+   {
+    "title": "À Éphèse",
+    "ref": "Actes 18:18-19",
+    "tags": [
+     [
+      "I",
+      "compagnons de route"
+     ]
+    ],
+    "text": "Ils partent avec Paul pour Éphèse, où Paul les laisse pour poursuivre sa route : ils deviennent des relais sur place."
+   },
+   {
+    "title": "Apollos pris à part",
+    "ref": "Actes 18:24-26",
+    "tags": [
+     [
+      "C",
+      "exactitude"
+     ],
+     [
+      "C",
+      "tact"
+     ]
+    ],
+    "text": "Apollos enseigne à Éphèse avec ferveur et exactitude, mais ne connaît que le baptême de Jean. Priscille et Aquilas l'entendent, le prennent avec eux et lui exposent plus exactement la voie de Dieu.",
+    "quote": {
+     "ref": "Actes 18:26",
+     "text": "Aquilas et Priscille, l'ayant entendu, le prirent avec eux, et lui exposèrent plus exactement la voie de Dieu."
+    }
+   },
+   {
+    "title": "Exposer leur tête",
+    "ref": "Romains 16:3-4",
+    "tags": [
+     [
+      "I",
+      "se dévouent"
+     ]
+    ],
+    "text": "Paul leur envoie ses salutations depuis Corinthe : ils sont ses compagnons d'œuvre en Jésus-Christ, et ils ont risqué leur vie pour lui.",
+    "quote": {
+     "ref": "Romains 16:3-4",
+     "text": "Saluez Prisca et Aquilas, mes compagnons d'oeuvre en Jésus-Christ, qui ont exposé leur tête pour sauver ma vie"
+    }
+   },
+   {
+    "title": "L'Église dans leur maison",
+    "ref": "Romains 16:5 ; 1 Corinthiens 16:19",
+    "tags": [
+     [
+      "I",
+      "ouvrent leur maison"
+     ]
+    ],
+    "text": "À Rome comme à Éphèse, leur maison accueille l'Église. Ils saluent les Corinthiens « beaucoup dans le Seigneur ».",
+    "quote": {
+     "ref": "1 Corinthiens 16:19",
+     "text": "Aquilas et Priscille, avec l'Eglise qui est dans leur maison, vous saluent beaucoup dans le Seigneur"
+    }
+   },
+   {
+    "title": "Jusqu'au bout",
+    "ref": "2 Timothée 4:19",
+    "tags": [
+     [
+      "C",
+      "constance"
+     ]
+    ],
+    "text": "Dans la dernière lettre de Paul, ils figurent encore dans les salutations : Prisca et Aquilas, toujours présents."
+   }
+  ],
+  "weakness": "Le texte ne rapporte aucune faiblesse du couple. À titre de lecture, la vigilance d'un tempérament exact et chaleureux : l'exactitude peut raidir, la chaleur peut épuiser. Leur façon de corriger Apollos, à l'écart et avec douceur, montre comment tenir les deux.",
+  "grace": "Ils ne disqualifient pas Apollos pour ce qu'il ignore : ils l'accueillent chez eux et lui exposent ce qui lui manque (Actes 18:26). Et Paul ne les loue pas pour leur mérite : il leur rend grâces, comme « toutes les Églises des païens » (Romains 16:4). L'exactitude, ici, est un service d'amitié, pas un tribunal.",
+  "christ": "Paul les appelle « mes compagnons d'œuvre en Jésus-Christ » (Romains 16:3) : tout ce qu'ils font l'est en lui. Et ce qu'ils expliquent à Apollos, c'est « la voie de Dieu » (Actes 18:26), qui conduit à Jésus. L'accueil et l'exactitude ne servent pas à se faire un nom : ils servent le Christ.",
+  "quotes": [
+   {
+    "ref": "Romains 16:3-4",
+    "text": "Saluez Prisca et Aquilas, mes compagnons d'oeuvre en Jésus-Christ, qui ont exposé leur tête pour sauver ma vie"
+   },
+   {
+    "ref": "Actes 18:26",
+    "text": "le prirent avec eux, et lui exposèrent plus exactement la voie de Dieu."
+   }
+  ],
+  "question": "Qui pourrais-je accueillir chez moi, et à qui puis-je expliquer quelque chose avec douceur ?",
+  "step": "Inviter une personne à votre table cette semaine et lui expliquer, avec tact, une chose que vous avez comprise."
+ },
+ "JONATHAN": {
+  "name": "Jonathan",
+  "aliases": [
+   "Jonathan"
+  ],
+  "relecture": "en cours",
+  "title": "L'ami fidèle qui cède sa place",
+  "refs": "1 Samuel 14 ; 18–20 ; 23 ; 31 ; 2 Samuel 1 ; 9",
+  "profile": {
+   "code": "IS",
+   "solidity": "I : indices nombreux et convergents · S : indices nombreux et convergents",
+   "dimensions": {
+    "I": {
+     "level": 3,
+     "traits": [
+      [
+       "Il se lie avec chaleur",
+       "« L'âme de Jonathan fut attachée à l'âme de David, et Jonathan l'aima comme son âme. »",
+       "1 Samuel 18:1"
+      ],
+      [
+       "Il exprime son affection",
+       "« Les deux amis s'embrassèrent et pleurèrent ensemble. »",
+       "1 Samuel 20:41"
+      ],
+      [
+       "Il donne généreusement",
+       "Il ôte son manteau, ses vêtements, son épée, son arc et sa ceinture pour les donner à David.",
+       "1 Samuel 18:4"
+      ],
+      [
+       "Il parle en faveur de l'autre",
+       "Il plaide pour David auprès de Saül, son père, et obtient sa grâce.",
+       "1 Samuel 19:4-6"
+      ]
+     ]
+    },
+    "S": {
+     "level": 3,
+     "traits": [
+      [
+       "Il est loyal",
+       "Il fait alliance avec David, et la renouvelle.",
+       "1 Samuel 18:3 ; 20:42 ; 23:18"
+      ],
+      [
+       "Il s'efface",
+       "« Tu régneras sur Israël, et moi je serai au second rang près de toi. »",
+       "1 Samuel 23:17"
+      ],
+      [
+       "Il fortifie",
+       "Il va trouver David dans la forêt : « il fortifia sa confiance en Dieu ».",
+       "1 Samuel 23:16"
+      ],
+      [
+       "Il reste auprès des siens",
+       "Après chaque rencontre, il retourne chez son père ; il meurt avec lui.",
+       "1 Samuel 20:42 ; 23:18 ; 31:2"
+      ]
+     ]
+    }
+   },
+   "absent": [
+    [
+     "Prise de pouvoir (D)",
+     "Fils du roi, il aurait pu régner : il reconnaît David et se met au second rang (1 Samuel 23:17)."
+    ],
+    [
+     "Retenue (S)",
+     "Une fois, il se lance : « Viens, et poussons jusqu'au poste de ces incirconcis » (1 Samuel 14:6). Une autre fois, il sort de table dans une ardente colère (1 Samuel 20:34) : le profil IS ne dit pas tout de lui."
+    ]
+   ],
+   "limits": "Jonathan est présent dans plusieurs chapitres de 1 et 2 Samuel : les indices sont nombreux, mais certains vont dans un autre sens (courage, colère). Nous repérons des indices, nous ne mesurons rien."
+  },
+  "why": {
+   "I": "Comme lui, vous vous liez avec chaleur, vous donnez sans compter et vous plaidez pour ceux que vous aimez. Son récit montre ce que vaut une amitié qui ne cherche pas sa place.",
+   "S": "Comme lui, vous êtes fidèle à vos engagements, et vous savez vous effacer pour que l'autre avance. Son récit montre aussi le prix de la fidélité à deux personnes qui s'opposent.",
+   "default": "Sa loyauté et son effacement éclairent les tempéraments chaleureux et fidèles."
+  },
+  "who": "Jonathan est le fils aîné du roi Saül, héritier naturel du trône. Il devient l'ami de David, le jeune berger oint pour être le prochain roi. Il le protège, plaide pour lui et renonce à sa propre place (1 Samuel 18–20 ; 23).",
+  "episodes": [
+   {
+    "title": "Une âme attachée",
+    "ref": "1 Samuel 18:1-4",
+    "tags": [
+     [
+      "I",
+      "se lie"
+     ],
+     [
+      "I",
+      "donne"
+     ],
+     [
+      "S",
+      "alliance"
+     ]
+    ],
+    "text": "Dès que David a fini de parler à Saül, Jonathan s'attache à lui comme à sa propre âme. Il fait alliance avec lui et lui donne son manteau et ses armes.",
+    "quote": {
+     "ref": "1 Samuel 18:4",
+     "text": "Il ôta le manteau qu'il portait, pour le donner à David"
+    }
+   },
+   {
+    "title": "Il plaide pour David",
+    "ref": "1 Samuel 19:4-6",
+    "tags": [
+     [
+      "I",
+      "parle en sa faveur"
+     ]
+    ],
+    "text": "Saül veut tuer David. Jonathan lui parle favorablement de lui, rappelle ce que David a fait pour Israël. Saül l'écoute et jure que David ne mourra pas.",
+    "quote": {
+     "ref": "1 Samuel 19:4",
+     "text": "Que le roi, dit-il, ne commette pas un péché à l'égard de son serviteur David"
+    }
+   },
+   {
+    "title": "Une colère qui l'affecte",
+    "ref": "1 Samuel 20:32-34",
+    "text": "Quand Saül lui lance sa lance, Jonathan comprend que son père est résolu à tuer David. Il quitte la table dans une ardente colère, affligé pour son ami."
+   },
+   {
+    "title": "Les deux amis pleurent",
+    "ref": "1 Samuel 20:41-42",
+    "tags": [
+     [
+      "I",
+      "affection"
+     ]
+    ],
+    "text": "Au moment de se séparer, David et Jonathan s'embrassent et pleurent ensemble. Jonathan lui dit : « Va en paix », au nom de l'Éternel.",
+    "quote": {
+     "ref": "1 Samuel 20:41",
+     "text": "Les deux amis s'embrassèrent et pleurèrent ensemble"
+    }
+   },
+   {
+    "title": "Il fortifie sa confiance",
+    "ref": "1 Samuel 23:16-18",
+    "tags": [
+     [
+      "S",
+      "s'efface"
+     ],
+     [
+      "S",
+      "fortifie"
+     ]
+    ],
+    "text": "David est traqué. Jonathan va le trouver dans la forêt, fortifie sa confiance en Dieu, et lui dit qu'il régnera, lui-même au second rang.",
+    "quote": {
+     "ref": "1 Samuel 23:17",
+     "text": "Tu régneras sur Israël, et moi je serai au second rang près de toi"
+    }
+   },
+   {
+    "title": "Mort avec son père",
+    "ref": "1 Samuel 31:2",
+    "tags": [
+     [
+      "S",
+      "fidèle à son père"
+     ]
+    ],
+    "text": "Jonathan reste loyal à son père jusqu'au bout. Il meurt avec lui à Guilboa, tué par les Philistins ; David le pleure : « Ton amour pour moi était admirable » (2 Samuel 1:26)."
+   },
+   {
+    "title": "À cause de Jonathan",
+    "ref": "2 Samuel 9:1-8",
+    "text": "Devenu roi, David cherche un survivant de la maison de Saül pour user envers lui de la bonté de Dieu. Il trouve Mephiboscheth, fils de Jonathan, handicapé des pieds, et le fait manger à sa table.",
+    "quote": {
+     "ref": "2 Samuel 9:7",
+     "text": "Ne crains point, car je veux te faire du bien à cause de Jonathan, ton père."
+    }
+   }
+  ],
+  "weakness": "La fidélité divisée. Jonathan est lié à David par alliance et à son père par le sang. Il ne peut empêcher la haine de Saül (1 Samuel 20:33), il retourne chez lui après chaque rencontre (20:42 ; 23:18) et il meurt avec son père (31:2). Pour ce tempérament, la vigilance : vouloir rester loyal à tous peut empêcher de choisir, et laisser les autres porter le risque.",
+  "grace": "Jonathan renonce à ce qu'il pouvait légitimement prétendre : « Tu régneras sur Israël, et moi je serai au second rang » (1 Samuel 23:17). Il accepte ce que Dieu a choisi. Et la grâce lui revient après sa mort : David use envers son fils infirme de « la bonté de Dieu » (2 Samuel 9:3), « à cause de Jonathan ». Mephiboscheth mange à la table du roi sans rien avoir fait pour le mériter.",
+  "christ": "« Il n'y a pas de plus grand amour que de donner sa vie pour ses amis » (Jean 15:13). Jésus dit à ses disciples : « je vous ai appelés amis » (15:15). Jonathan est « tel ami plus attaché qu'un frère » (Proverbes 18:24) ; l'amitié qu'il montre à David est un reflet de celle que le Christ offre, et que lui seul donne jusqu'au bout.",
+  "quotes": [
+   {
+    "ref": "Jean 15:13",
+    "text": "Il n'y a pas de plus grand amour que de donner sa vie pour ses amis."
+   },
+   {
+    "ref": "Proverbes 18:24",
+    "text": "il est tel ami plus attaché qu'un frère."
+   }
+  ],
+  "question": "À qui suis-je tenté de rester fidèle des deux côtés, alors qu'il faudrait choisir ?",
+  "step": "Dire à une personne ce que vous êtes prêt à céder pour qu'elle avance, et ce que vous ne pouvez pas céder."
+ },
+ "MARIE_BETHANIE": {
+  "name": "Marie de Béthanie",
+  "aliases": [
+   "Marie de Béthanie"
+  ],
+  "relecture": "en cours",
+  "title": "Celle qui s'assoit aux pieds de Jésus et ne retient rien",
+  "refs": "Luc 10 ; Jean 11–12 ; Marc 14",
+  "profile": {
+   "code": "SI",
+   "solidity": "S : indices nombreux et convergents · I : indices réels",
+   "dimensions": {
+    "S": {
+     "level": 3,
+     "traits": [
+      [
+       "Elle s'assoit et écoute",
+       "« S'étant assise aux pieds du Seigneur, elle écoutait sa parole. »",
+       "Luc 10:39"
+      ],
+      [
+       "Elle reste, dans la peine",
+       "Quand Jésus arrive après la mort de Lazare, elle « se tenait assise à la maison ».",
+       "Jean 11:20"
+      ],
+      [
+       "Elle répond dès qu'on l'appelle",
+       "« Le maître est ici, et il te demande » : elle se lève promptement et va vers lui.",
+       "Jean 11:28-29"
+      ]
+     ]
+    },
+    "I": {
+     "level": 2,
+     "traits": [
+      [
+       "Elle exprime son affection sans retenue",
+       "Elle prend une livre de nard pur, oint les pieds de Jésus et les essuie avec ses cheveux : la maison se remplit du parfum.",
+       "Jean 12:3"
+      ],
+      [
+       "Elle pleure ouvertement",
+       "Elle tombe à ses pieds et lui dit sa douleur.",
+       "Jean 11:32"
+      ]
+     ]
+    }
+   },
+   "absent": [
+    [
+     "Défense de soi (D)",
+     "Face à Marthe, puis à Judas, elle ne répond pas : c'est Jésus qui prend sa défense (Luc 10:42 ; Jean 12:7)."
+    ],
+    [
+     "Calcul (C)",
+     "Elle ne mesure pas : le parfum vaut trois cents deniers, selon Judas (Jean 12:5)."
+    ]
+   ],
+   "limits": "Marie n'apparaît que dans trois scènes, mais elles vont toutes dans le même sens, et l'on ne l'entend parler qu'une seule fois (Jean 11:32). Nous repérons des indices, nous ne mesurons rien."
+  },
+  "why": {
+   "S": "Comme elle, vous prenez le temps d'écouter, vous restez présent dans les moments difficiles, et vous répondez quand on vous appelle. Son récit montre que Jésus honore ce qui ne se voit pas.",
+   "I": "Comme elle, vous exprimez votre affection sans retenue. Son récit montre que cette liberté est reçue, même quand d'autres la jugent excessive.",
+   "default": "Son écoute et son affection éclairent les tempéraments sensibles."
+  },
+  "who": "Marie, de Béthanie, est la sœur de Marthe et de Lazare, que Jésus aimait. On la voit assise aux pieds de Jésus, en deuil, puis qui l'oint de parfum six jours avant la Pâque.",
+  "episodes": [
+   {
+    "title": "Assise aux pieds du Seigneur",
+    "ref": "Luc 10:38-42",
+    "tags": [
+     [
+      "S",
+      "écoute"
+     ]
+    ],
+    "text": "Marthe s'agite à servir ; Marie s'assoit et écoute Jésus. Marthe s'en plaint à Jésus, qui répond que Marie a choisi la bonne part.",
+    "quote": {
+     "ref": "Luc 10:42",
+     "text": "Marie a choisi la bonne part, qui ne lui sera point ôtée."
+    }
+   },
+   {
+    "title": "Assise à la maison",
+    "ref": "Jean 11:20",
+    "tags": [
+     [
+      "S",
+      "reste dans la peine"
+     ]
+    ],
+    "text": "Lazare est mort. Marthe va au-devant de Jésus ; Marie reste assise à la maison."
+   },
+   {
+    "title": "Le maître t'appelle",
+    "ref": "Jean 11:28-32",
+    "tags": [
+     [
+      "S",
+      "répond à l'appel"
+     ],
+     [
+      "I",
+      "pleure ouvertement"
+     ]
+    ],
+    "text": "Marthe lui dit à l'oreille que Jésus la demande. Elle se lève aussitôt, tombe à ses pieds et lui dit ce que sa sœur lui a déjà dit.",
+    "quote": {
+     "ref": "Jean 11:32",
+     "text": "Seigneur, si tu eusses été ici, mon frère ne serait pas mort."
+    }
+   },
+   {
+    "title": "Jésus pleura",
+    "ref": "Jean 11:33-35",
+    "text": "Voyant Marie pleurer, Jésus frémit en son esprit et s'émeut. Il demande où est le tombeau, et pleure.",
+    "quote": {
+     "ref": "Jean 11:35",
+     "text": "Jésus pleura."
+    }
+   },
+   {
+    "title": "Le parfum",
+    "ref": "Jean 12:1-8",
+    "tags": [
+     [
+      "I",
+      "affection sans retenue"
+     ]
+    ],
+    "text": "Au souper à Béthanie, elle oint les pieds de Jésus avec un parfum de grand prix, et les essuie avec ses cheveux. Judas objecte ; Jésus la défend.",
+    "quote": {
+     "ref": "Jean 12:3",
+     "text": "Marie, ayant pris une livre d'un parfum de nard pur de grand prix, oignit les pieds de Jésus, et elle lui essuya les pieds avec ses cheveux"
+    }
+   },
+   {
+    "title": "Elle a fait ce qu'elle a pu",
+    "ref": "Marc 14:8-9",
+    "text": "Jésus dit qu'elle a d'avance embaumé son corps pour la sépulture, et que partout où la bonne nouvelle sera prêchée, on racontera ce qu'elle a fait.",
+    "quote": {
+     "ref": "Marc 14:8",
+     "text": "Elle a fait ce qu'elle a pu"
+    }
+   }
+  ],
+  "weakness": "Le retrait dans la peine. À la mort de Lazare, elle reste assise à la maison (Jean 11:20) et elle dit à Jésus, comme sa sœur, que son frère ne serait pas mort s'il avait été là (11:32). Pour ce tempérament, la vigilance : la douleur peut enfermer, et l'amour peut se transformer en reproche.",
+  "grace": "Jésus ne la reprend pas. Il pleure avec elle (Jean 11:35). Face aux critiques, il la défend, deux fois : « Marie a choisi la bonne part » (Luc 10:42) et « Laisse-la garder ce parfum » (Jean 12:7). Elle ne se justifie pas : c'est lui qui répond, et il dit d'elle « elle a fait ce qu'elle a pu » (Marc 14:8).",
+  "christ": "À Marthe, Jésus dit : « Je suis la résurrection et la vie » (Jean 11:25), et il ressuscite Lazare. Marie, elle, l'oint « pour le jour de ma sépulture » (12:7) : elle est la première à honorer le Christ comme celui qui va mourir et vaincre la mort. Ce qui la touche n'est pas ce qu'elle comprend, mais celui qu'elle écoute : le Seigneur lui-même.",
+  "quotes": [
+   {
+    "ref": "Jean 11:25",
+    "text": "Je suis la résurrection et la vie."
+   },
+   {
+    "ref": "Jean 12:7",
+    "text": "Laisse-la garder ce parfum pour le jour de ma sépulture."
+   }
+  ],
+  "question": "Qu'est-ce que je retiens de mon affection ou de ma gratitude envers Jésus par peur de ce qu'on dira ?",
+  "step": "Prendre vingt minutes cette semaine pour vous asseoir et écouter, sans rien demander, puis lui dire merci."
+ },
+ "ELISABETH": {
+  "name": "Élisabeth",
+  "aliases": [
+   "Élisabeth"
+  ],
+  "relecture": "en cours",
+  "title": "La femme fidèle dans l'attente, qui bénit avant d'être comprise",
+  "refs": "Luc 1",
+  "profile": {
+   "code": "SI",
+   "solidity": "S : indices nombreux et convergents · I : indices réels",
+   "dimensions": {
+    "S": {
+     "level": 3,
+     "traits": [
+      [
+       "Elle est fidèle dans la durée",
+       "Avec Zacharie, elle est « juste devant Dieu, observant d'une manière irréprochable » tous les commandements, malgré des années sans enfant.",
+       "Luc 1:6-7"
+      ],
+      [
+       "Elle reste discrète",
+       "Après sa grossesse, « elle se cacha pendant cinq mois ».",
+       "Luc 1:24"
+      ],
+      [
+       "Elle tient bon",
+       "Quand on veut donner à l'enfant le nom de son père, elle dit : « Non, il sera appelé Jean. »",
+       "Luc 1:59-60"
+      ]
+     ]
+    },
+    "I": {
+     "level": 2,
+     "traits": [
+      [
+       "Elle accueille avec joie",
+       "À la salutation de Marie, elle « s'écria d'une voix forte : Tu es bénie entre les femmes ».",
+       "Luc 1:41-42"
+      ],
+      [
+       "Elle reconnaît et nomme",
+       "« Comment m'est-il accordé que la mère de mon Seigneur vienne auprès de moi ? »",
+       "Luc 1:43"
+      ],
+      [
+       "On se réjouit avec elle",
+       "Ses voisins et ses parents « se réjouirent avec elle ».",
+       "Luc 1:58"
+      ]
+     ]
+    }
+   },
+   "absent": [
+    [
+     "Prise de commandement (D)",
+     "Sa seule affirmation d'autorité concerne le nom de l'enfant (Luc 1:60)."
+    ],
+    [
+     "Analyse (C)",
+     "Elle ne discute pas ce qu'on lui annonce : elle y voit « la grâce que le Seigneur m'a faite » (Luc 1:25)."
+    ]
+   ],
+   "limits": "Élisabeth n'apparaît que dans le premier chapitre de Luc. Elle parle peu, mais ses paroles sont fortes. Les indices S sont convergents ; I repose sur des indices réels, moins nombreux. Nous repérons des indices, nous ne mesurons rien."
+  },
+  "why": {
+   "S": "Comme elle, vous êtes fidèle dans l'attente, discret et ferme quand c'est important. Son récit montre que Dieu n'oublie pas ceux qui attendent sans bruit.",
+   "I": "Comme elle, vous accueillez avec chaleur et vous bénissez les autres sans jalousie. Son récit montre une joie qui ne se compare pas.",
+   "default": "Sa fidélité patiente et son accueil joyeux éclairent les tempéraments posés et chaleureux."
+  },
+  "who": "Élisabeth est l'épouse du sacrificateur Zacharie, de la famille d'Aaron. Elle est âgée et n'a pas d'enfant. Elle devient la mère de Jean-Baptiste, et la parente de Marie (Luc 1:5-7, 36).",
+  "episodes": [
+   {
+    "title": "Justes, sans enfant",
+    "ref": "Luc 1:5-7",
+    "tags": [
+     [
+      "S",
+      "fidélité dans l'attente"
+     ]
+    ],
+    "text": "Elisabeth et Zacharie sont justes devant Dieu et irréprochables. Pourtant, elle est stérile et tous deux sont âgés.",
+    "quote": {
+     "ref": "Luc 1:6",
+     "text": "Tous deux étaient justes devant Dieu, observant d'une manière irréprochable tous les commandements et toutes les ordonnances du Seigneur."
+    }
+   },
+   {
+    "title": "Elle se cacha",
+    "ref": "Luc 1:24-25",
+    "tags": [
+     [
+      "S",
+      "discrétion"
+     ]
+    ],
+    "text": "Elle devient enceinte. Elle se cache cinq mois, et rapporte tout au Seigneur : c'est lui qui a ôté son opprobre.",
+    "quote": {
+     "ref": "Luc 1:25",
+     "text": "C'est la grâce que le Seigneur m'a faite, quand il a jeté les yeux sur moi pour ôter mon opprobre parmi les hommes."
+    }
+   },
+   {
+    "title": "La visite de Marie",
+    "ref": "Luc 1:39-45",
+    "tags": [
+     [
+      "I",
+      "accueille avec joie"
+     ]
+    ],
+    "text": "Marie arrive en hâte. À sa salutation, l'enfant d'Élisabeth tressaille et elle est remplie du Saint-Esprit. Elle bénit Marie à haute voix, et reconnaît en son enfant son Seigneur.",
+    "quote": {
+     "ref": "Luc 1:43",
+     "text": "Comment m'est-il accordé que la mère de mon Seigneur vienne auprès de moi?"
+    }
+   },
+   {
+    "title": "Heureuse celle qui a cru",
+    "ref": "Luc 1:45",
+    "tags": [
+     [
+      "I",
+      "bénit"
+     ]
+    ],
+    "text": "Elle ajoute : heureuse celle qui a cru, car les choses dites de la part du Seigneur auront leur accomplissement."
+   },
+   {
+    "title": "La naissance",
+    "ref": "Luc 1:57-58",
+    "text": "Elle enfante un fils. Ses voisins et ses parents apprennent que le Seigneur a fait éclater envers elle sa miséricorde, et se réjouissent avec elle.",
+    "quote": {
+     "ref": "Luc 1:58",
+     "text": "le Seigneur avait fait éclater envers elle sa miséricorde"
+    }
+   },
+   {
+    "title": "Il sera appelé Jean",
+    "ref": "Luc 1:59-60",
+    "tags": [
+     [
+      "S",
+      "tient bon"
+     ]
+    ],
+    "text": "Le huitième jour, on veut appeler l'enfant Zacharie. Elle prend la parole : « Non, il sera appelé Jean. »",
+    "quote": {
+     "ref": "Luc 1:60",
+     "text": "Non, il sera appelé Jean."
+    }
+   }
+  ],
+  "weakness": "Le texte ne rapporte aucune faute d'Élisabeth. Ce que la lecture signale : la douleur de l'attente et de l'opprobre (« ôter mon opprobre », Luc 1:25), et le retrait qui peut l'accompagner : elle se cache cinq mois (1:24). Pour ce tempérament, la vigilance : porter seule une peine qu'il faudrait partager.",
+  "grace": "Tout, chez elle, est reçu : « C'est la grâce que le Seigneur m'a faite » (Luc 1:25). Pas de mérite invoqué, bien qu'elle soit « juste » et « irréprochable » (1:6). Quand l'enfant naît, ses voisins reconnaissent « sa miséricorde » (1:58). Elle bénit Marie sans une ombre de jalousie : « Heureuse celle qui a cru » (1:45).",
+  "christ": "Remplie du Saint-Esprit, elle appelle l'enfant de Marie « mon Seigneur » (Luc 1:43) avant même sa naissance. Son propre fils, Jean, « marchera devant Dieu » pour « préparer au Seigneur un peuple bien disposé » (1:17). Toute sa vie pointe vers un autre : elle est la première à nommer le Seigneur dans l'évangile de Luc.",
+  "quotes": [
+   {
+    "ref": "Luc 1:42",
+    "text": "Tu es bénie entre les femmes, et le fruit de ton sein est béni."
+   },
+   {
+    "ref": "Luc 1:43",
+    "text": "Comment m'est-il accordé que la mère de mon Seigneur vienne auprès de moi?"
+   }
+  ],
+  "question": "Quelle peine est-ce que je porte seule, alors que Dieu m'invite à la lui présenter ?",
+  "step": "Bénir à voix haute quelqu'un dont la réussite vous touche, sans rien ajouter sur vous."
+ },
+ "BOAZ": {
+  "name": "Boaz",
+  "aliases": [
+   "Boaz"
+  ],
+  "relecture": "en cours",
+  "title": "Le parent juste qui protège, et qui rachète dans les règles",
+  "refs": "Ruth 2–4 ; Matthieu 1",
+  "profile": {
+   "code": "CS",
+   "solidity": "C : indices nombreux et convergents · S : indices nombreux et convergents",
+   "dimensions": {
+    "C": {
+     "level": 3,
+     "traits": [
+      [
+       "Il respecte la procédure",
+       "Il monte à la porte de la ville, réunit dix anciens, règle le rachat devant témoins : « Vous en êtes témoins aujourd'hui ! »",
+       "Ruth 4:1-10"
+      ],
+      [
+       "Il est honnête sur les faits",
+       "À Ruth : « Il est bien vrai que j'ai droit de rachat, mais il en existe un autre plus proche que moi. »",
+       "Ruth 3:12"
+      ],
+      [
+       "Il vérifie ce qu'on lui rapporte",
+       "« On m'a rapporté tout ce que tu as fait pour ta belle-mère depuis la mort de ton mari. »",
+       "Ruth 2:11"
+      ]
+     ]
+    },
+    "S": {
+     "level": 3,
+     "traits": [
+      [
+       "Il protège avec douceur",
+       "« J'ai défendu à mes serviteurs de te toucher. Et quand tu auras soif, tu iras aux vases. »",
+       "Ruth 2:8-9"
+      ],
+      [
+       "Il est généreux, sans bruit",
+       "Il fait laisser des épis à glaner « sans lui faire de reproches ».",
+       "Ruth 2:14-16"
+      ],
+      [
+       "Il bénit",
+       "À ses moissonneurs : « Que l'Éternel soit avec vous ! »",
+       "Ruth 2:4"
+      ],
+      [
+       "Il rassure",
+       "« Ne crains point ; je ferai pour toi tout ce que tu diras. »",
+       "Ruth 3:11"
+      ]
+     ]
+    }
+   },
+   "absent": [
+    [
+     "Recherche de la scène (I)",
+     "Il agit avec discrétion : il laisse Ruth repartir avant l'aube sans qu'on la reconnaisse (Ruth 3:14)."
+    ],
+    [
+     "Prise de pouvoir (D)",
+     "Il est « puissant et riche » (Ruth 2:1), mais n'en use que pour protéger."
+    ]
+   ],
+   "limits": "Boaz n'apparaît que dans le livre de Ruth, vu à travers le récit de Ruth et de Naomi. Les indices sont convergents ; le portrait est celui d'un homme exemplaire, presque sans ombre. Nous repérons des indices, nous ne mesurons rien."
+  },
+  "why": {
+   "C": "Comme lui, vous tenez à ce que les choses soient faites correctement, devant témoins et sans raccourci. Son récit montre que la rigueur peut être au service de la bonté.",
+   "S": "Comme lui, vous protégez et vous êtes généreux avec discrétion. Son récit montre que cette douceur n'est pas de la faiblesse.",
+   "default": "Sa justesse et sa bonté éclairent les tempéraments fiables."
+  },
+  "who": "Boaz est un parent de Naomi, « un homme puissant et riche » de Bethléem (Ruth 2:1). Il accueille Ruth, la Moabite, dans son champ, la protège, puis la rachète en épousant Ruth selon la loi du rachat.",
+  "episodes": [
+   {
+    "title": "Un homme puissant et riche",
+    "ref": "Ruth 2:1",
+    "text": "Le texte le présente d'abord par sa position, avant de montrer ce qu'il en fait."
+   },
+   {
+    "title": "Que l'Éternel soit avec vous",
+    "ref": "Ruth 2:4",
+    "tags": [
+     [
+      "S",
+      "bénit"
+     ]
+    ],
+    "text": "Il arrive dans son champ et salue ses moissonneurs par une bénédiction, à laquelle ils répondent.",
+    "quote": {
+     "ref": "Ruth 2:4",
+     "text": "Que l'Eternel soit avec vous!"
+    }
+   },
+   {
+    "title": "Reste avec mes servantes",
+    "ref": "Ruth 2:8-9",
+    "tags": [
+     [
+      "S",
+      "protège"
+     ]
+    ],
+    "text": "Il dit à Ruth de ne pas aller glaner ailleurs. Il a défendu à ses serviteurs de la toucher, et lui indique où puiser de l'eau.",
+    "quote": {
+     "ref": "Ruth 2:9",
+     "text": "J'ai défendu à mes serviteurs de te toucher."
+    }
+   },
+   {
+    "title": "On m'a rapporté",
+    "ref": "Ruth 2:11-16",
+    "tags": [
+     [
+      "C",
+      "vérifie"
+     ],
+     [
+      "S",
+      "généreux"
+     ]
+    ],
+    "text": "Il sait ce que Ruth a fait pour Naomi. Il lui donne à manger et ordonne à ses serviteurs de la laisser glaner même entre les gerbes, sans lui faire de reproches."
+   },
+   {
+    "title": "Il y en a un autre",
+    "ref": "Ruth 3:11-13",
+    "tags": [
+     [
+      "C",
+      "exactitude"
+     ]
+    ],
+    "text": "Pendant la nuit, Ruth lui demande de la racheter. Il la rassure, mais lui dit qu'un parent plus proche a priorité : il en ira selon la loi.",
+    "quote": {
+     "ref": "Ruth 3:12",
+     "text": "Il est bien vrai que j'ai droit de rachat, mais il en existe un autre plus proche que moi."
+    }
+   },
+   {
+    "title": "À la porte de la ville",
+    "ref": "Ruth 4:1-10",
+    "tags": [
+     [
+      "C",
+      "procédure"
+     ]
+    ],
+    "text": "Boaz réunit dix anciens et le parent plus proche. Celui-ci renonce à son droit, et Boaz prend à témoin les anciens et tout le peuple.",
+    "quote": {
+     "ref": "Ruth 4:9",
+     "text": "Vous êtes témoins aujourd'hui"
+    }
+   }
+  ],
+  "weakness": "Le texte ne rapporte aucune faiblesse de Boaz : c'est un portrait exemplaire. À titre de lecture, la vigilance d'un tempérament qui tient à la procédure : prendre les formes pour la fin. Boaz les met au service de Ruth : il ne contourne pas la loi, il s'en sert pour la sauver.",
+  "grace": "Il accueille une étrangère qui n'a aucun droit (Ruth 2:10), la protège, la nourrit et prend en charge sa cause, sans rien exiger : « Ne crains point ; je ferai pour toi tout ce que tu diras » (3:11). Le rachat est un acte gratuit : Ruth ne le mérite pas, Boaz le fait librement, et dans les règles.",
+  "christ": "Boaz a « droit de rachat » (Ruth 3:12) : il est le rédempteur de la famille. Il annonce celui dont Paul dit : « Dieu a envoyé son Fils, né d'une femme, né sous la loi, afin qu'il rachetât ceux qui étaient sous la loi » (Galates 4:4-5). Comme Boaz, le Christ ne contourne pas la loi : il l'accomplit pour racheter. Et Boaz figure dans sa généalogie : « Boaz engendra Obed de Ruth » (Matthieu 1:5).",
+  "quotes": [
+   {
+    "ref": "Galates 4:4",
+    "text": "Dieu a envoyé son Fils, né d'une femme, né sous la loi"
+   },
+   {
+    "ref": "Matthieu 1:5",
+    "text": "Boaz engendra Obed de Ruth"
+   }
+  ],
+  "question": "Qui pourrais-je protéger ou racheter, dans les règles, mais surtout par bonté ?",
+  "step": "Prendre en charge, de manière précise et discrète, une démarche pour une personne qui ne peut pas la faire seule."
+ }
+}

@@ -109,7 +109,7 @@ final class DiscCombos
             'grow' => ['Fixer à l\'avance le niveau de qualité « suffisant »', 'Commencer vos retours par ce qui est réussi', 'Donner une réponse datée, même provisoire'],
             'figures' => [
                 ['name' => 'Thomas', 'ref' => 'Jean 20.24–29', 'text' => 'Il veut voir et toucher avant de croire ; Jésus ne le rejette pas, il vient à sa rencontre : le besoin de preuves accueilli, et appelé à la confiance.'],
-                ['name' => 'Les Béréens', 'ref' => 'Actes 17.11', 'text' => 'Ils reçoivent la parole avec empressement et examinent chaque jour les Écritures pour vérifier : la rigueur au service de la foi.'],
+                ['name' => 'Nicodème', 'ref' => 'Jean 3 ; 7.50–52 ; 19.39', 'text' => 'Il pose ses questions de nuit, plaide pour que la loi soit respectée, puis apporte cent livres d\'aromates pour ensevelir Jésus : celui qui voulait comprendre est allé jusqu\'à la croix.'],
             ],
             'actions' => ['Prendre une décision en attente avec les informations disponibles aujourd\'hui', 'Faire trois compliments précis cette semaine', 'Livrer un travail à 90 % et demander un retour'],
         ],
@@ -238,7 +238,7 @@ final class DiscCombos
             'grow' => ['Formuler un « non » bienveillant cette semaine', 'Distinguer critique du travail et rejet de la personne', 'Recadrer une situation avec douceur et clarté'],
             'figures' => [
                 ['name' => 'Barnabé', 'ref' => 'Actes 4.36 ; 9.27 ; 11.23–24', 'text' => 'Surnommé « fils d\'encouragement », il accueille Paul quand tous le craignent et encourage les nouveaux croyants : la chaleur qui ouvre des portes.'],
-                ['name' => 'Lydie', 'ref' => 'Actes 16.14–15', 'text' => 'Dès sa conversion, elle ouvre sa maison et insiste pour accueillir Paul et ses compagnons : l\'hospitalité comme ministère.'],
+                ['name' => 'Jonathan', 'ref' => '1 Samuel 18.1–4 ; 20.41–42 ; 23.16–17', 'text' => 'Il aime David comme son âme, lui donne son manteau, plaide pour lui devant son père et accepte de rester au second rang : l\'ami fidèle qui cède sa place.'],
             ],
             'actions' => ['Dire un non bienveillant à une demande de trop', 'Avoir une conversation de recadrage que vous repoussez', 'Prendre un temps pour vous, sans culpabilité'],
         ],
@@ -314,8 +314,8 @@ final class DiscCombos
             'recharge' => 'Un moment de calme, un échange profond, la prière.',
             'grow' => ['Bloquer un temps pour vous chaque semaine', 'Dire une attente claire à quelqu\'un que vous accompagnez', 'Accepter une aide proposée'],
             'figures' => [
-                ['name' => 'Jean, le disciple bien-aimé', 'ref' => 'Jean 13.23 ; 19.26–27', 'text' => 'Proche de Jésus, présent au pied de la croix, il reçoit Marie chez lui : la fidélité tendre qui reste quand les autres fuient.'],
-                ['name' => 'Tabitha (Dorcas)', 'ref' => 'Actes 9.36–39', 'text' => 'Elle faisait beaucoup de bonnes œuvres et d\'aumônes ; les veuves montrent en pleurant les vêtements qu\'elle avait faits : un amour concret qui marque une communauté.'],
+                ['name' => 'Marie de Béthanie', 'ref' => 'Luc 10.39 ; Jean 11.20–32 ; 12.3', 'text' => 'Assise aux pieds de Jésus, elle écoute ; dans le deuil, elle reste à la maison puis tombe à ses pieds ; et elle verse un parfum de grand prix, sans retenir son affection.'],
+                ['name' => 'Élisabeth', 'ref' => 'Luc 1.5–7, 24–25, 39–45, 57–60', 'text' => 'Fidèle dans l\'attente, discrète, elle accueille Marie avec une joie sans jalousie, appelle son enfant « mon Seigneur » et tient bon sur le nom de Jean.'],
             ],
             'actions' => ['Prévoir un temps de repos non négociable cette semaine', 'Formuler une attente claire à une personne que vous aidez', 'Demander de l\'aide pour une tâche qui vous pèse'],
         ],
@@ -391,7 +391,7 @@ final class DiscCombos
             'recharge' => 'La lecture, l\'apprentissage, un échange intellectuel.',
             'grow' => ['Expliquer un sujet en trois phrases', 'Écouter une objection jusqu\'au bout', 'Accepter de répondre « je ne sais pas »'],
             'figures' => [
-                ['name' => 'Luc', 'ref' => 'Luc 1.1–4 ; Actes 1.1', 'text' => 'Médecin, il fait des recherches exactes « depuis l\'origine » pour écrire un récit ordonné, afin que Théophile reconnaisse la certitude de l\'enseignement reçu.'],
+                ['name' => 'Aquilas et Priscille', 'ref' => 'Actes 18.1–3, 26 ; Romains 16.3–5', 'text' => 'Ils accueillent Paul chez eux, exposent plus exactement la voie de Dieu à Apollos, ouvrent leur maison à l\'Église et exposent leur tête pour sauver la vie de Paul.'],
                 ['name' => 'Esther', 'ref' => 'Esther 4–5', 'text' => 'Elle prend le temps de jeûner, prépare avec soin sa démarche, puis parle au roi avec tact : la sagesse qui sait quand et comment parler.'],
             ],
             'actions' => ['Résumer votre prochaine présentation en une phrase', 'Demander un retour honnête sur votre façon d\'expliquer', 'Partager une conviction personnelle, pas seulement un savoir'],
@@ -417,7 +417,7 @@ final class DiscCombos
             'grow' => ['Prendre une décision avec 80 % des informations', 'Exprimer une inquiétude à voix haute plutôt que la ruminer', 'Tenter une nouveauté à faible risque'],
             'figures' => [
                 ['name' => 'Esdras', 'ref' => 'Esdras 7.10', 'text' => 'Scribe habile, il avait « appliqué son cœur à étudier, à mettre en pratique et à enseigner » la loi : l\'exactitude au service de la fidélité.'],
-                ['name' => 'Betsaleel', 'ref' => 'Exode 31.1–5', 'text' => 'Rempli de l\'Esprit de Dieu « de sagesse, d\'intelligence et de savoir » pour réaliser le tabernacle avec précision : le travail minutieux comme vocation.'],
+                ['name' => 'Boaz', 'ref' => 'Ruth 2–4', 'text' => 'Il protège Ruth avec douceur, lui dit qu\'un parent a priorité sur lui, puis règle le rachat à la porte, devant témoins : la justesse au service de la bonté.'],
             ],
             'actions' => ['Prendre une décision en attente avec les éléments déjà réunis', 'Confier une inquiétude à un proche ou dans la prière', 'Essayer une nouvelle méthode sur un sujet sans enjeu'],
         ],

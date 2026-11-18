@@ -417,3 +417,9 @@ Piège : `Content::defaults()` est appelé souvent ; `BiblicalFigures::raw()` me
 téléphone), les anciens encarts du parcours disparaissent (l'action est dans la carte). Tests : `tests/Dashboard/NextStepTest.php` (heure injectable), `JourneyTest` adapté.
 **Cercle des plans :** vérifié en vue téléphone (375 px) : libellés trop petits ; disques 62 → 72, police 14 → 16 px (15 px sous 420 px), cadrage du `viewBox` resserré,
 « LE SYSTÈME » masqué sous 560 px. **Reste :** libellés sous les icônes de la barre du bas sur téléphone ; page « Mes rythmes ».
+
+## 18/11/2026 — Six fiches fragiles remplacées
+
+Demande du fondateur : remplacer les personnages à matière mince par des personnages « évidents ». Remplacements (même code DISC) : Béréens → Nicodème (C), Lydie → Jonathan (IS),
+Tabitha → Élisabeth (SI), Jean le disciple bien-aimé → Marie de Béthanie (SI), Luc → Aquilas et Priscille (CI), Betsaleel → Boaz (CS). `DiscCombos` mis à jour (nom, référence,
+phrase courte), fichiers JSON nettoyés, nouveau `08-…json`. Pagination PDF contrôlée (profils C, CI, CS, IS, SI). Citations vérifiées par le test.
