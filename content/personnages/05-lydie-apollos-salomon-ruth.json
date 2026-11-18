@@ -1,0 +1,644 @@
+{
+ "LYDIE": {
+  "name": "Lydie",
+  "aliases": [
+   "Lydie"
+  ],
+  "reviewed": false,
+  "title": "La marchande dont le Seigneur ouvre le cœur, et la maison",
+  "refs": "Actes 16:13-15, 40",
+  "profile": {
+   "code": "IS",
+   "solidity": "I : indices réels, peu nombreux · S : indices réels, peu nombreux",
+   "dimensions": {
+    "I": {
+     "level": 2,
+     "traits": [
+      [
+       "Elle est entreprenante et sociable",
+       "Elle est « marchande de pourpre », de la ville de Thyatire : un commerce de luxe, qui suppose le contact avec les gens.",
+       "Actes 16:14"
+      ],
+      [
+       "Elle presse l'hospitalité",
+       "« Si vous me jugez fidèle au Seigneur, entrez dans ma maison, et demeurez-y. Et elle nous pressa par ses instances. »",
+       "Actes 16:15"
+      ],
+      [
+       "Elle rassemble",
+       "Après leur sortie de prison, Paul et Silas retournent chez elle et y voient les frères.",
+       "Actes 16:40"
+      ]
+     ]
+    },
+    "S": {
+     "level": 2,
+     "traits": [
+      [
+       "Elle écoute",
+       "« Elle écoutait » : le texte la montre d'abord attentive.",
+       "Actes 16:14"
+      ],
+      [
+       "Elle engage les siens avec elle",
+       "Elle est baptisée « avec sa famille ».",
+       "Actes 16:15"
+      ],
+      [
+       "Elle reste, elle accueille dans la durée",
+       "Sa maison est le lieu où l'on revient et où les frères se rencontrent.",
+       "Actes 16:15, 40"
+      ]
+     ]
+    }
+   },
+   "absent": [
+    [
+     "Prise de commandement (D)",
+     "Elle ne prend pas la parole en public : sa demande est une invitation, pas un discours."
+    ],
+    [
+     "Analyse et débat (C)",
+     "Elle ne discute pas : « le Seigneur lui ouvrit le cœur » (Actes 16:14)."
+    ]
+   ],
+   "limits": "Lydie n'apparaît que dans quelques versets de ce récit. Les indices sont réels mais peu nombreux : cette fiche est plus mince que les autres, et la lecture IS reste plus fragile."
+  },
+  "why": {
+   "I": "Comme elle, vous aimez accueillir, vous insistez avec chaleur et vous faites de votre maison un lieu où l'on se retrouve. Son récit montre d'où vient cet élan : c'est le Seigneur qui ouvre.",
+   "S": "Comme elle, vous êtes attentif et fidèle, et vous engagez les vôtres avec vous. Son récit montre que l'accueil est la suite d'un cœur d'abord ouvert par Dieu.",
+   "default": "Son accueil chaleureux éclaire les tempéraments hospitaliers."
+  },
+  "who": "Lydie est une femme de Thyatire, marchande de pourpre, installée à Philippes en Macédoine. Elle « craignait Dieu » : elle participait à la prière hors de la ville, au bord de la rivière, où Paul et ses compagnons viennent parler le jour du sabbat (Actes 16:13-14).",
+  "episodes": [
+   {
+    "title": "Au bord de la rivière",
+    "ref": "Actes 16:13",
+    "text": "Paul et ses compagnons sortent de la ville le jour du sabbat, à la recherche d'un lieu de prière. Ils s'assoient et parlent aux femmes qui s'y trouvent."
+   },
+   {
+    "title": "Elle écoutait",
+    "ref": "Actes 16:14",
+    "tags": [
+     [
+      "S",
+      "attentive"
+     ]
+    ],
+    "text": "Lydie est nommée parmi les femmes présentes : marchande de pourpre, de Thyatire, craignant Dieu. Elle écoute.",
+    "quote": {
+     "ref": "Actes 16:14",
+     "text": "Le Seigneur lui ouvrit le coeur, pour qu'elle fût attentive à ce que disait Paul."
+    }
+   },
+   {
+    "title": "Elle et sa maison",
+    "ref": "Actes 16:15",
+    "tags": [
+     [
+      "S",
+      "engage les siens"
+     ]
+    ],
+    "text": "Elle est baptisée avec sa famille. Le texte ne détaille pas leur démarche, mais il montre qu'ils avancent ensemble."
+   },
+   {
+    "title": "Entrez dans ma maison",
+    "ref": "Actes 16:15",
+    "tags": [
+     [
+      "I",
+      "presse l'hospitalité"
+     ]
+    ],
+    "text": "Elle demande à Paul et à ses compagnons d'entrer chez elle et d'y demeurer, avec une insistance que le texte souligne : elle les presse par ses instances.",
+    "quote": {
+     "ref": "Actes 16:15",
+     "text": "Si vous me jugez fidèle au Seigneur, entrez dans ma maison, et demeurez-y."
+    }
+   },
+   {
+    "title": "Après la prison",
+    "ref": "Actes 16:40",
+    "tags": [
+     [
+      "I",
+      "rassemble"
+     ]
+    ],
+    "text": "Après leur libération, Paul et Silas retournent chez Lydie. Ils y voient les frères et les exhortent avant de partir : sa maison paraît être devenue le lieu de rencontre des frères à Philippes (le texte ne le dit pas en toutes lettres)."
+   }
+  ],
+  "weakness": "Le texte ne rapporte aucune faiblesse de Lydie. À titre de lecture, la vigilance d'un tempérament hospitalier : se donner aux autres au point de ne plus se laisser recevoir. Lydie, elle, commence par recevoir : c'est le Seigneur qui lui ouvre le cœur (Actes 16:14).",
+  "grace": "Lydie ne commence pas par donner : « le Seigneur lui ouvrit le cœur » (Actes 16:14). Sa foi n'est pas le produit de son énergie ou de son sens des affaires ; son hospitalité est une réponse à ce qui lui a été donné. Elle demande d'être jugée « fidèle au Seigneur », parce qu'il l'a d'abord rendue attentive.",
+  "christ": "Ce que Paul annonçait à Philippes, c'était « la bonne nouvelle » (Actes 16:10), c'est-à-dire Jésus-Christ ; et c'est le Seigneur lui-même qui lui ouvre le cœur pour la recevoir. Sa maison paraît devenir le lieu où se retrouvent les frères : l'Église semble commencer chez elle. L'accueil est le fruit de cette ouverture, jamais sa cause.",
+  "quotes": [
+   {
+    "ref": "Actes 16:14",
+    "text": "Le Seigneur lui ouvrit le coeur, pour qu'elle fût attentive à ce que disait Paul."
+   },
+   {
+    "ref": "Actes 16:15",
+    "text": "Si vous me jugez fidèle au Seigneur, entrez dans ma maison, et demeurez-y."
+   }
+  ],
+  "question": "Qu'est-ce que le Seigneur m'a donné avant que je me mette à donner aux autres ?",
+  "step": "Inviter à votre table une personne ou une famille cette semaine, après avoir demandé au Seigneur à qui."
+ },
+ "APOLLOS": {
+  "name": "Apollos",
+  "aliases": [
+   "Apollos"
+  ],
+  "reviewed": false,
+  "title": "L'orateur fervent qui accepte d'être corrigé",
+  "refs": "Actes 18:24-28 ; 1 Corinthiens 3 ; 16 ; Tite 3",
+  "profile": {
+   "code": "IC",
+   "solidity": "I : indices convergents · C : indices convergents",
+   "dimensions": {
+    "I": {
+     "level": 3,
+     "traits": [
+      [
+       "Il est éloquent",
+       "« Un Juif nommé Apollos, originaire d'Alexandrie, homme éloquent. »",
+       "Actes 18:24"
+      ],
+      [
+       "Il est fervent et parle librement en public",
+       "« Fervent d'esprit », il se met à parler librement dans la synagogue.",
+       "Actes 18:25-26"
+      ],
+      [
+       "Il réfute vivement en public",
+       "« Il réfutait vivement les Juifs en public. »",
+       "Actes 18:28"
+      ],
+      [
+       "Il attire des partisans",
+       "À Corinthe, certains disent : « Moi, d'Apollos ! »",
+       "1 Corinthiens 3:4"
+      ]
+     ]
+    },
+    "C": {
+     "level": 3,
+     "traits": [
+      [
+       "Il est versé dans les Écritures",
+       "Il est « versé dans les Écritures » et « instruit dans la voie du Seigneur ».",
+       "Actes 18:24-25"
+      ],
+      [
+       "Il enseigne avec exactitude",
+       "Il « annonçait et enseignait avec exactitude ce qui concerne Jésus ».",
+       "Actes 18:25"
+      ],
+      [
+       "Il démontre à partir du texte",
+       "Il démontre « par les Écritures que Jésus est le Christ ».",
+       "Actes 18:28"
+      ],
+      [
+       "Il accepte d'être repris sur le détail",
+       "Aquilas et Priscille lui exposent « plus exactement la voie de Dieu » : il reçoit.",
+       "Actes 18:26"
+      ]
+     ]
+    }
+   },
+   "absent": [
+    [
+     "Prise de commandement (D)",
+     "Même exhorté par Paul, il ne se rend pas à Corinthe quand il ne le veut pas (1 Corinthiens 16:12)."
+    ],
+    [
+     "Chaleur et accueil (S)",
+     "Le texte le présente par sa parole et son argumentation, non par son accueil des personnes."
+    ]
+   ],
+   "limits": "Apollos est présenté en quelques versets dans les Actes et mentionné dans les lettres de Paul. Les indices sont convergents, mais le tableau reste bref. Nous repérons des indices, nous ne mesurons rien."
+  },
+  "why": {
+   "I": "Comme lui, vous parlez avec feu et vous gagnez les gens par la parole. Son récit montre ce qui garde cet élan : il accepte d'être complété.",
+   "C": "Comme lui, vous tenez à l'exactitude et vous vous appuyez sur le texte. Son récit montre que la compétence reste ouverte à la correction.",
+   "default": "Son éloquence et son sérieux éclairent les tempéraments d'enseignants."
+  },
+  "who": "Apollos est un Juif d'Alexandrie, « homme éloquent et versé dans les Écritures », qui vient à Éphèse (Actes 18:24). Il passe ensuite à Corinthe, où il est très utile à ceux qui ont cru. Paul le mentionne comme un collaborateur de l'Évangile.",
+  "episodes": [
+   {
+    "title": "Éloquent et versé dans les Écritures",
+    "ref": "Actes 18:24-25",
+    "tags": [
+     [
+      "I",
+      "éloquence"
+     ],
+     [
+      "C",
+      "exactitude"
+     ]
+    ],
+    "text": "À Éphèse, il enseigne avec exactitude ce qui concerne Jésus, avec ferveur d'esprit, bien qu'il ne connaisse que le baptême de Jean.",
+    "quote": {
+     "ref": "Actes 18:25",
+     "text": "fervent d'esprit, il annonçait et enseignait avec exactitude ce qui concerne Jésus"
+    }
+   },
+   {
+    "title": "Pris à part par Priscille et Aquilas",
+    "ref": "Actes 18:26",
+    "tags": [
+     [
+      "C",
+      "accepte la correction"
+     ]
+    ],
+    "text": "Ils l'entendent parler librement dans la synagogue, le prennent avec eux et lui exposent plus exactement la voie de Dieu."
+   },
+   {
+    "title": "Très utile par la grâce",
+    "ref": "Actes 18:27-28",
+    "tags": [
+     [
+      "I",
+      "réfute en public"
+     ]
+    ],
+    "text": "Encouragé par les frères, il passe en Achaïe. Là, il est très utile à ceux qui ont cru, et il réfute vivement les Juifs en public, en démontrant par les Écritures que Jésus est le Christ.",
+    "quote": {
+     "ref": "Actes 18:28",
+     "text": "démontrant par les Ecritures que Jésus est le Christ."
+    }
+   },
+   {
+    "title": "Moi, d'Apollos !",
+    "ref": "1 Corinthiens 3:4-7",
+    "text": "À Corinthe, des groupes se réclament de Paul ou d'Apollos. Paul remet les choses en place : l'un a planté, l'autre a arrosé, mais c'est Dieu qui fait croître.",
+    "quote": {
+     "ref": "1 Corinthiens 3:6",
+     "text": "J'ai planté, Apollos a arrosé, mais Dieu a fait croître"
+    }
+   },
+   {
+    "title": "Pas maintenant",
+    "ref": "1 Corinthiens 16:12",
+    "text": "Paul l'a beaucoup exhorté à se rendre à Corinthe, mais « ce n'était décidément pas sa volonté de le faire maintenant ». Il partira quand il en aura l'occasion."
+   },
+   {
+    "title": "Rien ne leur manque",
+    "ref": "Tite 3:13",
+    "text": "Paul demande à Tite de pourvoir au voyage d'Apollos, afin que rien ne lui manque : un collaborateur que l'on soutient."
+   }
+  ],
+  "weakness": "Le zèle en avance sur la connaissance : il enseigne avec exactitude, mais il ne connaît que le baptême de Jean (Actes 18:25). Et l'éloquence attire des partisans : à Corinthe, certains disent « moi, d'Apollos ! » (1 Corinthiens 3:4). Pour ce tempérament, la vigilance : le talent oratoire peut faire passer la personne avant le message.",
+  "grace": "Priscille et Aquilas ne le disqualifient pas : ils le prennent avec eux et lui exposent plus exactement la voie (Actes 18:26). Apollos reçoit sans s'offusquer, et le texte attribue son utilité à la grâce de Dieu : « il se rendit, par la grâce de Dieu, très utile à ceux qui avaient cru » (18:27).",
+  "christ": "Tout ce que fait Apollos tend à une seule démonstration : « que Jésus est le Christ » (Actes 18:28). Et Paul le dit sans ménagement : ni lui ni Apollos ne sont quelque chose, « mais Dieu qui fait croître » (1 Corinthiens 3:7). L'orateur qui attire est un serviteur ; ce qui sauve, c'est le Christ qu'il annonce.",
+  "quotes": [
+   {
+    "ref": "Actes 18:28",
+    "text": "démontrant par les Ecritures que Jésus est le Christ."
+   },
+   {
+    "ref": "1 Corinthiens 3:7",
+    "text": "ce n'est pas celui qui plante qui est quelque chose, ni celui qui arrose, mais Dieu qui fait croître."
+   }
+  ],
+  "question": "Qui peut me compléter, ou me corriger, sans que je m'en offusque ?",
+  "step": "Demander à une personne de confiance ce que vous enseignez ou affirmez avec assurance, mais qu'elle jugerait à compléter."
+ },
+ "SALOMON": {
+  "name": "Salomon",
+  "aliases": [
+   "Salomon"
+  ],
+  "reviewed": false,
+  "title": "Le roi sage dont le cœur s'est partagé",
+  "refs": "1 Rois 3–4 ; 10–11 ; 2 Samuel 12",
+  "profile": {
+   "code": "IC",
+   "solidity": "I : indices nombreux et convergents · C : indices nombreux et convergents",
+   "dimensions": {
+    "I": {
+     "level": 3,
+     "traits": [
+      [
+       "Il rayonne : on vient de partout",
+       "« Tout le monde cherchait à voir Salomon, pour entendre la sagesse que Dieu avait mise dans son cœur. »",
+       "1 Rois 10:24"
+      ],
+      [
+       "Il s'exprime abondamment",
+       "Il prononce trois mille sentences et compose mille cinq cantiques.",
+       "1 Rois 4:32"
+      ],
+      [
+       "Il est le plus grand, et on le voit",
+       "« Le roi Salomon fut plus grand que tous les rois de la terre par les richesses et par la sagesse. »",
+       "1 Rois 10:23"
+      ]
+     ]
+    },
+    "C": {
+     "level": 3,
+     "traits": [
+      [
+       "Il cherche le discernement",
+       "Il demande « un cœur intelligent pour juger ton peuple, pour discerner le bien du mal ».",
+       "1 Rois 3:9"
+      ],
+      [
+       "Il analyse avec précision",
+       "Devant deux mères, il met à l'épreuve leurs réactions et en déduit laquelle est la vraie mère.",
+       "1 Rois 3:24-27"
+      ],
+      [
+       "Il observe et classe",
+       "Il parle des arbres, des animaux, des oiseaux, des reptiles et des poissons.",
+       "1 Rois 4:33"
+      ]
+     ]
+    }
+   },
+   "absent": [
+    [
+     "Constance du cœur (S)",
+     "À la fin, « son cœur ne fut point tout entier à l'Éternel, son Dieu » (1 Rois 11:4)."
+    ],
+    [
+     "Conquête et prise de contrôle (D)",
+     "Son règne est présenté par la sagesse et la renommée, non par les conquêtes (1 Rois 4:29-34)."
+    ]
+   ],
+   "limits": "Salomon est longuement présenté, mais surtout par ce que le texte dit de sa sagesse et de sa chute. Nous repérons des indices, nous ne mesurons rien."
+  },
+  "why": {
+   "I": "Comme lui, vous avez du rayonnement et de la parole, et on vient vous écouter. Son récit montre ce qu'il ne faut jamais confondre avec la sagesse : le succès.",
+   "C": "Comme lui, vous voulez comprendre et discerner finement. Son récit montre que la connaissance, seule, ne garde pas le cœur.",
+   "default": "Son rayonnement et sa finesse éclairent les tempéraments brillants."
+  },
+  "who": "Salomon est le fils de David et de Bath-Schéba, devenu roi d'Israël. À Gabaon, Dieu lui apparaît en songe et lui dit : « Demande ce que tu veux que je te donne » (1 Rois 3:5). Il demande un cœur intelligent.",
+  "episodes": [
+   {
+    "title": "Aimé de l'Éternel",
+    "ref": "2 Samuel 12:24-25",
+    "text": "À sa naissance, le texte dit qu'il « fut aimé de l'Éternel » ; le prophète Nathan lui donne le nom de Jedidja, « à cause de l'Éternel ».",
+    "quote": {
+     "ref": "2 Samuel 12:24",
+     "text": "qui fut aimé de l'Eternel."
+    }
+   },
+   {
+    "title": "Demande ce que tu veux",
+    "ref": "1 Rois 3:5-14",
+    "tags": [
+     [
+      "C",
+      "cherche le discernement"
+     ]
+    ],
+    "text": "Jeune, il se reconnaît sans expérience. Il ne demande ni richesses ni longue vie, mais un cœur intelligent. Dieu le lui donne, et ajoute ce qu'il n'a pas demandé.",
+    "quote": {
+     "ref": "1 Rois 3:9",
+     "text": "Accorde donc à ton serviteur un coeur intelligent pour juger ton peuple, pour discerner le bien du mal!"
+    }
+   },
+   {
+    "title": "Le jugement des deux mères",
+    "ref": "1 Rois 3:24-28",
+    "tags": [
+     [
+      "C",
+      "analyse"
+     ]
+    ],
+    "text": "Deux femmes se disputent un enfant vivant. Il propose de le partager ; l'une cède l'enfant pour qu'il vive, l'autre accepte qu'on le coupe. Israël comprend que la sagesse de Dieu est en lui."
+   },
+   {
+    "title": "Une sagesse sans bornes",
+    "ref": "1 Rois 4:29-34",
+    "tags": [
+     [
+      "C",
+      "observe"
+     ],
+     [
+      "I",
+      "abondance"
+     ]
+    ],
+    "text": "Sa sagesse surpasse celle de tous les fils de l'Orient. Il parle des arbres et des animaux, compose des sentences et des cantiques ; des gens de tous les peuples viennent l'entendre."
+   },
+   {
+    "title": "Plus grand que tous les rois",
+    "ref": "1 Rois 10:23-24",
+    "tags": [
+     [
+      "I",
+      "rayonnement"
+     ]
+    ],
+    "text": "On vient de partout pour le voir et l'entendre. Le texte précise que la sagesse « Dieu l'avait mise dans son cœur »."
+   },
+   {
+    "title": "Un cœur partagé",
+    "ref": "1 Rois 11:1-4",
+    "text": "Il aime de nombreuses femmes étrangères, malgré l'avertissement de Dieu. Dans sa vieillesse, elles inclinent son cœur vers d'autres dieux.",
+    "quote": {
+     "ref": "1 Rois 11:4",
+     "text": "son coeur ne fut point tout entier à l'Eternel, son Dieu"
+    }
+   }
+  ],
+  "weakness": "Le cœur qui se partage. Le même homme qui avait demandé un cœur intelligent voit son cœur détourné par ses femmes vers d'autres dieux (1 Rois 11:3-4). Pour ce tempérament brillant, la vigilance : le succès, la renommée et la richesse entourent d'attraits qui peuvent éloigner de celui qui a tout donné.",
+  "grace": "Tout commence par un amour reçu avant toute œuvre : « aimé de l'Éternel » (2 Samuel 12:24). Dieu lui donne ce qu'il demande, et même « ce que tu n'as pas demandé » (1 Rois 3:13). Sa sagesse est un don : « la sagesse que Dieu avait mise dans son cœur » (10:24), non un mérite.",
+  "christ": "Jésus parle de la reine du Midi, venue de loin pour entendre la sagesse de Salomon, et dit : « il y a ici plus que Salomon » (Matthieu 12:42). Paul dit de Christ que « sont cachés tous les trésors de la sagesse et de la science » en lui (Colossiens 2:3). Salomon montre que la plus grande sagesse humaine reste un reflet ; c'est en Christ qu'elle trouve sa source et sa fin.",
+  "quotes": [
+   {
+    "ref": "Matthieu 12:42",
+    "text": "il y a ici plus que Salomon."
+   },
+   {
+    "ref": "Colossiens 2:3",
+    "text": "sont cachés tous les trésors de la sagesse et de la science."
+   }
+  ],
+  "question": "Qu'est-ce qui, dans mon succès ou mon image, pourrait partager mon cœur ?",
+  "step": "Nommer à une personne de confiance une chose qui occupe aujourd'hui dans votre cœur la place que Dieu devrait occuper."
+ },
+ "RUTH": {
+  "name": "Ruth",
+  "aliases": [
+   "Ruth"
+  ],
+  "reviewed": false,
+  "title": "L'étrangère fidèle que Dieu accueille",
+  "refs": "Ruth 1–4 ; Matthieu 1",
+  "profile": {
+   "code": "SD",
+   "solidity": "S : indices nombreux et convergents · D : indices réels",
+   "dimensions": {
+    "S": {
+     "level": 3,
+     "traits": [
+      [
+       "Elle est loyale, sans condition",
+       "« Où tu iras j'irai, où tu demeureras je demeurerai ; ton peuple sera mon peuple, et ton Dieu sera mon Dieu. »",
+       "Ruth 1:16-17"
+      ],
+      [
+       "Elle tient dans la durée",
+       "Elle glane dans le champ jusqu'au soir, puis rapporte à sa belle-mère de quoi manger.",
+       "Ruth 2:17-18"
+      ],
+      [
+       "Elle est humble et reconnaissante",
+       "Elle se prosterne : « Comment ai-je trouvé grâce à tes yeux... à moi qui suis une étrangère ? »",
+       "Ruth 2:10"
+      ],
+      [
+       "Elle suit docilement",
+       "« Je ferai tout ce que tu as dit. »",
+       "Ruth 3:5"
+      ]
+     ]
+    },
+    "D": {
+     "level": 2,
+     "traits": [
+      [
+       "Elle est déterminée",
+       "Naomi l'invite à repartir ; elle répond : « Ne me presse pas de te laisser. »",
+       "Ruth 1:15-16"
+      ],
+      [
+       "Elle prend l'initiative de pourvoir",
+       "« Laisse-moi, je te prie, aller glaner des épis dans le champ. »",
+       "Ruth 2:2"
+      ],
+      [
+       "Elle demande directement ce qu'il lui faut",
+       "Devant Boaz : « étends ton aile sur ta servante, car tu as droit de rachat. »",
+       "Ruth 3:9"
+      ]
+     ]
+    }
+   },
+   "absent": [
+    [
+     "Éloquence et recherche de la scène (I)",
+     "Elle parle peu, et sa force est dans ses actes."
+    ],
+    [
+     "Analyse et prudence (C)",
+     "Elle accepte le plan de Naomi tel qu'il lui est proposé (Ruth 3:5)."
+    ]
+   ],
+   "limits": "Le livre de Ruth tient en quatre chapitres. S est solidement appuyé ; D repose sur des indices réels mais moins nombreux. Nous repérons des indices, nous ne mesurons rien."
+  },
+  "why": {
+   "S": "Comme elle, vous êtes fidèle à une personne ou à une cause, dans la durée, sans bruit. Son récit montre que cette loyauté n'est pas oubliée.",
+   "D": "Comme elle, vous savez, quand il le faut, prendre l'initiative et demander clairement. Son récit montre que la douceur peut s'allier à la détermination.",
+   "default": "Sa loyauté et sa détermination éclairent les tempéraments fidèles."
+  },
+  "who": "Ruth est une Moabite, veuve d'un fils de Naomi. Naomi, veuve elle aussi, décide de retourner à Bethléhem ; Ruth refuse de la quitter et la suit. Elle glane dans les champs de Boaz, un parent de Naomi, qui devient son rédempteur.",
+  "episodes": [
+   {
+    "title": "Où tu iras j'irai",
+    "ref": "Ruth 1:15-17",
+    "tags": [
+     [
+      "S",
+      "loyauté"
+     ],
+     [
+      "D",
+      "détermination"
+     ]
+    ],
+    "text": "Orpa est retournée chez elle. Naomi presse Ruth d'en faire autant. Ruth refuse et prononce l'un des engagements les plus forts de la Bible.",
+    "quote": {
+     "ref": "Ruth 1:16",
+     "text": "Où tu iras j'irai, où tu demeureras je demeurerai; ton peuple sera mon peuple, et ton Dieu sera mon Dieu"
+    }
+   },
+   {
+    "title": "Glaner derrière les moissonneurs",
+    "ref": "Ruth 2:2-3",
+    "tags": [
+     [
+      "D",
+      "prend l'initiative"
+     ]
+    ],
+    "text": "Elle demande à Naomi la permission d'aller glaner. Elle arrive, par hasard selon le texte, dans le champ de Boaz."
+   },
+   {
+    "title": "Comment ai-je trouvé grâce ?",
+    "ref": "Ruth 2:10-12",
+    "tags": [
+     [
+      "S",
+      "humilité"
+     ]
+    ],
+    "text": "Boaz l'accueille et lui dit connaître ce qu'elle a fait pour sa belle-mère. Il lui souhaite d'être récompensée par l'Éternel, « sous les ailes duquel tu es venue te réfugier ».",
+    "quote": {
+     "ref": "Ruth 2:12",
+     "text": "sous les ailes duquel tu es venue te réfugier!"
+    }
+   },
+   {
+    "title": "Jusqu'au soir",
+    "ref": "Ruth 2:17-18",
+    "tags": [
+     [
+      "S",
+      "constance"
+     ]
+    ],
+    "text": "Elle glane toute la journée, bat l'orge et la rapporte. Sa belle-mère voit ce qu'elle a glané ; Ruth lui donne aussi les restes de son repas."
+   },
+   {
+    "title": "À l'aire",
+    "ref": "Ruth 3:1-9",
+    "tags": [
+     [
+      "S",
+      "docile"
+     ],
+     [
+      "D",
+      "demande clairement"
+     ]
+    ],
+    "text": "Naomi lui indique comment se présenter à Boaz. Elle répond qu'elle fera tout ce qu'elle a dit, puis demande directement à Boaz d'étendre son aile sur elle, car il a droit de rachat.",
+    "quote": {
+     "ref": "Ruth 3:9",
+     "text": "Je suis Ruth, ta servante; étends ton aile sur ta servante, car tu as droit de rachat."
+    }
+   },
+   {
+    "title": "Un fils pour Naomi",
+    "ref": "Ruth 4:13-17",
+    "text": "Boaz épouse Ruth. Elle enfante Obed, grand-père de David. Les femmes disent à Naomi : « Béni soit l'Éternel, qui ne t'a point laissé manquer aujourd'hui d'un homme ayant droit de rachat ! »"
+   }
+  ],
+  "weakness": "Le texte ne rapporte aucun défaut de Ruth. À titre de lecture, la vigilance d'une loyauté totale : se donner à une personne ou à un projet au point d'oublier ses propres besoins. Ruth le vit sans le nommer, et le texte montre que quelqu'un veille sur elle (Ruth 2:12 ; 3:10-11).",
+  "grace": "Ruth, la Moabite, est une étrangère. Elle n'a rien à faire valoir, et pourtant elle trouve grâce : « Comment ai-je trouvé grâce à tes yeux... à moi qui suis une étrangère ? » (Ruth 2:10). Boaz l'accueille, la protège et la rachète. Ce qu'elle reçoit dépasse de loin ce qu'elle a donné.",
+  "christ": "Boaz est celui qui a « droit de rachat » (Ruth 3:9 ; 4:14) : un parent qui rachète. Il annonce le Rédempteur : « En lui nous avons la rédemption par son sang » (Éphésiens 1:7). Et Ruth, la Moabite étrangère, figure dans la généalogie de Jésus-Christ : « Boaz engendra Obed de Ruth » (Matthieu 1:5). La fidèle étrangère est accueillie dans la famille du Christ.",
+  "quotes": [
+   {
+    "ref": "Matthieu 1:5",
+    "text": "Boaz engendra Obed de Ruth"
+   },
+   {
+    "ref": "Éphésiens 1:7",
+    "text": "En lui nous avons la rédemption par son sang, la rémission des péchés, selon la richesse de sa grâce"
+   }
+  ],
+  "question": "À qui ai-je donné ma fidélité, et qui veille sur moi pendant que je veille sur lui ?",
+  "step": "Demander à une personne de confiance de veiller sur vous cette semaine, comme vous veillez sur d'autres."
+ }
+}
