@@ -184,7 +184,8 @@ class SubscriptionTest extends WebTestCase
         // Vitrine : couverture du livre sans le nom de l'auteur, schémas, plus d'émojis, promesse exacte sur le livre
         $html = $this->client->getResponse()->getContent();
         $this->assertStringContainsString('images/livre/couverture', $html);
-        $this->assertStringContainsString('images/livre/fig_6plans', $html);
+        $this->assertStringContainsString('Développement personnel', $html);
+        $this->assertStringContainsString('role="img" aria-label="Les six plans', $html);
         $this->assertStringContainsString('l\'essentiel de chaque chapitre du livre', $html);
         $this->assertDoesNotMatchRegularExpression('/[\x{1F300}-\x{1FAFF}]/u', $html);
     }

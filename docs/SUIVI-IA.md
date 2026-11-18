@@ -317,3 +317,10 @@ est abandonné ; personne n'a encore reçu de lien `app.`, donc pas de redirecti
 l'hébergement vers `~/kiini/public`, SSL ; puis changer `DEFAULT_URI` dans `~/kiini/.env.prod.local`, mettre à jour
 `HOSTINGER_DIR` dans `bin/ops/hostinger.local` si le dossier change, vider le cache, vérifier connexion, email, installation.
 Connexions, notifications poussées et installation sur téléphone sont liées à l'adresse : tout le monde se reconnecte une fois.
+
+## 18/11/2026 — Vitrine : figure des six plans en SVG
+
+L'image du livre (`fig_6plans.png`) affichait « Plan de Développement » sans « personnel » ; `figs.py` ne se régénère pas sur ce Mac
+(`rsvg-convert` et polices Carlito/Caladea absents, sortie vers `/home/claude/...`). La vitrine utilise donc un SVG intégré :
+`templates/dashboard/_six_plans_figure.html.twig` (noms complets, couleurs du livre). Le cercle de « Mes plans » dit aussi
+« Développement personnel ». **Reste (auteur) :** corriger la ligne 102 de `figs.py` (`"Plan de\nDéveloppement\npersonnel"`) pour le livre.
