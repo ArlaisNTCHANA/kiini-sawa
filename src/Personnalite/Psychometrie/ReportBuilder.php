@@ -95,6 +95,36 @@ final class ReportBuilder
         ];
     }
 
+    /**
+     * Regard croisé : le style déduit du Big Five (profil complet ou essentiel) confronté au DISC. Aucun score n'est mélangé :
+     * les deux outils mesurent par des méthodes différentes, on dit seulement s'ils se rejoignent.
+     *
+     * @return array{status: string, text?: string, styleName?: string, source?: string, date?: \DateTimeInterface}
+     */
+    public function crossView(array $discReport, ?Assessment $ipip): array
+    {
+        $style = $ipip?->getScores()['style'] ?? null;
+        if (!$style) {
+            return ['status' => 'missing'];
+        }
+        $disc = $discReport['disc'];
+        $styleName = Interpretations::STYLES[$style['primary']]['name'];
+        $discName = $disc['profile']['name'];
+        $secondary = $style['secondary'] ?? null;
+        if ($disc['primary'] === $style['primary']) {
+            $status = 'confirmed';
+            $text = 'Deux outils différents, un même constat : votre Big Five fait lui aussi ressortir un style « '.$styleName.' », comme votre DISC (« '.$discName.' »). Votre profil naturel est solide.';
+        } elseif ($disc['primary'] === $secondary || ($disc['secondary'] ?? null) === $style['primary']) {
+            $status = 'close';
+            $text = 'Votre Big Five rejoint en partie votre DISC : il fait ressortir « '.$styleName.' », un style voisin de votre profil « '.$discName.' ». Vos deux résultats se complètent plutôt qu\'ils ne se contredisent.';
+        } else {
+            $status = 'different';
+            $text = 'Votre Big Five fait ressortir « '.$styleName.' », alors que votre DISC place « '.$discName.' » en tête. Ce n\'est pas une contradiction : le DISC mesure ce que vous choisissez de dire de vous (naturel et adapté), le Big Five mesure vos traits à partir d\'affirmations. Notez ce qui diffère : c\'est souvent là que vous vous adaptez, ou que vous vous voyez autrement que vous ne vous comportez.';
+        }
+
+        return ['status' => $status, 'text' => $text, 'styleName' => $styleName, 'source' => Instruments::CATALOG[$ipip->getInstrument()]['name'], 'date' => $ipip->getTakenAt()];
+    }
+
     public function disc(array $scores): array
     {
         $p = Content::get('disc.dimensions');

@@ -70,6 +70,7 @@ class AssessmentController extends AbstractController
         $this->denyUnlessOwner($assessment);
 
         $data = $this->reports->build($assessment);
+        $data['cross'] = $this->crossViewFor($assessment, $data, $em);
 
         return $this->render('personnalite/assessment/report.html.twig', $data + ['shareCard' => \App\Personnalite\Psychometrie\ShareCard::from($data),
             'addedActions' => $em->getRepository(\App\Personnalite\Entity\TestAction::class)->addedBy($this->user()),
@@ -91,16 +92,35 @@ class AssessmentController extends AbstractController
     }
 
     #[Route('/rapport/{id}/pdf', name: 'report_pdf', requirements: ['id' => '\d+'], methods: ['GET'])]
-    public function reportPdf(Assessment $assessment, PdfFactory $pdf): Response
+    public function reportPdf(Assessment $assessment, PdfFactory $pdf, \Doctrine\ORM\EntityManagerInterface $em): Response
     {
         $this->denyUnlessOwner($assessment);
         $data = $this->reports->build($assessment) + ['name' => $this->user()->getDisplayName()];
         $data['confirmation'] = $this->confirmationFor($assessment, $data);
+        $data['cross'] = $this->crossViewFor($assessment, $data, $em);
 
         return new Response($pdf->render($this->renderView($data['template'] ? 'personnalite/assessment/report/pdf.html.twig' : 'personnalite/assessment/report_pdf.html.twig', $data + ['body' => $data['template']])), 200, [
             'Content-Type' => 'application/pdf',
             'Content-Disposition' => HeaderUtils::makeDisposition(HeaderUtils::DISPOSITION_ATTACHMENT, 'kiini-sawa-'.$assessment->getInstrument().'-'.$assessment->getTakenAt()->format('Y-m-d').'.pdf'),
         ]);
+    }
+
+    /** Regard croisé du DISC avec le style déduit du Big Five le plus récent ; rien pour les autres tests. */
+    private function crossViewFor(Assessment $assessment, array $data, \Doctrine\ORM\EntityManagerInterface $em): ?array
+    {
+        if ('disc' !== $assessment->getInstrument()) {
+            return null;
+        }
+        $repo = $em->getRepository(Assessment::class);
+        $latest = null;
+        foreach (['profil-complet', 'big-five'] as $slug) {
+            $a = $repo->latest($this->user(), $slug);
+            if ($a && !empty($a->getScores()['style']) && (!$latest || $a->getTakenAt() > $latest->getTakenAt())) {
+                $latest = $a;
+            }
+        }
+
+        return $this->reports->crossView($data, $latest);
     }
 
     private function confirmationFor(Assessment $assessment, array $data): ?array

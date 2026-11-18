@@ -185,6 +185,23 @@
         <tr><td><strong>Dans un désaccord</strong></td><td>{{ p.disagree }}</td></tr>
         <tr><td><strong>Comment les autres vous repèrent</strong></td><td>Débit {{ p.cues.speech|lower }}, gestuelle {{ p.cues.gesture|lower }}, messages {{ p.cues.mail|lower }}.</td></tr>
     </table>
+    {% if cross is defined and cross %}
+        {% if cross.status == 'missing' %}
+            {% if not pdf %}
+                <div class="dr-tile" style="margin-top: 14px;">
+                    <div class="dr-label">Regard croisé</div>
+                    <p style="margin: 0;">Passez le <a href="{{ path('app_assessment_take', {slug: 'big-five'}) }}" style="color: var(--primary); font-weight: 700;">Big Five essentiel</a> (8 minutes) : nous confronterons son résultat à votre DISC pour voir si deux méthodes différentes disent la même chose de vous.</p>
+                </div>
+            {% endif %}
+        {% else %}
+            {% set tone = {confirmed: ['#F0FDF4', '#166534', 'Confirmé'], close: ['#FEF3C7', '#854D0E', 'Voisin'], different: ['#F1F5F9', '#334155', 'Nuancé']}[cross.status] %}
+            <div class="dr-tile" style="margin-top: 14px; background: {{ tone[0] }}; border-color: {{ tone[0] }}; color: {{ tone[1] }};">
+                <div class="dr-label" style="color: {{ tone[1] }};">Regard croisé · {{ tone[2] }}</div>
+                <p style="margin: 0 0 4px;">{{ cross.text }}</p>
+                <p class="dr-small" style="margin: 0; color: {{ tone[1] }};">D'après votre {{ cross.source }} du {{ cross.date|format_date(pattern: 'd MMMM y', locale: 'fr') }}.</p>
+            </div>
+        {% endif %}
+    {% endif %}
 </div>
 
 {# ═══ 6. Sous pression ════════════════════════════════════════════════ #}

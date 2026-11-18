@@ -344,3 +344,12 @@ intensité en étiquette lisible, page de garde en vert du livre (`report/_cover
 Outil de mesure : générer le PDF via un test temporaire (`tests/Personnalite/DiscTest.php` montre comment créer un `Assessment`), puis
 le rendre avec PDFKit (swift) ; poppler/ImageMagick absents sur le Mac. **Pas encore revu :** écran (page web du rapport), Big Five,
 ennéagramme, dons, synthèse : mêmes styles communs, à contrôler de la même façon.
+
+## 18/11/2026 — DISC : « Regard croisé » avec le Big Five
+
+Le test « Style comportemental » n'est plus proposé depuis l'arrivée du DISC (absent de `Instruments::GROUPS`, voir `DiscTest`) ; il ne
+sert qu'à relire d'anciens rapports. Son calcul (`Scorer::style`) existe déjà dans tout résultat Big Five / Profil complet.
+Ajout : `ReportBuilder::crossView()` confronte le DISC au style déduit du Big Five le plus récent (confirmé / voisin / nuancé) sans
+mélanger les scores ; bloc dans `disc/_report.html.twig` (page « Votre profil en situation », écran et PDF) ; sans Big Five, invitation
+à le passer (écran seulement). Branché dans `AssessmentController::report` et `reportPdf`. Tests : `tests/Personnalite/CrossViewTest.php`.
+Pagination PDF mesurée : toujours 13 pages, aucune page orpheline.
