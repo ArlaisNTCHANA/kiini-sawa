@@ -1,0 +1,35 @@
+{% extends 'admin/layout.html.twig' %}
+{% block title %}Textes du site{% endblock %}
+{% block page_title %}Textes du site{% endblock %}
+{% block stylesheets %}{% include 'personnalite/admin/_content_styles.html.twig' %}{% endblock %}
+{% block content %}
+<div class="ct-card">
+    <p class="ct-note">Modifiez ici les textes de la page d'accueil publique et des pages légales. <strong>Rien ne part en ligne tant que vous n'avez pas publié</strong> : vous écrivez un brouillon, vous le relisez en mode aperçu (vous seul le voyez en parcourant le site), puis vous le publiez. Chaque publication est gardée : on peut revenir en arrière ou au texte d'origine.</p>
+    <div style="display: flex; gap: 10px; flex-wrap: wrap; margin-top: 12px;">
+        <form method="post" action="{{ path('admin_site_texts_preview') }}"><input type="hidden" name="_csrf_token" value="{{ csrf_token('site_text') }}"><button class="ct-btn {{ preview ? '' : 'sec' }}" type="submit">{{ preview ? 'Quitter le mode aperçu' : 'Activer le mode aperçu' }}</button></form>
+        {% if drafts %}<form method="post" action="{{ path('admin_site_texts_publish_all') }}" onsubmit="return confirm('Publier les {{ drafts }} brouillon(s) ? Ils seront en ligne immédiatement.');"><input type="hidden" name="_csrf_token" value="{{ csrf_token('site_text') }}"><button class="ct-btn" type="submit">Publier les {{ drafts }} brouillon{{ drafts > 1 ? 's' }}</button></form>{% endif %}
+        <a class="ct-btn sec" href="{{ path('app_home', {vitrine: 1}) }}" target="_blank" rel="noopener">Ouvrir le site</a>
+    </div>
+</div>
+<div class="ct-card">
+    <form method="get" style="display: flex; gap: 10px; flex-wrap: wrap;">
+        <input class="ct-search" type="search" name="q" value="{{ q }}" placeholder="Chercher un mot dans les textes…" style="flex: 2; min-width: 200px;">
+        <select class="ct-search" name="groupe" style="flex: 1; min-width: 160px;"><option value="">Toutes les parties</option>{% for g, n in groups %}<option value="{{ g }}" {{ g == group ? 'selected' }}>{{ groupLabels[g] ?? g }} ({{ n }})</option>{% endfor %}</select>
+        <select class="ct-search" name="etat" style="flex: 1; min-width: 140px;"><option value="">Tous les états</option><option value="draft" {{ status == 'draft' ? 'selected' }}>Brouillons</option><option value="modified" {{ status == 'modified' ? 'selected' }}>Modifiés (en ligne)</option><option value="original" {{ status == 'original' ? 'selected' }}>Texte d'origine</option></select>
+        <button class="ct-btn sec" type="submit">Filtrer</button>
+    </form>
+</div>
+<div class="ct-card">
+    <h2>{{ items|length }} texte{{ items|length > 1 ? 's' }} sur {{ total }}</h2>
+    {% for it in items %}
+        <a class="ct-row" href="{{ path('admin_site_text_edit', {code: it.code}) }}">
+            <span><strong style="font-size: 12px;">{{ it.code }}</strong>
+                {% if it.state == 'draft' %}<span class="ct-badge">brouillon</span>{% elseif it.state == 'modified' %}<span class="ct-badge" style="background: rgba(34,197,94,.15); color: #4ade80;">modifié</span>{% endif %}
+                <br><span class="ct-meta" style="white-space: normal;">{{ it.excerpt }}</span></span>
+            <span class="ct-meta">›</span>
+        </a>
+    {% else %}
+        <p class="ct-note">Aucun texte ne correspond.</p>
+    {% endfor %}
+</div>
+{% endblock %}

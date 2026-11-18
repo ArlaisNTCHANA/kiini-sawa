@@ -23,13 +23,13 @@ class LegalController extends AbstractController
     public const UPDATED_AT = '15 novembre 2026';
 
     #[Route('/{page}', name: 'app_legal', requirements: ['page' => 'mentions-legales|confidentialite|cgu|cgv'], methods: ['GET'], priority: -10)]
-    public function show(string $page): Response
+    public function show(string $page, \App\Contenu\Service\SiteTexts $texts): Response
     {
         return $this->render('legal/'.$page.'.html.twig', [
             'page' => $page,
             'title' => self::PAGES[$page],
             'pages' => self::PAGES,
-            'updatedAt' => self::UPDATED_AT,
+            'todo' => substr_count($texts->document('legal.'.str_replace('-', '_', $page)), '[À COMPLÉTER'),
         ]);
     }
 }

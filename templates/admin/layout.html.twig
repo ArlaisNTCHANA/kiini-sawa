@@ -393,6 +393,10 @@
                     <i data-lucide="brain"></i>
                     <span>Tests</span>
                 </a>
+                <a href="{{ path('admin_site_texts') }}" class="ks-sidebar__link {{ app.request.attributes.get('_route') starts with 'admin_site_text' ? 'active' }}" id="nav-site-texts">
+                    <i data-lucide="file-pen-line"></i>
+                    <span>Textes du site</span>
+                </a>
                 <a href="{{ path('admin_content_index') }}" class="ks-sidebar__link {{ app.request.attributes.get('_route') starts with 'admin_content' ? 'active' }}" id="nav-test-texts">
                     <i data-lucide="pencil-line"></i>
                     <span>Textes des tests</span>

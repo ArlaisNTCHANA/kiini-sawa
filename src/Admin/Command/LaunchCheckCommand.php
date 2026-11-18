@@ -22,6 +22,7 @@ class LaunchCheckCommand extends Command
 {
     public function __construct(
         private readonly Connection $db,
+        private readonly \App\Contenu\Service\SiteTexts $siteTexts,
         private readonly Entitlements $entitlements,
         private readonly CacheItemPoolInterface $cacheApp,
         #[Autowire('%kernel.environment%')] private readonly string $env,
@@ -90,10 +91,14 @@ class LaunchCheckCommand extends Command
 
         // Contenu légal
         $todo = 0;
-        foreach (array_merge(glob($this->dir.'/templates/legal/*.twig') ?: [], [$this->dir.'/templates/abonnement/receipt.html.twig', $this->dir.'/templates/organisation/receipt.html.twig']) as $f) {
+        // Pages légales : le texte en ligne (modifiable dans Admin › Textes du site), pas seulement le texte d'origine
+        foreach (['mentions_legales', 'confidentialite', 'cgu', 'cgv'] as $page) {
+            $todo += substr_count($this->siteTexts->publishedDocument('legal.'.$page), '[À COMPLÉTER');
+        }
+        foreach ([$this->dir.'/templates/abonnement/receipt.html.twig', $this->dir.'/templates/organisation/receipt.html.twig'] as $f) {
             $todo += substr_count((string) file_get_contents($f), '[À COMPLÉTER');
         }
-        $check('Pages légales et reçus complétés', 0 === $todo, sprintf('%d passage(s) « [À COMPLÉTER] » : raison sociale, adresse, SIREN, hébergeur, médiateur, TVA (templates/legal/, reçus). À faire relire par un juriste.', $todo));
+        $check('Pages légales et reçus complétés', 0 === $todo, sprintf('%d passage(s) « [À COMPLÉTER] » : raison sociale, adresse, SIREN, hébergeur, médiateur, TVA (Admin › Textes du site › Pages légales, et reçus). À faire relire par un juriste.', $todo));
 
         $io->table(['', 'Point', 'À faire'], $rows);
         if ($blocking > 0) {

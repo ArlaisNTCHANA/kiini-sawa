@@ -186,7 +186,7 @@ class SubscriptionTest extends WebTestCase
         $this->assertStringContainsString('images/livre/couverture', $html);
         $this->assertStringContainsString('Développement personnel', $html);
         $this->assertStringContainsString('role="img" aria-label="Les six plans', $html);
-        $this->assertStringContainsString('l\'essentiel de chaque chapitre du livre', $html);
+        $this->assertStringContainsString('l\'essentiel de chaque chapitre du livre', html_entity_decode($html, \ENT_QUOTES), 'texte de la vitrine (les apostrophes sont écrites en entités HTML)');
         $this->assertDoesNotMatchRegularExpression('/[\x{1F300}-\x{1FAFF}]/u', $html);
     }
 }

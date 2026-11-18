@@ -16,10 +16,14 @@ class DashboardController extends AbstractController
     #[Route('/', name: 'app_home', methods: ['GET'])]
     public function home(\App\Abonnement\Service\SubscriptionManager $prices, \App\Abonnement\Service\Entitlements $entitlements, \App\Abonnement\Service\CurrencyResolver $currencies, \Symfony\Component\HttpFoundation\Request $request, \App\Media\Service\FunnelReport $funnel): Response
     {
-        if ($this->getUser()) {
+        // Un administrateur peut voir la vitrine (?vitrine=1) pour relire ses textes sans se déconnecter
+        $adminViewing = $this->isGranted('ROLE_ADMIN') && $request->query->has('vitrine');
+        if ($this->getUser() && !$adminViewing) {
             return $this->redirectToRoute('app_dashboard');
         }
-        $funnel->countVisit($request);
+        if (!$adminViewing) {
+            $funnel->countVisit($request);
+        }
 
         return $this->render('dashboard/landing.html.twig', [
             'defaultCurrency' => $currencies->resolve($request),

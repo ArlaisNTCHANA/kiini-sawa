@@ -36,8 +36,8 @@
             {% endfor %}
         </nav>
         <h1>{{ title }}</h1>
-        <p class="updated">Dernière mise à jour : {{ updatedAt }}</p>
-        <div class="draft">Version de travail : les passages <span class="todo">[À COMPLÉTER]</span> doivent être remplis, et l'ensemble relu par un juriste avant la mise en ligne.</div>
+        <p class="updated">{{ t('legal.mise_a_jour_label', 'Dernière mise à jour') }} : {{ t('legal.mise_a_jour', '15 novembre 2026') }}</p>
+        {% if todo > 0 %}<div class="draft">Version de travail : les passages <span class="todo">[À COMPLÉTER]</span> doivent être remplis, et l'ensemble relu par un juriste avant la mise en ligne.</div>{% endif %}
         {% block content %}{% endblock %}
     </main>
 </body>

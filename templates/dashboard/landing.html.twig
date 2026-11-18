@@ -89,23 +89,23 @@
 <header class="hero">
     <div class="wrap">
         <nav>
-            <a href="{{ path('app_home') }}" class="logo">KIINI SAWA</a>
+            <a href="{{ path('app_home') }}" class="logo">{{ t('vitrine.s0.01', 'KIINI SAWA') }}</a>
             <div class="nav-links">
-                <a href="#methode" class="hide-sm">La méthode</a>
-                <a href="#tests" class="hide-sm">Tests</a>
-                <a href="#couple" class="hide-sm">Couple</a>
-                <a href="#prix" class="hide-sm">Prix</a>
-                <a href="{{ path('app_login') }}">Se connecter</a>
+                <a href="#methode" class="hide-sm">{{ t('vitrine.s0.02', 'La méthode') }}</a>
+                <a href="#tests" class="hide-sm">{{ t('vitrine.s0.03', 'Tests') }}</a>
+                <a href="#couple" class="hide-sm">{{ t('vitrine.s0.04', 'Couple') }}</a>
+                <a href="#prix" class="hide-sm">{{ t('vitrine.s0.05', 'Prix') }}</a>
+                <a href="{{ path('app_login') }}">{{ t('vitrine.s0.06', 'Se connecter') }}</a>
             </div>
         </nav>
         <div class="hero-grid">
             <div class="hero-inner">
-                <span class="kicker">Les six plans d'une vie alignée</span>
-                <h1>Bâtissez la vie pour laquelle Dieu vous a créé.</h1>
-                <p class="lead">Découvrez le But de Dieu pour votre vie, écrivez-le en une phrase, puis bâtissez six plans concrets pour le vivre chaque jour : avec des rituels, des revues et des partenaires qui vous tiennent la main.</p>
+                <span class="kicker">{{ t('vitrine.s0.07', 'Les six plans d\'une vie alignée') }}</span>
+                <h1>{{ t('vitrine.s0.08', 'Bâtissez la vie pour laquelle Dieu vous a créé.') }}</h1>
+                <p class="lead">{{ t('vitrine.s0.09', 'Découvrez le But de Dieu pour votre vie, écrivez-le en une phrase, puis bâtissez six plans concrets pour le vivre chaque jour : avec des rituels, des revues et des partenaires qui vous tiennent la main.') }}</p>
                 <div class="cta-row">
-                    <a href="{{ path('app_register') }}" class="btn btn-primary">Commencer gratuitement</a>
-                    <a href="#methode" class="btn btn-ghost">Découvrir la méthode</a>
+                    <a href="{{ path('app_register') }}" class="btn btn-primary">{{ t('vitrine.s0.10', 'Commencer gratuitement') }}</a>
+                    <a href="#methode" class="btn btn-ghost">{{ t('vitrine.s0.11', 'Découvrir la méthode') }}</a>
                 </div>
                 <p class="small">Gratuit pour toujours · {{ trialDays }} jours de PRO offerts · sans carte bancaire</p>
             </div>
@@ -118,16 +118,16 @@
 
 <section>
     <div class="wrap">
-        <p class="verse">« Car je connais les projets que j'ai formés sur vous, dit l'Éternel, projets de paix et non de malheur, afin de vous donner un avenir et de l'espérance. »<small>Jérémie 29:11</small></p>
+        <p class="verse">« Car je connais les projets que j'ai formés sur vous, dit l'Éternel, projets de paix et non de malheur, afin de vous donner un avenir et de l'espérance. »<small>{{ t('vitrine.s1.01', 'Jérémie 29:11') }}</small></p>
     </div>
 </section>
 
 <section style="background: #fff;">
     <div class="wrap">
-        <h2 style="text-align: center;">Votre vie tient en une phrase</h2>
-        <p class="sub" style="text-align: center; margin-left: auto; margin-right: auto;">Le But de Dieu pour votre vie est une fonction, une nature, pas un projet : ce que vous êtes fait pour accomplir, quel que soit le lieu. KIINI SAWA vous aide à le formuler avec l'Équation du But.</p>
+        <h2 style="text-align: center;">{{ t('vitrine.s2.01', 'Votre vie tient en une phrase') }}</h2>
+        <p class="sub" style="text-align: center; margin-left: auto; margin-right: auto;">{{ t('vitrine.s2.02', 'Le But de Dieu pour votre vie est une fonction, une nature, pas un projet : ce que vous êtes fait pour accomplir, quel que soit le lieu. KIINI SAWA vous aide à le formuler avec l\'Équation du But.') }}</p>
         <div class="eq">
-            <p class="eq-line">Je suis créé pour <em>[verbe]</em> afin d'apporter <em>[impact]</em> chez <em>[cible]</em>.</p>
+            <p class="eq-line">Je suis créé pour <em>{{ t('vitrine.s2.03', '[verbe]') }}</em> afin d'apporter <em>{{ t('vitrine.s2.04', '[impact]') }}</em> chez <em>{{ t('vitrine.s2.05', '[cible]') }}</em>.</p>
             <div class="figure" style="box-shadow: none; padding: 0;"><img src="{{ asset('images/livre/fig_equation.png') }}" alt="L'Équation du But : je suis créé pour un verbe, afin d'apporter un impact, chez une cible" loading="lazy" style="max-width: 620px;"></div>
         </div>
     </div>
@@ -135,24 +135,24 @@
 
 <section id="methode" style="background: #fff;">
     <div class="wrap">
-        <h2>Beaucoup d'activité, peu de direction ?</h2>
-        <p class="sub">On peut faire beaucoup de choses bien, et passer à côté des bonnes. La méthode KIINI SAWA part de l'Être pour aller vers le Faire : d'abord votre raison d'être, puis des plans qui en découlent, puis un quotidien qui les nourrit.</p>
+        <h2>{{ t('vitrine.s3.01', 'Beaucoup d\'activité, peu de direction ?') }}</h2>
+        <p class="sub">{{ t('vitrine.s3.02', 'On peut faire beaucoup de choses bien, et passer à côté des bonnes. La méthode KIINI SAWA part de l\'Être pour aller vers le Faire : d\'abord votre raison d\'être, puis des plans qui en découlent, puis un quotidien qui les nourrit.') }}</p>
         <div class="split" style="margin-bottom: 2.5rem;">
             <div class="figure">{% include 'dashboard/_six_plans_figure.html.twig' %}</div>
             <div>
-                <p class="kicker" style="color: var(--primary);">Une méthode complète</p>
-                <p style="font-family: var(--serif); font-size: 1.5rem; color: var(--primary-dark); line-height: 1.3; margin-bottom: .75rem;">Qui je suis, qui je deviens, ce que je développe, ce qui me soutient, ce que je gère, ce que je laisse.</p>
-                <p class="sub" style="margin-bottom: 0;">Chaque plan répond à une question de votre vie. Le Plan de Vie est la boussole ; les cinq autres la mettent en œuvre ; le système du quotidien les relie.</p>
+                <p class="kicker" style="color: var(--primary);">{{ t('vitrine.s3.03', 'Une méthode complète') }}</p>
+                <p style="font-family: var(--serif); font-size: 1.5rem; color: var(--primary-dark); line-height: 1.3; margin-bottom: .75rem;">{{ t('vitrine.s3.04', 'Qui je suis, qui je deviens, ce que je développe, ce qui me soutient, ce que je gère, ce que je laisse.') }}</p>
+                <p class="sub" style="margin-bottom: 0;">{{ t('vitrine.s3.05', 'Chaque plan répond à une question de votre vie. Le Plan de Vie est la boussole ; les cinq autres la mettent en œuvre ; le système du quotidien les relie.') }}</p>
             </div>
         </div>
         <div class="grid">
-            <div class="card"><div class="icon" style="color: #C8962E; background: #FAF4E6;"><i data-lucide="compass"></i></div><h3>Plan de Vie</h3><p>But de Dieu, valeurs, passions, dons et talents, vision et objectifs : les fondations de tout le reste.</p></div>
-            <div class="card"><div class="icon" style="color: #1F4D3A; background: #E4ECE7;"><i data-lucide="sprout"></i></div><h3>Plan de Croissance</h3><p>Caractère & Conviction, Relation & Réseau : devenir la personne capable de porter votre vision.</p></div>
-            <div class="card"><div class="icon" style="color: #2E6B53; background: #E9F1EC;"><i data-lucide="wrench"></i></div><h3>Plan de Développement personnel</h3><p>Compétence & Connaissance : les savoir-faire à acquérir, les livres et formations à suivre.</p></div>
-            <div class="card"><div class="icon" style="color: #5D7368; background: #ECEFED;"><i data-lucide="heart-pulse"></i></div><h3>Plan d'Hygiène de vie</h3><p>Corps, âme et esprit : les rythmes qui vous soutiennent et vous font durer.</p></div>
-            <div class="card"><div class="icon" style="color: #5E8463; background: #EEF4EF;"><i data-lucide="hand-coins"></i></div><h3>Plan d'Intendance</h3><p>Argent, temps, foyer, dons : gérer fidèlement tout ce qui vous est confié.</p></div>
-            <div class="card"><div class="icon" style="color: #A87A1F; background: #FAF4E6;"><i data-lucide="hand-heart"></i></div><h3>Plan de Transmission</h3><p>Ce que vous laisserez : des valeurs, des œuvres et des personnes qui porteront du fruit après vous.</p></div>
-            <div class="card"><div class="icon" style="color: #2E6B53; background: #E9F1EC;"><i data-lucide="map"></i></div><h3>Carte et cohérence</h3><p>Voyez comment tout s'enchaîne, et recevez un score de cohérence avec les points à renforcer.</p></div>
+            <div class="card"><div class="icon" style="color: #C8962E; background: #FAF4E6;"><i data-lucide="compass"></i></div><h3>{{ t('vitrine.s3.06', 'Plan de Vie') }}</h3><p>{{ t('vitrine.s3.07', 'But de Dieu, valeurs, passions, dons et talents, vision et objectifs : les fondations de tout le reste.') }}</p></div>
+            <div class="card"><div class="icon" style="color: #1F4D3A; background: #E4ECE7;"><i data-lucide="sprout"></i></div><h3>{{ t('vitrine.s3.08', 'Plan de Croissance') }}</h3><p>{{ t('vitrine.s3.09', 'Caractère & Conviction, Relation & Réseau : devenir la personne capable de porter votre vision.') }}</p></div>
+            <div class="card"><div class="icon" style="color: #2E6B53; background: #E9F1EC;"><i data-lucide="wrench"></i></div><h3>{{ t('vitrine.s3.10', 'Plan de Développement personnel') }}</h3><p>{{ t('vitrine.s3.11', 'Compétence & Connaissance : les savoir-faire à acquérir, les livres et formations à suivre.') }}</p></div>
+            <div class="card"><div class="icon" style="color: #5D7368; background: #ECEFED;"><i data-lucide="heart-pulse"></i></div><h3>{{ t('vitrine.s3.12', 'Plan d\'Hygiène de vie') }}</h3><p>{{ t('vitrine.s3.13', 'Corps, âme et esprit : les rythmes qui vous soutiennent et vous font durer.') }}</p></div>
+            <div class="card"><div class="icon" style="color: #5E8463; background: #EEF4EF;"><i data-lucide="hand-coins"></i></div><h3>{{ t('vitrine.s3.14', 'Plan d\'Intendance') }}</h3><p>{{ t('vitrine.s3.15', 'Argent, temps, foyer, dons : gérer fidèlement tout ce qui vous est confié.') }}</p></div>
+            <div class="card"><div class="icon" style="color: #A87A1F; background: #FAF4E6;"><i data-lucide="hand-heart"></i></div><h3>{{ t('vitrine.s3.16', 'Plan de Transmission') }}</h3><p>{{ t('vitrine.s3.17', 'Ce que vous laisserez : des valeurs, des œuvres et des personnes qui porteront du fruit après vous.') }}</p></div>
+            <div class="card"><div class="icon" style="color: #2E6B53; background: #E9F1EC;"><i data-lucide="map"></i></div><h3>{{ t('vitrine.s3.18', 'Carte et cohérence') }}</h3><p>{{ t('vitrine.s3.19', 'Voyez comment tout s\'enchaîne, et recevez un score de cohérence avec les points à renforcer.') }}</p></div>
         </div>
     </div>
 </section>
@@ -162,10 +162,10 @@
         <div class="split">
             <div class="book"><img src="{{ asset('images/livre/couverture.png') }}" alt="Couverture du livre KIINI" loading="lazy"></div>
             <div>
-                <p class="kicker" style="color: var(--primary);">Le livre</p>
-                <h2 style="margin-bottom: .6rem;">Un livre qui se vit, une application qui le met en pratique</h2>
-                <p class="sub">« Ce livre ne se lit pas, il se vit. » À chaque étape de l'application, le chapitre qui l'explique : la parole, l'enseignement, l'exercice du Sanctuaire, puis ce que vous écrivez dans votre plan. Un parcours de 90 jours vous conduit de la première page à vos six plans écrits.</p>
-                <p><a href="{{ path('app_methode_chapter', {slug: 'introduction'}) }}" class="btn btn-primary">Lire gratuitement l'introduction</a></p>
+                <p class="kicker" style="color: var(--primary);">{{ t('vitrine.s4.01', 'Le livre') }}</p>
+                <h2 style="margin-bottom: .6rem;">{{ t('vitrine.s4.02', 'Un livre qui se vit, une application qui le met en pratique') }}</h2>
+                <p class="sub">{{ t('vitrine.s4.03', '« Ce livre ne se lit pas, il se vit. » À chaque étape de l\'application, le chapitre qui l\'explique : la parole, l\'enseignement, l\'exercice du Sanctuaire, puis ce que vous écrivez dans votre plan. Un parcours de 90 jours vous conduit de la première page à vos six plans écrits.') }}</p>
+                <p><a href="{{ path('app_methode_chapter', {slug: 'introduction'}) }}" class="btn btn-primary">{{ t('vitrine.s4.04', 'Lire gratuitement l\'introduction') }}</a></p>
             </div>
         </div>
     </div>
@@ -173,27 +173,27 @@
 
 <section>
     <div class="wrap">
-        <h2>Comment ça marche</h2>
-        <p class="sub">Trois minutes pour commencer, une vie pour approfondir.</p>
+        <h2>{{ t('vitrine.s5.01', 'Comment ça marche') }}</h2>
+        <p class="sub">{{ t('vitrine.s5.02', 'Trois minutes pour commencer, une vie pour approfondir.') }}</p>
         <div class="grid">
-            <div class="card"><div class="step-num">1</div><h3>Posez vos fondations</h3><p>Votre raison d'être, 3 valeurs, un premier objectif. Vous obtenez aussitôt votre premier score de cohérence.</p></div>
-            <div class="card"><div class="step-num">2</div><h3>Bâtissez vos plans</h3><p>Un assistant vous guide étape par étape, avec à chaque écran le chapitre du livre qui l'explique.</p></div>
-            <div class="card"><div class="step-num">3</div><h3>Vivez-les chaque jour</h3><p>Rituels, journal, revue de la semaine, revue du mois, et un partenaire de redevabilité pour ne pas lâcher.</p></div>
+            <div class="card"><div class="step-num">1</div><h3>{{ t('vitrine.s5.03', 'Posez vos fondations') }}</h3><p>{{ t('vitrine.s5.04', 'Votre raison d\'être, 3 valeurs, un premier objectif. Vous obtenez aussitôt votre premier score de cohérence.') }}</p></div>
+            <div class="card"><div class="step-num">2</div><h3>{{ t('vitrine.s5.05', 'Bâtissez vos plans') }}</h3><p>{{ t('vitrine.s5.06', 'Un assistant vous guide étape par étape, avec à chaque écran le chapitre du livre qui l\'explique.') }}</p></div>
+            <div class="card"><div class="step-num">3</div><h3>{{ t('vitrine.s5.07', 'Vivez-les chaque jour') }}</h3><p>{{ t('vitrine.s5.08', 'Rituels, journal, revue de la semaine, revue du mois, et un partenaire de redevabilité pour ne pas lâcher.') }}</p></div>
         </div>
     </div>
 </section>
 
 <section id="tests" style="background: #fff;">
     <div class="wrap">
-        <h2>Se connaître, avec des outils sérieux</h2>
-        <p class="sub">Pour bâtir sur ce que Dieu a mis en vous, il faut d'abord le discerner. Les tests de KIINI SAWA reposent sur des questionnaires utilisés en recherche, avec un rapport détaillé et des pistes concrètes.</p>
+        <h2>{{ t('vitrine.s6.01', 'Se connaître, avec des outils sérieux') }}</h2>
+        <p class="sub">{{ t('vitrine.s6.02', 'Pour bâtir sur ce que Dieu a mis en vous, il faut d\'abord le discerner. Les tests de KIINI SAWA reposent sur des questionnaires utilisés en recherche, avec un rapport détaillé et des pistes concrètes.') }}</p>
         <div class="grid" style="grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));">
-            <div class="card"><div class="icon" style="color: #2E6B53; background: #E9F1EC;"><i data-lucide="dna"></i></div><h3>Profil complet</h3><p>116 questions, vos 5 grandes dimensions de personnalité en 29 facettes. Questionnaire de référence IPIP-NEO.</p><span class="tag">15 min</span></div>
-            <div class="card"><div class="icon" style="color: #2E6B53; background: #E9F1EC;"><i data-lucide="brain"></i></div><h3>Type de fonctionnement</h3><p>16 types, d'après la typologie de Carl Jung : comment vous puisez votre énergie, décidez et vous organisez.</p><span class="tag">7 min</span></div>
-            <div class="card"><div class="icon" style="color: #2E6B53; background: #E9F1EC;"><i data-lucide="zap"></i></div><h3>DISC</h3><p>Votre profil naturel et votre profil adapté : votre manière d'agir, comment les autres vous perçoivent et comment interagir avec chacun.</p><span class="tag">10 min</span></div>
-            <div class="card"><div class="icon" style="color: #2E6B53; background: #E9F1EC;"><i data-lucide="target"></i></div><h3>Ennéagramme</h3><p>Vos motivations profondes et vos peurs, avec votre chemin de croissance.</p><span class="tag">10 min</span></div>
-            <div class="card"><div class="icon" style="color: #A87A1F; background: #FAF4E6;"><i data-lucide="flame"></i></div><h3>Dons spirituels</h3><p>15 dons bibliques (Romains 12, 1 Corinthiens 12, Éphésiens 4) pour discerner comment servir.</p><span class="tag">8 min</span></div>
-            <div class="card"><div class="icon" style="color: #2E6B53; background: #E9F1EC;"><i data-lucide="file-text"></i></div><h3>Un vrai rapport</h3><p>Forces, points de vigilance, pistes pour votre Plan de Vie, et un PDF à garder ou à partager avec votre mentor.</p></div>
+            <div class="card"><div class="icon" style="color: #2E6B53; background: #E9F1EC;"><i data-lucide="dna"></i></div><h3>{{ t('vitrine.s6.03', 'Profil complet') }}</h3><p>{{ t('vitrine.s6.04', '116 questions, vos 5 grandes dimensions de personnalité en 29 facettes. Questionnaire de référence IPIP-NEO.') }}</p><span class="tag">{{ t('vitrine.s6.05', '15 min') }}</span></div>
+            <div class="card"><div class="icon" style="color: #2E6B53; background: #E9F1EC;"><i data-lucide="brain"></i></div><h3>{{ t('vitrine.s6.06', 'Type de fonctionnement') }}</h3><p>{{ t('vitrine.s6.07', '16 types, d\'après la typologie de Carl Jung : comment vous puisez votre énergie, décidez et vous organisez.') }}</p><span class="tag">{{ t('vitrine.s6.08', '7 min') }}</span></div>
+            <div class="card"><div class="icon" style="color: #2E6B53; background: #E9F1EC;"><i data-lucide="zap"></i></div><h3>{{ t('vitrine.s6.09', 'DISC') }}</h3><p>{{ t('vitrine.s6.10', 'Votre profil naturel et votre profil adapté : votre manière d\'agir, comment les autres vous perçoivent et comment interagir avec chacun.') }}</p><span class="tag">{{ t('vitrine.s6.11', '10 min') }}</span></div>
+            <div class="card"><div class="icon" style="color: #2E6B53; background: #E9F1EC;"><i data-lucide="target"></i></div><h3>{{ t('vitrine.s6.12', 'Ennéagramme') }}</h3><p>{{ t('vitrine.s6.13', 'Vos motivations profondes et vos peurs, avec votre chemin de croissance.') }}</p><span class="tag">{{ t('vitrine.s6.14', '10 min') }}</span></div>
+            <div class="card"><div class="icon" style="color: #A87A1F; background: #FAF4E6;"><i data-lucide="flame"></i></div><h3>{{ t('vitrine.s6.15', 'Dons spirituels') }}</h3><p>{{ t('vitrine.s6.16', '15 dons bibliques (Romains 12, 1 Corinthiens 12, Éphésiens 4) pour discerner comment servir.') }}</p><span class="tag">{{ t('vitrine.s6.17', '8 min') }}</span></div>
+            <div class="card"><div class="icon" style="color: #2E6B53; background: #E9F1EC;"><i data-lucide="file-text"></i></div><h3>{{ t('vitrine.s6.18', 'Un vrai rapport') }}</h3><p>{{ t('vitrine.s6.19', 'Forces, points de vigilance, pistes pour votre Plan de Vie, et un PDF à garder ou à partager avec votre mentor.') }}</p></div>
         </div>
     </div>
 </section>
@@ -201,105 +201,105 @@
 <section id="couple">
     <div class="wrap split">
         <div>
-            <h2>Bâtir votre couple, ensemble</h2>
-            <p class="sub" style="margin-bottom: 1.25rem;">« Deux valent mieux qu'un » (Ecclésiaste 4:9). Un espace commun pour poser votre vision de couple, vos valeurs, vos projets et vos thèmes de croissance, et faire le point chaque mois. Vos espaces personnels restent privés.</p>
+            <h2>{{ t('vitrine.s7.01', 'Bâtir votre couple, ensemble') }}</h2>
+            <p class="sub" style="margin-bottom: 1.25rem;">{{ t('vitrine.s7.02', '« Deux valent mieux qu\'un » (Ecclésiaste 4:9). Un espace commun pour poser votre vision de couple, vos valeurs, vos projets et vos thèmes de croissance, et faire le point chaque mois. Vos espaces personnels restent privés.') }}</p>
             <ul class="check" style="margin-top: 0;">
-                <li>Une vision et un verset pour votre couple</li>
-                <li>Vos projets communs, avec échéances</li>
-                <li>10 thèmes de croissance : communication, finances, spiritualité, intimité…</li>
-                <li>Vos rituels de couple et une revue mensuelle à deux</li>
-                <li>Un rapport croisé de vos personnalités, pour mieux vous comprendre</li>
+                <li>{{ t('vitrine.s7.03', 'Une vision et un verset pour votre couple') }}</li>
+                <li>{{ t('vitrine.s7.04', 'Vos projets communs, avec échéances') }}</li>
+                <li>{{ t('vitrine.s7.05', '10 thèmes de croissance : communication, finances, spiritualité, intimité…') }}</li>
+                <li>{{ t('vitrine.s7.06', 'Vos rituels de couple et une revue mensuelle à deux') }}</li>
+                <li>{{ t('vitrine.s7.07', 'Un rapport croisé de vos personnalités, pour mieux vous comprendre') }}</li>
             </ul>
         </div>
         <div class="duo-box">
-            <p style="font-weight: 800; color: #BE185D; letter-spacing: .08em; text-transform: uppercase; font-size: .8rem;">Offre Duo</p>
-            <p class="price" style="color: var(--fg);"><span class="price-EUR">{{ prices.EUR.DUO|money('EUR') }}</span><span class="price-XAF" hidden>{{ prices.XAF.DUO|money('XAF') }}</span> <small>/ an pour deux</small></p>
-            <p class="alt-price">Les deux conjoints en PRO, plus l'espace couple. Moins cher que deux abonnements.</p>
-            <a href="{{ path('app_register') }}" class="btn btn-primary">Commencer à deux</a>
-            <p style="color: var(--muted); font-size: .8rem; margin-top: .75rem;">Créez votre compte, puis invitez votre conjoint depuis l'espace couple.</p>
+            <p style="font-weight: 800; color: #BE185D; letter-spacing: .08em; text-transform: uppercase; font-size: .8rem;">{{ t('vitrine.s7.08', 'Offre Duo') }}</p>
+            <p class="price" style="color: var(--fg);"><span class="price-EUR">{{ prices.EUR.DUO|money('EUR') }}</span><span class="price-XAF" hidden>{{ prices.XAF.DUO|money('XAF') }}</span> <small>{{ t('vitrine.s7.09', '/ an pour deux') }}</small></p>
+            <p class="alt-price">{{ t('vitrine.s7.10', 'Les deux conjoints en PRO, plus l\'espace couple. Moins cher que deux abonnements.') }}</p>
+            <a href="{{ path('app_register') }}" class="btn btn-primary">{{ t('vitrine.s7.11', 'Commencer à deux') }}</a>
+            <p style="color: var(--muted); font-size: .8rem; margin-top: .75rem;">{{ t('vitrine.s7.12', 'Créez votre compte, puis invitez votre conjoint depuis l\'espace couple.') }}</p>
         </div>
     </div>
 </section>
 
 <section id="prix" style="background: #fff;">
     <div class="wrap">
-        <h2>Un prix juste, en euros ou en francs CFA</h2>
-        <p class="sub">Commencez gratuitement. Passez à PRO quand vous voulez bâtir vos cinq autres plans : Croissance, Développement personnel, Hygiène de vie, Intendance et Transmission.</p>
+        <h2>{{ t('vitrine.s8.01', 'Un prix juste, en euros ou en francs CFA') }}</h2>
+        <p class="sub">{{ t('vitrine.s8.02', 'Commencez gratuitement. Passez à PRO quand vous voulez bâtir vos cinq autres plans : Croissance, Développement personnel, Hygiène de vie, Intendance et Transmission.') }}</p>
         <div class="toggle" role="group" aria-label="Devise">
-            <button type="button" class="on" data-cur="EUR" onclick="setCur('EUR')">Euros (€)</button>
-            <button type="button" data-cur="XAF" onclick="setCur('XAF')">Francs CFA</button>
+            <button type="button" class="on" data-cur="EUR" onclick="setCur('EUR')">{{ t('vitrine.s8.03', 'Euros (€)') }}</button>
+            <button type="button" data-cur="XAF" onclick="setCur('XAF')">{{ t('vitrine.s8.04', 'Francs CFA') }}</button>
         </div>
         <div class="pricing">
             <div class="price-card">
-                <h3>Gratuit</h3>
-                <p class="price">0 <small>pour toujours</small></p>
-                <p class="alt-price">Pour poser vos fondations</p>
+                <h3>{{ t('vitrine.s8.05', 'Gratuit') }}</h3>
+                <p class="price">0 <small>{{ t('vitrine.s8.06', 'pour toujours') }}</small></p>
+                <p class="alt-price">{{ t('vitrine.s8.07', 'Pour poser vos fondations') }}</p>
                 <ul class="check">
-                    <li>Plan de Vie complet et score de cohérence</li>
+                    <li>{{ t('vitrine.s8.08', 'Plan de Vie complet et score de cohérence') }}</li>
                     <li>{{ freeHabits }} rituels, journal, agenda</li>
-                    <li>Tous les tests de personnalité</li>
-                    <li>Revue de la semaine et rappels</li>
-                    <li>Un partenaire de redevabilité</li>
-                    <li>La méthode : l'essentiel de chaque chapitre du livre</li>
+                    <li>{{ t('vitrine.s8.09', 'Tous les tests de personnalité') }}</li>
+                    <li>{{ t('vitrine.s8.10', 'Revue de la semaine et rappels') }}</li>
+                    <li>{{ t('vitrine.s8.11', 'Un partenaire de redevabilité') }}</li>
+                    <li>{{ t('vitrine.s8.12', 'La méthode : l\'essentiel de chaque chapitre du livre') }}</li>
                 </ul>
-                <a href="{{ path('app_register') }}" class="btn btn-light" style="border: 1.5px solid var(--primary);">Créer mon compte</a>
+                <a href="{{ path('app_register') }}" class="btn btn-light" style="border: 1.5px solid var(--primary);">{{ t('vitrine.s8.13', 'Créer mon compte') }}</a>
             </div>
             <div class="price-card featured">
-                <h3>PRO</h3>
+                <h3>{{ t('vitrine.s8.14', 'PRO') }}</h3>
                 {% for cur in ['EUR', 'XAF'] %}
                     <div class="price-{{ cur }}" {{ cur == 'XAF' ? 'hidden' }}>
-                        <p class="price">{{ prices[cur].YEARLY|money(cur) }} <small>/ an</small></p>
+                        <p class="price">{{ prices[cur].YEARLY|money(cur) }} <small>{{ t('vitrine.s8.15', '/ an') }}</small></p>
                         <p class="alt-price">ou {{ prices[cur].MONTHLY|money(cur) }} par mois · soit {{ (prices[cur].YEARLY / 12)|money(cur) }} par mois à l'année</p>
                     </div>
                 {% endfor %}
                 <ul class="check">
-                    <li>Tout le gratuit, sans limite</li>
-                    <li>Plans de Croissance, Développement personnel, Hygiène de vie, Intendance et Transmission</li>
-                    <li>Carte stratégique</li>
-                    <li>Export PDF de vos plans</li>
-                    <li>Revue du mois et historique de vos plans</li>
-                    <li>Le livre en entier, chapitre par chapitre</li>
+                    <li>{{ t('vitrine.s8.16', 'Tout le gratuit, sans limite') }}</li>
+                    <li>{{ t('vitrine.s8.17', 'Plans de Croissance, Développement personnel, Hygiène de vie, Intendance et Transmission') }}</li>
+                    <li>{{ t('vitrine.s8.18', 'Carte stratégique') }}</li>
+                    <li>{{ t('vitrine.s8.19', 'Export PDF de vos plans') }}</li>
+                    <li>{{ t('vitrine.s8.20', 'Revue du mois et historique de vos plans') }}</li>
+                    <li>{{ t('vitrine.s8.21', 'Le livre en entier, chapitre par chapitre') }}</li>
                 </ul>
                 <a href="{{ path('app_register') }}" class="btn btn-primary">Essayer {{ trialDays }} jours gratuitement</a>
-                <p style="color: var(--muted); font-size: .8rem; margin-top: .75rem;">Paiement par virement, Mobile Money ou espèces. Sans renouvellement automatique.</p>
+                <p style="color: var(--muted); font-size: .8rem; margin-top: .75rem;">{{ t('vitrine.s8.22', 'Paiement par virement, Mobile Money ou espèces. Sans renouvellement automatique.') }}</p>
             </div>
         </div>
         <div class="card" style="margin-top: 2rem; max-width: 860px; border: 2px dashed #C8D6CD;">
-            <h3 style="font-size: 1.3rem;">Église, association, entreprise : l'offre Organisation</h3>
-            <p style="margin: .4rem 0 1rem;">Offrez KIINI SAWA PRO à tous vos membres. Vous suivez l'engagement du groupe, vous confiez chacun à un accompagnateur ; chaque membre choisit ce qu'il partage, et son journal reste toujours privé.</p>
+            <h3 style="font-size: 1.3rem;">{{ t('vitrine.s8.23', 'Église, association, entreprise : l\'offre Organisation') }}</h3>
+            <p style="margin: .4rem 0 1rem;">{{ t('vitrine.s8.24', 'Offrez KIINI SAWA PRO à tous vos membres. Vous suivez l\'engagement du groupe, vous confiez chacun à un accompagnateur ; chaque membre choisit ce qu\'il partage, et son journal reste toujours privé.') }}</p>
             <p style="color: var(--fg); font-weight: 600;">Dès {{ orgSeatEur|money('EUR') }} ou {{ orgSeatXaf|money('XAF') }} par membre et par an, jusqu'à −35 % selon le nombre de places.</p>
-            <a href="{{ path('app_register') }}" class="btn btn-primary" style="margin-top: 1rem;">Créer l'espace de mon organisation</a>
+            <a href="{{ path('app_register') }}" class="btn btn-primary" style="margin-top: 1rem;">{{ t('vitrine.s8.25', 'Créer l\'espace de mon organisation') }}</a>
         </div>
     </div>
 </section>
 
 <section>
     <div class="wrap" style="max-width: 760px;">
-        <h2>Questions fréquentes</h2>
-        <details><summary>Faut-il être chrétien pour utiliser KIINI SAWA ?</summary><p>La méthode est d'inspiration chrétienne et parle du « but de Dieu » pour votre vie. Elle reste accessible à toute personne qui cherche à vivre avec sens et intention.</p></details>
-        <details><summary>Mes réflexions sont-elles privées ?</summary><p>Oui. Votre journal et vos plans ne sont visibles que par vous et par les partenaires avec qui vous choisissez de partager. Ils ne sont jamais vendus ni utilisés pour de la publicité. Vous pouvez tout exporter ou tout supprimer à tout moment.</p></details>
-        <details><summary>Comment payer depuis l'Afrique ?</summary><p>Par Mobile Money, virement ou espèces, en francs CFA. Vous déclarez votre paiement dans l'application et votre accès PRO est activé dès sa vérification.</p></details>
-        <details><summary>Que se passe-t-il à la fin de mon abonnement ?</summary><p>Rien n'est perdu : vous repassez simplement en gratuit, et retrouvez tout dès que vous reprenez PRO.</p></details>
-        <details><summary>Y a-t-il un livre ?</summary><p>Oui : chaque étape de l'application est reliée au chapitre du livre KIINI SAWA qui l'explique. Le compte gratuit donne l'essentiel de chaque chapitre ; PRO ouvre le texte intégral.</p></details>
+        <h2>{{ t('vitrine.s9.01', 'Questions fréquentes') }}</h2>
+        <details><summary>{{ t('vitrine.s9.02', 'Faut-il être chrétien pour utiliser KIINI SAWA ?') }}</summary><p>{{ t('vitrine.s9.03', 'La méthode est d\'inspiration chrétienne et parle du « but de Dieu » pour votre vie. Elle reste accessible à toute personne qui cherche à vivre avec sens et intention.') }}</p></details>
+        <details><summary>{{ t('vitrine.s9.04', 'Mes réflexions sont-elles privées ?') }}</summary><p>{{ t('vitrine.s9.05', 'Oui. Votre journal et vos plans ne sont visibles que par vous et par les partenaires avec qui vous choisissez de partager. Ils ne sont jamais vendus ni utilisés pour de la publicité. Vous pouvez tout exporter ou tout supprimer à tout moment.') }}</p></details>
+        <details><summary>{{ t('vitrine.s9.06', 'Comment payer depuis l\'Afrique ?') }}</summary><p>{{ t('vitrine.s9.07', 'Par Mobile Money, virement ou espèces, en francs CFA. Vous déclarez votre paiement dans l\'application et votre accès PRO est activé dès sa vérification.') }}</p></details>
+        <details><summary>{{ t('vitrine.s9.08', 'Que se passe-t-il à la fin de mon abonnement ?') }}</summary><p>{{ t('vitrine.s9.09', 'Rien n\'est perdu : vous repassez simplement en gratuit, et retrouvez tout dès que vous reprenez PRO.') }}</p></details>
+        <details><summary>{{ t('vitrine.s9.10', 'Y a-t-il un livre ?') }}</summary><p>{{ t('vitrine.s9.11', 'Oui : chaque étape de l\'application est reliée au chapitre du livre KIINI SAWA qui l\'explique. Le compte gratuit donne l\'essentiel de chaque chapitre ; PRO ouvre le texte intégral.') }}</p></details>
     </div>
 </section>
 
 <section style="padding-top: 0;">
     <div class="wrap">
         <div class="final">
-            <h2>Votre vie a un but. Commencez à le bâtir aujourd'hui.</h2>
-            <p style="color: #DCE7DF; margin: .5rem 0 1.75rem;">Trois minutes suffisent pour poser vos fondations.</p>
-            <a href="{{ path('app_register') }}" class="btn btn-light">Commencer gratuitement</a>
+            <h2>{{ t('vitrine.s10.01', 'Votre vie a un but. Commencez à le bâtir aujourd\'hui.') }}</h2>
+            <p style="color: #DCE7DF; margin: .5rem 0 1.75rem;">{{ t('vitrine.s10.02', 'Trois minutes suffisent pour poser vos fondations.') }}</p>
+            <a href="{{ path('app_register') }}" class="btn btn-light">{{ t('vitrine.s10.03', 'Commencer gratuitement') }}</a>
         </div>
     </div>
 </section>
 
 <footer>
     <div class="wrap">
-        <p style="margin: 0 0 .6rem; font-family: var(--font-serif, Georgia, serif); font-size: 1.05rem; color: var(--fg, inherit);">KIINI SAWA : donnez du poids à ce qui compte vraiment.</p>
-        <p style="margin: 0 0 .8rem;">Contact : <a href="mailto:contact@kiinisawa.com">contact@kiinisawa.com</a></p>
+        <p style="margin: 0 0 .6rem; font-family: var(--font-serif, Georgia, serif); font-size: 1.05rem; color: var(--fg, inherit);">{{ t('vitrine.s10.04', 'KIINI SAWA : donnez du poids à ce qui compte vraiment.') }}</p>
+        <p style="margin: 0 0 .8rem;">Contact : <a href="mailto:contact@kiinisawa.com">{{ t('vitrine.s10.05', 'contact@kiinisawa.com') }}</a></p>
         © {{ 'now'|date('Y') }} KIINI SAWA ·
-        <a href="{{ path('app_install') }}">Installer l'application</a> ·
+        <a href="{{ path('app_install') }}">{{ t('vitrine.s10.06', 'Installer l\'application') }}</a> ·
         {% include 'legal/_footer_links.html.twig' with {} only %}
     </div>
 </footer>

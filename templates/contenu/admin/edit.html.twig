@@ -1,0 +1,40 @@
+{% extends 'admin/layout.html.twig' %}
+{% block title %}{{ code }}{% endblock %}
+{% block page_title %}Modifier un texte{% endblock %}
+{% block stylesheets %}{% include 'personnalite/admin/_content_styles.html.twig' %}{% endblock %}
+{% block content %}
+<div class="ct-crumb"><a href="{{ path('admin_site_texts') }}">Textes du site</a> › {{ groupLabel }} › {{ code }}</div>
+<div class="ct-card">
+    <p class="ct-note"><strong>{{ code }}</strong> · {{ formats[info.format] }} · défini dans <code>{{ info.source }}</code>.
+        {% if row and row.draft is not null %}<span class="ct-badge">brouillon non publié</span>{% endif %}
+        {% if row and row.published is not null %}<span class="ct-badge" style="background: rgba(34,197,94,.15); color: #4ade80;">modifié en ligne le {{ row.publishedAt|date('d/m/Y à H:i') }}</span>{% endif %}</p>
+    <form method="post">
+        <input type="hidden" name="_csrf_token" value="{{ csrf_token('site_text') }}">
+        <div class="ct-field" style="border-top: 0;">
+            <label class="ct-l" for="content">{{ row and row.draft is not null ? 'Brouillon' : 'Texte' }}</label>
+            <textarea id="content" name="content" rows="{{ info.format == 'markdown' ? 22 : 5 }}" style="width: 100%;">{{ value }}</textarea>
+            {% if info.format != 'text' %}<p class="ct-orig">Mise en forme : <code>**gras**</code>, <code>*italique*</code>, <code>[texte du lien](/adresse)</code>{% if info.format == 'markdown' %}, <code>## Titre</code>, listes avec <code>- </code>. Les passages <code>[À COMPLÉTER : …]</code> sont surlignés tant qu'ils restent.{% endif %}</p>{% endif %}
+        </div>
+        <div class="ct-sticky">
+            <button class="ct-btn sec" type="submit" name="action" value="draft">Enregistrer le brouillon</button>
+            <button class="ct-btn" type="submit" name="action" value="publish" onclick="return confirm('Publier ce texte ? Il sera en ligne immédiatement.');">Publier</button>
+            {% if row and row.draft is not null %}<button class="ct-btn sec" type="submit" name="action" value="discard">Abandonner le brouillon</button>{% endif %}
+            {% if row and row.published is not null %}<button class="ct-btn sec" type="submit" name="action" value="revert" onclick="return confirm('Remettre le texte d\'origine en ligne ?');">Revenir au texte d'origine</button>{% endif %}
+        </div>
+    </form>
+    <details class="ct-orig" style="margin-top: 14px;"><summary>Texte d'origine (celui du code)</summary><pre style="white-space: pre-wrap; margin: 8px 0 0; font: inherit;">{{ info.default }}</pre></details>
+</div>
+{% if history %}
+<div class="ct-card">
+    <h2>Historique</h2>
+    {% for v in history %}
+        <form method="post" class="ct-row" style="cursor: default;">
+            <input type="hidden" name="_csrf_token" value="{{ csrf_token('site_text') }}"><input type="hidden" name="version" value="{{ v.id }}">
+            <span><strong style="font-size: 12px;">{{ v.createdAt|date('d/m/Y H:i') }}</strong> · {{ v.kind == 'origine' ? 'remplacée par le texte d\'origine' : 'publiée' }}{% if v.author %} · {{ v.author.displayName }}{% endif %}
+                <br><span class="ct-meta" style="white-space: normal;">{{ v.content|striptags|slice(0, 160) }}{{ v.content|length > 160 ? '…' }}</span></span>
+            <button class="ct-btn sec" type="submit" name="action" value="restore">Remettre dans le brouillon</button>
+        </form>
+    {% endfor %}
+</div>
+{% endif %}
+{% endblock %}

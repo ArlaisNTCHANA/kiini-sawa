@@ -30,6 +30,8 @@ vers le Faire (6 plans, rituels, revues).
 5. **Tests** : tout changement passe `php bin/phpunit` (≈ 180 tests). Ajouter un test pour chaque correction.
    Puis **compléter `docs/SUIVI-IA.md`** (ce qui a été fait, où, pièges, reste à faire).
 6. **Secrets** : jamais dans le dépôt. Ils vivent sur le serveur dans `.env.prod.local` (voir §6).
+8. **Textes modifiables** : tout texte visible (vitrine, pages légales, et progressivement le reste) passe par `t('code', 'texte d'origine')` ou
+   `doc('code')` pour que le fondateur puisse le modifier dans Admin › Textes du site (brouillon puis publication). Voir `docs/modules/contenu.md`.
 7. **Marques** : les tests s'inspirent du Big Five, de Jung, de DISC, de l'ennéagramme, mais n'emploient pas les
    marques déposées (MBTI®…) autrement qu'en référence nominative. Noms de types propres à KIINI SAWA.
 
