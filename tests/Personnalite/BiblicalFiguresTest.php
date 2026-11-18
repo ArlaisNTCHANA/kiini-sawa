@@ -100,4 +100,16 @@ class BiblicalFiguresTest extends TestCase
         }
         $this->assertGreaterThanOrEqual(12, $checked);
     }
+
+    /** Chaque figure citée par un profil DISC a sa fiche, et la fiche décrit bien le profil qui la cite. */
+    public function testEveryDiscProfileFigureHasASheetOfTheSameProfile(): void
+    {
+        foreach (\App\Personnalite\Psychometrie\DiscCombos::PROFILES as $code => $profile) {
+            foreach ($profile['figures'] as $figure) {
+                $sheet = BiblicalFigures::find($figure['name']);
+                $this->assertNotNull($sheet, "Fiche manquante : {$figure['name']} ($code)");
+                $this->assertSame($code, $sheet['profile']['code'], "{$figure['name']} : la fiche décrit le profil {$sheet['profile']['code']}, pas $code");
+            }
+        }
+    }
 }

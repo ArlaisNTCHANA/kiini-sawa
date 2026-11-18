@@ -37,7 +37,8 @@
     {% if not fig.reviewed %}<p class="dr-small" style="margin: 6px 0 0;">Fiche en cours de relecture.</p>{% endif %}
 {% endmacro %}
 
-<div style="margin-bottom: 14px; border-left: 6px solid {{ pc }}; border-radius: 0 14px 14px 0; background: #fff; padding: {{ pdf ? '10px 14px' : '16px 18px' }}; border-top: 1px solid #E2E8F0; border-right: 1px solid #E2E8F0; border-bottom: 1px solid #E2E8F0;">
+{% if pdf %}<style>.fsheet .dr-table td { padding: 4px 8px; } .fsheet .dr-tile { padding: 8px 12px; } .fsheet p { margin-bottom: 4px; } .fsheet .dr-quote { padding: 6px 12px; }</style>{% endif %}
+<div class="fsheet" style="margin-bottom: 14px; border-left: 6px solid {{ pc }}; border-radius: 0 14px 14px 0; background: #fff; padding: {{ pdf ? '10px 14px' : '16px 18px' }}; border-top: 1px solid #E2E8F0; border-right: 1px solid #E2E8F0; border-bottom: 1px solid #E2E8F0;">
     <div style="font-family: {{ serif }}; font-size: {{ pdf ? '15pt' : '1.35rem' }}; font-weight: bold; color: #0F172A;">{{ fig.name }}</div>
     <div style="font-family: {{ serif }}; font-style: italic; color: #475569; margin-bottom: 2px;">{{ fig.title }}</div>
     <div class="dr-small" style="margin-bottom: 8px;">{{ fig.refs }}</div>

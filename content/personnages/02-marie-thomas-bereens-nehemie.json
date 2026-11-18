@@ -466,11 +466,6 @@
        "Il entraîne en racontant ce que Dieu a fait",
        "Il raconte « comment la bonne main de mon Dieu avait été sur moi » : ils se fortifient dans leur résolution.",
        "Néhémie 2:18"
-      ],
-      [
-       "Il rassemble les foules",
-       "Face à l'injustice, « je rassemblai autour d'eux une grande foule ».",
-       "Néhémie 5:7"
       ]
      ]
     }
@@ -492,13 +487,8 @@
    "I": "Comme lui, vous savez enthousiasmer et rassembler autour d'un projet. Son récit montre que la vraie source de l'élan est ailleurs que dans le meneur.",
    "default": "Son énergie et sa capacité à rassembler éclairent les tempéraments de meneurs."
   },
-  "who": "Néhémie est échanson du roi Artaxerxès, à Suse (Néhémie 2:1). Un frère lui apprend que les murailles de Jérusalem sont en ruines et que ses portes sont brûlées (1:3). Il obtient du roi la permission d'aller les rebâtir.",
+  "who": "Néhémie est échanson du roi Artaxerxès, à Suse (Néhémie 2:1). Un frère lui apprend que les murailles de Jérusalem sont en ruines et que ses portes sont brûlées (1:3). Il en pleure, jeûne et prie plusieurs jours (1:4), puis obtient du roi la permission d'aller les rebâtir.",
   "episodes": [
-   {
-    "title": "Il pleure, jeûne et prie",
-    "ref": "Néhémie 1:1-4",
-    "text": "Avant d'agir, il s'assied, pleure, reste plusieurs jours dans la désolation, jeûne et prie devant le Dieu des cieux."
-   },
    {
     "title": "Que demandes-tu ?",
     "ref": "Néhémie 2:1-8",
