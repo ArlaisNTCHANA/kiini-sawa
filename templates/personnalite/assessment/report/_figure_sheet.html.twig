@@ -1,12 +1,14 @@
-{# Fiche d'un personnage biblique (BiblicalFigures). Variables : fig, why, pdf, pc. Écran : portrait complet repliable ; PDF : déplié. #}
+{# Fiche d'un personnage biblique (BiblicalFigures). Variables : fig, why, pdf, pc, profiles (disc.profiles), lights, darks.
+   Ordre voulu par le fondateur : d'abord le profil et ses indices (la crédibilité), ensuite le récit et les commentaires. #}
 {% set serif = pdf ? "'Playfair Display', serif" : 'var(--font-serif)' %}
-{% macro body(fig, pdf, pc, serif) %}
+{% set levelText = {3: 'indices nombreux et convergents', 2: 'indices réels, moins nombreux', 1: 'indices indirects'} %}
+{% macro story(fig, pdf, pc, serif, profiles, darks, lights) %}
     <p style="margin: 8px 0;">{{ fig.who }}</p>
-
-    <div class="dr-label" style="margin-top: 12px; color: {{ pc }};">Dans le texte</div>
+    <div class="dr-label" style="margin-top: 12px; color: {{ pc }};">Le récit, épisode par épisode</div>
     {% for e in fig.episodes %}
         <div style="margin: 0 0 8px; page-break-inside: avoid;">
-            <div><strong>{{ e.title }}</strong> <span class="dr-small">· {{ e.ref }}</span></div>
+            <div><strong>{{ e.title }}</strong> <span class="dr-small">· {{ e.ref }}</span>
+                {% for t in e.tags|default([]) %}<span style="font-size: {{ pdf ? '7pt' : '.68rem' }}; font-weight: bold; color: {{ darks[t[0]] }}; background: {{ lights[t[0]] }}; padding: 1px 6px; border-radius: 8px;">{{ t[0] }} · {{ t[1] }}</span> {% endfor %}</div>
             <p style="margin: 2px 0 4px;">{{ e.text }}</p>
             {% if e.quote is defined %}
                 <div class="dr-quote" style="padding: 8px 14px; margin: 0 0 4px; font-size: {{ pdf ? '9.5pt' : '.95rem' }};">« {{ e.quote.text }} »<div style="font-style: normal; font-weight: bold; font-size: {{ pdf ? '8pt' : '.8rem' }}; margin-top: 2px;">{{ e.quote.ref }} (LSG)</div></div>
@@ -14,31 +16,19 @@
         </div>
     {% endfor %}
 
-    <div class="dr-tile" style="margin-top: 10px; background: #F1F5F9; border-color: #E2E8F0; page-break-inside: avoid;">
-        <div class="dr-label">Notre lecture : ce n'est pas celle du texte</div>
-        <p style="margin: 0 0 6px;">{{ fig.reading.temperament }}</p>
-        <table class="dr-table">
-            <tr><th>Ce que nous y lisons</th><th>Où le texte le montre</th></tr>
-            {% for t in fig.reading.traits %}<tr><td>{{ t[0] }}</td><td class="dr-small">{{ t[1] }}</td></tr>{% endfor %}
-        </table>
-    </div>
-
-    <div class="dr-tile" style="margin-top: 8px; background: #FFF7ED; border-color: #FED7AA; page-break-inside: avoid;">
+    <div class="dr-tile" style="margin-top: 10px; background: #FFF7ED; border-color: #FED7AA; page-break-inside: avoid;">
         <div class="dr-label" style="color: #9A3412;">Là où il est fragile</div>
         <p style="margin: 0;">{{ fig.weakness }}</p>
     </div>
-
     <div class="dr-tile" style="margin-top: 8px; background: #F0FDF4; border-color: #BBF7D0; page-break-inside: avoid;">
         <div class="dr-label" style="color: #166534;">Comment Dieu le relève</div>
         <p style="margin: 0;">{{ fig.grace }}</p>
     </div>
-
     <div class="dr-tile" style="margin-top: 8px; background: #DCE7DF; border-color: #DCE7DF; page-break-inside: avoid;">
         <div class="dr-label" style="color: #173D2E;">Le Christ au centre</div>
         <p style="margin: 0 0 6px; color: #173D2E;">{{ fig.christ }}</p>
         {% for q in fig.quotes %}<div class="dr-small" style="color: #173D2E;">« {{ q.text }} » <strong>{{ q.ref }} (LSG)</strong></div>{% endfor %}
     </div>
-
     <div class="dr-tile" style="margin-top: 8px; background: #fff; page-break-inside: avoid;">
         <div class="dr-label">Pour vous</div>
         <p style="margin: 0 0 4px; font-family: {{ serif }}; font-size: {{ pdf ? '11pt' : '1.05rem' }};">{{ fig.question }}</p>
@@ -50,14 +40,39 @@
 <div style="margin-bottom: 14px; border-left: 6px solid {{ pc }}; border-radius: 0 14px 14px 0; background: #fff; padding: {{ pdf ? '10px 14px' : '16px 18px' }}; border-top: 1px solid #E2E8F0; border-right: 1px solid #E2E8F0; border-bottom: 1px solid #E2E8F0;">
     <div style="font-family: {{ serif }}; font-size: {{ pdf ? '15pt' : '1.35rem' }}; font-weight: bold; color: #0F172A;">{{ fig.name }}</div>
     <div style="font-family: {{ serif }}; font-style: italic; color: #475569; margin-bottom: 2px;">{{ fig.title }}</div>
-    <div class="dr-small" style="margin-bottom: 6px;">{{ fig.refs }}</div>
-    <p style="margin: 0; color: #1E293B;"><strong>Pourquoi lui, pour vous ?</strong> {{ why }}</p>
+    <div class="dr-small" style="margin-bottom: 8px;">{{ fig.refs }}</div>
+
+    {# 1. Le profil et ses indices : la crédibilité d'abord #}
+    <div class="dr-label" style="color: {{ pc }};">Son profil : {{ fig.profile.code }}</div>
+    <p class="dr-small" style="margin: 0 0 6px;">Lecture de KIINI SAWA : les auteurs bibliques ne pensaient pas en DISC. Voici, pour chaque dimension, les indices que le texte donne, avec leur référence et la solidité de l'indice.</p>
+    {% for letter, dim in fig.profile.dimensions %}
+        <div style="margin-bottom: 8px; page-break-inside: avoid;">
+            <table style="width: 100%; border-collapse: collapse; background: {{ lights[letter] }}; border-radius: 10px;"><tr>
+                <td style="width: {{ pdf ? '11mm' : '44px' }}; padding: 8px 4px 8px 12px; font-size: {{ pdf ? '18pt' : '1.7rem' }}; font-weight: bold; color: {{ darks[letter] }};">{{ letter }}</td>
+                <td style="padding: 8px 12px 8px 4px; color: {{ darks[letter] }};"><strong>{{ profiles[letter].name }}</strong> · <span class="dr-small" style="color: {{ darks[letter] }};">{{ profiles[letter].essence }}</span><br>
+                    <span class="dr-small" style="color: {{ darks[letter] }};">Solidité : {{ levelText[dim.level] }}.</span></td>
+            </tr></table>
+            <table class="dr-table" style="margin-top: 2px;">
+                {% for t in dim.traits %}<tr><td style="width: 30%; font-weight: bold;">{{ t[0] }}</td><td>{{ t[1] }}</td><td class="dr-small" style="width: 22%;">{{ t[2] }}</td></tr>{% endfor %}
+            </table>
+        </div>
+    {% endfor %}
+    {% if fig.profile.absent|length %}
+        <div class="dr-tile" style="background: #F8FAFC; margin-bottom: 6px; page-break-inside: avoid;">
+            <div class="dr-label">Ce que le texte ne montre pas</div>
+            {% for a in fig.profile.absent %}<p style="margin: 0 0 3px;"><strong>{{ a[0] }} :</strong> {{ a[1] }}</p>{% endfor %}
+        </div>
+    {% endif %}
+    <p class="dr-small" style="margin: 0 0 8px;"><em>{{ fig.profile.limits }}</em></p>
+
+    {# 2. Le lien avec le lecteur, puis le récit et les commentaires #}
+    <p style="margin: 0 0 4px; color: #1E293B;"><strong>Pourquoi lui, pour vous ?</strong> {{ why }}</p>
     {% if pdf %}
-        {{ _self.body(fig, pdf, pc, serif) }}
+        {{ _self.story(fig, pdf, pc, serif, profiles, darks, lights) }}
     {% else %}
         <details style="margin-top: 10px;">
-            <summary style="cursor: pointer; font-weight: 700; color: {{ pc }};">Lire le portrait complet</summary>
-            {{ _self.body(fig, pdf, pc, serif) }}
+            <summary style="cursor: pointer; font-weight: 700; color: {{ pc }};">Lire le récit et les commentaires</summary>
+            {{ _self.story(fig, pdf, pc, serif, profiles, darks, lights) }}
         </details>
     {% endif %}
 </div>

@@ -270,7 +270,7 @@
     {% for f in c.figures %}
         {% set sheet = disc.figureSheets[loop.index0] %}
         {% if sheet %}
-            {% include 'personnalite/assessment/report/_figure_sheet.html.twig' with {fig: sheet, why: sheet.why[disc.primary] ?? sheet.why.default, pdf: pdf, pc: pc} only %}
+            {% include 'personnalite/assessment/report/_figure_sheet.html.twig' with {fig: sheet, why: sheet.why[disc.primary] ?? sheet.why.default, pdf: pdf, pc: pc, profiles: disc.profiles, lights: lights, darks: darks} only %}
         {% else %}
         <div class="dr-tile" style="margin-bottom: 10px; border-left: 6px solid {{ pc }}; border-radius: 0 14px 14px 0;">
             <div style="font-family: {{ pdf ? "'Playfair Display', serif" : 'var(--font-serif)' }}; font-size: {{ pdf ? '14pt' : '1.25rem' }}; font-weight: bold;">{{ f.name }}</div>

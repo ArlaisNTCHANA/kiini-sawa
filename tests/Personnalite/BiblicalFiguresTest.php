@@ -17,14 +17,26 @@ class BiblicalFiguresTest extends TestCase
     public function testEveryFigureIsComplete(): void
     {
         foreach (BiblicalFigures::FIGURES as $key => $f) {
-            foreach (['name', 'aliases', 'title', 'refs', 'why', 'who', 'episodes', 'reading', 'weakness', 'grace', 'christ', 'quotes', 'question', 'step'] as $field) {
+            foreach (['name', 'aliases', 'title', 'refs', 'profile', 'why', 'who', 'episodes', 'weakness', 'grace', 'christ', 'quotes', 'question', 'step'] as $field) {
                 $this->assertArrayHasKey($field, $f, "$key : champ $field");
                 $this->assertNotEmpty($f[$field], "$key : champ $field vide");
             }
             $this->assertArrayHasKey('default', $f['why'], "$key : texte par défaut");
             $this->assertGreaterThanOrEqual(5, \count($f['episodes']), "$key : au moins cinq épisodes");
-            $this->assertNotEmpty($f['reading']['traits'], "$key : traits");
-            $this->assertStringContainsString('pas une affirmation du texte', $f['reading']['temperament'], "$key : la lecture doit être dite comme telle");
+            // La crédibilité d'abord : chaque dimension du profil est appuyée par des indices référencés, et on dit ce que le texte ne montre pas
+            $p = $f['profile'];
+            $this->assertMatchesRegularExpression('/^[DISC]{1,2}$/', $p['code'], "$key : code DISC");
+            $this->assertSame(str_split($p['code']), array_keys($p['dimensions']), "$key : une dimension par lettre du code");
+            foreach ($p['dimensions'] as $letter => $dim) {
+                $this->assertContains($dim['level'], [1, 2, 3], "$key $letter : solidité");
+                $this->assertGreaterThanOrEqual(2, \count($dim['traits']), "$key $letter : au moins deux indices");
+                foreach ($dim['traits'] as $t) {
+                    $this->assertCount(3, $t, "$key $letter : trait, ce que dit le texte, référence");
+                    $this->assertMatchesRegularExpression('/\d+[:,]\d+/', $t[2], "$key $letter : la référence doit citer un verset");
+                }
+            }
+            $this->assertNotEmpty($p['absent'], "$key : ce que le texte ne montre pas");
+            $this->assertNotEmpty($p['limits'], "$key : limites de la lecture");
             $this->assertMatchesRegularExpression('/Christ|Fils|Seigneur|Sauveur/u', $f['christ'], "$key : le Christ au centre");
         }
     }

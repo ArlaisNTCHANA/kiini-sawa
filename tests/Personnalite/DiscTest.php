@@ -139,7 +139,7 @@ class DiscTest extends WebTestCase
             // Les mentions courtes de la « même famille » cèdent la place aux fiches complètes quand il y en a
             $hasSheet = [] !== array_filter(array_map(fn ($f) => \App\Personnalite\Psychometrie\BiblicalFigures::find($f['name']), DiscCombos::PROFILES[$code]['figures']));
             $hasSheet
-                ? $this->assertStringContainsString('Dans le texte', $html, "Fiche de personnage pour $code")
+                ? $this->assertStringContainsString('Ce que le texte ne montre pas', $html, "Fiche de personnage pour $code")
                 : $this->assertStringContainsString('Dans la même famille', $html, "Figures de la même famille pour $code");
             $this->assertStringContainsString('Bon usage de ce rapport', $html);
         }

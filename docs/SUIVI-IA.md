@@ -386,3 +386,12 @@ ajouter d'autres tests au regard des proches (Big Five, ennéagramme) si le fond
 `BiblicalFiguresTest`. Texte biblique téléchargé avec l'accord du fondateur dans `var/bible/` (non versionné). Intégrées au rapport DISC (profils D
 et SC) ; les mentions courtes « même famille » sont masquées quand des fiches existent. Pagination PDF contrôlée (aucune page orpheline).
 **En attente :** relecture doctrinale par le fondateur (`reviewed => false`), puis extension.
+
+## 18/11/2026 — Fiches bibliques : le profil d'abord
+
+Retour du fondateur : pour qu'un rapprochement soit crédible, il faut montrer d'abord les traits du profil chez le personnage, ensuite
+commenter. Refonte de `_figure_sheet.html.twig` : en tête « Son profil : SC » avec, pour chaque dimension DISC, la définition de l'application
+(essence), la solidité des indices (nombreux / réels / indirects) et un tableau trait · ce que dit le texte · référence ; puis « Ce que le texte ne
+montre pas » (contre-indices) et les limites ; ensuite seulement le lien avec le lecteur, le récit (épisodes étiquetés par dimension), la
+fragilité, la grâce et le Christ au centre. Le bloc « Notre lecture » disparaît (remplacé par le profil). Données : `BiblicalFigures[...]['profile']`.
+Test : chaque dimension a au moins deux indices référencés (verset cité).
