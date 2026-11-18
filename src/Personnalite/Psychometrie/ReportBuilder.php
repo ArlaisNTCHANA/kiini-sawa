@@ -153,6 +153,7 @@ final class ReportBuilder
             'combo' => $combo,
             'intensity' => self::discIntensity($scores['natural'][$primary], $p[$primary]['name'], $secondary ? $p[$secondary]['name'] : null),
             'adaptation' => $scores['adaptedPrimary'] !== $primary ? (Content::get('disc.adaptation')[$primary][$scores['adaptedPrimary']] ?? null) : null,
+            'figureSheets' => array_map(fn ($f) => BiblicalFigures::find($f['name']), $combo['figures']),
             'verse' => Content::get('disc.verses')[$primary],
             'meditation' => Content::get('disc.meditations')[$primary],
             'familyFigures' => DiscCombos::familyFigures($primary, $code),

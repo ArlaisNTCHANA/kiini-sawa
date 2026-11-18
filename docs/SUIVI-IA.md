@@ -378,3 +378,11 @@ elles sont couvertes par des tests unitaires.
 « adaptation excessive » ; invitation à demander ce regard dans la synthèse (`closeInvites`). Anonymat : seules les synthèses ≥ 3 réponses.
 Tests : `InsightEngineTest` (15, dont un parcours réel avec trois réponses de proches). **Reste :** recalibrage avec de vrais résultats ;
 ajouter d'autres tests au regard des proches (Big Five, ennéagramme) si le fondateur le décide.
+
+## 18/11/2026 — Fiches de personnages bibliques (pilote)
+
+À la demande du fondateur (les deux phrases par figure « n'apportaient rien ») : 3 fiches complètes (Élie, Joseph, Timothée), structure
+« Dans le texte / Notre lecture / Fragilité / Grâce / Le Christ au centre », citations LSG vérifiées par `bin/outils/bible.py` et
+`BiblicalFiguresTest`. Texte biblique téléchargé avec l'accord du fondateur dans `var/bible/` (non versionné). Intégrées au rapport DISC (profils D
+et SC) ; les mentions courtes « même famille » sont masquées quand des fiches existent. Pagination PDF contrôlée (aucune page orpheline).
+**En attente :** relecture doctrinale par le fondateur (`reviewed => false`), puis extension.

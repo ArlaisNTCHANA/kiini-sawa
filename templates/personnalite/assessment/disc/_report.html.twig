@@ -268,13 +268,19 @@
     <h2>Des figures bibliques qui vous ressemblent</h2>
     <p class="dr-lead">La Bible montre des hommes et des femmes aux tempéraments très différents, que Dieu a appelés tels qu'ils étaient, et transformés. Ces rapprochements avec votre profil sont des illustrations, non une interprétation savante des textes.</p>
     {% for f in c.figures %}
+        {% set sheet = disc.figureSheets[loop.index0] %}
+        {% if sheet %}
+            {% include 'personnalite/assessment/report/_figure_sheet.html.twig' with {fig: sheet, why: sheet.why[disc.primary] ?? sheet.why.default, pdf: pdf, pc: pc} only %}
+        {% else %}
         <div class="dr-tile" style="margin-bottom: 10px; border-left: 6px solid {{ pc }}; border-radius: 0 14px 14px 0;">
             <div style="font-family: {{ pdf ? "'Playfair Display', serif" : 'var(--font-serif)' }}; font-size: {{ pdf ? '14pt' : '1.25rem' }}; font-weight: bold;">{{ f.name }}</div>
             <div class="dr-small" style="margin-bottom: 6px;">{{ f.ref }}</div>
             <p style="margin: 0;">{{ f.text }}</p>
         </div>
+        {% endif %}
     {% endfor %}
-    {% if disc.familyFigures|length %}
+    {# Les courtes mentions de la « même famille » ne s'affichent plus quand des fiches complètes sont là #}
+    {% if disc.familyFigures|length and not (disc.figureSheets|filter(x => x)|length) %}
         <h3 style="margin-top: 14px;">Dans la même famille de tempérament ({{ p.name }})</h3>
         <table class="dr-grid"><tr>
             {% for f in disc.familyFigures|slice(0, 3) %}
