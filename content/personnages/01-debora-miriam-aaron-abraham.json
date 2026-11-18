@@ -1,0 +1,585 @@
+{
+ "DEBORA": {
+  "name": "Débora",
+  "aliases": [
+   "Débora"
+  ],
+  "reviewed": false,
+  "title": "La juge qui se lève quand les chefs manquent",
+  "refs": "Juges 4–5",
+  "profile": {
+   "code": "D",
+   "solidity": "Indices nombreux et convergents",
+   "dimensions": {
+    "D": {
+     "level": 3,
+     "traits": [
+      [
+       "Elle dirige et rend la justice",
+       "Elle siège sous le palmier, et les enfants d'Israël montent vers elle pour être jugés.",
+       "Juges 4:4-5"
+      ],
+      [
+       "Elle donne des ordres clairs",
+       "Elle convoque Barak et lui transmet l'ordre : aller au mont Thabor avec dix mille hommes.",
+       "Juges 4:6-7"
+      ],
+      [
+       "Elle prend les devants et presse l'action",
+       "Quand Barak hésite, elle accepte de venir, puis lui dit : « Lève-toi, car voici le jour ».",
+       "Juges 4:8-9, 14"
+      ],
+      [
+       "Elle se lève quand les autres manquent de force",
+       "« Les chefs étaient sans force en Israël... quand je me suis levée, moi, Débora ».",
+       "Juges 5:7"
+      ]
+     ]
+    }
+   },
+   "absent": [
+    [
+     "Patience envers l'hésitation (S)",
+     "Elle n'attend pas que Barak soit prêt : elle le presse (4:14)."
+    ],
+    [
+     "Recherche de la scène (I)",
+     "Elle ne court pas après la foule : c'est le peuple qui monte vers elle (4:5)."
+    ]
+   ],
+   "limits": "Le récit est bref (deux chapitres) : nous repérons des indices, nous ne mesurons rien. Quatre indices convergent vers la dimension D ; aucun ne la contredit."
+  },
+  "why": {
+   "D": "Comme elle, vous voyez ce qu'il faut faire, vous le dites sans détour et vous poussez les autres à avancer. Son récit montre aussi ce qui oriente ce tempérament : elle se lève au nom de l'Éternel et se nomme « mère en Israël », jamais maîtresse.",
+   "default": "Son assurance et son sens de l'action éclairent les tempéraments qui dirigent."
+  },
+  "who": "Débora est prophétesse et juge en Israël, au temps des Juges. Un roi cananéen, Jabin, opprime le peuple, et son chef d'armée est Sisera. Elle siège entre Rama et Béthel, dans la montagne d'Éphraïm, et le peuple vient à elle pour être jugé (Juges 4:2-5).",
+  "episodes": [
+   {
+    "title": "Juge et prophétesse",
+    "ref": "Juges 4:4-5",
+    "tags": [
+     [
+      "D",
+      "autorité"
+     ]
+    ],
+    "text": "Dans un temps de désordre, elle rend la justice sous un palmier. Son autorité n'est pas prise : le peuple vient à elle."
+   },
+   {
+    "title": "L'ordre donné à Barak",
+    "ref": "Juges 4:6-7",
+    "tags": [
+     [
+      "D",
+      "direction"
+     ]
+    ],
+    "text": "Elle fait appeler Barak et lui rappelle l'ordre de l'Éternel : monter au mont Thabor avec dix mille hommes. Elle annonce que Dieu livrera Sisera entre ses mains.",
+    "quote": {
+     "ref": "Juges 4:6",
+     "text": "N'est-ce pas l'ordre qu'a donné l'Eternel, le Dieu d'Israël?"
+    }
+   },
+   {
+    "title": "Je viens, mais la gloire ne sera pas pour toi",
+    "ref": "Juges 4:8-9",
+    "tags": [
+     [
+      "D",
+      "courage"
+     ]
+    ],
+    "text": "Barak ne veut partir que si elle l'accompagne. Elle accepte sans hésiter, en lui annonçant que Dieu livrera Sisera « entre les mains d'une femme ». Elle se met en route avec lui."
+   },
+   {
+    "title": "Lève-toi",
+    "ref": "Juges 4:14-15",
+    "tags": [
+     [
+      "D",
+      "action"
+     ]
+    ],
+    "text": "Au moment décisif, elle dit à Barak d'agir. L'Éternel met en déroute Sisera, ses chars et tout son camp devant Barak.",
+    "quote": {
+     "ref": "Juges 4:14",
+     "text": "Lève-toi, car voici le jour où l'Eternel livre Sisera entre tes mains. L'Eternel ne marche-t-il pas devant toi?"
+    }
+   },
+   {
+    "title": "Le cantique",
+    "ref": "Juges 5:1-12",
+    "tags": [
+     [
+      "D",
+      "porte la cause"
+     ]
+    ],
+    "text": "Débora et Barak chantent. Elle se présente non comme une cheffe, mais comme « une mère en Israël » levée quand les chefs manquaient. Elle chante à l'Éternel (5:3) et s'adresse à elle-même : « Réveille-toi, réveille-toi, Débora ! » (5:12).",
+    "quote": {
+     "ref": "Juges 5:7",
+     "text": "Quand je me suis levée, moi, Débora, Quand je me suis levée comme une mère en Israël."
+    }
+   },
+   {
+    "title": "Le pays en repos",
+    "ref": "Juges 5:31",
+    "text": "Le cantique s'achève sur la paix : « Le pays fut en repos pendant quarante ans »."
+   }
+  ],
+  "weakness": "Le récit ne rapporte aucune faute de Débora. Ce que cette lecture signale comme vigilance pour un tempérament qui dirige : presser ceux qui hésitent (4:14) peut manquer de patience pour eux. Débora garde pourtant un cap : elle ne s'attribue pas la victoire (4:9 ; 5:3) et se dit « mère », non « cheffe ».",
+  "grace": "Dieu ne s'appuie pas d'abord sur la force humaine : il met l'armée en déroute devant Barak (4:15), et Sisera meurt de la main d'une femme, Jaël (4:21). « L'Éternel ne marche-t-il pas devant toi ? » (4:14) : la victoire est donnée, Débora la reçoit et la chante. Elle dirige sans se faire gloire de ce que Dieu accomplit.",
+  "christ": "Les juges délivraient seulement « pendant toute la vie du juge » : à sa mort, le peuple retombait (Juges 2:18-19). Débora montre qu'une personne peut être un instrument de Dieu, sans être le sauveur. La libération durable vient du Fils : « Si donc le Fils vous affranchit, vous serez réellement libres » (Jean 8:36). Votre autorité peut servir, mais elle ne sauve pas : elle désigne celui qui sauve.",
+  "quotes": [
+   {
+    "ref": "Juges 2:18",
+    "text": "l'Eternel était avec le juge, et il les délivrait de la main de leurs ennemis pendant toute la vie du juge"
+   },
+   {
+    "ref": "Jean 8:36",
+    "text": "Si donc le Fils vous affranchit, vous serez réellement libres."
+   }
+  ],
+  "question": "Qui est-ce que je presse d'avancer sans l'accompagner, et comment pourrais-je me placer à côté plutôt qu'en tête ?",
+  "step": "Avant une décision importante, demander à deux personnes ce qui les freine, puis avancer avec elles."
+ },
+ "MIRIAM": {
+  "name": "Miriam",
+  "aliases": [
+   "Miriam"
+  ],
+  "reviewed": false,
+  "title": "La sœur qui chante, et dont la parole part trop vite",
+  "refs": "Exode 2 ; 15 ; Nombres 12",
+  "profile": {
+   "code": "I",
+   "solidity": "Indices convergents",
+   "dimensions": {
+    "I": {
+     "level": 3,
+     "traits": [
+      [
+       "Elle entraîne les autres",
+       "Elle prend un tambourin et toutes les femmes la suivent, avec des tambourins et en dansant.",
+       "Exode 15:20"
+      ],
+      [
+       "Elle s'exprime avec élan",
+       "Elle répond aux enfants d'Israël par un chant : « Chantez à l'Éternel ».",
+       "Exode 15:21"
+      ],
+      [
+       "Elle prend la parole avec aisance devant les puissants",
+       "La sœur de l'enfant (identifiée à Miriam) s'avance vers la fille de Pharaon et propose d'aller chercher une nourrice.",
+       "Exode 2:4-8"
+      ],
+      [
+       "Elle veut être entendue",
+       "Avec Aaron, elle conteste : « N'est-ce pas aussi par nous qu'il parle ? »",
+       "Nombres 12:1-2"
+      ]
+     ]
+    }
+   },
+   "absent": [
+    [
+     "Prudence et méthode (C)",
+     "Sa critique part à chaud et touche l'autorité de Moïse sans mesure (Nombres 12:1-2)."
+    ],
+    [
+     "Retrait et discrétion (S)",
+     "On la voit toujours en avant : devant Pharaon, devant le peuple, devant Moïse."
+    ]
+   ],
+   "limits": "Le texte est bref. Dans Exode 2, la sœur de l'enfant n'est pas nommée ; on l'identifie à Miriam d'après Nombres 26:59. Nous repérons des indices, nous ne mesurons rien."
+  },
+  "why": {
+   "I": "Comme elle, vous mettez de l'élan dans un groupe, vous parlez facilement et vous aimez que l'on reconnaisse ce que vous apportez. Son récit montre aussi la vigilance de ce tempérament : la parole qui part vite et le besoin d'être reconnu.",
+   "default": "Son élan et sa parole éclairent les tempéraments qui entraînent."
+  },
+  "who": "Miriam (nommée « Marie » dans la Louis Segond) est la sœur de Moïse et d'Aaron (Nombres 26:59). Le texte l'appelle « prophétesse » (Exode 15:20). Dieu la compte lui-même parmi ceux qu'il a envoyés devant son peuple : « j'ai envoyé devant toi Moïse, Aaron et Marie » (Michée 6:4).",
+  "episodes": [
+   {
+    "title": "La sœur qui veille",
+    "ref": "Exode 2:4-8",
+    "tags": [
+     [
+      "I",
+      "initiative"
+     ]
+    ],
+    "text": "Elle reste à distance pour voir ce qui arrivera à l'enfant dans la caisse. Quand la fille de Pharaon le trouve, elle s'avance et propose d'aller chercher une nourrice parmi les femmes des Hébreux : c'est leur mère qu'elle ramène."
+   },
+   {
+    "title": "Le tambourin",
+    "ref": "Exode 15:20-21",
+    "tags": [
+     [
+      "I",
+      "entraîne"
+     ],
+     [
+      "I",
+      "élan"
+     ]
+    ],
+    "text": "Après le passage de la mer, elle prend un tambourin et toutes les femmes la suivent. Elle leur répond par un chant qui célèbre la gloire de l'Éternel.",
+    "quote": {
+     "ref": "Exode 15:21",
+     "text": "Chantez à l'Eternel, car il a fait éclater sa gloire"
+    }
+   },
+   {
+    "title": "La critique",
+    "ref": "Nombres 12:1-2",
+    "tags": [
+     [
+      "I",
+      "besoin de reconnaissance"
+     ]
+    ],
+    "text": "Avec Aaron, elle parle contre Moïse. Leur question laisse voir un désir d'être reconnus eux aussi : le texte ne dit pas que l'intention était mauvaise, mais « l'Éternel l'entendit ».",
+    "quote": {
+     "ref": "Nombres 12:2",
+     "text": "Est-ce seulement par Moïse que l'Eternel parle? N'est-ce pas aussi par nous qu'il parle?"
+    }
+   },
+   {
+    "title": "Le camp qui l'attend",
+    "ref": "Nombres 12:10-15",
+    "text": "Miriam est frappée de lèpre. Moïse crie à l'Éternel : « guéris-la ! ». Elle reste sept jours hors du camp, et le peuple ne repart pas avant qu'elle y soit rentrée (12:15)."
+   },
+   {
+    "title": "Envoyée devant son peuple",
+    "ref": "Michée 6:4",
+    "text": "Bien des siècles plus tard, Dieu la nomme encore avec Moïse et Aaron comme l'un de ceux qu'il a envoyés pour conduire son peuple."
+   }
+  ],
+  "weakness": "La parole qui part vite, et le besoin d'être entendu. Avec Aaron, elle conteste l'autorité de Moïse (Nombres 12:1-2). Le texte ne dit pas que l'élan est mauvais : il montre qu'il peut tourner à la jalousie quand on veut être entendu comme celui qu'on admire.",
+  "grace": "Après sa faute, Moïse supplie l'Éternel pour elle (12:13) et le peuple l'attend pour repartir (12:15) : elle n'est pas rejetée, elle est ramenée. Et Dieu la compte encore, des siècles après, parmi ceux qu'il a envoyés devant son peuple (Michée 6:4).",
+  "christ": "Miriam chante la délivrance : « Chantez à l'Éternel, car il a fait éclater sa gloire » (Exode 15:21). Toute la louange d'Israël regarde vers une délivrance plus grande, celle que le Christ accomplit en affranchissant du péché. Votre voix et votre élan sont donnés pour célébrer celui qui sauve, pas pour faire reconnaître la vôtre.",
+  "quotes": [
+   {
+    "ref": "Exode 15:21",
+    "text": "Chantez à l'Eternel, car il a fait éclater sa gloire"
+   },
+   {
+    "ref": "Michée 6:4",
+    "text": "j'ai envoyé devant toi Moïse, Aaron et Marie."
+   }
+  ],
+  "question": "Qu'est-ce que je dis trop vite, et qui vient d'un besoin d'être reconnu ?",
+  "step": "Avant de critiquer une décision, attendre vingt-quatre heures et poser une question plutôt que d'affirmer."
+ },
+ "AARON": {
+  "name": "Aaron",
+  "aliases": [
+   "Aaron"
+  ],
+  "reviewed": false,
+  "title": "Le porte-parole qui cède devant la foule",
+  "refs": "Exode 4 ; 32 ; Lévitique 9 ; Nombres 16",
+  "profile": {
+   "code": "I",
+   "solidity": "Indices nombreux et convergents",
+   "dimensions": {
+    "I": {
+     "level": 3,
+     "traits": [
+      [
+       "Il parle facilement",
+       "L'Éternel dit de lui : « Je sais qu'il parlera facilement ».",
+       "Exode 4:14"
+      ],
+      [
+       "Il porte la parole devant le peuple",
+       "Il rapporte les paroles de l'Éternel et exécute les signes ; « le peuple crut ».",
+       "Exode 4:30-31"
+      ],
+      [
+       "Il est chaleureux dans la rencontre",
+       "Il va au-devant de Moïse et le baise.",
+       "Exode 4:27"
+      ],
+      [
+       "Il cède quand la foule le presse",
+       "Le peuple s'assemble autour de lui : « Fais-nous un dieu ». Il leur fait un veau d'or.",
+       "Exode 32:1-4"
+      ],
+      [
+       "Il cherche à préserver l'ambiance",
+       "Après avoir fait le veau, il bâtit un autel et proclame une fête.",
+       "Exode 32:5"
+      ]
+     ]
+    }
+   },
+   "absent": [
+    [
+     "Prise de décision (D)",
+     "Il n'est pas celui qui reçoit la parole de Dieu : Moïse parle à Dieu, Aaron relaie (Exode 4:15-16)."
+    ],
+    [
+     "Rigueur face à la pression (C)",
+     "Il minimise : « je l'ai jeté au feu, et il en est sorti ce veau » (Exode 32:24)."
+    ]
+   ],
+   "limits": "Aaron apparaît dans plusieurs livres, mais toujours à côté de Moïse. Cinq indices convergent vers la dimension I ; nous repérons des indices, nous ne mesurons rien."
+  },
+  "why": {
+   "I": "Comme lui, vous parlez bien, vous rassemblez et vous savez mettre à l'aise. Son récit montre le prix de ce don : la peur de déplaire à la foule peut faire céder sur l'essentiel.",
+   "default": "Sa parole facile et sa peur de déplaire éclairent les tempéraments qui rassemblent."
+  },
+  "who": "Aaron est le frère aîné de Moïse, de la tribu de Lévi. Quand Moïse se dit incapable de parler (Exode 4:10), Dieu lui désigne Aaron comme porte-parole. Il sera ensuite consacré avec ses fils au service du sacerdoce (Exode 28:1).",
+  "episodes": [
+   {
+    "title": "Le porte-parole",
+    "ref": "Exode 4:14-16",
+    "tags": [
+     [
+      "I",
+      "parole facile"
+     ]
+    ],
+    "text": "Dieu répond à l'hésitation de Moïse : son frère Aaron parlera pour lui. Moïse mettra les paroles dans sa bouche ; Aaron les dira au peuple.",
+    "quote": {
+     "ref": "Exode 4:14",
+     "text": "Je sais qu'il parlera facilement."
+    }
+   },
+   {
+    "title": "Devant les anciens",
+    "ref": "Exode 4:27-31",
+    "tags": [
+     [
+      "I",
+      "rassemble"
+     ]
+    ],
+    "text": "Aaron va au-devant de Moïse, l'embrasse, rassemble les anciens, rapporte les paroles de l'Éternel et fait les signes. Le peuple s'incline.",
+    "quote": {
+     "ref": "Exode 4:31",
+     "text": "Et le peuple crut."
+    }
+   },
+   {
+    "title": "Le veau d'or",
+    "ref": "Exode 32:1-6",
+    "tags": [
+     [
+      "I",
+      "peur de déplaire"
+     ]
+    ],
+    "text": "Moïse tarde sur la montagne. Le peuple s'assemble autour d'Aaron et lui demande un dieu visible. Il fait ôter les anneaux d'or, les fond en un veau, bâtit un autel et proclame une fête."
+   },
+   {
+    "title": "Les excuses",
+    "ref": "Exode 32:21-24",
+    "tags": [
+     [
+      "I",
+      "minimise"
+     ]
+    ],
+    "text": "Moïse lui demande ce que ce peuple lui a fait pour qu'il le laisse commettre un si grand péché. Aaron rejette la faute sur le peuple et présente le veau comme sorti tout seul du feu.",
+    "quote": {
+     "ref": "Exode 32:24",
+     "text": "je l'ai jeté au feu, et il en est sorti ce veau."
+    }
+   },
+   {
+    "title": "Le sacrificateur qui bénit",
+    "ref": "Lévitique 9:22-24",
+    "text": "Il offre les sacrifices, lève les mains et bénit le peuple. La gloire de l'Éternel apparaît, et le peuple pousse des cris de joie."
+   },
+   {
+    "title": "Entre les morts et les vivants",
+    "ref": "Nombres 16:46-48",
+    "tags": [
+     [
+      "I",
+      "se place devant le peuple"
+     ]
+    ],
+    "text": "Quand la plaie frappe le peuple, il prend l'encensoir sur l'ordre de Moïse, court au milieu de l'assemblée et fait l'expiation.",
+    "quote": {
+     "ref": "Nombres 16:48",
+     "text": "Il se plaça entre les morts et les vivants, et la plaie fut arrêtée."
+    }
+   }
+  ],
+  "weakness": "La peur de déplaire. Quand le peuple le presse (Exode 32:1), il cède, puis minimise : « il en est sorti ce veau » (32:24). Pour ce tempérament, la vigilance est de ne pas acheter la paix de la foule au prix de la vérité.",
+  "grace": "Aaron n'est pas écarté : il reste le sacrificateur d'Israël (Lévitique 9) et c'est lui qui, plus tard, se place « entre les morts et les vivants » pour arrêter la plaie (Nombres 16:48). Sa faute la plus grave n'a pas annulé sa mission. Le texte ne le présente pas comme un mérite, mais comme la patience de Dieu.",
+  "christ": "Aaron préfigure le grand-prêtre, mais il doit offrir d'abord pour ses propres péchés, puis pour ceux du peuple (Hébreux 7:27). Jésus est le grand-prêtre « saint, innocent, sans tache » qui s'est offert une seule fois ; il compatit à nos faiblesses (Hébreux 4:15 ; 7:26-27). En se plaçant entre les morts et les vivants, Aaron annonçait cette médiation ; seul le Christ la réalise.",
+  "quotes": [
+   {
+    "ref": "Hébreux 4:15",
+    "text": "nous n'avons pas un souverain sacrificateur qui ne puisse compatir à nos faiblesses"
+   },
+   {
+    "ref": "Hébreux 7:27",
+    "text": "il l'a fait une fois pour toutes en s'offrant lui-même."
+   }
+  ],
+  "question": "Où ai-je cédé pour garder la paix, alors que l'essentiel était en jeu ?",
+  "step": "Dire non, avec douceur, à une demande qui vous met mal à l'aise, au lieu de la satisfaire pour éviter un désaccord."
+ },
+ "ABRAHAM": {
+  "name": "Abraham",
+  "aliases": [
+   "Abraham"
+  ],
+  "reviewed": false,
+  "title": "Le père de la foi, qui avance sans tout savoir",
+  "refs": "Genèse 12–25 ; Hébreux 11",
+  "profile": {
+   "code": "S",
+   "solidity": "Indices nombreux et convergents",
+   "dimensions": {
+    "S": {
+     "level": 3,
+     "traits": [
+      [
+       "Il cherche la paix et cède pour préserver la relation",
+       "Avec Lot : « Qu'il n'y ait point de dispute entre moi et toi... car nous sommes frères » ; il lui laisse choisir.",
+       "Genèse 13:8-9"
+      ],
+      [
+       "Il est hospitalier et attentionné",
+       "Il court au-devant de trois visiteurs et leur fait préparer du pain, de la viande, de la crème et du lait.",
+       "Genèse 18:2-8"
+      ],
+      [
+       "Il tient dans la durée",
+       "Il part à soixante-quinze ans et vit sous des tentes en attendant la promesse.",
+       "Genèse 12:4 ; Hébreux 11:9-10"
+      ],
+      [
+       "Il redoute le conflit et la menace",
+       "Par peur d'être tué, il demande à Sara de dire qu'elle est sa sœur, en Égypte puis à Guérar.",
+       "Genèse 12:11-13 ; 20:1-2"
+      ],
+      [
+       "Il obéit calmement, sans éclat",
+       "Il se lève de bon matin pour partir au lieu que Dieu lui a dit.",
+       "Genèse 22:3"
+      ]
+     ]
+    }
+   },
+   "absent": [
+    [
+     "Conquête et prise de contrôle (D)",
+     "Il ne conquiert pas : il s'établit sous des tentes et laisse à Lot le meilleur choix (Genèse 13:9)."
+    ],
+    [
+     "Éloquence et recherche de la scène (I)",
+     "Il parle peu : « Me voici ! » (Genèse 22:1), puis il agit."
+    ]
+   ],
+   "limits": "Abraham est l'un des personnages les plus longuement racontés de la Bible : les indices sont nombreux, mais certains peuvent aussi se lire autrement. Nous repérons des indices, nous ne mesurons rien."
+  },
+  "why": {
+   "S": "Comme lui, vous préférez la paix à la dispute, vous accueillez et vous tenez dans la durée. Son récit montre aussi la crainte de ce tempérament : la peur d'un conflit peut conduire à des arrangements dont on se repent.",
+   "default": "Sa fidélité patiente et son hospitalité éclairent les tempéraments posés."
+  },
+  "who": "Abraham (d'abord Abram) est appelé à quitter son pays pour un lieu que Dieu lui montrera, à soixante-quinze ans (Genèse 12:1-4). Dieu lui promet une grande nation et une bénédiction pour « toutes les familles de la terre ». Il est le père de la foi.",
+  "episodes": [
+   {
+    "title": "Va-t'en",
+    "ref": "Genèse 12:1-4",
+    "tags": [
+     [
+      "S",
+      "fidélité"
+     ]
+    ],
+    "text": "Dieu l'appelle à quitter son pays, sa patrie et la maison de son père. Il part, comme l'Éternel le lui a dit, sans savoir où il va (Hébreux 11:8).",
+    "quote": {
+     "ref": "Genèse 12:1",
+     "text": "Va-t-en de ton pays, de ta patrie, et de la maison de ton père, dans le pays que je te montrerai."
+    }
+   },
+   {
+    "title": "Qu'il n'y ait point de dispute",
+    "ref": "Genèse 13:8-9",
+    "tags": [
+     [
+      "S",
+      "harmonie"
+     ]
+    ],
+    "text": "Ses bergers et ceux de Lot se disputent. Abram propose de se séparer, et laisse à Lot le choix du pays.",
+    "quote": {
+     "ref": "Genèse 13:8",
+     "text": "Qu'il n'y ait point, je te prie, de dispute entre moi et toi"
+    }
+   },
+   {
+    "title": "La peur en Égypte",
+    "ref": "Genèse 12:10-13",
+    "tags": [
+     [
+      "S",
+      "crainte du conflit"
+     ]
+    ],
+    "text": "En Égypte, par peur d'être tué à cause de la beauté de sa femme, il lui demande de se dire sa sœur. Il recommencera à Guérar (20:1-2)."
+   },
+   {
+    "title": "Les trois visiteurs",
+    "ref": "Genèse 18:1-8",
+    "tags": [
+     [
+      "S",
+      "hospitalité"
+     ]
+    ],
+    "text": "Assis à l'entrée de sa tente dans la chaleur du jour, il voit trois hommes, court au-devant d'eux, se prosterne et leur prépare un repas. Il reste debout à leurs côtés pendant qu'ils mangent."
+   },
+   {
+    "title": "Il eut confiance",
+    "ref": "Genèse 15:6",
+    "tags": [
+     [
+      "S",
+      "confiance patiente"
+     ]
+    ],
+    "text": "Malgré l'attente et les doutes, c'est ce verset que le Nouveau Testament retient : sa confiance en l'Éternel lui est comptée comme justice. Il n'y a pas de mérite chez Abraham, seulement une promesse reçue.",
+    "quote": {
+     "ref": "Genèse 15:6",
+     "text": "Abram eut confiance en l'Eternel, qui le lui imputa à justice."
+    }
+   },
+   {
+    "title": "Le matin du Morija",
+    "ref": "Genèse 22:1-3",
+    "tags": [
+     [
+      "S",
+      "obéissance calme"
+     ]
+    ],
+    "text": "Dieu l'éprouve en lui demandant d'offrir Isaac. Il répond « Me voici ! », se lève de bon matin, prépare le bois et part."
+   }
+  ],
+  "weakness": "Deux fois, la peur le pousse à faire passer sa femme pour sa sœur (Genèse 12:11-13 ; 20:2), et une fois il se rend à la proposition de Saraï (16:2 : « Abram écouta la voix de Saraï »), ce qui engendre des tensions (16:4). Pour ce tempérament, la vigilance : éviter le conflit à court terme peut produire des arrangements qui font souffrir ensuite.",
+  "grace": "Ce n'est pas la perfection d'Abraham que le texte retient : « Abram eut confiance en l'Éternel, qui le lui imputa à justice » (Genèse 15:6). Cette justice est reçue, non gagnée ; Paul s'appuie sur ce verset (Romains 4:3, 20-22). Dieu tient sa promesse malgré les faiblesses de l'homme.",
+  "christ": "« Les promesses ont été faites à Abraham et à sa postérité... c'est-à-dire à Christ » (Galates 3:16). Jésus dit : Abraham « a tressailli de joie de ce qu'il verrait mon jour » (Jean 8:56). Abraham a cru à une promesse dont le Christ est l'accomplissement ; son attente patiente sous des tentes regardait vers « la cité qui a de solides fondements » (Hébreux 11:10).",
+  "quotes": [
+   {
+    "ref": "Galates 3:16",
+    "text": "et à ta postérité, c'est-à-dire, à Christ."
+   },
+   {
+    "ref": "Jean 8:56",
+    "text": "Abraham, votre père, a tressailli de joie de ce qu'il verrait mon jour: il l'a vu, et il s'est réjoui."
+   }
+  ],
+  "question": "Qu'est-ce que j'évite de dire pour ne pas provoquer un conflit, et que Dieu me demande peut-être de dire ?",
+  "step": "Nommer calmement, cette semaine, un désaccord que vous taisez, en demandant à Dieu la paix dans la vérité."
+ }
+}

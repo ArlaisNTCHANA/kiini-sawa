@@ -172,10 +172,32 @@ final class BiblicalFigures
         ],
     ];
 
+    /** @var ?array<string, array> */
+    private static ?array $all = null;
+
+    /**
+     * Toutes les fiches : les fiches pilotes ci-dessus et celles de `content/personnages/*.json` (une fiche par clé, même structure).
+     *
+     * @return array<string, array>
+     */
+    public static function all(): array
+    {
+        if (null === self::$all) {
+            self::$all = self::FIGURES;
+            foreach (glob(\dirname(__DIR__, 3).'/content/personnages/*.json') ?: [] as $file) {
+                foreach (json_decode((string) file_get_contents($file), true, 512, \JSON_THROW_ON_ERROR) as $key => $fig) {
+                    self::$all[$key] = $fig;
+                }
+            }
+        }
+
+        return self::$all;
+    }
+
     /** Fiche d'un personnage d'après son nom tel qu'il apparaît dans les profils, ou null s'il n'a pas encore de fiche. */
     public static function find(string $name): ?array
     {
-        foreach (self::FIGURES as $key => $fig) {
+        foreach (self::all() as $key => $fig) {
             if (\in_array($name, $fig['aliases'], true)) {
                 return $fig + ['key' => $key];
             }

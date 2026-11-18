@@ -11,12 +11,17 @@ use PHPUnit\Framework\TestCase;
  */
 class BiblicalFiguresTest extends TestCase
 {
-    private const BOOKS = ['1 rois' => '1Kgs', '2 rois' => '2Kgs', 'jacques' => 'Jas', 'matthieu' => 'Matt', 'luc' => 'Luke', 'philippiens' => 'Phil',
-        '1 timothée' => '1Tim', '2 timothée' => '2Tim', '1 corinthiens' => '1Cor', 'actes' => 'Acts', 'jean' => 'John', 'psaumes' => 'Ps'];
+    private const BOOKS = ['genèse' => 'Gen', 'exode' => 'Exod', 'lévitique' => 'Lev', 'nombres' => 'Num', 'deutéronome' => 'Deut', 'josué' => 'Josh', 'juges' => 'Judg', 'ruth' => 'Ruth',
+        '1 samuel' => '1Sam', '2 samuel' => '2Sam', '1 rois' => '1Kgs', '2 rois' => '2Kgs', '1 chroniques' => '1Chr', '2 chroniques' => '2Chr', 'esdras' => 'Ezra', 'néhémie' => 'Neh',
+        'esther' => 'Esth', 'job' => 'Job', 'psaumes' => 'Ps', 'proverbes' => 'Prov', 'ecclésiaste' => 'Eccl', 'ésaïe' => 'Isa', 'jérémie' => 'Jer', 'ézéchiel' => 'Ezek', 'daniel' => 'Dan',
+        'osée' => 'Hos', 'jonas' => 'Jonah', 'michée' => 'Mic', 'aggée' => 'Hag', 'zacharie' => 'Zech', 'malachie' => 'Mal', 'matthieu' => 'Matt', 'marc' => 'Mark', 'luc' => 'Luke', 'jean' => 'John',
+        'actes' => 'Acts', 'romains' => 'Rom', '1 corinthiens' => '1Cor', '2 corinthiens' => '2Cor', 'galates' => 'Gal', 'éphésiens' => 'Eph', 'philippiens' => 'Phil', 'colossiens' => 'Col',
+        '1 thessaloniciens' => '1Thess', '2 thessaloniciens' => '2Thess', '1 timothée' => '1Tim', '2 timothée' => '2Tim', 'tite' => 'Titus', 'hébreux' => 'Heb', 'jacques' => 'Jas',
+        '1 pierre' => '1Pet', '2 pierre' => '2Pet', '1 jean' => '1John', 'apocalypse' => 'Rev'];
 
     public function testEveryFigureIsComplete(): void
     {
-        foreach (BiblicalFigures::FIGURES as $key => $f) {
+        foreach (BiblicalFigures::all() as $key => $f) {
             foreach (['name', 'aliases', 'title', 'refs', 'profile', 'why', 'who', 'episodes', 'weakness', 'grace', 'christ', 'quotes', 'question', 'step'] as $field) {
                 $this->assertArrayHasKey($field, $f, "$key : champ $field");
                 $this->assertNotEmpty($f[$field], "$key : champ $field vide");
@@ -61,9 +66,10 @@ class BiblicalFiguresTest extends TestCase
         foreach (json_decode((string) file_get_contents($file), true)['books'] as $b) {
             $bible[$b['book']] = $b;
         }
-        $norm = fn (string $s) => trim(preg_replace('/[^a-z0-9]+/', ' ', strtolower(iconv('UTF-8', 'ASCII//TRANSLIT', str_replace(["''", '’'], "'", $s)))));
+        // Insensible aux accents, à la casse, à la ponctuation et à la forme Unicode (précomposée ou décomposée)
+        $norm = fn (string $s) => trim(preg_replace('/[^a-z0-9]+/', ' ', strtolower(preg_replace('/\p{Mn}/u', '', \Normalizer::normalize(str_replace(["''", '’'], "'", $s), \Normalizer::FORM_D)))));
         $checked = 0;
-        foreach (BiblicalFigures::FIGURES as $key => $f) {
+        foreach (BiblicalFigures::all() as $key => $f) {
             $quotes = $f['quotes'];
             foreach ($f['episodes'] as $e) {
                 if (isset($e['quote'])) {
