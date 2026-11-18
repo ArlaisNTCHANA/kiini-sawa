@@ -333,3 +333,14 @@ carte du Plan de Vie) → `|raw` ajouté ; (2) Turbo remplaçait le `<body>` san
 après un clic) → `turbo:load/render/frame-load` appellent `lucide.createIcons()`. Étiquettes des diagrammes Mermaid : plus de balise
 d'icône (elle y était invisible). Gardes : `NavigationTest::testNoIconMarkupIsDisplayedAsText`, `DesignRulesTest::testIconsAreRecreatedAfterTurboNavigation`.
 Leçon : après tout remplacement en masse, rendre les pages et chercher `&lt;i data-lucide` dans le HTML.
+
+## 18/11/2026 — Rapports de tests : PDF plus propre (DISC mesuré)
+
+Constat sur le PDF DISC du fondateur (16 pages) : 3 pages presque vides (5, 7, 12 : quelques lignes débordées), page de garde bleu
+nuit hors palette du livre, pastille « Modérée » mal alignée, question réflexe coupée (« ? » seul en bout de ligne).
+Corrigé (rendu local mesuré : 13 pages, aucune page orpheline) : compaction du PDF (interligne, marges, tuiles) dans
+`report/_styles.html.twig`, boussole plus petite, hauteur minimale des tuiles « vu par les autres », espaces insécables avant « ? »,
+intensité en étiquette lisible, page de garde en vert du livre (`report/_cover.html.twig`, commune à tous les rapports).
+Outil de mesure : générer le PDF via un test temporaire (`tests/Personnalite/DiscTest.php` montre comment créer un `Assessment`), puis
+le rendre avec PDFKit (swift) ; poppler/ImageMagick absents sur le Mac. **Pas encore revu :** écran (page web du rapport), Big Five,
+ennéagramme, dons, synthèse : mêmes styles communs, à contrôler de la même façon.

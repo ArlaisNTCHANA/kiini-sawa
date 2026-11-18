@@ -2,14 +2,14 @@
   Page de garde commune. Variables : pdf, title, subtitle, badges [{t, color}], headline, tagline, keywords, name, assessment.
 #}
 {% set big = badges|length <= 2 %}
-<div style="{{ pdf ? 'height: 222mm;' : 'margin-bottom: 22px;' }} border-radius: 24px; background: #0F172A; color: #fff; padding: {{ pdf ? '22mm 16mm' : '40px 28px' }}; position: relative;">
+<div style="{{ pdf ? 'height: 222mm;' : 'margin-bottom: 22px;' }} border-radius: 24px; background: #1F4D3A; color: #fff; padding: {{ pdf ? '22mm 16mm' : '40px 28px' }}; position: relative;">
     <table style="border-collapse: collapse;"><tr>
         {% if brand_logo() %}<td style="padding-right: 10px;"><img src="{{ brand_logo() }}" alt="KIINI SAWA" style="width: {{ pdf ? '13mm' : '46px' }}; height: {{ pdf ? '13mm' : '46px' }}; border-radius: 10px;"></td>{% endif %}
         <td style="font-size: {{ pdf ? '9pt' : '.8rem' }}; letter-spacing: 4px; font-weight: bold; color: #A9C2B1; vertical-align: middle;">KIINI SAWA<br><span style="letter-spacing: 1px; font-weight: normal; color: #94A3B8;">Bâtir sa vie avec Dieu</span></td>
     </tr></table>
-    <div style="margin-top: {{ pdf ? '30mm' : '36px' }}; font-size: {{ pdf ? '10pt' : '.85rem' }}; letter-spacing: 3px; text-transform: uppercase; color: #CBD5E1;">Rapport personnel</div>
+    <div style="margin-top: {{ pdf ? '30mm' : '36px' }}; font-size: {{ pdf ? '10pt' : '.85rem' }}; letter-spacing: 3px; text-transform: uppercase; color: #DCE7DF;">Rapport personnel</div>
     <div style="font-family: {{ pdf ? "'Playfair Display', serif" : 'var(--font-serif)' }}; font-size: {{ pdf ? '32pt' : '2.5rem' }}; font-weight: bold; line-height: 1.1; margin: 6px 0 4px;">{{ title }}</div>
-    <div style="color: #CBD5E1; font-size: {{ pdf ? '11pt' : '1rem' }};">{{ subtitle }}</div>
+    <div style="color: #DCE7DF; font-size: {{ pdf ? '11pt' : '1rem' }};">{{ subtitle }}</div>
 
     {% if badges|length %}
     <table style="margin-top: {{ pdf ? '22mm' : '30px' }}; border-collapse: separate; border-spacing: {{ big ? '10px' : '6px' }} 0;"><tr>
@@ -23,11 +23,11 @@
     <div style="color: #E2E8F0; font-size: {{ pdf ? '12pt' : '1.1rem' }}; margin-top: 4px;">{{ tagline }}</div>
     {% if keywords|default([])|length %}
     <div style="margin-top: 14px;">
-        {% for k in keywords %}<span class="dr-chip" style="background: #1E293B; color: #fff; border: 1px solid #475569;">{{ k }}</span>{% endfor %}
+        {% for k in keywords %}<span class="dr-chip" style="background: #2E6B53; color: #fff; border: 1px solid #5E9479;">{{ k }}</span>{% endfor %}
     </div>
     {% endif %}
 
-    <div style="{{ pdf ? 'position: absolute; bottom: 14mm; left: 16mm; right: 16mm;' : 'margin-top: 36px;' }} border-top: 1px solid #334155; padding-top: 12px; color: #CBD5E1; font-size: {{ pdf ? '9pt' : '.85rem' }};">
+    <div style="{{ pdf ? 'position: absolute; bottom: 14mm; left: 16mm; right: 16mm;' : 'margin-top: 36px;' }} border-top: 1px solid #5E9479; padding-top: 12px; color: #DCE7DF; font-size: {{ pdf ? '9pt' : '.85rem' }};">
         <strong style="color: #fff;">{{ name }}</strong> · questionnaire passé le {{ assessment.takenAt|format_date(pattern: 'd MMMM y', locale: 'fr') }}<br>
         Document personnel et confidentiel · outil de connaissance de soi, pas un diagnostic
     </div>

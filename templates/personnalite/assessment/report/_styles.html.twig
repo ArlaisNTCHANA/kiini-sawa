@@ -1,16 +1,16 @@
 {# Styles communs des rapports (écran et PDF Dompdf). Variables : pdf, pc (couleur d'accent). #}
 <style>
-    .dr { color: #1E293B; line-height: 1.55; }
+    .dr { color: #1E293B; line-height: {{ pdf ? '1.42' : '1.55' }}; }
     .dr * { box-sizing: border-box; }
     .dr h2 { font-family: {{ pdf ? "'Playfair Display', serif" : 'var(--font-serif)' }}; font-size: {{ pdf ? '17pt' : '1.55rem' }}; color: #0F172A; margin: 0 0 4px; font-weight: bold; }
     .dr h3 { font-size: {{ pdf ? '11pt' : '1.02rem' }}; margin: 0 0 6px; color: #0F172A; }
-    .dr p { margin: 0 0 8px; }
+    .dr p { margin: 0 0 {{ pdf ? '6px' : '8px' }}; }
     .dr-kicker { font-size: {{ pdf ? '7.5pt' : '.72rem' }}; letter-spacing: 2px; text-transform: uppercase; font-weight: bold; color: {{ pc }}; margin-bottom: 4px; }
-    .dr-lead { color: #475569; font-size: {{ pdf ? '9.5pt' : '.95rem' }}; margin-bottom: 14px !important; }
+    .dr-lead { color: #475569; font-size: {{ pdf ? '9.5pt' : '.95rem' }}; margin-bottom: {{ pdf ? '10px' : '14px' }} !important; }
     .dr-page { {{ pdf ? 'page-break-before: always;' : 'background: var(--card-bg, #fff); border-radius: 20px; box-shadow: var(--card-shadow); padding: 28px; margin-bottom: 22px;' }} }
     .dr-grid { width: 100%; border-collapse: separate; border-spacing: 10px; margin: 0 -10px; table-layout: fixed; }
     .dr-grid td { vertical-align: top; }
-    .dr-tile { border-radius: 14px; padding: 14px 16px; background: #F8FAFC; border: 1px solid #E2E8F0; }
+    .dr-tile { border-radius: 14px; padding: {{ pdf ? '10px 14px' : '14px 16px' }}; background: #F8FAFC; border: 1px solid #E2E8F0; }
     .dr-tile ul { margin: 0; padding-left: 16px; }
     .dr-tile li { margin-bottom: 4px; }
     .dr-label { font-size: {{ pdf ? '7.5pt' : '.7rem' }}; text-transform: uppercase; letter-spacing: 1.5px; font-weight: bold; color: #64748B; margin-bottom: 6px; }
