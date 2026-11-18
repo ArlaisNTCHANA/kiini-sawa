@@ -148,12 +148,16 @@
         </div>
         {% endif %}
     {% endfor %}
+    {% set closing %}
     <div class="dr-quote" style="margin-top: 14px;">« {{ x.verse[0] }} »<div style="font-style: normal; font-weight: bold; margin-top: 6px; font-size: {{ pdf ? '9pt' : '.9rem' }};">{{ x.verse[1] }}</div></div>
     <div class="dr-tile" style="margin-top: 10px;"><div class="dr-label">Une question à méditer</div><p style="margin: 0; font-family: {{ serif }}; font-size: {{ pdf ? '11pt' : '1.05rem' }};">{{ x.meditation }}</p></div>
+    {% endset %}
+    {% if not pdf %}{{ closing }}{% endif %}
 </div>
 
 {# ═══ Grandir ═══ #}
 <div class="dr-page">
+    {% if pdf %}{{ closing }}{% endif %}
     <div class="dr-kicker">Passer à l'action</div>
     <h2>Pour grandir</h2>
     <p class="dr-lead">Grandir, pour votre type, c'est desserrer l'emprise de votre peur et laisser votre motivation devenir un don pour les autres.</p>

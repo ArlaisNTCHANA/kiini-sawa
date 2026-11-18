@@ -428,3 +428,4 @@ phrase courte), fichiers JSON nettoyés, nouveau `08-…json`. Pagination PDF co
 - Fiches pilotes migrées en JSON ; 7 nouvelles fiches (Jonas, Marthe, Jacob, Saül, Jérémie, Samson, Isaac) dans `content/personnages/09-*.json` ; lectures par test (`lenses`, clé `ENN:<type>`) dans `content/lectures/enneagramme.json` pour 11 fiches existantes.
 - `EnneagramProfiles` : Tabitha→Barnabé, David le psalmiste→David, L'Ecclésiaste→Thomas, Jacques et Jean→Moïse. Chaque personnage du rapport ennéagramme a une fiche « Son profil » (test de couverture).
 - Reste : mesurer la pagination PDF des 9 rapports ennéagramme ; phases dons (`GIFT:`) et type (`TYPE:`) ; fiches toutes « en cours de relecture ».
+- Pagination PDF ennéagramme mesurée (9 types, 15 pages chacun, aucune page < 35 %) : en PDF, la citation finale et la « question à méditer » passent en tête de la page « Pour grandir », et les fiches à lecture ne montrent que 5 épisodes.
