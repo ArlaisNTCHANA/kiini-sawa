@@ -16,7 +16,7 @@
             ['<i data-lucide="search" class="ks-ico" aria-hidden="true"></i>', 'Un rapport croisé', 'Vos profils de personnalité côte à côte, avec des pistes concrètes.'],
         ] %}
             <div style="background: var(--card-bg); box-shadow: var(--card-shadow); border-radius: var(--r-lg); padding: 1.2rem;">
-                <div style="font-size: 1.5rem;">{{ f[0] }}</div><div style="font-weight: 700; margin: .3rem 0 .2rem;">{{ f[1] }}</div><div style="color: var(--fg-muted); font-size: .9rem;">{{ f[2] }}</div>
+                <div style="font-size: 1.5rem;">{{ f[0]|raw }}</div><div style="font-weight: 700; margin: .3rem 0 .2rem;">{{ f[1] }}</div><div style="color: var(--fg-muted); font-size: .9rem;">{{ f[2] }}</div>
             </div>
         {% endfor %}
     </div>

@@ -96,4 +96,27 @@ class NavigationTest extends WebTestCase
             $this->assertSame($section, (new NavigationExtension($stack))->activeSection(), $path);
         }
     }
+
+    /** Une icône écrite dans une variable Twig doit être rendue, pas affichée en texte (« <i data-lucide=… »). */
+    public function testNoIconMarkupIsDisplayedAsText(): void
+    {
+        $client = static::createClient();
+        $client->loginUser($this->createUser(pro: true));
+        $router = static::getContainer()->get('router');
+        $routes = ['app_dashboard', 'app_couple', 'app_organisation_index', 'app_journal', 'app_plans'];
+        foreach (NavigationExtension::SECTIONS as $section) {
+            $routes = array_merge($routes, $section['items'] ? array_column($section['items'], 1) : [$section['route']]);
+        }
+        foreach (array_unique($routes) as $route) {
+            try {
+                $client->request('GET', $router->generate($route));
+            } catch (\Symfony\Component\Routing\Exception\RouteNotFoundException) {
+                continue;
+            }
+            if (302 === $client->getResponse()->getStatusCode()) {
+                $client->followRedirect();
+            }
+            $this->assertStringNotContainsString('&lt;i data-lucide', (string) $client->getResponse()->getContent(), $route);
+        }
+    }
 }

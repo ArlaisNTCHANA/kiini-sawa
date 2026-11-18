@@ -2058,7 +2058,7 @@ graph TD
   {% endfor %}
 
   {% for g in allGoals %}
-      Goal{{ g.id }}["<i data-lucide="target" class="ks-ico" aria-hidden="true"></i> {{ g.title|escape('html') }}"]
+      Goal{{ g.id }}["{{ g.title|escape('html') }}"]
       Vision --> Goal{{ g.id }}
   {% endfor %}
 
@@ -2080,7 +2080,7 @@ graph TD
 
   {# Define legacy goals #}
   {% for lg in legacyGoals %}
-      Legacy{{ lg.id }}["<i data-lucide="sprout" class="ks-ico" aria-hidden="true"></i> {{ lg.title|escape('html') }}"]
+      Legacy{{ lg.id }}["{{ lg.title|escape('html') }}"]
       {% for sg in lg.supportedLifeGoals %}
           Goal{{ sg.id }} --> Legacy{{ lg.id }}
       {% endfor %}
@@ -2088,7 +2088,7 @@ graph TD
 
   {# Define hygiene domains #}
   {% for hd in hygieneDomains %}
-      Hygiene{{ hd.id }}["<i data-lucide="star" class="ks-ico" aria-hidden="true"></i> {{ hd.name|escape('html') }}"]
+      Hygiene{{ hd.id }}["{{ hd.name|escape('html') }}"]
       {% for sg in hd.supportedLifeGoals %}
           Goal{{ sg.id }} --> Hygiene{{ hd.id }}
       {% endfor %}

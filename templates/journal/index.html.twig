@@ -338,7 +338,7 @@
                                        display: flex; align-items: center; justify-content: center; cursor: pointer;
                                        border: none; background: transparent;"
                                 title="{{ m.value }}">
-                            {{ m.icon }}
+                            {{ m.icon|raw }}
                         </button>
                         {% endfor %}
                     </div>

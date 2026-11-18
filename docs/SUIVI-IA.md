@@ -324,3 +324,12 @@ L'image du livre (`fig_6plans.png`) affichait « Plan de Développement » sans 
 (`rsvg-convert` et polices Carlito/Caladea absents, sortie vers `/home/claude/...`). La vitrine utilise donc un SVG intégré :
 `templates/dashboard/_six_plans_figure.html.twig` (noms complets, couleurs du livre). Le cercle de « Mes plans » dit aussi
 « Développement personnel ». **Reste (auteur) :** corriger la ligne 102 de `figs.py` (`"Plan de\nDéveloppement\npersonnel"`) pour le livre.
+
+## 18/11/2026 — Icônes affichées en texte et disparues (suite du lot A)
+
+Deux défauts hérités du remplacement des émojis : (1) des balises `<i data-lucide=…>` rangées dans des tableaux Twig étaient
+imprimées échappées (« <i data-lucide… » visible sur Organisation, Couple, humeurs du journal et de l'accueil, états de la
+carte du Plan de Vie) → `|raw` ajouté ; (2) Turbo remplaçait le `<body>` sans redessiner les icônes (menu sans pictogrammes
+après un clic) → `turbo:load/render/frame-load` appellent `lucide.createIcons()`. Étiquettes des diagrammes Mermaid : plus de balise
+d'icône (elle y était invisible). Gardes : `NavigationTest::testNoIconMarkupIsDisplayedAsText`, `DesignRulesTest::testIconsAreRecreatedAfterTurboNavigation`.
+Leçon : après tout remplacement en masse, rendre les pages et chercher `&lt;i data-lucide` dans le HTML.

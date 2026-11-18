@@ -2220,7 +2220,7 @@ graph TD
   
   {# Specific Goals BE #}
   {% for g in lifeGoals.BE %}
-    Goal{{ g.id }}["<i data-lucide="target" class="ks-ico" aria-hidden="true"></i> {{ g.title|escape('html') }}"]
+    Goal{{ g.id }}["{{ g.title|escape('html') }}"]
     Vision --> Goal{{ g.id }}
   {% endfor %}
 
@@ -2233,12 +2233,12 @@ graph TD
 
     {# Strategy #}
     {% if gg.strategy %}
-      Strat{{ gg.id }}["<i data-lucide="clipboard-list" class="ks-ico" aria-hidden="true"></i> {{ gg.strategy|slice(0, 40)|escape('html') }}..."]
+      Strat{{ gg.id }}["{{ gg.strategy|slice(0, 40)|escape('html') }}..."]
       GG{{ gg.id }} --> Strat{{ gg.id }}
       
       {# Habits #}
       {% for h in gg.habits %}
-        H{{ gg.id }}_{{ h.id }}["<i data-lucide="zap" class="ks-ico" aria-hidden="true"></i> {{ h.title|escape('html') }}"]
+        H{{ gg.id }}_{{ h.id }}["{{ h.title|escape('html') }}"]
         Strat{{ gg.id }} --> H{{ gg.id }}_{{ h.id }}
       {% endfor %}
     {% endif %}
@@ -2268,25 +2268,25 @@ graph TD
   
   {# Specific Goals DO #}
   {% for g in lifeGoals.DO %}
-    Goal{{ g.id }}["<i data-lucide="target" class="ks-ico" aria-hidden="true"></i> {{ g.title|escape('html') }}"]
+    Goal{{ g.id }}["{{ g.title|escape('html') }}"]
     Vision --> Goal{{ g.id }}
   {% endfor %}
 
   {# Growth Goals COMPETENCE #}
   {% for gg in growthGoals.COMPETENCE %}
-    GG{{ gg.id }}["<i data-lucide="library" class="ks-ico" aria-hidden="true"></i> {{ gg.title|escape('html') }}"]
+    GG{{ gg.id }}["{{ gg.title|escape('html') }}"]
     {% for sg in gg.supportedLifeGoals %}
       Goal{{ sg.id }} --> GG{{ gg.id }}
     {% endfor %}
 
     {# Strategy #}
     {% if gg.strategy %}
-      Strat{{ gg.id }}["<i data-lucide="clipboard-list" class="ks-ico" aria-hidden="true"></i> {{ gg.strategy|slice(0, 40)|escape('html') }}..."]
+      Strat{{ gg.id }}["{{ gg.strategy|slice(0, 40)|escape('html') }}..."]
       GG{{ gg.id }} --> Strat{{ gg.id }}
       
       {# Habits #}
       {% for h in gg.habits %}
-        H{{ gg.id }}_{{ h.id }}["<i data-lucide="zap" class="ks-ico" aria-hidden="true"></i> {{ h.title|escape('html') }}"]
+        H{{ gg.id }}_{{ h.id }}["{{ h.title|escape('html') }}"]
         Strat{{ gg.id }} --> H{{ gg.id }}_{{ h.id }}
       {% endfor %}
     {% endif %}
@@ -2316,20 +2316,20 @@ graph TD
   
   {# Specific Goals GIVE #}
   {% for g in lifeGoals.GIVE %}
-    Goal{{ g.id }}["<i data-lucide="target" class="ks-ico" aria-hidden="true"></i> {{ g.title|escape('html') }}"]
+    Goal{{ g.id }}["{{ g.title|escape('html') }}"]
     Vision --> Goal{{ g.id }}
   {% endfor %}
 
   {# Projets de transmission #}
   {% for gg in legacyGoals %}
-    LG{{ gg.id }}["<i data-lucide="gift" class="ks-ico" aria-hidden="true"></i> {{ gg.title|escape('html') }}"]
+    LG{{ gg.id }}["{{ gg.title|escape('html') }}"]
     {% for sg in gg.supportedLifeGoals %}
       Goal{{ sg.id }} --> LG{{ gg.id }}
     {% endfor %}
 
     {# Rituels d'ancrage #}
     {% for h in gg.habits %}
-      H{{ gg.id }}_{{ h.id }}["<i data-lucide="zap" class="ks-ico" aria-hidden="true"></i> {{ h.title|escape('html') }}"]
+      H{{ gg.id }}_{{ h.id }}["{{ h.title|escape('html') }}"]
       LG{{ gg.id }} --> H{{ gg.id }}_{{ h.id }}
     {% endfor %}
   {% endfor %}
@@ -2357,20 +2357,20 @@ graph TD
   
   {# Specific Goals HAVE #}
   {% for g in lifeGoals.HAVE %}
-    Goal{{ g.id }}["<i data-lucide="target" class="ks-ico" aria-hidden="true"></i> {{ g.title|escape('html') }}"]
+    Goal{{ g.id }}["{{ g.title|escape('html') }}"]
     Vision --> Goal{{ g.id }}
   {% endfor %}
 
   {# Hygiene Domains #}
   {% for hd in hygieneDomains %}
-    GG{{ hd.id }}["<i data-lucide="star" class="ks-ico" aria-hidden="true"></i> {{ hd.name|escape('html') }}"]
+    GG{{ hd.id }}["{{ hd.name|escape('html') }}"]
     {% for sg in hd.supportedLifeGoals %}
       Goal{{ sg.id }} --> GG{{ hd.id }}
     {% endfor %}
     
     {# Habits #}
     {% for h in hd.habits %}
-      H{{ hd.id }}_{{ h.id }}["<i data-lucide="zap" class="ks-ico" aria-hidden="true"></i> {{ h.title|escape('html') }}"]
+      H{{ hd.id }}_{{ h.id }}["{{ h.title|escape('html') }}"]
       GG{{ hd.id }} --> H{{ hd.id }}_{{ h.id }}
     {% endfor %}
   {% endfor %}
