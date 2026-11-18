@@ -70,7 +70,7 @@ final class EnneagramProfiles
             'grow' => ['Demander chaque semaine : « De quoi ai-je besoin, moi ? »', 'Accepter une aide sans la rendre aussitôt', 'Dire non à une demande sans vous justifier longuement'],
             'figures' => [
                 ['name' => 'Marthe', 'ref' => 'Luc 10.38–42', 'text' => 'Elle accueille et sert Jésus avec ardeur, mais s\'agite et s\'irrite ; Jésus l\'invite d\'abord à recevoir.'],
-                ['name' => 'Tabitha (Dorcas)', 'ref' => 'Actes 9.36–39', 'text' => 'Ses bonnes œuvres ont touché toute une communauté : l\'amour concret qui laisse une trace.'],
+                ['name' => 'Barnabé', 'ref' => 'Actes 4.36–37 ; 9.27 ; 11.23', 'text' => 'Il donne, encourage, présente Saul aux apôtres et reprend Marc : l\'aide qui fait avancer les autres, avec parfois la peur de déplaire.'],
             ],
             'verse' => ['Nous l\'aimons, parce qu\'il nous a aimés le premier.', '1 Jean 4.19'],
             'meditation' => 'Est-ce que je sers par liberté, ou pour être aimé en retour ?',
@@ -109,7 +109,7 @@ final class EnneagramProfiles
             'stressText' => 'Vous cherchez à vous rendre indispensable, vous devenez dépendant de l\'attention des autres.',
             'grow' => ['Tenir un rituel simple chaque jour, même sans envie', 'Noter trois choses ordinaires pour lesquelles vous êtes reconnaissant', 'Remplacer la comparaison par la gratitude'],
             'figures' => [
-                ['name' => 'David, le psalmiste', 'ref' => 'Psaumes 42 ; 51', 'text' => 'Il met des mots sur sa détresse et sa joie avec une sincérité unique : l\'émotion offerte à Dieu devient prière.'],
+                ['name' => 'David', 'ref' => 'Psaumes 42 ; 51', 'text' => 'Il met des mots sur sa détresse et sa joie avec une sincérité unique : l\'émotion offerte à Dieu devient prière.'],
                 ['name' => 'Jérémie', 'ref' => 'Jérémie 20.7–18', 'text' => 'Le prophète des larmes, déchiré et sincère, qui continue pourtant d\'annoncer la parole reçue.'],
             ],
             'verse' => ['Je te loue de ce que je suis une créature si merveilleuse.', 'Psaume 139.14'],
@@ -130,7 +130,7 @@ final class EnneagramProfiles
             'grow' => ['Agir sur une idée avant d\'avoir tout compris', 'Partager une émotion, pas seulement une analyse', 'Donner de votre temps à une cause concrète'],
             'figures' => [
                 ['name' => 'Nicodème', 'ref' => 'Jean 3.1–21 ; 19.39', 'text' => 'Il vient de nuit, avec ses questions ; plus tard, il ose se montrer en apportant les aromates pour le corps de Jésus.'],
-                ['name' => 'L\'Ecclésiaste', 'ref' => 'Ecclésiaste 1.13–18 ; 12.13', 'text' => 'Il a appliqué son cœur à tout comprendre ; il conclut que la crainte de Dieu donne sens au savoir.'],
+                ['name' => 'Thomas', 'ref' => 'Jean 14.5 ; 20.24–29', 'text' => 'Il veut comprendre et voir avant de croire ; Jésus vient à sa rencontre, et il confesse : « Mon Seigneur et mon Dieu ! »'],
             ],
             'verse' => ['La connaissance enfle, mais la charité édifie.', '1 Corinthiens 8.1'],
             'meditation' => 'Qu\'est-ce que je sais déjà, et que je n\'ose pas encore vivre ?',
@@ -190,7 +190,7 @@ final class EnneagramProfiles
             'grow' => ['Demander l\'avis des autres avant d\'imposer le vôtre', 'Montrer une vulnérabilité à une personne de confiance', 'Baisser d\'un ton dans un désaccord'],
             'figures' => [
                 ['name' => 'Samson', 'ref' => 'Juges 15–16', 'text' => 'Une force hors du commun, mal maîtrisée ; dans sa faiblesse finale, il se tourne enfin vers Dieu (Juges 16.28).'],
-                ['name' => 'Jacques et Jean, « fils du tonnerre »', 'ref' => 'Marc 3.17 ; Luc 9.54–55', 'text' => 'Prompts à faire tomber le feu du ciel ; Jean deviendra pourtant l\'apôtre de l\'amour.'],
+                ['name' => 'Moïse', 'ref' => 'Exode 2.11–17 ; 18.13–26 ; 32.19', 'text' => 'Il défend les opprimés, réagit avec force et porte tout seul, jusqu\'à ce que son beau-père lui apprenne à partager la charge.'],
             ],
             'verse' => ['Car, quand je suis faible, c\'est alors que je suis fort.', '2 Corinthiens 12.10'],
             'meditation' => 'Où ma force protège-t-elle, et où écrase-t-elle ?',

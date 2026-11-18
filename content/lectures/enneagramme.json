@@ -1,0 +1,475 @@
+{
+ "PAUL": {
+  "lenses": {
+   "ENN:1": {
+    "label": "Type 1 · Le Juste",
+    "definition": "Faire ce qui est bien, avec intégrité ; craindre d'être dans l'erreur.",
+    "solidity": "Indices nombreux et convergents",
+    "traits": [
+     [
+      "Il veut être irréprochable",
+      "« Quant à la loi, pharisien ; quant au zèle, persécuteur de l'Église ; irréprochable, à l'égard de la justice de la loi. »",
+      "Philippiens 3:5-6"
+     ],
+     [
+      "Il juge sévèrement les écarts, les siens comme ceux des autres",
+      "À Pierre : « Je lui résistai en face, parce qu'il était répréhensible » ; à lui-même : « j'ai la volonté, mais non le pouvoir de faire le bien ».",
+      "Galates 2:11 ; Romains 7:18"
+     ],
+     [
+      "Il a un zèle moral intense",
+      "Il est « plein de zèle pour Dieu », instruit « dans la connaissance exacte de la loi ».",
+      "Actes 22:3"
+     ],
+     [
+      "Il lutte contre lui-même",
+      "« Je ne fais pas le bien que je veux, et je fais le mal que je ne veux pas. »",
+      "Romains 7:19"
+     ]
+    ],
+    "absent": [
+     [
+      "La paix avec l'imperfection",
+      "Il n'accepte pas de se contenter de ses efforts : tout son récit est une lutte contre ce qu'il fait ou ne fait pas (Romains 7:15-19)."
+     ],
+     [
+      "La légèreté",
+      "Même sa conversion le laisse très exigeant : il se désigne comme « le premier » des pécheurs (1 Timothée 1:15)."
+     ]
+    ],
+    "limits": "Paul parle lui-même dans plusieurs lettres. Les indices sont nombreux ; ils se prêtent aussi à d'autres lectures. Nous repérons des indices, nous ne mesurons rien.",
+    "why": "Comme lui, vous voulez faire ce qui est juste et bien le faire. Son récit montre où cela mène : à la découverte que la justice ne vient pas de l'effort, mais de la grâce."
+   }
+  }
+ },
+ "BARNABE": {
+  "lenses": {
+   "ENN:2": {
+    "label": "Type 2 · Le Cœur ouvert",
+    "definition": "Aimer, être utile et être aimé(e) ; craindre de ne pas être aimé(e) ou d'être inutile.",
+    "solidity": "Indices nombreux et convergents",
+    "traits": [
+     [
+      "Il aime donner",
+      "Il vend un champ et en dépose le prix aux pieds des apôtres.",
+      "Actes 4:37"
+     ],
+     [
+      "Il se rend utile en encourageant",
+      "Son surnom, Barnabas, signifie « fils d'exhortation » ; à Antioche, « il les exhorta tous ».",
+      "Actes 4:36 ; 11:23"
+     ],
+     [
+      "Il veut que les autres réussissent",
+      "Il prend Saul avec lui, va le chercher à Tarse, veut reprendre Marc.",
+      "Actes 9:27 ; 11:25 ; 15:37"
+     ],
+     [
+      "Il craint de déplaire",
+      "« Barnabas même fut entraîné par leur hypocrisie. »",
+      "Galates 2:13"
+     ]
+    ],
+    "absent": [
+     [
+      "Demander pour lui-même",
+      "Le texte ne le montre jamais en train de demander quelque chose pour lui."
+     ],
+     [
+      "Poser des limites",
+      "Il se sépare de Paul pour défendre Marc, mais ne dit rien de ce que cela lui coûte (Actes 15:39)."
+     ]
+    ],
+    "limits": "Barnabas apparaît dans les Actes et les lettres de Paul. Nous repérons des indices, nous ne mesurons rien.",
+    "why": "Comme lui, vous aimez aider et encourager, et vous vous sentez utile quand les autres avancent. Son récit montre que cette bonté peut s'accompagner d'une peur de déplaire."
+   }
+  }
+ },
+ "DAVID": {
+  "lenses": {
+   "ENN:4": {
+    "label": "Type 4 · L'Âme singulière",
+    "definition": "Être authentique et trouver sa place unique ; craindre de n'avoir ni identité ni signification.",
+    "solidity": "Indices nombreux et convergents (psaumes et récits)",
+    "traits": [
+     [
+      "Il met des mots sur sa détresse et sa joie",
+      "« Jusques à quand, Éternel ! m'oublieras-tu sans cesse ? » puis « Je chante à l'Éternel, car il m'a fait du bien ».",
+      "Psaumes 13:1, 6"
+     ],
+     [
+      "Il vit les hauts et les bas intensément",
+      "Du soupir à la confiance en six versets : « Moi, j'ai confiance en ta bonté, j'ai de l'allégresse dans le cœur ».",
+      "Psaumes 13:1-6"
+     ],
+     [
+      "Il s'exprime de tout son être",
+      "« David dansait de toute sa force devant l'Éternel. »",
+      "2 Samuel 6:14"
+     ],
+     [
+      "Il se montre vrai devant Dieu, même dans sa faute",
+      "« J'ai péché contre l'Éternel ! » ; « Aie pitié de moi dans ta bonté. »",
+      "2 Samuel 12:13 ; Psaumes 51:1"
+     ]
+    ],
+    "absent": [
+     [
+      "La retenue",
+      "Il n'a pas l'habitude de cacher ce qu'il ressent : il le chante, le danse ou le pleure (2 Samuel 1:26)."
+     ],
+     [
+      "La stabilité d'humeur",
+      "Ses psaumes passent souvent de la plainte à la louange dans un même texte (Psaumes 13)."
+     ]
+    ],
+    "limits": "Nous nous appuyons sur les psaumes de David (13 et 51) et sur les récits de 1 et 2 Samuel. Le psaume 42, cité parfois, est attribué aux fils de Koré : nous ne l'utilisons pas ici. Nous repérons des indices, nous ne mesurons rien.",
+    "why": "Comme lui, vous ressentez fortement et vous avez besoin de dire ce que vous vivez, vrai, sans masque. Son récit montre que Dieu accueille cette sincérité."
+   }
+  }
+ },
+ "NICODEME": {
+  "lenses": {
+   "ENN:5": {
+    "label": "Type 5 · Le Chercheur",
+    "definition": "Comprendre et être compétent(e) ; craindre d'être incapable, envahi(e) ou démuni(e).",
+    "solidity": "Indices clairs et convergents",
+    "traits": [
+     [
+      "Il cherche à comprendre",
+      "« Comment un homme peut-il naître quand il est vieux ? » ; « Comment cela peut-il se faire ? »",
+      "Jean 3:4, 9"
+     ],
+     [
+      "Il observe à distance",
+      "Il vient voir Jésus « de nuit », loin des regards.",
+      "Jean 3:2"
+     ],
+     [
+      "Il s'abrite derrière la procédure",
+      "« Notre loi condamne-t-elle un homme avant qu'on l'entende et qu'on sache ce qu'il a fait ? »",
+      "Jean 7:51"
+     ],
+     [
+      "Il donne beaucoup, quand il décide",
+      "Il apporte « environ cent livres de myrrhe et d'aloès ».",
+      "Jean 19:39"
+     ]
+    ],
+    "absent": [
+     [
+      "S'engager rapidement",
+      "Il ne se déclare disciple qu'à la croix (Jean 19:39), après des années de réflexion."
+     ],
+     [
+      "Se montrer",
+      "Même devant ses collègues, il plaide pour le droit, pas pour Jésus (Jean 7:51)."
+     ]
+    ],
+    "limits": "Trois scènes de l'évangile de Jean, convergentes. Nous repérons des indices, nous ne mesurons rien.",
+    "why": "Comme lui, vous voulez comprendre avant de vous engager, et vous préservez votre énergie. Son récit montre que ce chemin lent peut mener à un engagement entier."
+   }
+  }
+ },
+ "THOMAS": {
+  "lenses": {
+   "ENN:5": {
+    "label": "Type 5 · Le Chercheur",
+    "definition": "Comprendre et être compétent(e) ; craindre d'être incapable, envahi(e) ou démuni(e).",
+    "solidity": "Indices nombreux et convergents",
+    "traits": [
+     [
+      "Il veut voir pour croire",
+      "« Si je ne vois dans ses mains la marque des clous... je ne croirai point. »",
+      "Jean 20:25"
+     ],
+     [
+      "Il dit tout haut sa difficulté à comprendre",
+      "« Nous ne savons où tu vas ; comment pouvons-nous en savoir le chemin ? »",
+      "Jean 14:5"
+     ],
+     [
+      "Il garde sa distance du groupe",
+      "Il « n'était pas avec eux lorsque Jésus vint ».",
+      "Jean 20:24"
+     ],
+     [
+      "Il s'engage entièrement quand il comprend",
+      "« Mon Seigneur et mon Dieu ! »",
+      "Jean 20:28"
+     ]
+    ],
+    "absent": [
+     [
+      "S'engager sur parole",
+      "Il refuse de croire sur le témoignage des autres (Jean 20:25)."
+     ],
+     [
+      "La spontanéité",
+      "Il pose ses conditions précisément, mot pour mot (Jean 20:25)."
+     ]
+    ],
+    "limits": "Quelques scènes de l'évangile de Jean. Nous repérons des indices, nous ne mesurons rien.",
+    "why": "Comme lui, vous avez besoin de comprendre et de vérifier avant d'adhérer, et vous gardez votre autonomie par rapport au groupe. Son récit montre que Jésus vient à votre rencontre sur votre terrain."
+   }
+  }
+ },
+ "GEDEON": {
+  "lenses": {
+   "ENN:6": {
+    "label": "Type 6 · Le Gardien fidèle",
+    "definition": "Être en sécurité et soutenu(e) ; craindre d'être sans soutien, sans repère.",
+    "solidity": "Indices nombreux et convergents",
+    "traits": [
+     [
+      "Il cherche la sécurité avant d'agir",
+      "Il demande deux signes avec une toison de laine : « je connaîtrai que tu délivreras Israël par ma main ».",
+      "Juges 6:36-40"
+     ],
+     [
+      "Il doute de lui-même et cherche un appui",
+      "« Ma famille est la plus pauvre en Manassé, et je suis le plus petit dans la maison de mon père. »",
+      "Juges 6:15"
+     ],
+     [
+      "Il vérifie le risque avant de s'engager",
+      "Il descend au camp de Madian avec son serviteur Pura pour écouter ce qu'on y dit.",
+      "Juges 7:9-11"
+     ],
+     [
+      "Il est loyal et efficace quand il est rassuré",
+      "« Levez-vous, car l'Éternel a livré entre vos mains le camp de Madian. »",
+      "Juges 7:15"
+     ]
+    ],
+    "absent": [
+     [
+      "La confiance spontanée",
+      "Il lui faut des signes, répétés (Juges 6:36-40)."
+     ],
+     [
+      "L'audace sans filet",
+      "Il avance de nuit, accompagné, pour se rassurer (Juges 7:10-11)."
+     ]
+    ],
+    "limits": "Quelques chapitres de Juges, qui vont dans le même sens. Nous repérons des indices, nous ne mesurons rien.",
+    "why": "Comme lui, vous cherchez des appuis et des garanties avant de vous engager, et vous êtes fidèle une fois rassuré. Son récit montre que Dieu répond à ce besoin sans vous reprocher votre prudence."
+   }
+  }
+ },
+ "TIMOTHEE": {
+  "lenses": {
+   "ENN:6": {
+    "label": "Type 6 · Le Gardien fidèle",
+    "definition": "Être en sécurité et soutenu(e) ; craindre d'être sans soutien, sans repère.",
+    "solidity": "Indices nombreux et convergents (vus par Paul)",
+    "traits": [
+     [
+      "Il est fidèle et loyal",
+      "Paul n'a personne d'autre qui prenne à cœur la situation des Philippiens comme lui.",
+      "Philippiens 2:20-22"
+     ],
+     [
+      "Il craint, et a besoin d'être soutenu",
+      "Paul demande qu'il soit « sans crainte » parmi les Corinthiens et lui rappelle que Dieu n'a pas donné « un esprit de timidité ».",
+      "1 Corinthiens 16:10 ; 2 Timothée 1:7"
+     ],
+     [
+      "Il dépend de relations de confiance",
+      "Paul se souvient de ses larmes, et lui demande de venir au plus tôt.",
+      "2 Timothée 1:4 ; 4:9"
+     ],
+     [
+      "Il s'appuie sur ce qu'il a reçu",
+      "« Demeure dans les choses que tu as apprises, et reconnues certaines, sachant de qui tu les as apprises. »",
+      "2 Timothée 3:14"
+     ]
+    ],
+    "absent": [
+     [
+      "L'assurance",
+      "Il est le plus souvent rassuré, encouragé, appelé à « ranimer » son don (2 Timothée 1:6)."
+     ],
+     [
+      "L'initiative",
+      "Il est toujours envoyé, jamais initiateur (Philippiens 2:19)."
+     ]
+    ],
+    "limits": "Nous ne voyons Timothée que par les lettres de Paul. Nous repérons des indices, nous ne mesurons rien.",
+    "why": "Comme lui, vous êtes fidèle, loyal, et vous avez besoin de soutien et de repères. Son récit montre que la sécurité vient de la grâce, pas de votre assurance."
+   }
+  }
+ },
+ "PIERRE": {
+  "lenses": {
+   "ENN:7": {
+    "label": "Type 7 · L'Explorateur joyeux",
+    "definition": "Être libre, heureux(se), comblé(e) ; craindre d'être privé(e) ou enfermé(e) dans la douleur.",
+    "solidity": "Indices nombreux et convergents",
+    "traits": [
+     [
+      "Il s'enthousiasme vite",
+      "« Seigneur, si c'est toi, ordonne que j'aille vers toi sur les eaux. » Il sort de la barque.",
+      "Matthieu 14:28-29"
+     ],
+     [
+      "Il refuse la souffrance",
+      "Quand Jésus annonce sa mort : « A Dieu ne plaise, Seigneur ! Cela ne t'arrivera pas. »",
+      "Matthieu 16:22"
+     ],
+     [
+      "Il fuit la douleur quand elle arrive",
+      "Il dit trois fois ne pas connaître Jésus, le soir de l'arrestation.",
+      "Matthieu 26:69-75"
+     ],
+     [
+      "Il retourne vers ce qu'il connaît",
+      "Après la résurrection : « Je vais pêcher. »",
+      "Jean 21:3"
+     ]
+    ],
+    "absent": [
+     [
+      "Rester dans l'épreuve",
+      "Il promet de mourir avec Jésus (Matthieu 26:35), puis ne tient pas."
+     ],
+     [
+      "La mesure",
+      "Il promet, propose et parle vite (Matthieu 14:28 ; 16:22)."
+     ]
+    ],
+    "limits": "Pierre est l'un des personnages les plus présents des évangiles et des Actes. Nous repérons des indices, nous ne mesurons rien.",
+    "why": "Comme lui, vous vous enthousiasmez vite et vous aimez les possibilités, mais la souffrance vous fait fuir. Son récit montre que Jésus vous retrouve et vous rend votre place."
+   }
+  }
+ },
+ "SALOMON": {
+  "lenses": {
+   "ENN:7": {
+    "label": "Type 7 · L'Explorateur joyeux",
+    "definition": "Être libre, heureux(se), comblé(e) ; craindre d'être privé(e) ou enfermé(e) dans la douleur.",
+    "solidity": "Indices nombreux et convergents (l'Ecclésiaste)",
+    "traits": [
+     [
+      "Il veut tout essayer",
+      "« J'ai dit en mon cœur : Allons ! je t'éprouverai par la joie, et tu goûteras le bonheur. »",
+      "Ecclésiaste 2:1"
+     ],
+     [
+      "Il se donne tout ce qu'il désire",
+      "« Je n'ai refusé à mon cœur aucune joie. »",
+      "Ecclésiaste 2:10"
+     ],
+     [
+      "Il multiplie les projets",
+      "Maisons, vignes, jardins, étangs, serviteurs, troupeaux, or et argent, chanteurs.",
+      "Ecclésiaste 2:4-8"
+     ],
+     [
+      "Il découvre le vide",
+      "« Tout est vanité et poursuite du vent. »",
+      "Ecclésiaste 2:11"
+     ]
+    ],
+    "absent": [
+     [
+      "Se priver",
+      "Le texte le montre sans limite dans ses essais (Ecclésiaste 2:10)."
+     ],
+     [
+      "Rester dans la douleur",
+      "Il passe d'une expérience à l'autre, jusqu'à constater que rien ne comble (Ecclésiaste 2:11)."
+     ]
+    ],
+    "limits": "L'Ecclésiaste se présente comme « fils de David, roi de Jérusalem » (1:1) ; la tradition l'identifie à Salomon. Les indices viennent du chapitre 2 et de 1 Rois 4. Nous repérons des indices, nous ne mesurons rien.",
+    "why": "Comme lui, vous aimez essayer, multiplier les expériences et les projets. Son récit montre ce que vous découvrirez peut-être : que tout cela ne comble pas, et vers qui se tourner."
+   }
+  }
+ },
+ "MOISE": {
+  "lenses": {
+   "ENN:8": {
+    "label": "Type 8 · Le Protecteur",
+    "definition": "Être fort(e) et maître de sa vie ; craindre d'être contrôlé(e), blessé(e) ou vulnérable.",
+    "solidity": "Indices nombreux et convergents",
+    "traits": [
+     [
+      "Il prend la défense des opprimés",
+      "Il frappe l'Égyptien qui maltraitait un Hébreu, puis défend les filles du prêtre de Madian chassées au puits.",
+      "Exode 2:11-12, 17"
+     ],
+     [
+      "Il réagit avec force",
+      "À la vue du veau d'or, « la colère de Moïse s'enflamma » : il brise les tables.",
+      "Exode 32:19"
+     ],
+     [
+      "Il porte tout seul",
+      "Il juge le peuple depuis le matin jusqu'au soir ; son beau-père lui dit qu'il s'épuisera.",
+      "Exode 18:13-18"
+     ],
+     [
+      "Il s'impatiente quand on lui résiste",
+      "« Écoutez donc, rebelles ! » : il frappe le rocher.",
+      "Nombres 20:10-11"
+     ]
+    ],
+    "absent": [
+     [
+      "Se montrer vulnérable",
+      "Il objecte pourtant : « Qui suis-je ? » (Exode 3:11) ; le texte le montre aussi hésitant."
+     ],
+     [
+      "L'impatience",
+      "Le texte le dit « fort patient, plus qu'aucun homme » (Nombres 12:3) : la lecture ne dit pas tout."
+     ]
+    ],
+    "limits": "Moïse est l'un des personnages les plus longuement racontés de la Bible ; le texte lui attribue même une qualité qui contredit en partie cette lecture. Nous repérons des indices, nous ne mesurons rien.",
+    "why": "Comme lui, vous défendez les faibles, vous réagissez avec force et vous portez beaucoup. Son récit montre le coût de cette charge et la sagesse de la partager."
+   }
+  }
+ },
+ "ABRAHAM": {
+  "lenses": {
+   "ENN:9": {
+    "label": "Type 9 · L'Artisan de paix",
+    "definition": "Garder la paix intérieure et l'harmonie ; craindre le conflit et la séparation.",
+    "solidity": "Indices nombreux et convergents",
+    "traits": [
+     [
+      "Il évite le conflit",
+      "« Qu'il n'y ait point, je te prie, de dispute entre moi et toi... car nous sommes frères. »",
+      "Genèse 13:8"
+     ],
+     [
+      "Il cède pour garder la paix",
+      "« Abram écouta la voix de Saraï » ; il avait déjà dit à Sara de se dire sa sœur, par crainte.",
+      "Genèse 16:2 ; 12:11-13"
+     ],
+     [
+      "Il laisse l'autre choisir",
+      "« Sépare-toi donc de moi : si tu vas à gauche, j'irai à droite. »",
+      "Genèse 13:9"
+     ],
+     [
+      "Il accueille et apaise",
+      "Il court au-devant des visiteurs et leur fait préparer un repas.",
+      "Genèse 18:2-8"
+     ]
+    ],
+    "absent": [
+     [
+      "Trancher",
+      "Il préfère s'écarter plutôt que de décider contre Lot ou Saraï (Genèse 13:9 ; 16:2)."
+     ],
+     [
+      "Dire non",
+      "Il dit à Sara de mentir plutôt que d'affronter le danger (Genèse 12:11-13)."
+     ]
+    ],
+    "limits": "Abraham est longuement raconté. Les indices sont nombreux ; certains vont aussi dans un autre sens (obéissance ferme, Genèse 22:3). Nous repérons des indices, nous ne mesurons rien.",
+    "why": "Comme lui, vous préférez la paix à la dispute et vous cédez facilement pour la préserver. Son récit montre le prix de cette paix, et la foi qui ne dépend pas d'elle."
+   }
+  }
+ }
+}

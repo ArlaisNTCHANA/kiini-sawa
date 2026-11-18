@@ -1,0 +1,784 @@
+{
+ "JONAS": {
+  "name": "Jonas",
+  "aliases": [
+   "Jonas"
+  ],
+  "relecture": "en cours",
+  "title": "Le prophète juste qui s'irrite de la grâce",
+  "refs": "Jonas 1–4 ; Matthieu 12",
+  "who": "Jonas, fils d'Amitthaï, est un prophète à qui Dieu ordonne d'aller à Ninive, la grande ville, pour crier contre sa méchanceté (Jonas 1:1-2). Il s'enfuit à l'opposé, puis, forcé d'obéir, voit Ninive se repentir : ce qui le met en colère.",
+  "lenses": {
+   "ENN:1": {
+    "label": "Type 1 · Le Juste",
+    "definition": "Faire ce qui est bien, avec intégrité ; craindre d'être dans l'erreur.",
+    "solidity": "Indices clairs et convergents (un livre de quatre chapitres)",
+    "traits": [
+     [
+      "Il a un sens aigu de la justice",
+      "Quand Dieu épargne Ninive, « cela déplut fort à Jonas, et il fut irrité ».",
+      "Jonas 4:1"
+     ],
+     [
+      "Il sait ce qu'il croit juste, et il le dit",
+      "« Je savais que tu es un Dieu compatissant et miséricordieux » : c'est pour cela qu'il avait fui.",
+      "Jonas 4:2"
+     ],
+     [
+      "Il assume la faute sans détour",
+      "« Prenez-moi, et jetez-moi dans la mer... car je sais que c'est moi qui attire sur vous cette grande tempête. »",
+      "Jonas 1:12"
+     ],
+     [
+      "Il s'irrite plutôt qu'il ne cède",
+      "« Je fais bien de m'irriter jusqu'à la mort. »",
+      "Jonas 4:9"
+     ]
+    ],
+    "absent": [
+     [
+      "Souplesse envers la grâce faite aux autres",
+      "Il ne peut pas se réjouir que Ninive soit épargnée (Jonas 4:1-3)."
+     ],
+     [
+      "Réponse du prophète à la fin",
+      "Le livre se termine sur la question de Dieu (4:11), sans que Jonas réponde : on ne sait pas s'il a changé."
+     ]
+    ],
+    "limits": "Quatre chapitres, où le prophète est présenté sans complaisance. Nous repérons des indices, nous ne mesurons rien.",
+    "why": "Comme lui, vous avez un sens aigu de ce qui est juste, et la miséricorde accordée à d'autres peut vous irriter. Son récit montre que Dieu patiente avec le juste qui s'irrite, et lui pose une question plutôt que de le condamner."
+   }
+  },
+  "episodes": [
+   {
+    "title": "La fuite",
+    "ref": "Jonas 1:1-3",
+    "text": "Dieu lui dit d'aller à Ninive. Jonas se lève pour s'enfuir à Tarsis, « loin de la face de l'Éternel », et prend un bateau.",
+    "quote": {
+     "ref": "Jonas 1:3",
+     "text": "Et Jonas se leva pour s'enfuir à Tarsis, loin de la face de l'Eternel."
+    }
+   },
+   {
+    "title": "La tempête",
+    "ref": "Jonas 1:12",
+    "text": "Quand la tempête menace le bateau, Jonas reconnaît qu'il en est la cause et demande à être jeté à la mer.",
+    "quote": {
+     "ref": "Jonas 1:12",
+     "text": "Prenez-moi, et jetez-moi dans la mer, et la mer se calmera envers vous"
+    }
+   },
+   {
+    "title": "Ninive croit",
+    "ref": "Jonas 3:1-5",
+    "text": "Une seconde fois, Dieu lui parle. Il va à Ninive et crie : « Encore quarante jours, et Ninive est détruite ! » Les gens de Ninive croient à Dieu, jeûnent et se revêtent de sacs."
+   },
+   {
+    "title": "Il fut irrité",
+    "ref": "Jonas 4:1-4",
+    "text": "Jonas implore l'Éternel : il savait que Dieu est compatissant, et c'est pour l'empêcher qu'il avait fui. Il demande la mort. Dieu répond : « Fais-tu bien de t'irriter ? »",
+    "quote": {
+     "ref": "Jonas 4:2",
+     "text": "Car je savais que tu es un Dieu compatissant et miséricordieux"
+    }
+   },
+   {
+    "title": "Pitié pour le ricin",
+    "ref": "Jonas 4:9-11",
+    "text": "Dieu lui montre qu'il a pitié d'une plante qui ne lui a rien coûté. Il conclut par une question sur Ninive : cent vingt mille personnes qui ne savent pas distinguer leur droite de leur gauche.",
+    "quote": {
+     "ref": "Jonas 4:11",
+     "text": "Et moi, je n'aurais pas pitié de Ninive, la grande ville"
+    }
+   }
+  ],
+  "weakness": "Son sens de la justice se retourne contre la miséricorde de Dieu. Il préfère voir Ninive détruite plutôt qu'épargnée, et il s'enferme dans l'irritation (Jonas 4:1, 9). Pour ce type, la vigilance : le souci de ce qui est juste peut devenir une dureté envers ceux à qui Dieu fait grâce.",
+  "grace": "Dieu ne le frappe pas, ne le reprend pas d'un coup : il lui pose deux fois une question, « Fais-tu bien de t'irriter ? » (Jonas 4:4, 9), et lui montre sa propre pitié. Ninive est épargnée parce que ses habitants croient (3:5) ; Jonas, lui, est patiemment enseigné. La grâce est faite à la ville comme au prophète.",
+  "christ": "Jésus reprend le signe de Jonas : « de même que Jonas fut trois jours et trois nuits dans le ventre d'un grand poisson, de même le Fils de l'homme sera trois jours et trois nuits dans le sein de la terre » (Matthieu 12:40). Et il ajoute : « il y a ici plus que Jonas » (12:41). Jonas ne voulait pas de la miséricorde pour Ninive ; le Christ la donne à tous, en mourant et en ressuscitant.",
+  "quotes": [
+   {
+    "ref": "Matthieu 12:40",
+    "text": "de même le Fils de l'homme sera trois jours et trois nuits dans le sein de la terre"
+   },
+   {
+    "ref": "Matthieu 12:41",
+    "text": "il y a ici plus que Jonas"
+   }
+  ],
+  "question": "À qui est-ce que je refuse la miséricorde que j'ai moi-même reçue ?",
+  "step": "Prier cette semaine pour une personne dont vous trouvez la faute impardonnable, et demander à Dieu de vous montrer sa pitié pour elle."
+ },
+ "MARTHE": {
+  "name": "Marthe",
+  "aliases": [
+   "Marthe"
+  ],
+  "relecture": "en cours",
+  "title": "Celle qui sert avec ardeur, et que Jésus appelle par son nom",
+  "refs": "Luc 10 ; Jean 11–12",
+  "who": "Marthe est la sœur de Marie et de Lazare, à Béthanie. Elle reçoit Jésus dans sa maison, le sert, puis court à sa rencontre à la mort de son frère. L'évangile de Jean note : « Jésus aimait Marthe, et sa sœur, et Lazare » (Jean 11:5).",
+  "lenses": {
+   "ENN:2": {
+    "label": "Type 2 · Le Cœur ouvert",
+    "definition": "Aimer, être utile et être aimé(e) ; craindre de ne pas être aimé(e) ou d'être inutile.",
+    "solidity": "Indices clairs et convergents (trois scènes)",
+    "traits": [
+     [
+      "Elle accueille et sert avec ardeur",
+      "« Une femme, nommée Marthe, le reçut dans sa maison » ; elle est « occupée à divers soins domestiques ».",
+      "Luc 10:38, 40"
+     ],
+     [
+      "Elle s'estime utile en servant",
+      "Au souper à Béthanie : « Marthe servait ».",
+      "Jean 12:2"
+     ],
+     [
+      "Elle attend qu'on reconnaisse son effort",
+      "« Seigneur, cela ne te fait-il rien que ma sœur me laisse seule pour servir ? Dis-lui donc de m'aider. »",
+      "Luc 10:40"
+     ],
+     [
+      "Elle va au-devant de celui qu'elle aime",
+      "À l'annonce de l'arrivée de Jésus, elle va au-devant de lui, tandis que Marie reste à la maison.",
+      "Jean 11:20"
+     ]
+    ],
+    "absent": [
+     [
+      "S'asseoir et recevoir",
+      "C'est Marie qui s'assoit et écoute (Luc 10:39), tandis que Marthe s'agite."
+     ],
+     [
+      "Demander de l'aide pour elle-même",
+      "Elle demande à Jésus d'intervenir auprès de sa sœur, plutôt que d'exprimer ce qu'elle ressent (Luc 10:40)."
+     ]
+    ],
+    "limits": "Trois scènes, mais elles convergent. Nous repérons des indices, nous ne mesurons rien.",
+    "why": "Comme elle, vous aimez servir et vous vous sentez utile en donnant. Son récit montre que Jésus voit ce que vous ressentez quand le service pèse, et vous invite à recevoir d'abord."
+   }
+  },
+  "episodes": [
+   {
+    "title": "L'accueil",
+    "ref": "Luc 10:38",
+    "text": "Jésus entre dans un village. Marthe le reçoit chez elle."
+   },
+   {
+    "title": "Cela ne te fait-il rien ?",
+    "ref": "Luc 10:39-40",
+    "text": "Sa sœur Marie s'est assise aux pieds de Jésus. Marthe, accablée par le service, vient se plaindre : « Dis-lui donc de m'aider. »",
+    "quote": {
+     "ref": "Luc 10:40",
+     "text": "Seigneur, cela ne te fait-il rien que ma soeur me laisse seule pour servir?"
+    }
+   },
+   {
+    "title": "Marthe, Marthe",
+    "ref": "Luc 10:41-42",
+    "text": "Jésus l'appelle deux fois par son nom. Il ne lui reproche pas de servir : il lui dit qu'elle s'inquiète et s'agite pour beaucoup de choses, et qu'une seule est nécessaire.",
+    "quote": {
+     "ref": "Luc 10:41",
+     "text": "Marthe, Marthe, tu t'inquiètes et tu t'agites pour beaucoup de choses."
+    }
+   },
+   {
+    "title": "Au-devant de lui",
+    "ref": "Jean 11:20-22",
+    "text": "Lazare est mort. Marthe va au-devant de Jésus et lui dit sa douleur, puis sa foi : « tout ce que tu demanderas à Dieu, Dieu te l'accordera ».",
+    "quote": {
+     "ref": "Jean 11:21",
+     "text": "Seigneur, si tu eusses été ici, mon frère ne serait pas mort."
+    }
+   },
+   {
+    "title": "Je suis la résurrection",
+    "ref": "Jean 11:23-27",
+    "text": "Jésus lui annonce que son frère ressuscitera, puis se déclare lui-même résurrection et vie. Elle lui répond par l'une des plus belles confessions des évangiles.",
+    "quote": {
+     "ref": "Jean 11:27",
+     "text": "Oui, Seigneur, je crois que tu es le Christ, le Fils de Dieu, qui devait venir dans le monde."
+    }
+   },
+   {
+    "title": "Elle servait",
+    "ref": "Jean 12:2",
+    "text": "Six jours avant la Pâque, on offre un souper à Jésus à Béthanie. Marthe sert, comme toujours : mais cette fois, sans plainte rapportée."
+   }
+  ],
+  "weakness": "Le service qui se retourne en amertume. Elle est occupée, accablée, et elle compare : « ma sœur me laisse seule pour servir » (Luc 10:40). Pour ce type, la vigilance : donner beaucoup, puis attendre qu'on le voie, au lieu de dire ce que l'on ressent. Jésus nomme ce qui l'agite sans moquerie.",
+  "grace": "Jésus l'appelle par son nom, deux fois, avec tendresse : « Marthe, Marthe » (Luc 10:41). Il la décharge d'une charge qu'il ne lui demandait pas : il n'a pas besoin de ce service-là pour l'aimer. Et c'est à elle, la servante, qu'il révèle l'une de ses paroles les plus grandes : « Je suis la résurrection et la vie » (Jean 11:25).",
+  "christ": "À Marthe, Jésus dit : « Je suis la résurrection et la vie. Celui qui croit en moi vivra, quand même il serait mort » (Jean 11:25). Et elle répond en le nommant : « le Christ, le Fils de Dieu » (11:27). Celle qui voulait être utile à Jésus apprend à recevoir de lui ce que personne d'autre ne peut donner.",
+  "quotes": [
+   {
+    "ref": "Jean 11:25",
+    "text": "Je suis la résurrection et la vie."
+   },
+   {
+    "ref": "Luc 10:42",
+    "text": "Une seule chose est nécessaire."
+   }
+  ],
+  "question": "Qu'est-ce que je donne en attendant qu'on me le rende, et que je pourrais plutôt dire à Dieu ?",
+  "step": "Vous asseoir dix minutes avant votre service du jour pour recevoir de Dieu, et dire à une personne ce qui pèse dans ce que vous donnez."
+ },
+ "JACOB": {
+  "name": "Jacob",
+  "aliases": [
+   "Jacob"
+  ],
+  "relecture": "en cours",
+  "title": "Le conquérant qui lutte pour être béni, et qui boite",
+  "refs": "Genèse 25–33 ; Jean 1",
+  "who": "Jacob est le fils d'Isaac et de Rebecca, frère jumeau d'Ésaü. Il obtient le droit d'aînesse et la bénédiction paternelle par la ruse, fuit chez Laban, y travaille des années, puis revient. À Peniel, il lutte avec Dieu et reçoit le nom d'Israël.",
+  "lenses": {
+   "ENN:3": {
+    "label": "Type 3 · Le Conquérant",
+    "definition": "Réussir et avoir de la valeur ; craindre d'être sans valeur ou d'échouer.",
+    "solidity": "Indices nombreux et convergents",
+    "traits": [
+     [
+      "Il vise la réussite et la bénédiction à tout prix",
+      "« Vends-moi aujourd'hui ton droit d'aînesse. »",
+      "Genèse 25:31"
+     ],
+     [
+      "Il soigne son image, au besoin en la déformant",
+      "À son père aveugle : « Je suis Ésaü, ton fils aîné ; j'ai fait ce que tu m'as dit. »",
+      "Genèse 27:19"
+     ],
+     [
+      "Il travaille avec acharnement pour ce qu'il veut",
+      "Il sert sept ans pour Rachel : « elles furent à ses yeux comme quelques jours, parce qu'il l'aimait ».",
+      "Genèse 29:18-20"
+     ],
+     [
+      "Il lutte pour obtenir",
+      "« Je ne te laisserai point aller, que tu ne m'aies béni. »",
+      "Genèse 32:26"
+     ]
+    ],
+    "absent": [
+     [
+      "Se savoir reçu sans l'avoir mérité",
+      "Sa première rencontre avec Dieu, à Béthel, est une promesse faite à un homme en fuite, avant qu'il ait rien accompli (Genèse 28:13-15)."
+     ],
+     [
+      "Se contenter de ce qu'il a",
+      "Le texte le montre toujours en train de conquérir davantage."
+     ]
+    ],
+    "limits": "Jacob est l'un des personnages les plus longuement racontés de la Genèse. Les indices sont nombreux, mais ils se prêtent aussi à d'autres lectures. Nous repérons des indices, nous ne mesurons rien.",
+    "why": "Comme lui, vous voulez réussir, vous travaillez avec acharnement et vous soignez l'image que vous donnez. Son récit montre ce que Dieu fait d'un conquérant : il le rencontre, puis le fait boiter."
+   }
+  },
+  "episodes": [
+   {
+    "title": "Le droit d'aînesse",
+    "ref": "Genèse 25:29-34",
+    "text": "Esaü, épuisé, demande du potage. Jacob lui propose un marché : le droit d'aînesse contre un plat de lentilles. Esaü le lui cède.",
+    "quote": {
+     "ref": "Genèse 25:31",
+     "text": "Vends-moi aujourd'hui ton droit d'aînesse."
+    }
+   },
+   {
+    "title": "Je suis Ésaü",
+    "ref": "Genèse 27:18-24",
+    "text": "Pour obtenir la bénédiction de son père aveugle, il se fait passer pour son frère. Isaac hésite : « la voix est la voix de Jacob, mais les mains sont les mains d'Ésaü ». Il le bénit quand même.",
+    "quote": {
+     "ref": "Genèse 27:19",
+     "text": "Je suis Esaü, ton fils aîné"
+    }
+   },
+   {
+    "title": "Béthel",
+    "ref": "Genèse 28:10-17",
+    "text": "En fuite, il dort avec une pierre pour chevet. Il voit une échelle entre la terre et le ciel. Dieu lui promet, sans condition : « je suis avec toi, je te garderai partout où tu iras ».",
+    "quote": {
+     "ref": "Genèse 28:15",
+     "text": "je suis avec toi, je te garderai partout où tu iras"
+    }
+   },
+   {
+    "title": "Sept ans pour Rachel",
+    "ref": "Genèse 29:18-20",
+    "text": "Chez Laban, il offre sept années de travail pour épouser Rachel. Le texte dit que ces années lui parurent comme quelques jours."
+   },
+   {
+    "title": "La lutte de Peniel",
+    "ref": "Genèse 32:24-31",
+    "text": "Seul, la nuit, il lutte avec un homme jusqu'à l'aurore. Frappé à la hanche, il ne lâche pas : il veut être béni. On lui demande son nom : « Jacob ». Il devient Israël ; il boite en repartant.",
+    "quote": {
+     "ref": "Genèse 32:26",
+     "text": "Je ne te laisserai point aller, que tu ne m'aies béni."
+    }
+   }
+  ],
+  "weakness": "La ruse et l'image. Il prend le droit d'aînesse (Genèse 25:31), puis la bénédiction en se faisant passer pour un autre (27:19). Pour ce type, la vigilance : vouloir la bénédiction à tout prix, au lieu de la recevoir, conduit à tromper, à fuir, à devoir recommencer sa vie loin des siens.",
+  "grace": "Dieu lui parle avant qu'il ait changé : à Béthel, dans sa fuite, il lui promet sa présence (Genèse 28:15). À Peniel, il ne reçoit pas ce qu'il arrache mais ce qu'il demande : une bénédiction et un nom nouveau, avec une blessure qui le rendra dépendant (32:28, 31). La grâce lui est donnée pendant qu'il boite.",
+  "christ": "À Nathanaël, Jésus dit : « vous verrez désormais le ciel ouvert et les anges de Dieu monter et descendre sur le Fils de l'homme » (Jean 1:51) : il reprend l'échelle de Jacob et l'applique à lui-même. Jacob lutte pour monter vers Dieu ; en Christ, c'est Dieu qui descend vers nous.",
+  "quotes": [
+   {
+    "ref": "Jean 1:51",
+    "text": "vous verrez désormais le ciel ouvert et les anges de Dieu monter et descendre sur le Fils de l'homme"
+   },
+   {
+    "ref": "Genèse 28:15",
+    "text": "je suis avec toi, je te garderai partout où tu iras"
+   }
+  ],
+  "question": "Qu'est-ce que je cherche à obtenir de force, alors que Dieu me l'offre déjà ?",
+  "step": "Nommer à voix haute, devant Dieu, ce que vous voulez obtenir par vos efforts, et le lui remettre avant d'agir."
+ },
+ "SAUL": {
+  "name": "Saül",
+  "aliases": [
+   "Saül"
+  ],
+  "relecture": "en cours",
+  "title": "Le roi à l'image impressionnante, qui craint le peuple",
+  "refs": "1 Samuel 9–18 ; Philippiens 2",
+  "who": "Saül est le premier roi d'Israël, choisi par Dieu alors que le peuple demandait un roi « comme toutes les nations ». Beau, grand, d'abord humble, il finit par désobéir et par rechercher l'approbation du peuple plus que celle de Dieu.",
+  "lenses": {
+   "ENN:3": {
+    "label": "Type 3 · Le Conquérant",
+    "definition": "Réussir et avoir de la valeur ; craindre d'être sans valeur ou d'échouer.",
+    "solidity": "Indices nombreux et convergents",
+    "traits": [
+     [
+      "Une apparence qui s'impose",
+      "« Jeune et beau, plus beau qu'aucun des enfants d'Israël, et les dépassant tous de la tête. »",
+      "1 Samuel 9:2"
+     ],
+     [
+      "Il tient à son image devant le peuple",
+      "Après sa faute : « Honore-moi en présence des anciens de mon peuple et en présence d'Israël. »",
+      "1 Samuel 15:30"
+     ],
+     [
+      "Il craint le jugement du peuple",
+      "« Je craignais le peuple, et j'ai écouté sa voix. »",
+      "1 Samuel 15:24"
+     ],
+     [
+      "Il vit la comparaison comme une blessure",
+      "« Saül a frappé ses mille, et David ses dix mille... Il ne lui manque plus que la royauté. »",
+      "1 Samuel 18:7-8"
+     ]
+    ],
+    "absent": [
+     [
+      "Se savoir reçu sans l'avoir gagné",
+      "Samuel lui rappelle qu'il était « petit à tes yeux » quand Dieu l'a fait chef (1 Samuel 15:17)."
+     ],
+     [
+      "Humilité durable",
+      "Au début, il se cache « vers les bagages » (1 Samuel 10:22) ; ensuite, plus rien de tel."
+     ]
+    ],
+    "limits": "Saül est longuement raconté, surtout par ses échecs. Les indices sont nombreux, mais le récit est écrit du point de vue de Samuel et de David. Nous repérons des indices, nous ne mesurons rien.",
+    "why": "Comme lui, vous êtes attentif à l'image que vous donnez et au regard du groupe. Son récit montre le coût de cette préoccupation : elle prend la place de l'obéissance."
+   }
+  },
+  "episodes": [
+   {
+    "title": "Plus beau, plus grand",
+    "ref": "1 Samuel 9:2",
+    "text": "Le texte le présente d'abord par son apparence : grand, beau, plus que tous.",
+    "quote": {
+     "ref": "1 Samuel 9:2",
+     "text": "jeune et beau, plus beau qu'aucun des enfants d'Israël, et les dépassant tous de la tête"
+    }
+   },
+   {
+    "title": "Caché vers les bagages",
+    "ref": "1 Samuel 10:20-24",
+    "text": "Quand le sort le désigne comme roi, on ne le trouve pas : il est caché vers les bagages. Il est sorti de là, dépasse tout le peuple de la tête, et le peuple crie : « Vive le roi ! »"
+   },
+   {
+    "title": "Il offrit l'holocauste",
+    "ref": "1 Samuel 13:8-14",
+    "text": "Samuel tarde. Le peuple se disperse. Saül offre lui-même le sacrifice. Samuel arrive : « Tu as agi en insensé » ; son règne ne durera pas.",
+    "quote": {
+     "ref": "1 Samuel 13:13",
+     "text": "Tu as agi en insensé, tu n'as pas observé le commandement que l'Eternel, ton Dieu, t'avait donné."
+    }
+   },
+   {
+    "title": "Épargner le meilleur",
+    "ref": "1 Samuel 15:9-24",
+    "text": "Saül et le peuple épargnent le roi Agag et les meilleures bêtes. Face à Samuel, il rejette la faute sur le peuple, puis reconnaît qu'il a craint le peuple et écouté sa voix.",
+    "quote": {
+     "ref": "1 Samuel 15:24",
+     "text": "je craignais le peuple, et j'ai écouté sa voix."
+    }
+   },
+   {
+    "title": "Honore-moi",
+    "ref": "1 Samuel 15:30",
+    "text": "Même en reconnaissant son péché, il demande à Samuel de l'honorer devant les anciens et devant Israël.",
+    "quote": {
+     "ref": "1 Samuel 15:30",
+     "text": "J'ai péché! Maintenant, je te prie, honore-moi en présence des anciens de mon peuple et en présence d'Israël"
+    }
+   },
+   {
+    "title": "Dix mille",
+    "ref": "1 Samuel 18:7-9",
+    "text": "Les femmes chantent : « Saül a frappé ses mille, et David ses dix mille ». Il en est très irrité et regarde David d'un mauvais œil à partir de ce jour."
+   }
+  ],
+  "weakness": "L'image qui prend la place de l'obéissance. Il craint le peuple plus que Dieu (1 Samuel 15:24), il demande à être honoré même dans la repentance (15:30), et la gloire de David le blesse (18:8). Pour ce type, la vigilance : le regard des autres peut devenir un maître plus exigeant que Dieu.",
+  "grace": "Tout lui a été donné : Samuel lui rappelle que, « petit à tes yeux », il est devenu chef des tribus d'Israël, oint par l'Éternel (1 Samuel 15:17). Sa valeur ne venait pas de sa taille ni de ses succès, mais de ce choix. Le texte ne dit pas qu'il l'ait reçu comme un don ; c'est ce qui rend son récit douloureux.",
+  "christ": "« Ayez en vous les sentiments qui étaient en Jésus-Christ, lequel, existant en forme de Dieu, n'a point regardé comme une proie à arracher d'être égal avec Dieu, mais s'est dépouillé lui-même » (Philippiens 2:5-7). Saül s'accroche à son rang et à son image ; le Christ s'en dépouille, jusqu'à la croix. Le roi que le peuple a demandé révèle le besoin du Roi parfait.",
+  "quotes": [
+   {
+    "ref": "Philippiens 2:6",
+    "text": "lequel, existant en forme de Dieu, n'a point regardé comme une proie à arracher d'être égal avec Dieu"
+   },
+   {
+    "ref": "1 Samuel 15:17",
+    "text": "Lorsque tu étais petit à tes yeux, n'es-tu pas devenu le chef des tribus d'Israël"
+   }
+  ],
+  "question": "Devant qui est-ce que je joue un rôle, et qui m'a donné la valeur que je défends ?",
+  "step": "Faire cette semaine une chose utile sans que personne ne le sache, et la remettre à Dieu."
+ },
+ "JEREMIE": {
+  "name": "Jérémie",
+  "aliases": [
+   "Jérémie"
+  ],
+  "relecture": "en cours",
+  "title": "Le prophète des larmes, déchiré et sincère",
+  "refs": "Jérémie 1 ; 20 ; 31 ; Luc 22",
+  "who": "Jérémie est appelé prophète très jeune, avant le siège de Jérusalem. Il annonce la parole de Dieu à un peuple qui ne veut pas l'entendre, et la souffre dans sa propre vie. C'est aussi lui qui annonce la nouvelle alliance.",
+  "lenses": {
+   "ENN:4": {
+    "label": "Type 4 · L'Âme singulière",
+    "definition": "Être authentique et trouver sa place unique ; craindre de n'avoir ni identité ni signification.",
+    "solidity": "Indices nombreux et convergents (le livre est écrit à la première personne)",
+    "traits": [
+     [
+      "Il ressent tout intensément",
+      "« Il y a dans mon cœur comme un feu dévorant qui est renfermé dans mes os. Je m'efforce de le contenir, et je ne le puis. »",
+      "Jérémie 20:9"
+     ],
+     [
+      "Il met des mots sur sa détresse",
+      "« Maudit soit le jour où je suis né ! » ; « Pourquoi suis-je sorti du sein maternel pour voir la souffrance et la douleur ? »",
+      "Jérémie 20:14, 18"
+     ],
+     [
+      "Il se sent seul et incompris",
+      "« Je suis chaque jour un objet de raillerie, tout le monde se moque de moi. »",
+      "Jérémie 20:7"
+     ],
+     [
+      "Il est sincère, jusqu'à la gaucherie",
+      "« Ah ! Seigneur Éternel ! voici, je ne sais point parler, car je suis un enfant. »",
+      "Jérémie 1:6"
+     ]
+    ],
+    "absent": [
+     [
+      "Légèreté et joie sans arrière-pensée",
+      "Ses plus longs passages sont des plaintes, parfois des malédictions (Jérémie 20:14-18)."
+     ],
+     [
+      "Se contenter de qui il est",
+      "Il discute son appel et son identité dès le premier chapitre (Jérémie 1:6)."
+     ]
+    ],
+    "limits": "Un livre long, écrit en partie à la première personne : nous voyons le prophète de l'intérieur. Les indices sont nombreux ; nous repérons des indices, nous ne mesurons rien.",
+    "why": "Comme lui, vous ressentez profondément, vous cherchez à dire la vérité de ce que vous vivez et vous vous sentez parfois incompris. Son récit montre que Dieu supporte vos cris et vous donne une identité qui ne dépend pas de ce que vous ressentez."
+   }
+  },
+  "episodes": [
+   {
+    "title": "Avant que tu fusses sorti de son sein",
+    "ref": "Jérémie 1:4-5",
+    "text": "Dieu lui dit qu'il le connaissait avant sa naissance, l'a consacré et établi prophète des nations. Son identité lui est donnée avant qu'il ait rien fait.",
+    "quote": {
+     "ref": "Jérémie 1:5",
+     "text": "Avant que je t'eusse formé dans le ventre de ta mère, je te connaissais"
+    }
+   },
+   {
+    "title": "Je suis un enfant",
+    "ref": "Jérémie 1:6-8",
+    "text": "Il objecte : il ne sait pas parler, il est trop jeune. Dieu lui répond : « Ne dis pas : Je suis un enfant... Ne les crains point, car je suis avec toi pour te délivrer. »",
+    "quote": {
+     "ref": "Jérémie 1:8",
+     "text": "Ne les crains point, car je suis avec toi pour te délivrer"
+    }
+   },
+   {
+    "title": "Mes paroles dans ta bouche",
+    "ref": "Jérémie 1:9-10",
+    "text": "Dieu touche sa bouche : il met ses paroles en lui, et lui confie une mission de déraciner et de planter."
+   },
+   {
+    "title": "Un feu dévorant",
+    "ref": "Jérémie 20:7-9",
+    "text": "Moqué chaque jour, il voudrait se taire. Mais la parole est dans son cœur comme un feu : il ne peut la contenir.",
+    "quote": {
+     "ref": "Jérémie 20:9",
+     "text": "Il y a dans mon coeur comme un feu dévorant"
+    }
+   },
+   {
+    "title": "Maudit soit le jour",
+    "ref": "Jérémie 20:14-18",
+    "text": "Dans un moment de désespoir, il maudit le jour de sa naissance et demande pourquoi il est sorti du sein de sa mère pour voir la souffrance et consumer ses jours dans la honte.",
+    "quote": {
+     "ref": "Jérémie 20:14",
+     "text": "Maudit soit le jour où je suis né!"
+    }
+   },
+   {
+    "title": "Une alliance nouvelle",
+    "ref": "Jérémie 31:31-34",
+    "text": "Le prophète des larmes annonce aussi l'alliance nouvelle : Dieu écrira sa loi dans les cœurs, tous le connaîtront, et il pardonnera leur iniquité.",
+    "quote": {
+     "ref": "Jérémie 31:33",
+     "text": "Je mettrai ma loi au dedans d'eux, Je l'écrirai dans leur coeur"
+    }
+   }
+  ],
+  "weakness": "S'enfoncer dans la plainte. Il en vient à maudire le jour de sa naissance (Jérémie 20:14-18) ; son intensité le fait osciller entre le feu et le désespoir. Pour ce type, la vigilance : ce qui se ressent fortement n'est pas toute la vérité ; Dieu dit autre chose de lui.",
+  "grace": "Dieu ne lui reproche pas ses cris : il les garde dans la Bible, et il lui dit, avant que Jérémie ait parlé ou souffert, qui il est : « Avant que je t'eusse formé... je te connaissais » (Jérémie 1:5). La grâce, pour lui, est une identité reçue : il n'a pas à se chercher, il est déjà connu.",
+  "christ": "Le prophète des larmes annonce l'alliance nouvelle (Jérémie 31:31-34), que Jésus déclare accomplie à la dernière cène : « Cette coupe est la nouvelle alliance en mon sang, qui est répandu pour vous » (Luc 22:20). Ce que Jérémie ne pouvait que promettre, le Christ le donne : la loi écrite dans le cœur, et le pardon.",
+  "quotes": [
+   {
+    "ref": "Luc 22:20",
+    "text": "Cette coupe est la nouvelle alliance en mon sang, qui est répandu pour vous."
+   },
+   {
+    "ref": "Jérémie 1:5",
+    "text": "Avant que je t'eusse formé dans le ventre de ta mère, je te connaissais"
+   }
+  ],
+  "question": "Qu'est-ce que je ressens très fort, et qui n'est pas toute la vérité de qui je suis ?",
+  "step": "Écrire une plainte honnête à Dieu, puis recopier en dessous ce qu'il dit de vous : « Je te connaissais »."
+ },
+ "SAMSON": {
+  "name": "Samson",
+  "aliases": [
+   "Samson"
+  ],
+  "relecture": "en cours",
+  "title": "La force hors du commun, mal maîtrisée, relevée dans la faiblesse",
+  "refs": "Juges 13–16 ; Hébreux 2 ; 11",
+  "who": "Samson est un Danite consacré à Dieu dès le ventre de sa mère, appelé à commencer à délivrer Israël de la main des Philistins (Juges 13:5). Doté d'une force extraordinaire, il la gaspille souvent, et finit prisonnier, aveuglé.",
+  "lenses": {
+   "ENN:8": {
+    "label": "Type 8 · Le Protecteur",
+    "definition": "Être fort(e) et maître de sa vie ; craindre d'être contrôlé(e), blessé(e) ou vulnérable.",
+    "solidity": "Indices nombreux et convergents",
+    "traits": [
+     [
+      "Une force qui s'impose",
+      "« L'esprit de l'Éternel saisit Samson ; et, sans avoir rien à la main, Samson déchira le lion comme on déchire un chevreau. »",
+      "Juges 14:6"
+     ],
+     [
+      "Il agit seul, sans rendre de comptes",
+      "« Il ne dit point à son père et à sa mère ce qu'il avait fait. »",
+      "Juges 14:6"
+     ],
+     [
+      "Il se croit maître de la situation",
+      "« Je m'en tirerai comme les autres fois, et je me dégagerai. »",
+      "Juges 16:20"
+     ],
+     [
+      "Il redoute d'être dompté",
+      "Importuné par Delila, « son âme s'impatienta à la mort » : il lui livre son secret.",
+      "Juges 16:16-17"
+     ]
+    ],
+    "absent": [
+     [
+      "Mesure et retenue",
+      "Sa force ne connaît pas de limite, et il agit souvent par colère ou par vengeance (Juges 15:16 ; 16:28)."
+     ],
+     [
+      "Vulnérabilité assumée",
+      "Il cache son secret, puis le livre par fatigue, non par confiance (Juges 16:16-17)."
+     ]
+    ],
+    "limits": "Un récit court, marqué par la démesure ; l'ennéagramme n'y est pour rien. Nous repérons des indices, nous ne mesurons rien.",
+    "why": "Comme lui, vous avez de la force et vous détestez qu'on vous contrôle. Son récit montre ce que devient la force quand elle ne se rend de comptes à personne, et ce que Dieu peut en faire quand elle est brisée."
+   }
+  },
+  "episodes": [
+   {
+    "title": "Consacré dès le ventre",
+    "ref": "Juges 13:2-5",
+    "text": "Un ange annonce à une femme stérile qu'elle enfantera un fils consacré à Dieu, qui commencera à délivrer Israël des Philistins."
+   },
+   {
+    "title": "Le lion",
+    "ref": "Juges 14:5-6",
+    "text": "Un jeune lion rugit à sa rencontre. L'esprit de l'Éternel le saisit ; il le déchire à mains nues et n'en dit rien à ses parents.",
+    "quote": {
+     "ref": "Juges 14:6",
+     "text": "L'esprit de l'Eternel saisit Samson"
+    }
+   },
+   {
+    "title": "La mâchoire d'âne",
+    "ref": "Juges 15:14-16",
+    "text": "Lié par les siens, il rompt ses liens, saisit une mâchoire d'âne fraîche et tue mille hommes, puis chante sa victoire à la première personne."
+   },
+   {
+    "title": "Delila",
+    "ref": "Juges 16:15-21",
+    "text": "Importuné chaque jour, il livre son secret : le rasoir n'a pas passé sur sa tête. Rasé pendant son sommeil, il se réveille et se dit qu'il s'en tirera comme avant, sans savoir que l'Éternel s'est retiré de lui. Les Philistins lui crèvent les yeux.",
+    "quote": {
+     "ref": "Juges 16:20",
+     "text": "Il ne savait pas que l'Eternel s'était retiré de lui."
+    }
+   },
+   {
+    "title": "Souviens-toi de moi",
+    "ref": "Juges 16:28-30",
+    "text": "Aveugle et enchaîné, il invoque l'Éternel : « souviens-toi de moi... donne-moi de la force seulement cette fois ». Il fait tomber la maison sur les princes des Philistins, et sa mort fait plus de victimes que sa vie.",
+    "quote": {
+     "ref": "Juges 16:28",
+     "text": "Seigneur Eternel! souviens-toi de moi, je te prie; ô Dieu! donne-moi de la force seulement cette fois"
+    }
+   }
+  ],
+  "weakness": "La force sans mesure, et sans compte à rendre. Il agit seul (Juges 14:6), se sert de sa force pour se venger (15:16) et se croit invulnérable (16:20). Pour ce type, la vigilance : celui qui ne laisse personne le contrôler finit par perdre lui-même la maîtrise, et il ne s'en aperçoit qu'une fois la force partie.",
+  "grace": "Dieu ne l'abandonne pas à son sort : sa force lui revient quand il se tourne vers lui. Le Seigneur répond à un homme aveugle et enchaîné qui dit « souviens-toi de moi » (Juges 16:28). Et le Nouveau Testament le compte parmi ceux qui ont agi « par la foi » (Hébreux 11:32).",
+  "christ": "Samson délivre en mourant : « ceux qu'il fit périr à sa mort furent plus nombreux que ceux qu'il avait tués pendant sa vie » (Juges 16:30). Le Christ aussi délivre en mourant, « afin que, par la mort, il anéantît celui qui a la puissance de la mort » (Hébreux 2:14), et délivre ceux qui étaient « retenus dans la servitude » (2:15). Samson n'est que l'ombre : sa force ne sauve pas, la faiblesse du Christ sauve.",
+  "quotes": [
+   {
+    "ref": "Hébreux 2:14",
+    "text": "afin que, par la mort, il anéantît celui qui a la puissance de la mort"
+   },
+   {
+    "ref": "Juges 16:30",
+    "text": "Ceux qu'il fit périr à sa mort furent plus nombreux que ceux qu'il avait tués pendant sa vie."
+   }
+  ],
+  "question": "À qui est-ce que je rends des comptes, vraiment, de l'usage de ma force ?",
+  "step": "Demander à une personne de confiance de vous dire, sans filtre, où votre force pèse sur les autres."
+ },
+ "ISAAC": {
+  "name": "Isaac",
+  "aliases": [
+   "Isaac"
+  ],
+  "relecture": "en cours",
+  "title": "Celui qui creuse un autre puits plutôt que de se quereller",
+  "refs": "Genèse 22 ; 24 ; 26 ; Hébreux 11",
+  "who": "Isaac est le fils de la promesse, né à Abraham et à Sara dans leur vieillesse. Il est offert en sacrifice, puis épargné ; il épouse Rebecca, hérite d'Abraham et vit en paix parmi les peuples voisins.",
+  "lenses": {
+   "ENN:9": {
+    "label": "Type 9 · L'Artisan de paix",
+    "definition": "Garder la paix intérieure et l'harmonie ; craindre le conflit et la séparation.",
+    "solidity": "Indices réels (un personnage souvent présenté dans l'ombre d'Abraham et de Jacob)",
+    "traits": [
+     [
+      "Il préfère s'éloigner plutôt que se quereller",
+      "Il creuse un puits, puis un autre, puis un troisième, plutôt que de se disputer : Rehoboth, « l'Éternel nous a maintenant mis au large ».",
+      "Genèse 26:17-22"
+     ],
+     [
+      "Il se laisse conduire",
+      "Il porte le bois de l'holocauste et se laisse lier sur l'autel, sans qu'on rapporte une résistance.",
+      "Genèse 22:6-9"
+     ],
+     [
+      "Il aime le calme",
+      "Un soir, « Isaac était sorti pour méditer dans les champs ».",
+      "Genèse 24:63"
+     ],
+     [
+      "Il fait la paix avec ceux qui l'ont chassé",
+      "Il leur fait un festin, et ils partent en paix.",
+      "Genèse 26:26-31"
+     ]
+    ],
+    "absent": [
+     [
+      "Prise de position",
+      "Dans le conflit entre ses fils, il ne tranche pas : il aime Ésaü, tandis que Rebecca aime Jacob (Genèse 25:28)."
+     ],
+     [
+      "Initiative",
+      "Il refait les puits de son père plutôt que d'en creuser de nouveaux au départ (Genèse 26:18)."
+     ]
+    ],
+    "limits": "Isaac est un personnage discret, peu présent par ses paroles. Les indices sont réels mais peu nombreux ; la lecture est moins solide que pour d'autres. Nous repérons des indices, nous ne mesurons rien.",
+    "why": "Comme lui, vous préférez la paix à la dispute, vous cédez du terrain plutôt que de vous battre et vous cherchez l'harmonie. Son récit montre qu'on peut vivre ainsi sans faiblesse, et ce que cela coûte quand il faut trancher."
+   }
+  },
+  "episodes": [
+   {
+    "title": "Où est l'agneau ?",
+    "ref": "Genèse 22:6-9",
+    "text": "Son père le charge du bois. Il demande où est l'agneau ; Abraham répond que Dieu s'en pourvoira. Arrivés à l'autel, Abraham le lie et le met sur le bois.",
+    "quote": {
+     "ref": "Genèse 22:8",
+     "text": "Mon fils, Dieu se pourvoira lui-même de l'agneau pour l'holocauste."
+    }
+   },
+   {
+    "title": "Il l'aima, et fut consolé",
+    "ref": "Genèse 24:63-67",
+    "text": "Un soir, il médite dans les champs, voit arriver Rebecca et l'épouse. Le texte dit qu'il l'aima, et qu'il fut ainsi consolé après avoir perdu sa mère.",
+    "quote": {
+     "ref": "Genèse 24:67",
+     "text": "il prit Rebecca, qui devint sa femme, et il l'aima. Ainsi fut consolé Isaac, après avoir perdu sa mère."
+    }
+   },
+   {
+    "title": "Esek, Sitna, Rehoboth",
+    "ref": "Genèse 26:12-22",
+    "text": "Les Philistins comblent les puits de son père. Il les rouvre, puis creuse des puits qui lui sont disputés. Il s'éloigne chaque fois, jusqu'à celui pour lequel on ne cherche pas querelle.",
+    "quote": {
+     "ref": "Genèse 26:22",
+     "text": "l'Eternel nous a maintenant mis au large, et nous prospérerons dans le pays"
+    }
+   },
+   {
+    "title": "Ne crains point",
+    "ref": "Genèse 26:23-25",
+    "text": "À Beer-Schéba, l'Éternel lui apparaît la nuit : « Ne crains point, car je suis avec toi ». Il y bâtit un autel et y dresse sa tente.",
+    "quote": {
+     "ref": "Genèse 26:24",
+     "text": "ne crains point, car je suis avec toi; je te bénirai"
+    }
+   },
+   {
+    "title": "Un festin avec ceux qui l'ont chassé",
+    "ref": "Genèse 26:26-31",
+    "text": "Abimélec vient lui demander une alliance. Isaac répond qu'ils l'ont haï, puis leur fait un festin. Ils jurent et repartent en paix.",
+    "quote": {
+     "ref": "Genèse 26:31",
+     "text": "Isaac les laissa partir, et ils le quittèrent en paix."
+    }
+   }
+  ],
+  "weakness": "La préférence silencieuse et l'évitement. Il aime Ésaü, Rebecca aime Jacob (Genèse 25:28) : la maison se partage, et Isaac ne tranche pas. Pour ce type, la vigilance : éviter le conflit peut laisser s'installer des divisions que l'on aurait pu nommer. Le texte ne l'analyse pas ; c'est une lecture.",
+  "grace": "Dieu ne lui demande pas d'être un autre : « Ne crains point, car je suis avec toi ; je te bénirai » (Genèse 26:24), et il lui rappelle qu'il est béni « à cause d'Abraham, mon serviteur » : une bénédiction reçue d'un autre. Rehoboth, le puits sans querelle, est donné à celui qui n'a pas lutté.",
+  "christ": "« Mon fils, Dieu se pourvoira lui-même de l'agneau pour l'holocauste » (Genèse 22:8). Ce que le père répond à Isaac, Jean-Baptiste le montre : « Voici l'Agneau de Dieu, qui ôte le péché du monde » (Jean 1:29). Isaac est épargné ; Jésus, le Fils unique, ne l'est pas : c'est lui, l'Agneau que Dieu s'est pourvu.",
+  "quotes": [
+   {
+    "ref": "Genèse 22:8",
+    "text": "Mon fils, Dieu se pourvoira lui-même de l'agneau pour l'holocauste."
+   },
+   {
+    "ref": "Jean 1:29",
+    "text": "Voici l'Agneau de Dieu, qui ôte le péché du monde."
+   }
+  ],
+  "question": "Quelle division est-ce que je laisse s'installer, par désir d'éviter le conflit ?",
+  "step": "Nommer calmement, cette semaine, une tension que vous évitez, devant la personne concernée."
+ }
+}

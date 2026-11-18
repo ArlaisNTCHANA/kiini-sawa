@@ -202,6 +202,16 @@ final class ContentAdminController extends AbstractController
         if (preg_match('/^profile\.absent\.(\d+)\.(\d)$/', $path, $m)) {
             return 'Ce que le texte ne montre pas · n° '.((int) $m[1] + 1).' · '.['Le point', 'Le détail'][(int) $m[2]];
         }
+        // Lectures par test (ennéagramme, dons, type) : lenses.<TEST:code>.traits.N.M ; lenses.<TEST:code>.absent.N.M
+        if (preg_match('/^lenses\.([A-Z]+:[^.]+)\.traits\.(\d+)\.(\d)$/', $path, $m)) {
+            return 'Lecture '.$m[1].' · indice n° '.((int) $m[2] + 1).' · '.['Le trait', 'Ce que dit le texte', 'Référence'][(int) $m[3]];
+        }
+        if (preg_match('/^lenses\.([A-Z]+:[^.]+)\.absent\.(\d+)\.(\d)$/', $path, $m)) {
+            return 'Lecture '.$m[1].' · ce que le texte ne montre pas · n° '.((int) $m[2] + 1).' · '.['Le point', 'Le détail'][(int) $m[3]];
+        }
+        if (preg_match('/^lenses\.([A-Z]+:[^.]+)\.(label|definition|solidity|limits|why)$/', $path, $m)) {
+            return 'Lecture '.$m[1].' · '.['label' => 'Titre', 'definition' => 'Définition', 'solidity' => 'Solidité', 'limits' => 'Limites', 'why' => 'Pourquoi lui, pour vous'][$m[2]];
+        }
         if (preg_match('/^why\.(D|I|S|C|default)$/', $path, $m)) {
             return 'Pourquoi lui, pour vous · '.('default' === $m[1] ? 'texte par défaut' : 'profil '.$m[1]);
         }

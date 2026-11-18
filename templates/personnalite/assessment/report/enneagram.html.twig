@@ -137,11 +137,16 @@
     <h2>Des figures bibliques qui vous ressemblent</h2>
     <p class="dr-lead">La Bible montre des hommes et des femmes habités par les mêmes motivations et les mêmes peurs que nous, que Dieu a rencontrés et transformés. Ces rapprochements sont des illustrations, non une interprétation savante des textes.</p>
     {% for f in x.figures %}
+        {% set sheet = e.figureSheets[loop.index0] %}
+        {% if sheet and sheet.lenses['ENN:' ~ e.type] is defined %}
+            {% include 'personnalite/assessment/report/_figure_sheet.html.twig' with {fig: sheet, lens: 'ENN:' ~ e.type, why: sheet.lenses['ENN:' ~ e.type].why, pdf: pdf, pc: pc} only %}
+        {% else %}
         <div class="dr-tile" style="margin-bottom: 10px; border-left: 6px solid {{ pc }}; border-radius: 0 14px 14px 0;">
             <div style="font-family: {{ serif }}; font-size: {{ pdf ? '14pt' : '1.25rem' }}; font-weight: bold;">{{ f.name }}</div>
             <div class="dr-small" style="margin-bottom: 6px;">{{ f.ref }}</div>
             <p style="margin: 0;">{{ f.text }}</p>
         </div>
+        {% endif %}
     {% endfor %}
     <div class="dr-quote" style="margin-top: 14px;">« {{ x.verse[0] }} »<div style="font-style: normal; font-weight: bold; margin-top: 6px; font-size: {{ pdf ? '9pt' : '.9rem' }};">{{ x.verse[1] }}</div></div>
     <div class="dr-tile" style="margin-top: 10px;"><div class="dr-label">Une question à méditer</div><p style="margin: 0; font-family: {{ serif }}; font-size: {{ pdf ? '11pt' : '1.05rem' }};">{{ x.meditation }}</p></div>

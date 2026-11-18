@@ -252,6 +252,7 @@ final class ReportBuilder
             'profile' => Content::get('enn.types')[$t], 'wingProfile' => Content::get('enn.types')[$scores['wing']], 'bars' => $bars,
             'clarityLabel' => $scores['clarity'] >= 15 ? ['Type net', 'Votre type ressort nettement des autres : ce portrait devrait vous parler fortement.'] : ($scores['clarity'] >= 8 ? ['Type assez net', 'Votre type ressort, mais un ou deux autres types sont proches : lisez aussi leurs portraits.'] : null),
             'x' => $x, 'center' => Content::get('enn.centers')[$x['center']], 'centerKey' => $x['center'],
+            'figureSheets' => array_map(fn ($f) => BiblicalFigures::find($f['name']), $x['figures']),
             'wingName' => Content::get('enn.wings')[$t][$scores['wing']],
             'grow' => ['n' => $grow, 'name' => Content::get('enn.types')[$grow]['name']], 'stress' => ['n' => $stress, 'name' => Content::get('enn.types')[$stress]['name']],
             'centers' => Content::get('enn.centers'),

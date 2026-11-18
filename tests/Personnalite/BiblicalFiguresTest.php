@@ -22,13 +22,30 @@ class BiblicalFiguresTest extends TestCase
     public function testEveryFigureIsComplete(): void
     {
         foreach (BiblicalFigures::all() as $key => $f) {
-            foreach (['name', 'aliases', 'title', 'refs', 'profile', 'why', 'who', 'episodes', 'weakness', 'grace', 'christ', 'quotes', 'question', 'step'] as $field) {
+            foreach (['name', 'aliases', 'title', 'refs', 'who', 'episodes', 'weakness', 'grace', 'christ', 'quotes', 'question', 'step'] as $field) {
                 $this->assertArrayHasKey($field, $f, "$key : champ $field");
                 $this->assertNotEmpty($f[$field], "$key : champ $field vide");
             }
-            $this->assertArrayHasKey('default', $f['why'], "$key : texte par défaut");
+            $this->assertTrue(isset($f['profile']) || !empty($f['lenses']), "$key : un profil DISC ou au moins une lecture par test");
+            $this->assertArrayHasKey('default', $f['why'] ?? ['default' => 1], "$key : texte par défaut");
             $this->assertGreaterThanOrEqual(5, \count($f['episodes']), "$key : au moins cinq épisodes");
+            $this->assertMatchesRegularExpression('/Christ|Fils|Seigneur|Sauveur/u', $f['christ'], "$key : le Christ au centre");
             // La crédibilité d'abord : chaque dimension du profil est appuyée par des indices référencés, et on dit ce que le texte ne montre pas
+            foreach ($f['lenses'] ?? [] as $lensKey => $lens) {
+                $this->assertMatchesRegularExpression('/^(ENN|GIFT|TYPE):/', $lensKey, "$key : lecture $lensKey");
+                foreach (['label', 'solidity', 'limits', 'why'] as $field) {
+                    $this->assertNotEmpty($lens[$field] ?? null, "$key $lensKey : $field");
+                }
+                $this->assertGreaterThanOrEqual(2, \count($lens['traits']), "$key $lensKey : au moins deux indices");
+                foreach ($lens['traits'] as $t) {
+                    $this->assertCount(3, $t);
+                    $this->assertMatchesRegularExpression('/\d+[:,]\d+/', $t[2], "$key $lensKey : la référence doit citer un verset");
+                }
+                $this->assertNotEmpty($lens['absent'], "$key $lensKey : ce que le texte ne montre pas");
+            }
+            if (!isset($f['profile'])) {
+                continue;
+            }
             $p = $f['profile'];
             $this->assertMatchesRegularExpression('/^[DISC]{1,2}$/', $p['code'], "$key : code DISC");
             $this->assertSame(str_split($p['code']), array_keys($p['dimensions']), "$key : une dimension par lettre du code");
@@ -42,7 +59,6 @@ class BiblicalFiguresTest extends TestCase
             }
             $this->assertNotEmpty($p['absent'], "$key : ce que le texte ne montre pas");
             $this->assertNotEmpty($p['limits'], "$key : limites de la lecture");
-            $this->assertMatchesRegularExpression('/Christ|Fils|Seigneur|Sauveur/u', $f['christ'], "$key : le Christ au centre");
         }
     }
 
@@ -109,6 +125,19 @@ class BiblicalFiguresTest extends TestCase
                 $sheet = BiblicalFigures::find($figure['name']);
                 $this->assertNotNull($sheet, "Fiche manquante : {$figure['name']} ($code)");
                 $this->assertSame($code, $sheet['profile']['code'], "{$figure['name']} : la fiche décrit le profil {$sheet['profile']['code']}, pas $code");
+            }
+        }
+    }
+
+    public function testEveryEnneagramFigureHasALensSheet(): void
+    {
+        foreach (\App\Personnalite\Psychometrie\EnneagramProfiles::TYPES as $type => $t) {
+            foreach ($t['figures'] as $f) {
+                $sheet = BiblicalFigures::find($f['name']);
+                $this->assertNotNull($sheet, 'Pas de fiche pour '.$f['name']);
+                $lens = $sheet['lenses']['ENN:'.$type] ?? null;
+                $this->assertNotNull($lens, $f['name'].' sans lecture ENN:'.$type);
+                $this->assertGreaterThanOrEqual(2, \count($lens['traits']));
             }
         }
     }

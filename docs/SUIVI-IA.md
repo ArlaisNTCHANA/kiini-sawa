@@ -423,3 +423,8 @@ téléphone), les anciens encarts du parcours disparaissent (l'action est dans l
 Demande du fondateur : remplacer les personnages à matière mince par des personnages « évidents ». Remplacements (même code DISC) : Béréens → Nicodème (C), Lydie → Jonathan (IS),
 Tabitha → Élisabeth (SI), Jean le disciple bien-aimé → Marie de Béthanie (SI), Luc → Aquilas et Priscille (CI), Betsaleel → Boaz (CS). `DiscCombos` mis à jour (nom, référence,
 phrase courte), fichiers JSON nettoyés, nouveau `08-…json`. Pagination PDF contrôlée (profils C, CI, CS, IS, SI). Citations vérifiées par le test.
+
+## 18/11/2026 — Bibliothèque de personnages rattachée à l'ennéagramme (phase 1)
+- Fiches pilotes migrées en JSON ; 7 nouvelles fiches (Jonas, Marthe, Jacob, Saül, Jérémie, Samson, Isaac) dans `content/personnages/09-*.json` ; lectures par test (`lenses`, clé `ENN:<type>`) dans `content/lectures/enneagramme.json` pour 11 fiches existantes.
+- `EnneagramProfiles` : Tabitha→Barnabé, David le psalmiste→David, L'Ecclésiaste→Thomas, Jacques et Jean→Moïse. Chaque personnage du rapport ennéagramme a une fiche « Son profil » (test de couverture).
+- Reste : mesurer la pagination PDF des 9 rapports ennéagramme ; phases dons (`GIFT:`) et type (`TYPE:`) ; fiches toutes « en cours de relecture ».
