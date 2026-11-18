@@ -1,0 +1,599 @@
+{
+ "MARIE": {
+  "name": "Marie, mère de Jésus",
+  "aliases": [
+   "Marie, mère de Jésus"
+  ],
+  "reviewed": false,
+  "title": "La servante qui reçoit, garde et renvoie vers son fils",
+  "refs": "Luc 1–2 ; Jean 2 ; Jean 19 ; Actes 1",
+  "profile": {
+   "code": "S",
+   "solidity": "Indices nombreux et convergents",
+   "dimensions": {
+    "S": {
+     "level": 3,
+     "traits": [
+      [
+       "Elle accueille avec calme, sans éclat",
+       "« Je suis la servante du Seigneur ; qu'il me soit fait selon ta parole ! »",
+       "Luc 1:38"
+      ],
+      [
+       "Elle garde et médite en silence",
+       "« Marie gardait toutes ces choses, et les repassait dans son cœur. »",
+       "Luc 2:19, 51"
+      ],
+      [
+       "Elle est attentive aux besoins des autres",
+       "À Cana, elle voit que le vin manque, le dit à Jésus, puis dit aux serviteurs : « Faites ce qu'il vous dira ».",
+       "Jean 2:3-5"
+      ],
+      [
+       "Elle est fidèle jusqu'au bout",
+       "Elle se tient près de la croix, puis persévère dans la prière avec les disciples.",
+       "Jean 19:25 ; Actes 1:14"
+      ],
+      [
+       "Le changement soudain la trouble",
+       "« Troublée par cette parole, Marie se demandait ce que pouvait signifier une telle salutation. »",
+       "Luc 1:29"
+      ]
+     ]
+    }
+   },
+   "absent": [
+    [
+     "Prise de commandement (D)",
+     "Au seul moment où elle indique quoi faire, elle renvoie à Jésus, sans rien ajouter (Jean 2:5)."
+    ],
+    [
+     "Éloquence et recherche de la scène (I)",
+     "Ses paroles rapportées sont brèves ; elle écoute et garde plus qu'elle ne parle."
+    ]
+   ],
+   "limits": "Les évangiles disent peu de Marie, mais ce qu'ils disent est convergent. Nous repérons des indices, nous ne mesurons rien."
+  },
+  "why": {
+   "S": "Comme elle, vous accueillez sans bruit, vous gardez ce qui vous est confié et vous restez présent dans la durée. Son récit montre aussi ce que cela coûte : le trouble devant l'inconnu et la fidélité qui traverse la souffrance.",
+   "default": "Sa fidélité silencieuse et son attention aux autres éclairent les tempéraments posés."
+  },
+  "who": "Marie est la jeune femme de Nazareth, fiancée à Joseph, à qui l'ange Gabriel annonce qu'elle enfantera le Fils du Très-Haut (Luc 1:26-33). Elle est la mère de Jésus ; on la retrouve à Cana, près de la croix et, après la résurrection, avec les disciples en prière.",
+  "episodes": [
+   {
+    "title": "L'annonce",
+    "ref": "Luc 1:26-38",
+    "tags": [
+     [
+      "S",
+      "accueil calme"
+     ],
+     [
+      "S",
+      "trouble"
+     ]
+    ],
+    "text": "L'ange la salue comme celle qui a reçu une grâce. Troublée, elle se demande ce que signifie cette parole ; elle pose une question simple (« Comment cela se fera-t-il ? »), puis accepte.",
+    "quote": {
+     "ref": "Luc 1:38",
+     "text": "Je suis la servante du Seigneur; qu'il me soit fait selon ta parole!"
+    }
+   },
+   {
+    "title": "Le chant",
+    "ref": "Luc 1:46-49",
+    "text": "Chez Élisabeth, elle chante. Elle ne parle pas d'elle comme d'une source : elle se réjouit en Dieu, son Sauveur, qui a regardé la bassesse de sa servante.",
+    "quote": {
+     "ref": "Luc 1:47",
+     "text": "Et mon esprit se réjouit en Dieu, mon Sauveur"
+    }
+   },
+   {
+    "title": "Garder et méditer",
+    "ref": "Luc 2:19, 34-35",
+    "tags": [
+     [
+      "S",
+      "garde en silence"
+     ]
+    ],
+    "text": "Après la naissance, elle garde tout dans son cœur. Siméon lui annonce qu'« une épée » lui transpercera l'âme : sa fidélité aura un prix."
+   },
+   {
+    "title": "Cana",
+    "ref": "Jean 2:1-5",
+    "tags": [
+     [
+      "S",
+      "attention aux autres"
+     ]
+    ],
+    "text": "Le vin manque. Elle le dit à Jésus, sans rien exiger ; devant sa réponse, elle ne discute pas et se tourne vers les serviteurs.",
+    "quote": {
+     "ref": "Jean 2:5",
+     "text": "Faites ce qu'il vous dira."
+    }
+   },
+   {
+    "title": "Près de la croix",
+    "ref": "Jean 19:25-27",
+    "tags": [
+     [
+      "S",
+      "fidélité"
+     ]
+    ],
+    "text": "Elle est là, au pied de la croix. Jésus la confie au disciple qu'il aime, qui la prend chez lui."
+   },
+   {
+    "title": "Avec les disciples",
+    "ref": "Actes 1:14",
+    "tags": [
+     [
+      "S",
+      "persévérance"
+     ]
+    ],
+    "text": "Après l'ascension, elle persévère « d'un commun accord » dans la prière avec les disciples : la dernière fois qu'elle apparaît, c'est au milieu des autres, en prière."
+   }
+  ],
+  "weakness": "Le récit ne rapporte aucune faute de Marie. Ce que cette lecture signale comme vigilance : le trouble devant l'inconnu (Luc 1:29), l'angoisse quand son enfant disparaît (« nous te cherchions avec angoisse », 2:48), et le prix d'une fidélité silencieuse : « une épée te transpercera l'âme » (2:35).",
+  "grace": "Tout commence par la grâce qui lui est faite : « tu as trouvé grâce devant Dieu » (Luc 1:30). La grâce précède sa réponse. Elle ne se présente pas comme source de grâce mais comme celle qui la reçoit : elle a elle-même besoin d'un Sauveur (Luc 1:47).",
+  "christ": "Marie dit la première d'où vient son salut : « Dieu, mon Sauveur » (Luc 1:47). À Cana, sa seule parole d'instruction renvoie à Jésus : « Faites ce qu'il vous dira » (Jean 2:5). Le texte ne lui donne pas d'autre rôle : elle reçoit le Sauveur, l'accompagne jusqu'à la croix et prie avec les disciples. Pour le tempérament posé, c'est la voie : recevoir, garder, et diriger vers lui.",
+  "quotes": [
+   {
+    "ref": "Luc 1:47",
+    "text": "Et mon esprit se réjouit en Dieu, mon Sauveur"
+   },
+   {
+    "ref": "Jean 2:5",
+    "text": "Faites ce qu'il vous dira."
+   }
+  ],
+  "question": "Qu'est-ce que je garde dans mon cœur sans le présenter à Dieu ?",
+  "step": "Écrire chaque soir une chose reçue de Dieu dans la journée, comme Marie qui gardait et repassait dans son cœur."
+ },
+ "THOMAS": {
+  "name": "Thomas",
+  "aliases": [
+   "Thomas"
+  ],
+  "reviewed": false,
+  "title": "Le disciple qui veut voir, et qui dit la plus haute confession",
+  "refs": "Jean 11 ; 14 ; 20",
+  "profile": {
+   "code": "C",
+   "solidity": "Indices nombreux et convergents",
+   "dimensions": {
+    "C": {
+     "level": 3,
+     "traits": [
+      [
+       "Il veut comprendre avant de suivre",
+       "« Nous ne savons où tu vas ; comment pouvons-nous en savoir le chemin ? »",
+       "Jean 14:5"
+      ],
+      [
+       "Il a besoin de preuves",
+       "« Si je ne vois dans ses mains la marque des clous... je ne croirai point. »",
+       "Jean 20:25"
+      ],
+      [
+       "Il regarde le risque en face, et reste loyal",
+       "« Allons aussi, afin de mourir avec lui. »",
+       "Jean 11:16"
+      ],
+      [
+       "Quand il est convaincu, il le dit sans détour",
+       "« Mon Seigneur et mon Dieu ! »",
+       "Jean 20:28"
+      ]
+     ]
+    }
+   },
+   "absent": [
+    [
+     "Entraînement par l'enthousiasme (I)",
+     "Il n'était pas avec les autres quand Jésus vint, et il ne se joint pas à leur joie sur parole (Jean 20:24-25)."
+    ],
+    [
+     "Prise de commandement (D)",
+     "Il ne dirige pas le groupe : il pose ses questions et ses conditions."
+    ]
+   ],
+   "limits": "Thomas n'apparaît que dans quelques scènes de l'évangile de Jean, mais elles vont toutes dans le même sens. Nous repérons des indices, nous ne mesurons rien."
+  },
+  "why": {
+   "C": "Comme lui, vous voulez comprendre, vérifier et vous engager en connaissance de cause. Son récit montre que Dieu ne méprise pas ce besoin : il y répond, en personne.",
+   "default": "Son besoin de comprendre et de vérifier éclaire les tempéraments analytiques."
+  },
+  "who": "Thomas, appelé Didyme, est l'un des douze disciples (Jean 20:24). L'évangile de Jean le fait parler trois fois : devant le danger, devant l'inconnu et devant la résurrection.",
+  "episodes": [
+   {
+    "title": "Allons mourir avec lui",
+    "ref": "Jean 11:16",
+    "tags": [
+     [
+      "C",
+      "lucidité"
+     ],
+     [
+      "C",
+      "loyauté"
+     ]
+    ],
+    "text": "Jésus veut retourner en Judée, où l'on cherche à le tuer. Thomas dit aux autres disciples : « Allons aussi, afin de mourir avec lui. » Il voit le danger, et le suit.",
+    "quote": {
+     "ref": "Jean 11:16",
+     "text": "Allons aussi, afin de mourir avec lui."
+    }
+   },
+   {
+    "title": "Nous ne savons où tu vas",
+    "ref": "Jean 14:5-6",
+    "tags": [
+     [
+      "C",
+      "pose la question"
+     ]
+    ],
+    "text": "Jésus parle de partir. Thomas dit tout haut ce que d'autres pensent. La réponse de Jésus est l'une des plus grandes de l'évangile : « Je suis le chemin, la vérité, et la vie ».",
+    "quote": {
+     "ref": "Jean 14:5",
+     "text": "Seigneur, nous ne savons où tu vas; comment pouvons-nous en savoir le chemin?"
+    }
+   },
+   {
+    "title": "Si je ne vois",
+    "ref": "Jean 20:24-25",
+    "tags": [
+     [
+      "C",
+      "preuve"
+     ]
+    ],
+    "text": "Absent le soir de Pâques, il refuse de croire sur la parole des autres. Il énonce exactement ce qu'il lui faut : voir les marques des clous et toucher le côté.",
+    "quote": {
+     "ref": "Jean 20:25",
+     "text": "Si je ne vois dans ses mains la marque des clous, et si je ne mets mon doigt dans la marque des clous, et si je ne mets ma main dans son côté, je ne croirai point."
+    }
+   },
+   {
+    "title": "Avance ici ton doigt",
+    "ref": "Jean 20:26-27",
+    "text": "Huit jours plus tard, Jésus revient, Thomas est là. Jésus s'adresse à lui, reprend ses propres mots et lui offre ce qu'il demandait : ses mains et son côté."
+   },
+   {
+    "title": "Mon Seigneur et mon Dieu",
+    "ref": "Jean 20:28-29",
+    "tags": [
+     [
+      "C",
+      "engagement entier"
+     ]
+    ],
+    "text": "Thomas ne touche pas : il confesse. C'est la déclaration la plus directe de l'évangile sur l'identité de Jésus. Jésus ajoute : « Heureux ceux qui n'ont pas vu, et qui ont cru ! »",
+    "quote": {
+     "ref": "Jean 20:28",
+     "text": "Mon Seigneur et mon Dieu!"
+    }
+   },
+   {
+    "title": "Pour que vous croyiez",
+    "ref": "Jean 20:30-31",
+    "text": "Jean explique pourquoi il a écrit : afin que le lecteur croie que Jésus est le Christ, le Fils de Dieu. L'évangile met entre nos mains des témoignages à examiner."
+   }
+  ],
+  "weakness": "L'exigence de preuve devient une condition (« je ne croirai point », Jean 20:25) et l'isole du groupe : il n'était pas là quand les autres ont vu (20:24). Pour ce tempérament, la vigilance : attendre une preuve complète peut retarder la joie que les autres reçoivent déjà.",
+  "grace": "Jésus ne le reproche pas d'abord. Il revient « huit jours après » (Jean 20:26), se présente devant lui et lui propose exactement ce qu'il avait demandé (20:27). Il répond au doute par sa présence, et c'est cette rencontre qui produit la confession.",
+  "christ": "Sa confession est la plus haute de l'évangile : « Mon Seigneur et mon Dieu ! » (Jean 20:28). Jean écrit « afin que vous croyiez que Jésus est le Christ, le Fils de Dieu » (20:31). La foi du consciencieux n'est pas contre la vérification : en Christ, elle trouve de quoi vérifier, car il a offert ses mains et son côté. Ce qui sauve, ce n'est pas le doute surmonté, c'est celui qui vient à notre rencontre.",
+  "quotes": [
+   {
+    "ref": "Jean 20:28",
+    "text": "Mon Seigneur et mon Dieu!"
+   },
+   {
+    "ref": "Jean 20:31",
+    "text": "afin que vous croyiez que Jésus est le Christ, le Fils de Dieu"
+   }
+  ],
+  "question": "Qu'est-ce que j'attends de voir avant de croire, et Dieu m'a-t-il déjà montré quelque chose ?",
+  "step": "Écrire trois preuves de la fidélité de Dieu dans votre vie, puis en partager une à une personne proche."
+ },
+ "BEREENS": {
+  "name": "Les Béréens",
+  "aliases": [
+   "Les Béréens"
+  ],
+  "reviewed": false,
+  "title": "Ceux qui vérifient chaque jour, et qui croient",
+  "refs": "Actes 17:10-14 ; 20:4",
+  "profile": {
+   "code": "C",
+   "solidity": "Indices clairs mais peu nombreux",
+   "dimensions": {
+    "C": {
+     "level": 2,
+     "traits": [
+      [
+       "Ils vérifient",
+       "Ils examinent les Écritures « pour voir si ce qu'on leur disait était exact ».",
+       "Actes 17:11"
+      ],
+      [
+       "Ils sont réguliers et méthodiques",
+       "Ils le font « chaque jour ».",
+       "Actes 17:11"
+      ],
+      [
+       "Ils examinent sans rejeter",
+       "Ils reçoivent la parole « avec beaucoup d'empressement » : l'examen n'est pas du soupçon.",
+       "Actes 17:11"
+      ],
+      [
+       "Leur examen aboutit",
+       "« Plusieurs d'entre eux crurent. »",
+       "Actes 17:12"
+      ]
+     ]
+    }
+   },
+   "absent": [
+    [
+     "Recherche de la controverse (D)",
+     "Aucune agitation ne vient d'eux : l'opposition arrive de Thessalonique (Actes 17:13)."
+    ],
+    [
+     "Entraînement des foules (I)",
+     "Aucun meneur n'est nommé, sinon, plus tard, Sopater de Bérée (Actes 20:4)."
+    ]
+   ],
+   "limits": "Il s'agit d'une communauté, et non d'un personnage : le texte tient en quelques versets. Les indices sont clairs mais peu nombreux ; cette fiche est plus mince que les autres."
+  },
+  "why": {
+   "C": "Comme eux, vous voulez comprendre et vérifier avant d'adhérer. Leur récit est l'un des rares où la Bible loue ouvertement cette attitude.",
+   "default": "Leur méthode éclaire les tempéraments qui vérifient avant de croire."
+  },
+  "who": "Les Béréens sont les Juifs de la ville de Bérée, en Macédoine. Paul et Silas y arrivent de nuit, envoyés par les frères de Thessalonique (Actes 17:10).",
+  "episodes": [
+   {
+    "title": "Thessalonique",
+    "ref": "Actes 17:1-4",
+    "text": "Pendant trois sabbats, Paul discute avec les Juifs, d'après les Écritures, et établit que le Christ devait souffrir et ressusciter. Quelques-uns sont persuadés."
+   },
+   {
+    "title": "Une fuite de nuit",
+    "ref": "Actes 17:10",
+    "text": "Les frères font partir Paul et Silas de nuit pour Bérée. Dès leur arrivée, ils entrent dans la synagogue."
+   },
+   {
+    "title": "Plus nobles",
+    "ref": "Actes 17:11",
+    "tags": [
+     [
+      "C",
+      "vérification"
+     ],
+     [
+      "C",
+      "régularité"
+     ]
+    ],
+    "text": "Le texte juge leurs sentiments « plus nobles » que ceux de Thessalonique : ils reçoivent la parole avec empressement et examinent chaque jour les Écritures.",
+    "quote": {
+     "ref": "Actes 17:11",
+     "text": "ils examinaient chaque jour les Ecritures, pour voir si ce qu'on leur disait était exact"
+    }
+   },
+   {
+    "title": "Plusieurs crurent",
+    "ref": "Actes 17:12",
+    "text": "L'examen aboutit : plusieurs croient, parmi eux des femmes grecques de distinction et beaucoup d'hommes."
+   },
+   {
+    "title": "L'opposition les rejoint",
+    "ref": "Actes 17:13-14",
+    "text": "Des Juifs de Thessalonique viennent agiter la foule. Paul doit partir ; Silas et Timothée restent à Bérée."
+   },
+   {
+    "title": "Sopater de Bérée",
+    "ref": "Actes 20:4",
+    "text": "Quelques années plus tard, Sopater de Bérée figure parmi ceux qui accompagnent Paul : au moins un de leurs frères est devenu collaborateur de l'apôtre."
+   }
+  ],
+  "weakness": "Le texte ne rapporte aucun reproche. Ce que cette lecture signale comme vigilance pour un tempérament qui vérifie : l'examen peut devenir un but en soi. Chez les Béréens, il reste un moyen, et il mène à croire (Actes 17:12).",
+  "grace": "Les Béréens ne sont pas loués pour avoir mérité quoi que ce soit : le texte parle de « sentiments plus nobles » et il conclut sur la foi reçue (17:12). Leur examen est un chemin, pas un titre de gloire.",
+  "christ": "Ce qu'ils examinent, ce sont les Écritures, et ce que Paul leur montre : « le Christ devait souffrir et ressusciter » (Actes 17:3). Jésus a lui-même expliqué « dans toutes les Écritures ce qui le concernait » (Luc 24:27). Examiner les Écritures, c'est chercher le Christ ; vérifier jusqu'au bout, c'est le trouver.",
+  "quotes": [
+   {
+    "ref": "Actes 17:3",
+    "text": "expliquant et établissant que le Christ devait souffrir et ressusciter des morts."
+   },
+   {
+    "ref": "Luc 24:27",
+    "text": "il leur expliqua dans toutes les Ecritures ce qui le concernait."
+   }
+  ],
+  "question": "Quelle vérité ai-je reçue sans l'avoir examinée dans les Écritures ?",
+  "step": "Prendre un enseignement entendu cette semaine et le comparer, passage par passage, à la Bible."
+ },
+ "NEHEMIE": {
+  "name": "Néhémie",
+  "aliases": [
+   "Néhémie"
+  ],
+  "reviewed": false,
+  "title": "Le bâtisseur qui prie, mobilise et tient bon",
+  "refs": "Néhémie 1–6 ; 13",
+  "profile": {
+   "code": "DI",
+   "solidity": "D : indices nombreux et convergents · I : indices réels",
+   "dimensions": {
+    "D": {
+     "level": 3,
+     "traits": [
+      [
+       "Il prend l'initiative",
+       "Il apprend que les murailles sont en ruines, prie, puis demande lui-même au roi la permission d'aller rebâtir.",
+       "Néhémie 1:2-4 ; 2:4-5"
+      ],
+      [
+       "Il organise et mène à terme",
+       "La moitié travaille, l'autre est armée ; la muraille est achevée en cinquante-deux jours.",
+       "Néhémie 4:16-18 ; 6:15"
+      ],
+      [
+       "Il ne se laisse pas détourner",
+       "« J'ai un grand ouvrage à exécuter, et je ne puis descendre. »",
+       "Néhémie 6:3"
+      ],
+      [
+       "Il tranche, avec force",
+       "« Je fus très irrité... Je résolus de faire des réprimandes aux grands et aux magistrats. »",
+       "Néhémie 5:6-7"
+      ]
+     ]
+    },
+    "I": {
+     "level": 2,
+     "traits": [
+      [
+       "Il mobilise par la parole",
+       "« Venez, rebâtissons la muraille de Jérusalem ! » Ils répondent : « Levons-nous, et bâtissons ! »",
+       "Néhémie 2:17-18"
+      ],
+      [
+       "Il entraîne en racontant ce que Dieu a fait",
+       "Il raconte « comment la bonne main de mon Dieu avait été sur moi » : ils se fortifient dans leur résolution.",
+       "Néhémie 2:18"
+      ],
+      [
+       "Il rassemble les foules",
+       "Face à l'injustice, « je rassemblai autour d'eux une grande foule ».",
+       "Néhémie 5:7"
+      ]
+     ]
+    }
+   },
+   "absent": [
+    [
+     "Douceur et patience (S)",
+     "Quand on lui résiste, il réprimande, maudit, frappe, arrache des cheveux (Néhémie 13:25)."
+    ],
+    [
+     "Analyse prolongée (C)",
+     "Il prie, puis agit vite : on ne le voit pas hésiter longuement."
+    ]
+   ],
+   "limits": "Le livre de Néhémie est écrit à la première personne : nous voyons le personnage tel qu'il se présente lui-même. D est solidement appuyé ; I repose sur des indices réels, moins nombreux. Nous ne mesurons rien."
+  },
+  "why": {
+   "D": "Comme lui, vous décidez, vous menez le projet jusqu'au bout et vous ne vous laissez pas détourner. Son récit montre aussi le revers : l'irritation quand on résiste.",
+   "I": "Comme lui, vous savez enthousiasmer et rassembler autour d'un projet. Son récit montre que la vraie source de l'élan est ailleurs que dans le meneur.",
+   "default": "Son énergie et sa capacité à rassembler éclairent les tempéraments de meneurs."
+  },
+  "who": "Néhémie est échanson du roi Artaxerxès, à Suse (Néhémie 2:1). Un frère lui apprend que les murailles de Jérusalem sont en ruines et que ses portes sont brûlées (1:3). Il obtient du roi la permission d'aller les rebâtir.",
+  "episodes": [
+   {
+    "title": "Il pleure, jeûne et prie",
+    "ref": "Néhémie 1:1-4",
+    "text": "Avant d'agir, il s'assied, pleure, reste plusieurs jours dans la désolation, jeûne et prie devant le Dieu des cieux."
+   },
+   {
+    "title": "Que demandes-tu ?",
+    "ref": "Néhémie 2:1-8",
+    "tags": [
+     [
+      "D",
+      "initiative"
+     ]
+    ],
+    "text": "Le roi remarque sa tristesse et lui demande ce qu'il veut. Néhémie prie en un instant, puis formule une demande précise : être envoyé à Jérusalem pour la rebâtir, avec des lettres et du bois. Le roi accepte, car « la bonne main de mon Dieu était sur moi ».",
+    "quote": {
+     "ref": "Néhémie 2:4",
+     "text": "Que demandes-tu? Je priai le Dieu des cieux"
+    }
+   },
+   {
+    "title": "Venez, rebâtissons",
+    "ref": "Néhémie 2:17-18",
+    "tags": [
+     [
+      "I",
+      "mobilise"
+     ]
+    ],
+    "text": "À Jérusalem, il expose la situation et raconte ce que Dieu a fait pour lui. Le peuple répond d'une seule voix.",
+    "quote": {
+     "ref": "Néhémie 2:18",
+     "text": "Levons-nous, et bâtissons!"
+    }
+   },
+   {
+    "title": "D'une main la truelle",
+    "ref": "Néhémie 4:16-18",
+    "tags": [
+     [
+      "D",
+      "organise"
+     ]
+    ],
+    "text": "Face aux menaces, la moitié des serviteurs travaille et l'autre monte la garde ; chaque bâtisseur garde une arme à la ceinture.",
+    "quote": {
+     "ref": "Néhémie 4:17",
+     "text": "travaillaient d'une main et tenaient une arme de l'autre"
+    }
+   },
+   {
+    "title": "Je ne puis descendre",
+    "ref": "Néhémie 6:3",
+    "tags": [
+     [
+      "D",
+      "constance"
+     ]
+    ],
+    "text": "Ses adversaires l'invitent à venir discuter, pour le détourner. Il refuse : l'ouvrage est trop grand.",
+    "quote": {
+     "ref": "Néhémie 6:3",
+     "text": "J'ai un grand ouvrage à exécuter, et je ne puis descendre"
+    }
+   },
+   {
+    "title": "Cinquante-deux jours",
+    "ref": "Néhémie 6:15-16",
+    "text": "La muraille est achevée. Les nations alentour, effrayées, reconnaissent que l'œuvre s'est accomplie par la volonté de Dieu.",
+    "quote": {
+     "ref": "Néhémie 6:16",
+     "text": "reconnurent que l'oeuvre s'était accomplie par la volonté de notre Dieu"
+    }
+   },
+   {
+    "title": "Quand il frappe",
+    "ref": "Néhémie 13:14, 25",
+    "tags": [
+     [
+      "D",
+      "irritation"
+     ]
+    ],
+    "text": "Plus tard, face à des mariages qu'il juge contraires à l'alliance, il réprimande, maudit, frappe et arrache des cheveux (13:25). Il demande aussi à Dieu de se souvenir de ses « actes de piété » (13:14)."
+   }
+  ],
+  "weakness": "L'irritation quand on résiste : il est « très irrité » (Néhémie 5:6) et, plus tard, il frappe et arrache des cheveux (13:25). Il demande aussi à Dieu de se souvenir de ses actes de piété (13:14), comme s'il fallait les lui rappeler. Pour ce tempérament, la vigilance : porter seul le poids de l'œuvre peut tourner à la dureté.",
+  "grace": "Il attribue chaque pas à la main de Dieu : « la bonne main de mon Dieu était sur moi » (Néhémie 2:8), et ce sont les nations elles-mêmes qui reconnaissent que « l'œuvre s'était accomplie par la volonté de notre Dieu » (6:16). La muraille s'élève parce que Dieu agit ; Néhémie en est l'instrument.",
+  "christ": "« Si l'Éternel ne bâtit la maison, ceux qui la bâtissent travaillent en vain » (Psaume 127:1). La muraille de Néhémie protégeait une ville ; Jésus dit : « sur cette pierre je bâtirai mon Église » (Matthieu 16:18), et Abraham attendait « la cité dont Dieu est l'architecte et le constructeur » (Hébreux 11:10). Le bâtisseur qui mène tout trouve en Christ celui qui bâtit vraiment, et dans lequel on peut se reposer.",
+  "quotes": [
+   {
+    "ref": "Psaumes 127:1",
+    "text": "Si l'Eternel ne bâtit la maison, Ceux qui la bâtissent travaillent en vain"
+   },
+   {
+    "ref": "Matthieu 16:18",
+    "text": "sur cette pierre je bâtirai mon Eglise"
+   }
+  ],
+  "question": "Qu'est-ce que j'attribue à mon énergie, alors que Dieu me l'a donné ?",
+  "step": "Avant de lancer un projet, le présenter à Dieu dans la prière, puis le confier à une équipe et la laisser s'approprier le travail."
+ }
+}
