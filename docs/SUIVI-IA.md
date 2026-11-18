@@ -429,3 +429,9 @@ phrase courte), fichiers JSON nettoyés, nouveau `08-…json`. Pagination PDF co
 - `EnneagramProfiles` : Tabitha→Barnabé, David le psalmiste→David, L'Ecclésiaste→Thomas, Jacques et Jean→Moïse. Chaque personnage du rapport ennéagramme a une fiche « Son profil » (test de couverture).
 - Reste : mesurer la pagination PDF des 9 rapports ennéagramme ; phases dons (`GIFT:`) et type (`TYPE:`) ; fiches toutes « en cours de relecture ».
 - Pagination PDF ennéagramme mesurée (9 types, 15 pages chacun, aucune page < 35 %) : en PDF, la citation finale et la « question à méditer » passent en tête de la page « Pour grandir », et les fiches à lecture ne montrent que 5 épisodes.
+
+## 18/11/2026 — Bibliothèque de personnages rattachée aux dons (phase 2)
+- 15 dons × 2 figures : chaque figure a une fiche avec une lecture `GIFT:<CODE>` (`content/lectures/dons.json`, 29 lectures sur 21 fiches existantes) ; nouvelle fiche Philippe (`content/personnages/10-philippe.json`). `GiftProfiles` : slots remplacés par des personnages individuels (plus de groupes ni de paraboles : Les sept serviteurs, Églises de Macédoine, Bon Samaritain…).
+- Rapport des dons : section « Des figures bibliques qui ont ces dons » après les 3 dons principaux (fiches complètes à l'écran ; en PDF 2 épisodes par fiche, 21 pages, aucune page orpheline sur 8 combinaisons mesurées).
+- Citations des lectures vérifiées contre la LSG avec un script temporaire (extrait des « … » dans les traits) : à refaire pour toute nouvelle lecture. Piège : un macro Twig ne voit pas le contexte (paramètre `maxEpisodes` à passer explicitement).
+- Reste : phase type (16 types × 2 slots, lecture `TYPE:<CODE>`).

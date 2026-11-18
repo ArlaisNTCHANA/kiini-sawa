@@ -1,0 +1,1169 @@
+{
+ "ESDRAS": {
+  "lenses": {
+   "GIFT:ENSEIGNEMENT": {
+    "label": "Don d'enseignement",
+    "definition": "Expliquer la vérité avec clarté pour que d'autres comprennent et grandissent.",
+    "solidity": "Indices nombreux et clairs",
+    "traits": [
+     [
+      "Il se prépare avant d'enseigner",
+      "Il avait « appliqué son cœur à étudier et à mettre en pratique la loi de l'Éternel, et à enseigner ».",
+      "Esdras 7:10"
+     ],
+     [
+      "Il est reconnu comme versé dans le texte",
+      "Il est « scribe versé dans la loi de Moïse ».",
+      "Esdras 7:6"
+     ],
+     [
+      "On vient le chercher pour qu'il explique",
+      "Le peuple demande au scribe Esdras d'apporter le livre de la loi.",
+      "Néhémie 8:1"
+     ],
+     [
+      "Il fait comprendre, pas seulement lire",
+      "Ils « en donnaient le sens pour faire comprendre ce qu'ils avaient lu ».",
+      "Néhémie 8:8"
+     ]
+    ],
+    "absent": [
+     [
+      "L'enseignement par la parole seule",
+      "Le texte insiste d'abord sur sa propre mise en pratique (Esdras 7:10)."
+     ],
+     [
+      "Le travail en solitaire",
+      "À Jérusalem, il enseigne avec d'autres lévites (Néhémie 8:7-8)."
+     ]
+    ],
+    "limits": "Nous repérons des indices de ce don dans le texte, nous ne mesurons rien : un don se reconnaît aussi à ses fruits, et c'est l'Église qui le confirme.",
+    "why": "Comme lui, vous aimez comprendre la Parole et la rendre claire. Son récit montre l'ordre juste : étudier, vivre ce qu'on enseigne, puis transmettre."
+   },
+   "GIFT:CONNAISSANCE": {
+    "label": "Don de connaissance",
+    "definition": "Chercher, comprendre et mettre en lumière la vérité.",
+    "solidity": "Indices clairs",
+    "traits": [
+     [
+      "Il cherche d'abord",
+      "Il avait appliqué son cœur à « étudier » la loi de l'Éternel.",
+      "Esdras 7:10"
+     ],
+     [
+      "On le reconnaît comme savant",
+      "Le roi l'appelle « sacrificateur et scribe, versé dans la loi du Dieu des cieux ».",
+      "Esdras 7:12"
+     ],
+     [
+      "Il fait comprendre",
+      "Ils en donnaient le sens « pour faire comprendre ce qu'ils avaient lu ».",
+      "Néhémie 8:8"
+     ]
+    ],
+    "absent": [
+     [
+      "Le savoir pour lui-même",
+      "Chez lui, l'étude mène à la pratique (Esdras 7:10)."
+     ]
+    ],
+    "limits": "Peu d'informations sur sa personnalité, davantage sur sa mission. Nous repérons des indices, nous ne mesurons rien.",
+    "why": "Comme lui, vous cherchez à comprendre en profondeur. Son récit montre l'étude au service de la pratique et de l'enseignement."
+   }
+  }
+ },
+ "AQUILAS_PRISCILLE": {
+  "lenses": {
+   "GIFT:ENSEIGNEMENT": {
+    "label": "Don d'enseignement",
+    "definition": "Expliquer la vérité avec clarté pour que d'autres comprennent et grandissent.",
+    "solidity": "Un indice central, des indices autour",
+    "traits": [
+     [
+      "Ils enseignent en tête à tête",
+      "Ils prennent Apollos avec eux et lui exposent « plus exactement la voie de Dieu ».",
+      "Actes 18:26"
+     ],
+     [
+      "Ils enseignent avec humilité",
+      "Apollos était déjà « éloquent et versé dans les Écritures » ; ils l'instruisent à part, sans le reprendre à la synagogue.",
+      "Actes 18:24-26"
+     ],
+     [
+      "Ils enseignent par leur vie partagée",
+      "Paul demeure chez eux et y travaille : ils étaient faiseurs de tentes.",
+      "Actes 18:3"
+     ],
+     [
+      "Ils forment des responsables",
+      "Apollos, ainsi complété, se rend « très utile à ceux qui avaient cru ».",
+      "Actes 18:27"
+     ]
+    ],
+    "absent": [
+     [
+      "L'enseignement public",
+      "Le texte les montre enseigner en privé, jamais à la tribune."
+     ],
+     [
+      "L'initiative d'un seul",
+      "Ils agissent toujours ensemble, jamais séparément."
+     ]
+    ],
+    "limits": "Nous repérons des indices de ce don dans le texte, nous ne mesurons rien : un don se reconnaît aussi à ses fruits, et c'est l'Église qui le confirme.",
+    "why": "Comme eux, vous enseignez peut-être mieux de près, en dialogue. Leur récit montre un enseignement fait d'attention et de respect."
+   },
+   "GIFT:HOSPITALITE": {
+    "label": "Don d'hospitalité",
+    "definition": "Accueillir chaleureusement et faire que chacun se sente chez soi.",
+    "solidity": "Indices clairs et convergents",
+    "traits": [
+     [
+      "Ils ouvrent leur maison à l'étranger",
+      "Paul « demeura chez eux et y travailla » : ils étaient faiseurs de tentes.",
+      "Actes 18:3"
+     ],
+     [
+      "Leur maison devient une Église",
+      "« Saluez aussi l'Église qui est dans leur maison. »",
+      "Romains 16:5"
+     ],
+     [
+      "Ils le font partout où ils vont",
+      "D'Éphèse : « Aquilas et Priscille, avec l'Église qui est dans leur maison, vous saluent beaucoup dans le Seigneur. »",
+      "1 Corinthiens 16:19"
+     ],
+     [
+      "Ils accueillent aussi ceux qui ont besoin d'être repris",
+      "Ils prennent Apollos avec eux.",
+      "Actes 18:26"
+     ]
+    ],
+    "absent": [
+     [
+      "L'accueil sans risque",
+      "Ils ont exposé leur tête pour sauver la vie de Paul (Romains 16:4)."
+     ]
+    ],
+    "limits": "Nous repérons des indices de ce don dans le texte, nous ne mesurons rien : un don se reconnaît aussi à ses fruits, et c'est l'Église qui le confirme.",
+    "why": "Comme eux, vous faites de votre maison un lieu où l'on est chez soi. Leur récit montre une hospitalité qui bâtit l'Église."
+   }
+  }
+ },
+ "BARNABE": {
+  "lenses": {
+   "GIFT:EXHORTATION": {
+    "label": "Don d'exhortation",
+    "definition": "Encourager, consoler et pousser les autres à avancer.",
+    "solidity": "Indices nombreux et convergents",
+    "traits": [
+     [
+      "Son nom le dit",
+      "Les apôtres l'appellent Barnabas, « fils d'exhortation ».",
+      "Actes 4:36"
+     ],
+     [
+      "Il encourage à tenir",
+      "À Antioche, « il les exhorta tous à rester d'un cœur ferme attachés au Seigneur ».",
+      "Actes 11:23"
+     ],
+     [
+      "Il ouvre des portes aux autres",
+      "Il conduit Saul vers les apôtres.",
+      "Actes 9:27"
+     ],
+     [
+      "Il croit en ceux que d'autres écartent",
+      "Il voulait emmener aussi Jean, appelé Marc.",
+      "Actes 15:37"
+     ]
+    ],
+    "absent": [
+     [
+      "La mise en avant de lui-même",
+      "Il passe au second plan quand Paul prend la tête (Actes 13:13)."
+     ],
+     [
+      "La fermeté sans fléchir",
+      "Il se sépare de Paul à propos de Marc (Actes 15:39), mais il avait aussi été entraîné par l'hypocrisie (Galates 2:13)."
+     ]
+    ],
+    "limits": "Nous repérons des indices de ce don dans le texte, nous ne mesurons rien : un don se reconnaît aussi à ses fruits, et c'est l'Église qui le confirme.",
+    "why": "Comme lui, vous relevez et remettez en marche. Son récit montre que l'encouragement peut changer toute une vie, celle de Paul comme celle de Marc."
+   },
+   "GIFT:LIBERALITE": {
+    "label": "Don de libéralité",
+    "definition": "Donner ses ressources avec joie et générosité pour l'œuvre de Dieu.",
+    "solidity": "Un indice net, d'autres autour",
+    "traits": [
+     [
+      "Il se sépare de son bien",
+      "Il vend un champ, apporte l'argent et le dépose aux pieds des apôtres.",
+      "Actes 4:37"
+     ],
+     [
+      "Il donne de son temps et de sa personne",
+      "Il va chercher Saul à Tarse.",
+      "Actes 11:25"
+     ],
+     [
+      "Il est reconnu pour sa bonté",
+      "C'était « un homme de bien, plein d'Esprit-Saint et de foi ».",
+      "Actes 11:24"
+     ]
+    ],
+    "absent": [
+     [
+      "Le don pour être vu",
+      "Le texte ne dit rien de ses motifs, mais il donne là où Ananias et Saphira trichent (Actes 5:1-2)."
+     ]
+    ],
+    "limits": "Un seul verset parle de son argent ; le reste de ce qui est dit de lui concerne ses actions. Nous repérons des indices, nous ne mesurons rien.",
+    "why": "Comme lui, vous donnez sans réserve, et vous donnez aussi de vous-même. Son récit montre que la générosité va avec la foi."
+   }
+  }
+ },
+ "JONATHAN": {
+  "lenses": {
+   "GIFT:EXHORTATION": {
+    "label": "Don d'exhortation",
+    "definition": "Encourager, consoler et pousser les autres à avancer.",
+    "solidity": "Indices clairs",
+    "traits": [
+     [
+      "Il fortifie dans l'épreuve",
+      "Il va trouver David et « fortifia sa confiance en Dieu ».",
+      "1 Samuel 23:16"
+     ],
+     [
+      "Il rassure",
+      "« Ne crains rien. »",
+      "1 Samuel 23:17"
+     ],
+     [
+      "Il plaide pour l'ami absent",
+      "Il parle en faveur de David auprès de Saül, son père.",
+      "1 Samuel 19:4"
+     ],
+     [
+      "Il s'attache de tout son être",
+      "Son âme est « attachée à l'âme de David », et il l'aime comme son âme.",
+      "1 Samuel 18:1"
+     ]
+    ],
+    "absent": [
+     [
+      "S'imposer",
+      "Il s'efface au profit de David, héritier du trône à sa place (1 Samuel 18:4)."
+     ],
+     [
+      "Quitter son père",
+      "Il reste fidèle à Saül jusqu'à la fin (1 Samuel 31:2)."
+     ]
+    ],
+    "limits": "Nous repérons des indices de ce don dans le texte, nous ne mesurons rien : un don se reconnaît aussi à ses fruits, et c'est l'Église qui le confirme.",
+    "why": "Comme lui, vous êtes là au moment où l'autre doute. Son récit montre une amitié qui soutient sans chercher à retenir."
+   }
+  }
+ },
+ "MARTHE": {
+  "lenses": {
+   "GIFT:SERVICE": {
+    "label": "Don de service",
+    "definition": "Voir ce qui doit être fait et le faire, souvent dans l'ombre.",
+    "solidity": "Indices clairs (trois scènes)",
+    "traits": [
+     [
+      "Elle accueille et se met à l'ouvrage",
+      "Elle reçoit Jésus dans sa maison ; elle est « occupée à divers soins domestiques ».",
+      "Luc 10:38, 40"
+     ],
+     [
+      "Elle sert, tout simplement",
+      "Au souper de Béthanie, « Marthe servait ».",
+      "Jean 12:2"
+     ],
+     [
+      "Elle voit ce qu'il y a à faire",
+      "Elle se plaint que sa sœur la laisse seule pour servir.",
+      "Luc 10:40"
+     ],
+     [
+      "Elle va au-devant de celui qu'elle aime",
+      "À l'annonce de la venue de Jésus, elle va à sa rencontre.",
+      "Jean 11:20"
+     ]
+    ],
+    "absent": [
+     [
+      "S'arrêter pour recevoir",
+      "C'est Marie qui s'assoit et écoute (Luc 10:39)."
+     ],
+     [
+      "Servir sans compter",
+      "Elle demande qu'on l'aide (Luc 10:40) : le texte ne la montre pas patiente."
+     ]
+    ],
+    "limits": "Nous repérons des indices de ce don dans le texte, nous ne mesurons rien : un don se reconnaît aussi à ses fruits, et c'est l'Église qui le confirme.",
+    "why": "Comme elle, vous voyez le concret et vous le faites. Son récit montre que Jésus ne méprise pas le service, mais veut que vous receviez avant de donner."
+   }
+  }
+ },
+ "JOSUE": {
+  "lenses": {
+   "GIFT:SERVICE": {
+    "label": "Don de service",
+    "definition": "Voir ce qui doit être fait et le faire, souvent dans l'ombre.",
+    "solidity": "Indices clairs et convergents",
+    "traits": [
+     [
+      "Il sert pendant des années, sans titre",
+      "Josué, fils de Nun, est « serviteur de Moïse depuis sa jeunesse ».",
+      "Nombres 11:28"
+     ],
+     [
+      "Il reste là où l'on sert",
+      "Il ne quitte point l'intérieur de la tente.",
+      "Exode 33:11"
+     ],
+     [
+      "Il suit son maître dans la montagne",
+      "Moïse se lève avec Josué, son serviteur, et monte sur la montagne de Dieu.",
+      "Exode 24:13"
+     ],
+     [
+      "Il est prêt à défendre",
+      "Il combat Amalek, pendant que Moïse prie.",
+      "Exode 17:9-10"
+     ]
+    ],
+    "absent": [
+     [
+      "Le goût des premiers rôles",
+      "Il avait d'abord le souci de Moïse (Nombres 11:28), non de sa propre place."
+     ],
+     [
+      "Le moindre doute",
+      "Pour lui, l'ordre est de se fortifier, d'avoir du courage (Josué 1:6-7) : le service ne le rend pas sûr de lui."
+     ]
+    ],
+    "limits": "Nous repérons des indices de ce don dans le texte, nous ne mesurons rien : un don se reconnaît aussi à ses fruits, et c'est l'Église qui le confirme.",
+    "why": "Comme lui, vous servez dans l'ombre avant d'être appelé à autre chose. Son récit montre que cette fidélité prépare ce que Dieu confiera ensuite."
+   },
+   "GIFT:PRESIDENCE": {
+    "label": "Don de présidence",
+    "definition": "Donner une direction, rassembler et conduire un groupe vers un but.",
+    "solidity": "Indices clairs",
+    "traits": [
+     [
+      "Il donne des ordres et on le suit",
+      "Il commande aux officiers du peuple de se préparer, et ils répondent : « Nous ferons tout ce que tu nous as ordonné. »",
+      "Josué 1:10-11, 16"
+     ],
+     [
+      "Il appelle à un choix net",
+      "« Choisissez aujourd'hui qui vous voulez servir. »",
+      "Josué 24:15"
+     ],
+     [
+      "Il s'engage le premier",
+      "« Moi et ma maison, nous servirons l'Éternel. »",
+      "Josué 24:15"
+     ],
+     [
+      "Il reçoit un cap avant d'agir",
+      "« Fortifie-toi et prends courage. »",
+      "Josué 1:6"
+     ]
+    ],
+    "absent": [
+     [
+      "S'appuyer sur sa force",
+      "Dieu lui répète de ne pas craindre (Josué 1:9) : sa force n'est pas la sienne."
+     ],
+     [
+      "Toujours réussir",
+      "À Aï, il tombe la face contre terre après un échec (Josué 7:6)."
+     ]
+    ],
+    "limits": "Nous repérons des indices de ce don dans le texte, nous ne mesurons rien : un don se reconnaît aussi à ses fruits, et c'est l'Église qui le confirme.",
+    "why": "Comme lui, vous conduisez, et vous êtes suivi. Son récit montre qu'un chef tient parce que Dieu est avec lui."
+   }
+  }
+ },
+ "BOAZ": {
+  "lenses": {
+   "GIFT:LIBERALITE": {
+    "label": "Don de libéralité",
+    "definition": "Donner ses ressources avec joie et générosité pour l'œuvre de Dieu.",
+    "solidity": "Indices clairs (le livre de Ruth)",
+    "traits": [
+     [
+      "Il donne au-delà de ce qui est attendu",
+      "Il ordonne d'ôter pour elle quelques épis des gerbes, pour qu'elle les glane.",
+      "Ruth 2:16"
+     ],
+     [
+      "Il protège et nourrit",
+      "Il lui dit de rester près de ses servantes et l'invite à manger avec lui.",
+      "Ruth 2:8, 14"
+     ],
+     [
+      "Il donne avec abondance",
+      "Il lui remplit son manteau de six mesures d'orge.",
+      "Ruth 3:15"
+     ],
+     [
+      "Il paie le prix devant témoins",
+      "Il achète le champ et prend Ruth pour femme.",
+      "Ruth 4:9-10"
+     ]
+    ],
+    "absent": [
+     [
+      "Le don bruyant",
+      "Il agit sans bruit, et c'est Ruth qui s'étonne de sa bonté (Ruth 2:10)."
+     ],
+     [
+      "Le don qui humilie",
+      "Il demande qu'on la laisse glaner « sans lui faire de reproches » (Ruth 2:16)."
+     ]
+    ],
+    "limits": "Nous repérons des indices de ce don dans le texte, nous ne mesurons rien : un don se reconnaît aussi à ses fruits, et c'est l'Église qui le confirme.",
+    "why": "Comme lui, vous donnez avec largesse et discrétion. Son récit montre un don qui honore celui qui reçoit, et pointe vers le Rédempteur qui paie le prix."
+   }
+  }
+ },
+ "NEHEMIE": {
+  "lenses": {
+   "GIFT:PRESIDENCE": {
+    "label": "Don de présidence",
+    "definition": "Donner une direction, rassembler et conduire un groupe vers un but.",
+    "solidity": "Indices nombreux et clairs",
+    "traits": [
+     [
+      "Il rassemble autour d'un but",
+      "« Venez, rebâtissons la muraille de Jérusalem. »",
+      "Néhémie 2:17"
+     ],
+     [
+      "Il organise",
+      "Il pose une garde et répartit le peuple par familles, avec leurs épées, leurs lances et leurs arcs.",
+      "Néhémie 4:9, 13"
+     ],
+     [
+      "Il donne l'exemple",
+      "Ni lui, ni ses frères, ni ses serviteurs ne quittaient leurs vêtements.",
+      "Néhémie 4:23"
+     ],
+     [
+      "Il va jusqu'au bout",
+      "« La muraille fut achevée... en cinquante-deux jours. »",
+      "Néhémie 6:15"
+     ]
+    ],
+    "absent": [
+     [
+      "Décider sans prier",
+      "Avant de parler au roi, il prie : il ne fonce pas (Néhémie 1:4-11)."
+     ],
+     [
+      "Garder tout pour lui",
+      "Il refuse le salaire de gouverneur par égard pour le peuple (Néhémie 5:14-15)."
+     ]
+    ],
+    "limits": "Nous repérons des indices de ce don dans le texte, nous ne mesurons rien : un don se reconnaît aussi à ses fruits, et c'est l'Église qui le confirme.",
+    "why": "Comme lui, vous voyez un but et vous rassemblez les autres. Son récit montre une direction qui s'appuie d'abord sur la prière."
+   }
+  }
+ },
+ "RUTH": {
+  "lenses": {
+   "GIFT:MISERICORDE": {
+    "label": "Don de miséricorde",
+    "definition": "Ressentir la souffrance des autres et les secourir avec douceur.",
+    "solidity": "Indices clairs",
+    "traits": [
+     [
+      "Elle reste auprès de celle qui souffre",
+      "« Où tu iras j'irai, où tu demeureras je demeurerai. »",
+      "Ruth 1:16"
+     ],
+     [
+      "Elle porte la charge de l'autre",
+      "Elle dit à Naomi : « aller glaner des épis » pour les nourrir.",
+      "Ruth 2:2"
+     ],
+     [
+      "Elle s'attache, elle ne lâche pas",
+      "Orpa embrasse sa belle-mère, mais « Ruth s'attacha à elle ».",
+      "Ruth 1:14"
+     ],
+     [
+      "Sa bonté est vue de tous",
+      "Boaz lui dit qu'on lui a rapporté tout ce qu'elle a fait pour sa belle-mère.",
+      "Ruth 2:11"
+     ]
+    ],
+    "absent": [
+     [
+      "Ses propres plaintes",
+      "Le texte ne rapporte aucune plainte de sa part."
+     ],
+     [
+      "Les limites",
+      "Elle va jusqu'au bout, jusqu'à quitter son pays (Ruth 2:11)."
+     ]
+    ],
+    "limits": "Nous repérons des indices de ce don dans le texte, nous ne mesurons rien : un don se reconnaît aussi à ses fruits, et c'est l'Église qui le confirme.",
+    "why": "Comme elle, vous ressentez la peine des autres et vous restez. Son récit montre que Dieu voit la fidélité discrète et lui donne une place dans sa grande histoire."
+   }
+  }
+ },
+ "JOSEPH_JACOB": {
+  "lenses": {
+   "GIFT:MISERICORDE": {
+    "label": "Don de miséricorde",
+    "definition": "Ressentir la souffrance des autres et les secourir avec douceur.",
+    "solidity": "Indices nombreux et clairs",
+    "traits": [
+     [
+      "Il pleure pour ceux qui l'ont blessé",
+      "Il s'éloigne de ses frères et pleure.",
+      "Genèse 42:24"
+     ],
+     [
+      "Il éloigne la honte",
+      "« Ne vous affligez pas... c'est pour vous sauver la vie que Dieu m'a envoyé devant vous. »",
+      "Genèse 45:5"
+     ],
+     [
+      "Il console",
+      "« Il les consola, en parlant à leur cœur. »",
+      "Genèse 50:21"
+     ],
+     [
+      "Il pourvoit",
+      "Il nourrit son père, ses frères et toute leur famille.",
+      "Genèse 47:12"
+     ]
+    ],
+    "absent": [
+     [
+      "La vengeance",
+      "Il aurait pu se venger, et il ne le fait pas (Genèse 50:19)."
+     ],
+     [
+      "La froideur",
+      "Il éprouve ses frères avant de se révéler (Genèse 42:9), mais pleure à plusieurs reprises (43:30)."
+     ]
+    ],
+    "limits": "Nous repérons des indices de ce don dans le texte, nous ne mesurons rien : un don se reconnaît aussi à ses fruits, et c'est l'Église qui le confirme.",
+    "why": "Comme lui, vous êtes touché par la souffrance, même de ceux qui vous ont fait du tort. Son récit montre que la miséricorde voit la main de Dieu derrière le mal."
+   }
+  }
+ },
+ "ELIE": {
+  "lenses": {
+   "GIFT:PROPHETIE": {
+    "label": "Don de prophétie",
+    "definition": "Recevoir et transmettre une parole qui édifie, exhorte et console.",
+    "solidity": "Indices nombreux et clairs",
+    "traits": [
+     [
+      "Il parle de la part de Dieu",
+      "« L'Éternel est vivant, le Dieu d'Israël, dont je suis le serviteur. »",
+      "1 Rois 17:1"
+     ],
+     [
+      "Il appelle au choix",
+      "« Jusqu'à quand clocherez-vous des deux côtés ? »",
+      "1 Rois 18:21"
+     ],
+     [
+      "Il dit la vérité au roi",
+      "Dieu lui fait dire, au sujet du meurtre de Naboth : « N'es-tu pas un assassin et un voleur ? »",
+      "1 Rois 21:19"
+     ],
+     [
+      "Il prie pour que Dieu se montre",
+      "Il demande que le peuple sache que l'Éternel est Dieu.",
+      "1 Rois 18:36-37"
+     ]
+    ],
+    "absent": [
+     [
+      "La douceur du ton",
+      "Il est direct, même face au roi (1 Rois 18:17-18)."
+     ],
+     [
+      "La constance",
+      "Après le Carmel, il fuit et demande à mourir (1 Rois 19:3-4)."
+     ]
+    ],
+    "limits": "Nous repérons des indices de ce don dans le texte, nous ne mesurons rien : un don se reconnaît aussi à ses fruits, et c'est l'Église qui le confirme.",
+    "why": "Comme lui, vous portez une parole que d'autres n'osent pas dire. Son récit montre le coût de la prophétie, et le Dieu qui relève le prophète épuisé."
+   }
+  }
+ },
+ "JEAN_BAPTISTE": {
+  "lenses": {
+   "GIFT:PROPHETIE": {
+    "label": "Don de prophétie",
+    "definition": "Recevoir et transmettre une parole qui édifie, exhorte et console.",
+    "solidity": "Indices nombreux et clairs",
+    "traits": [
+     [
+      "Il reçoit la parole et la proclame",
+      "« La parole de Dieu fut adressée à Jean. »",
+      "Luc 3:2"
+     ],
+     [
+      "Il appelle à la repentance",
+      "« Repentez-vous, car le royaume des cieux est proche. »",
+      "Matthieu 3:2"
+     ],
+     [
+      "Il dit la vérité à ceux qui ont le pouvoir",
+      "À Hérode : « Il ne t'est pas permis d'avoir la femme de ton frère. »",
+      "Marc 6:18"
+     ],
+     [
+      "Il montre quelqu'un d'autre que lui",
+      "« Voici l'Agneau de Dieu » ; « Il faut qu'il croisse, et que je diminue. »",
+      "Jean 1:29 ; 3:30"
+     ]
+    ],
+    "absent": [
+     [
+      "Chercher à se faire un nom",
+      "Il se tient en retrait devant Jésus (Jean 3:30)."
+     ],
+     [
+      "La certitude permanente",
+      "En prison, il envoie demander si Jésus est bien celui qui devait venir (Matthieu 11:2-3)."
+     ]
+    ],
+    "limits": "Nous repérons des indices de ce don dans le texte, nous ne mesurons rien : un don se reconnaît aussi à ses fruits, et c'est l'Église qui le confirme.",
+    "why": "Comme lui, vous portez une parole juste, quitte à déranger. Son récit montre que le prophète ne parle jamais de lui-même : il désigne le Christ."
+   }
+  }
+ },
+ "SALOMON": {
+  "lenses": {
+   "GIFT:SAGESSE": {
+    "label": "Don de sagesse",
+    "definition": "Appliquer la vérité avec justesse aux situations concrètes.",
+    "solidity": "Indices nombreux (début du règne)",
+    "traits": [
+     [
+      "Il la demande à Dieu",
+      "« Accorde donc à ton serviteur un cœur intelligent pour juger ton peuple, pour discerner le bien du mal. »",
+      "1 Rois 3:9"
+     ],
+     [
+      "Elle se voit dans les décisions",
+      "On vit que « la sagesse de Dieu était en lui pour le diriger dans ses jugements ».",
+      "1 Rois 3:28"
+     ],
+     [
+      "Elle attire de loin",
+      "La reine de Séba vient l'éprouver par des énigmes.",
+      "1 Rois 10:1"
+     ]
+    ],
+    "absent": [
+     [
+      "La persévérance",
+      "Plus tard, ses femmes détournent son cœur (1 Rois 11:4) : la sagesse reçue ne le garde pas de tomber."
+     ]
+    ],
+    "limits": "Les trois premiers indices viennent du début de son règne, le dernier de sa fin. Nous repérons des indices, nous ne mesurons rien.",
+    "why": "Comme lui, vous aimez voir juste dans les situations concrètes. Son récit commence par une demande humble, et finit par un avertissement : la sagesse reçue demande d'y rester fidèle."
+   }
+  }
+ },
+ "DANIEL": {
+  "lenses": {
+   "GIFT:SAGESSE": {
+    "label": "Don de sagesse",
+    "definition": "Appliquer la vérité avec justesse aux situations concrètes.",
+    "solidity": "Indices nombreux et clairs",
+    "traits": [
+     [
+      "Dieu la lui donne",
+      "À lui et à ses compagnons, Dieu accorde « de la science, de l'intelligence dans toutes les lettres, et de la sagesse ».",
+      "Daniel 1:17"
+     ],
+     [
+      "Il parle avec tact",
+      "Face au chef des gardes du roi, il « s'adressa d'une manière prudente et sensée » à Arjoc.",
+      "Daniel 2:14"
+     ],
+     [
+      "Il en rend gloire à Dieu",
+      "« Il y a dans les cieux un Dieu qui révèle les secrets. »",
+      "Daniel 2:28"
+     ],
+     [
+      "Il demande à l'avance de quoi respecter sa conscience",
+      "Il demande au chef des eunuques de ne pas se souiller.",
+      "Daniel 1:8"
+     ]
+    ],
+    "absent": [
+     [
+      "S'attribuer le mérite",
+      "Il dit que ce secret ne lui a pas été révélé à cause d'une sagesse supérieure en lui (Daniel 2:30)."
+     ],
+     [
+      "Le conseil de complaisance",
+      "Il refuse les présents de Belschatsar et lui lit l'écriture sans adoucir (Daniel 5:17-23)."
+     ]
+    ],
+    "limits": "Nous repérons des indices de ce don dans le texte, nous ne mesurons rien : un don se reconnaît aussi à ses fruits, et c'est l'Église qui le confirme.",
+    "why": "Comme lui, vous appliquez ce que vous savez aux situations concrètes, avec tact. Son récit montre que la sagesse vient d'en haut et ne se garde pas pour soi."
+   },
+   "GIFT:INTERCESSION": {
+    "label": "Don d'intercession",
+    "definition": "Prier avec persévérance pour les autres et pour l'œuvre de Dieu.",
+    "solidity": "Indices clairs",
+    "traits": [
+     [
+      "Il prie avec constance",
+      "Il se mettait à genoux trois fois par jour ; il priait et louait son Dieu.",
+      "Daniel 6:10"
+     ],
+     [
+      "Il intercède pour son peuple",
+      "Il se tourne vers le Seigneur pour recourir à la prière et aux supplications, en jeûnant.",
+      "Daniel 9:3"
+     ],
+     [
+      "Il s'inclut dans la faute",
+      "« Nous avons péché, nous avons commis l'iniquité. »",
+      "Daniel 9:5"
+     ],
+     [
+      "Il appelle Dieu à agir pour sa gloire",
+      "« Écoute, Seigneur ! Pardonne, Seigneur ! »",
+      "Daniel 9:19"
+     ]
+    ],
+    "absent": [
+     [
+      "Prier pour son avantage",
+      "Il ne plaide pas ses mérites, mais les compassions de Dieu (Daniel 9:18)."
+     ]
+    ],
+    "limits": "Nous repérons des indices de ce don dans le texte, nous ne mesurons rien : un don se reconnaît aussi à ses fruits, et c'est l'Église qui le confirme.",
+    "why": "Comme lui, vous priez avec persévérance pour d'autres, sans vous exclure de la faute. Son récit montre une prière appuyée sur la grâce."
+   }
+  }
+ },
+ "APOLLOS": {
+  "lenses": {
+   "GIFT:CONNAISSANCE": {
+    "label": "Don de connaissance",
+    "definition": "Chercher, comprendre et mettre en lumière la vérité.",
+    "solidity": "Indices clairs (quelques versets)",
+    "traits": [
+     [
+      "Il connaît les Écritures",
+      "Il est « versé dans les Écritures ».",
+      "Actes 18:24"
+     ],
+     [
+      "Il les met en lumière",
+      "Il démontre « par les Écritures que Jésus est le Christ ».",
+      "Actes 18:28"
+     ],
+     [
+      "Il est instruit, et enseignable",
+      "Il avait été instruit dans la voie du Seigneur, et il accepte d'être repris par Aquilas et Priscille.",
+      "Actes 18:25-26"
+     ],
+     [
+      "Il reconnaît que Dieu fait croître",
+      "Paul : « J'ai planté, Apollos a arrosé, mais Dieu a fait croître. »",
+      "1 Corinthiens 3:6"
+     ]
+    ],
+    "absent": [
+     [
+      "La connaissance complète",
+      "Il ne connaissait que le baptême de Jean (Actes 18:25)."
+     ],
+     [
+      "Le désir de se faire des disciples",
+      "Il ne se rend pas à Corinthe malgré l'insistance de Paul (1 Corinthiens 16:12) : le texte n'en dit pas la raison."
+     ]
+    ],
+    "limits": "Quelques versets seulement parlent de lui. Nous repérons des indices, nous ne mesurons rien.",
+    "why": "Comme lui, vous aimez chercher, comprendre et mettre en lumière la vérité. Son récit montre que le savoir se complète quand on accepte d'être instruit."
+   }
+  }
+ },
+ "ABRAHAM": {
+  "lenses": {
+   "GIFT:FOI": {
+    "label": "Don de foi",
+    "definition": "Croire avec assurance que Dieu agira, et entraîner les autres dans cette confiance.",
+    "solidity": "Indices nombreux et clairs",
+    "traits": [
+     [
+      "Il se met en route sur la parole",
+      "« Abram partit, comme l'Éternel le lui avait dit. »",
+      "Genèse 12:4"
+     ],
+     [
+      "Il fait confiance",
+      "« Abram eut confiance en l'Éternel, qui le lui imputa à justice. »",
+      "Genèse 15:6"
+     ],
+     [
+      "Il tient sans voir",
+      "Il partit « sans savoir où il allait ».",
+      "Hébreux 11:8"
+     ],
+     [
+      "Il compte sur la promesse",
+      "Il a « la pleine conviction que ce qu'il promet il peut aussi l'accomplir ».",
+      "Romains 4:21"
+     ]
+    ],
+    "absent": [
+     [
+      "La foi sans chute",
+      "Il a aussi menti par crainte (Genèse 12:12-13) et cédé à Saraï (16:2)."
+     ],
+     [
+      "L'effort",
+      "Sa justice lui est « imputée » (Genèse 15:6) : elle est reçue, pas gagnée."
+     ]
+    ],
+    "limits": "Nous repérons des indices de ce don dans le texte, nous ne mesurons rien : un don se reconnaît aussi à ses fruits, et c'est l'Église qui le confirme.",
+    "why": "Comme lui, vous croyez que Dieu agira, et vous vous mettez en route. Son récit montre que sa foi s'appuie sur la promesse, pas sur sa constance."
+   },
+   "GIFT:HOSPITALITE": {
+    "label": "Don d'hospitalité",
+    "definition": "Accueillir chaleureusement et faire que chacun se sente chez soi.",
+    "solidity": "Indices clairs (un récit central)",
+    "traits": [
+     [
+      "Il court accueillir",
+      "Il court au-devant des trois visiteurs et se prosterne.",
+      "Genèse 18:2"
+     ],
+     [
+      "Il met tout en œuvre",
+      "Il se hâte d'aller trouver Sara, et fait préparer du pain, du lait et un veau.",
+      "Genèse 18:6-8"
+     ],
+     [
+      "Il reste auprès d'eux",
+      "Il se tient lui-même auprès d'eux, sous l'arbre, pendant qu'ils mangent.",
+      "Genèse 18:8"
+     ],
+     [
+      "Il ne sait pas à qui il ouvre",
+      "Certains, en pratiquant l'hospitalité, « ont logé des anges, sans le savoir ».",
+      "Hébreux 13:2"
+     ]
+    ],
+    "absent": [
+     [
+      "Les limites",
+      "Le texte ne parle pas de ce que cet accueil lui coûte."
+     ]
+    ],
+    "limits": "Une scène centrale, et un commentaire du Nouveau Testament. Nous repérons des indices, nous ne mesurons rien.",
+    "why": "Comme lui, vous ouvrez votre porte d'instinct. Son récit montre que celui qui accueille reçoit plus qu'il ne donne : une promesse (Genèse 18:10)."
+   }
+  }
+ },
+ "NOE": {
+  "lenses": {
+   "GIFT:FOI": {
+    "label": "Don de foi",
+    "definition": "Croire avec assurance que Dieu agira, et entraîner les autres dans cette confiance.",
+    "solidity": "Indices clairs",
+    "traits": [
+     [
+      "Il obéit à ce qu'on ne voit pas encore",
+      "« C'est par la foi que Noé, divinement averti des choses qu'on ne voyait pas encore... construisit une arche pour sauver sa famille. »",
+      "Hébreux 11:7"
+     ],
+     [
+      "Il fait tout ce qui est demandé",
+      "« Il exécuta tout ce que Dieu lui avait ordonné. »",
+      "Genèse 6:22"
+     ],
+     [
+      "Il marche avec Dieu",
+      "Il « marchait avec Dieu ».",
+      "Genèse 6:9"
+     ],
+     [
+      "Il remercie à la sortie",
+      "Il bâtit un autel à l'Éternel.",
+      "Genèse 8:20"
+     ]
+    ],
+    "absent": [
+     [
+      "Entraîner les autres",
+      "Le texte le montre sauvant sa famille, pas la foule (Hébreux 11:7)."
+     ],
+     [
+      "Une foi sans faille",
+      "Après le déluge, il tombe dans l'ivresse (Genèse 9:21)."
+     ]
+    ],
+    "limits": "Nous repérons des indices de ce don dans le texte, nous ne mesurons rien : un don se reconnaît aussi à ses fruits, et c'est l'Église qui le confirme.",
+    "why": "Comme lui, vous croyez ce que Dieu dit avant de le voir. Son récit montre une foi qui construit, longtemps, sous le regard des autres."
+   }
+  }
+ },
+ "PIERRE": {
+  "lenses": {
+   "GIFT:DISCERNEMENT": {
+    "label": "Don de discernement",
+    "definition": "Distinguer le vrai du faux, ce qui vient de Dieu et ce qui n'en vient pas.",
+    "solidity": "Indices clairs (quelques scènes)",
+    "traits": [
+     [
+      "Il voit clair derrière les apparences",
+      "« Ananias, pourquoi Satan a-t-il rempli ton cœur, au point que tu mentes au Saint-Esprit ? »",
+      "Actes 5:3"
+     ],
+     [
+      "Il distingue le faux zèle",
+      "À Simon : « Ton cœur n'est pas droit devant Dieu. »",
+      "Actes 8:21"
+     ],
+     [
+      "Il le dit avec franchise",
+      "« Je vois que tu es dans un fiel amer et dans les liens de l'iniquité. »",
+      "Actes 8:23"
+     ]
+    ],
+    "absent": [
+     [
+      "L'infaillibilité",
+      "Lui-même est repris par Paul pour son hypocrisie (Galates 2:11-14)."
+     ],
+     [
+      "Le discernement sur lui-même",
+      "Il ne voit pas venir son reniement (Matthieu 26:33-35)."
+     ]
+    ],
+    "limits": "Quelques scènes précises. Nous repérons des indices, nous ne mesurons rien.",
+    "why": "Comme lui, vous sentez ce qui sonne faux. Son récit montre qu'un discernement sûr va avec l'humilité : lui-même a eu besoin d'être repris."
+   },
+   "GIFT:PASTORAT": {
+    "label": "Don de pastorat",
+    "definition": "Prendre soin d'un groupe dans la durée, le nourrir et le protéger.",
+    "solidity": "Indices nombreux et clairs",
+    "traits": [
+     [
+      "Jésus lui confie son troupeau",
+      "« Pais mes agneaux... Pais mes brebis. »",
+      "Jean 21:15-17"
+     ],
+     [
+      "Il appelle les autres à faire de même",
+      "« Paissez le troupeau de Dieu qui est sous votre garde. »",
+      "1 Pierre 5:2"
+     ],
+     [
+      "Il visite",
+      "Il visitait tous les saints.",
+      "Actes 9:32"
+     ],
+     [
+      "Il conduit par l'exemple",
+      "Il demande d'être « les modèles du troupeau ».",
+      "1 Pierre 5:3"
+     ]
+    ],
+    "absent": [
+     [
+      "La domination",
+      "Il dit lui-même de ne pas dominer sur ceux qui nous sont confiés (1 Pierre 5:3)."
+     ],
+     [
+      "La perfection",
+      "Il a renié Jésus trois fois (Matthieu 26:69-75) avant d'être appelé à paître."
+     ]
+    ],
+    "limits": "Nous repérons des indices de ce don dans le texte, nous ne mesurons rien : un don se reconnaît aussi à ses fruits, et c'est l'Église qui le confirme.",
+    "why": "Comme lui, vous prenez soin des autres dans la durée. Son récit montre que Jésus confie ses brebis à celui qui a failli et qui a été restauré."
+   }
+  }
+ },
+ "PAUL": {
+  "lenses": {
+   "GIFT:DISCERNEMENT": {
+    "label": "Don de discernement",
+    "definition": "Distinguer le vrai du faux, ce qui vient de Dieu et ce qui n'en vient pas.",
+    "solidity": "Indices clairs (plusieurs scènes)",
+    "traits": [
+     [
+      "Il discerne l'esprit à l'œuvre",
+      "Il dit à l'esprit qui parlait par la jeune fille : « Je t'ordonne, au nom de Jésus-Christ, de sortir d'elle. »",
+      "Actes 16:18"
+     ],
+     [
+      "Il reconnaît la ruse",
+      "À Élymas : « Homme plein de toute espèce de ruse et de fraude. »",
+      "Actes 13:10"
+     ],
+     [
+      "Il avertit les responsables",
+      "Il annonce qu'il « s'élèvera du milieu de vous des hommes qui enseigneront des choses pernicieuses ». ",
+      "Actes 20:30"
+     ],
+     [
+      "Il protège les Églises",
+      "Il met en garde contre les faux apôtres, qui se déguisent en apôtres de Christ.",
+      "2 Corinthiens 11:13"
+     ]
+    ],
+    "absent": [
+     [
+      "Les yeux fermés sur lui-même",
+      "Il se dit « le premier » des pécheurs (1 Timothée 1:15), loin de toute assurance."
+     ],
+     [
+      "Le discernement sans amour",
+      "Il écrit aussi que la connaissance enfle, mais que la charité édifie (1 Corinthiens 8:1)."
+     ]
+    ],
+    "limits": "Nous repérons des indices de ce don dans le texte, nous ne mesurons rien : un don se reconnaît aussi à ses fruits, et c'est l'Église qui le confirme.",
+    "why": "Comme lui, vous voyez vite ce qui est vrai et ce qui ne l'est pas, et vous protégez ceux qui vous sont confiés. Son récit montre que le discernement sert l'Église et non l'ego."
+   },
+   "GIFT:EVANGELISATION": {
+    "label": "Don d'évangélisation",
+    "definition": "Partager la foi avec naturel et conduire d'autres à la découvrir.",
+    "solidity": "Indices très nombreux",
+    "traits": [
+     [
+      "Il en est fier",
+      "« Je n'ai point honte de l'Évangile. »",
+      "Romains 1:16"
+     ],
+     [
+      "Il s'adapte à chacun",
+      "« Je me suis fait tout à tous, afin d'en sauver de toute manière quelques-uns. »",
+      "1 Corinthiens 9:22"
+     ],
+     [
+      "Il part de ce que les gens connaissent",
+      "À Athènes, il part d'un autel avec cette inscription : « À un dieu inconnu ! »",
+      "Actes 17:23"
+     ],
+     [
+      "Il ne peut pas se taire",
+      "« Malheur à moi si je n'annonce pas l'Évangile ! »",
+      "1 Corinthiens 9:16"
+     ]
+    ],
+    "absent": [
+     [
+      "La retenue",
+      "Il prêche même en prison et dans les tribunaux (Actes 16:25-31 ; 26:1-29)."
+     ]
+    ],
+    "limits": "Nous repérons des indices de ce don dans le texte, nous ne mesurons rien : un don se reconnaît aussi à ses fruits, et c'est l'Église qui le confirme.",
+    "why": "Comme lui, vous parlez de votre foi avec naturel, en partant de là où sont les autres. Son récit montre que l'Évangile est une grâce reçue, pas une technique."
+   }
+  }
+ },
+ "TIMOTHEE": {
+  "lenses": {
+   "GIFT:PASTORAT": {
+    "label": "Don de pastorat",
+    "definition": "Prendre soin d'un groupe dans la durée, le nourrir et le protéger.",
+    "solidity": "Indices clairs (lettres de Paul)",
+    "traits": [
+     [
+      "Il prend à cœur les autres",
+      "Paul n'a personne d'autre qui prenne ainsi à cœur la situation des Philippiens.",
+      "Philippiens 2:20"
+     ],
+     [
+      "Il est appelé à veiller",
+      "« Veille sur toi-même et sur ton enseignement. »",
+      "1 Timothée 4:16"
+     ],
+     [
+      "Il doit transmettre",
+      "« Ce que tu as entendu de moi... confie-le à des hommes fidèles. »",
+      "2 Timothée 2:2"
+     ],
+     [
+      "Il est envoyé aux Églises",
+      "Paul l'envoie fortifier et exhorter les Thessaloniciens.",
+      "1 Thessaloniciens 3:2"
+     ]
+    ],
+    "absent": [
+     [
+      "L'assurance",
+      "Paul doit lui rappeler de ne pas avoir honte (2 Timothée 1:7-8)."
+     ],
+     [
+      "L'autorité naturelle",
+      "Paul lui demande que personne ne méprise sa jeunesse (1 Timothée 4:12)."
+     ]
+    ],
+    "limits": "Nous repérons des indices de ce don dans le texte, nous ne mesurons rien : un don se reconnaît aussi à ses fruits, et c'est l'Église qui le confirme.",
+    "why": "Comme lui, vous prenez soin d'un groupe, parfois sans vous sentir à la hauteur. Son récit montre que Dieu donne « un esprit de force, d'amour et de sagesse » (2 Timothée 1:7)."
+   }
+  }
+ },
+ "MOISE": {
+  "lenses": {
+   "GIFT:INTERCESSION": {
+    "label": "Don d'intercession",
+    "definition": "Prier avec persévérance pour les autres et pour l'œuvre de Dieu.",
+    "solidity": "Indices nombreux et clairs",
+    "traits": [
+     [
+      "Il prie pour un peuple qui l'a trahi",
+      "Après le veau d'or, il implore l'Éternel, son Dieu.",
+      "Exode 32:11"
+     ],
+     [
+      "Il s'offre à la place des autres",
+      "« Pardonne maintenant leur péché ! Sinon, efface-moi de ton livre. »",
+      "Exode 32:32"
+     ],
+     [
+      "Il intercède quand on crie vers lui",
+      "Le peuple crie à Moïse, Moïse prie l'Éternel, et le feu s'éteint.",
+      "Nombres 11:2"
+     ],
+     [
+      "Il est soutenu pour tenir",
+      "Aaron et Hur soutenaient ses mains, et le peuple l'emportait.",
+      "Exode 17:11-12"
+     ]
+    ],
+    "absent": [
+     [
+      "Prier seul",
+      "Il tient parce que d'autres soutiennent ses mains (Exode 17:12)."
+     ],
+     [
+      "La toute-puissance de sa prière",
+      "Il est exclu de la terre promise (Nombres 20:12) ; sa prière n'obtient pas tout (Deutéronome 3:23-26)."
+     ]
+    ],
+    "limits": "Nous repérons des indices de ce don dans le texte, nous ne mesurons rien : un don se reconnaît aussi à ses fruits, et c'est l'Église qui le confirme.",
+    "why": "Comme lui, vous portez les autres devant Dieu. Son récit montre l'intercession, et préfigure celui qui s'est vraiment mis à la place du peuple : le Christ."
+   }
+  }
+ }
+}

@@ -1,0 +1,124 @@
+{
+ "PHILIPPE": {
+  "name": "Philippe",
+  "aliases": [
+   "Philippe"
+  ],
+  "relecture": "en cours",
+  "title": "L'évangéliste qui s'approche du char",
+  "refs": "Actes 6 ; 8 ; 21",
+  "who": "Philippe est l'un des sept hommes choisis à Jérusalem pour le service des tables (Actes 6:5). Dispersé après la mort d'Étienne, il annonce le Christ en Samarie, puis sur la route de Gaza à un eunuque éthiopien, et s'établit à Césarée, où l'on le nomme « l'évangéliste » (Actes 21:8).",
+  "lenses": {
+   "GIFT:EVANGELISATION": {
+    "label": "Don d'évangélisation",
+    "definition": "Partager la foi avec naturel et conduire d'autres à la découvrir.",
+    "solidity": "Indices nombreux et clairs (deux scènes développées)",
+    "traits": [
+     [
+      "Il annonce là où il est envoyé",
+      "Il descend à Samarie et y prêche le Christ.",
+      "Actes 8:5"
+     ],
+     [
+      "Il va vers les gens, sur leur chemin",
+      "Il accourt vers le char et demande : « Comprends-tu ce que tu lis ? »",
+      "Actes 8:30"
+     ],
+     [
+      "Il part de ce que l'autre lit",
+      "Il ouvre la bouche et, « commençant par ce passage », lui annonce la bonne nouvelle de Jésus.",
+      "Actes 8:35"
+     ],
+     [
+      "Il continue de ville en ville",
+      "Il évangélise toutes les villes par lesquelles il passe, jusqu'à Césarée.",
+      "Actes 8:40"
+     ]
+    ],
+    "absent": [
+     [
+      "Les grands discours",
+      "Le texte le montre dans des conversations, d'un à un (Actes 8:30-35)."
+     ],
+     [
+      "La maîtrise du résultat",
+      "Il ne donne pas l'Esprit : les apôtres viennent pour cela (Actes 8:14-17)."
+     ]
+    ],
+    "limits": "Quelques chapitres des Actes. Nous repérons des indices, nous ne mesurons rien : un don se reconnaît aussi à ses fruits, et c'est l'Église qui le confirme.",
+    "why": "Comme lui, vous parlez de votre foi avec naturel, en vous approchant de l'autre avec une question plutôt qu'un discours. Son récit montre que le message est toujours le Christ."
+   }
+  },
+  "episodes": [
+   {
+    "title": "Un des sept",
+    "ref": "Actes 6:3-6",
+    "text": "Les apôtres demandent qu'on choisisse sept hommes de bon témoignage, pleins d'Esprit-Saint et de sagesse, pour le service. Philippe est l'un d'eux.",
+    "quote": {
+     "ref": "Actes 6:3",
+     "text": "choisissez parmi vous sept hommes, de qui l'on rende un bon témoignage"
+    }
+   },
+   {
+    "title": "La Samarie",
+    "ref": "Actes 8:5-8",
+    "text": "Il descend à Samarie et y prêche le Christ. Les foules sont attentives, des malades sont guéris, et il y a une grande joie dans la ville.",
+    "quote": {
+     "ref": "Actes 8:5",
+     "text": "Philippe, étant descendu dans la ville de Samarie, y prêcha le Christ."
+    }
+   },
+   {
+    "title": "Va vers ce char",
+    "ref": "Actes 8:26-30",
+    "text": "Un ange l'envoie sur un chemin désert. Il y trouve un Éthiopien, ministre de la reine, qui lit Ésaïe. L'Esprit lui dit d'approcher ; Philippe accourt.",
+    "quote": {
+     "ref": "Actes 8:30",
+     "text": "Comprends-tu ce que tu lis?"
+    }
+   },
+   {
+    "title": "Commençant par ce passage",
+    "ref": "Actes 8:31-35",
+    "text": "L'eunuque répond qu'il a besoin d'un guide, et invite Philippe à s'asseoir avec lui. Le passage est celui du serviteur souffrant ; Philippe lui annonce Jésus.",
+    "quote": {
+     "ref": "Actes 8:35",
+     "text": "Alors Philippe, ouvrant la bouche et commençant par ce passage, lui annonça la bonne nouvelle de Jésus."
+    }
+   },
+   {
+    "title": "Le baptême",
+    "ref": "Actes 8:36-39",
+    "text": "L'eunuque demande ce qui l'empêche d'être baptisé. Philippe le baptise, puis l'Esprit l'enlève ; l'eunuque poursuit sa route, joyeux.",
+    "quote": {
+     "ref": "Actes 8:37",
+     "text": "Je crois que Jésus-Christ est le Fils de Dieu."
+    }
+   },
+   {
+    "title": "Philippe l'évangéliste",
+    "ref": "Actes 8:40 ; 21:8-9",
+    "text": "Il évangélise toutes les villes jusqu'à Césarée, où Paul loge chez lui des années plus tard. Il a quatre filles qui prophétisent.",
+    "quote": {
+     "ref": "Actes 21:8",
+     "text": "dans la maison de Philippe l'évangéliste, qui était l'un des sept"
+    }
+   }
+  ],
+  "weakness": "Le texte ne signale aucune faute de Philippe. Sa limite est celle de tout évangéliste : il annonce, mais il ne donne ni la foi ni l'Esprit. À Samarie, les apôtres doivent venir pour que les croyants reçoivent le Saint-Esprit (Actes 8:14-17), et l'Esprit enlève Philippe dès que sa tâche est faite (Actes 8:39).",
+  "grace": "Philippe est d'abord un serviteur des tables (Actes 6:5), pas un orateur : Dieu l'envoie sur un chemin désert pour une seule personne. La grâce, ici, est l'initiative de Dieu : un ange parle, l'Esprit dit « Avance », et l'eunuque lisait déjà. Philippe n'a qu'à s'approcher.",
+  "christ": "Philippe ne prêche pas un système : il annonce Jésus à partir d'Ésaïe 53. Le serviteur « mené comme une brebis à la boucherie » est le Fils de Dieu, que l'eunuque confesse (Actes 8:35, 37). Toute l'Écriture, pour Philippe, mène au Christ.",
+  "quotes": [
+   {
+    "ref": "Actes 8:35",
+    "text": "lui annonça la bonne nouvelle de Jésus"
+   },
+   {
+    "ref": "Ésaïe 53:7",
+    "text": "Il a été maltraité et opprimé, Et il n'a point ouvert la bouche"
+   }
+  ],
+  "question": "Qui Dieu met-il sur mon chemin, que j'ai peur d'approcher ?",
+  "step": "Cette semaine, poser une vraie question (« Qu'est-ce que tu lis, ou qu'est-ce qui te porte en ce moment ? ») à une personne qui ne partage pas votre foi."
+ }
+}

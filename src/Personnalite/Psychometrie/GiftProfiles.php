@@ -24,7 +24,7 @@ final class GiftProfiles
             'church' => 'Groupes d\'étude biblique, école du dimanche, formation des nouveaux, écriture de supports.',
             'daily' => 'Transmettre un savoir au travail, aider les enfants dans leurs devoirs, former un collègue.',
             'dangers' => ['Privilégier le savoir sur l\'amour (1 Co 8.1)', 'Corriger plus qu\'enseigner'],
-            'figures' => [['Esdras', 'Esdras 7.10', 'Il étudie, met en pratique, puis enseigne la loi au peuple.'], ['Priscille et Aquilas', 'Actes 18.26', 'Ils prennent Apollos à part pour lui exposer plus exactement la voie de Dieu.']],
+            'figures' => [['Esdras', 'Esdras 7.10', 'Il étudie, met en pratique, puis enseigne la loi au peuple.'], ['Aquilas et Priscille', 'Actes 18.26', 'Ils prennent Apollos à part pour lui exposer plus exactement la voie de Dieu.']],
             'read' => 'Romains 12.7 ; 2 Timothée 2.2', 'action' => 'Proposer d\'animer une étude ou une séance de formation dans votre groupe.',
         ],
         'EXHORTATION' => [
@@ -33,7 +33,7 @@ final class GiftProfiles
             'church' => 'Accompagnement, mentorat, suivi des nouveaux, messages d\'encouragement, visites.',
             'daily' => 'Soutenir un collègue en difficulté, encourager vos enfants, être un ami qui relève.',
             'dangers' => ['Encourager sans dire la vérité', 'S\'épuiser à porter tout le monde'],
-            'figures' => [['Barnabé', 'Actes 11.23', 'Il exhorte les nouveaux croyants d\'Antioche à rester attachés au Seigneur.'], ['Jonathan', '1 Samuel 23.16', 'Il va trouver David dans le désert et fortifie sa confiance en Dieu.']],
+            'figures' => [['Barnabé', 'Actes 4.36 ; 11.23', '« Fils d\'exhortation » : il encourage les croyants d\'Antioche à rester attachés au Seigneur.'], ['Jonathan', '1 Samuel 23.16', 'Il va vers David et fortifie sa confiance en Dieu.']],
             'read' => 'Romains 12.8 ; 1 Thessaloniciens 5.11', 'action' => 'Écrire un message d\'encouragement à trois personnes cette semaine.',
         ],
         'SERVICE' => [
@@ -42,7 +42,7 @@ final class GiftProfiles
             'church' => 'Logistique, accueil, installation, technique, entraide pratique.',
             'daily' => 'Aider un voisin, soutenir une équipe par votre fiabilité, être présent dans les moments concrets.',
             'dangers' => ['Ne jamais savoir dire non', 'Juger ceux qui servent moins'],
-            'figures' => [['Les sept serviteurs', 'Actes 6.1–6', 'Choisis pour servir aux tables, ils libèrent les apôtres pour la prière et la parole.'], ['Phœbé', 'Romains 16.1–2', 'Servante de l\'Église de Cenchrées, elle a aidé beaucoup de monde, dont Paul.']],
+            'figures' => [['Marthe', 'Luc 10.38–40 ; Jean 12.2', 'Elle accueille et sert : le service concret, avec ses fatigues.'], ['Josué', 'Exode 33.11 ; Nombres 11.28', 'Serviteur de Moïse depuis sa jeunesse, il ne quitte pas la tente.']],
             'read' => 'Romains 12.7 ; 1 Pierre 4.10–11', 'action' => 'Rejoindre une équipe de service pour trois mois.',
         ],
         'LIBERALITE' => [
@@ -51,7 +51,7 @@ final class GiftProfiles
             'church' => 'Soutien de projets et de missions, aide aux familles dans le besoin, bourses.',
             'daily' => 'Générosité réfléchie, gestion sage de l\'argent, soutien discret de personnes.',
             'dangers' => ['Donner pour contrôler', 'Chercher la reconnaissance'],
-            'figures' => [['Les Églises de Macédoine', '2 Corinthiens 8.1–5', 'Dans une grande pauvreté, elles donnent au-delà de leurs moyens, avec joie.'], ['La veuve aux deux petites pièces', 'Marc 12.41–44', 'Elle donne tout ce qu\'elle a pour vivre ; Jésus la cite en exemple.']],
+            'figures' => [['Boaz', 'Ruth 2 ; 3.15', 'Il donne largement à Ruth, en préservant sa dignité.'], ['Barnabé', 'Actes 4.37', 'Il vend un champ et en dépose le prix aux pieds des apôtres.']],
             'read' => 'Romains 12.8 ; 2 Corinthiens 9.7', 'action' => 'Choisir une œuvre ou une personne à soutenir régulièrement.',
         ],
         'PRESIDENCE' => [
@@ -60,7 +60,7 @@ final class GiftProfiles
             'church' => 'Responsabilité de ministère, coordination d\'événements, conseil, conduite de projets.',
             'daily' => 'Diriger une équipe, organiser une association, conduire votre foyer avec sagesse.',
             'dangers' => ['Diriger sans servir', 'Confondre autorité et contrôle'],
-            'figures' => [['Néhémie', 'Néhémie 2–4', 'Il organise la reconstruction des murailles, répartit le travail et tient bon dans l\'opposition.'], ['Moïse', 'Exode 18.13–26', 'Conseillé par Jéthro, il apprend à déléguer et à organiser le peuple.']],
+            'figures' => [['Néhémie', 'Néhémie 2 ; 4 ; 6', 'Il rassemble le peuple, organise la défense et achève la muraille en cinquante-deux jours.'], ['Josué', 'Josué 1 ; 24', 'Il conduit le peuple dans le pays et l\'appelle à choisir qui il servira.']],
             'read' => 'Romains 12.8 ; Marc 10.42–45', 'action' => 'Proposer de coordonner un projet concret dans votre communauté.',
         ],
         'MISERICORDE' => [
@@ -69,7 +69,7 @@ final class GiftProfiles
             'church' => 'Visites aux malades, aux personnes âgées, aux prisonniers ; aide aux personnes fragiles ; écoute.',
             'daily' => 'Être présent pour un proche malade, soutenir un collègue en deuil, aider les plus vulnérables.',
             'dangers' => ['Porter la souffrance au point de s\'effondrer', 'Excuser ce qui doit être corrigé'],
-            'figures' => [['Le bon Samaritain', 'Luc 10.30–37', 'Il voit, s\'approche, soigne et prend en charge le blessé que d\'autres ont évité.'], ['Tabitha (Dorcas)', 'Actes 9.36–39', 'Elle était riche en bonnes œuvres et prenait soin des veuves.']],
+            'figures' => [['Ruth', 'Ruth 1.16 ; 2.2', 'Elle reste auprès de Naomi et va glaner pour la nourrir.'], ['Joseph, fils de Jacob', 'Genèse 45 ; 50', 'Il pleure, pardonne à ses frères et les console.']],
             'read' => 'Romains 12.8 ; Matthieu 25.35–40', 'action' => 'Rendre visite à une personne malade, isolée ou âgée ce mois-ci.',
         ],
         'PROPHETIE' => [
@@ -78,7 +78,7 @@ final class GiftProfiles
             'church' => 'Parole d\'encouragement, intercession, discernement des temps, toujours dans le cadre et sous la conduite des responsables de l\'Église.',
             'daily' => 'Dire une parole vraie et utile au bon moment, avec amour et humilité.',
             'dangers' => ['Parler sans se soumettre à l\'examen des autres (1 Co 14.29)', 'Confondre son opinion et une parole reçue'],
-            'figures' => [['Agabus', 'Actes 11.28 ; 21.10–11', 'Il annonce une famine, et l\'Église s\'organise pour aider ; sa parole est éprouvée par les faits.'], ['Les filles de Philippe', 'Actes 21.9', 'Quatre filles qui prophétisaient, au sein d\'une famille ouverte à l\'Esprit.']],
+            'figures' => [['Élie', '1 Rois 17 ; 18 ; 21', 'Il porte la parole de Dieu, jusque devant le roi.'], ['Jean-Baptiste', 'Matthieu 3 ; Jean 3.30', 'Il appelle à la repentance et désigne Jésus : « Il faut qu\'il croisse, et que je diminue. »']],
             'read' => 'Romains 12.6 ; 1 Corinthiens 14.3', 'action' => 'Parler avec un responsable de votre Église de la manière d\'exercer ce don dans un cadre sain.',
         ],
         'SAGESSE' => [
@@ -87,7 +87,7 @@ final class GiftProfiles
             'church' => 'Conseil, médiation, accompagnement des décisions, participation au conseil d\'Église.',
             'daily' => 'Aider un ami à décider, apaiser un conflit familial, conseiller au travail.',
             'dangers' => ['Conseiller sans écouter', 'S\'appuyer sur sa propre sagesse plutôt que sur Dieu'],
-            'figures' => [['Salomon', '1 Rois 3.16–28', 'Face aux deux mères, il trouve la décision qui révèle la vérité.'], ['Abigaïl', '1 Samuel 25.23–33', 'Par une parole sage, elle empêche David de commettre l\'irréparable.']],
+            'figures' => [['Salomon', '1 Rois 3.9', 'Il demande un cœur intelligent pour discerner le bien du mal.'], ['Daniel', 'Daniel 1 ; 2', 'Il s\'adresse avec prudence aux puissants et rend gloire à Dieu qui révèle les secrets.']],
             'read' => '1 Corinthiens 12.8 ; Jacques 3.17', 'action' => 'Proposer votre écoute à une personne qui doit prendre une décision.',
         ],
         'CONNAISSANCE' => [
@@ -96,7 +96,7 @@ final class GiftProfiles
             'church' => 'Recherche biblique, préparation de contenus, bibliothèque, soutien aux enseignants.',
             'daily' => 'Expertise professionnelle, recherche, transmission de savoirs utiles.',
             'dangers' => ['L\'orgueil du savoir', 'L\'étude sans mise en pratique'],
-            'figures' => [['Luc', 'Luc 1.1–4', 'Il fait des recherches exactes depuis l\'origine pour écrire un récit ordonné.'], ['Les Béréens', 'Actes 17.11', 'Ils examinent chaque jour les Écritures pour vérifier ce qu\'on leur dit.']],
+            'figures' => [['Apollos', 'Actes 18.24–28', 'Versé dans les Écritures, il démontre que Jésus est le Christ.'], ['Esdras', 'Esdras 7.10', 'Il s\'applique à étudier la loi de l\'Éternel.']],
             'read' => '1 Corinthiens 12.8 ; Colossiens 2.2–3', 'action' => 'Préparer une fiche d\'étude pour votre groupe sur un sujet qui vous passionne.',
         ],
         'FOI' => [
@@ -105,7 +105,7 @@ final class GiftProfiles
             'church' => 'Projets pionniers, prière pour les situations difficiles, lancement d\'œuvres nouvelles.',
             'daily' => 'Garder espoir dans les épreuves, encourager votre famille dans la confiance.',
             'dangers' => ['Confondre foi et imprudence', 'Mépriser les doutes des autres'],
-            'figures' => [['Abraham', 'Romains 4.18–21', 'Espérant contre toute espérance, il croit à la promesse de Dieu.'], ['La femme cananéenne', 'Matthieu 15.21–28', 'Elle persévère dans sa demande ; Jésus admire la grandeur de sa foi.']],
+            'figures' => [['Abraham', 'Genèse 12 ; 15.6', 'Il part sur la parole de Dieu, et croit à sa promesse.'], ['Noé', 'Genèse 6 ; Hébreux 11.7', 'Il construit l\'arche, averti de ce qu\'on ne voyait pas encore.']],
             'read' => '1 Corinthiens 12.9 ; Hébreux 11.1', 'action' => 'Porter dans la prière, chaque jour pendant un mois, un projet qui vous semble impossible.',
         ],
         'DISCERNEMENT' => [
@@ -114,7 +114,7 @@ final class GiftProfiles
             'church' => 'Conseil, protection d\'une communauté, évaluation de projets et d\'enseignements.',
             'daily' => 'Évaluer une proposition, protéger votre famille de mauvaises influences.',
             'dangers' => ['Devenir soupçonneux', 'Juger les personnes au lieu d\'éclairer les situations'],
-            'figures' => [['Pierre face à Ananias', 'Actes 5.1–11', 'Il perçoit le mensonge caché derrière un don apparemment généreux.'], ['Paul à Philippes', 'Actes 16.16–18', 'Il discerne l\'esprit qui se cache derrière des paroles flatteuses.']],
+            'figures' => [['Pierre', 'Actes 5 ; 8.20–23', 'Il démasque le mensonge d\'Ananias et le faux zèle de Simon.'], ['Paul', 'Actes 13.8–11 ; 16.16–18', 'Il reconnaît l\'œuvre de l\'esprit mauvais et la ruse d\'Élymas.']],
             'read' => '1 Corinthiens 12.10 ; 1 Jean 4.1', 'action' => 'Proposer votre regard sur un projet de votre communauté, avec humilité.',
         ],
         'HOSPITALITE' => [
@@ -123,7 +123,7 @@ final class GiftProfiles
             'church' => 'Accueil, repas, groupes de maison, intégration des nouveaux, hébergement.',
             'daily' => 'Ouvrir votre maison, accueillir un collègue nouveau, créer des moments conviviaux.',
             'dangers' => ['Chercher la perfection dans l\'accueil', 'S\'épuiser à recevoir sans se reposer'],
-            'figures' => [['Abraham à Mamré', 'Genèse 18.1–8', 'Il court au-devant de trois inconnus et leur prépare un repas : il accueille le Seigneur.'], ['Lydie', 'Actes 16.15', 'Elle insiste pour accueillir Paul et ses compagnons dans sa maison.']],
+            'figures' => [['Abraham', 'Genèse 18.1–8', 'Il court au-devant de trois visiteurs et leur prépare un repas.'], ['Aquilas et Priscille', 'Actes 18.3 ; Romains 16.5', 'Ils accueillent Paul, puis une Église dans leur maison.']],
             'read' => '1 Pierre 4.9 ; Hébreux 13.2', 'action' => 'Inviter à votre table une personne nouvelle ou isolée ce mois-ci.',
         ],
         'EVANGELISATION' => [
@@ -132,7 +132,7 @@ final class GiftProfiles
             'church' => 'Témoignage, actions de proximité, parcours de découverte de la foi, accueil des chercheurs.',
             'daily' => 'Vivre et dire votre foi au travail, avec vos voisins, dans vos amitiés.',
             'dangers' => ['Compter les résultats', 'Oublier l\'accompagnement après la découverte'],
-            'figures' => [['Philippe', 'Actes 8.26–40', 'Il rejoint l\'eunuque éthiopien sur la route et lui annonce Jésus à partir du texte qu\'il lit.'], ['La Samaritaine', 'Jean 4.28–30, 39', 'Elle court dans sa ville dire « Venez voir », et beaucoup croient.']],
+            'figures' => [['Philippe', 'Actes 8', 'Il annonce Jésus à l\'eunuque éthiopien, à partir du passage qu\'il lit.'], ['Paul', 'Actes 17 ; 1 Corinthiens 9.22', 'Il se fait tout à tous pour en sauver quelques-uns.']],
             'read' => 'Éphésiens 4.11 ; 1 Pierre 3.15', 'action' => 'Prier pour trois personnes de votre entourage et chercher une occasion de partager votre foi.',
         ],
         'PASTORAT' => [
@@ -141,7 +141,7 @@ final class GiftProfiles
             'church' => 'Responsable de cellule ou de groupe de maison, accompagnement d\'un groupe, suivi des membres.',
             'daily' => 'Prendre soin de votre famille, accompagner une équipe, veiller sur vos amis.',
             'dangers' => ['Vouloir tout porter seul', 'Créer de la dépendance plutôt que de l\'autonomie'],
-            'figures' => [['Pierre', 'Jean 21.15–17 ; 1 Pierre 5.2–3', 'Restauré par Jésus, il reçoit la mission : « Pais mes brebis. »'], ['Timothée', '1 Timothée 4.12–16', 'Jeune responsable de l\'Église d\'Éphèse, appelé à être un modèle et à veiller sur l\'enseignement.']],
+            'figures' => [['Pierre', 'Jean 21.15–17 ; 1 Pierre 5.2', '« Pais mes brebis » : il est appelé à prendre soin du troupeau.'], ['Timothée', '1 Timothée 4 ; Philippiens 2.20', 'Il prend à cœur les Églises, et on lui demande de veiller sur elles.']],
             'read' => 'Éphésiens 4.11 ; Actes 20.28', 'action' => 'Prendre des nouvelles régulières de deux ou trois personnes que vous accompagnez.',
         ],
         'INTERCESSION' => [
@@ -150,7 +150,7 @@ final class GiftProfiles
             'church' => 'Équipes de prière, soutien spirituel de projets, de missionnaires et de responsables.',
             'daily' => 'Porter votre famille, vos collègues et votre ville dans la prière.',
             'dangers' => ['Prier sans agir quand l\'action est nécessaire', 'Porter seul des fardeaux trop lourds'],
-            'figures' => [['Épaphras', 'Colossiens 4.12', 'Il combat sans cesse dans ses prières pour l\'Église de Colosses.'], ['Moïse', 'Exode 32.11–14', 'Il intercède pour le peuple qui a péché, et Dieu l\'entend.']],
+            'figures' => [['Moïse', 'Exode 32.11–32', 'Il plaide pour le peuple qui l\'a trahi.'], ['Daniel', 'Daniel 9', 'Il prie pour son peuple et s\'inclut dans la faute.']],
             'read' => '1 Timothée 2.1 ; Jacques 5.16', 'action' => 'Tenir un carnet de prière pour dix personnes pendant un mois.',
         ],
     ];

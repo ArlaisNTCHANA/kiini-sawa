@@ -141,4 +141,18 @@ class BiblicalFiguresTest extends TestCase
             }
         }
     }
+
+    public function testEveryGiftFigureHasALensSheet(): void
+    {
+        foreach (\App\Personnalite\Psychometrie\GiftProfiles::GIFTS as $code => $g) {
+            $this->assertCount(2, $g['figures'], $code);
+            foreach ($g['figures'] as $f) {
+                $sheet = BiblicalFigures::find($f[0]);
+                $this->assertNotNull($sheet, 'Pas de fiche pour '.$f[0]);
+                $lens = $sheet['lenses']['GIFT:'.$code] ?? null;
+                $this->assertNotNull($lens, $f[0].' sans lecture GIFT:'.$code);
+                $this->assertGreaterThanOrEqual(3, \count($lens['traits']));
+            }
+        }
+    }
 }

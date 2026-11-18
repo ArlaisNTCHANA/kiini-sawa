@@ -79,6 +79,17 @@
 </div>
 {% endfor %}
 
+{# ═══ Figures bibliques de vos dons ═══ #}
+<div class="dr-page">
+    <div class="dr-kicker">Dans les Écritures</div>
+    <h2>Des figures bibliques qui ont ces dons</h2>
+    <p class="dr-lead">Le texte biblique ne parle pas de « dons » comme nous le faisons : pour chaque personnage, voici les indices que le récit donne du don concerné, puis ce que sa vie dit du Christ. Ce sont des illustrations, non une interprétation savante.</p>
+    {% for g in gf.top %}{% for sheet in g.figureSheets %}{% if sheet and sheet.lenses['GIFT:' ~ g.code] is defined %}
+    <div class="dr-kicker" style="color: {{ g.family.dark }}; margin-top: 14px;">{{ g.name }}</div>
+    {% include 'personnalite/assessment/report/_figure_sheet.html.twig' with {fig: sheet, lens: 'GIFT:' ~ g.code, why: sheet.lenses['GIFT:' ~ g.code].why, pdf: pdf, pc: g.family.color, maxEpisodes: 2} only %}
+    {% endif %}{% endfor %}{% endfor %}
+</div>
+
 {# ═══ Les 15 dons ═══ #}
 <div class="dr-page">
     <div class="dr-kicker">Vue d'ensemble</div>

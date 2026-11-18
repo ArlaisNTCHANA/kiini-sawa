@@ -6,10 +6,10 @@
 {% set darks = darks|default({D: '#991B1B', I: '#854D0E', S: '#166534', C: '#1E40AF'}) %}
 {% set profiles = profiles|default({}) %}
 {% set levelText = {3: 'indices nombreux et convergents', 2: 'indices réels, moins nombreux', 1: 'indices indirects'} %}
-{% macro story(fig, pdf, pc, serif, profiles, darks, lights, lens) %}
+{% macro story(fig, pdf, pc, serif, profiles, darks, lights, lens, maxEpisodes) %}
     <p style="margin: 8px 0;">{{ fig.who }}</p>
     <div class="dr-label" style="margin-top: 12px; color: {{ pc }};">Le récit, épisode par épisode</div>
-    {% for e in (pdf and lens is defined and lens ? fig.episodes|slice(0, 5) : fig.episodes) %}
+    {% for e in (pdf and lens is defined and lens ? fig.episodes|slice(0, maxEpisodes|default(5)) : fig.episodes) %}
         <div style="margin: 0 0 8px; page-break-inside: avoid;">
             <div><strong>{{ e.title }}</strong> <span class="dr-small">· {{ e.ref }}</span>
                 {% for t in (lens ? [] : e.tags|default([])) %}<span style="font-size: {{ pdf ? '7pt' : '.68rem' }}; font-weight: bold; color: {{ darks[t[0]] }}; background: {{ lights[t[0]] }}; padding: 1px 6px; border-radius: 8px;">{{ t[0] }} · {{ t[1] }}</span> {% endfor %}</div>
@@ -90,11 +90,11 @@
     {# 2. Le lien avec le lecteur, puis le récit et les commentaires #}
     <p style="margin: 0 0 4px; color: #1E293B;"><strong>Pourquoi lui, pour vous ?</strong> {{ why }}</p>
     {% if pdf %}
-        {{ _self.story(fig, pdf, pc, serif, profiles, darks, lights, lens) }}
+        {{ _self.story(fig, pdf, pc, serif, profiles, darks, lights, lens, maxEpisodes|default(5)) }}
     {% else %}
         <details style="margin-top: 10px;">
             <summary style="cursor: pointer; font-weight: 700; color: {{ pc }};">Lire le récit et les commentaires</summary>
-            {{ _self.story(fig, pdf, pc, serif, profiles, darks, lights, lens) }}
+            {{ _self.story(fig, pdf, pc, serif, profiles, darks, lights, lens, maxEpisodes|default(5)) }}
         </details>
     {% endif %}
 </div>

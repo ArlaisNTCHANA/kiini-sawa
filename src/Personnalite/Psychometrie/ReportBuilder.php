@@ -277,7 +277,8 @@ final class ReportBuilder
             $families[$key] = $f + ['avg' => (int) round(array_sum($vals) / \count($vals))];
         }
         $top = array_map(fn ($g) => Content::get('gifts.gifts')[$g] + Content::get('gifts.profiles')[$g] + ['score' => $scores['scores'][$g], 'code' => $g, 'strength' => self::giftStrength($scores['scores'][$g]),
-            'family' => Content::get('gifts.families')[GiftProfiles::familyOf($g)]], $scores['top']);
+            'family' => Content::get('gifts.families')[GiftProfiles::familyOf($g)],
+            'figureSheets' => array_map(fn ($f) => BiblicalFigures::find($f[0]), Content::get('gifts.profiles')[$g]['figures'])], $scores['top']);
         uasort($families, fn ($a, $b) => $b['avg'] <=> $a['avg']);
 
         return ['gifts' => ['top' => $top, 'bars' => $bars, 'families' => $families, 'mainFamily' => array_key_first($families),
