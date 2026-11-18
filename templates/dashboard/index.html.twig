@@ -20,6 +20,8 @@
         .dash-hero-quote p { font-size: 1rem !important; line-height: 1.55 !important; }
         .dash-wrap { gap: 1.5rem; padding-top: 1rem; }
         .dash-step-cta { display: none; }
+        /* L'action du moment d'abord, sur téléphone */
+        .next-step { order: -1; margin: 0 !important; }
     }
     @media (min-width: 1024px) {
         .dash-wrap {
@@ -233,11 +235,40 @@
         </div>
     </section>
 
+    {# Ma prochaine étape : une seule action en tête (NextStep), puis deux « ensuite » #}
+    {% if nextStep|default(null) %}
+        <section class="ks-card ks-card--accent next-step" data-next-step="{{ nextStep.kind }}"{% if nextStep.kind == 'journey' %} data-journey-reminder{% elseif nextStep.kind == 'journey-start' %} data-journey-invite{% endif %} style="max-width: 1100px; margin: 1.25rem auto 0;">
+            <p class="ks-eyebrow" style="margin: 0;"><i data-lucide="{{ nextStep.icon }}" class="ks-ico" aria-hidden="true"></i> Ma prochaine étape · {{ nextStep.eyebrow }}</p>
+            <div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: .8rem 1.25rem; margin-top: .35rem;">
+                <div style="flex: 1 1 320px; min-width: 0;">
+                    <p class="next-step__title">{{ nextStep.title }}</p>
+                    <p class="next-step__text">{{ nextStep.text }}</p>
+                </div>
+                <a href="{{ path(nextStep.route, nextStep.params) }}{{ nextStep.fragment ? '#' ~ nextStep.fragment : '' }}" class="ks-btn ks-btn--primary">{{ nextStep.cta }}</a>
+            </div>
+            {% if nextStep.then|length %}
+                <p class="next-step__then"><span>Ensuite :</span>
+                    {% for t in nextStep.then %}<a href="{{ path(t.route, t.params) }}">{{ t.title }}</a>{{ loop.last ? '' : ' · ' }}{% endfor %}
+                </p>
+            {% endif %}
+        </section>
+        <style>
+            .next-step__title { font-family: var(--font-serif); font-size: 1.35rem; line-height: 1.25; margin: 0; color: var(--fg); }
+            .next-step__text { margin: .3rem 0 0; color: var(--fg-muted); }
+            .next-step__then { margin: .9rem 0 0; font-size: .88rem; color: var(--fg-muted); }
+            .next-step__then span { font-weight: 700; margin-right: .25rem; }
+            .next-step__then a { color: var(--primary); font-weight: 600; text-decoration: none; }
+            @media (max-width: 560px) { .next-step .ks-btn { width: 100%; justify-content: center; } }
+        </style>
+    {% endif %}
+
     {# Proposition d'activer les notifications (application installée uniquement) #}
     {% include 'shared/_push_toggle.html.twig' with {compact: true} %}
 
     {# Parcours de 90 jours (livre, annexe A) #}
-    {% if journeyWeek|default(null) %}
+    {% if nextStep|default(null) %}
+        {# le parcours est présenté dans « Ma prochaine étape » (action principale ou « ensuite ») #}
+    {% elseif journeyWeek|default(null) %}
         <section class="ks-card" data-journey-reminder style="max-width: 1100px; margin: 1.25rem auto 0; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: .8rem;">
             <div>
                 <p class="ks-eyebrow" style="margin: 0;">Mon parcours de 90 jours · semaine {{ journeyWeek.n }} sur 13</p>

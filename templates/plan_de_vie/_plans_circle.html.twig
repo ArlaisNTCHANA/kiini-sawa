@@ -6,18 +6,18 @@
 {% set plans = constant('App\\PlanDeVie\\Service\\PlanCatalog::PLANS') %}
 {% set pos = {
     VIE:           {x: 360, y: 300, r: 84, name: 'Plan de Vie',   css: 'vie'},
-    CROISSANCE:    {x: 360, y: 82,  r: 62, name: 'Croissance',    css: 'croissance'},
-    DEVELOPPEMENT: {x: 566, y: 232, r: 62, name: 'Développement', sub: 'personnel', css: 'developpement'},
-    HYGIENE:       {x: 488, y: 474, r: 62, name: 'Hygiène de vie', css: 'hygiene'},
-    INTENDANCE:    {x: 232, y: 474, r: 62, name: 'Intendance',    css: 'intendance'},
-    TRANSMISSION:  {x: 154, y: 232, r: 62, name: 'Transmission',  css: 'transmission'},
+    CROISSANCE:    {x: 360, y: 82,  r: 72, name: 'Croissance',    css: 'croissance'},
+    DEVELOPPEMENT: {x: 566, y: 232, r: 72, name: 'Développement', sub: 'personnel', css: 'developpement'},
+    HYGIENE:       {x: 488, y: 474, r: 72, name: 'Hygiène de vie', css: 'hygiene'},
+    INTENDANCE:    {x: 232, y: 474, r: 72, name: 'Intendance',    css: 'intendance'},
+    TRANSMISSION:  {x: 154, y: 232, r: 72, name: 'Transmission',  css: 'transmission'},
 } %}
 {% set firstOpen = null %}
 {% for key in pos|keys %}{% if firstOpen is null and planProgress[key].percent < 100 and key not in (lockedPlans ?? []) %}{% set firstOpen = key %}{% endif %}{% endfor %}
 {% set initial = firstOpen ?? 'VIE' %}
 
 <section class="pc" data-plans-circle data-initial="{{ initial }}" aria-label="Mes six plans et leur progression">
-    <svg viewBox="0 0 720 560" class="pc__svg" role="group" aria-label="Le cercle des six plans">
+    <svg viewBox="48 -4 624 576" class="pc__svg" role="group" aria-label="Le cercle des six plans">
         <circle cx="360" cy="300" r="268" class="pc__system"/>
         <text x="360" y="22" text-anchor="middle" class="pc__system-label">LE SYSTÈME</text>
         {% for key, p in pos %}
@@ -30,9 +30,9 @@
                 <circle cx="{{ p.x }}" cy="{{ p.y }}" r="{{ ringR }}" class="pc__track"/>
                 <circle cx="{{ p.x }}" cy="{{ p.y }}" r="{{ ringR }}" class="pc__ring" style="stroke: var(--plan-{{ p.css }}); stroke-dasharray: {{ (circ * pr.percent / 100)|round(1) }} {{ circ|round(1) }};" transform="rotate(-90 {{ p.x }} {{ p.y }})"/>
                 <circle cx="{{ p.x }}" cy="{{ p.y }}" r="{{ p.r }}" class="pc__disc" style="fill: var(--plan-{{ p.css }});"/>
-                <text x="{{ p.x }}" y="{{ p.y - (key == 'VIE' ? 4 : (p.sub is defined ? 12 : 6)) }}" text-anchor="middle" class="pc__name{{ key == 'VIE' ? ' pc__name--big' }}">{{ p.name }}</text>
-                {% if p.sub is defined %}<text x="{{ p.x }}" y="{{ p.y + 3 }}" text-anchor="middle" class="pc__name">{{ p.sub }}</text>{% endif %}
-                <text x="{{ p.x }}" y="{{ p.y + (key == 'VIE' ? 24 : (p.sub is defined ? 22 : 18)) }}" text-anchor="middle" class="pc__pct">{{ locked ? 'PRO' : pr.percent ~ ' %' }}</text>
+                <text x="{{ p.x }}" y="{{ p.y - (key == 'VIE' ? 4 : (p.sub is defined ? 14 : 7)) }}" text-anchor="middle" class="pc__name{{ key == 'VIE' ? ' pc__name--big' }}">{{ p.name }}</text>
+                {% if p.sub is defined %}<text x="{{ p.x }}" y="{{ p.y + 5 }}" text-anchor="middle" class="pc__name">{{ p.sub }}</text>{% endif %}
+                <text x="{{ p.x }}" y="{{ p.y + (key == 'VIE' ? 24 : (p.sub is defined ? 26 : 22)) }}" text-anchor="middle" class="pc__pct">{{ locked ? 'PRO' : pr.percent ~ ' %' }}</text>
             </a>
         {% endfor %}
     </svg>
@@ -64,6 +64,8 @@
     @media (min-width: 900px) { .pc { grid-template-columns: 1.25fr 1fr; align-items: center; } }
     .pc__svg { width: 100%; height: auto; max-width: 620px; margin: 0 auto; display: block; }
     .pc__system { fill: var(--primary-soft); stroke: var(--sage); stroke-width: 2; stroke-dasharray: 8 7; }
+    @media (max-width: 560px) { .pc__system-label { display: none; } }
+    @media (max-width: 420px) { .pc__name { font-size: 15px; } }
     .pc__system-label { font: 700 12px var(--font-sans); letter-spacing: .18em; fill: var(--primary-dark); }
     .pc__node { cursor: pointer; outline: none; }
     .pc__track { fill: none; stroke: var(--mist); stroke-width: 6; }
@@ -72,9 +74,9 @@
     .pc__node:hover .pc__disc, .pc__node:focus-visible .pc__disc, .pc__node.is-active .pc__disc { transform: scale(1.06); }
     .pc__node:focus-visible .pc__track, .pc__node.is-active .pc__track { stroke: var(--gold); }
     .pc__node.is-locked { opacity: .55; }
-    .pc__name { font: 700 14px var(--font-sans); fill: #fff; pointer-events: none; }
+    .pc__name { font: 700 16px var(--font-sans); fill: #fff; pointer-events: none; }
     .pc__name--big { font: 600 20px var(--font-serif); }
-    .pc__pct { font: 600 13px var(--font-sans); fill: rgba(255,255,255,.85); pointer-events: none; }
+    .pc__pct { font: 600 15px var(--font-sans); fill: rgba(255,255,255,.85); pointer-events: none; }
     .pc__title { font-family: var(--font-serif); font-size: 1.25rem; margin: .1rem 0 .6rem; display: flex; align-items: center; gap: .5rem; flex-wrap: wrap; }
     .pc__steps { list-style: none; padding: 0; margin: 0 0 1rem; display: grid; gap: .35rem; font-size: .92rem; color: var(--fg-light); }
     .pc__steps li.is-done { color: var(--fg-muted); text-decoration: line-through; text-decoration-color: var(--border-strong); }

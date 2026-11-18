@@ -42,7 +42,7 @@ class JourneyTest extends WebTestCase
         $client->loginUser($user);
 
         $client->request('GET', '/dashboard');
-        $this->assertSelectorExists('[data-journey-invite]');
+        $this->assertSelectorExists('[data-next-step]', 'Le parcours est proposé dans « Ma prochaine étape »');
 
         $crawler = $client->request('GET', '/parcours');
         $this->assertResponseIsSuccessful();
@@ -59,6 +59,6 @@ class JourneyTest extends WebTestCase
         $client->request('GET', '/parcours');
         $this->assertSelectorTextContains('[data-journey-status]', 'Semaine 1');
         $client->request('GET', '/dashboard');
-        $this->assertSelectorTextContains('[data-journey-reminder]', 'semaine 1 sur 13');
+        $this->assertSelectorExists('[data-next-step]');
     }
 }

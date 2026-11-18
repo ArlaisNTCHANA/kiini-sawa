@@ -37,7 +37,7 @@ class DashboardController extends AbstractController
     }
 
     #[Route('/dashboard', name: 'app_dashboard')]
-    public function index(EntityManagerInterface $entityManager, DashboardData $dashboard, \App\Defis\Service\ChallengeService $challenges): Response
+    public function index(EntityManagerInterface $entityManager, DashboardData $dashboard, \App\Defis\Service\ChallengeService $challenges, \App\Dashboard\Service\NextStep $nextStep): Response
     {
         /** @var User $user */
         $user = $this->getUser();
@@ -56,6 +56,7 @@ class DashboardController extends AbstractController
         $journey = $entityManager->getRepository(\App\Methode\Entity\JourneyProgress::class)->findOneBy(['user' => $user]);
 
         return $this->render('dashboard/index.html.twig', [
+            'nextStep' => $nextStep->forUser($user),
             'journey' => $journey,
             'journeyWeek' => $journey && !$journey->isFinished() ? \App\Methode\Service\Journey::PLAN[$journey->currentWeek()] + ['n' => $journey->currentWeek()] : null,
             'user' => $user,

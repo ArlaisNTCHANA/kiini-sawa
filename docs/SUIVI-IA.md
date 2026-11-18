@@ -409,3 +409,11 @@ extension aux autres tests (ennéagramme, dons, type) avec la même bibliothèqu
 Demande du fondateur. Les fiches deviennent une source de `Content` (`figures.library`) : édition par la page « Textes des tests » existante, sans nouveau code d'écran.
 Champ `relecture` (« en cours » / « faite ») remplace `reviewed`. Citations LSG et noms de rattachement verrouillés. Libellés lisibles pour les indices du profil.
 Piège : `Content::defaults()` est appelé souvent ; `BiblicalFigures::raw()` met les fichiers JSON en cache.
+
+## 18/11/2026 — Accueil « Ma prochaine étape » et cercle des plans sur téléphone
+
+**Accueil :** `Dashboard/Service/NextStep` (règles ordonnées : fondations, bilan du jour à partir de 18 h, revue de la semaine samedi soir et dimanche, parcours de
+90 jours, plan accessible le moins avancé, sinon relire le Plan de Vie) renvoie UNE action + deux « ensuite » ; carte en tête de l'accueil (au-dessus du bandeau sur
+téléphone), les anciens encarts du parcours disparaissent (l'action est dans la carte). Tests : `tests/Dashboard/NextStepTest.php` (heure injectable), `JourneyTest` adapté.
+**Cercle des plans :** vérifié en vue téléphone (375 px) : libellés trop petits ; disques 62 → 72, police 14 → 16 px (15 px sous 420 px), cadrage du `viewBox` resserré,
+« LE SYSTÈME » masqué sous 560 px. **Reste :** libellés sous les icônes de la barre du bas sur téléphone ; page « Mes rythmes ».
