@@ -1,6 +1,6 @@
 # Guide pour les IA (et les développeurs) — KIINI SAWA web
 
-À lire en entier avant toute modification. Le produit est en production : **https://app.kiinisawa.com**.
+À lire en entier avant toute modification. Le produit est en production : **https://kiinisawa.com**.
 
 ## 1. Le produit en bref
 

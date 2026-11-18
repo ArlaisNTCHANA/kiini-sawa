@@ -9,7 +9,7 @@ Ce guide décrit la mise en ligne de la version web (Symfony). Le contrôle
 |---|---|---|
 | **Société** | Immatriculer la structure qui encaisse | Obligatoire pour les mentions légales, les reçus puis les factures, et plus tard le paiement par carte ou Mobile Money automatique. |
 | **Hébergement** | **Retenu : Hostinger Business Web Hosting** (section 3). Sinon, un hébergeur en Europe, avec PHP 8.4 ou plus, MySQL 8 et tâches planifiées : une plateforme managée (ex. Clever Cloud, Platform.sh) ou un serveur privé (ex. OVHcloud, Scaleway, Hetzner, Infomaniak) | Données en Europe (RGPD). La plateforme managée évite d'administrer un serveur. |
-| **Nom de domaine** | Ex. `kiinisawa.com` pour la présentation et `app.kiinisawa.com` pour l'application | Le domaine sert aussi à l'adresse d'envoi des emails. |
+| **Nom de domaine** | `kiinisawa.com` : l'application et sa vitrine sont sur le même domaine (décision du 18/11/2026, plus de sous-domaine `app.`) | Le domaine sert aussi à l'adresse d'envoi des emails. |
 | **Envoi d'emails** | Un fournisseur transactionnel européen (ex. Brevo, Mailjet) ou Postmark | Codes de vérification, mots de passe oubliés, rappels, reçus : indispensable dès le premier jour. |
 | **Paiements** | Renseigner virement et/ou Mobile Money dans l'administration | Sinon le paiement reste masqué. |
 
@@ -22,7 +22,7 @@ Sur Hostinger, elles vont dans le fichier `.env.prod.local` du serveur (modèle 
 | `APP_ENV` | `prod` | Mode production. |
 | `APP_DEBUG` | `0` | Pas d'outils de débogage. |
 | `APP_SECRET` | 64 caractères aléatoires | `php -r "echo bin2hex(random_bytes(32));"`. Ne jamais la partager. |
-| `DEFAULT_URI` | `https://app.kiinisawa.com` | Liens absolus dans les emails et les tâches planifiées. |
+| `DEFAULT_URI` | `https://kiinisawa.com` | Liens absolus dans les emails et les tâches planifiées. |
 | `DATABASE_URL` | `mysql://user:motdepasse@hote:3306/kiini?serverVersion=8.4.0&charset=utf8mb4` | Base de données. Sur MariaDB : `serverVersion=11.8.2-MariaDB` (la version réelle). |
 | `MAILER_DSN` | fourni par le prestataire d'emails | Envoi des emails. |
 | `MAILER_FROM` | `"KIINI SAWA <bonjour@kiinisawa.com>"` | Expéditeur (domaine vérifié chez le prestataire : SPF, DKIM). |
@@ -47,7 +47,7 @@ Tout est préparé dans le projet :
 
 ### 3.1 Dans hPanel (une seule fois)
 
-1. **Site web** : ajouter le domaine (ou un sous-domaine, ex. `app.kiinisawa.com`).
+1. **Site web** : ajouter le domaine `kiinisawa.com` (désactiver d'abord l'ancien site du Builder).
 2. **Avancé › Configuration PHP** : choisir **PHP 8.4** (ou plus) ; vérifier que `intl`, `pdo_mysql`, `gd`,
    `zip`, `mbstring` sont cochées ; `memory_limit` à 256M au moins.
 3. **Bases de données › MySQL** : créer la base et son utilisateur. Noter le nom, l'utilisateur, le mot de passe.
@@ -64,7 +64,7 @@ public du site pointe vers `~/kiini/public` :
 
 ```bash
 ssh -p 65002 u340339661@194.36.184.161
-cd ~/domains/app.kiinisawa.com
+cd ~/domains/kiinisawa.com
 mv public_html public_html.origine
 ln -s /home/u340339661/kiini/public public_html
 ```

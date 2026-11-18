@@ -5,7 +5,7 @@
 # Réglages dans bin/ops/hostinger.local (non versionné), d'après hPanel › Avancé › Accès SSH :
 #   HOSTINGER_SSH="u123456789@123.45.67.89"
 #   HOSTINGER_PORT=65002
-#   HOSTINGER_DIR="domains/app.kiinisawa.com/kiini"
+#   HOSTINGER_DIR="domains/kiinisawa.com/kiini"
 #   HOSTINGER_PHP=""          # facultatif, ex. /opt/alt/php84/usr/bin/php
 set -euo pipefail
 cd "$(dirname "$0")/../.."

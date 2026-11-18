@@ -306,3 +306,14 @@ feedback nourricier, notifications push, tableau de rétention.
 - Suivi de la fidélité de tous les tests (Admin › Fidélité des tests couvre l'IPIP) ; normes dès 200 profils.
 - Relectures humaines : théologien (figures bibliques), psychologue (textes), juriste (mentions) — côté fondateur.
 - Structure juridique (15 « [À COMPLÉTER] »), coordonnées de paiement, site vitrine — côté fondateur.
+
+## 18/11/2026 — Bascule vers kiinisawa.com (code prêt, pas encore déployé)
+
+Décision du fondateur : l'application passe de `app.kiinisawa.com` à `kiinisawa.com` (le site Hostinger Website Builder
+est abandonné ; personne n'a encore reçu de lien `app.`, donc pas de redirection). Fait : références remplacées
+(README, AGENTS, `env.prod.local.exemple`, page d'installation, rapport de test, brief média, `app:launch:check`,
+`docs/mise-en-ligne.md`), test `tests/Shared/CanonicalDomainTest.php` (aucune mention de `app.` dans templates/src/config).
+**Reste, côté serveur (à faire par le fondateur puis par moi) :** désactiver le Builder, ajouter `kiinisawa.com` à
+l'hébergement vers `~/kiini/public`, SSL ; puis changer `DEFAULT_URI` dans `~/kiini/.env.prod.local`, mettre à jour
+`HOSTINGER_DIR` dans `bin/ops/hostinger.local` si le dossier change, vider le cache, vérifier connexion, email, installation.
+Connexions, notifications poussées et installation sur téléphone sont liées à l'adresse : tout le monde se reconnecte une fois.

@@ -50,7 +50,7 @@ class LaunchCheckCommand extends Command
         $secret = $env('APP_SECRET');
         $check('Clé secrète APP_SECRET', \strlen($secret) >= 32 && !str_contains($secret, 'test'), 'Générer une clé : php -r "echo bin2hex(random_bytes(32));" et la mettre dans APP_SECRET.');
         $uri = $env('DEFAULT_URI');
-        $check('Adresse publique DEFAULT_URI (https)', str_starts_with($uri, 'https://') && !str_contains($uri, 'localhost'), 'Mettre l\'adresse du site, ex. DEFAULT_URI=https://app.kiinisawa.com (sert aux liens des emails).');
+        $check('Adresse publique DEFAULT_URI (https)', str_starts_with($uri, 'https://') && !str_contains($uri, 'localhost'), 'Mettre l\'adresse du site, ex. DEFAULT_URI=https://kiinisawa.com (sert aux liens des emails).');
         $check('Proxy de l\'hébergeur (TRUSTED_PROXIES)', '' !== $env('TRUSTED_PROXIES'), 'Renseigner l\'adresse du proxy de l\'hébergeur, ou REMOTE_ADDR.', false);
 
         // Base

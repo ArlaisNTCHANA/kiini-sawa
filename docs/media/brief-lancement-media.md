@@ -37,8 +37,8 @@ pour aller vers le **Faire** (plans, rituels, revues). Trois briques existent d�
 
 | Brique | Où | Rôle pour le média |
 |---|---|---|
-| **Application web** | https://app.kiinisawa.com | Là où l'audience passe à l'action. **Toute** la stratégie y mène. |
-| **Livre de la méthode** | 15 chapitres (voir §6) ; les 3 premiers sont lisibles gratuitement : https://app.kiinisawa.com/methode | Réserve inépuisable de sujets. |
+| **Application web** | https://kiinisawa.com | Là où l'audience passe à l'action. **Toute** la stratégie y mène. |
+| **Livre de la méthode** | 15 chapitres (voir §6) ; les 3 premiers sont lisibles gratuitement : https://kiinisawa.com/methode | Réserve inépuisable de sujets. |
 | **Site vitrine** | https://www.kiinisawa.com | Présentation générale (à aligner plus tard sur l'application). |
 
 **Ce que propose l'application** : Plan de Vie et 4 plans stratégiques (Croissance, Développement, Transmission,
@@ -100,15 +100,15 @@ mes tests. Signature : **« Bâtis. Grandis. Transmets. »** (à valider par le 
   fond `#F8FAFC`, texte `#0F172A`.
 - **Polices** : Playfair Display (titres, versets), Inter (texte). Toutes deux gratuites (Google Fonts).
 - **Photo de profil** : monogramme « KS » blanc sur fond `#0F766E`, lisible en tout petit.
-- **Bannières** : promesse + « Commence gratuitement : app.kiinisawa.com ».
+- **Bannières** : promesse + « Commence gratuitement : kiinisawa.com ».
 
 **Bios (à adapter à la limite de caractères de chaque plateforme)** :
 > Bâtis une vie alignée sur le but de Dieu 🧭
 > Discipline · Vision · Leadership · Couple
 > Ton Plan de Vie gratuit 👇
-> app.kiinisawa.com
+> kiinisawa.com
 
-**Lien unique dans la bio** : https://app.kiinisawa.com/?utm_source=PLATEFORME&utm_medium=bio
+**Lien unique dans la bio** : https://kiinisawa.com/?utm_source=PLATEFORME&utm_medium=bio
 (remplacer PLATEFORME par tiktok, instagram, facebook, youtube, whatsapp).
 
 ---
@@ -247,7 +247,7 @@ source et l'appel à l'action.
 ## 10. Mesure et conversion
 
 **Liens suivis** (convention UTM, toujours la même) :
-`https://app.kiinisawa.com/inscription?utm_source=PLATEFORME&utm_medium=CANAL&utm_campaign=CAMPAGNE`
+`https://kiinisawa.com/inscription?utm_source=PLATEFORME&utm_medium=CANAL&utm_campaign=CAMPAGNE`
 - `utm_source` : tiktok, instagram, facebook, youtube, whatsapp, newsletter
 - `utm_medium` : bio, video, story, message, email
 - `utm_campaign` : defi21-discipline, plan-de-vie, test-personnalite, couple, eglises…
@@ -275,7 +275,7 @@ source et l'appel à l'action.
 |---|---|---|
 | **Semaine 1** | Fondations | Comptes créés par le fondateur, identité visuelle, 30 scripts, calendrier du mois |
 | **Semaines 2–4** | Trouver ce qui marche | 1 vidéo/jour sur TikTok + Reels + Shorts, WhatsApp quotidien, tests d'accroches ; garder les 3 piliers qui performent |
-| **Semaine 5** | Annonce du défi | Teasing « Défi 21 jours de discipline ». Le fondateur crée le défi dans l'admin (Croissance › Défis) : page publique `app.kiinisawa.com/defi/…` et liens suivis prêts à copier pour chaque plateforme |
+| **Semaine 5** | Annonce du défi | Teasing « Défi 21 jours de discipline ». Le fondateur crée le défi dans l'admin (Croissance › Défis) : page publique `kiinisawa.com/defi/…` et liens suivis prêts à copier pour chaque plateforme |
 | **Semaines 6–8** | **Défi 21 jours** | 1 épisode/jour, rituels suivis dans l'application, direct hebdomadaire, témoignages réels (avec accord écrit) |
 | **Semaine 9** | Bilan et preuve sociale | Résultats du défi, newsletter lancée, 1re vidéo longue YouTube |
 | **Semaines 10–12** | Élargir | Série couple (Duo), série leadership (Églises), 2e défi, prise de contact avec 10 Églises (messages rédigés par l'IA, envoyés par le fondateur) |

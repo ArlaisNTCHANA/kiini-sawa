@@ -2,7 +2,7 @@
 
 **Bâtir sa vie avec Dieu.** Une application chrétienne de planification de vie : raison d'être, 5 plans (Vie,
 Croissance, Développement, Transmission, Hygiène de vie), rituels, journal, revues, partenaires, tests de personnalité,
-espace couple et organisations. En ligne sur **https://app.kiinisawa.com**.
+espace couple et organisations. En ligne sur **https://kiinisawa.com**.
 
 ## Pour commencer
 
