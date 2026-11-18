@@ -356,8 +356,10 @@
         .pill-item:hover { background: rgba(0,0,0,0.04); color: var(--fg); }
         .pill-item.active { background: var(--bg-alt); color: var(--primary); }
         .pill-item svg { width: 20px; height: 20px; }
-        .pill-label { display: none; }
-        .pill-item.active .pill-label { display: block; }
+        /* Libellés toujours visibles (lisibilité : une icône seule ne suffit pas) */
+        .pill-item { padding: 0.45rem 0.2rem; gap: 3px; min-width: 0; }
+        .pill-label { display: block; font-size: 10px; font-weight: 600; letter-spacing: 0; text-transform: none; line-height: 1.1; white-space: nowrap; }
+        .pill-item.active .pill-label { font-weight: 700; }
 
         /* ── Navigation par rubriques (NavigationExtension) ── */
         .topnav-section { position: relative; height: 100%; display: flex; align-items: center; }

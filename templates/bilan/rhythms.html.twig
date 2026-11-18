@@ -1,0 +1,50 @@
+{% extends 'base.html.twig' %}
+{# Mes rythmes : les cinq rendez-vous de la méthode (service App\Bilan\Service\Rhythms) #}
+{% block title %}Mes rythmes{% endblock %}
+
+{% block body %}
+<style>
+    .rhythm { display: grid; grid-template-columns: auto 1fr; gap: .25rem 1rem; align-items: start; }
+    .rhythm__icon { grid-row: span 3; width: 2.6rem; height: 2.6rem; border-radius: 12px; display: flex; align-items: center; justify-content: center; background: var(--bg-alt); color: var(--primary); }
+    .rhythm__icon svg { width: 20px; height: 20px; }
+    .rhythm__title { font-family: var(--font-serif); font-size: 1.15rem; font-weight: 700; margin: 0; }
+    .rhythm__status { font-family: var(--font-sans); display: inline-flex; align-items: center; gap: .35rem; font-size: .8rem; font-weight: 700; padding: .15rem .6rem; border-radius: 999px; margin-left: .5rem; vertical-align: middle; }
+    .rhythm--done .rhythm__status { background: #ECFDF3; color: #166534; }
+    .rhythm--todo .rhythm__status { background: var(--gold-soft); color: var(--accent); }
+    .rhythm--late .rhythm__status { background: #FEF2F2; color: #991B1B; }
+    .rhythm--later .rhythm__status { background: var(--bg-alt); color: var(--fg-muted); }
+    .rhythm--late { border-left: 4px solid #DC2626; }
+    .rhythm--todo { border-left: 4px solid var(--accent); }
+    .rhythm--done { border-left: 4px solid #16A34A; }
+    .rhythm__text { margin: 0; color: var(--fg-muted); font-size: .92rem; line-height: 1.5; grid-column: 2; }
+    .rhythm__cta { grid-column: 2; margin-top: .5rem; }
+    .rhythm-list { display: grid; gap: .9rem; margin-top: 1.25rem; }
+</style>
+<div class="ks-page ks-page--narrow">
+    {% include 'shared/_page_header.html.twig' with {
+        back: {url: path('app_bilan'), label: 'Bilan'},
+        eyebrow: 'Revues', icon: 'repeat',
+        title: 'Mes rythmes',
+        lead: 'Un jour, une semaine, un mois, une saison, une année : cinq rendez-vous pour rester aligné avec votre But. Voici où vous en êtes.'
+    } %}
+
+    <div class="rhythm-list">
+        {% for r in rhythms %}
+        <section class="ks-card ks-card--flat rhythm rhythm--{{ r.state }}" data-rhythm="{{ r.key }}" data-state="{{ r.state }}">
+            <div class="rhythm__icon"><i data-lucide="{{ r.icon }}"></i></div>
+            <h2 class="rhythm__title">{{ r.label }}<span class="rhythm__status">{{ r.status }}</span></h2>
+            <p class="rhythm__text">{{ r.text }}</p>
+            <div class="rhythm__cta">
+                {% if r.locked %}
+                    <a class="ks-btn ks-btn--secondary" href="{{ path('app_subscription') }}">{{ r.cta }} · PRO</a>
+                {% else %}
+                    <a class="ks-btn {{ r.state in ['todo', 'late'] ? 'ks-btn--primary' : 'ks-btn--secondary' }}" href="{{ path(r.route) }}">{{ r.cta }}</a>
+                {% endif %}
+            </div>
+        </section>
+        {% endfor %}
+    </div>
+
+    <div style="max-width: 760px; margin: 1.5rem auto 0;">{% include 'methode/_figure.html.twig' with {name: 'fig_revues', alt: 'Les revues : hebdomadaire, mensuelle, de saison, annuelle', caption: 'les rythmes de revue du livre', collapsed: true, max: '600px'} only %}</div>
+</div>
+{% endblock %}

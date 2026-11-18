@@ -3,7 +3,7 @@
 namespace App\Dashboard\Service;
 
 use App\Abonnement\Service\Entitlements;
-use App\Bilan\Entity\DailyLog;
+use App\PlanDHygiene\Entity\DailyLog;
 use App\Bilan\Repository\WeeklyReviewRepository;
 use App\Bilan\Service\WeeklyReviewService;
 use App\Compte\Entity\User;

@@ -162,6 +162,12 @@ class BilanController extends AbstractController
         ]);
     }
 
+    #[Route('/bilan/rythmes', name: 'app_rhythms')]
+    public function rhythms(\App\Bilan\Service\Rhythms $rhythms): Response
+    {
+        return $this->render('bilan/rhythms.html.twig', ['rhythms' => $rhythms->forUser($this->getUser())]);
+    }
+
     #[Route('/api/bilan/save-score', name: 'api_bilan_save_score', methods: ['POST'])]
     public function saveScore(Request $request, EntityManagerInterface $em): JsonResponse
     {

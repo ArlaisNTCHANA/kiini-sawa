@@ -1,0 +1,45 @@
+{#
+    Schéma du livre rendu interactif : une rangée d'étapes à toucher, puis le détail de l'étape choisie (Alpine, sans image).
+    Paramètres : items (liste de {key, label, icon, color, summary, lines: liste de [titre, texte]}), active (clé choisie au départ,
+    ex. la saison en cours), title (titre accessible), hint (phrase sous la rangée, facultatif).
+#}
+{% set start = active|default(null) %}
+<section class="cyc" aria-label="{{ title }}" data-cycle x-data="{ cur: {{ (start ?: (items|first).key)|json_encode|e('html_attr') }} }">
+    <style>
+        .cyc { background: #fff; border-radius: 16px; padding: 1rem; box-shadow: var(--card-shadow); margin: 0 0 1.5rem; }
+        .cyc__row { display: grid; grid-template-columns: repeat({{ items|length }}, 1fr); gap: .5rem; }
+        .cyc__node { display: flex; flex-direction: column; align-items: center; gap: .35rem; padding: .7rem .3rem; border: 2px solid var(--border); border-radius: 14px; background: #fff; cursor: pointer; font: inherit; color: var(--fg); transition: border-color .2s, background .2s, transform .2s; }
+        .cyc__node:hover { transform: translateY(-2px); }
+        .cyc__node:focus-visible { outline: 3px solid var(--gold); outline-offset: 2px; }
+        .cyc__ico { width: 2.4rem; height: 2.4rem; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #fff; }
+        .cyc__ico svg { width: 20px; height: 20px; }
+        .cyc__name { font-weight: 700; font-size: .85rem; text-align: center; line-height: 1.15; }
+        .cyc__here { font-size: .65rem; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; color: var(--accent); }
+        .cyc__detail { margin-top: .9rem; border-radius: 14px; padding: 1rem 1.1rem; background: var(--bg-alt); border-left: 5px solid var(--primary); }
+        .cyc__detail h3 { margin: 0 0 .25rem; font-family: var(--font-serif); font-size: 1.15rem; }
+        .cyc__detail p { margin: 0; color: var(--fg-muted); font-size: .92rem; line-height: 1.5; }
+        .cyc__lines { display: grid; gap: .5rem; margin-top: .75rem; }
+        .cyc__lines strong { display: block; font-size: .72rem; letter-spacing: .08em; text-transform: uppercase; color: var(--fg-muted); }
+        .cyc__hint { text-align: center; font-size: .8rem; color: var(--fg-muted); margin: .6rem 0 0; font-style: italic; }
+    </style>
+    <div class="cyc__row" role="tablist">
+        {% for it in items %}
+            <button type="button" role="tab" class="cyc__node" data-cycle-node="{{ it.key }}" :aria-selected="cur === '{{ it.key }}'" @click="cur = '{{ it.key }}'"
+                    :style="cur === '{{ it.key }}' ? 'border-color: {{ it.color }}; background: color-mix(in srgb, {{ it.color }} 8%, #fff)' : ''">
+                <span class="cyc__ico" style="background: {{ it.color }};"><i data-lucide="{{ it.icon }}" aria-hidden="true"></i></span>
+                <span class="cyc__name">{{ it.label }}</span>
+                {% if start == it.key %}<span class="cyc__here">Vous êtes ici</span>{% endif %}
+            </button>
+        {% endfor %}
+    </div>
+    {% for it in items %}
+        <div class="cyc__detail" role="tabpanel" x-show="cur === '{{ it.key }}'" {{ it.key == (start ?: (items|first).key) ? '' : 'x-cloak' }} style="border-left-color: {{ it.color }};">
+            <h3>{{ it.label }}</h3>
+            <p>{{ it.summary }}</p>
+            <div class="cyc__lines">
+                {% for l in it.lines %}<div><strong>{{ l[0] }}</strong><p>{{ l[1] }}</p></div>{% endfor %}
+            </div>
+        </div>
+    {% endfor %}
+    {% if hint is defined and hint %}<p class="cyc__hint">{{ hint }}</p>{% endif %}
+</section>

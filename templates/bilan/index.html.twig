@@ -236,7 +236,10 @@
     <header class="ks-header">
         <h1 class="ks-header__title">Mon bilan</h1>
         <p class="ks-header__lead">Évaluez vos progrès, suivez votre discipline et observez votre évolution.</p>
-        <a href="{{ path('app_weekly_review') }}" class="bilan-btn" style="margin-top: 1.25rem; display: inline-flex; align-items: center; gap: .5rem; text-decoration: none;">
+        <a href="{{ path('app_rhythms') }}" class="bilan-btn" style="margin-top: 1.25rem; display: inline-flex; align-items: center; gap: .5rem; text-decoration: none;">
+            <i data-lucide="repeat" class="w-4 h-4"></i> Mes rythmes
+        </a>
+        <a href="{{ path('app_weekly_review') }}" class="bilan-btn" style="margin-top: 1.25rem; margin-left: .5rem; display: inline-flex; align-items: center; gap: .5rem; text-decoration: none;">
             <i data-lucide="calendar-check" class="w-4 h-4"></i> Faire ma revue de la semaine
         </a>
         <a href="{{ path('app_monthly_review') }}" class="bilan-btn" style="margin-top: 1.25rem; margin-left: .5rem; display: inline-flex; align-items: center; gap: .5rem; text-decoration: none; background: var(--bg-alt); color: var(--fg);">

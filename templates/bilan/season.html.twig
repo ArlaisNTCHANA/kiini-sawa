@@ -28,7 +28,14 @@
     } %}
 
     <blockquote class="season-verse">« Enseigne-nous à bien compter nos jours, afin que nous appliquions notre cœur à la sagesse. »<cite>Psaume 90:12</cite></blockquote>
-    {% include 'methode/_figure.html.twig' with {name: 'fig_saisons', alt: 'Les quatre saisons : semis, croissance, récolte, hiver ; une saison dure environ trois mois', max: '440px'} only %}
+    {% set cycleItems = [] %}
+    {% set icons = {SEMIS: 'sprout', CROISSANCE: 'trending-up', RECOLTE: 'wheat', HIVER: 'snowflake'} %}
+    {% set colors = {SEMIS: 'var(--success)', CROISSANCE: 'var(--primary)', RECOLTE: 'var(--gold)', HIVER: 'var(--fg-muted)'} %}
+    {% for key, k in kinds %}
+        {% set cycleItems = cycleItems|merge([{key: key, label: k.label, icon: icons[key], color: colors[key], summary: k.what, lines: [['Ce que je fais', k.work], ['Le piège', k.trap]]}]) %}
+    {% endfor %}
+    {% include 'shared/_cycle_figure.html.twig' with {items: cycleItems, active: activeSeason ? activeSeason.kind : null, title: 'Les quatre saisons : semis, croissance, récolte, hiver', hint: 'Touchez une saison pour voir ce qu\'elle demande. Une saison dure environ trois mois.'} only %}
+    {% include 'methode/_figure.html.twig' with {name: 'fig_saisons', alt: 'Les quatre saisons : semis, croissance, récolte, hiver ; une saison dure environ trois mois', caption: 'les saisons', collapsed: true, max: '440px'} only %}
 
     {% if activeSeason %}
         {% set k = kinds[activeSeason.kind] ?? null %}

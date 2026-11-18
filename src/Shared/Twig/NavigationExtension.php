@@ -38,6 +38,7 @@ final class NavigationExtension extends AbstractExtension
             ['Agenda', 'app_planner', 'calendar', 'Tâches, jalons et frise'],
             ['Journal', 'app_journal', 'notebook-pen', 'Pensées, prières, victoires'],
             ['Bilan', 'app_bilan', 'bar-chart-2', 'Revues de la semaine et du mois'],
+            ['Mes rythmes', 'app_rhythms', 'repeat', 'Jour, semaine, mois, saison, année : ce qui est fait ou en retard'],
         ]],
         'together' => ['label' => 'Ensemble', 'icon' => 'users', 'match' => ['/social', '/couple', '/defis', '/organisation', '/parrainage'], 'items' => [
             ['Partenaires', 'app_social', 'users', 'Redevabilité et partages'],
