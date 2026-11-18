@@ -29,6 +29,7 @@ final class ProfileSynthesis
         private readonly SelfAssessmentReport $selfReports,
         private readonly EntityManagerInterface $em,
         private readonly InsightEngine $insights,
+        private readonly ConfirmationService $confirmations,
     ) {
     }
 
@@ -55,7 +56,8 @@ final class ProfileSynthesis
             'resources' => $this->resources($r),
             'priorities' => $this->priorities($r),
             'life' => $life,
-            'insights' => $this->insights->analyze($r, $convergence, $life),
+            'insights' => $this->insights->analyze($r, $convergence, $life, InsightEngine::MAX, $close = $this->closeOnes($user, $r)),
+            'closeInvites' => $this->closeInvites($r, $close),
         ];
     }
 
@@ -69,13 +71,51 @@ final class ProfileSynthesis
     public function insightsFor(User $user, string $key, int $max = 3): array
     {
         $r = $this->collect($user);
-        $found = $this->insights->analyze($r, $this->convergence($r), $this->life($user), 50);
+        $found = $this->insights->analyze($r, $this->convergence($r), $this->life($user), 50, $this->closeOnes($user, $r));
         $mine = array_values(array_filter($found, fn ($i) => \in_array($key, $i['sources'], true)));
         // Les lectures croisées d'abord, puis une lecture interne au test
         $crossed = array_filter($mine, fn ($i) => !$i['internal']);
         $internal = array_filter($mine, fn ($i) => $i['internal']);
 
         return \array_slice(array_merge(\array_slice(array_values($crossed), 0, 2), \array_slice(array_values($internal), 0, 1)), 0, $max);
+    }
+
+    /**
+     * Regard des proches : synthèses agrégées (au moins trois réponses) pour le DISC et les dons, absentes sinon.
+     *
+     * @return array<string, array>
+     */
+    private function closeOnes(User $user, array $r): array
+    {
+        $out = [];
+        foreach (['disc' => ['disc', 'disc'], 'dons' => ['dons-spirituels', 'dons']] as $key => [$instrument, $part]) {
+            if (!$r[$part]) {
+                continue;
+            }
+            $summary = $this->confirmations->summary($this->confirmations->current($user, $instrument), $r[$part]);
+            if ($summary && $summary['enough']) {
+                $out[$key] = $summary;
+            }
+        }
+
+        return $out;
+    }
+
+    /**
+     * Tests passés dont le regard des proches n'est pas encore assez fourni (moins de trois réponses) : invitation à le demander.
+     *
+     * @return list<array{label: string, id: int}>
+     */
+    private function closeInvites(array $r, array $close): array
+    {
+        $out = [];
+        foreach (['disc' => 'DISC', 'dons' => 'Dons spirituels'] as $key => $label) {
+            if ($r[$key] && !isset($close[$key])) {
+                $out[] = ['label' => $label, 'id' => $r[$key]['assessment']->getId()];
+            }
+        }
+
+        return $out;
     }
 
     /** Derniers rapports de chaque test. */

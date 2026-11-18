@@ -371,3 +371,10 @@ Suite de l'InsightEngine : 7 rapprochements de facettes du Big Five et 7 paires 
 que de l'interne. Zone de vocation : bloc « Comment l'exercer, selon votre tempérament » (`vocationNuances`, Big Five). Tests :
 `InsightEngineTest` (10). Pagination PDF contrôlée. **Non vu à l'écran :** aucun profil de test local ne déclenche encore ces règles internes ;
 elles sont couvertes par des tests unitaires.
+
+## 18/11/2026 — Le regard des proches entre dans le moteur
+
+`InsightEngine` reçoit le regard des proches (DISC, dons) via `ProfileSynthesis::closeOnes()` ; 6 lectures nouvelles + renfort de la lecture
+« adaptation excessive » ; invitation à demander ce regard dans la synthèse (`closeInvites`). Anonymat : seules les synthèses ≥ 3 réponses.
+Tests : `InsightEngineTest` (15, dont un parcours réel avec trois réponses de proches). **Reste :** recalibrage avec de vrais résultats ;
+ajouter d'autres tests au regard des proches (Big Five, ennéagramme) si le fondateur le décide.

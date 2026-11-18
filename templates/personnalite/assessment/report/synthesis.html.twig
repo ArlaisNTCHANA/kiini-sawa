@@ -83,6 +83,13 @@
     <p class="dr-lead">Ces lectures ne viennent d'aucun test pris seul : elles naissent de leur rencontre. Chacune dit sur quels résultats elle s'appuie. Ce sont des pistes à discuter, pas des verdicts.</p>
     {% set plans = constant('App\\PlanDeVie\\Service\\PlanCatalog::PLANS') %}
     {% for i in insights %}{% include 'personnalite/assessment/report/_insight_card.html.twig' with {i: i, pdf: pdf, plans: plans} only %}{% endfor %}
+    {% if not pdf and closeInvites|default([])|length %}
+        <div class="dr-tile" style="background: #EEF3EF; border-color: #C8D6CD;">
+            <div class="dr-label" style="color: #173D2E;">Pour affiner ces lectures : le regard de vos proches</div>
+            <p style="margin: 0;">Ce que vos proches disent de vous peut confirmer ou nuancer ces lectures. Demandez-leur leur regard, c'est anonyme à partir de trois réponses :
+                {% for c in closeInvites %}<a href="{{ path('app_assessment_report', {id: c.id}) }}#regard-proches" style="color: var(--primary); font-weight: 700;">{{ c.label }}</a>{{ loop.last ? '.' : ', ' }}{% endfor %}</p>
+        </div>
+    {% endif %}
 </div>
 {% endif %}
 

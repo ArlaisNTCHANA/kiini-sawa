@@ -161,4 +161,88 @@ class InsightEngineTest extends WebTestCase
         $this->assertSame([], $method->invoke($synthesis, ['bigfive' => null]));
         $this->assertCount(1, $method->invoke($synthesis, ['bigfive' => $this->bf(['E' => 'mid', 'N' => 'high'])]));
     }
+
+    private function discReport(string $primary, string $adapted, int $gap = 10): array
+    {
+        $names = ['D' => 'Dominant', 'I' => 'Influent', 'S' => 'Stable', 'C' => 'Conforme'];
+
+        return ['disc' => ['primary' => $primary, 'adaptedPrimary' => $adapted, 'gap' => $gap, 'more' => [], 'secondary' => null,
+            'profile' => ['name' => $names[$primary]], 'adaptedProfile' => ['name' => $names[$adapted]]]];
+    }
+
+    private function closeDisc(string $letter, string $name): array
+    {
+        return ['disc' => ['enough' => true, 'count' => 4, 'agree' => false, 'most' => [['letter' => $letter, 'name' => $name, 'count' => 3]]]];
+    }
+
+    public function testRelativesConfirmNatureSeeAdaptedOrSeeOther(): void
+    {
+        $base = ['type' => null, 'enneagramme' => null, 'bigfive' => null, 'dons' => null];
+        $engine = new InsightEngine();
+        $confirm = $engine->analyze($base + ['disc' => $this->discReport('S', 'C')], [], null, 50, $this->closeDisc('S', 'Stable'));
+        $this->assertSame(['close-confirm'], $this->ids($confirm));
+        $this->assertSame('Croise vos tests et le regard de vos proches', $confirm[0]['confidence']);
+        $adapted = $engine->analyze($base + ['disc' => $this->discReport('S', 'C')], [], null, 50, $this->closeDisc('C', 'Conforme'));
+        $this->assertSame(['close-adapted'], $this->ids($adapted));
+        $other = $engine->analyze($base + ['disc' => $this->discReport('S', 'C')], [], null, 50, $this->closeDisc('D', 'Dominant'));
+        $this->assertSame(['close-other'], $this->ids($other));
+        $this->assertSame('paradox', $other[0]['kind']);
+    }
+
+    public function testRelativesStrengthenAdaptationStrain(): void
+    {
+        $r = ['type' => null, 'enneagramme' => null, 'bigfive' => null, 'dons' => null, 'disc' => $this->discReport('S', 'C', 40)];
+        $without = (new InsightEngine())->analyze($r);
+        $with = (new InsightEngine())->analyze($r, [], null, 50, $this->closeDisc('C', 'Conforme'));
+        $strainWithout = current(array_filter($without, fn ($i) => 'strain' === $i['id']));
+        $strainWith = current(array_filter($with, fn ($i) => 'strain' === $i['id']));
+        $this->assertContains('proches', $strainWith['sources']);
+        $this->assertGreaterThan($strainWithout['weight'], $strainWith['weight']);
+    }
+
+    public function testRelativesIgnoredBelowThreeAnswers(): void
+    {
+        $r = ['type' => null, 'enneagramme' => null, 'bigfive' => null, 'dons' => null, 'disc' => $this->discReport('S', 'C')];
+        $close = ['disc' => ['enough' => false, 'count' => 2]];
+        $this->assertSame([], (new InsightEngine())->analyze($r, [], null, 50, $close));
+    }
+
+    public function testRelativesAndGifts(): void
+    {
+        $r = ['disc' => null, 'type' => null, 'enneagramme' => null, 'bigfive' => null, 'dons' => $this->gifts(['SERVICE', 'ENSEIGNEMENT', 'SAGESSE'])];
+        $close = ['dons' => ['enough' => true, 'count' => 3, 'confirmed' => [['name' => 'Service', 'count' => 3], ['name' => 'Enseignement', 'count' => 2]],
+            'unseen' => ['Sagesse'], 'others' => [['name' => 'Hospitalité', 'count' => 3]]]];
+        $ids = $this->ids((new InsightEngine())->analyze($r, [], null, 50, $close));
+        $this->assertContains('close-gifts-confirmed', $ids);
+        $this->assertContains('close-gifts-unseen', $ids);
+        $this->assertContains('close-gifts-others', $ids);
+    }
+
+    public function testSynthesisUsesRealRelativesAnswers(): void
+    {
+        $client = static::createClient();
+        $user = $this->createUser(pro: true);
+        $svc = static::getContainer()->get(AssessmentService::class);
+        $answers = [];
+        foreach (Instruments::items('disc') as $it) {
+            $answers[$it['key']] = 'SD';
+        }
+        $a = $svc->record($user, 'disc', $answers, 400);
+        $gifts = [];
+        foreach (Instruments::items('dons-spirituels') as $i => $it) {
+            $gifts[$it['key']] = 1 + ($i % 5);
+        }
+        $svc->record($user, 'dons-spirituels', $gifts, 400);
+        $confirmations = static::getContainer()->get(\App\Personnalite\Service\ConfirmationService::class);
+        $request = $confirmations->open($user, 'disc');
+        // Trois proches désignent le Dominant, que le test ne place pas en tête
+        for ($i = 0; $i < 3; ++$i) {
+            $this->assertSame([], $confirmations->submit($request, ['most' => 'D', 'least' => 'C', 'relationship' => 'ami']));
+        }
+        $client->loginUser($user);
+        $client->request('GET', '/mes-tests/synthese');
+        $this->assertResponseIsSuccessful();
+        $this->assertSelectorTextContains('main', 'Les autres vous voient autrement que vos tests');
+        $this->assertSelectorTextContains('main', 'Croise vos tests et le regard de vos proches');
+    }
 }

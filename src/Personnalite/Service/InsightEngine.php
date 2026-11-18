@@ -107,13 +107,14 @@ final class InsightEngine
      * @param array<string, ?array> $r           rapports par test
      * @param array<string, mixed>  $convergence résultat de ProfileSynthesis::convergence (axes, divergent)
      * @param ?array<string, mixed> $life        équilibre de vie (avg, priorities, supports)
+     * @param array<string, array>  $close       regard des proches, synthèses de ConfirmationService (clés disc, dons) ; seules les synthèses « enough » (3 réponses au moins) comptent
      *
      * @return list<array<string, mixed>>
      */
-    public function analyze(array $r, array $convergence = [], ?array $life = null, int $limit = self::MAX): array
+    public function analyze(array $r, array $convergence = [], ?array $life = null, int $limit = self::MAX, array $close = []): array
     {
         $found = array_filter([
-            $this->adaptationStrain($r, $life),
+            $this->adaptationStrain($r, $life, $close),
             $this->motivationVersusBehaviour($r),
             $this->visibleGiftReservedTemperament($r),
             $this->hiddenGiftOpenTemperament($r),
@@ -127,12 +128,13 @@ final class InsightEngine
             $this->divergence($convergence),
             $this->lifeGround($r, $life),
         ]);
-        $found = array_merge(array_values($found), $this->internalBigFive($r), $this->internalGifts($r));
+        $found = array_merge(array_values($found), $this->internalBigFive($r), $this->internalGifts($r), $this->closeOnesDisc($r, $close), $this->closeOnesGifts($r, $close));
         foreach ($found as &$f) {
             $count = \count($f['sources']);
             $f['weight'] += 6 * ($count - 1);
             $f['internal'] = 1 === $count;
             $f['confidence'] = match (true) {
+                \in_array('proches', $f['sources'], true) => 'Croise vos tests et le regard de vos proches',
                 $count >= 3 => 'Recoupé par '.$count.' tests',
                 2 === $count => 'Recoupé par 2 tests',
                 default => 'Lu dans ce seul test : à recouper',
@@ -148,7 +150,7 @@ final class InsightEngine
     // ───────────────────────────── Règles ─────────────────────────────
 
     /** Un profil adapté très éloigné du profil naturel : l'effort se paie, surtout avec une sensibilité émotionnelle élevée. */
-    private function adaptationStrain(array $r, ?array $life): ?array
+    private function adaptationStrain(array $r, ?array $life, array $close = []): ?array
     {
         $disc = $r['disc']['disc'] ?? null;
         if (!$disc || $disc['gap'] < 25) {
@@ -169,6 +171,12 @@ final class InsightEngine
         if ($e = $r['enneagramme']['enneagram'] ?? null) {
             $evidence[] = ['Ennéagramme', 'Votre peur profonde : '.lcfirst($e['profile']['fear'])];
             $sources[] = 'enneagramme';
+        }
+        $discClose = $close['disc'] ?? null;
+        if ($discClose && !empty($discClose['enough']) && !$discClose['agree'] && ($discClose['most'][0]['letter'] ?? null) === $disc['adaptedPrimary']) {
+            $evidence[] = ['Regard de vos proches', 'Ils vous voient surtout dans votre profil adapté.'];
+            $sources[] = 'proches';
+            $weight += 10;
         }
         if ($life && $life['priorities']) {
             $evidence[] = ['Équilibre de vie', 'Priorités signalées : '.lcfirst(implode(', ', $life['priorities'])).'.'];
@@ -421,6 +429,77 @@ final class InsightEngine
             }
             $out[] = $this->insight($rule['id'], $rule['kind'], $rule['title'], $rule['text'], [['Dons spirituels', $names[$a].' et '.$names[$b].' figurent parmi vos dons principaux.']], ['dons'], $rule['weight'],
                 $rule['question'], $rule['step'], $rule['plan']);
+        }
+
+        return $out;
+    }
+
+    /**
+     * Le regard des proches sur le DISC : ils reconnaissent votre nature, ne voient que votre profil adapté, ou vous voient autrement.
+     * Seules des synthèses agrégées (au moins trois réponses) sont utilisées : aucune réponse individuelle n'entre dans le moteur.
+     *
+     * @return list<array<string, mixed>>
+     */
+    private function closeOnesDisc(array $r, array $close): array
+    {
+        $c = $close['disc'] ?? null;
+        $disc = $r['disc']['disc'] ?? null;
+        if (!$c || empty($c['enough']) || !$disc || empty($c['most'][0])) {
+            return [];
+        }
+        $top = $c['most'][0];
+        $count = $c['count'];
+        $evidence = [['DISC', 'Profil naturel : '.$disc['profile']['name'].'.'], ['Regard de vos proches', $count.' réponses : la description qui vous ressemble le plus est « '.$top['name'].' ».']];
+        $sources = ['disc', 'proches'];
+        if ($top['letter'] === $disc['primary']) {
+            return [$this->insight('close-confirm', 'convergence', 'Vos proches reconnaissent votre nature',
+                'Au moins '.$count.' proches ont désigné « '.$top['name'].' » comme la description qui vous ressemble le plus, comme votre profil naturel. Ce que vous êtes se voit : vous pouvez vous appuyer sur cette cohérence pour vous engager.',
+                $evidence, $sources, 56, 'Qu\'est-ce que cette cohérence m\'autorise à oser ?', 'Prendre une responsabilité qui demande exactement cette nature', 'TRANSMISSION')];
+        }
+        if ($top['letter'] === $disc['adaptedPrimary']) {
+            return [$this->insight('close-adapted', 'tension', 'Vos proches voient surtout le profil que vous adoptez',
+                'Vos proches vous voient d\'abord « '.$top['name'].' », ce qui correspond à votre profil adapté plutôt qu\'à votre nature (« '.$disc['profile']['name'].' »). Ils connaissent surtout la manière dont vous vous adaptez : votre nature profonde se montre peu. Ce n\'est pas un reproche, mais une invitation à vous laisser voir davantage.',
+                $evidence, $sources, 62, 'Qui connaît ma nature profonde, et à qui puis-je la montrer ?', 'Dire à une personne de confiance ce que vous ressentez vraiment dans une situation précise', 'CROISSANCE')];
+        }
+
+        return [$this->insight('close-other', 'paradox', 'Les autres vous voient autrement que vos tests',
+            'Vos proches vous voient d\'abord « '.$top['name'].' », alors que votre DISC place « '.$disc['profile']['name'].' » en tête (profil adapté : « '.$disc['adaptedProfile']['name'].' »). Ni eux ni le test n\'ont forcément tort : ce que vous montrez et ce que vous êtes diffèrent peut-être. C\'est précieux à explorer ensemble.',
+            $evidence, $sources, 64, 'Qu\'est-ce qu\'ils voient de moi que je ne vois pas ?', 'Demander à deux proches de raconter une situation où ils vous ont vu sous ce jour', 'CROISSANCE')];
+    }
+
+    /**
+     * Le regard des proches sur les dons : dons reconnus, dons non reconnus, dons que d'autres voient et que vous ne citez pas.
+     *
+     * @return list<array<string, mixed>>
+     */
+    private function closeOnesGifts(array $r, array $close): array
+    {
+        $c = $close['dons'] ?? null;
+        if (!$c || empty($c['enough']) || !isset($r['dons']['gifts'])) {
+            return [];
+        }
+        $names = fn (array $list) => implode(', ', array_map(fn ($g) => mb_strtolower($g['name'] ?? $g), $list));
+        $out = [];
+        $confirmed = $c['confirmed'] ?? [];
+        $unseen = $c['unseen'] ?? [];
+        $others = $c['others'] ?? [];
+        if (\count($confirmed) >= 2) {
+            $out[] = $this->insight('close-gifts-confirmed', 'calling', 'Vos dons sont reconnus par ceux qui vous entourent',
+                'Vos proches reconnaissent en vous '.$names($confirmed).'. Un don que d\'autres confirment est un don à exercer sans hésiter : ce n\'est plus seulement votre impression.',
+                [['Dons spirituels', 'Dons principaux de votre test.'], ['Regard de vos proches', $c['count'].' réponses reconnaissent '.$names($confirmed).'.']], ['dons', 'proches'], 54,
+                'Dans quel service concret ce don est-il déjà attendu ?', 'Proposer d\'exercer ce don dans un service précis', 'TRANSMISSION');
+        }
+        if ($unseen && $confirmed) {
+            $out[] = $this->insight('close-gifts-unseen', 'growth', 'Un don que vos proches ne voient pas encore',
+                ucfirst($names($unseen)).' ressort'.(\count($unseen) > 1 ? 'ent' : '').' dans votre test, mais vos proches ne '.(\count($unseen) > 1 ? 'les' : 'le').' citent pas. Soit '.(\count($unseen) > 1 ? 'ces dons s\'exercent' : 'ce don s\'exerce').' peu devant eux, soit '.(\count($unseen) > 1 ? 'ils sont plus discrets' : 'il est plus discret').' que vous ne le pensez. Le mettre en pratique devant d\'autres permettra de le vérifier.',
+                [['Dons spirituels', 'Ressort dans votre test : '.$names($unseen).'.'], ['Regard de vos proches', 'Non cité par vos proches.']], ['dons', 'proches'], 44,
+                'Où pourrais-je exercer ce don devant des personnes qui me connaissent ?', 'Exercer ce don une fois devant des proches et leur demander leur retour', 'TRANSMISSION');
+        }
+        if ($others) {
+            $out[] = $this->insight('close-gifts-others', 'calling', 'Des dons que les autres voient en vous',
+                'Vos proches citent '.$names($others).', que votre test ne place pas en tête. Les autres voient parfois ce que nous ne voyons pas de nous-mêmes : prenez-le comme une invitation à explorer.',
+                [['Regard de vos proches', 'Cités par vos proches : '.$names($others).'.'], ['Dons spirituels', 'Ne figurent pas parmi vos dons principaux.']], ['dons', 'proches'], 58,
+                'Dans quelles occasions ces dons se sont-ils déjà manifestés, sans que j\'y prête attention ?', 'Demander à un proche de citer un moment où il a vu ce don à l\'œuvre', 'TRANSMISSION');
         }
 
         return $out;
