@@ -155,4 +155,27 @@ class BiblicalFiguresTest extends TestCase
             }
         }
     }
+
+    public function testEveryTypeFigureHasALensSheet(): void
+    {
+        foreach (\App\Personnalite\Psychometrie\TypeProfiles::TYPES as $code => $t) {
+            $this->assertCount(2, $t['figures'], $code);
+            foreach ($t['figures'] as $f) {
+                $sheet = BiblicalFigures::find($f[0]);
+                $this->assertNotNull($sheet, 'Pas de fiche pour '.$f[0]);
+                $lens = $sheet['lenses']['TYPE:'.$code] ?? null;
+                $this->assertNotNull($lens, $f[0].' sans lecture TYPE:'.$code);
+                $this->assertGreaterThanOrEqual(3, \count($lens['traits']));
+            }
+        }
+    }
+
+    public function testEveryOverlayKeyMatchesAFigure(): void
+    {
+        foreach (glob(\dirname(__DIR__, 2).'/content/lectures/*.json') as $file) {
+            foreach (array_keys(json_decode((string) file_get_contents($file), true, 512, \JSON_THROW_ON_ERROR)) as $key) {
+                $this->assertArrayHasKey($key, BiblicalFigures::raw(), basename($file).' : fiche inconnue '.$key);
+            }
+        }
+    }
 }

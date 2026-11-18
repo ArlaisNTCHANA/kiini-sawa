@@ -1,0 +1,1078 @@
+{
+ "ESDRAS": {
+  "lenses": {
+   "TYPE:ISTJ": {
+    "label": "Type ISTJ · Le Pilier",
+    "definition": "Fiable et méthodique, vous tenez vos engagements et faites reposer les projets sur du solide.",
+    "solidity": "Indices clairs",
+    "traits": [
+     [
+      "Il étudie avant d'agir",
+      "Il avait « appliqué son cœur à étudier et à mettre en pratique la loi de l'Éternel, et à enseigner ».",
+      "Esdras 7:10"
+     ],
+     [
+      "Il s'appuie sur le texte et la règle",
+      "On le présente comme « scribe, versé dans la loi du Dieu des cieux ».",
+      "Esdras 7:12"
+     ],
+     [
+      "Il prépare le voyage avec soin",
+      "Il proclame un jeûne au bord du fleuve pour demander à Dieu un bon chemin, au lieu de demander une escorte au roi.",
+      "Esdras 8:21-23"
+     ]
+    ],
+    "absent": [
+     [
+      "L'improvisation",
+      "Chaque geste du texte est préparé et ordonné."
+     ]
+    ],
+    "limits": "Les récits bibliques ne décrivent pas de « types » : nous repérons seulement des comportements qui vont dans le sens de ce type. C'est un rapprochement, pas un diagnostic, et nous ne mesurons rien.",
+    "why": "Comme lui, vous tenez vos engagements et vous préférez une méthode éprouvée. Son récit montre une fidélité au texte et à la parole donnée."
+   }
+  }
+ },
+ "BOAZ": {
+  "lenses": {
+   "TYPE:ISTJ": {
+    "label": "Type ISTJ · Le Pilier",
+    "definition": "Fiable et méthodique, vous tenez vos engagements et faites reposer les projets sur du solide.",
+    "solidity": "Indices clairs (livre de Ruth)",
+    "traits": [
+     [
+      "Il tient parole",
+      "« Je ferai pour toi tout ce que tu diras. »",
+      "Ruth 3:11"
+     ],
+     [
+      "Il suit la procédure",
+      "Il monte à la porte de la ville et prend dix anciens pour témoins avant d'acheter le champ.",
+      "Ruth 4:1-2, 9"
+     ],
+     [
+      "Il respecte l'ordre établi",
+      "Il reconnaît qu'un parent plus proche a un droit avant lui.",
+      "Ruth 3:12"
+     ]
+    ],
+    "absent": [
+     [
+      "La spontanéité",
+      "Il agit en règle, publiquement, devant témoins (Ruth 4:9-10)."
+     ]
+    ],
+    "limits": "Les récits bibliques ne décrivent pas de « types » : nous repérons seulement des comportements qui vont dans le sens de ce type. C'est un rapprochement, pas un diagnostic, et nous ne mesurons rien.",
+    "why": "Comme lui, vous faites reposer vos engagements sur du solide. Son récit montre une fidélité qui devient une bénédiction pour d'autres."
+   }
+  }
+ },
+ "RUTH": {
+  "lenses": {
+   "TYPE:ISFJ": {
+    "label": "Type ISFJ · Le Soutien",
+    "definition": "Attentionné(e) et fidèle, vous prenez soin des autres avec constance et discrétion.",
+    "solidity": "Indices clairs",
+    "traits": [
+     [
+      "Elle reste fidèle",
+      "« Où tu iras j'irai, où tu demeureras je demeurerai. »",
+      "Ruth 1:16"
+     ],
+     [
+      "Elle prend soin concrètement",
+      "Elle va glaner pour nourrir sa belle-mère.",
+      "Ruth 2:2"
+     ],
+     [
+      "Sa constance est reconnue",
+      "« Toute la porte de mon peuple sait que tu es une femme vertueuse. »",
+      "Ruth 3:11"
+     ]
+    ],
+    "absent": [
+     [
+      "Réclamer pour elle-même",
+      "Elle laisse Naomi guider ses démarches (Ruth 3:1-5)."
+     ]
+    ],
+    "limits": "Les récits bibliques ne décrivent pas de « types » : nous repérons seulement des comportements qui vont dans le sens de ce type. C'est un rapprochement, pas un diagnostic, et nous ne mesurons rien.",
+    "why": "Comme elle, vous prenez soin des autres avec constance et discrétion. Son récit montre que Dieu voit cette fidélité et lui donne une place."
+   }
+  }
+ },
+ "ESTHER": {
+  "lenses": {
+   "TYPE:ISFJ": {
+    "label": "Type ISFJ · Le Soutien",
+    "definition": "Attentionné(e) et fidèle, vous prenez soin des autres avec constance et discrétion.",
+    "solidity": "Indices partiels (quelques scènes)",
+    "traits": [
+     [
+      "Elle reste discrète",
+      "Elle ne fait connaître ni son peuple ni sa naissance.",
+      "Esther 2:10"
+     ],
+     [
+      "Elle écoute et suit ceux qui l'ont élevée",
+      "Elle faisait ce que Mardochée lui avait dit.",
+      "Esther 2:20"
+     ],
+     [
+      "Elle s'engage pour les siens malgré le risque",
+      "« Et si je dois périr, je périrai. »",
+      "Esther 4:16"
+     ]
+    ],
+    "absent": [
+     [
+      "Prendre la parole d'emblée",
+      "Elle hésite d'abord à se présenter devant le roi (Esther 4:11)."
+     ]
+    ],
+    "limits": "Les récits bibliques ne décrivent pas de « types » : nous repérons seulement des comportements qui vont dans le sens de ce type. C'est un rapprochement, pas un diagnostic, et nous ne mesurons rien.",
+    "why": "Comme elle, vous êtes fidèle et prudent, et vous vous engagez quand cela compte vraiment. Son récit montre le courage d'une personne discrète."
+   }
+  }
+ },
+ "DANIEL": {
+  "lenses": {
+   "TYPE:INFJ": {
+    "label": "Type INFJ · Le Discerneur",
+    "definition": "Intuitif(ve) et profond(e), vous percevez le sens caché des choses et accompagnez les autres vers leur vocation.",
+    "solidity": "Indices clairs",
+    "traits": [
+     [
+      "Il perçoit le sens caché des choses",
+      "« Il y a dans les cieux un Dieu qui révèle les secrets. »",
+      "Daniel 2:28"
+     ],
+     [
+      "Il agit selon ses convictions profondes",
+      "Il résolut de ne pas se souiller par les mets du roi.",
+      "Daniel 1:8"
+     ],
+     [
+      "Dieu lui donne l'intelligence des visions",
+      "Dieu lui accorda « de la science, de l'intelligence dans toutes les lettres, et de la sagesse ».",
+      "Daniel 1:17"
+     ]
+    ],
+    "absent": [
+     [
+      "Chercher la place publique",
+      "Il sert discrètement à la cour, et sa gloire est celle de Dieu (Daniel 2:30)."
+     ]
+    ],
+    "limits": "Les récits bibliques ne décrivent pas de « types » : nous repérons seulement des comportements qui vont dans le sens de ce type. C'est un rapprochement, pas un diagnostic, et nous ne mesurons rien.",
+    "why": "Comme lui, vous percevez ce qui se joue sous la surface et vous tenez à vos convictions. Son récit montre qu'une telle intuition vient de Dieu, pas de soi."
+   }
+  }
+ },
+ "MARIE": {
+  "lenses": {
+   "TYPE:INFJ": {
+    "label": "Type INFJ · Le Discerneur",
+    "definition": "Intuitif(ve) et profond(e), vous percevez le sens caché des choses et accompagnez les autres vers leur vocation.",
+    "solidity": "Indices clairs mais peu nombreux",
+    "traits": [
+     [
+      "Elle garde et médite",
+      "« Marie gardait toutes ces choses, et les repassait dans son cœur. »",
+      "Luc 2:19"
+     ],
+     [
+      "Elle réfléchit à ce qu'elle entend",
+      "Elle se demandait ce que signifiait une telle salutation.",
+      "Luc 1:29"
+     ],
+     [
+      "Elle s'engage en profondeur",
+      "« Je suis la servante du Seigneur ; qu'il me soit fait selon ta parole. »",
+      "Luc 1:38"
+     ]
+    ],
+    "absent": [
+     [
+      "Expliquer",
+      "Elle parle peu : le texte rapporte peu de ses paroles."
+     ]
+    ],
+    "limits": "Les récits bibliques ne décrivent pas de « types » : nous repérons seulement des comportements qui vont dans le sens de ce type. C'est un rapprochement, pas un diagnostic, et nous ne mesurons rien.",
+    "why": "Comme elle, vous méditez longtemps ce que vous recevez avant d'en parler. Son récit montre une foi intérieure profonde, tournée vers son Fils."
+   }
+  }
+ },
+ "JOSEPH_JACOB": {
+  "lenses": {
+   "TYPE:INTJ": {
+    "label": "Type INTJ · Le Bâtisseur de vision",
+    "definition": "Stratège indépendant(e), vous concevez des plans à long terme et les menez avec détermination.",
+    "solidity": "Indices nombreux et clairs",
+    "traits": [
+     [
+      "Il conçoit un plan à long terme",
+      "Il propose à Pharaon de choisir un homme intelligent et sage et de prélever le cinquième des récoltes pendant sept ans.",
+      "Genèse 41:33-36"
+     ],
+     [
+      "Il voit loin",
+      "« Vous aviez médité de me faire du mal : Dieu l'a changé en bien. »",
+      "Genèse 50:20"
+     ],
+     [
+      "Il agit de façon indépendante",
+      "Il est placé à la tête du pays d'Égypte, qu'il organise.",
+      "Genèse 41:41"
+     ]
+    ],
+    "absent": [
+     [
+      "L'expression immédiate de ses sentiments",
+      "Il se retient et pleure à l'écart (Genèse 42:24)."
+     ]
+    ],
+    "limits": "Les récits bibliques ne décrivent pas de « types » : nous repérons seulement des comportements qui vont dans le sens de ce type. C'est un rapprochement, pas un diagnostic, et nous ne mesurons rien.",
+    "why": "Comme lui, vous voyez loin et vous bâtissez avec méthode. Son récit montre qu'un plan se lit mieux à la lumière de la main de Dieu."
+   }
+  }
+ },
+ "PAUL": {
+  "lenses": {
+   "TYPE:INTJ": {
+    "label": "Type INTJ · Le Bâtisseur de vision",
+    "definition": "Stratège indépendant(e), vous concevez des plans à long terme et les menez avec détermination.",
+    "solidity": "Indices nombreux",
+    "traits": [
+     [
+      "Il a un grand dessein",
+      "Il forme le projet d'aller à Jérusalem, puis se dit : « il faut aussi que je voie Rome ».",
+      "Actes 19:21"
+     ],
+     [
+      "Il planifie ses déplacements",
+      "Il espère aller en Espagne en passant par Rome.",
+      "Romains 15:24"
+     ],
+     [
+      "Il tient son cap",
+      "« J'ai combattu le bon combat, j'ai achevé la course, j'ai gardé la foi. »",
+      "2 Timothée 4:7"
+     ]
+    ],
+    "absent": [
+     [
+      "L'adaptation sans cap",
+      "Il se fait pourtant « tout à tous » (1 Corinthiens 9:22) : son cap n'est pas rigide."
+     ]
+    ],
+    "limits": "Les récits bibliques ne décrivent pas de « types » : nous repérons seulement des comportements qui vont dans le sens de ce type. C'est un rapprochement, pas un diagnostic, et nous ne mesurons rien.",
+    "why": "Comme lui, vous avez une vision qui organise vos choix. Son récit montre qu'une vision est un service, et que sa force vient de la grâce."
+   },
+   "TYPE:ENTP": {
+    "label": "Type ENTP · Le Défricheur",
+    "definition": "Inventif(ve) et vif(ve), vous aimez remettre en question et ouvrir de nouvelles voies.",
+    "solidity": "Indices nombreux",
+    "traits": [
+     [
+      "Il discute et argumente",
+      "Il discutait chaque jour sur la place publique avec ceux qui s'y trouvaient.",
+      "Actes 17:17"
+     ],
+     [
+      "Il part du terrain des autres",
+      "À Athènes, il part d'un autel avec cette inscription : « À un dieu inconnu ! »",
+      "Actes 17:23"
+     ],
+     [
+      "Il invente des approches nouvelles",
+      "« Je me suis fait tout à tous, afin d'en sauver de toute manière quelques-uns. »",
+      "1 Corinthiens 9:22"
+     ]
+    ],
+    "absent": [
+     [
+      "La retenue dans le débat",
+      "Il s'oppose vivement, y compris à Pierre (Galates 2:11)."
+     ]
+    ],
+    "limits": "Les récits bibliques ne décrivent pas de « types » : nous repérons seulement des comportements qui vont dans le sens de ce type. C'est un rapprochement, pas un diagnostic, et nous ne mesurons rien.",
+    "why": "Comme lui, vous êtes inventif et vif dans le débat. Son récit montre que cette énergie sert l'Évangile quand elle s'appuie sur la grâce."
+   }
+  }
+ },
+ "NOE": {
+  "lenses": {
+   "TYPE:ISTP": {
+    "label": "Type ISTP · Le Technicien",
+    "definition": "Pratique et calme, vous comprenez comment les choses fonctionnent et réglez les problèmes concrets.",
+    "solidity": "Indices clairs",
+    "traits": [
+     [
+      "Il fait, concrètement",
+      "Il exécute tout ce que Dieu lui a ordonné.",
+      "Genèse 6:22"
+     ],
+     [
+      "Il construit avec des mesures précises",
+      "Dieu lui donne les dimensions de l'arche : trois cents coudées de longueur.",
+      "Genèse 6:15"
+     ],
+     [
+      "Il parle peu",
+      "Le texte ne rapporte aucune de ses paroles avant la sortie de l'arche.",
+      "Genèse 6:9 ; 9:25"
+     ]
+    ],
+    "absent": [
+     [
+      "Le discours",
+      "Le texte garde sa première parole pour après le déluge (Genèse 9:25)."
+     ]
+    ],
+    "limits": "Les récits bibliques ne décrivent pas de « types » : nous repérons seulement des comportements qui vont dans le sens de ce type. C'est un rapprochement, pas un diagnostic, et nous ne mesurons rien.",
+    "why": "Comme lui, vous comprenez comment les choses fonctionnent et vous les faites. Son récit montre un homme qui agit calmement sur la parole de Dieu."
+   }
+  }
+ },
+ "JONATHAN": {
+  "lenses": {
+   "TYPE:ISTP": {
+    "label": "Type ISTP · Le Technicien",
+    "definition": "Pratique et calme, vous comprenez comment les choses fonctionnent et réglez les problèmes concrets.",
+    "solidity": "Indices clairs (une scène centrale)",
+    "traits": [
+     [
+      "Il évalue la situation et agit",
+      "Il propose au jeune homme qui porte ses armes de pousser jusqu'au poste des Philistins.",
+      "1 Samuel 14:6"
+     ],
+     [
+      "Il pose un test pratique",
+      "S'ils disent « Montez vers nous ! », ce sera un signe.",
+      "1 Samuel 14:10"
+     ],
+     [
+      "Il agit avec habileté, de ses mains",
+      "Il monte « en s'aidant des mains et des pieds ».",
+      "1 Samuel 14:13"
+     ]
+    ],
+    "absent": [
+     [
+      "Le long discours",
+      "Dans cette scène, il parle brièvement et agit (1 Samuel 14:6-13)."
+     ]
+    ],
+    "limits": "Les récits bibliques ne décrivent pas de « types » : nous repérons seulement des comportements qui vont dans le sens de ce type. C'est un rapprochement, pas un diagnostic, et nous ne mesurons rien.",
+    "why": "Comme lui, vous êtes pratique et calme, et vous passez à l'action au bon moment. Son récit montre l'action discrète d'un homme qui compte sur l'Éternel."
+   }
+  }
+ },
+ "DAVID": {
+  "lenses": {
+   "TYPE:ISFP": {
+    "label": "Type ISFP · L'Artiste",
+    "definition": "Sensible et authentique, vous exprimez vos valeurs par vos actes et votre créativité.",
+    "solidity": "Indices nombreux et clairs",
+    "traits": [
+     [
+      "Il exprime ce qu'il vit par l'art",
+      "David jouait de la harpe, et Saül se trouvait soulagé.",
+      "1 Samuel 16:23"
+     ],
+     [
+      "Il vit ses émotions pleinement",
+      "« David dansait de toute sa force devant l'Éternel. »",
+      "2 Samuel 6:14"
+     ],
+     [
+      "Il est authentique, même dans la faute",
+      "« O Dieu ! aie pitié de moi dans ta bonté. »",
+      "Psaumes 51:1"
+     ]
+    ],
+    "absent": [
+     [
+      "La retenue",
+      "Il montre ce qu'il ressent, par le chant ou la danse (2 Samuel 6:14)."
+     ]
+    ],
+    "limits": "Les récits bibliques ne décrivent pas de « types » : nous repérons seulement des comportements qui vont dans le sens de ce type. C'est un rapprochement, pas un diagnostic, et nous ne mesurons rien.",
+    "why": "Comme lui, vous exprimez vos valeurs par vos actes et votre sensibilité. Son récit montre que Dieu accueille cette sincérité."
+   }
+  }
+ },
+ "MARIE_BETHANIE": {
+  "lenses": {
+   "TYPE:ISFP": {
+    "label": "Type ISFP · L'Artiste",
+    "definition": "Sensible et authentique, vous exprimez vos valeurs par vos actes et votre créativité.",
+    "solidity": "Indices clairs (trois scènes)",
+    "traits": [
+     [
+      "Elle exprime son amour par un geste",
+      "Elle prend du nard pur de grand prix et oint les pieds de Jésus.",
+      "Jean 12:3"
+     ],
+     [
+      "Elle choisit l'essentiel, sans le dire",
+      "Elle s'assoit aux pieds du Seigneur et écoute sa parole.",
+      "Luc 10:39"
+     ],
+     [
+      "Elle agit au lieu de parler",
+      "Dans la scène du parfum, le texte ne rapporte aucune parole de sa part.",
+      "Jean 12:3"
+     ]
+    ],
+    "absent": [
+     [
+      "La justification",
+      "Elle ne se défend pas devant la remarque de sa sœur ; Jésus parle pour elle (Luc 10:42)."
+     ]
+    ],
+    "limits": "Les récits bibliques ne décrivent pas de « types » : nous repérons seulement des comportements qui vont dans le sens de ce type. C'est un rapprochement, pas un diagnostic, et nous ne mesurons rien.",
+    "why": "Comme elle, vous exprimez vos valeurs par des gestes plus que par des mots. Son récit montre un amour offert sans calcul, que Jésus reçoit."
+   }
+  }
+ },
+ "JEREMIE": {
+  "lenses": {
+   "TYPE:INFP": {
+    "label": "Type INFP · L'Idéaliste",
+    "definition": "Guidé(e) par vos valeurs, vous cherchez le sens et défendez ce qui est juste avec douceur.",
+    "solidity": "Indices nombreux et clairs",
+    "traits": [
+     [
+      "Il ressent profondément",
+      "« Il y a dans mon cœur comme un feu dévorant. »",
+      "Jérémie 20:9"
+     ],
+     [
+      "Il doute de lui-même, il a ses idéaux",
+      "« Je ne sais point parler, car je suis un enfant. »",
+      "Jérémie 1:6"
+     ],
+     [
+      "Il dit sa peine avec honnêteté",
+      "« Maudit soit le jour où je suis né ! »",
+      "Jérémie 20:14"
+     ]
+    ],
+    "absent": [
+     [
+      "La légèreté",
+      "Il est appelé « le prophète des larmes » : sa vie est marquée de souffrance."
+     ]
+    ],
+    "limits": "Les récits bibliques ne décrivent pas de « types » : nous repérons seulement des comportements qui vont dans le sens de ce type. C'est un rapprochement, pas un diagnostic, et nous ne mesurons rien.",
+    "why": "Comme lui, vous êtes guidé par vos valeurs, et vous ressentez fort. Son récit montre que Dieu accueille la plainte sincère de l'idéaliste."
+   }
+  }
+ },
+ "JOSEPH": {
+  "lenses": {
+   "TYPE:INFP": {
+    "label": "Type INFP · L'Idéaliste",
+    "definition": "Guidé(e) par vos valeurs, vous cherchez le sens et défendez ce qui est juste avec douceur.",
+    "solidity": "Indices clairs (quelques versets)",
+    "traits": [
+     [
+      "Il agit selon ses valeurs, avec douceur",
+      "C'était un homme de bien, qui ne voulait pas la diffamer.",
+      "Matthieu 1:19"
+     ],
+     [
+      "Il réfléchit en silence",
+      "« Comme il y pensait, voici, un ange du Seigneur lui apparut en songe. »",
+      "Matthieu 1:20"
+     ],
+     [
+      "Il obéit à ce qu'il a compris",
+      "Il se leva, prit de nuit l'enfant et sa mère.",
+      "Matthieu 2:14"
+     ]
+    ],
+    "absent": [
+     [
+      "La parole",
+      "Aucune parole de lui n'est rapportée dans les évangiles."
+     ]
+    ],
+    "limits": "Les récits bibliques ne décrivent pas de « types » : nous repérons seulement des comportements qui vont dans le sens de ce type. C'est un rapprochement, pas un diagnostic, et nous ne mesurons rien.",
+    "why": "Comme lui, vous suivez ce que votre conscience vous dit, avec délicatesse. Son récit montre un homme juste qui reçoit et protège."
+   }
+  }
+ },
+ "THOMAS": {
+  "lenses": {
+   "TYPE:INTP": {
+    "label": "Type INTP · Le Penseur",
+    "definition": "Curieux(se) et logique, vous aimez comprendre les systèmes et explorer les idées.",
+    "solidity": "Indices clairs",
+    "traits": [
+     [
+      "Il veut comprendre avant de suivre",
+      "« Nous ne savons où tu vas ; comment pouvons-nous en savoir le chemin ? »",
+      "Jean 14:5"
+     ],
+     [
+      "Il exige des preuves",
+      "« Si je ne vois dans ses mains la marque des clous... je ne croirai point. »",
+      "Jean 20:25"
+     ],
+     [
+      "Il reconnaît ce qu'il voit",
+      "« Mon Seigneur et mon Dieu ! »",
+      "Jean 20:28"
+     ]
+    ],
+    "absent": [
+     [
+      "La confiance sur parole",
+      "Il refuse de croire sur le seul témoignage des autres (Jean 20:25)."
+     ]
+    ],
+    "limits": "Les récits bibliques ne décrivent pas de « types » : nous repérons seulement des comportements qui vont dans le sens de ce type. C'est un rapprochement, pas un diagnostic, et nous ne mesurons rien.",
+    "why": "Comme lui, vous voulez comprendre à fond avant d'adhérer. Son récit montre que Jésus répond à cette recherche."
+   }
+  }
+ },
+ "SALOMON": {
+  "lenses": {
+   "TYPE:INTP": {
+    "label": "Type INTP · Le Penseur",
+    "definition": "Curieux(se) et logique, vous aimez comprendre les systèmes et explorer les idées.",
+    "solidity": "Indices clairs",
+    "traits": [
+     [
+      "Il cherche à comprendre le monde",
+      "« J'ai appliqué mon cœur à rechercher et à sonder par la sagesse tout ce qui se fait sous les cieux. »",
+      "Ecclésiaste 1:13"
+     ],
+     [
+      "Il observe et classe",
+      "Il parle des arbres, des animaux, des oiseaux, des reptiles et des poissons.",
+      "1 Rois 4:33"
+     ],
+     [
+      "Il teste par l'expérience",
+      "Il essaie la joie, puis constate : « Tout est vanité. »",
+      "Ecclésiaste 2:1, 11"
+     ]
+    ],
+    "absent": [
+     [
+      "La conclusion pratique",
+      "Sa recherche le laisse, un temps, sans réponse (Ecclésiaste 2:11)."
+     ]
+    ],
+    "limits": "Les récits bibliques ne décrivent pas de « types » : nous repérons seulement des comportements qui vont dans le sens de ce type. C'est un rapprochement, pas un diagnostic, et nous ne mesurons rien.",
+    "why": "Comme lui, vous aimez explorer les idées et les systèmes. Son récit montre que la recherche seule ne comble pas, et vers qui elle doit mener."
+   }
+  }
+ },
+ "PIERRE": {
+  "lenses": {
+   "TYPE:ESTP": {
+    "label": "Type ESTP · Le Fonceur",
+    "definition": "Énergique et réaliste, vous agissez vite et saisissez les occasions.",
+    "solidity": "Indices nombreux et clairs",
+    "traits": [
+     [
+      "Il agit vite",
+      "« Seigneur, si c'est toi, ordonne que j'aille vers toi sur les eaux. »",
+      "Matthieu 14:28"
+     ],
+     [
+      "Il saisit l'occasion",
+      "Il tire l'épée et coupe l'oreille du serviteur du souverain sacrificateur.",
+      "Jean 18:10"
+     ],
+     [
+      "Il fonce vers l'action",
+      "Il met son vêtement et se jette à l'eau pour rejoindre Jésus.",
+      "Jean 21:7"
+     ]
+    ],
+    "absent": [
+     [
+      "La réflexion préalable",
+      "Il parle et agit avant de mesurer (Matthieu 16:22)."
+     ]
+    ],
+    "limits": "Les récits bibliques ne décrivent pas de « types » : nous repérons seulement des comportements qui vont dans le sens de ce type. C'est un rapprochement, pas un diagnostic, et nous ne mesurons rien.",
+    "why": "Comme lui, vous êtes énergique et vous saisissez les occasions. Son récit montre que Jésus accueille l'élan et le corrige avec patience."
+   },
+   "TYPE:ENFP": {
+    "label": "Type ENFP · L'Éveilleur",
+    "definition": "Enthousiaste et inspirant(e), vous voyez le potentiel des personnes et des idées.",
+    "solidity": "Indices nombreux",
+    "traits": [
+     [
+      "Il s'enthousiasme",
+      "Il sort de la barque pour marcher sur les eaux.",
+      "Matthieu 14:29"
+     ],
+     [
+      "Il voit le potentiel de l'autre, et il le dit",
+      "Il confesse : « Tu es le Christ, le Fils du Dieu vivant. »",
+      "Matthieu 16:16"
+     ],
+     [
+      "Il prend la parole",
+      "Le jour de la Pentecôte, il se lève et élève la voix.",
+      "Actes 2:14"
+     ]
+    ],
+    "absent": [
+     [
+      "La constance",
+      "Il promet de ne jamais renier Jésus, puis le renie (Matthieu 26:35, 69-75)."
+     ]
+    ],
+    "limits": "Les récits bibliques ne décrivent pas de « types » : nous repérons seulement des comportements qui vont dans le sens de ce type. C'est un rapprochement, pas un diagnostic, et nous ne mesurons rien.",
+    "why": "Comme lui, vous voyez le potentiel des personnes et des situations, et vous vous lancez. Son récit montre un enthousiasme repris par la grâce."
+   }
+  }
+ },
+ "SAMSON": {
+  "lenses": {
+   "TYPE:ESTP": {
+    "label": "Type ESTP · Le Fonceur",
+    "definition": "Énergique et réaliste, vous agissez vite et saisissez les occasions.",
+    "solidity": "Indices clairs",
+    "traits": [
+     [
+      "Il agit par la force, sur le moment",
+      "L'Esprit de l'Éternel le saisit ; sans rien à la main, il déchire le lion.",
+      "Juges 14:6"
+     ],
+     [
+      "Il aime le défi",
+      "Il propose une énigme aux jeunes gens, avec un pari.",
+      "Juges 14:12-14"
+     ],
+     [
+      "Il saisit l'occasion jusqu'au bout",
+      "« Que je meure avec les Philistins ! »",
+      "Juges 16:30"
+     ]
+    ],
+    "absent": [
+     [
+      "La maîtrise de soi",
+      "Il cède à Dalila, qui le presse chaque jour (Juges 16:16-17)."
+     ]
+    ],
+    "limits": "Les récits bibliques ne décrivent pas de « types » : nous repérons seulement des comportements qui vont dans le sens de ce type. C'est un rapprochement, pas un diagnostic, et nous ne mesurons rien.",
+    "why": "Comme lui, vous agissez vite et vous aimez les défis. Son récit montre le risque d'un élan sans frein, et un Dieu qui reste fidèle."
+   }
+  }
+ },
+ "MIRIAM": {
+  "lenses": {
+   "TYPE:ESFP": {
+    "label": "Type ESFP · L'Animateur",
+    "definition": "Chaleureux(se) et spontané(e), vous apportez de la vie et de la joie partout où vous passez.",
+    "solidity": "Indices clairs (quelques scènes)",
+    "traits": [
+     [
+      "Elle fait vivre la fête",
+      "Elle prend un tambourin ; toutes les femmes la suivent avec des tambourins et en dansant.",
+      "Exode 15:20"
+     ],
+     [
+      "Elle entraîne par le chant",
+      "« Chantez à l'Éternel, car il a fait éclater sa gloire. »",
+      "Exode 15:21"
+     ],
+     [
+      "Elle dit ce qu'elle pense, même à son frère",
+      "Elle parle contre Moïse avec Aaron.",
+      "Nombres 12:1"
+     ]
+    ],
+    "absent": [
+     [
+      "La retenue",
+      "Elle prend la parole en public, devant tout le peuple (Exode 15:21)."
+     ]
+    ],
+    "limits": "Les récits bibliques ne décrivent pas de « types » : nous repérons seulement des comportements qui vont dans le sens de ce type. C'est un rapprochement, pas un diagnostic, et nous ne mesurons rien.",
+    "why": "Comme elle, vous apportez de la vie et de la joie. Son récit montre le don de l'entrain, et le danger de la jalousie."
+   }
+  }
+ },
+ "MARTHE": {
+  "lenses": {
+   "TYPE:ESFP": {
+    "label": "Type ESFP · L'Animateur",
+    "definition": "Chaleureux(se) et spontané(e), vous apportez de la vie et de la joie partout où vous passez.",
+    "solidity": "Indices partiels",
+    "traits": [
+     [
+      "Elle accueille avec énergie",
+      "Elle reçoit Jésus dans sa maison, occupée à divers soins domestiques.",
+      "Luc 10:38, 40"
+     ],
+     [
+      "Elle dit ce qu'elle pense, directement",
+      "« Seigneur, cela ne te fait-il rien que ma sœur me laisse seule pour servir ? »",
+      "Luc 10:40"
+     ],
+     [
+      "Elle réagit sur le champ",
+      "À l'annonce de sa venue, elle va au-devant de Jésus.",
+      "Jean 11:20"
+     ]
+    ],
+    "absent": [
+     [
+      "La contemplation",
+      "C'est Marie qui s'assoit (Luc 10:39)."
+     ]
+    ],
+    "limits": "Les récits bibliques ne décrivent pas de « types » : nous repérons seulement des comportements qui vont dans le sens de ce type. C'est un rapprochement, pas un diagnostic, et nous ne mesurons rien.",
+    "why": "Comme elle, vous êtes chaleureux, spontané, très présent. Son récit montre que Jésus accueille cette spontanéité et vous invite à recevoir."
+   }
+  }
+ },
+ "APOLLOS": {
+  "lenses": {
+   "TYPE:ENFP": {
+    "label": "Type ENFP · L'Éveilleur",
+    "definition": "Enthousiaste et inspirant(e), vous voyez le potentiel des personnes et des idées.",
+    "solidity": "Indices clairs (quelques versets)",
+    "traits": [
+     [
+      "Il est enthousiaste",
+      "Il était « fervent d'esprit ».",
+      "Actes 18:25"
+     ],
+     [
+      "Il parle avec aisance",
+      "C'était un « homme éloquent ».",
+      "Actes 18:24"
+     ],
+     [
+      "Il s'ouvre au conseil",
+      "Aquilas et Priscille le prennent avec eux et lui exposent plus exactement la voie de Dieu.",
+      "Actes 18:26"
+     ]
+    ],
+    "absent": [
+     [
+      "La rigueur du détail",
+      "Il ne connaissait que le baptême de Jean (Actes 18:25)."
+     ]
+    ],
+    "limits": "Les récits bibliques ne décrivent pas de « types » : nous repérons seulement des comportements qui vont dans le sens de ce type. C'est un rapprochement, pas un diagnostic, et nous ne mesurons rien.",
+    "why": "Comme lui, vous inspirez par votre enthousiasme et votre parole. Son récit montre que cet élan gagne à se laisser compléter."
+   }
+  }
+ },
+ "ELIE": {
+  "lenses": {
+   "TYPE:ENTP": {
+    "label": "Type ENTP · Le Défricheur",
+    "definition": "Inventif(ve) et vif(ve), vous aimez remettre en question et ouvrir de nouvelles voies.",
+    "solidity": "Indices clairs",
+    "traits": [
+     [
+      "Il remet en question",
+      "« Jusqu'à quand clocherez-vous des deux côtés ? »",
+      "1 Rois 18:21"
+     ],
+     [
+      "Il manie l'ironie",
+      "« Criez à haute voix, puisqu'il est dieu. »",
+      "1 Rois 18:27"
+     ],
+     [
+      "Il ouvre un chemin nouveau, seul contre tous",
+      "Il se tient seul devant 450 prophètes de Baal.",
+      "1 Rois 18:22"
+     ]
+    ],
+    "absent": [
+     [
+      "La régularité",
+      "Après le Carmel, il fuit et demande à mourir (1 Rois 19:3-4)."
+     ]
+    ],
+    "limits": "Les récits bibliques ne décrivent pas de « types » : nous repérons seulement des comportements qui vont dans le sens de ce type. C'est un rapprochement, pas un diagnostic, et nous ne mesurons rien.",
+    "why": "Comme lui, vous aimez remettre en question et ouvrir des voies. Son récit montre aussi l'épuisement qui suit, et le Dieu qui relève."
+   }
+  }
+ },
+ "NEHEMIE": {
+  "lenses": {
+   "TYPE:ESTJ": {
+    "label": "Type ESTJ · L'Organisateur",
+    "definition": "Structuré(e) et décidé(e), vous mettez de l'ordre et faites avancer les choses.",
+    "solidity": "Indices nombreux et clairs",
+    "traits": [
+     [
+      "Il organise",
+      "Il place le peuple par familles, avec leurs épées, leurs lances et leurs arcs.",
+      "Néhémie 4:13"
+     ],
+     [
+      "Il tient son cap, sans se laisser distraire",
+      "« J'ai un grand ouvrage à exécuter, et je ne puis descendre. »",
+      "Néhémie 6:3"
+     ],
+     [
+      "Il finit ce qu'il commence",
+      "La muraille est achevée en cinquante-deux jours.",
+      "Néhémie 6:15"
+     ]
+    ],
+    "absent": [
+     [
+      "L'improvisation",
+      "Il prépare tout : prière, requête, inspection de nuit (Néhémie 1 ; 2:12-15)."
+     ]
+    ],
+    "limits": "Les récits bibliques ne décrivent pas de « types » : nous repérons seulement des comportements qui vont dans le sens de ce type. C'est un rapprochement, pas un diagnostic, et nous ne mesurons rien.",
+    "why": "Comme lui, vous mettez de l'ordre et vous faites avancer le travail. Son récit montre une organisation appuyée d'abord sur la prière."
+   },
+   "TYPE:ENTJ": {
+    "label": "Type ENTJ · Le Stratège",
+    "definition": "Leader déterminé(e), vous fixez un cap ambitieux et organisez les moyens de l'atteindre.",
+    "solidity": "Indices nombreux et clairs",
+    "traits": [
+     [
+      "Il rassemble autour d'un projet",
+      "« Venez, rebâtissons la muraille de Jérusalem. »",
+      "Néhémie 2:17"
+     ],
+     [
+      "Il organise les moyens",
+      "Il pose une garde jour et nuit pour se défendre.",
+      "Néhémie 4:9"
+     ],
+     [
+      "Il va jusqu'au bout",
+      "La muraille est achevée en cinquante-deux jours.",
+      "Néhémie 6:15"
+     ]
+    ],
+    "absent": [
+     [
+      "L'indépendance",
+      "Il prie d'abord, avant de se mettre en route (Néhémie 1:4-11)."
+     ]
+    ],
+    "limits": "Les récits bibliques ne décrivent pas de « types » : nous repérons seulement des comportements qui vont dans le sens de ce type. C'est un rapprochement, pas un diagnostic, et nous ne mesurons rien.",
+    "why": "Comme lui, vous fixez un but ambitieux et vous mobilisez les autres. Son récit montre un chef qui prie d'abord."
+   }
+  }
+ },
+ "MOISE": {
+  "lenses": {
+   "TYPE:ESTJ": {
+    "label": "Type ESTJ · L'Organisateur",
+    "definition": "Structuré(e) et décidé(e), vous mettez de l'ordre et faites avancer les choses.",
+    "solidity": "Indices clairs",
+    "traits": [
+     [
+      "Il juge et tranche",
+      "Il siège pour juger le peuple, du matin jusqu'au soir.",
+      "Exode 18:13"
+     ],
+     [
+      "Il accepte de mettre de l'ordre",
+      "Il écoute son beau-père et établit des chefs de mille, de cent, de cinquante et de dix.",
+      "Exode 18:21-24"
+     ],
+     [
+      "Il transmet les règles",
+      "Il enseigne au peuple les ordonnances et les lois.",
+      "Exode 18:20"
+     ]
+    ],
+    "absent": [
+     [
+      "La délégation spontanée",
+      "Il a eu besoin d'être conseillé : « Ce que tu fais n'est pas bien » (Exode 18:17)."
+     ]
+    ],
+    "limits": "Les récits bibliques ne décrivent pas de « types » : nous repérons seulement des comportements qui vont dans le sens de ce type. C'est un rapprochement, pas un diagnostic, et nous ne mesurons rien.",
+    "why": "Comme lui, vous êtes structuré et décidé. Son récit montre qu'un bon organisateur apprend à partager la charge."
+   }
+  }
+ },
+ "AQUILAS_PRISCILLE": {
+  "lenses": {
+   "TYPE:ESFJ": {
+    "label": "Type ESFJ · Le Rassembleur",
+    "definition": "Sociable et dévoué(e), vous créez de la cohésion et veillez au bien-être de chacun.",
+    "solidity": "Indices clairs et convergents",
+    "traits": [
+     [
+      "Ils ouvrent leur maison",
+      "Paul demeura chez eux et y travailla.",
+      "Actes 18:3"
+     ],
+     [
+      "Ils rassemblent",
+      "« L'Église qui est dans leur maison. »",
+      "1 Corinthiens 16:19"
+     ],
+     [
+      "Ils veillent au bien des autres",
+      "Ils prennent Apollos avec eux pour lui exposer plus exactement la voie de Dieu.",
+      "Actes 18:26"
+     ]
+    ],
+    "absent": [
+     [
+      "Le goût de la mise en avant",
+      "On les nomme toujours ensemble, jamais en vedette."
+     ]
+    ],
+    "limits": "Les récits bibliques ne décrivent pas de « types » : nous repérons seulement des comportements qui vont dans le sens de ce type. C'est un rapprochement, pas un diagnostic, et nous ne mesurons rien.",
+    "why": "Comme eux, vous créez de la cohésion autour de vous. Leur récit montre un couple qui met sa maison au service de l'Église."
+   }
+  }
+ },
+ "ELISABETH": {
+  "lenses": {
+   "TYPE:ESFJ": {
+    "label": "Type ESFJ · Le Rassembleur",
+    "definition": "Sociable et dévoué(e), vous créez de la cohésion et veillez au bien-être de chacun.",
+    "solidity": "Indices clairs (quelques versets)",
+    "traits": [
+     [
+      "Elle se réjouit avec les autres",
+      "Elle bénit Marie : « Tu es bénie entre les femmes. »",
+      "Luc 1:42"
+     ],
+     [
+      "Elle encourage",
+      "« Heureuse celle qui a cru. »",
+      "Luc 1:45"
+     ],
+     [
+      "Elle est entourée",
+      "Ses voisins et ses parents se réjouissaient avec elle.",
+      "Luc 1:58"
+     ]
+    ],
+    "absent": [
+     [
+      "L'affirmation de soi",
+      "Elle attribue tout au Seigneur : « Voilà ce que le Seigneur a fait pour moi » (Luc 1:25)."
+     ]
+    ],
+    "limits": "Les récits bibliques ne décrivent pas de « types » : nous repérons seulement des comportements qui vont dans le sens de ce type. C'est un rapprochement, pas un diagnostic, et nous ne mesurons rien.",
+    "why": "Comme elle, vous êtes sociable et dévoué, et vous aimez partager la joie des autres. Son récit montre l'accueil et l'encouragement."
+   }
+  }
+ },
+ "DEBORA": {
+  "lenses": {
+   "TYPE:ENFJ": {
+    "label": "Type ENFJ · Le Mentor",
+    "definition": "Charismatique et bienveillant(e), vous inspirez et faites grandir les autres.",
+    "solidity": "Indices clairs",
+    "traits": [
+     [
+      "Les gens viennent à elle",
+      "Les enfants d'Israël montaient vers elle pour être jugés.",
+      "Juges 4:5"
+     ],
+     [
+      "Elle inspire et fait avancer",
+      "Elle envoie appeler Barak et lui donne l'ordre de l'Éternel.",
+      "Juges 4:6"
+     ],
+     [
+      "Elle accompagne",
+      "« J'irai bien avec toi. »",
+      "Juges 4:9"
+     ]
+    ],
+    "absent": [
+     [
+      "Le goût de la gloire",
+      "Elle annonce que la gloire ne sera pas pour Barak (Juges 4:9) et se nomme « mère en Israël » (Juges 5:7)."
+     ]
+    ],
+    "limits": "Les récits bibliques ne décrivent pas de « types » : nous repérons seulement des comportements qui vont dans le sens de ce type. C'est un rapprochement, pas un diagnostic, et nous ne mesurons rien.",
+    "why": "Comme elle, vous inspirez et faites grandir les autres. Son récit montre un leadership qui se tient à côté de celui qu'il encourage."
+   }
+  }
+ },
+ "BARNABE": {
+  "lenses": {
+   "TYPE:ENFJ": {
+    "label": "Type ENFJ · Le Mentor",
+    "definition": "Charismatique et bienveillant(e), vous inspirez et faites grandir les autres.",
+    "solidity": "Indices nombreux et convergents",
+    "traits": [
+     [
+      "Il encourage",
+      "Il les exhorta tous à rester d'un cœur ferme attachés au Seigneur.",
+      "Actes 11:23"
+     ],
+     [
+      "Il fait grandir quelqu'un d'autre",
+      "Il conduit Saul vers les apôtres.",
+      "Actes 9:27"
+     ],
+     [
+      "Il est reconnu comme bienveillant",
+      "« C'était un homme de bien, plein d'Esprit-Saint et de foi. »",
+      "Actes 11:24"
+     ]
+    ],
+    "absent": [
+     [
+      "L'autorité qui tranche",
+      "Il s'incline devant Paul comme chef (Actes 13:13)."
+     ]
+    ],
+    "limits": "Les récits bibliques ne décrivent pas de « types » : nous repérons seulement des comportements qui vont dans le sens de ce type. C'est un rapprochement, pas un diagnostic, et nous ne mesurons rien.",
+    "why": "Comme lui, vous inspirez et faites grandir les autres. Son récit montre un mentor qui s'efface devant ceux qu'il a aidés."
+   }
+  }
+ },
+ "JOSUE": {
+  "lenses": {
+   "TYPE:ENTJ": {
+    "label": "Type ENTJ · Le Stratège",
+    "definition": "Leader déterminé(e), vous fixez un cap ambitieux et organisez les moyens de l'atteindre.",
+    "solidity": "Indices clairs",
+    "traits": [
+     [
+      "Il commande et on le suit",
+      "Ils répondent : « Nous ferons tout ce que tu nous as ordonné. »",
+      "Josué 1:16"
+     ],
+     [
+      "Il fixe un cap",
+      "« Choisissez aujourd'hui qui vous voulez servir. »",
+      "Josué 24:15"
+     ],
+     [
+      "Il donne l'exemple",
+      "« Moi et ma maison, nous servirons l'Éternel. »",
+      "Josué 24:15"
+     ]
+    ],
+    "absent": [
+     [
+      "L'assurance personnelle",
+      "Dieu lui répète de se fortifier et de ne pas craindre (Josué 1:6-9)."
+     ]
+    ],
+    "limits": "Les récits bibliques ne décrivent pas de « types » : nous repérons seulement des comportements qui vont dans le sens de ce type. C'est un rapprochement, pas un diagnostic, et nous ne mesurons rien.",
+    "why": "Comme lui, vous fixez un cap et vous organisez les moyens. Son récit montre un chef dont la force vient de la présence de Dieu."
+   }
+  }
+ }
+}

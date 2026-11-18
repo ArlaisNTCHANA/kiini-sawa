@@ -435,3 +435,9 @@ phrase courte), fichiers JSON nettoyés, nouveau `08-…json`. Pagination PDF co
 - Rapport des dons : section « Des figures bibliques qui ont ces dons » après les 3 dons principaux (fiches complètes à l'écran ; en PDF 2 épisodes par fiche, 21 pages, aucune page orpheline sur 8 combinaisons mesurées).
 - Citations des lectures vérifiées contre la LSG avec un script temporaire (extrait des « … » dans les traits) : à refaire pour toute nouvelle lecture. Piège : un macro Twig ne voit pas le contexte (paramètre `maxEpisodes` à passer explicitement).
 - Reste : phase type (16 types × 2 slots, lecture `TYPE:<CODE>`).
+
+## 18/11/2026 — Bibliothèque de personnages rattachée au type (phase 3)
+- 16 types × 2 figures : lectures `TYPE:<CODE>` (`content/lectures/types.json`, 32 lectures sur 29 fiches). `TypeProfiles` : slots remplacés (Boaz, Esther, Daniel, Marie mère de Jésus, Noé, Jonathan, Samson, Élie, Salomon, Élisabeth, etc. ; plus de « Paul à Athènes » ni « Moïse et Jéthro »). Rapport « Type » : fiches complètes (3 épisodes en PDF), 13 pages pour les 16 types, aucune page orpheline.
+- Tests : couverture des slots (ennéagramme, dons, type) et clés des fichiers `content/lectures/*.json` (une clé inconnue était ignorée en silence).
+- Les rapprochements « type » sont les plus fragiles (les récits ne décrivent pas de types) : le texte le dit explicitement dans « Ce que le texte ne permet pas de dire ».
+- Les trois tests (ennéagramme, dons, type) sont maintenant rattachés à la bibliothèque. Reste : relecture par le fondateur (champ `relecture`).

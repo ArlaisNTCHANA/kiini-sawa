@@ -95,11 +95,16 @@
     <h2>Des figures bibliques qui vous ressemblent</h2>
     <p class="dr-lead">Dieu appelle des personnes de tous les tempéraments. Ces rapprochements avec votre type sont des illustrations, non une interprétation savante des textes.</p>
     {% for f in x.figures %}
+        {% set sheet = x.figureSheets[loop.index0] %}
+        {% if sheet and sheet.lenses['TYPE:' ~ type.code] is defined %}
+            {% include 'personnalite/assessment/report/_figure_sheet.html.twig' with {fig: sheet, lens: 'TYPE:' ~ type.code, why: sheet.lenses['TYPE:' ~ type.code].why, pdf: pdf, pc: pc, maxEpisodes: 3} only %}
+        {% else %}
         <div class="dr-tile" style="margin-bottom: 10px; border-left: 6px solid {{ pc }}; border-radius: 0 14px 14px 0;">
             <div style="font-family: {{ serif }}; font-size: {{ pdf ? '14pt' : '1.25rem' }}; font-weight: bold;">{{ f[0] }}</div>
             <div class="dr-small" style="margin-bottom: 6px;">{{ f[1] }}</div>
             <p style="margin: 0;">{{ f[2] }}</p>
         </div>
+        {% endif %}
     {% endfor %}
     <div class="dr-quote" style="margin-top: 14px;">« Car nous sommes son ouvrage, ayant été créés en Jésus-Christ pour de bonnes œuvres, que Dieu a préparées d'avance, afin que nous les pratiquions. »<div style="font-style: normal; font-weight: bold; margin-top: 6px; font-size: {{ pdf ? '9pt' : '.9rem' }};">Éphésiens 2.10</div></div>
 </div>

@@ -208,7 +208,9 @@ final class ReportBuilder
         }
         $names = array_map(fn ($t) => $t[0], Content::get('type.types'));
 
-        return Content::get('type.profiles')[$code] + ['community' => Content::get('type.community')[$code] ?? null, 'family' => $family, 'familyKey' => TypeProfiles::familyOf($code), 'families' => Content::get('type.families'),
+        $profile = Content::get('type.profiles')[$code];
+
+        return $profile + ['figureSheets' => array_map(fn ($f) => BiblicalFigures::find($f[0]), $profile['figures']), 'community' => Content::get('type.community')[$code] ?? null, 'family' => $family, 'familyKey' => TypeProfiles::familyOf($code), 'families' => Content::get('type.families'),
             'axesChart' => ReportCharts::uri(ReportCharts::typeAxes($rows, $family['color'])),
             'grid' => ReportCharts::uri(ReportCharts::typeGrid($code, $family['color'], $names))];
     }
