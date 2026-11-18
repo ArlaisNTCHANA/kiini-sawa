@@ -19,7 +19,7 @@
 <section class="pc" data-plans-circle data-initial="{{ initial }}" aria-label="Mes six plans et leur progression">
     <svg viewBox="48 -4 624 576" class="pc__svg" role="group" aria-label="Le cercle des six plans">
         <circle cx="360" cy="300" r="268" class="pc__system"/>
-        <text x="360" y="22" text-anchor="middle" class="pc__system-label">LE SYSTÈME</text>
+        <text x="360" y="552" text-anchor="middle" class="pc__system-label">LE SYSTÈME</text>
         {% for key, p in pos %}
             {% set pr = planProgress[key] %}
             {% set locked = key in (lockedPlans ?? []) %}
