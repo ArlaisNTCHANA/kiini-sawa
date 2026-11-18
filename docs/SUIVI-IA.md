@@ -466,3 +466,7 @@ phrase courte), fichiers JSON nettoyés, nouveau `08-…json`. Pagination PDF co
 - Vérifié dans le navigateur : saisie hors ligne simulée → rechargement → envoi automatique. **Reste à vérifier sur un vrai téléphone** (iPhone : installer sur l'écran d'accueil ; couper le réseau ; cocher un rituel ; rétablir).
 - Piège de test : `createUser` laisse la collection `habits` vide en mémoire ; vider l'EM (`clear()`) avant la requête. Et `DailyLog` est dans `App\PlanDHygiene\Entity` (l'import erroné a été commis deux fois).
 - Reste (étapes suivantes de la PWA) : lecture hors ligne des plans et du journal complet, revues de la semaine et du mois hors ligne, notifications iPhone à vérifier sur appareil.
+
+## 18/11/2026 — Passation de la version mobile native (Expo)
+- Le fondateur confie l'application mobile native à une autre IA. Instructions complètes : **`docs/passation-mobile-expo.md`** (mission, état des lieux, règles permanentes, contrainte des stores et du paiement manuel, API à construire dont l'authentification par jeton, contrat du mode rapide à réutiliser, design, étapes et critères, publication, questions à poser au fondateur).
+- Points d'attention transmis : l'ancienne app `mobile/` est gelée (branchée sur l'ancien site) ; `docs/api.md` est périmé ; l'application ne doit ni vendre ni afficher de prix tant que le fondateur n'a pas tranché (règles Apple/Google sur les achats intégrés) ; la soumission aux stores attend les pages légales complétées.
