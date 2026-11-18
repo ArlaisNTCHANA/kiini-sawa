@@ -1,0 +1,697 @@
+{
+ "DAVID": {
+  "name": "David",
+  "aliases": [
+   "David"
+  ],
+  "reviewed": false,
+  "title": "Le berger qui s'avance, qui rassemble, et qui tombe",
+  "refs": "1 Samuel 16–18 ; 2 Samuel 6 ; 11–12 ; Psaume 51",
+  "profile": {
+   "code": "DI",
+   "solidity": "D : indices nombreux et convergents · I : indices nombreux et convergents",
+   "dimensions": {
+    "D": {
+     "level": 3,
+     "traits": [
+      [
+       "Il s'avance quand tous reculent",
+       "« Que personne ne se décourage à cause de ce Philistin ! Ton serviteur ira se battre avec lui. »",
+       "1 Samuel 17:32"
+      ],
+      [
+       "Il agit vite et sans détour",
+       "Quand le Philistin s'ébranle, David court à sa rencontre sur le champ de bataille.",
+       "1 Samuel 17:48"
+      ],
+      [
+       "Il s'appuie sur ce qu'il a vécu",
+       "Il rappelle qu'il a terrassé le lion et l'ours pour défendre ses brebis.",
+       "1 Samuel 17:34-37"
+      ],
+      [
+       "Il conduit",
+       "Tout Israël l'aime « parce qu'il sortait et rentrait à leur tête ».",
+       "1 Samuel 18:16"
+      ]
+     ]
+    },
+    "I": {
+     "level": 3,
+     "traits": [
+      [
+       "Il plaît et rassemble",
+       "« Il plaisait à tout le peuple, même aux serviteurs de Saül. »",
+       "1 Samuel 18:5"
+      ],
+      [
+       "Il apaise par son art",
+       "Quand l'esprit mauvais tourmente Saül, David joue de la harpe : Saül respire plus à l'aise.",
+       "1 Samuel 16:23"
+      ],
+      [
+       "Il s'exprime avec toute sa personne",
+       "« David dansait de toute sa force devant l'Éternel. »",
+       "2 Samuel 6:14"
+      ]
+     ]
+    }
+   },
+   "absent": [
+    [
+     "Prudence et réflexion (C)",
+     "Face à la tentation, il agit sur le moment : il voit, fait demander, envoie chercher (2 Samuel 11:2-4)."
+    ],
+    [
+     "Retenue (S)",
+     "Il ne se contient pas : il chante, danse, combat de toute sa force."
+    ]
+   ],
+   "limits": "David est l'un des personnages les plus longuement racontés de l'Ancien Testament ; les indices sont nombreux, mais le récit se prête à d'autres lectures. Nous repérons des indices, nous ne mesurons rien."
+  },
+  "why": {
+   "D": "Comme lui, vous vous avancez quand d'autres reculent et vous agissez vite. Son récit montre aussi ce qui guette ce tempérament : le succès et le pouvoir qui font oublier la retenue.",
+   "I": "Comme lui, vous plaisez, vous rassemblez et vous vous exprimez de tout votre être. Son récit montre aussi le prix de la popularité : le regard des autres peut devenir un piège.",
+   "default": "Son audace et son rayonnement éclairent les tempéraments de meneurs."
+  },
+  "who": "David est le plus jeune fils d'Isaï, berger à Bethléem. Oint roi par Samuel, il entre au service de Saül comme musicien, puis tue Goliath et devient roi d'Israël. Dieu rend de lui ce témoignage : « J'ai trouvé David... homme selon mon cœur » (Actes 13:22).",
+  "episodes": [
+   {
+    "title": "Le harpiste de Saül",
+    "ref": "1 Samuel 16:23",
+    "tags": [
+     [
+      "I",
+      "apaise"
+     ]
+    ],
+    "text": "Quand l'esprit mauvais tourmente le roi, on appelle David. Il joue de la harpe : Saül se trouve soulagé."
+   },
+   {
+    "title": "Goliath",
+    "ref": "1 Samuel 17:32-50",
+    "tags": [
+     [
+      "D",
+      "courage"
+     ],
+     [
+      "D",
+      "action"
+     ]
+    ],
+    "text": "Un géant défie l'armée d'Israël et personne n'ose répondre. David, un jeune berger, s'avance : il s'appuie sur ce que Dieu lui a fait vivre avec le lion et l'ours, refuse l'armure et court au combat avec une fronde.",
+    "quote": {
+     "ref": "1 Samuel 17:47",
+     "text": "ce n'est ni par l'épée ni par la lance que l'Eternel sauve. Car la victoire appartient à l'Eternel."
+    }
+   },
+   {
+    "title": "Le favori du peuple",
+    "ref": "1 Samuel 18:5-7",
+    "tags": [
+     [
+      "I",
+      "plaît à tous"
+     ]
+    ],
+    "text": "Les femmes sortent chanter et danser en l'honneur du jeune vainqueur. Le refrain, « Saül a frappé ses mille, et David ses dix mille », éveille la jalousie du roi."
+   },
+   {
+    "title": "Il danse devant l'arche",
+    "ref": "2 Samuel 6:14-15",
+    "tags": [
+     [
+      "I",
+      "exubérance"
+     ]
+    ],
+    "text": "Devenu roi, il fait monter l'arche de l'Éternel à Jérusalem avec des cris de joie, et danse de toute sa force."
+   },
+   {
+    "title": "Bath-Schéba",
+    "ref": "2 Samuel 11:2-5, 14-15",
+    "tags": [
+     [
+      "D",
+      "prend sans retenue"
+     ]
+    ],
+    "text": "Depuis son toit, il aperçoit une femme, la fait chercher et couche avec elle. Quand elle est enceinte, il fait revenir son mari Urie, puis écrit à Joab de le placer « au plus fort du combat » pour qu'il meure."
+   },
+   {
+    "title": "Tu es cet homme-là",
+    "ref": "2 Samuel 12:7-13",
+    "text": "Le prophète Nathan le confronte par une parabole : « Tu es cet homme-là ! » David reconnaît sa faute, et Nathan lui annonce le pardon.",
+    "quote": {
+     "ref": "2 Samuel 12:13",
+     "text": "J'ai péché contre l'Eternel! Et Nathan dit à David: L'Eternel pardonne ton péché, tu ne mourras point."
+    }
+   },
+   {
+    "title": "Aie pitié de moi",
+    "ref": "Psaumes 51:1-4",
+    "text": "Le psaume 51, rattaché à cet épisode, est une supplication : le roi ne se justifie pas, il demande miséricorde pour son péché.",
+    "quote": {
+     "ref": "Psaumes 51:1",
+     "text": "O Dieu! aie pitié de moi dans ta bonté; Selon ta grande miséricorde, efface mes transgressions"
+    }
+   }
+  ],
+  "weakness": "Le succès et le pouvoir sans frein : il voit, fait demander, fait chercher (2 Samuel 11:2-4), puis cache sa faute en faisant placer Urie au plus fort du combat (11:15). Le texte ne le justifie pas : Nathan lui dit « Tu es cet homme-là ! » (12:7). Pour ce tempérament, la vigilance : ce que l'on peut obtenir ne dit rien de ce qu'on a le droit de prendre.",
+  "grace": "David ne se défend pas : « J'ai péché contre l'Éternel ! » (2 Samuel 12:13). Le pardon lui est annoncé dans la foulée : « L'Éternel pardonne ton péché, tu ne mourras point ». La faute reste réelle, et les conséquences aussi, mais le pardon n'est pas gagné : il est donné. Paul s'appuiera sur David pour parler de « l'homme à qui Dieu impute la justice sans les œuvres » (Romains 4:6-8).",
+  "christ": "Dieu promet à David un fils dont le trône sera « pour toujours affermi » (2 Samuel 7:13) ; l'évangile s'ouvre sur « Jésus-Christ, fils de David » (Matthieu 1:1). David, roi imparfait, désigne le roi parfait. Et son pardon annonce celui que Dieu accorde en Christ : « Heureux l'homme à qui le Seigneur n'impute pas son péché ! » (Romains 4:8).",
+  "quotes": [
+   {
+    "ref": "2 Samuel 12:13",
+    "text": "L'Eternel pardonne ton péché, tu ne mourras point."
+   },
+   {
+    "ref": "Romains 4:8",
+    "text": "Heureux l'homme à qui le Seigneur n'impute pas son péché!"
+   }
+  ],
+  "question": "Qu'est-ce que je me permets, parce que j'ai du succès ou de l'influence ?",
+  "step": "Demander à une personne de confiance de vous dire, sans filtre, ce qu'elle voit de vos zones de pouvoir."
+ },
+ "JOSUE": {
+  "name": "Josué",
+  "aliases": [
+   "Josué"
+  ],
+  "reviewed": false,
+  "title": "Le fidèle serviteur devenu chef",
+  "refs": "Exode 33 ; Nombres 14 ; Josué 1–9 ; 24",
+  "profile": {
+   "code": "DS",
+   "solidity": "D : indices réels · S : indices nombreux et convergents",
+   "dimensions": {
+    "D": {
+     "level": 2,
+     "traits": [
+      [
+       "Il reçoit la mission de conduire, et la prend",
+       "« Fortifie-toi et prends courage, car c'est toi qui mettras ce peuple en possession du pays. »",
+       "Josué 1:6"
+      ],
+      [
+       "Il mène l'assaut",
+       "Au signal, le peuple pousse des cris, la muraille de Jéricho s'écroule et le peuple monte dans la ville.",
+       "Josué 6:20"
+      ],
+      [
+       "Il force la décision",
+       "« Choisissez aujourd'hui qui vous voulez servir... Moi et ma maison, nous servirons l'Éternel. »",
+       "Josué 24:15"
+      ]
+     ]
+    },
+    "S": {
+     "level": 3,
+     "traits": [
+      [
+       "Il sert dans l'ombre, fidèlement",
+       "Son jeune serviteur Josué « ne sortait pas du milieu de la tente ».",
+       "Exode 33:11"
+      ],
+      [
+       "Il reste loyal quand la foule recule",
+       "Avec Caleb, il déchire ses vêtements et exhorte : « ne craignez point les gens de ce pays ».",
+       "Nombres 14:6-9"
+      ],
+      [
+       "Il tient dans la durée",
+       "« Israël servit l'Éternel pendant toute la vie de Josué. »",
+       "Josué 24:31"
+      ]
+     ]
+    }
+   },
+   "absent": [
+    [
+     "Éloquence et recherche de la scène (I)",
+     "Il rappelle les ordres et la loi ; on ne le voit pas séduire par la parole."
+    ],
+    [
+     "Vérification avant d'agir (C)",
+     "Il conclut une alliance avec les Gabaonites sans consulter l'Éternel (Josué 9:14-15)."
+    ]
+   ],
+   "limits": "Josué est un personnage de second plan avant d'être chef : D repose sur des indices réels, S sur des indices nombreux. Nous repérons des indices, nous ne mesurons rien."
+  },
+  "why": {
+   "D": "Comme lui, vous savez prendre la tête et trancher quand il le faut. Son récit montre que ce courage s'appuie sur une promesse, non sur la seule volonté.",
+   "S": "Comme lui, vous êtes fidèle dans l'ombre avant de l'être en pleine lumière. Son récit montre qu'une longue fidélité prépare à conduire.",
+   "default": "Sa fidélité et sa fermeté éclairent les tempéraments qui tiennent et qui dirigent."
+  },
+  "who": "Josué, fils de Nun, est le jeune serviteur de Moïse. Il est l'un des deux explorateurs qui, avec Caleb, ont encouragé le peuple à entrer dans le pays. Après Moïse, c'est lui que Dieu charge de conduire le peuple dans la terre promise.",
+  "episodes": [
+   {
+    "title": "Le serviteur",
+    "ref": "Exode 33:11",
+    "tags": [
+     [
+      "S",
+      "fidélité dans l'ombre"
+     ]
+    ],
+    "text": "Quand Moïse retourne au camp après avoir parlé à Dieu face à face, Josué, son jeune serviteur, reste dans la tente.",
+    "quote": {
+     "ref": "Exode 33:11",
+     "text": "son jeune serviteur, Josué, fils de Nun, ne sortait pas du milieu de la tente"
+    }
+   },
+   {
+    "title": "L'explorateur qui garde confiance",
+    "ref": "Nombres 14:6-9",
+    "tags": [
+     [
+      "S",
+      "loyauté"
+     ],
+     [
+      "D",
+      "courage"
+     ]
+    ],
+    "text": "Au retour de l'exploration, la plupart des explorateurs sèment la peur. Josué et Caleb déchirent leurs vêtements et exhortent le peuple à faire confiance : « l'Éternel est avec nous »."
+   },
+   {
+    "title": "Fortifie-toi",
+    "ref": "Josué 1:5-9",
+    "tags": [
+     [
+      "D",
+      "reçoit la mission"
+     ]
+    ],
+    "text": "Après la mort de Moïse, Dieu lui parle. Avant de lui demander quoi que ce soit, il lui promet : « Je serai avec toi... je ne te délaisserai point ». Puis il lui demande d'être fort, et de méditer sa loi.",
+    "quote": {
+     "ref": "Josué 1:9",
+     "text": "Ne t'effraie point et ne t'épouvante point, car l'Eternel, ton Dieu, est avec toi dans tout ce que tu entreprendras."
+    }
+   },
+   {
+    "title": "Jéricho",
+    "ref": "Josué 6:20",
+    "tags": [
+     [
+      "D",
+      "conduit l'assaut"
+     ]
+    ],
+    "text": "Le peuple pousse des cris, les trompettes sonnent, la muraille s'écroule : le peuple s'empare de la ville."
+   },
+   {
+    "title": "Aï : le chef abattu",
+    "ref": "Josué 7:6-7",
+    "text": "Après une défaite, Josué déchire ses vêtements et se prosterne jusqu'au soir. Il reproche à Dieu d'avoir fait passer le Jourdain au peuple."
+   },
+   {
+    "title": "Les Gabaonites",
+    "ref": "Josué 9:14-15",
+    "tags": [
+     [
+      "D",
+      "décide sans consulter"
+     ]
+    ],
+    "text": "Des gens qui se disent venus de loin demandent la paix. Les hommes d'Israël prennent de leurs provisions et « ne consultèrent point l'Éternel » ; Josué conclut l'alliance.",
+    "quote": {
+     "ref": "Josué 9:14",
+     "text": "ils ne consultèrent point l'Eternel."
+    }
+   },
+   {
+    "title": "Moi et ma maison",
+    "ref": "Josué 24:14-15",
+    "tags": [
+     [
+      "D",
+      "tranche"
+     ]
+    ],
+    "text": "À la fin de sa vie, il met le peuple devant le choix, et donne l'exemple.",
+    "quote": {
+     "ref": "Josué 24:15",
+     "text": "Moi et ma maison, nous servirons l'Eternel."
+    }
+   }
+  ],
+  "weakness": "Deux écueils apparaissent. Après la défaite d'Aï, l'abattement le fait reprocher à Dieu d'avoir fait traverser le Jourdain (Josué 7:7). Et il conclut une alliance sans consulter l'Éternel (9:14-15) : un tempérament qui décide vite risque d'avancer sans avoir demandé. Dans les deux cas, le texte le montre, sans l'excuser.",
+  "grace": "La conquête est d'abord un don : « le pays que j'ai juré à leurs pères de leur donner » (Josué 1:6). Et avant toute exigence, Dieu promet sa présence : « Je serai avec toi... je ne te délaisserai point » (1:5). La fidélité de Josué est une réponse à cette promesse, pas le moyen de l'obtenir.",
+  "christ": "« Josué » est le même nom que « Jésus » en hébreu. L'épître aux Hébreux le dit : « si Josué leur eût donné le repos, il ne parlerait pas après cela d'un autre jour » (Hébreux 4:8). Josué introduit le peuple dans un pays ; Jésus-Christ introduit dans le repos de Dieu, où « celui qui entre se repose de ses œuvres » (4:10). Le chef fidèle désigne le chef parfait, le Fils.",
+  "quotes": [
+   {
+    "ref": "Josué 1:5",
+    "text": "je ne te délaisserai point, je ne t'abandonnerai point."
+   },
+   {
+    "ref": "Hébreux 4:8",
+    "text": "si Josué leur eût donné le repos, il ne parlerait pas après cela d'un autre jour."
+   }
+  ],
+  "question": "Quelle décision ai-je prise vite, sans demander à Dieu ?",
+  "step": "Avant la prochaine décision importante, prendre vingt minutes de prière et demander l'avis d'une personne de confiance."
+ },
+ "NOE": {
+  "name": "Noé",
+  "aliases": [
+   "Noé"
+  ],
+  "reviewed": false,
+  "title": "L'homme qui construit sans bruit, par grâce",
+  "refs": "Genèse 6–9 ; Hébreux 11 ; 1 Pierre 3",
+  "profile": {
+   "code": "DS",
+   "solidity": "D : indices réels · S : indices nombreux et convergents",
+   "dimensions": {
+    "D": {
+     "level": 2,
+     "traits": [
+      [
+       "Il mène un projet immense",
+       "Une arche de trois cents coudées de long, sur trois étages, selon les mesures données.",
+       "Genèse 6:14-16"
+      ],
+      [
+       "Il exécute tout, sans négocier",
+       "« Noé exécuta tout ce que l'Éternel lui avait ordonné. »",
+       "Genèse 6:22 ; 7:5"
+      ]
+     ]
+    },
+    "S": {
+     "level": 3,
+     "traits": [
+      [
+       "Il est droit et fidèle",
+       "« Noé était un homme juste et intègre dans son temps ; Noé marchait avec Dieu. »",
+       "Genèse 6:9"
+      ],
+      [
+       "Il tient dans la durée",
+       "Il construit « pendant que la patience de Dieu se prolongeait ».",
+       "1 Pierre 3:20"
+      ],
+      [
+       "Il protège les siens",
+       "Il construit l'arche « pour sauver sa famille ».",
+       "Hébreux 11:7"
+      ],
+      [
+       "Il agit plus qu'il ne parle",
+       "Dans tout le récit de l'arche, le texte ne rapporte aucune parole de lui ; sa première parole rapportée est en Genèse 9:25.",
+       "Genèse 6:13 – 9:25"
+      ]
+     ]
+    }
+   },
+   "absent": [
+    [
+     "Éloquence (I)",
+     "Le texte ne le montre jamais plaidant ou persuadant ; Hébreux 11:7 dit seulement qu'il « condamna le monde » par sa foi."
+    ],
+    [
+     "Initiative propre (D)",
+     "Il ne conçoit pas son projet : les plans lui sont donnés (Genèse 6:14-16), et il les suit."
+    ]
+   ],
+   "limits": "Peu de paroles sont rapportées, et tout le récit est centré sur ce que Dieu dit et fait ; D repose sur des indices réels, S sur des indices nombreux. Nous repérons des indices, nous ne mesurons rien."
+  },
+  "why": {
+   "D": "Comme lui, vous pouvez mener à terme un grand projet, étape par étape. Son récit montre que la persévérance a besoin d'une parole à laquelle s'accrocher.",
+   "S": "Comme lui, vous tenez dans la durée, vous protégez les vôtres et vous agissez plus que vous ne parlez. Son récit montre aussi ce qui peut suivre une longue tension : le relâchement.",
+   "default": "Sa persévérance silencieuse éclaire les tempéraments qui tiennent la durée."
+  },
+  "who": "Noé vit dans un monde que le texte décrit comme rempli de violence (Genèse 6:11, 13). Dieu décide de détruire la terre par le déluge et ordonne à Noé de construire une arche pour sauver sa famille et les animaux (6:13-21).",
+  "episodes": [
+   {
+    "title": "Noé trouva grâce",
+    "ref": "Genèse 6:8-9",
+    "tags": [
+     [
+      "S",
+      "droiture"
+     ]
+    ],
+    "text": "Avant qu'on parle de son obéissance, le texte dit : « Noé trouva grâce aux yeux de l'Éternel ». Puis il le décrit juste, intègre, marchant avec Dieu.",
+    "quote": {
+     "ref": "Genèse 6:8",
+     "text": "Mais Noé trouva grâce aux yeux de l'Eternel."
+    }
+   },
+   {
+    "title": "Le plan",
+    "ref": "Genèse 6:13-22",
+    "tags": [
+     [
+      "D",
+      "exécute"
+     ]
+    ],
+    "text": "Dieu annonce le déluge, donne à Noé les dimensions de l'arche, promet son alliance et ordonne d'y faire entrer sa famille et les animaux. Noé fait comme Dieu a dit.",
+    "quote": {
+     "ref": "Genèse 6:22",
+     "text": "C'est ce que fit Noé: il exécuta tout ce que Dieu lui avait ordonné."
+    }
+   },
+   {
+    "title": "Les années de construction",
+    "ref": "1 Pierre 3:20",
+    "tags": [
+     [
+      "S",
+      "patience"
+     ]
+    ],
+    "text": "Pierre rappelle que la patience de Dieu « se prolongeait » pendant la construction de l'arche : un travail long, public, sans résultat visible pour ceux qui regardent."
+   },
+   {
+    "title": "Il exécuta",
+    "ref": "Genèse 7:5",
+    "tags": [
+     [
+      "S",
+      "obéissance"
+     ]
+    ],
+    "text": "Au moment d'entrer dans l'arche, le texte répète : « Noé exécuta tout ce que l'Éternel lui avait ordonné »."
+   },
+   {
+    "title": "L'autel",
+    "ref": "Genèse 8:20",
+    "text": "À la sortie de l'arche, avant tout autre chose, Noé bâtit un autel à l'Éternel et offre des holocaustes."
+   },
+   {
+    "title": "La vigne",
+    "ref": "Genèse 9:20-25",
+    "text": "Plus tard, Noé plante de la vigne, s'enivre et se découvre dans sa tente. Quand il se réveille et apprend ce qui s'est passé, sa première parole rapportée est une malédiction.",
+    "quote": {
+     "ref": "Genèse 9:25",
+     "text": "Maudit soit Canaan!"
+    }
+   },
+   {
+    "title": "Par la foi",
+    "ref": "Hébreux 11:7",
+    "text": "L'épître aux Hébreux fait de Noé un exemple de foi : averti de choses qu'on ne voyait pas encore, il construisit une arche pour sauver sa famille."
+   }
+  ],
+  "weakness": "Après la longue tension de l'arche, le récit ne le montre pas dans la gloire : il s'enivre et se découvre (Genèse 9:20-21), et sa première parole rapportée est une malédiction (9:25). Le texte ne donne pas la cause ; une lecture possible est le relâchement après une longue tension. Pour ce tempérament, la vigilance : tenir la durée ne protège pas du moment qui suit.",
+  "grace": "« Noé trouva grâce aux yeux de l'Éternel » (Genèse 6:8) : la grâce précède le récit de son obéissance. Dieu donne le plan (6:14-16), établit son alliance avec lui (6:18) et c'est lui qui fait traverser l'épreuve. L'obéissance de Noé suit la grâce ; elle ne la mérite pas.",
+  "christ": "Noé devient « héritier de la justice qui s'obtient par la foi » (Hébreux 11:7). Pierre voit dans l'arche et l'eau une figure du baptême, et précise que ce qui sauve, c'est « la résurrection de Jésus-Christ » (1 Pierre 3:21). L'arche protégeait huit personnes ; Christ sauve tous ceux qui croient. Celui qui tient la durée n'est pas son propre sauveur.",
+  "quotes": [
+   {
+    "ref": "Hébreux 11:7",
+    "text": "devint héritier de la justice qui s'obtient par la foi"
+   },
+   {
+    "ref": "1 Pierre 3:21",
+    "text": "qui maintenant vous sauve, vous aussi, par la résurrection de Jésus-Christ"
+   }
+  ],
+  "question": "Où ai-je relâché ma vigilance après une longue période d'effort ?",
+  "step": "Après un grand effort, prévoir une période de reprise et en parler à une personne de confiance."
+ },
+ "PAUL": {
+  "name": "Paul",
+  "aliases": [
+   "Paul"
+  ],
+  "reviewed": false,
+  "title": "Le zélé qui perd tout, pour gagner Christ",
+  "refs": "Actes 9 ; 15–22 ; Philippiens 3 ; 2 Corinthiens 11–12",
+  "profile": {
+   "code": "DC",
+   "solidity": "D : indices nombreux et convergents · C : indices nombreux et convergents",
+   "dimensions": {
+    "D": {
+     "level": 3,
+     "traits": [
+      [
+       "Il fonce avec zèle",
+       "Saul « respirant encore la menace et le meurtre » demande des lettres pour Damas ; il se dit lui-même, quant au zèle, « persécuteur de l'Église ».",
+       "Actes 9:1-2 ; Philippiens 3:6"
+      ],
+      [
+       "Il répond aussitôt à l'appel",
+       "Après la vision du Macédonien, « nous cherchâmes aussitôt à nous rendre en Macédoine ».",
+       "Actes 16:9-10"
+      ],
+      [
+       "Il court vers un but",
+       "« Je cours, non pas comme à l'aventure ; je frappe, non pas comme battant l'air. »",
+       "1 Corinthiens 9:26"
+      ],
+      [
+       "Il dit les choses en face",
+       "« Je lui résistai en face, parce qu'il était répréhensible. »",
+       "Galates 2:11"
+      ],
+      [
+       "Il endure l'épreuve",
+       "Coups, naufrages, périls, veilles, faim : il énumère ce qu'il a traversé.",
+       "2 Corinthiens 11:23-27"
+      ]
+     ]
+    },
+    "C": {
+     "level": 3,
+     "traits": [
+      [
+       "Il est formé avec rigueur",
+       "« Instruit aux pieds de Gamaliel dans la connaissance exacte de la loi de nos pères. »",
+       "Actes 22:3"
+      ],
+      [
+       "Il argumente à partir des Écritures",
+       "Pendant trois sabbats, il discute avec les Juifs d'après les Écritures ; il s'entretient chaque jour sur la place publique.",
+       "Actes 17:2-3, 17"
+      ],
+      [
+       "Il tient à l'exactitude de ce qu'il transmet",
+       "« Je vous ai enseigné... comme je l'avais aussi reçu, que Christ est mort pour nos péchés, selon les Écritures. »",
+       "1 Corinthiens 15:3"
+      ]
+     ]
+    }
+   },
+   "absent": [
+    [
+     "Patience en désaccord (S)",
+     "Avec Barnabas, un dissentiment « assez vif pour être cause qu'ils se séparèrent l'un de l'autre » (Actes 15:39)."
+    ],
+    [
+     "Éloquence flatteuse (I)",
+     "Sa méthode est l'argument et le texte (Actes 17:2-3), non la séduction."
+    ]
+   ],
+   "limits": "Paul est l'un des personnages les mieux documentés du Nouveau Testament, et c'est lui-même qui parle dans plusieurs lettres. Les indices sont nombreux ; ils se prêtent aussi à d'autres lectures. Nous repérons des indices, nous ne mesurons rien."
+  },
+  "why": {
+   "D": "Comme lui, vous foncez, vous allez au but et vous dites les choses en face. Son récit montre ce que Dieu fait d'un tempérament zélé : il le renverse, puis le met à son service.",
+   "C": "Comme lui, vous voulez que ce que vous défendez soit exact et argumenté. Son récit montre où se trouve la vraie justice : pas dans la rigueur personnelle.",
+   "default": "Son zèle et sa rigueur éclairent les tempéraments exigeants."
+  },
+  "who": "Saul de Tarse est pharisien, formé auprès de Gamaliel et persécuteur des chrétiens. Sur le chemin de Damas, il rencontre le Christ ressuscité et devient l'apôtre Paul, missionnaire auprès des nations et auteur de plusieurs lettres du Nouveau Testament.",
+  "episodes": [
+   {
+    "title": "Le persécuteur zélé",
+    "ref": "Actes 9:1-2 ; 22:3",
+    "tags": [
+     [
+      "D",
+      "zèle"
+     ],
+     [
+      "C",
+      "rigueur"
+     ]
+    ],
+    "text": "Formé dans la connaissance exacte de la loi, plein de zèle pour Dieu, il traque les disciples de Jésus jusqu'à Damas."
+   },
+   {
+    "title": "Tout est perte",
+    "ref": "Philippiens 3:4-9",
+    "text": "Il énumère ses titres : circoncis, pharisien, irréprochable quant à la loi. Puis il les « regarde comme une perte, à cause de Christ ».",
+    "quote": {
+     "ref": "Philippiens 3:9",
+     "text": "non avec ma justice, celle qui vient de la loi, mais avec celle qui s'obtient par la foi en Christ"
+    }
+   },
+   {
+    "title": "Aussitôt en Macédoine",
+    "ref": "Actes 16:9-10",
+    "tags": [
+     [
+      "D",
+      "réponds sans délai"
+     ]
+    ],
+    "text": "Une vision le pousse en Macédoine. Il part aussitôt, concluant que le Seigneur l'appelle à y annoncer la bonne nouvelle."
+   },
+   {
+    "title": "Discuter d'après les Écritures",
+    "ref": "Actes 17:2-3",
+    "tags": [
+     [
+      "C",
+      "argumente"
+     ]
+    ],
+    "text": "À Thessalonique, il discute trois sabbats d'après les Écritures et établit que le Christ devait souffrir et ressusciter."
+   },
+   {
+    "title": "Je lui résistai en face",
+    "ref": "Galates 2:11",
+    "tags": [
+     [
+      "D",
+      "franchise"
+     ]
+    ],
+    "text": "À Antioche, il s'oppose publiquement à Pierre, qu'il juge répréhensible."
+   },
+   {
+    "title": "Un dissentiment assez vif",
+    "ref": "Actes 15:36-40",
+    "tags": [
+     [
+      "D",
+      "tranche"
+     ]
+    ],
+    "text": "À propos de Marc, il se sépare de Barnabas. Chacun part de son côté, Paul avec Silas, « recommandé par les frères à la grâce du Seigneur ».",
+    "quote": {
+     "ref": "Actes 15:39",
+     "text": "Ce dissentiment fut assez vif pour être cause qu'ils se séparèrent l'un de l'autre."
+    }
+   },
+   {
+    "title": "L'écharde",
+    "ref": "2 Corinthiens 12:7-9",
+    "text": "Une écharde dans la chair, qu'il demande trois fois à Dieu d'éloigner, lui est laissée. La réponse du Seigneur change sa manière de se glorifier.",
+    "quote": {
+     "ref": "2 Corinthiens 12:9",
+     "text": "Ma grâce te suffit, car ma puissance s'accomplit dans la faiblesse."
+    }
+   }
+  ],
+  "weakness": "Le zèle et la certitude d'avoir raison. Il se décrit lui-même comme « blasphémateur, persécuteur, homme violent » (1 Timothée 1:13). Même après sa conversion, un désaccord vif le sépare de Barnabas (Actes 15:39). Dieu lui laisse une écharde « pour que je ne sois pas enflé d'orgueil » (2 Corinthiens 12:7). Pour ce tempérament, la vigilance : la rigueur personnelle peut devenir une fierté.",
+  "grace": "« J'ai obtenu miséricorde » (1 Timothée 1:13, 16) : c'est la clé de toute sa vie. Il n'est pas sauvé par son zèle, mais malgré lui. Et à sa faiblesse, le Seigneur répond : « Ma grâce te suffit » (2 Corinthiens 12:9). Le plus rigoureux des pharisiens a appris que sa justice ne comptait pas.",
+  "christ": "Paul place tout sur un seul fondement : « J'ai été crucifié avec Christ ; et si je vis, ce n'est plus moi qui vis, c'est Christ qui vit en moi » (Galates 2:20). Sa « justice » ne vient pas de la loi mais de la foi en Christ (Philippiens 3:9). Pour le tempérament exigeant, c'est la bonne nouvelle : ce que Dieu attend est déjà accompli en Christ, qui s'est livré pour nous.",
+  "quotes": [
+   {
+    "ref": "Galates 2:20",
+    "text": "ce n'est plus moi qui vis, c'est Christ qui vit en moi"
+   },
+   {
+    "ref": "2 Corinthiens 12:9",
+    "text": "Ma grâce te suffit, car ma puissance s'accomplit dans la faiblesse."
+   }
+  ],
+  "question": "Sur quoi est-ce que j'appuie encore ma valeur : mes résultats, ma rigueur ou mes convictions ?",
+  "step": "Écrire ce que vous considérez comme vos « gains », le présenter à Dieu dans la prière, et vous reposer sur la grâce plutôt que sur eux."
+ }
+}
