@@ -7,7 +7,7 @@
 {% set pos = {
     VIE:           {x: 360, y: 300, r: 84, name: 'Plan de Vie',   css: 'vie'},
     CROISSANCE:    {x: 360, y: 82,  r: 62, name: 'Croissance',    css: 'croissance'},
-    DEVELOPPEMENT: {x: 566, y: 232, r: 62, name: 'Développement', css: 'developpement'},
+    DEVELOPPEMENT: {x: 566, y: 232, r: 62, name: 'Développement', sub: 'personnel', css: 'developpement'},
     HYGIENE:       {x: 488, y: 474, r: 62, name: 'Hygiène de vie', css: 'hygiene'},
     INTENDANCE:    {x: 232, y: 474, r: 62, name: 'Intendance',    css: 'intendance'},
     TRANSMISSION:  {x: 154, y: 232, r: 62, name: 'Transmission',  css: 'transmission'},
@@ -30,8 +30,9 @@
                 <circle cx="{{ p.x }}" cy="{{ p.y }}" r="{{ ringR }}" class="pc__track"/>
                 <circle cx="{{ p.x }}" cy="{{ p.y }}" r="{{ ringR }}" class="pc__ring" style="stroke: var(--plan-{{ p.css }}); stroke-dasharray: {{ (circ * pr.percent / 100)|round(1) }} {{ circ|round(1) }};" transform="rotate(-90 {{ p.x }} {{ p.y }})"/>
                 <circle cx="{{ p.x }}" cy="{{ p.y }}" r="{{ p.r }}" class="pc__disc" style="fill: var(--plan-{{ p.css }});"/>
-                <text x="{{ p.x }}" y="{{ p.y - (key == 'VIE' ? 4 : 6) }}" text-anchor="middle" class="pc__name{{ key == 'VIE' ? ' pc__name--big' }}">{{ p.name }}</text>
-                <text x="{{ p.x }}" y="{{ p.y + (key == 'VIE' ? 24 : 18) }}" text-anchor="middle" class="pc__pct">{{ locked ? 'PRO' : pr.percent ~ ' %' }}</text>
+                <text x="{{ p.x }}" y="{{ p.y - (key == 'VIE' ? 4 : (p.sub is defined ? 12 : 6)) }}" text-anchor="middle" class="pc__name{{ key == 'VIE' ? ' pc__name--big' }}">{{ p.name }}</text>
+                {% if p.sub is defined %}<text x="{{ p.x }}" y="{{ p.y + 3 }}" text-anchor="middle" class="pc__name">{{ p.sub }}</text>{% endif %}
+                <text x="{{ p.x }}" y="{{ p.y + (key == 'VIE' ? 24 : (p.sub is defined ? 22 : 18)) }}" text-anchor="middle" class="pc__pct">{{ locked ? 'PRO' : pr.percent ~ ' %' }}</text>
             </a>
         {% endfor %}
     </svg>
