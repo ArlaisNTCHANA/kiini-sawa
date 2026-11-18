@@ -70,10 +70,21 @@
     <div class="dr-page" style="text-align: center;">
         <div style="font-size: 2rem;">{{ report_icon('star', '#D97706', 32) }}</div>
         <h2>La suite de votre synthèse est réservée à l'offre PRO</h2>
-        <p class="dr-lead">Votre zone de vocation, vos ressources et vos fragilités croisées, vos trois priorités de croissance reliées à vos plans, et le rapport PDF complet.</p>
+        <p class="dr-lead">{% if insights|length %}{{ insights|length }} lectures croisées de vos tests (tensions, paradoxes, appels), votre {% else %}Votre {% endif %}zone de vocation, vos ressources et vos fragilités croisées, vos trois priorités de croissance reliées à vos plans, et le rapport PDF complet.</p>
         <a href="{{ path('app_subscription') }}" class="ks-btn ks-btn--primary">Découvrir l'offre PRO</a>
     </div>
 {% else %}
+
+{# ═══ Lectures croisées (InsightEngine) ═══ #}
+{% if insights|length %}
+<div class="dr-page">
+    <div class="dr-kicker">{{ report_icon('compass', pc) }}Ce que vos tests révèlent ensemble</div>
+    <h2>Lectures croisées</h2>
+    <p class="dr-lead">Ces lectures ne viennent d'aucun test pris seul : elles naissent de leur rencontre. Chacune dit sur quels résultats elle s'appuie. Ce sont des pistes à discuter, pas des verdicts.</p>
+    {% set plans = constant('App\\PlanDeVie\\Service\\PlanCatalog::PLANS') %}
+    {% for i in insights %}{% include 'personnalite/assessment/report/_insight_card.html.twig' with {i: i, pdf: pdf, plans: plans} only %}{% endfor %}
+</div>
+{% endif %}
 
 {# ═══ Zone de vocation ═══ #}
 <div class="dr-page">

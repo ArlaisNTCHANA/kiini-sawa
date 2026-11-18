@@ -139,3 +139,18 @@ vivent dans la table `content_override` (chemin → texte) et s'appliquent via `
 `Service/TestHistory` (séries, libellés, évolution) ; « Vos passations » sous chaque rapport ; `/mes-tests/evolution`
 et `/mes-tests/evolution/{série}` ; passation précise d'une auto-évaluation : `/mes-tests/{type}/resultats/{id}`.
 Tests : `tests/Personnalite/HistoryTest.php`.
+
+## Lectures croisées (InsightEngine, 18/11/2026)
+
+`App\Personnalite\Service\InsightEngine` confronte les résultats de plusieurs tests et produit jusqu'à 6 « lectures » classées (vigilance,
+tension, paradoxe, convergence, appel, croissance). Ce n'est ni un score ni de l'apprentissage : **chaque règle est écrite, nommée et
+testée** (`tests/Personnalite/InsightEngineTest.php`). Règles actuelles : adaptation excessive (écart naturel/adapté ≥ 25, renforcée par une
+sensibilité émotionnelle élevée), motivation (ennéagramme) contre comportement (DISC) via `ENNEAGRAM_EXPECTS` (lecture usuelle, **non
+démontrée**, présentée comme hypothèse), don public et tempérament réservé, don discret et tempérament ouvert, sensibilité et don de soin,
+franchise et don de soin, fiabilité et don concret, curiosité et don de pensée, signature sous pression (DISC + ennéagramme), chemin de
+croissance, cohérence ou divergence des trois axes, terrain de vie (équilibre de vie).
+Chaque lecture cite ses preuves (quel test dit quoi), un niveau de confiance (nombre de tests qui la recoupent), une question et un premier
+pas relié à un plan. Affichage : page « Lectures croisées » de la synthèse (PRO) et encart « Ce que vos autres tests ajoutent » dans
+chaque rapport (PRO ; un test gratuit voit seulement le nombre de lectures disponibles).
+**Limites assumées :** seuils posés à la main, pas validés sur des données réelles ; à recalibrer avec de vrais résultats d'utilisateurs.
+**Pour ajouter une règle :** une méthode privée qui renvoie `$this->insight(...)` ou `null`, l'ajouter à `analyze()`, un test.

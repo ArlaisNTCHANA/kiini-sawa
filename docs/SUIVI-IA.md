@@ -353,3 +353,13 @@ Ajout : `ReportBuilder::crossView()` confronte le DISC au style déduit du Big F
 mélanger les scores ; bloc dans `disc/_report.html.twig` (page « Votre profil en situation », écran et PDF) ; sans Big Five, invitation
 à le passer (écran seulement). Branché dans `AssessmentController::report` et `reportPdf`. Tests : `tests/Personnalite/CrossViewTest.php`.
 Pagination PDF mesurée : toujours 13 pages, aucune page orpheline.
+
+## 18/11/2026 — « Mon profil KIINI SAWA » : lectures croisées (InsightEngine)
+
+Demande du fondateur : une vraie intelligence derrière la synthèse, et pas seulement un agrégat. Ajouté : `Service/InsightEngine.php`
+(13 règles explicites, preuves citées, confiance selon le nombre de tests, question + premier pas relié à un plan), page « Lectures croisées »
+dans la synthèse, encart « Ce que vos autres tests ajoutent » dans chaque rapport (écran et PDF, PRO ; teaser pour le gratuit),
+partial `report/_insight_card.html.twig`. Pagination PDF mesurée (synthèse 10 p., ennéagramme 12 p., DISC 14 p., aucune page orpheline).
+**Honnêteté :** règles et seuils écrits à la main, non validés statistiquement ; `ENNEAGRAM_EXPECTS` est une lecture usuelle, pas une
+preuve. **Reste :** recalibrer avec de vrais résultats ; lire aussi le regard des proches (ConfirmationService) dans le moteur ; lectures
+internes à chaque test (facettes Big Five qui se contredisent, combinaisons de dons) ; moteur de vocation qui pèse aussi ennéagramme et Big Five.

@@ -1,0 +1,22 @@
+{# « Ce que vos autres tests ajoutent » : lectures croisées (InsightEngine) qui concernent ce test. Variables : crossInsights, pdf. #}
+{% if crossInsights|default([])|length %}
+    {% set pc = '#2E6B53' %}
+    {% include 'personnalite/assessment/report/_styles.html.twig' with {pdf: pdf, pc: pc, pcLight: '#DCE7DF', pcDark: '#173D2E'} only %}
+    {% set plans = constant('App\\PlanDeVie\\Service\\PlanCatalog::PLANS') %}
+    <div class="dr">
+        <div class="dr-page">
+            <div class="dr-kicker">Au croisement de vos tests</div>
+            <h2>Ce que vos autres tests ajoutent</h2>
+            <p class="dr-lead">Ce résultat se lit mieux avec vos autres tests. Voici ce qui apparaît quand on les met côte à côte. Ce sont des pistes à discuter, pas des verdicts.</p>
+            {% for i in crossInsights %}{% include 'personnalite/assessment/report/_insight_card.html.twig' with {i: i, pdf: pdf, plans: plans} only %}{% endfor %}
+            {% if not pdf %}<p class="dr-small"><a href="{{ path('app_synthesis') }}" style="color: var(--primary); font-weight: 700;">Voir ma synthèse complète : Mon profil KIINI SAWA</a></p>{% endif %}
+        </div>
+    </div>
+{% endif %}
+{% if not pdf and crossLocked|default(0) > 0 %}
+    <section class="r-section" style="background: var(--bg-alt, #EEF3EF);">
+        <h2>Ce que vos autres tests ajoutent</h2>
+        <p>{{ crossLocked }} lecture{{ crossLocked > 1 ? 's' }} croisée{{ crossLocked > 1 ? 's' }} de vos tests {{ crossLocked > 1 ? 'sont disponibles' : 'est disponible' }} avec l'offre PRO : tensions, paradoxes et appels qui n'apparaissent qu'en croisant vos résultats.</p>
+        <a href="{{ path('app_subscription') }}" class="ks-btn ks-btn--secondary">Découvrir l'offre PRO</a>
+    </section>
+{% endif %}

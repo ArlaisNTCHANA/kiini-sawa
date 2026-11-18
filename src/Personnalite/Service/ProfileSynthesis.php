@@ -28,6 +28,7 @@ final class ProfileSynthesis
         private readonly ReportBuilder $reports,
         private readonly SelfAssessmentReport $selfReports,
         private readonly EntityManagerInterface $em,
+        private readonly InsightEngine $insights,
     ) {
     }
 
@@ -43,15 +44,37 @@ final class ProfileSynthesis
             return $out;
         }
 
+        $convergence = $this->convergence($r);
+        $life = $this->life($user);
+
         return $out + [
             'identity' => $this->identity($r),
-            'convergence' => $this->convergence($r),
+            'convergence' => $convergence,
             'vocation' => $this->vocation($r),
             'fragile' => $this->fragile($r),
             'resources' => $this->resources($r),
             'priorities' => $this->priorities($r),
-            'life' => $this->life($user),
+            'life' => $life,
+            'insights' => $this->insights->analyze($r, $convergence, $life),
         ];
+    }
+
+    /**
+     * Lectures croisées qui concernent un test donné (au moins deux tests en jeu, dont celui-ci), pour le rapport de ce test.
+     *
+     * @param string $key clé de test : disc, bigfive, type, enneagramme, dons
+     *
+     * @return list<array<string, mixed>>
+     */
+    public function insightsFor(User $user, string $key, int $max = 2): array
+    {
+        $r = $this->collect($user);
+        if (\count(array_filter($r)) < 2) {
+            return [];
+        }
+        $found = $this->insights->analyze($r, $this->convergence($r), $this->life($user));
+
+        return \array_slice(array_values(array_filter($found, fn ($i) => \in_array($key, $i['sources'], true) && \count($i['sources']) >= 2)), 0, $max);
     }
 
     /** Derniers rapports de chaque test. */

@@ -71,6 +71,10 @@ class AssessmentController extends AbstractController
 
         $data = $this->reports->build($assessment);
         $data['cross'] = $this->crossViewFor($assessment, $data, $em);
+        $insights = $this->crossInsightsFor($assessment);
+        $pro = $this->container->get('entitlements')->isPro($this->user());
+        $data['crossInsights'] = $pro ? $insights : [];
+        $data['crossLocked'] = $pro ? 0 : \count($insights);
 
         return $this->render('personnalite/assessment/report.html.twig', $data + ['shareCard' => \App\Personnalite\Psychometrie\ShareCard::from($data),
             'addedActions' => $em->getRepository(\App\Personnalite\Entity\TestAction::class)->addedBy($this->user()),
@@ -98,11 +102,20 @@ class AssessmentController extends AbstractController
         $data = $this->reports->build($assessment) + ['name' => $this->user()->getDisplayName()];
         $data['confirmation'] = $this->confirmationFor($assessment, $data);
         $data['cross'] = $this->crossViewFor($assessment, $data, $em);
+        $data['crossInsights'] = $this->container->get('entitlements')->isPro($this->user()) ? $this->crossInsightsFor($assessment) : [];
 
         return new Response($pdf->render($this->renderView($data['template'] ? 'personnalite/assessment/report/pdf.html.twig' : 'personnalite/assessment/report_pdf.html.twig', $data + ['body' => $data['template']])), 200, [
             'Content-Type' => 'application/pdf',
             'Content-Disposition' => HeaderUtils::makeDisposition(HeaderUtils::DISPOSITION_ATTACHMENT, 'kiini-sawa-'.$assessment->getInstrument().'-'.$assessment->getTakenAt()->format('Y-m-d').'.pdf'),
         ]);
+    }
+
+    /** Lectures croisées qui concernent ce test (au moins deux tests passés). */
+    private function crossInsightsFor(Assessment $assessment): array
+    {
+        $key = ['disc' => 'disc', 'profil-complet' => 'bigfive', 'big-five' => 'bigfive', 'type' => 'type', 'enneagramme' => 'enneagramme', 'dons-spirituels' => 'dons'][$assessment->getInstrument()] ?? null;
+
+        return $key ? $this->container->get('synthesis')->insightsFor($this->user(), $key) : [];
     }
 
     /** Regard croisé du DISC avec le style déduit du Big Five le plus récent ; rien pour les autres tests. */
@@ -147,7 +160,7 @@ class AssessmentController extends AbstractController
     public static function getSubscribedServices(): array
     {
         return parent::getSubscribedServices() + ['confirmations' => \App\Personnalite\Service\ConfirmationService::class,
-            'history' => \App\Personnalite\Service\TestHistory::class];
+            'history' => \App\Personnalite\Service\TestHistory::class, 'synthesis' => \App\Personnalite\Service\ProfileSynthesis::class, 'entitlements' => \App\Abonnement\Service\Entitlements::class];
     }
 
     private function denyUnlessOwner(Assessment $assessment): void

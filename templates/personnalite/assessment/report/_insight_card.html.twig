@@ -1,0 +1,15 @@
+{# Une lecture croisée (InsightEngine). Variables : i (la lecture), pdf, plans (PlanCatalog::PLANS), compact (bool, optionnel). #}
+{% set k = constant('App\\Personnalite\\Service\\InsightEngine::KINDS')[i.kind] %}
+<div class="dr-tile" style="page-break-inside: avoid; margin-bottom: {{ pdf ? '8px' : '12px' }}; background: #fff; border-left: 5px solid {{ k.color }}; border-radius: 4px 14px 14px 4px;">
+    <div class="dr-label" style="margin-bottom: 3px;"><span style="color: {{ k.color }};">{{ k.label }}</span> · {{ i.confidence }}</div>
+    <div style="font-family: {{ pdf ? "'Playfair Display', serif" : 'var(--font-serif)' }}; font-weight: bold; font-size: {{ pdf ? '12.5pt' : '1.15rem' }}; color: #0F172A; margin-bottom: 4px;">{{ i.title }}</div>
+    <p style="margin: 0 0 6px;">{{ i.text }}</p>
+    <div style="margin: 0 0 6px;">
+        {% for e in i.evidence %}<div class="dr-small" style="margin: 0 0 2px;"><strong style="color: {{ k.color }};">{{ e[0] }}</strong> · {{ e[1] }}</div>{% endfor %}
+    </div>
+    {% if not (compact|default(false)) %}
+        <p style="margin: 0 0 4px; color: #334155;"><strong>Une question à vous poser :</strong> {{ i.question }}</p>
+        <p class="dr-small" style="margin: 0; color: #334155;"><strong>Un premier pas :</strong> {{ i.step.label|slice(0, 1)|lower }}{{ i.step.label|slice(1) }}.
+            {% if not pdf %}<a href="{{ path(plans[i.step.plan].route) }}" style="color: var(--primary); font-weight: 700;">Ouvrir le {{ plans[i.step.plan].label }}</a>{% endif %}</p>
+    {% endif %}
+</div>

@@ -1,0 +1,332 @@
+<?php
+
+namespace App\Personnalite\Service;
+
+/**
+ * Moteur de lecture croisée : il confronte les résultats de plusieurs tests et en tire des « lectures » (tensions, paradoxes,
+ * convergences, appels, risques, chemins de croissance). Ce n'est ni un score ni de l'apprentissage automatique : chaque règle
+ * est écrite, nommée et vérifiable, et chaque lecture cite ses preuves (quel test dit quoi).
+ *
+ * Principes (voir docs/modules/personnalite.md) :
+ *  - une lecture n'est produite que si les données la justifient (seuils explicites) ;
+ *  - une lecture recoupée par plusieurs tests pèse plus qu'une lecture appuyée par un seul ;
+ *  - une hypothèse (paradoxe, tension) est présentée comme telle, jamais comme un verdict ;
+ *  - chaque lecture se termine par une question à se poser et un premier pas relié à un plan.
+ *
+ * Entrée : les rapports de chaque test (clés disc, bigfive, type, enneagramme, dons, comme ProfileSynthesis::collect), la
+ * convergence des trois axes et, si disponible, l'équilibre de vie. Sortie : lectures classées de la plus importante à la moindre.
+ */
+final class InsightEngine
+{
+    public const KINDS = [
+        'risk' => ['label' => 'Vigilance', 'color' => '#9A3412', 'bg' => '#FFF7ED'],
+        'tension' => ['label' => 'Tension', 'color' => '#854D0E', 'bg' => '#FEF3C7'],
+        'paradox' => ['label' => 'Paradoxe', 'color' => '#334155', 'bg' => '#F1F5F9'],
+        'convergence' => ['label' => 'Convergence', 'color' => '#166534', 'bg' => '#F0FDF4'],
+        'calling' => ['label' => 'Appel', 'color' => '#173D2E', 'bg' => '#DCE7DF'],
+        'growth' => ['label' => 'Croissance', 'color' => '#1E3A8A', 'bg' => '#EFF6FF'],
+    ];
+
+    /** Types de l'ennéagramme : profils DISC qu'on s'attend d'ordinaire à leur voir exprimer (lecture usuelle, non démontrée). */
+    public const ENNEAGRAM_EXPECTS = [1 => ['C'], 2 => ['S', 'I'], 3 => ['D', 'I'], 4 => ['C', 'I'], 5 => ['C'], 6 => ['S', 'C'], 7 => ['I'], 8 => ['D'], 9 => ['S']];
+
+    private const PUBLIC_GIFTS = ['ENSEIGNEMENT', 'EXHORTATION', 'PROPHETIE', 'EVANGELISATION', 'PRESIDENCE'];
+    private const HIDDEN_GIFTS = ['SERVICE', 'INTERCESSION', 'MISERICORDE', 'LIBERALITE'];
+    private const CARE_GIFTS = ['MISERICORDE', 'EXHORTATION', 'PASTORAT', 'HOSPITALITE'];
+    private const CONCRETE_GIFTS = ['SERVICE', 'LIBERALITE', 'HOSPITALITE', 'PRESIDENCE'];
+    private const THOUGHT_GIFTS = ['PROPHETIE', 'SAGESSE', 'CONNAISSANCE', 'ENSEIGNEMENT'];
+
+    /** Nombre de lectures gardées. */
+    public const MAX = 6;
+
+    /**
+     * @param array<string, ?array> $r           rapports par test
+     * @param array<string, mixed>  $convergence résultat de ProfileSynthesis::convergence (axes, divergent)
+     * @param ?array<string, mixed> $life        équilibre de vie (avg, priorities, supports)
+     *
+     * @return list<array<string, mixed>>
+     */
+    public function analyze(array $r, array $convergence = [], ?array $life = null): array
+    {
+        $found = array_filter([
+            $this->adaptationStrain($r, $life),
+            $this->motivationVersusBehaviour($r),
+            $this->visibleGiftReservedTemperament($r),
+            $this->hiddenGiftOpenTemperament($r),
+            $this->sensitivityAndCare($r),
+            $this->directnessAndCare($r),
+            $this->reliabilityAndConcreteGift($r),
+            $this->curiosityAndThoughtGift($r),
+            $this->pressureSignature($r),
+            $this->growthPath($r),
+            $this->coherence($convergence),
+            $this->divergence($convergence),
+            $this->lifeGround($r, $life),
+        ]);
+        foreach ($found as &$f) {
+            $count = \count($f['sources']);
+            $f['weight'] += 6 * ($count - 1);
+            $f['confidence'] = match (true) {
+                $count >= 3 => 'Recoupé par '.$count.' tests',
+                2 === $count => 'Recoupé par 2 tests',
+                default => 'Un seul test : à vérifier',
+            };
+            $f['kindLabel'] = self::KINDS[$f['kind']]['label'];
+        }
+        unset($f);
+        usort($found, fn ($a, $b) => $b['weight'] <=> $a['weight']);
+
+        return \array_slice($found, 0, self::MAX);
+    }
+
+    // ───────────────────────────── Règles ─────────────────────────────
+
+    /** Un profil adapté très éloigné du profil naturel : l'effort se paie, surtout avec une sensibilité émotionnelle élevée. */
+    private function adaptationStrain(array $r, ?array $life): ?array
+    {
+        $disc = $r['disc']['disc'] ?? null;
+        if (!$disc || $disc['gap'] < 25) {
+            return null;
+        }
+        $evidence = [['DISC', 'Écart de '.$disc['gap'].' points entre votre profil naturel ('.$disc['profile']['name'].') et votre profil adapté'.($disc['adaptedPrimary'] === $disc['primary'] ? ' (même dimension dominante, mais répartie autrement).' : ' ('.$disc['adaptedProfile']['name'].').')]];
+        $sources = ['disc'];
+        $weight = 62 + min(14, (int) (($disc['gap'] - 25) / 3));
+        $text = 'Votre contexte vous demande de vivre assez loin de votre nature'.($disc['more'] ? ' : '.lcfirst(implode(', ', $disc['more'])) : '').'. '
+            .'Cela peut durer longtemps sans se voir, mais cela consomme de l\'énergie.';
+        $n = $r['bigfive']['bf']['domains']['N'] ?? null;
+        if ($n && 'high' === $n['level']) {
+            $evidence[] = ['Big Five', 'Sensibilité émotionnelle élevée : vous ressentez fortement la pression.'];
+            $sources[] = 'bigfive';
+            $weight += 12;
+            $text .= ' Avec une sensibilité émotionnelle élevée, la fatigue peut s\'installer avant que vous ne la remarquiez.';
+        }
+        if ($e = $r['enneagramme']['enneagram'] ?? null) {
+            $evidence[] = ['Ennéagramme', 'Votre peur profonde : '.lcfirst($e['profile']['fear'])];
+            $sources[] = 'enneagramme';
+        }
+        if ($life && $life['priorities']) {
+            $evidence[] = ['Équilibre de vie', 'Priorités signalées : '.lcfirst(implode(', ', $life['priorities'])).'.'];
+            $sources[] = 'equilibre';
+        }
+
+        return $this->insight('strain', 'risk', 'Vous vous adaptez beaucoup à votre contexte', $text, $evidence, $sources, $weight,
+            'Où puis-je être moi-même sans avoir à m\'expliquer, et quand ?', 'Poser un temps de ressourcement fixe chaque semaine', 'HYGIENE');
+    }
+
+    /** Ce qu'on voit (DISC) et ce qui pousse au fond (ennéagramme) : accord ou paradoxe. */
+    private function motivationVersusBehaviour(array $r): ?array
+    {
+        $disc = $r['disc']['disc'] ?? null;
+        $enn = $r['enneagramme']['enneagram'] ?? null;
+        if (!$disc || !$enn || !isset(self::ENNEAGRAM_EXPECTS[$enn['type']])) {
+            return null;
+        }
+        $type = (int) $enn['type'];
+        $expected = self::ENNEAGRAM_EXPECTS[$type];
+        $evidence = [
+            ['DISC', 'Votre manière d\'agir : '.$disc['profile']['name'].'.'],
+            ['Ennéagramme', 'Type '.$type.' · '.$enn['profile']['name'].' : '.lcfirst(rtrim($enn['profile']['motivation'], '.')).'.'],
+        ];
+        if (\in_array($disc['primary'], $expected, true)) {
+            return $this->insight('consistent', 'convergence', 'Ce que vous faites et ce qui vous pousse s\'accordent',
+                'Votre manière d\'agir ('.lcfirst($disc['profile']['name']).') est celle qu\'on voit d\'ordinaire chez un type '.$type.'. Vos actes expriment ce qui vous motive vraiment : c\'est une force d\'unité, et on sent peu de décalage entre vous et ce que vous montrez.',
+                $evidence, ['disc', 'enneagramme'], 48, 'Qu\'est-ce que cette unité me permet d\'oser que d\'autres n\'osent pas ?', 'Écrire ce que vous voulez vraiment servir', 'VIE');
+        }
+        $names = array_map(fn ($l) => lcfirst(\App\Personnalite\Psychometrie\Content::get('disc.dimensions')[$l]['name']), $expected);
+
+        return $this->insight('paradox', 'paradox', 'Ce qui se voit n\'est pas tout ce qui vous porte',
+            'Vous agissez en profil '.lcfirst($disc['profile']['name']).', alors que ce qui vous motive ('.lcfirst(rtrim($enn['profile']['motivation'], '.')).') s\'exprime plus souvent par un profil '.implode(' ou ', $names).'. '
+            .'Cela arrive : on apprend parfois à agir autrement que ce qu\'on ressent, par éducation, par contexte ou par foi. À explorer sans en faire un verdict : c\'est une hypothèse, pas une étiquette.',
+            $evidence, ['disc', 'enneagramme'], 58, 'Dans quelles situations est-ce que j\'agis à l\'inverse de ce que je ressens ?', 'Choisir une situation et agir de façon plus fidèle à ce que vous ressentez', 'CROISSANCE');
+    }
+
+    /** Un don qui s'exerce devant les autres, dans un tempérament réservé. */
+    private function visibleGiftReservedTemperament(array $r): ?array
+    {
+        $e = $r['bigfive']['bf']['domains']['E'] ?? null;
+        $gift = $this->topGift($r, self::PUBLIC_GIFTS);
+        if (!$e || !$gift || 'low' !== $e['level']) {
+            return null;
+        }
+
+        return $this->insight('public-gift-quiet', 'tension', 'Un don qui se voit, un tempérament qui se ménage',
+            'Votre don de '.mb_strtolower($gift['name']).' vous place devant les autres, alors que votre tempérament est plutôt réservé. Ce n\'est pas un obstacle : beaucoup de personnes appelées à parler ou à conduire sont ainsi. '
+            .'Cela demande de préparer, de choisir des cadres à taille humaine et de prévoir du repos après les moments d\'exposition.',
+            [['Dons spirituels', 'Don mis en avant : '.$gift['name'].'.'], ['Big Five', 'Extraversion faible : énergie plutôt puisée dans le calme.']],
+            ['dons', 'bigfive'], 60, 'Quel cadre me permet d\'exercer ce don sans m\'épuiser ?', 'Proposer d\'exercer ce don dans un petit groupe d\'abord', 'CROISSANCE');
+    }
+
+    /** Un don discret, un tempérament tourné vers les autres : chercher le lien. */
+    private function hiddenGiftOpenTemperament(array $r): ?array
+    {
+        $e = $r['bigfive']['bf']['domains']['E'] ?? null;
+        $gifts = array_column($r['dons']['gifts']['top'] ?? [], 'code');
+        if (!$e || !$gifts || 'high' !== $e['level'] || array_diff($gifts, self::HIDDEN_GIFTS)) {
+            return null;
+        }
+
+        return $this->insight('hidden-gift-open', 'calling', 'Un don discret, un tempérament qui rassemble',
+            'Vos dons les plus marqués s\'exercent plutôt dans l\'ombre (service, prière, compassion), tandis que votre énergie vous porte vers les autres. Associez les deux : votre aisance relationnelle peut ouvrir des portes à un service que d\'autres n\'oseraient pas proposer.',
+            [['Dons spirituels', 'Dons principaux : '.implode(', ', array_column($r['dons']['gifts']['top'], 'name')).'.'], ['Big Five', 'Extraversion élevée.']],
+            ['dons', 'bigfive'], 46, 'À qui puis-je offrir ce service pour la première fois ?', 'Proposer ce service à une personne précise', 'TRANSMISSION');
+    }
+
+    /** Sensibilité émotionnelle forte et don de soin : fatigue de compassion. */
+    private function sensitivityAndCare(array $r): ?array
+    {
+        $n = $r['bigfive']['bf']['domains']['N'] ?? null;
+        $gift = $this->topGift($r, self::CARE_GIFTS);
+        if (!$n || !$gift || 'high' !== $n['level']) {
+            return null;
+        }
+
+        return $this->insight('care-sensitive', 'risk', 'Votre sensibilité nourrit votre don, et peut l\'épuiser',
+            'Votre don de '.mb_strtolower($gift['name']).' s\'appuie sur une grande sensibilité : vous percevez ce que les autres vivent. C\'est ce qui rend votre présence précieuse, et ce qui expose à la fatigue de compassion. '
+            .'Fixer à l\'avance où s\'arrête ce que vous portez protège ce don.',
+            [['Dons spirituels', 'Don de soin : '.$gift['name'].'.'], ['Big Five', 'Sensibilité émotionnelle élevée.']],
+            ['dons', 'bigfive'], 64, 'Qu\'est-ce que je porte qui ne m\'appartient pas ?', 'Définir une limite claire (horaire, nombre de personnes suivies)', 'HYGIENE');
+    }
+
+    /** Un tempérament direct et un don de soin : apprendre la douceur sans perdre la franchise. */
+    private function directnessAndCare(array $r): ?array
+    {
+        $a = $r['bigfive']['bf']['domains']['A'] ?? null;
+        $gift = $this->topGift($r, self::CARE_GIFTS);
+        if (!$a || !$gift || 'low' !== $a['level']) {
+            return null;
+        }
+
+        return $this->insight('care-direct', 'tension', 'Un don de soin, un tempérament direct',
+            'Votre don de '.mb_strtolower($gift['name']).' appelle de la douceur ; votre tempérament va droit au but. Ces deux traits ne s\'opposent pas : votre franchise rassure ceux qui veulent la vérité. Elle gagne à être précédée d\'une écoute visible.',
+            [['Dons spirituels', 'Don de soin : '.$gift['name'].'.'], ['Big Five', 'Agréabilité plutôt faible : franchise, esprit critique.']],
+            ['dons', 'bigfive'], 52, 'Qu\'est-ce que la personne a besoin d\'entendre avant ma remarque ?', 'Reformuler ce que l\'autre a dit avant de répondre, trois fois cette semaine', 'CROISSANCE');
+    }
+
+    /** Conscience élevée et don concret : une fiabilité qui donne corps au don. */
+    private function reliabilityAndConcreteGift(array $r): ?array
+    {
+        $c = $r['bigfive']['bf']['domains']['C'] ?? null;
+        $gift = $this->topGift($r, self::CONCRETE_GIFTS);
+        if (!$c || !$gift || 'high' !== $c['level']) {
+            return null;
+        }
+
+        return $this->insight('reliable-gift', 'calling', 'Une fiabilité qui donne corps à votre don',
+            'Votre sens de l\'engagement et de l\'organisation donne un corps à votre don de '.mb_strtolower($gift['name']).' : on peut compter sur vous dans la durée. Les communautés manquent souvent de personnes qui tiennent leurs engagements ; vous en êtes une.',
+            [['Dons spirituels', 'Don : '.$gift['name'].'.'], ['Big Five', 'Conscience élevée : rigueur, constance.']],
+            ['dons', 'bigfive'], 44, 'Quel engagement durable suis-je prêt à prendre ?', 'Choisir un service régulier et l\'inscrire à votre agenda', 'INTENDANCE');
+    }
+
+    /** Ouverture élevée et don de pensée : le chercheur qui transmet. */
+    private function curiosityAndThoughtGift(array $r): ?array
+    {
+        $o = $r['bigfive']['bf']['domains']['O'] ?? null;
+        $gift = $this->topGift($r, self::THOUGHT_GIFTS);
+        if (!$o || !$gift || 'high' !== $o['level']) {
+            return null;
+        }
+
+        return $this->insight('thought-gift', 'calling', 'Un esprit curieux au service de la parole',
+            'Votre curiosité et votre goût des idées alimentent votre don de '.mb_strtolower($gift['name']).' : vous cherchez, puis vous transmettez. Veillez à transformer ce que vous découvrez en quelque chose que les autres peuvent saisir et vivre.',
+            [['Dons spirituels', 'Don : '.$gift['name'].'.'], ['Big Five', 'Ouverture élevée : curiosité intellectuelle, imagination.']],
+            ['dons', 'bigfive'], 44, 'Qu\'ai-je découvert récemment que quelqu\'un a besoin d\'entendre ?', 'Rédiger en dix lignes ce que vous avez appris et le partager', 'DEVELOPPEMENT');
+    }
+
+    /** Deux regards sur la même épreuve : ce qui se passe quand la pression monte. */
+    private function pressureSignature(array $r): ?array
+    {
+        $disc = $r['disc']['disc'] ?? null;
+        $enn = $r['enneagramme']['enneagram'] ?? null;
+        if (!$disc || !$enn) {
+            return null;
+        }
+        $stress = $enn['stress'];
+        $text = 'Deux outils décrivent le même moment. Pour le DISC : '.lcfirst(rtrim($disc['combo']['signs'], '.')).'. Pour l\'ennéagramme, la pression vous entraîne vers le type '.$stress['n'].' ('.lcfirst($stress['name']).') ; votre signal d\'alerte : '.lcfirst(rtrim($enn['x']['signs'], '.')).'. '
+            .'Repérer ces signes tôt vous permet de vous arrêter avant que la tension ne s\'installe.';
+
+        return $this->insight('pressure', 'risk', 'Votre signature sous pression', $text,
+            [['DISC', 'Signes : '.lcfirst(rtrim($disc['combo']['signs'], '.')).'.'], ['Ennéagramme', 'Sous pression, vers le type '.$stress['n'].' ('.$stress['name'].') ; signal d\'alerte : '.lcfirst(rtrim($enn['x']['signs'], '.')).'.']],
+            ['disc', 'enneagramme'], 56, 'Quels sont les trois premiers signes qui me disent que je glisse ?', 'Écrire vos trois signes d\'alerte et les confier à un partenaire de redevabilité', 'HYGIENE');
+    }
+
+    /** Où grandir, d'après l'ennéagramme et le DISC. */
+    private function growthPath(array $r): ?array
+    {
+        $disc = $r['disc']['disc'] ?? null;
+        $enn = $r['enneagramme']['enneagram'] ?? null;
+        if (!$disc || !$enn) {
+            return null;
+        }
+
+        return $this->insight('growth', 'growth', 'Où grandir en priorité',
+            'Quand vous allez bien, l\'ennéagramme vous voit rejoindre le type '.$enn['grow']['n'].' ('.lcfirst($enn['grow']['name']).') : '.lcfirst(rtrim($enn['x']['growthText'], '.')).'. Côté DISC, un geste concret : '.lcfirst(rtrim($disc['combo']['grow'][0], '.')).'. Un seul chantier à la fois suffit.',
+            [['Ennéagramme', 'Chemin de croissance : type '.$enn['grow']['n'].'.'], ['DISC', 'Pour grandir : '.lcfirst(rtrim($disc['combo']['grow'][0], '.')).'.']],
+            ['disc', 'enneagramme'], 50, 'Quel est le plus petit pas qui irait dans ce sens ?', 'Choisir un chantier de caractère dans votre Plan de Croissance', 'CROISSANCE');
+    }
+
+    /** Trois axes (relation, rythme, structure) qui se rejoignent. */
+    private function coherence(array $convergence): ?array
+    {
+        $axes = $convergence['axes'] ?? [];
+        $agree = array_filter($axes, fn ($a) => true === $a['agree']);
+        if (\count($agree) < 2 || ($convergence['divergent'] ?? [])) {
+            return null;
+        }
+        $labels = array_map(fn ($a) => lcfirst($a['mean'] > 0.25 ? $a['right'] : ($a['mean'] < -0.25 ? $a['left'] : 'ni trop '.lcfirst($a['left']).' ni trop '.lcfirst($a['right']))), $agree);
+
+        return $this->insight('coherent', 'convergence', 'Un profil cohérent d\'un test à l\'autre',
+            'Vos tests disent la même chose sur '.\count($agree).' axes : '.implode(', ', $labels).'. Quand des méthodes différentes se rejoignent, le trait est solide : vous pouvez vous appuyer dessus pour choisir où vous engager.',
+            array_map(fn ($a) => [$a['left'].' / '.$a['right'], 'Tests concordants.'], array_values($agree)), ['disc', 'bigfive', 'type'], 42,
+            'Qu\'est-ce que cette solidité m\'autorise à décider maintenant ?', 'Noter une décision que vous repoussez et la prendre', 'VIE');
+    }
+
+    /** Un axe sur lequel les tests divergent : une zone à observer. */
+    private function divergence(array $convergence): ?array
+    {
+        $div = $convergence['divergent'] ?? [];
+        if (!$div) {
+            return null;
+        }
+        $names = array_map(fn ($k) => $convergence['axes'][$k]['left'].' / '.$convergence['axes'][$k]['right'], $div);
+
+        return $this->insight('divergent', 'tension', 'Une zone à observer : vos tests ne disent pas tout à fait la même chose',
+            'Sur '.(\count($names) > 1 ? 'les axes' : 'l\'axe').' « '.implode(' », « ', $names).' », vos tests divergent. Ce n\'est pas une erreur : une méthode mesure ce que vous dites, une autre vos traits, une autre vos préférences. '
+            .'C\'est souvent là que vous vous adaptez, ou que vous vous voyez autrement que les autres ne vous voient. Demander à trois proches leur regard éclaire ce point.',
+            array_map(fn ($n) => [$n, 'Les tests divergent.'], $names), ['disc', 'bigfive', 'type'], 55,
+            'Et eux, comment me voient-ils sur ce point ?', 'Demander le regard de trois proches sur ce point', 'VIE');
+    }
+
+    /** Votre réalité de vie : un terrain où les dons s'exercent. */
+    private function lifeGround(array $r, ?array $life): ?array
+    {
+        if (!$life || !$life['priorities'] || !($r['dons']['gifts']['top'] ?? null)) {
+            return null;
+        }
+
+        return $this->insight('ground', 'growth', 'Vos dons s\'exercent dans la vie que vous avez',
+            'Votre équilibre de vie signale des priorités ('.lcfirst(implode(', ', $life['priorities'])).'). Vos dons ne sont pas à exercer à côté de cette réalité mais à l\'intérieur : commencez par là où vous êtes, avant d\'ajouter un nouveau service.',
+            [['Équilibre de vie', 'Priorités : '.lcfirst(implode(', ', $life['priorities'])).'.'], ['Dons spirituels', 'Dons principaux : '.implode(', ', array_column($r['dons']['gifts']['top'], 'name')).'.']],
+            ['equilibre', 'dons'], 40, 'Où mes dons sont-ils déjà attendus, tout près de moi ?', 'Nommer une personne de votre entourage proche que votre don peut servir', 'INTENDANCE');
+    }
+
+    // ───────────────────────────── Outils ─────────────────────────────
+
+    /** Premier don du podium appartenant à la liste donnée, sinon null. */
+    private function topGift(array $r, array $codes): ?array
+    {
+        foreach ($r['dons']['gifts']['top'] ?? [] as $g) {
+            if (\in_array($g['code'], $codes, true)) {
+                return $g;
+            }
+        }
+
+        return null;
+    }
+
+    /** @param list<array{0: string, 1: string}> $evidence */
+    private function insight(string $id, string $kind, string $title, string $text, array $evidence, array $sources, int $weight, string $question, string $step, string $plan): array
+    {
+        return ['id' => $id, 'kind' => $kind, 'title' => $title, 'text' => $text, 'evidence' => $evidence, 'sources' => $sources, 'weight' => $weight,
+            'question' => $question, 'step' => ['label' => $step, 'plan' => $plan]];
+    }
+}

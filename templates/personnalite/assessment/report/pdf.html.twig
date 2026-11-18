@@ -13,5 +13,6 @@
 <body>
     <div class="footer">KIINI SAWA · {{ instrument.name }} de {{ name }} · document personnel, outil de connaissance de soi, pas un diagnostic <span style="float: right;">page <span class="pn"></span></span></div>
     {% include body with {pdf: true} %}
+    {% include 'personnalite/assessment/report/_cross_panel.html.twig' with {crossInsights: crossInsights|default([]), pdf: true} only %}
 </body>
 </html>

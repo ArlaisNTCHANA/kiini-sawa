@@ -24,6 +24,7 @@
     {% else %}
         {% include 'personnalite/assessment/_report_body.html.twig' %}
     {% endif %}
+    {% include 'personnalite/assessment/report/_cross_panel.html.twig' with {crossInsights: crossInsights|default([]), crossLocked: crossLocked|default(0), pdf: false} only %}
 
     {% include 'personnalite/_history.html.twig' with {currentUrl: '/mes-tests/rapport/' ~ assessment.id} %}
 
