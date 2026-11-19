@@ -46,6 +46,18 @@ framework:
             policy: sliding_window
             limit: 60
             interval: '10 minutes'
+        mobile_login_ip:     # connexions mobiles par IP
+            policy: sliding_window
+            limit: 30
+            interval: '15 minutes'
+        mobile_login_account: # connexions mobiles par compte (reste strict en test pour vérifier le 429)
+            policy: sliding_window
+            limit: 5
+            interval: '15 minutes'
+        mobile_refresh:      # rafraîchissement de jeton mobile par IP
+            policy: sliding_window
+            limit: 30
+            interval: '15 minutes'
 
 # Les tests enchaînent les inscriptions depuis la même adresse : limites relevées
 when@test:
@@ -59,3 +71,11 @@ when@test:
                 policy: sliding_window
                 limit: 10000
                 interval: '1 hour'
+            mobile_login_ip:
+                policy: sliding_window
+                limit: 1000
+                interval: '15 minutes'
+            mobile_refresh:
+                policy: sliding_window
+                limit: 1000
+                interval: '15 minutes'

@@ -37,6 +37,7 @@ class SecurityGuardsTest extends WebTestCase
         'app_notification_unsubscribe', // lien signé reçu par email
         'app_organisation_join', // lien d'invitation d'une organisation
         'app_couple_join', // lien d'invitation du conjoint
+        'api_mobile_login', 'api_mobile_refresh', 'api_mobile_logout', // authentification mobile par jeton (endpoints sans session)
     ];
 
     public function testEveryPageRequiresAuthenticationExceptPublicOnes(): void

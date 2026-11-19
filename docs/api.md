@@ -1,5 +1,7 @@
 # Architecture & Sécurité des API (Mobile)
 
+> ⚠️ **Document remplacé** : l'API mobile est désormais implémentée et documentée dans [`docs/api-mobile.md`](api-mobile.md) (`/api/mobile/v1/...`, pare-feu `Bearer` avec rotation, sans NelmioApiDoc). Le présent fichier est conservé uniquement pour archive.
+
 > ⚠️ **État au 16/11/2026** : cette page décrit l'API **prévue** pour l'application mobile (phase 7). Elle n'existe pas encore : pas de JWT, pas de NelmioApiDoc, pas de `/api/sync`. Les routes `/api/…` actuelles sont internes aux pages web (session). Voir `AGENTS.md` §8.
 
 

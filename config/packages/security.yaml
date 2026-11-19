@@ -16,6 +16,12 @@ security:
             # Ensure dev tools and static assets are always allowed
             pattern: ^/(_profiler|_wdt|assets|build)/
             security: false
+        mobile_api:
+            pattern: ^/api/mobile
+            stateless: true
+            provider: app_user_provider
+            custom_authenticator: App\Mobile\Security\MobileBearerAuthenticator
+            entry_point: App\Mobile\Security\MobileBearerAuthenticator
         main:
             lazy: true
             provider: app_user_provider
@@ -52,6 +58,8 @@ security:
     # Un compte connecté mais dont l'email n'est pas vérifié est en plus redirigé
     # vers /verification-email (voir App\\Compte\\Security\\VerifiedUserSubscriber).
     access_control:
+        - { path: ^/api/mobile/v1/(connexion|jeton|deconnexion)$, roles: PUBLIC_ACCESS }
+        - { path: ^/api/mobile, roles: ROLE_USER }
         - { path: ^/$, roles: PUBLIC_ACCESS }
         - { path: ^/(sante|robots\.txt|sitemap\.xml)$, roles: PUBLIC_ACCESS }
         - { path: ^/login$, roles: PUBLIC_ACCESS }

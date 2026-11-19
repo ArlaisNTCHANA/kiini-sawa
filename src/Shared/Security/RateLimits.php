@@ -25,11 +25,15 @@ final class RateLimits
         #[Autowire(service: 'limiter.account_security')] RateLimiterFactory $accountSecurityLimiter,
         #[Autowire(service: 'limiter.public_form')] RateLimiterFactory $publicFormLimiter,
         #[Autowire(service: 'limiter.public_form_ip')] RateLimiterFactory $publicFormIpLimiter,
+        #[Autowire(service: 'limiter.mobile_login_ip')] RateLimiterFactory $mobileLoginIpLimiter,
+        #[Autowire(service: 'limiter.mobile_login_account')] RateLimiterFactory $mobileLoginAccountLimiter,
+        #[Autowire(service: 'limiter.mobile_refresh')] RateLimiterFactory $mobileRefreshLimiter,
     ) {
         $this->factories = [
             'push_test' => $pushTestLimiter, 'org_invite' => $orgInviteLimiter, 'org_invite_licensed' => $orgInviteLicensedLimiter,
             'org_create' => $orgCreateLimiter, 'couple_create' => $coupleCreateLimiter, 'plan_email' => $planEmailLimiter, 'account_security' => $accountSecurityLimiter,
             'public_form' => $publicFormLimiter, 'public_form_ip' => $publicFormIpLimiter,
+            'mobile_login_ip' => $mobileLoginIpLimiter, 'mobile_login_account' => $mobileLoginAccountLimiter, 'mobile_refresh' => $mobileRefreshLimiter,
         ];
     }
 

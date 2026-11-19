@@ -57,6 +57,9 @@ class Subscription
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $stripePaymentMethodId = null;
 
+    #[ORM\Column(length: 30, nullable: true)]
+    private ?string $billingSource = null;
+
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $createdAt = null;
 
@@ -234,6 +237,18 @@ class Subscription
     public function setStripePaymentMethodId(?string $stripePaymentMethodId): static
     {
         $this->stripePaymentMethodId = $stripePaymentMethodId;
+
+        return $this;
+    }
+
+    public function getBillingSource(): ?string
+    {
+        return $this->billingSource;
+    }
+
+    public function setBillingSource(?string $billingSource): static
+    {
+        $this->billingSource = $billingSource;
 
         return $this;
     }

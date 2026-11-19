@@ -18,6 +18,7 @@ Le code de KIINI SAWA est rangé **par module métier**. Chaque module regroupe 
 | [Journal](modules/journal.md) | Journal de réflexion et collections | 2 | 6 | Oui |
 | [Listes](modules/listes.md) | Listes personnelles (UserList / ListItem) | 2 | 0 | Non |
 | [Methode](modules/methode.md) | La méthode : chapitres du livre et encarts « Comprendre cette étape » | 0 | 2 | Oui |
+| [Mobile](modules/mobile.md) | API mobile versionnée (`/api/mobile/v1`), jetons Bearer et rotation sécurisée | 1 | 18 | API JSON |
 | [Notification](modules/notification.md) | Centre de notifications, préférences, rappels par email | 3 | 5 | Oui |
 | [Organisation](modules/organisation.md) | Offre B2B : églises, associations, entreprises ; places, rôles, accompagnateurs, engagement | 3 | 11 | Oui |
 | [Personnalite](modules/personnalite.md) | Questionnaires psychométriques (IPIP-NEO, type, style, ennéagramme, dons), rapports PDF, fidélité ; tests d'aptitudes et d'hygiène | 5 | 14 | Oui |

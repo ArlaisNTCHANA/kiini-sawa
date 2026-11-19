@@ -96,8 +96,8 @@ Code : `web/src/Rapide/` ; documentation : `docs/modules/rapide.md` ; tests : `w
 
 ## 8. Étapes et critères d'acceptation
 
-1. **Fondations** : projet Expo (TypeScript, Expo Router, SDK à jour au moment du démarrage), polices, thème, `i18n/fr.ts`, client API avec rafraîchissement automatique du jeton, stockage des jetons dans `expo-secure-store`, écran de connexion. *Critère* : se connecter avec un compte de test, rester connecté après redémarrage, se déconnecter (jetons révoqués côté serveur, cache local effacé).
-2. **Aujourd'hui, rituels, bilan du jour, journal** hors ligne (file §6). *Critère* : mode avion → cocher, écrire, enregistrer le bilan → réseau rétabli → tout apparaît sur le site, sans doublon ; test d'un renvoi après coupure.
+1. **Fondations** _(Lot 1 — API et socle `../mobile-v1/` livrés)_ : projet Expo (TypeScript, Expo Router, SDK à jour au moment du démarrage), polices, thème, `i18n/fr.ts`, client API avec rafraîchissement automatique du jeton, stockage des jetons dans `expo-secure-store`, écran de connexion. *Critère* : se connecter avec un compte de test, rester connecté après redémarrage, se déconnecter (jetons révoqués côté serveur, cache local effacé).
+2. **Aujourd'hui, rituels, bilan du jour, journal** _(Lot 1 — API et écrans livrés dans `../mobile-v1/` ; reste vérification finale sur appareil physique)_ hors ligne (file §6). *Critère* : mode avion → cocher, écrire, enregistrer le bilan → réseau rétabli → tout apparaît sur le site, sans doublon ; test d'un renvoi après coupure.
 3. **Rappels** : notifications locales et distantes (`expo-notifications`), autorisation demandée au bon moment avec explication, préférences respectées, touche → ouvre le bon écran. *Critère* : testé sur iPhone et Android réels (les notifications ne fonctionnent pas dans Expo Go sur toutes les plateformes : utiliser un *development build* EAS).
 4. **Mes plans** (lecture), cercle des plans, progression.
 5. **Mes tests** et rapports, synthèse « Mon profil KIINI SAWA ».

@@ -18,7 +18,12 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 #[AsCommand(name: 'app:reminders:send', description: 'Envoie les rappels du jour (revues, rituels, échéances, partenaires)')]
 class SendRemindersCommand extends Command
 {
-    public function __construct(private readonly ReminderService $reminders, private readonly \Psr\Cache\CacheItemPoolInterface $cacheApp, private readonly \App\Rapide\Repository\SyncOperationRepository $syncOperations)
+    public function __construct(
+        private readonly ReminderService $reminders,
+        private readonly \Psr\Cache\CacheItemPoolInterface $cacheApp,
+        private readonly \App\Rapide\Repository\SyncOperationRepository $syncOperations,
+        private readonly \App\Mobile\Repository\MobileTokenRepository $mobileTokens,
+    )
     {
         parent::__construct();
     }
@@ -41,6 +46,7 @@ class SendRemindersCommand extends Command
         $sent = $this->reminders->sendAll($date);
         // Ménage quotidien : les identifiants de synchronisation du mode rapide de plus de 60 jours ne servent plus
         $this->syncOperations->purgeOlderThan($date->modify('-60 days'));
+        $this->mobileTokens->purgeExpired($date->modify('-60 days'));
         // Trace de la dernière exécution, vérifiée par app:launch:check (tâche planifiée bien en place ?)
         $this->cacheApp->save($this->cacheApp->getItem('reminders_last_run')->set(time()));
         $io->table(['Rappel', 'Envoyés'], array_map(fn ($k, $v) => [$k, $v], array_keys($sent), $sent));
