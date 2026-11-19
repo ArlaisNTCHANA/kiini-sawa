@@ -11,7 +11,8 @@ revue de couple mensuelle et rapport croisé des deux profils de personnalité.
 
 ## Règles
 
-- **Accès** : les deux conjoints doivent être PRO. L'abonnement **Duo** (par défaut 119,99 € ou 39 000 FCFA par an) rend les deux PRO en un seul paiement, validé dans `/admin/paiements` (`SubscriptionManager`, période `DUO`).
+- **Accès** : les deux conjoints doivent être PRO. L'abonnement **Duo** (par défaut 119,99 € ou 78 500 FCFA par an) rend les deux PRO en un seul paiement, validé dans `/admin/paiements` (`SubscriptionManager`, période `DUO`).
+- **Évolution future** : voir la spécification technique [RFC-001 : Sanctuaire de Croissance 360 (Espace Couple V2)](../roadmap/RFC-001-sanctuaire-couple-360.md).
 - **Confidentialité** : les espaces personnels (plans, journal) restent privés. Le rapport croisé n'utilise les résultats de tests que si chacun l'accepte (modifiable dans les réglages).
 - **Fermeture** : supprime l'espace commun, jamais les espaces personnels. La suppression du compte d'un conjoint ferme aussi l'espace.
 - Un conjoint sans compte ouvre le lien, s'inscrit, et revient automatiquement sur l'invitation (`PendingInvitation::COUPLE_KEY`).
