@@ -31,23 +31,39 @@ final class ReminderService
     ) {
     }
 
+    /** Utilisateurs traités à la fois (mémoire bornée). */
+    public const BATCH_SIZE = 200;
+
     /** @return array<string, int> nombre de rappels envoyés par type */
-    public function sendAll(\DateTimeImmutable $today): array
+    public function sendAll(\DateTimeImmutable $today, int $batchSize = self::BATCH_SIZE): array
     {
+        $batchSize = max(1, $batchSize);
         $sent = array_fill_keys(['suivi des tests', 'rituels du matin', 'défis', 'accueil', 'revue hebdomadaire', 'revue mensuelle', 'rituels', 'échéances', 'partenaires', 'fin d\'essai ou d\'abonnement'], 0);
-        $users = $this->em->getRepository(User::class)->findBy(['isVerified' => true]);
-        foreach ($users as $user) {
-            $sent['accueil'] += (int) $this->onboarding->sendFor($user, $today);
-            $sent['suivi des tests'] += $this->testFollowUps($user, $today);
-            $sent['défis'] += $this->challengeDay($user, $today);
-            $sent['rituels du matin'] += (int) $this->dailyRituals($user, $today);
-            $sent['revue hebdomadaire'] += (int) $this->weeklyReview($user, $today);
-            $sent['revue mensuelle'] += (int) $this->monthlyReview($user, $today);
-            $sent['rituels'] += (int) $this->habits($user, $today);
-            $sent['échéances'] += $this->deadlines($user, $today);
-            $sent['partenaires'] += $this->partners($user, $today);
-            $sent['fin d\'essai ou d\'abonnement'] += (int) $this->subscriptionEnding($user, $today);
-        }
+        // Par lots d'identifiants (BATCH_SIZE à la fois) : la mémoire reste constante, quel que soit le nombre d'utilisateurs ;
+        // le gestionnaire d'entités est vidé entre deux lots.
+        $lastId = 0;
+        do {
+            $ids = $this->em->createQueryBuilder()->select('u.id')->from(User::class, 'u')
+                ->where('u.isVerified = true')->andWhere('u.id > :last')->setParameter('last', $lastId)
+                ->orderBy('u.id', 'ASC')->setMaxResults($batchSize)->getQuery()->getSingleColumnResult();
+            if ([] === $ids) {
+                break;
+            }
+            foreach ($this->em->getRepository(User::class)->findBy(['id' => $ids], ['id' => 'ASC']) as $user) {
+                $sent['accueil'] += (int) $this->onboarding->sendFor($user, $today);
+                $sent['suivi des tests'] += $this->testFollowUps($user, $today);
+                $sent['défis'] += $this->challengeDay($user, $today);
+                $sent['rituels du matin'] += (int) $this->dailyRituals($user, $today);
+                $sent['revue hebdomadaire'] += (int) $this->weeklyReview($user, $today);
+                $sent['revue mensuelle'] += (int) $this->monthlyReview($user, $today);
+                $sent['rituels'] += (int) $this->habits($user, $today);
+                $sent['échéances'] += $this->deadlines($user, $today);
+                $sent['partenaires'] += $this->partners($user, $today);
+                $sent['fin d\'essai ou d\'abonnement'] += (int) $this->subscriptionEnding($user, $today);
+            }
+            $lastId = (int) max($ids);
+            $this->em->clear();
+        } while ($batchSize === \count($ids));
 
         return $sent;
     }

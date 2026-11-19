@@ -49,6 +49,9 @@ class PlannerController extends AbstractController
         ]);
     }
 
+    /** Fenêtre maximale d'une demande d'événements (un an et un jour de marge). */
+    public const MAX_EVENTS_WINDOW_DAYS = 366;
+
     #[Route('/api/planner/events', name: 'api_planner_events', methods: ['GET'])]
     public function getEvents(Request $request, EntityManagerInterface $em): JsonResponse
     {
@@ -71,6 +74,14 @@ class PlannerController extends AbstractController
         // Set start time to 00:00:00 and end time to 23:59:59
         $startDate->setTime(0, 0, 0);
         $endDate->setTime(23, 59, 59);
+
+        // Fenêtre bornée : une période inversée ou de plusieurs décennies ferait charger et construire des milliers d'événements
+        if ($endDate < $startDate) {
+            return new JsonResponse(['error' => 'La date de fin précède la date de début.'], Response::HTTP_BAD_REQUEST);
+        }
+        if ($startDate->diff($endDate)->days > self::MAX_EVENTS_WINDOW_DAYS) {
+            return new JsonResponse(['error' => 'La période demandée ne peut pas dépasser '.self::MAX_EVENTS_WINDOW_DAYS.' jours.'], Response::HTTP_BAD_REQUEST);
+        }
 
         // 1. Fetch Manual Tasks
         $tasks = $em->getRepository(PlannerTask::class)->createQueryBuilder('t')

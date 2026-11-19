@@ -196,8 +196,7 @@ final class SubscriptionManager
         $summary = sprintf('%s déclare un paiement de %s (%s, réf. %s).', $customer->getDisplayName().' ('.$customer->getEmail().')',
             self::formatAmount($t->getAmount(), $t->getCurrency()), $t->getMethodLabel(), $t->getReference() ?: '—');
 
-        $admins = array_filter($this->em->getRepository(User::class)->findAll(), fn (User $u) => \in_array('ROLE_ADMIN', $u->getRoles(), true));
-        foreach ($admins as $admin) {
+        foreach ($this->em->getRepository(User::class)->findAdmins() as $admin) {
             $this->notifier->notify($admin, NotificationType::PAYMENT_DECLARED, 'Paiement à vérifier', $summary, '/admin/paiements', 'paiement '.$t->getId());
         }
         $extra = $this->entitlements->config()->getPaymentNotificationEmail();

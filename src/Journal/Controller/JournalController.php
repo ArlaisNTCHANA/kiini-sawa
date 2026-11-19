@@ -14,6 +14,10 @@ use Symfony\Component\Routing\Attribute\Route;
 
 class JournalController extends AbstractController
 {
+    public const INITIAL_PAGE = 20;
+    public const MAX_PAGE_SIZE = 50;
+    public const MAX_OFFSET = 5000;
+
     #[Route('/journal', name: 'app_journal')]
     public function index(EntityManagerInterface $em): Response
     {
@@ -22,10 +26,9 @@ class JournalController extends AbstractController
             return $this->redirectToRoute('app_login');
         }
 
-        // Get initial entries (limit 20, offset 0)
-        $allEntries = $this->getNormalizedEntries($user, $em);
-        $totalCount = count($allEntries);
-        $initialEntries = array_slice($allEntries, 0, 20);
+        // Première page (20 entrées) : lue en base avec une limite, jamais tout le journal en mémoire
+        $initialEntries = array_slice($this->getNormalizedEntries($user, $em, null, null, self::INITIAL_PAGE), 0, self::INITIAL_PAGE);
+        $totalCount = $this->countEntries($user, $em);
 
         // Get collections
         $collections = $em->getRepository(JournalCollection::class)->findBy(
@@ -50,12 +53,13 @@ class JournalController extends AbstractController
 
         $collectionId = $request->query->get('collectionId') ? (int)$request->query->get('collectionId') : null;
         $type = $request->query->get('type') ?: null;
-        $limit = $request->query->getInt('limit', 20);
-        $offset = $request->query->getInt('offset', 0);
+        // Pagination bornée : au plus 50 entrées par page, et un décalage plafonné (sinon une requête pourrait réclamer tout le journal)
+        $limit = max(1, min(self::MAX_PAGE_SIZE, $request->query->getInt('limit', self::INITIAL_PAGE)));
+        $offset = max(0, min(self::MAX_OFFSET, $request->query->getInt('offset', 0)));
 
-        $allEntries = $this->getNormalizedEntries($user, $em, $collectionId, $type);
-        $totalCount = count($allEntries);
-        $paginatedEntries = array_slice($allEntries, $offset, $limit);
+        $totalCount = $this->countEntries($user, $em, $collectionId, $type);
+        // Les deux sources (notes du journal, notes de revue) sont lues avec LIMIT (décalage + page), fusionnées puis découpées
+        $paginatedEntries = array_slice($this->getNormalizedEntries($user, $em, $collectionId, $type, $offset + $limit), $offset, $limit);
 
         return new JsonResponse([
             'entries' => $paginatedEntries,
@@ -175,7 +179,33 @@ class JournalController extends AbstractController
         return new JsonResponse(['success' => true]);
     }
 
-    private function getNormalizedEntries($user, EntityManagerInterface $em, ?int $collectionId = null, ?string $type = null): array
+    /** Nombre total d'entrées (notes du journal + notes de revue), par deux requêtes COUNT. */
+    private function countEntries($user, EntityManagerInterface $em, ?int $collectionId = null, ?string $type = null): int
+    {
+        $notes = $em->getRepository(ReflectionNote::class)->createQueryBuilder('n')->select('COUNT(n.id)')->where('n.user = :user')->setParameter('user', $user);
+        if ($collectionId) {
+            $notes->andWhere('n.collection = :collectionId')->setParameter('collectionId', $collectionId);
+        }
+        if ($type) {
+            $notes->andWhere('n.type = :type')->setParameter('type', $type);
+        }
+        $total = (int) $notes->getQuery()->getSingleScalarResult();
+
+        if (!$collectionId && (!$type || 'MILESTONE' === $type)) {
+            $total += (int) $em->getRepository(\App\PlanDeCroissance\Entity\GrowthGoalScore::class)->createQueryBuilder('s')->select('COUNT(s.id)')
+                ->join('s.growthGoal', 'g')->join('g.planDeCroissance', 'p')
+                ->where('p.user = :user')->andWhere('s.note IS NOT NULL')->andWhere('s.note != :empty')
+                ->setParameter('user', $user)->setParameter('empty', '')->getQuery()->getSingleScalarResult();
+        }
+
+        return $total;
+    }
+
+    /**
+     * Les entrées les plus récentes, au plus $take au total (chaque source est lue avec LIMIT $take : les $take plus récentes de
+     * l'ensemble sont forcément parmi les $take plus récentes de l'une ou l'autre).
+     */
+    private function getNormalizedEntries($user, EntityManagerInterface $em, ?int $collectionId = null, ?string $type = null, int $take = self::INITIAL_PAGE): array
     {
         // 1. Fetch Reflection Notes
         $qb = $em->getRepository(ReflectionNote::class)->createQueryBuilder('n')
@@ -185,7 +215,9 @@ class JournalController extends AbstractController
             ->leftJoin('n.growthGoal', 'gg')
             ->where('n.user = :user')
             ->setParameter('user', $user)
-            ->orderBy('n.date', 'DESC');
+            ->orderBy('n.date', 'DESC')
+            ->addOrderBy('n.id', 'DESC')
+            ->setMaxResults($take);
 
         if ($collectionId) {
             $qb->andWhere('n.collection = :collectionId')
@@ -242,8 +274,10 @@ class JournalController extends AbstractController
                 ->andWhere('s.note != :empty')
                 ->setParameter('user', $user)
                 ->setParameter('empty', '')
-                ->orderBy('s.date', 'DESC');
-            
+                ->orderBy('s.date', 'DESC')
+                ->addOrderBy('s.id', 'DESC')
+                ->setMaxResults($take);
+
             if ($type && $type !== 'MILESTONE') {
                 $scoreQb->andWhere('1 = 0');
             }

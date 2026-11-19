@@ -216,10 +216,8 @@ final class OrganisationService
 
         $summary = sprintf('%s commande %d places pour %s : %s (%s, réf. %s).', $by->getDisplayName(), $seats, $org->getName(),
             SubscriptionManager::formatAmount($order->getAmount(), $currency), $order->getMethodLabel(), $order->getReference() ?: '—');
-        foreach ($this->em->getRepository(User::class)->findAll() as $admin) {
-            if (\in_array('ROLE_ADMIN', $admin->getRoles(), true)) {
-                $this->notifier->notify($admin, NotificationType::PAYMENT_DECLARED, 'Commande de places à vérifier', $summary, '/admin/paiements', 'places '.$order->getId());
-            }
+        foreach ($this->em->getRepository(User::class)->findAdmins() as $admin) {
+            $this->notifier->notify($admin, NotificationType::PAYMENT_DECLARED, 'Commande de places à vérifier', $summary, '/admin/paiements', 'places '.$order->getId());
         }
 
         return $order;
