@@ -22,6 +22,10 @@ framework:
             policy: sliding_window
             limit: 100
             interval: '1 day'
+        org_create:          # création d'organisations par compte
+            policy: sliding_window
+            limit: 2
+            interval: '1 day'
         couple_create:
             policy: sliding_window
             limit: 5

@@ -80,11 +80,17 @@ class OrganisationController extends AbstractController
     }
 
     #[Route('/organisation/creer', name: 'app_organisation_create', methods: ['POST'])]
-    public function create(Request $request): Response
+    public function create(Request $request, \App\Shared\Security\RateLimits $limits): Response
     {
         $name = trim($request->request->getString('name'));
         if (!$this->isCsrfTokenValid('org_create', $request->request->getString('_csrf_token')) || mb_strlen($name) < 2) {
             $this->addFlash('error', 'Indiquez le nom de votre organisation.');
+
+            return $this->redirectToRoute('app_organisation_index');
+        }
+        // Au plus 2 organisations créées par compte et par jour (sinon, de nouvelles organisations gratuites multiplient les invitations)
+        if (!$limits->allow('org_create', (string) $this->user()->getId())) {
+            $this->addFlash('error', 'Vous avez déjà créé plusieurs organisations aujourd\'hui. Réessayez demain.');
 
             return $this->redirectToRoute('app_organisation_index');
         }
@@ -221,7 +227,10 @@ class OrganisationController extends AbstractController
         $emails = array_unique(array_filter(array_map(fn ($e) => mb_strtolower(trim($e)), preg_split('/[\s,;]+/', $request->request->getString('emails')))));
         $valid = array_slice(array_filter($emails, fn ($e) => 0 === \count($validator->validate($e, new Email()))), 0, 200);
         // Anti-spam : une organisation sans licence valide envoie au plus 5 invitations par jour ; avec licence, 100 par jour
-        if ([] !== $valid && !$limits->allow($org->isLicenseValid() ? 'org_invite_licensed' : 'org_invite', (string) $org->getId(), \count($valid))) {
+        // Sans licence, le plafond est PAR COMPTE (créer plusieurs organisations gratuites ne le contourne pas) ; avec licence, par organisation
+        $limiter = $org->isLicenseValid() ? 'org_invite_licensed' : 'org_invite';
+        $limitKey = $org->isLicenseValid() ? (string) $org->getId() : (string) $this->user()->getId();
+        if ([] !== $valid && !$limits->allow($limiter, $limitKey, \count($valid))) {
             $this->addFlash('error', $org->isLicenseValid()
                 ? 'Limite quotidienne d\'invitations atteinte (100 par jour). Réessayez demain, ou partagez le lien d\'invitation.'
                 : 'Limite quotidienne d\'invitations atteinte (5 par jour sans places). Partagez le lien d\'invitation, ou choisissez un pack de places.');

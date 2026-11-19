@@ -19,6 +19,7 @@ final class RateLimits
         #[Autowire(service: 'limiter.push_test')] RateLimiterFactory $pushTestLimiter,
         #[Autowire(service: 'limiter.org_invite')] RateLimiterFactory $orgInviteLimiter,
         #[Autowire(service: 'limiter.org_invite_licensed')] RateLimiterFactory $orgInviteLicensedLimiter,
+        #[Autowire(service: 'limiter.org_create')] RateLimiterFactory $orgCreateLimiter,
         #[Autowire(service: 'limiter.couple_create')] RateLimiterFactory $coupleCreateLimiter,
         #[Autowire(service: 'limiter.plan_email')] RateLimiterFactory $planEmailLimiter,
         #[Autowire(service: 'limiter.account_security')] RateLimiterFactory $accountSecurityLimiter,
@@ -27,7 +28,7 @@ final class RateLimits
     ) {
         $this->factories = [
             'push_test' => $pushTestLimiter, 'org_invite' => $orgInviteLimiter, 'org_invite_licensed' => $orgInviteLicensedLimiter,
-            'couple_create' => $coupleCreateLimiter, 'plan_email' => $planEmailLimiter, 'account_security' => $accountSecurityLimiter,
+            'org_create' => $orgCreateLimiter, 'couple_create' => $coupleCreateLimiter, 'plan_email' => $planEmailLimiter, 'account_security' => $accountSecurityLimiter,
             'public_form' => $publicFormLimiter, 'public_form_ip' => $publicFormIpLimiter,
         ];
     }

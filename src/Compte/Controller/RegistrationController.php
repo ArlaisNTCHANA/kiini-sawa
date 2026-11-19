@@ -35,6 +35,7 @@ class RegistrationController extends AbstractController
 {
     /** Session d'un visiteur qui a saisi une adresse déjà inscrite : il voit l'écran de vérification, sans être connecté ni rien apprendre. */
     private const DECOY_KEY = 'register_decoy_email';
+    private const DECOY_SENT_KEY = 'register_decoy_sent_at';
 
     public function __construct(
         private readonly AccountTokenService $tokens,
@@ -103,6 +104,7 @@ class RegistrationController extends AbstractController
                     // exactement le même écran qu'après une vraie inscription (même redirection, même page « Vérifiez votre email »).
                     $this->mailer->sendAlreadyRegistered($existing);
                     $request->getSession()->set(self::DECOY_KEY, $data['email']);
+                    $request->getSession()->set(self::DECOY_SENT_KEY, time()); // comme un vrai code vient d'être « envoyé » : même délai avant de le redemander
 
                     return $this->redirectToRoute('app_verify_email');
                 }
@@ -203,7 +205,18 @@ class RegistrationController extends AbstractController
             return $this->redirectToRoute('app_login');
         }
         if ($request->isMethod('POST')) {
-            $this->addFlash($resend ? 'success' : 'error', $resend ? 'Un nouveau code vous a été envoyé.' : 'Code incorrect ou expiré. Après 5 essais, demandez un nouveau code.');
+            // Mêmes contrôles et mêmes messages que pour un vrai compte : jeton CSRF, puis (renvoi) un délai de 60 s en session
+            $session = $request->getSession();
+            if (!$this->isCsrfTokenValid($resend ? 'verify_email_resend' : 'verify_email', $request->getPayload()->getString('_csrf_token'))) {
+                $this->addFlash('error', 'La page a expiré. Merci de réessayer.');
+            } elseif (!$resend) {
+                $this->addFlash('error', 'Code incorrect ou expiré. Après 5 essais, demandez un nouveau code.');
+            } elseif ($session->get(self::DECOY_SENT_KEY, 0) > time() - 60) {
+                $this->addFlash('error', 'Un code vient d\'être envoyé. Patientez une minute avant d\'en demander un autre.');
+            } else {
+                $session->set(self::DECOY_SENT_KEY, time());
+                $this->addFlash('success', 'Un nouveau code vous a été envoyé.');
+            }
 
             return $this->redirectToRoute('app_verify_email');
         }
