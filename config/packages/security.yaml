@@ -22,6 +22,9 @@ security:
             custom_authenticator: App\Compte\Security\LoginAuthenticator
             logout:
                 path: app_logout
+                # Déconnexion par formulaire POST avec jeton (un lien ou une image sur un autre site ne peut plus déconnecter l'utilisateur)
+                enable_csrf: true
+                csrf_token_id: logout_form
                 # where to redirect after logout
                 # target: app_any_route
 
@@ -53,6 +56,7 @@ security:
         - { path: ^/(sante|robots\.txt|sitemap\.xml)$, roles: PUBLIC_ACCESS }
         - { path: ^/login$, roles: PUBLIC_ACCESS }
         - { path: ^/inscription$, roles: PUBLIC_ACCESS }
+        - { path: ^/verification-email, roles: PUBLIC_ACCESS } # écran affiché aussi après une inscription avec une adresse déjà utilisée (le contrôleur renvoie vers /login sinon)
         - { path: ^/mot-de-passe/, roles: PUBLIC_ACCESS }
         - { path: ^/(mentions-legales|confidentialite|cgu|cgv)$, roles: PUBLIC_ACCESS }
         - { path: ^/notifications/desabonnement/, roles: PUBLIC_ACCESS }

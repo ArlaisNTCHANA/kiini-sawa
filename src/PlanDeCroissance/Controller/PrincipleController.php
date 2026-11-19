@@ -24,10 +24,17 @@ class PrincipleController extends AbstractController
     ];
 
     #[Route('/principes/{pillar}', name: 'app_principles_save', requirements: ['pillar' => 'CROISSANCE|DEVELOPPEMENT|TRANSMISSION|HYGIENE'], methods: ['POST'])]
-    public function save(string $pillar, Request $request, EntityManagerInterface $em): Response
+    public function save(string $pillar, Request $request, EntityManagerInterface $em, \App\Abonnement\Service\Entitlements $entitlements): Response
     {
         /** @var User $user */
         $user = $this->getUser();
+        // Chaque pilier est un plan : réservé à PRO comme sa page (Croissance, Développement, Transmission, Hygiène)
+        $entitlements->require($user, \App\Abonnement\Service\Entitlements::PLAN_FEATURES[$pillar]);
+        if (!$this->isCsrfTokenValid('principles', $request->request->getString('_csrf_token'))) {
+            $this->addFlash('error', 'La page a expiré. Merci de réessayer.');
+
+            return $this->redirectToRoute(PlanCatalog::PLANS[$pillar]['route'], ['tab' => 'LAWS']);
+        }
 
         // Les principes n'ont pas de liens : on peut remplacer la liste du pilier
         foreach ($user->getPrinciples() as $pr) {

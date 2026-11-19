@@ -148,7 +148,8 @@ class RegistrationTest extends WebTestCase
         $existing = $this->createUser();
         $this->register(['email' => $existing->getEmail()]);
 
-        $this->assertResponseRedirects('/login');
+        // Même redirection qu'une vraie inscription (anti-énumération) ; le propriétaire de l'adresse est prévenu par e-mail
+        $this->assertResponseRedirects('/verification-email');
         $this->assertSame('Vous avez déjà un compte KIINI SAWA', $this->lastEmail()->getSubject());
         $this->assertSame(1, $this->em()->getConnection()->fetchOne('SELECT COUNT(*) FROM `user` WHERE email = ?', [$existing->getEmail()]));
     }

@@ -48,7 +48,7 @@ final class ContentAdminController extends AbstractController
     {
     }
 
-    #[Route('', name: 'admin_content_index')]
+    #[Route('', name: 'admin_content_index', methods: ['GET'])]
     public function index(): Response
     {
         $all = $this->overrides->map();
@@ -61,7 +61,7 @@ final class ContentAdminController extends AbstractController
         return $this->render('personnalite/admin/content_index.html.twig', ['groups' => $groups, 'total' => \count($all)]);
     }
 
-    #[Route('/export', name: 'admin_content_export')]
+    #[Route('/export', name: 'admin_content_export', methods: ['GET'])]
     public function export(): Response
     {
         $rows = [];
@@ -75,7 +75,7 @@ final class ContentAdminController extends AbstractController
         ]);
     }
 
-    #[Route('/{source}', name: 'admin_content_source')]
+    #[Route('/{source}', name: 'admin_content_source', methods: ['GET', 'POST'])]
     public function source(string $source, Request $request): Response
     {
         $this->assertSource($source);

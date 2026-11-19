@@ -60,7 +60,7 @@ class HistoryTest extends WebTestCase
     public function testEquilibreEvolutionAndPastResults(): void
     {
         $client = static::createClient();
-        $user = $this->createUser();
+        $user = $this->createUser(pro: true); // PDF des tests : PRO
         $em = $this->em();
         $mk = fn (array $s, string $d) => (new ProfileTest())->setUser($user)->setType('EQUILIBRE')->setDate(new \DateTime($d))->setInsights('')->setResult(json_encode($s));
         $first = $mk(['sante' => 3, 'famille' => 6, 'finances' => 4, 'carriere' => 5, 'spiritualite' => 6, 'social' => 5, 'personnel' => 4, 'loisirs' => 2], '-3 months');

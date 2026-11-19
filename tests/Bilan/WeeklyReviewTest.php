@@ -23,10 +23,10 @@ class WeeklyReviewTest extends WebTestCase
         $client->loginUser($user);
 
         // Un élément dans chacun des quatre plans
-        $client->request('POST', '/plan-de-vie/assistant?plan=CROISSANCE&step=9&single=1', ['growth_character_title' => ['Patience']]);
-        $client->request('POST', '/plan-de-vie/assistant?plan=DEVELOPPEMENT&step=8&single=1', ['growth_competence_title' => ['Prise de parole']]);
-        $client->request('POST', '/plan-de-vie/assistant?plan=TRANSMISSION&step=11&single=1', ['legacy_title' => ['Bourse d\'études']]);
-        $client->request('POST', '/plan-de-vie/assistant?plan=HYGIENE&step=12&single=1', ['hygiene_name' => ['Sommeil']]);
+        $client->request('POST', '/plan-de-vie/assistant?plan=CROISSANCE&step=9&single=1', ['_csrf_token' => \App\Tests\Support\FixedCsrfTokenManager::VALUE, 'growth_character_title' => ['Patience']]);
+        $client->request('POST', '/plan-de-vie/assistant?plan=DEVELOPPEMENT&step=8&single=1', ['_csrf_token' => \App\Tests\Support\FixedCsrfTokenManager::VALUE, 'growth_competence_title' => ['Prise de parole']]);
+        $client->request('POST', '/plan-de-vie/assistant?plan=TRANSMISSION&step=11&single=1', ['_csrf_token' => \App\Tests\Support\FixedCsrfTokenManager::VALUE, 'legacy_title' => ['Bourse d\'études']]);
+        $client->request('POST', '/plan-de-vie/assistant?plan=HYGIENE&step=12&single=1', ['_csrf_token' => \App\Tests\Support\FixedCsrfTokenManager::VALUE, 'hygiene_name' => ['Sommeil']]);
 
         $crawler = $client->request('GET', '/bilan/revue-hebdomadaire');
         $this->assertResponseIsSuccessful();

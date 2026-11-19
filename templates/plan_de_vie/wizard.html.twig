@@ -184,6 +184,7 @@
 
         <div style="background: white; border-radius: 1.5rem; border: 1px solid rgba(46, 107, 83, 0.08); box-shadow: var(--card-shadow); overflow: hidden; display: flex; flex-direction: column;">
             <form action="{{ path('app_plan_wizard', { step: step, single: 1, plan: plan }) }}" method="POST" style="flex: 1; display: flex; flex-direction: column; padding: 2.5rem; width: 100%;">
+<input type="hidden" name="_csrf_token" value="{{ csrf_token('plan_wizard') }}">
                 <input type="hidden" name="plan" value="{{ plan }}">
                 <div style="flex: 1;">
 {% else %}
@@ -240,6 +241,7 @@
 
         <!-- Form content -->
         <form action="{{ path('app_plan_wizard', { step: step, single: 0, plan: plan }) }}" method="POST" style="flex: 1; display: flex; flex-direction: column; padding: 2rem 2.5rem 2.5rem; width: 100%;">
+<input type="hidden" name="_csrf_token" value="{{ csrf_token('plan_wizard') }}">
             <input type="hidden" name="plan" value="{{ plan }}">
             <div style="flex: 1; overflow-y: auto; max-height: 420px; padding-right: 0.5rem;" class="custom-scrollbar">
 {% endif %}

@@ -2465,6 +2465,7 @@ graph TD
                      </div>
                      
                      <form :action="'{{ path('app_plan_de_croissance_axis_save', {sourceType: 'CONVICTION', sourceId: 0})|e('js') }}'.replace('CONVICTION', currentAxis.sourceType).replace(/0$/, currentAxis.sourceId)" method="POST" style="padding: 2rem; display: flex; flex-direction: column; gap: 1.5rem;">
+                         <input type="hidden" name="_csrf_token" value="{{ csrf_token('growth_axis') }}">
                          <!-- Statut -->
                          <div style="display: flex; flex-direction: column; gap: 0.35rem;">
                              <label style="font-size: 0.75rem; font-weight: 700; text-transform: uppercase; color: var(--fg-light); letter-spacing: 0.05em;">Statut d'acquisition</label>
@@ -2591,6 +2592,7 @@ graph TD
                      </div>
                      
                      <form :action="'{{ path('app_principles_save', {pillar: 'CROISSANCE'})|e('js') }}'.replace('CROISSANCE', activePlan || 'CROISSANCE')" method="POST" style="padding: 2rem; display: flex; flex-direction: column; gap: 1.5rem;">
+                         <input type="hidden" name="_csrf_token" value="{{ csrf_token('principles') }}">
                          <!-- Principles Proposed -->
                          <div style="display: flex; flex-direction: column; gap: 0.75rem;">
                              <label style="font-size: 0.75rem; font-weight: 700; text-transform: uppercase; color: var(--fg-light); letter-spacing: 0.05em;">Principes proposés (Cochez pour adopter)</label>

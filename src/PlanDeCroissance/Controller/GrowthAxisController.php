@@ -29,11 +29,18 @@ class GrowthAxisController extends AbstractController
     public const SOURCE_TYPES = ['LIMITING_BELIEF', 'CONVICTION', 'COUNTER_VALUE', 'DECLARED_VALUE'];
 
     #[Route('/plan-de-croissance/axe/{sourceType}/{sourceId}', name: 'app_plan_de_croissance_axis_save', requirements: ['sourceType' => 'LIMITING_BELIEF|CONVICTION|COUNTER_VALUE|DECLARED_VALUE', 'sourceId' => '\d+'], methods: ['POST'])]
-    public function save(string $sourceType, int $sourceId, Request $request, EntityManagerInterface $em): Response
+    public function save(string $sourceType, int $sourceId, Request $request, EntityManagerInterface $em, \App\Abonnement\Service\Entitlements $entitlements): Response
     {
         /** @var User $user */
         $user = $this->getUser();
+        // Le Plan de Croissance est une fonction PRO (sauf réglage contraire dans l'administration) : aussi par cette adresse
+        $entitlements->require($user, 'croissance');
         $back = $this->redirectToRoute('app_plan_de_croissance', ['tab' => 'SYSTEM']);
+        if (!$this->isCsrfTokenValid('growth_axis', $request->request->getString('_csrf_token'))) {
+            $this->addFlash('error', 'La page a expiré. Merci de réessayer.');
+
+            return $back;
+        }
 
         $sourceText = match ($sourceType) {
             'LIMITING_BELIEF', 'CONVICTION' => $this->ownedInternalBalance($em, $user, $sourceId)?->getText(),
@@ -76,7 +83,7 @@ class GrowthAxisController extends AbstractController
         }
 
         $this->syncActions($em, $goal, $payload->all('action_ids'), $payload->all('action_titles'), $payload->all('action_deadlines'));
-        $this->syncHabits($em, $user, $goal, $payload->all('habit_ids'), $payload->all('habit_titles'), $payload->all('habit_frequencies'));
+        $this->syncHabits($em, $user, $goal, $payload->all('habit_ids'), $payload->all('habit_titles'), $payload->all('habit_frequencies'), $entitlements);
 
         $em->flush();
 
@@ -116,8 +123,9 @@ class GrowthAxisController extends AbstractController
         }
     }
 
-    private function syncHabits(EntityManagerInterface $em, User $user, GrowthGoal $goal, array $ids, array $titles, array $frequencies): void
+    private function syncHabits(EntityManagerInterface $em, User $user, GrowthGoal $goal, array $ids, array $titles, array $frequencies, \App\Abonnement\Service\Entitlements $entitlements): void
     {
+        $created = 0;
         [$ids, $titles, $frequencies] = [array_values($ids), array_values($titles), array_values($frequencies)];
         $existing = [];
         foreach ($goal->getHabits() as $h) {
@@ -131,6 +139,9 @@ class GrowthAxisController extends AbstractController
             }
             $habit = $this->match($existing, $kept, $ids[$i] ?? null, $title, fn (Habit $h) => $h->getTitle());
             if (!$habit) {
+                // Limite de rituels de l'offre gratuite : la même qu'à la création d'un rituel depuis la page Rituels
+                $entitlements->requireBelowLimit($user, 'habits', $user->getHabits()->count() + $created, 'Limite de rituels de l\'offre gratuite atteinte.');
+                ++$created;
                 $habit = (new Habit())->setUser($user);
                 $goal->addHabit($habit);
                 $em->persist($habit);

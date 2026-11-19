@@ -27,6 +27,7 @@ chmod 600 .env.prod.local
 
 export APP_ENV=prod
 run "$(command -v composer)" dump-env prod >/dev/null
+chmod 600 .env.local.php
 run bin/console cache:clear >/dev/null 2>&1
 
 FROM=$(grep '^MAILER_FROM=' .env.prod.local | cut -d= -f2- | tr -d '"')

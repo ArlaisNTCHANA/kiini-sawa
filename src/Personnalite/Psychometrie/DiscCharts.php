@@ -44,7 +44,7 @@ final class DiscCharts
             $ty = 'D' === $l || 'I' === $l ? $y + 44 : $y + $r - 18;
             $svg .= "<text x='$tx' y='$ty' ".self::FONT." font-size='34' font-weight='bold' fill='".$c[$l]['color']."'>$l</text>";
             $ny = 'D' === $l || 'I' === $l ? $ty + 18 : $ty - 40;
-            $svg .= "<text x='$tx' y='$ny' ".self::FONT." font-size='11' fill='#475569'>".$c[$l]['name'].'</text>';
+            $svg .= "<text x='$tx' y='$ny' ".self::FONT." font-size='11' fill='#475569'>".htmlspecialchars((string) $c[$l]['name'], \ENT_XML1 | \ENT_QUOTES).'</text>';
         }
         $svg .= "<line x1='$cx' y1='".($cy - $r)."' x2='$cx' y2='".($cy + $r)."' stroke='#94A3B8' stroke-width='1'/>";
         $svg .= "<line x1='".($cx - $r)."' y1='$cy' x2='".($cx + $r)."' y2='$cy' stroke='#94A3B8' stroke-width='1'/>";

@@ -22,6 +22,14 @@ class ReferralRepository extends ServiceEntityRepository
             ->setParameter('u', $referrer)->setParameter('since', $since)->getQuery()->getSingleScalarResult();
     }
 
+    /** Récompenses déjà accordées à ce parrain pour des filleuls inscrits depuis la même adresse (empreinte). */
+    public function rewardedFromSameIp(User $referrer, string $ipHash): int
+    {
+        return (int) $this->createQueryBuilder('r')->select('COUNT(r.id)')
+            ->where('r.referrer = :u')->andWhere('r.rewardedAt IS NOT NULL')->andWhere('r.signupIpHash = :h')
+            ->setParameter('u', $referrer)->setParameter('h', $ipHash)->getQuery()->getSingleScalarResult();
+    }
+
     /** @return list<Referral> */
     public function forReferrer(User $referrer): array
     {

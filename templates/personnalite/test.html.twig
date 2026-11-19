@@ -252,6 +252,7 @@
 
     <div class="test-card-wrap">
         <form id="test-form" method="POST" action="{{ path('app_personality_submit', {type: type|lower}) }}">
+<input type="hidden" name="_csrf_token" value="{{ csrf_token('personality_test_' ~ type|lower) }}">
             {% for q in questions %}
             {% set qIndex = loop.index0 %}
             {% set isScale = q.answers|length == 10 %}

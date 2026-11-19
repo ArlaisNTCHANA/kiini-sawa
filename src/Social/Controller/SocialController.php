@@ -25,7 +25,7 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 #[IsGranted('ROLE_USER')]
 class SocialController extends AbstractController
 {
-    #[Route('/social', name: 'app_social')]
+    #[Route('/social', name: 'app_social', methods: ['GET'])]
     public function index(Request $request, EntityManagerInterface $em): Response
     {
         /** @var User $user */

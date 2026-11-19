@@ -30,7 +30,7 @@ class FeedbackTest extends WebTestCase
         $client->submitForm('Créer mon lien');
         $request = static::getContainer()->get(FeedbackService::class)->activeRequest($owner);
         $this->assertNotNull($request);
-        $client->request('GET', '/logout');
+        $client->request('POST', '/logout', ['_csrf_token' => \App\Tests\Support\FixedCsrfTokenManager::VALUE]);
 
         // Trois proches répondent (sessions différentes)
         foreach ([['Fiable', 'Patient'], ['Fiable', 'Sage'], ['Fiable', 'Courageux']] as $i => $qualities) {

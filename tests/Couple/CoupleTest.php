@@ -162,7 +162,7 @@ class CoupleTest extends WebTestCase
     {
         [$couple, $a] = $this->activeCouple();
         $this->client->loginUser($a);
-        $this->client->request('POST', '/plan-de-vie/assistant?step=1&single=1', ['purpose_statement' => 'Mon but personnel']);
+        $this->client->request('POST', '/plan-de-vie/assistant?step=1&single=1', ['_csrf_token' => \App\Tests\Support\FixedCsrfTokenManager::VALUE, 'purpose_statement' => 'Mon but personnel']);
         $crawler = $this->client->request('GET', '/couple');
         $this->client->submit($crawler->selectButton('Fermer l\'espace couple')->form());
         $this->assertNull($this->couples()->coupleOf($this->findUser($a->getEmail())));

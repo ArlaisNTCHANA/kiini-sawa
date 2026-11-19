@@ -30,7 +30,7 @@ class NextStepTest extends WebTestCase
         $this->client = static::createClient();
         $user = $this->createUser(pro: true);
         $this->client->loginUser($user);
-        $this->client->request('POST', '/plan-de-vie/assistant?step=1&single=1', ['purpose_statement' => 'Je suis créé pour former afin d\'apporter la lumière chez les jeunes.']);
+        $this->client->request('POST', '/plan-de-vie/assistant?step=1&single=1', ['_csrf_token' => \App\Tests\Support\FixedCsrfTokenManager::VALUE, 'purpose_statement' => 'Je suis créé pour former afin d\'apporter la lumière chez les jeunes.']);
 
         return $user;
     }

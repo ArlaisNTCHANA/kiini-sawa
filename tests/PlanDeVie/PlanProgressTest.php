@@ -38,9 +38,9 @@ class PlanProgressTest extends WebTestCase
         $user = $this->createUser(pro: true);
         $client->loginUser($user);
 
-        $client->request('POST', '/plan-de-vie/assistant?step=1&single=1', ['purpose_statement' => 'Je suis créé pour former afin d\'apporter la lumière chez les jeunes.']);
-        $client->request('POST', '/plan-d-intendance/element', ['origin' => 'TEMPS', 'label' => 'Mes soirées']);
-        $client->request('POST', '/plan-d-intendance/rythme', ['frequency' => 'MONTHLY', 'review' => '1']);
+        $client->request('POST', '/plan-de-vie/assistant?step=1&single=1', ['_csrf_token' => \App\Tests\Support\FixedCsrfTokenManager::VALUE, 'purpose_statement' => 'Je suis créé pour former afin d\'apporter la lumière chez les jeunes.']);
+        $client->request('POST', '/plan-d-intendance/element', ['_csrf_token' => \App\Tests\Support\FixedCsrfTokenManager::VALUE, 'origin' => 'TEMPS', 'label' => 'Mes soirées']);
+        $client->request('POST', '/plan-d-intendance/rythme', ['_csrf_token' => \App\Tests\Support\FixedCsrfTokenManager::VALUE, 'frequency' => 'MONTHLY', 'review' => '1']);
 
         $p = $this->progress($user);
         $this->assertSame(25, $p['VIE']['percent']);

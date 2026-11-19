@@ -28,6 +28,8 @@ final class ReferralService
     public const REWARD_MONTHS = 1;
     public const REFERRED_TRIAL_DAYS = 30;
     public const MAX_REWARDS_PER_YEAR = 12;
+    /** Récompenses au plus par parrain pour des filleuls inscrits depuis une même adresse IP (un foyer, un bureau : une seule). */
+    public const MAX_REWARDS_PER_IP = 1;
 
     public function __construct(
         private readonly EntityManagerInterface $em,
@@ -69,10 +71,12 @@ final class ReferralService
     {
         $code = $request->cookies->get(self::COOKIE);
         $referrer = \is_string($code) ? $this->referrerFromCode($code) : null;
-        if (null === $referrer || $referrer === $newUser || mb_strtolower((string) $referrer->getEmail()) === mb_strtolower((string) $newUser->getEmail())) {
+        // Pas d'auto-parrainage, y compris par alias d'adresse : jean.dupont+a@gmail.com, j.e.a.n.dupont@gmail.com, jean.dupont@googlemail.com…
+        if (null === $referrer || $referrer === $newUser || self::normalizeEmail((string) $referrer->getEmail()) === self::normalizeEmail((string) $newUser->getEmail())) {
             return null;
         }
         $referral = new Referral($referrer, $newUser);
+        $referral->setSignupIpHash($this->ipHash($request->getClientIp()));
         $this->em->persist($referral);
         $sub = $newUser->getSubscription();
         if ($sub && SubscriptionStatus::TRIAL === $sub->getStatus() && $sub->getTrialStartAt()) {
@@ -98,6 +102,11 @@ final class ReferralService
         if ($this->referrals->rewardedSince($referrer, new \DateTimeImmutable('-1 year')) >= self::MAX_REWARDS_PER_YEAR) {
             return false;
         }
+        // Même adresse IP que d'autres filleuls déjà récompensés pour ce parrain : pas de nouvelle récompense (comptes en série)
+        $hash = $referral->getSignupIpHash();
+        if (null !== $hash && $this->referrals->rewardedFromSameIp($referrer, $hash) >= self::MAX_REWARDS_PER_IP) {
+            return false;
+        }
         $referral->markRewarded();
         $this->subscriptions->gift($referrer, self::REWARD_MONTHS, 'Parrainage de '.$referred->getEmail(), false);
         $this->em->flush();
@@ -116,6 +125,32 @@ final class ReferralService
         $rewarded = \count(array_filter($list, fn (Referral $r) => null !== $r->getRewardedAt()));
 
         return ['invited' => \count($list), 'rewarded' => $rewarded, 'monthsEarned' => $rewarded * self::REWARD_MONTHS];
+    }
+
+    /**
+     * Forme canonique d'une adresse e-mail pour comparer des alias d'une même boîte : minuscules, sans « +étiquette » ; chez Gmail
+     * (gmail.com et googlemail.com), sans les points de la partie locale non plus.
+     */
+    public static function normalizeEmail(string $email): string
+    {
+        $email = mb_strtolower(trim($email));
+        $at = strrpos($email, '@');
+        if (false === $at) {
+            return $email;
+        }
+        [$local, $domain] = [substr($email, 0, $at), substr($email, $at + 1)];
+        $local = explode('+', $local, 2)[0];
+        if (\in_array($domain, ['gmail.com', 'googlemail.com'], true)) {
+            $local = str_replace('.', '', $local);
+            $domain = 'gmail.com';
+        }
+
+        return $local.'@'.$domain;
+    }
+
+    private function ipHash(?string $ip): ?string
+    {
+        return $ip ? hash_hmac('sha256', 'parrainage|'.$ip, $this->secret) : null;
     }
 
     private function signature(int $id): string

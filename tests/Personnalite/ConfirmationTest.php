@@ -37,7 +37,7 @@ class ConfirmationTest extends WebTestCase
         $client->request('GET', '/confirmer/'.$token);
         $this->assertResponseRedirects('/mes-tests/');
 
-        $client->request('GET', '/logout');
+        $client->request('POST', '/logout', ['_csrf_token' => \App\Tests\Support\FixedCsrfTokenManager::VALUE]);
         // Réponse invalide : deux fois la même description
         $crawler = $client->request('GET', '/confirmer/'.$token);
         $this->assertResponseIsSuccessful();
@@ -60,7 +60,7 @@ class ConfirmationTest extends WebTestCase
         // Fermeture : le lien ne répond plus
         $crawler = $client->getCrawler();
         $client->submit($crawler->filter('#regard-proches form button:contains("Fermer le lien")')->form());
-        $client->request('GET', '/logout');
+        $client->request('POST', '/logout', ['_csrf_token' => \App\Tests\Support\FixedCsrfTokenManager::VALUE]);
         $client->request('GET', '/confirmer/'.$token);
         $this->assertResponseStatusCodeSame(404);
     }

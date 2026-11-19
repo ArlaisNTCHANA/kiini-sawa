@@ -16,7 +16,7 @@ class SelfAssessmentReportTest extends WebTestCase
     public function testEquilibreAndHygieneReports(): void
     {
         $client = static::createClient();
-        $user = $this->createUser();
+        $user = $this->createUser(pro: true); // les rapports PDF des tests sont réservés à PRO
         $em = $this->em();
         $em->persist((new ProfileTest())->setUser($user)->setType('EQUILIBRE')->setDate(new \DateTime())->setInsights('')
             ->setResult(json_encode(['sante' => 3, 'famille' => 8, 'finances' => 5, 'carriere' => 6, 'spiritualite' => 9, 'social' => 7, 'personnel' => 4, 'loisirs' => 2])));

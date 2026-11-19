@@ -30,6 +30,10 @@ class Referral
     #[ORM\Column(nullable: true)]
     private ?\DateTimeImmutable $rewardedAt = null;
 
+    /** Empreinte (HMAC) de l'adresse IP d'inscription du filleul : sert à limiter les récompenses issues d'une même adresse. Jamais l'adresse elle-même. */
+    #[ORM\Column(length: 64, nullable: true)]
+    private ?string $signupIpHash = null;
+
     public function __construct(User $referrer, User $referred)
     {
         $this->referrer = $referrer;
@@ -42,5 +46,7 @@ class Referral
     public function getReferred(): User { return $this->referred; }
     public function getCreatedAt(): \DateTimeImmutable { return $this->createdAt; }
     public function getRewardedAt(): ?\DateTimeImmutable { return $this->rewardedAt; }
+    public function getSignupIpHash(): ?string { return $this->signupIpHash; }
+    public function setSignupIpHash(?string $hash): static { $this->signupIpHash = $hash; return $this; }
     public function markRewarded(): static { $this->rewardedAt = new \DateTimeImmutable(); return $this; }
 }

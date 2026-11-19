@@ -34,6 +34,8 @@ fi
 
 run "$(command -v "$COMPOSER")" install --no-dev --optimize-autoloader --no-interaction --no-progress --no-scripts
 run "$(command -v "$COMPOSER")" dump-env prod
+# .env.local.php contient les secrets compilés (base de données, clé, e-mails) : lisible par son propriétaire seulement
+chmod 600 .env.local.php
 run bin/console importmap:install
 run bin/console assets:install public
 run bin/console tailwind:build --minify

@@ -154,7 +154,7 @@ class UserPlanControllerTest extends WebTestCase
             $client->loginUser($testUser);
             
             // Post goals with deadlines
-            $client->request('POST', '/plan-de-vie/assistant?step=7&single=1', [
+            $client->request('POST', '/plan-de-vie/assistant?step=7&single=1', ['_csrf_token' => \App\Tests\Support\FixedCsrfTokenManager::VALUE, 
                 'life_goals_be' => ['Devenir un leader inspirant', 'Être calme'],
                 'life_goals_be_deadlines' => ['2026-12-31', ''],
                 'life_goals_do' => ['Lancer un produit'],
@@ -267,7 +267,7 @@ class UserPlanControllerTest extends WebTestCase
             $lgId2 = $lifeGoals[1]->getId();
             
             // Post Step 8 data
-            $client->request('POST', '/plan-de-vie/assistant?step=8&single=1', [
+            $client->request('POST', '/plan-de-vie/assistant?step=8&single=1', ['_csrf_token' => \App\Tests\Support\FixedCsrfTokenManager::VALUE, 
                 'growth_competence_title' => ['Négocier des contrats', 'Programmer en PHP'],
                 'growth_competence_strategy' => ['Pratique réelle', 'Suivre des cours Symfony'],
                 'growth_competence_status' => ['leverage', 'consolidate'],
@@ -396,7 +396,7 @@ class UserPlanControllerTest extends WebTestCase
             $lgId1 = $lifeGoals[0]->getId();
             
             // Post Step 9 data
-            $client->request('POST', '/plan-de-vie/assistant?step=9&single=1', [
+            $client->request('POST', '/plan-de-vie/assistant?step=9&single=1', ['_csrf_token' => \App\Tests\Support\FixedCsrfTokenManager::VALUE, 
                 'growth_character_title' => ['Faire preuve de patience'],
                 'growth_character_strategy' => ['Méditer chaque matin'],
                 'growth_character_status' => ['consolidate'],
@@ -408,7 +408,7 @@ class UserPlanControllerTest extends WebTestCase
             $this->assertResponseRedirects('/plan-de-vie');
 
             // Post Step 10 data
-            $client->request('POST', '/plan-de-vie/assistant?step=10&single=1', [
+            $client->request('POST', '/plan-de-vie/assistant?step=10&single=1', ['_csrf_token' => \App\Tests\Support\FixedCsrfTokenManager::VALUE, 
                 'growth_relation_title' => ['Trouver un mentor technique'],
                 'growth_relation_strategy' => ['Assister aux meetups'],
                 'growth_relation_status' => ['build'],
@@ -511,7 +511,7 @@ class UserPlanControllerTest extends WebTestCase
             $lgId1 = $lifeGoals[0]->getId();
             
             // Post Step 11 data
-            $client->request('POST', '/plan-de-vie/assistant?step=11&single=1', [
+            $client->request('POST', '/plan-de-vie/assistant?step=11&single=1', ['_csrf_token' => \App\Tests\Support\FixedCsrfTokenManager::VALUE, 
                 'legacy_title' => ['Fonder une académie de leadership'],
                 'legacy_status' => ['leverage'],
                 'legacy_goals' => [
@@ -594,7 +594,7 @@ class UserPlanControllerTest extends WebTestCase
             $lgId1 = $lifeGoals[0]->getId();
             
             // Post Step 12 data
-            $client->request('POST', '/plan-de-vie/assistant?step=12&single=1', [
+            $client->request('POST', '/plan-de-vie/assistant?step=12&single=1', ['_csrf_token' => \App\Tests\Support\FixedCsrfTokenManager::VALUE, 
                 'hygiene_name' => ['Physique (Sommeil/Nutrition)'],
                 'hygiene_status' => ['consolidate'],
                 'hygiene_goals' => [
@@ -674,7 +674,7 @@ class UserPlanControllerTest extends WebTestCase
 
         try {
             // Post to the route
-            $client->request('POST', "/plan-de-croissance/axe/LIMITING_BELIEF/{$ibId}", [
+            $client->request('POST', "/plan-de-croissance/axe/LIMITING_BELIEF/{$ibId}", ['_csrf_token' => \App\Tests\Support\FixedCsrfTokenManager::VALUE, 
                 'status' => 'consolidate',
                 'strategy' => 'Une stratégie de croissance',
                 'life_goals' => [$lgId],
@@ -768,7 +768,7 @@ class UserPlanControllerTest extends WebTestCase
 
         try {
             // Post to the save principles route
-            $client->request('POST', '/principes/CROISSANCE', [
+            $client->request('POST', '/principes/CROISSANCE', ['_csrf_token' => \App\Tests\Support\FixedCsrfTokenManager::VALUE, 
                 'proposed_principles' => ['syst-obj', 'one-thing'],
                 'custom_principle_titles' => ['Mon principe perso', ''],
                 'custom_principle_descriptions' => ['Explication de mon principe', '']
@@ -899,7 +899,7 @@ class UserPlanControllerTest extends WebTestCase
         $client->loginUser($testUser);
 
         // 1. Save DEVELOPPEMENT principles
-        $client->request('POST', '/principes/DEVELOPPEMENT', [
+        $client->request('POST', '/principes/DEVELOPPEMENT', ['_csrf_token' => \App\Tests\Support\FixedCsrfTokenManager::VALUE, 
             'proposed_principles' => ['syst-obj'],
             'custom_principle_titles' => ['Perso Dev', ''],
             'custom_principle_descriptions' => ['Desc Dev', '']

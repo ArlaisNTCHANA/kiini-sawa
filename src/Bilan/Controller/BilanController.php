@@ -17,7 +17,7 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 #[IsGranted('ROLE_USER')]
 class BilanController extends AbstractController
 {
-    #[Route('/bilan', name: 'app_bilan')]
+    #[Route('/bilan', name: 'app_bilan', methods: ['GET'])]
     public function index(EntityManagerInterface $em): Response
     {
         /** @var User $user */
@@ -162,7 +162,7 @@ class BilanController extends AbstractController
         ]);
     }
 
-    #[Route('/bilan/rythmes', name: 'app_rhythms')]
+    #[Route('/bilan/rythmes', name: 'app_rhythms', methods: ['GET'])]
     public function rhythms(\App\Bilan\Service\Rhythms $rhythms): Response
     {
         return $this->render('bilan/rhythms.html.twig', ['rhythms' => $rhythms->forUser($this->getUser())]);

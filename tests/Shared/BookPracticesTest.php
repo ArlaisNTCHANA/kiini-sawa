@@ -25,7 +25,7 @@ class BookPracticesTest extends WebTestCase
 
         $client->request('GET', '/plan-de-vie/assistant?step=11&single=1&plan=TRANSMISSION');
         $this->assertSelectorTextContains('[data-eternity]', 'Ma phrase d\'éternité');
-        $client->request('POST', '/plan-de-vie/assistant?step=11&single=1&plan=TRANSMISSION', [
+        $client->request('POST', '/plan-de-vie/assistant?step=11&single=1&plan=TRANSMISSION', ['_csrf_token' => \App\Tests\Support\FixedCsrfTokenManager::VALUE, 
             'eternity_phrase' => 'Que ceux que j\'ai formés en forment d\'autres', 'treasure_shift' => 'Moins d\'écrans, plus de temps avec mes enfants',
         ]);
         $this->em()->clear();

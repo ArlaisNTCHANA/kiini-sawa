@@ -24,7 +24,7 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 #[IsGranted('ROLE_ADMIN')]
 class DashboardController extends AbstractController
 {
-    #[Route('', name: 'admin_dashboard')]
+    #[Route('', name: 'admin_dashboard', methods: ['GET'])]
     public function index(
         UserRepository $userRepo,
         PlanDeVieRepository $planVieRepo,

@@ -65,12 +65,12 @@ class PlanDIntendanceControllerTest extends WebTestCase
         $user = $this->createUser(pro: true);
         $this->client->loginUser($user);
 
-        $this->client->request('POST', '/plan-d-intendance/element', ['origin' => 'TEMPS', 'label' => 'Mes soirées']);
+        $this->client->request('POST', '/plan-d-intendance/element', ['_csrf_token' => \App\Tests\Support\FixedCsrfTokenManager::VALUE, 'origin' => 'TEMPS', 'label' => 'Mes soirées']);
         $this->assertResponseRedirects();
         $item = $this->items($user)[0];
         $this->assertSame('TEMPS', $item->getOrigin());
 
-        $this->client->request('POST', '/plan-d-intendance/element/'.$item->getId(), [
+        $this->client->request('POST', '/plan-d-intendance/element/'.$item->getId(), ['_csrf_token' => \App\Tests\Support\FixedCsrfTokenManager::VALUE, 
             'status' => 'FUIT', 'decision' => 'LIBERER', 'action' => 'Écrans éteints à 21 h, trois soirs par semaine', 'priority' => '1', 'note' => '',
         ]);
         $item = $this->items($user)[0];
@@ -83,10 +83,10 @@ class PlanDIntendanceControllerTest extends WebTestCase
         $this->assertSelectorTextContains('#priorites table', 'Il fuit');
         $this->assertSelectorTextContains('#priorites table', 'Libérer');
 
-        $this->client->request('POST', '/plan-d-intendance/element/'.$item->getId().'/fait');
+        $this->client->request('POST', '/plan-d-intendance/element/'.$item->getId().'/fait', ['_csrf_token' => \App\Tests\Support\FixedCsrfTokenManager::VALUE]);
         $this->assertNotNull($this->items($user)[0]->getActionDoneAt());
 
-        $this->client->request('POST', '/plan-d-intendance/rythme', ['frequency' => 'WEEKLY', 'with_whom' => 'Mon conjoint', 'review' => '1']);
+        $this->client->request('POST', '/plan-d-intendance/rythme', ['_csrf_token' => \App\Tests\Support\FixedCsrfTokenManager::VALUE, 'frequency' => 'WEEKLY', 'with_whom' => 'Mon conjoint', 'review' => '1']);
         $this->em()->clear();
         $rhythm = $this->em()->getRepository(StewardshipRhythm::class)->findOneBy(['user' => $user->getId()]);
         $this->assertSame('WEEKLY', $rhythm->getFrequency());
@@ -97,7 +97,7 @@ class PlanDIntendanceControllerTest extends WebTestCase
         $this->assertSelectorTextContains('body', 'Mes soirées');
         $this->assertSelectorTextContains('body', 'Chaque semaine, avec Mon conjoint');
 
-        $this->client->request('POST', '/plan-d-intendance/element/'.$item->getId().'/supprimer');
+        $this->client->request('POST', '/plan-d-intendance/element/'.$item->getId().'/supprimer', ['_csrf_token' => \App\Tests\Support\FixedCsrfTokenManager::VALUE]);
         $this->assertCount(0, $this->items($user));
     }
 
@@ -106,10 +106,10 @@ class PlanDIntendanceControllerTest extends WebTestCase
         $user = $this->createUser(pro: true);
         $this->client->loginUser($user);
         for ($i = 1; $i <= 6; ++$i) {
-            $this->client->request('POST', '/plan-d-intendance/element', ['origin' => 'FINANCES', 'label' => 'Élément '.$i]);
+            $this->client->request('POST', '/plan-d-intendance/element', ['_csrf_token' => \App\Tests\Support\FixedCsrfTokenManager::VALUE, 'origin' => 'FINANCES', 'label' => 'Élément '.$i]);
         }
         foreach ($this->items($user) as $item) {
-            $this->client->request('POST', '/plan-d-intendance/element/'.$item->getId(), ['priority' => '1']);
+            $this->client->request('POST', '/plan-d-intendance/element/'.$item->getId(), ['_csrf_token' => \App\Tests\Support\FixedCsrfTokenManager::VALUE, 'priority' => '1']);
         }
         $this->assertCount(5, array_filter($this->items($user), fn (StewardshipItem $i) => $i->isPriority()));
     }
@@ -118,11 +118,11 @@ class PlanDIntendanceControllerTest extends WebTestCase
     {
         $owner = $this->createUser(pro: true);
         $this->client->loginUser($owner);
-        $this->client->request('POST', '/plan-d-intendance/element', ['origin' => 'FOYER', 'label' => 'Mes enfants']);
+        $this->client->request('POST', '/plan-d-intendance/element', ['_csrf_token' => \App\Tests\Support\FixedCsrfTokenManager::VALUE, 'origin' => 'FOYER', 'label' => 'Mes enfants']);
         $id = $this->items($owner)[0]->getId();
 
         $this->client->loginUser($this->createUser(pro: true));
-        $this->client->request('POST', '/plan-d-intendance/element/'.$id, ['status' => 'DORT']);
+        $this->client->request('POST', '/plan-d-intendance/element/'.$id, ['_csrf_token' => \App\Tests\Support\FixedCsrfTokenManager::VALUE, 'status' => 'DORT']);
         $this->assertResponseStatusCodeSame(404);
         $this->assertNull($this->items($owner)[0]->getStatus());
     }
@@ -143,7 +143,7 @@ class PlanDIntendanceControllerTest extends WebTestCase
 
         // Un clic sur la puce ajoute le don à l'inventaire, et il n'est plus proposé
         $label = $crawler->filter('[data-stewardship-suggestions="VIE_DON"] input[name="label"]')->first()->attr('value');
-        $this->client->request('POST', '/plan-d-intendance/element', ['origin' => 'VIE_DON', 'label' => $label]);
+        $this->client->request('POST', '/plan-d-intendance/element', ['_csrf_token' => \App\Tests\Support\FixedCsrfTokenManager::VALUE, 'origin' => 'VIE_DON', 'label' => $label]);
         $this->assertSame($label, $this->items($user)[0]->getLabel());
         $crawler = $this->client->request('GET', '/plan-d-intendance');
         $this->assertCount(0, $crawler->filter('[data-stewardship-suggestions="VIE_DON"] input[value="'.$label.'"]'));
@@ -164,9 +164,9 @@ class PlanDIntendanceControllerTest extends WebTestCase
     {
         $user = $this->createUser(pro: true);
         $this->client->loginUser($user);
-        $this->client->request('POST', '/plan-d-intendance/element', ['origin' => 'FINANCES', 'label' => 'Mon épargne']);
+        $this->client->request('POST', '/plan-d-intendance/element', ['_csrf_token' => \App\Tests\Support\FixedCsrfTokenManager::VALUE, 'origin' => 'FINANCES', 'label' => 'Mon épargne']);
         $item = $this->items($user)[0];
-        $this->client->request('POST', '/plan-d-intendance/element/'.$item->getId(), ['status' => 'DORT', 'decision' => 'PROTEGER', 'action' => 'Compte séparé', 'priority' => '1']);
+        $this->client->request('POST', '/plan-d-intendance/element/'.$item->getId(), ['_csrf_token' => \App\Tests\Support\FixedCsrfTokenManager::VALUE, 'status' => 'DORT', 'decision' => 'PROTEGER', 'action' => 'Compte séparé', 'priority' => '1']);
 
         $crawler = $this->client->request('GET', '/bilan/revue-mensuelle');
         $this->assertSelectorTextContains('[data-stewardship-review]', 'Mon épargne');
@@ -199,9 +199,9 @@ class PlanDIntendanceControllerTest extends WebTestCase
         $this->client->request('GET', '/plan-de-vie');
         $this->assertSelectorTextContains('[data-map-missing-plans]', 'Intendance');
 
-        $this->client->request('POST', '/plan-d-intendance/element', ['origin' => 'TEMPS', 'label' => 'Deux soirées par mois']);
+        $this->client->request('POST', '/plan-d-intendance/element', ['_csrf_token' => \App\Tests\Support\FixedCsrfTokenManager::VALUE, 'origin' => 'TEMPS', 'label' => 'Deux soirées par mois']);
         $item = $this->items($user)[0];
-        $this->client->request('POST', '/plan-d-intendance/element/'.$item->getId(), ['life_goal' => (string) $goal->getId()]);
+        $this->client->request('POST', '/plan-d-intendance/element/'.$item->getId(), ['_csrf_token' => \App\Tests\Support\FixedCsrfTokenManager::VALUE, 'life_goal' => (string) $goal->getId()]);
         $this->assertSame($goal->getId(), $this->items($user)[0]->getLifeGoal()?->getId());
 
         $crawler = $this->client->request('GET', '/plan-de-vie');

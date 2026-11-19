@@ -65,6 +65,9 @@ class PlanDIntendanceController extends AbstractPlanController
     public function add(Request $request): RedirectResponse
     {
         $this->requirePlan('INTENDANCE');
+        if ($expired = $this->expired($request)) {
+            return $expired;
+        }
         $origin = $request->request->getString('origin');
         $label = trim($request->request->getString('label'));
         if (!Stewardship::isOrigin($origin) || '' === $label) {
@@ -84,6 +87,9 @@ class PlanDIntendanceController extends AbstractPlanController
     public function update(int $id, Request $request): RedirectResponse
     {
         $item = $this->own($id);
+        if ($expired = $this->expired($request)) {
+            return $expired;
+        }
         $form = $request->request;
         if ($form->has('label') && '' !== trim($form->getString('label'))) {
             $item->setLabel($form->getString('label'));
@@ -126,9 +132,12 @@ class PlanDIntendanceController extends AbstractPlanController
     }
 
     #[Route('/element/{id}/fait', name: '_done', requirements: ['id' => '\d+'], methods: ['POST'])]
-    public function done(int $id): RedirectResponse
+    public function done(int $id, Request $request): RedirectResponse
     {
         $item = $this->own($id);
+        if ($expired = $this->expired($request)) {
+            return $expired;
+        }
         $item->setActionDoneAt($item->getActionDoneAt() ? null : new \DateTimeImmutable());
         $this->em->flush();
 
@@ -136,9 +145,12 @@ class PlanDIntendanceController extends AbstractPlanController
     }
 
     #[Route('/element/{id}/supprimer', name: '_delete', requirements: ['id' => '\d+'], methods: ['POST'])]
-    public function delete(int $id): RedirectResponse
+    public function delete(int $id, Request $request): RedirectResponse
     {
         $item = $this->own($id);
+        if ($expired = $this->expired($request)) {
+            return $expired;
+        }
         $origin = $item->getOrigin();
         $this->em->remove($item);
         $this->em->flush();
@@ -150,6 +162,9 @@ class PlanDIntendanceController extends AbstractPlanController
     public function rhythm(Request $request): RedirectResponse
     {
         $this->requirePlan('INTENDANCE');
+        if ($expired = $this->expired($request)) {
+            return $expired;
+        }
         $rhythm = $this->rhythmFor();
         $rhythm->setFrequency($request->request->getString('frequency'))->setWithWhom($request->request->getString('with_whom'));
         if ($request->request->getBoolean('review')) {
@@ -159,6 +174,17 @@ class PlanDIntendanceController extends AbstractPlanController
         $this->em->flush();
 
         return $this->back('compte-rendu');
+    }
+
+    /** Jeton CSRF du formulaire (en plus du contrôle d'origine) : null s'il est valide, sinon retour à la page avec un message. */
+    private function expired(Request $request): ?RedirectResponse
+    {
+        if ($this->isCsrfTokenValid('plan_intendance', $request->request->getString('_csrf_token'))) {
+            return null;
+        }
+        $this->addFlash('error', 'La page a expiré. Vos modifications n\'ont pas été enregistrées : merci de réessayer.');
+
+        return $this->back();
     }
 
     private function rhythmFor(): StewardshipRhythm

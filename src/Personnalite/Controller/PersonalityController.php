@@ -38,6 +38,7 @@ class PersonalityController extends AbstractController
         private readonly \App\Personnalite\Repository\AssessmentRepository $assessments,
         private readonly \App\Personnalite\Service\SelfAssessmentReport $selfReports,
         private readonly \App\Personnalite\Service\TestHistory $history,
+        private readonly \App\Abonnement\Service\Entitlements $entitlements,
     ) {}
 
     /** Rapport PDF d'une auto-évaluation (dernière passation). */
@@ -49,6 +50,10 @@ class PersonalityController extends AbstractController
         $user = $this->getUser();
         if (!$user || !isset(self::TESTS[$type])) {
             throw $this->createNotFoundException();
+        }
+        // Rapports PDF des tests : PRO, comme AssessmentController::reportPdf()
+        if (!$this->entitlements->isPro($user)) {
+            throw new \App\Abonnement\Exception\ProRequiredException('test_pdf', 'Le rapport PDF des tests fait partie de KIINI SAWA PRO.');
         }
         $id = (int) ($this->container->get('request_stack')->getCurrentRequest()?->query->get('id') ?? 0);
         $latest = $id
@@ -69,7 +74,7 @@ class PersonalityController extends AbstractController
     // ─────────────────────────────────────────────────────────────────────────
     // Catalogue — /mes-tests/
     // ─────────────────────────────────────────────────────────────────────────
-    #[Route('/', name: 'index')]
+    #[Route('/', name: 'index', methods: ['GET'])]
     public function index(): Response
     {
         /** @var \App\Compte\Entity\User $user */
@@ -155,6 +160,11 @@ class PersonalityController extends AbstractController
         if (!$user) {
             return $this->redirectToRoute('app_login');
         }
+        if (!$this->isCsrfTokenValid('personality_test_'.strtolower($type), $request->request->getString('_csrf_token'))) {
+            $this->addFlash('error', 'La page a expiré. Vos réponses n\'ont pas été enregistrées : merci de recommencer.');
+
+            return $this->redirectToRoute('app_personality_take', ['type' => strtolower($type)]);
+        }
 
         // Collect answers: key = question category/id, value = answer value
         $rawAnswers = $request->request->all('answers');
@@ -184,7 +194,7 @@ class PersonalityController extends AbstractController
     // ─────────────────────────────────────────────────────────────────────────
     // Résultats — /mes-tests/{type}/resultats
     // ─────────────────────────────────────────────────────────────────────────
-    #[Route('/{type}/resultats/{id}', name: 'result', requirements: ['id' => '\d+'], defaults: ['id' => null])]
+    #[Route('/{type}/resultats/{id}', name: 'result', requirements: ['id' => '\d+'], defaults: ['id' => null], methods: ['GET'])]
     public function result(string $type, ?int $id = null): Response
     {
         $type = strtoupper($type);

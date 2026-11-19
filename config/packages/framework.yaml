@@ -14,6 +14,11 @@ framework:
     trusted_proxies: '%env(TRUSTED_PROXIES)%'
     trusted_headers: ['x-forwarded-for', 'x-forwarded-host', 'x-forwarded-proto', 'x-forwarded-port', 'x-forwarded-prefix']
 
+    # Noms de domaine acceptés (expression régulière) : une requête adressée à un autre nom (en-tête Host forgé) est refusée avant d'atteindre
+    # l'application, ce qui protège les liens générés (e-mails de réinitialisation, invitations) contre l'empoisonnement de l'en-tête Host.
+    # Valeur par défaut sûre pour la production dans .env ; à adapter par TRUSTED_HOSTS dans .env.local / .env.prod.local.
+    trusted_hosts: '%env(TRUSTED_HOSTS)%'
+
     #esi: true
     #fragments: true
 

@@ -24,7 +24,7 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 #[IsGranted('ROLE_USER')]
 class PlannerController extends AbstractController
 {
-    #[Route('/planner', name: 'app_planner')]
+    #[Route('/planner', name: 'app_planner', methods: ['GET'])]
     public function index(EntityManagerInterface $em): Response
     {
         /** @var User $user */

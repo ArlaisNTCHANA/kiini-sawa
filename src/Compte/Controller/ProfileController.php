@@ -180,13 +180,16 @@ class ProfileController extends AbstractController
             $this->addFlash('error', 'Adresse email invalide.');
         } elseif ($email === $user->getEmail()) {
             $this->addFlash('error', 'C\'est déjà votre adresse actuelle.');
-        } elseif ($users->findOneBy(['email' => $email])) {
-            $this->addFlash('error', 'Cette adresse ne peut pas être utilisée.');
-        } elseif (!$tokens->canResend($user, AccountToken::CHANGE_EMAIL)) {
+        } elseif ($request->getSession()->get('email_change_at', 0) > time() - 60 || !$tokens->canResend($user, AccountToken::CHANGE_EMAIL)) {
+            // Même délai d'attente que l'adresse existe déjà ou non : sinon, redemander deux fois de suite révélerait si elle est prise
             $this->addFlash('error', 'Un code vient d\'être envoyé. Patientez une minute.');
         } else {
-            $mailer->sendVerificationCode($user, $tokens->createCode($user, AccountToken::CHANGE_EMAIL, $email), $email);
-            $this->addFlash('success', 'Un code a été envoyé à '.$email.'. Saisissez-le ci-dessous pour confirmer.');
+            $request->getSession()->set('email_change_at', time());
+            // Anti-énumération : si l'adresse appartient déjà à un compte, la réponse est identique (aucun code n'est envoyé)
+            if (!$users->findOneBy(['email' => $email])) {
+                $mailer->sendVerificationCode($user, $tokens->createCode($user, AccountToken::CHANGE_EMAIL, $email), $email);
+            }
+            $this->addFlash('success', 'Un code a été envoyé à '.$email.' si cette adresse peut être utilisée. Saisissez-le ci-dessous pour confirmer.');
         }
 
         return $this->redirectToRoute('app_profile', ['_fragment' => 'securite']);

@@ -75,7 +75,7 @@ class WizardTestResultsTest extends WebTestCase
     {
         $this->takeTests();
         $this->client->loginUser($this->user);
-        $this->client->request('POST', '/plan-de-vie/assistant?step=5&single=1', ['profile_disc' => 'CS', 'profile_mbti' => '', 'profile_enneagram' => '', 'profile_big5' => '']);
+        $this->client->request('POST', '/plan-de-vie/assistant?step=5&single=1', ['_csrf_token' => \App\Tests\Support\FixedCsrfTokenManager::VALUE, 'profile_disc' => 'CS', 'profile_mbti' => '', 'profile_enneagram' => '', 'profile_big5' => '']);
         $crawler = $this->client->request('GET', '/plan-de-vie/assistant?step=5&single=1');
         $this->assertSame('CS', $crawler->filter('select[name="profile_disc"] option[selected]')->attr('value'));
         if ('CS' !== $this->results()['disc']['value']) {

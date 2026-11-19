@@ -414,10 +414,13 @@
             </nav>
 
             <div class="ks-sidebar__footer">
-                <a href="{{ path('app_logout') }}" class="ks-sidebar__link" id="nav-logout">
-                    <i data-lucide="log-out"></i>
-                    <span>Déconnexion</span>
-                </a>
+                <form method="post" action="{{ path('app_logout') }}" style="margin: 0;" data-turbo="false">
+                    <input type="hidden" name="_csrf_token" value="{{ csrf_token('logout_form') }}">
+                    <button type="submit" class="ks-sidebar__link" id="nav-logout" style="width: 100%; border: 0; background: transparent; font: inherit; text-align: left; cursor: pointer;">
+                        <i data-lucide="log-out"></i>
+                        <span>Déconnexion</span>
+                    </button>
+                </form>
             </div>
         </aside>
 

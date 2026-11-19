@@ -15,13 +15,20 @@ use Symfony\Component\HttpKernel\KernelEvents;
  *
  * Les navigateurs envoient toujours l'en-tête Origin (ou Sec-Fetch-Site) sur
  * ces requêtes ; un site tiers ne peut ni les retirer ni les falsifier.
- * Une requête sans aucun de ces en-têtes ne vient pas d'un navigateur
- * (tests, curl, application mobile) : elle ne porte donc pas les cookies
- * d'une victime et est acceptée.
+ *
+ * Mode strict (« fail-closed », par défaut) : une requête SANS aucun de ces en-têtes mais qui PORTE le cookie de session est refusée
+ * (403). Un navigateur ne produit jamais cela ; un script ou un outil qui rejouerait un cookie volé non plus, sans le savoir. Une requête
+ * sans en-têtes et SANS cookie de session (curl sans connexion, application mobile avec jeton, tests de l'API) reste acceptée : elle ne
+ * porte pas les droits d'une victime. Réglage : variable APP_SAME_ORIGIN_STRICT (1 par défaut ; la suite de tests la met à 0 sauf
+ * pour les tests de cette protection).
  */
 final class SameOriginRequestSubscriber implements EventSubscriberInterface
 {
     private const UNSAFE_METHODS = ['POST', 'PUT', 'PATCH', 'DELETE'];
+
+    public function __construct(#[\Symfony\Component\DependencyInjection\Attribute\Autowire('%env(bool:APP_SAME_ORIGIN_STRICT)%')] private readonly bool $strict = true)
+    {
+    }
 
     public static function getSubscribedEvents(): array
     {
@@ -68,6 +75,7 @@ final class SameOriginRequestSubscriber implements EventSubscriberInterface
             return !str_starts_with($referer, $request->getSchemeAndHttpHost().'/');
         }
 
-        return false;
+        // Aucun en-tête d'origine : acceptable seulement si la requête ne porte pas de session (ou de « se souvenir de moi »)
+        return $this->strict && ($request->hasPreviousSession() || $request->cookies->has('REMEMBERME'));
     }
 }

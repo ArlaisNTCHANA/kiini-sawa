@@ -20,6 +20,6 @@
             <input type="hidden" name="_csrf_token" value="{{ csrf_token('admin_login_code_resend') }}">
             <button type="submit" class="link-button">Renvoyer un code</button>
         </form>
-        <a href="{{ path('app_logout') }}">Se déconnecter</a>
+        <form method="post" action="{{ path('app_logout') }}" style="display: inline;" data-turbo="false"><input type="hidden" name="_csrf_token" value="{{ csrf_token('logout_form') }}"><button type="submit" class="link-button">Se déconnecter</button></form>
     </div>
 {% endblock %}

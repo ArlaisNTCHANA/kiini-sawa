@@ -10,6 +10,8 @@ parameters:
     # Expéditeur des emails de l'application
     app.mailer_from: '%env(default:app.mailer_from_default:MAILER_FROM)%'
     app.mailer_from_default: 'KIINI SAWA <noreply@kiinisawa.com>'
+    # Contrôle d'origine « fail-closed » (voir App\Shared\Security\SameOriginRequestSubscriber) ; 1 = actif
+    env(APP_SAME_ORIGIN_STRICT): '1'
 
 services:
     # default configuration for services in *this* file
@@ -24,3 +26,10 @@ services:
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
+
+when@test:
+    services:
+        # Jeton CSRF connu et unique pour les tests (voir tests/Support/FixedCsrfTokenManager.php)
+        security.csrf.token_manager:
+            class: App\Tests\Support\FixedCsrfTokenManager
+            public: true

@@ -17,7 +17,7 @@ use Symfony\Component\Routing\Attribute\Route;
 
 class HabitController extends AbstractController
 {
-    #[Route('/mes-plans/rituels', name: 'app_user_habits')]
+    #[Route('/mes-plans/rituels', name: 'app_user_habits', methods: ['GET', 'POST'])]
     public function rituels(Request $request, EntityManagerInterface $em, Entitlements $entitlements): Response
     {
         $user = $this->getUser();
@@ -32,7 +32,8 @@ class HabitController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $entitlements->requireBelowLimit($user, 'habits', $user->getHabits()->count() - 1, 'Limite de rituels de l\'offre gratuite atteinte.');
+            // Le nouveau rituel n'est pas encore dans la collection du compte (setUser ne l'y ajoute pas) : on compte les rituels existants, sans retrancher
+            $entitlements->requireBelowLimit($user, 'habits', $user->getHabits()->count(), 'Limite de rituels de l\'offre gratuite atteinte.');
             $em->persist($habit);
             $em->flush();
 

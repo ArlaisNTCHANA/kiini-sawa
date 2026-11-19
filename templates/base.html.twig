@@ -545,12 +545,15 @@
 
                     {# Logout #}
                     <div style="padding: 0.375rem 0; border-top: 1px solid rgba(15,76,110,0.06); margin-top: 0.25rem;">
-                        <a href="{{ path('app_logout') }}" class="dd-item danger">
+                        <form method="post" action="{{ path('app_logout') }}" style="margin: 0;" data-turbo="false">
+                        <input type="hidden" name="_csrf_token" value="{{ csrf_token('logout_form') }}">
+                        <button type="submit" class="dd-item danger" style="width: 100%; border: 0; background: transparent; font: inherit; text-align: left; cursor: pointer;">
                             <div class="dd-item-icon" style="color: var(--danger);">
                                 <i data-lucide="log-out" style="width:15px;height:15px;"></i>
                             </div>
                             <div style="line-height:1.2;">Déconnexion</div>
-                        </a>
+                        </button>
+                        </form>
                     </div>
                 </div>
             </div>
@@ -613,7 +616,7 @@
                             <a href="{{ path('app_subscription') }}" class="ks-sheet__link" @click="o = false"><i data-lucide="crown"></i>{{ is_pro() ? (is_trialing() ? 'Essai PRO' : 'Mon abonnement') : 'Passer à PRO' }}</a>
                             <a href="{{ path('app_install') }}" class="ks-sheet__link" @click="o = false"><i data-lucide="smartphone"></i>Installer l'application</a>
                             <a href="{{ path('app_app_feedback', {page: app.request.pathInfo}) }}" class="ks-sheet__link" @click="o = false"><i data-lucide="message-square"></i>Donner mon avis</a>
-                            <a href="{{ path('app_logout') }}" class="ks-sheet__link" style="color: var(--danger);"><i data-lucide="log-out"></i>Déconnexion</a>
+                            <form method="post" action="{{ path('app_logout') }}" style="margin: 0; display: contents;" data-turbo="false"><input type="hidden" name="_csrf_token" value="{{ csrf_token('logout_form') }}"><button type="submit" class="ks-sheet__link" style="color: var(--danger); border: 0; font: inherit; cursor: pointer; width: 100%; text-align: left;"><i data-lucide="log-out"></i>Déconnexion</button></form>
                         </div>
                     </div>
                 </div>

@@ -21,7 +21,7 @@ class PersonalityAdminController extends AbstractController
         'HYGIENE'       => ['name' => 'Hygiène de Vie', 'subtitle' => '6 Axes Vitaux', 'color' => '#ec4899', 'bg' => '#fdf2f8'],
     ];
 
-    #[Route('', name: 'admin_personality_dashboard')]
+    #[Route('', name: 'admin_personality_dashboard', methods: ['GET'])]
     public function index(EntityManagerInterface $em): Response
     {
         $stats = [];
@@ -40,7 +40,7 @@ class PersonalityAdminController extends AbstractController
         ]);
     }
 
-    #[Route('/{type}/questions', name: 'admin_personality_questions')]
+    #[Route('/{type}/questions', name: 'admin_personality_questions', methods: ['GET', 'POST'])]
     public function questions(string $type, Request $request, EntityManagerInterface $em): Response
     {
         $type = strtoupper($type);
@@ -156,7 +156,7 @@ class PersonalityAdminController extends AbstractController
         return $this->redirectToRoute('admin_personality_questions', ['type' => strtolower($type)]);
     }
 
-    #[Route('/{type}/profils', name: 'admin_personality_profiles')]
+    #[Route('/{type}/profils', name: 'admin_personality_profiles', methods: ['GET', 'POST'])]
     public function profiles(string $type, Request $request, EntityManagerInterface $em): Response
     {
         $type = strtoupper($type);

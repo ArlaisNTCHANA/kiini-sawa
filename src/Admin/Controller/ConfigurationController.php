@@ -15,7 +15,7 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 #[IsGranted('ROLE_ADMIN')]
 class ConfigurationController extends AbstractController
 {
-    #[Route('', name: 'admin_config')]
+    #[Route('', name: 'admin_config', methods: ['GET', 'POST'])]
     public function index(Request $request, EntityManagerInterface $em): Response
     {
         $config = $em->getRepository(AppConfig::class)->find('default');

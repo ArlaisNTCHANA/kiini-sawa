@@ -3,9 +3,12 @@
 # Usage : DATABASE_URL="mysql://user:motdepasse@hote:3306/base" bin/ops/sauvegarde.sh /chemin/des/sauvegardes
 # Garde 30 jours de sauvegardes compressées. Copiez aussi ce dossier hors du serveur (stockage objet, autre machine).
 set -euo pipefail
+# Les sauvegardes contiennent toutes les données : lisibles par leur propriétaire seulement (fichiers 600, dossier 700)
+umask 077
 
 DEST="${1:-./sauvegardes}"
 mkdir -p "$DEST"
+chmod 700 "$DEST" 2>/dev/null || true
 
 # Décompose DATABASE_URL (mysql://utilisateur:motdepasse@hote:port/base?options) ; les parties sont décodées
 # (un mot de passe avec @ : / $ … est encodé dans l'URL).
@@ -31,5 +34,6 @@ if ! MYSQL_PWD="$pass" mysqldump --single-transaction --quick --routines -h "$ho
   echo "Échec de la sauvegarde ($(date '+%Y-%m-%d %H:%M'))" >&2
   exit 1
 fi
+chmod 600 "$file"
 find "$DEST" -name 'kiini-sawa-*.sql.gz' -mtime +30 -delete
 echo "Sauvegarde : $file"

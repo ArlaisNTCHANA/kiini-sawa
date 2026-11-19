@@ -19,6 +19,7 @@
             </span>
         </summary>
         <form method="post" data-turbo="false" action="{{ path('app_plan_d_intendance_update', {id: it.id}) }}" class="stw-item__form">
+        <input type="hidden" name="_csrf_token" value="{{ csrf_token('plan_intendance') }}">
             <fieldset class="stw-choice">
                 <legend class="ks-label">Comment je le gère aujourd'hui</legend>
                 {% for key, s in statuses %}
@@ -55,6 +56,7 @@
             </div>
         </form>
         <form method="post" data-turbo="false" action="{{ path('app_plan_d_intendance_delete', {id: it.id}) }}" onsubmit="return confirm('Retirer cet élément de votre inventaire ?');" class="stw-item__delete">
+        <input type="hidden" name="_csrf_token" value="{{ csrf_token('plan_intendance') }}">
             <button type="submit" class="ks-btn ks-btn--ghost ks-btn--sm">Retirer</button>
         </form>
     </details>
@@ -62,6 +64,7 @@
 
 {% macro add_form(origin, placeholder) %}
     <form method="post" data-turbo="false" action="{{ path('app_plan_d_intendance_add') }}" class="stw-add">
+        <input type="hidden" name="_csrf_token" value="{{ csrf_token('plan_intendance') }}">
         <input type="hidden" name="origin" value="{{ origin }}">
         <input class="ks-input" name="label" maxlength="255" required placeholder="{{ placeholder }}" aria-label="Ajouter un élément">
         <button type="submit" class="ks-btn ks-btn--secondary ks-btn--sm">Ajouter</button>
@@ -110,6 +113,7 @@
                             <td>
                                 {% if it.actionText %}
                                 <form method="post" data-turbo="false" action="{{ path('app_plan_d_intendance_done', {id: it.id}) }}">
+        <input type="hidden" name="_csrf_token" value="{{ csrf_token('plan_intendance') }}">
                                     <button type="submit" class="ks-btn ks-btn--{{ it.actionDoneAt ? 'secondary' : 'ghost' }} ks-btn--sm" title="{{ it.actionDoneAt ? 'Faite le ' ~ it.actionDoneAt|date('d/m') : 'Marquer comme faite' }}">{{ it.actionDoneAt ? '✓ Faite' : 'Fait ?' }}</button>
                                 </form>
                                 {% endif %}
@@ -137,6 +141,7 @@
                     <div class="stw-chips" data-stewardship-suggestions="{{ origin }}">
                         {% for label in suggestions[origin] %}
                             <form method="post" data-turbo="false" action="{{ path('app_plan_d_intendance_add') }}">
+        <input type="hidden" name="_csrf_token" value="{{ csrf_token('plan_intendance') }}">
                                 <input type="hidden" name="origin" value="{{ origin }}">
                                 <input type="hidden" name="label" value="{{ label }}">
                                 <button type="submit" class="stw-chip" title="Ajouter à mon inventaire">+ {{ label|length > 70 ? label|slice(0, 69) ~ '…' : label }}</button>
@@ -172,6 +177,7 @@
         <h2 class="ks-section-title">Mon compte rendu</h2>
         <p class="stw-hint">« Longtemps après, le maître de ces serviteurs revint, et leur fit rendre compte » (Matthieu 25:19). À intervalles réguliers, revenez sur vos décisions et mesurez-en le fruit.</p>
         <form method="post" data-turbo="false" action="{{ path('app_plan_d_intendance_rhythm') }}" class="ks-card stw-rhythm">
+        <input type="hidden" name="_csrf_token" value="{{ csrf_token('plan_intendance') }}">
             <div class="ks-field">
                 <label class="ks-label" for="frequency">Quand je fais le point</label>
                 <select class="ks-input" id="frequency" name="frequency">

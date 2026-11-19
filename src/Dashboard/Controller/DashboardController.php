@@ -40,7 +40,7 @@ class DashboardController extends AbstractController
         ]);
     }
 
-    #[Route('/dashboard', name: 'app_dashboard')]
+    #[Route('/dashboard', name: 'app_dashboard', methods: ['GET'])]
     public function index(EntityManagerInterface $entityManager, DashboardData $dashboard, \App\Defis\Service\ChallengeService $challenges, \App\Dashboard\Service\NextStep $nextStep): Response
     {
         /** @var User $user */

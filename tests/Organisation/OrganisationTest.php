@@ -123,9 +123,9 @@ class OrganisationTest extends WebTestCase
 
         // En HTTP : plan partagé lisible, plan privé refusé, journal jamais exposé
         $this->client->loginUser($owner);
-        $this->client->request('POST', '/plan-de-vie/assistant?step=1&single=1'); // assure un Plan de Vie au responsable
+        $this->client->request('POST', '/plan-de-vie/assistant?step=1&single=1', ['_csrf_token' => \App\Tests\Support\FixedCsrfTokenManager::VALUE]); // assure un Plan de Vie au responsable
         $this->client->loginUser($sharing);
-        $this->client->request('POST', '/plan-de-vie/assistant?step=1&single=1', ['purpose_statement' => 'Servir les jeunes de mon quartier.']);
+        $this->client->request('POST', '/plan-de-vie/assistant?step=1&single=1', ['_csrf_token' => \App\Tests\Support\FixedCsrfTokenManager::VALUE, 'purpose_statement' => 'Servir les jeunes de mon quartier.']);
         $this->client->jsonRequest('POST', '/api/journal/entries/create', ['content' => 'Pensée très intime']);
 
         $this->client->loginUser($owner);

@@ -59,7 +59,7 @@ class SignupOriginTest extends WebTestCase
         $this->assertSame('l.facebook.com', $this->originOf($email)->getReferrer());
 
         $client->getCookieJar()->clear();
-        $client->request('GET', '/logout');
+        $client->request('POST', '/logout', ['_csrf_token' => \App\Tests\Support\FixedCsrfTokenManager::VALUE]);
         $email2 = $this->uniqueEmail('direct');
         $this->signUp($client, $email2);
         $this->assertSame('direct', $this->originOf($email2)->getSource());

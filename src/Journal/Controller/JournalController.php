@@ -18,7 +18,7 @@ class JournalController extends AbstractController
     public const MAX_PAGE_SIZE = 50;
     public const MAX_OFFSET = 5000;
 
-    #[Route('/journal', name: 'app_journal')]
+    #[Route('/journal', name: 'app_journal', methods: ['GET'])]
     public function index(EntityManagerInterface $em): Response
     {
         $user = $this->getUser();

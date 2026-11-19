@@ -32,7 +32,7 @@ class WizardIncrementalSaveTest extends WebTestCase
 
     private function post(string $query, array $data): void
     {
-        $this->client->request('POST', '/plan-de-vie/assistant?'.$query, $data);
+        $this->client->request('POST', '/plan-de-vie/assistant?'.$query, $data + ['_csrf_token' => \App\Tests\Support\FixedCsrfTokenManager::VALUE]);
     }
 
     private function goals(): array
@@ -85,7 +85,7 @@ class WizardIncrementalSaveTest extends WebTestCase
         $valueId = $value->getId();
 
         // Axe de croissance né de cette valeur (page Plan de Croissance)
-        $this->client->request('POST', "/plan-de-croissance/axe/DECLARED_VALUE/$valueId", ['strategy' => 'Écouter avant de parler', 'status' => 'build', 'habit_titles' => ['Demander un retour chaque semaine'], 'habit_frequencies' => ['WEEKLY']]);
+        $this->client->request('POST', "/plan-de-croissance/axe/DECLARED_VALUE/$valueId", ['_csrf_token' => \App\Tests\Support\FixedCsrfTokenManager::VALUE, 'strategy' => 'Écouter avant de parler', 'status' => 'build', 'habit_titles' => ['Demander un retour chaque semaine'], 'habit_frequencies' => ['WEEKLY']]);
         $this->assertResponseRedirects('/plan-de-croissance?tab=SYSTEM');
         $axis = $this->em()->getRepository(GrowthGoal::class)->findOneBy(['sourceType' => 'DECLARED_VALUE', 'sourceId' => $valueId]);
         $habitId = $axis->getHabits()->first()->getId();
@@ -95,7 +95,7 @@ class WizardIncrementalSaveTest extends WebTestCase
         $this->assertNotNull($this->em()->find(Value::class, $valueId), 'La valeur garde son identifiant : l\'axe qui en dépend reste valide');
 
         // Réenregistrer l'axe met à jour le rituel au lieu d'effacer son historique
-        $this->client->request('POST', "/plan-de-croissance/axe/DECLARED_VALUE/$valueId", ['strategy' => 'Écouter avant de parler', 'status' => 'consolidate', 'habit_ids' => [$habitId], 'habit_titles' => ['Demander un retour chaque semaine'], 'habit_frequencies' => ['WEEKLY']]);
+        $this->client->request('POST', "/plan-de-croissance/axe/DECLARED_VALUE/$valueId", ['_csrf_token' => \App\Tests\Support\FixedCsrfTokenManager::VALUE, 'strategy' => 'Écouter avant de parler', 'status' => 'consolidate', 'habit_ids' => [$habitId], 'habit_titles' => ['Demander un retour chaque semaine'], 'habit_frequencies' => ['WEEKLY']]);
         $this->assertNotNull($this->em()->find(Habit::class, $habitId), 'Le rituel (et son historique) est conservé');
     }
 
@@ -116,7 +116,7 @@ class WizardIncrementalSaveTest extends WebTestCase
 
     public function testStepAutosaveReturnsIdsForNewRows(): void
     {
-        $this->client->request('POST', '/plan-de-vie/assistant', [
+        $this->client->request('POST', '/plan-de-vie/assistant', ['_csrf_token' => \App\Tests\Support\FixedCsrfTokenManager::VALUE, 
             'autosave' => '1',
             'autosave_step' => '3',
             'passions' => ['Musique', '', 'Lecture'],
@@ -129,7 +129,7 @@ class WizardIncrementalSaveTest extends WebTestCase
         $this->assertIsInt($ids[2]);
 
         // Second enregistrement avec les identifiants reçus : pas de doublon
-        $this->client->request('POST', '/plan-de-vie/assistant', ['autosave' => '1', 'autosave_step' => '3', 'passions' => ['Musique', 'Lecture'], 'passions_ids' => [$ids[0], $ids[2]]]);
+        $this->client->request('POST', '/plan-de-vie/assistant', ['_csrf_token' => \App\Tests\Support\FixedCsrfTokenManager::VALUE, 'autosave' => '1', 'autosave_step' => '3', 'passions' => ['Musique', 'Lecture'], 'passions_ids' => [$ids[0], $ids[2]]]);
         $this->assertCount(2, $this->findUser($this->user->getEmail())->getPlanDeVie()->getPassions());
     }
 }

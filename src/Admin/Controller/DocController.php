@@ -5,13 +5,16 @@ namespace App\Admin\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Component\Routing\Attribute\Route;
 use Parsedown;
 
+/** Documentation du projet pour les administrateurs (en plus de la règle d'accès ^/admin de security.yaml : défense en profondeur). */
+#[IsGranted('ROLE_ADMIN')]
 class DocController extends AbstractController
 {
 
-    #[Route('/admin/doc/{page}', name: 'admin_doc', requirements: ['page' => '[A-Za-z0-9_\-]+(/[A-Za-z0-9_\-]+)?'], defaults: ['page' => 'index'])]
+    #[Route('/admin/doc/{page}', name: 'admin_doc', requirements: ['page' => '[A-Za-z0-9_\-]+(/[A-Za-z0-9_\-]+)?'], defaults: ['page' => 'index'], methods: ['GET'])]
     public function index(string $page): Response
     {
         // Prevent directory traversal attacks
@@ -31,6 +34,7 @@ class DocController extends AbstractController
 
         // Compile Markdown to HTML using Parsedown
         $parsedown = new Parsedown();
+        $parsedown->setSafeMode(true); // le HTML brut des fichiers est neutralisé
         $htmlContent = $parsedown->text($markdownContent);
 
         // Rewrite relative markdown links (e.g. "api.md" -> "/admin/doc/api")

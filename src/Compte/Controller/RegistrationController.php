@@ -33,6 +33,9 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
  */
 class RegistrationController extends AbstractController
 {
+    /** Session d'un visiteur qui a saisi une adresse déjà inscrite : il voit l'écran de vérification, sans être connecté ni rien apprendre. */
+    private const DECOY_KEY = 'register_decoy_email';
+
     public function __construct(
         private readonly AccountTokenService $tokens,
         private readonly AccountMailer $mailer,
@@ -96,11 +99,12 @@ class RegistrationController extends AbstractController
             if ([] === $errors) {
                 $existing = $users->findOneBy(['email' => $data['email']]);
                 if ($existing) {
-                    // On ne révèle pas que l'adresse a déjà un compte : on prévient son propriétaire par email.
+                    // On ne révèle pas que l'adresse a déjà un compte : on prévient son propriétaire par email, et le visiteur voit
+                    // exactement le même écran qu'après une vraie inscription (même redirection, même page « Vérifiez votre email »).
                     $this->mailer->sendAlreadyRegistered($existing);
-                    $this->addFlash('info', 'Si cette adresse peut être utilisée, un email vient de vous être envoyé. Pensez à vérifier vos courriers indésirables.');
+                    $request->getSession()->set(self::DECOY_KEY, $data['email']);
 
-                    return $this->redirectToRoute('app_login');
+                    return $this->redirectToRoute('app_verify_email');
                 }
 
                 $user = (new User())
@@ -135,8 +139,10 @@ class RegistrationController extends AbstractController
     #[Route('/verification-email', name: 'app_verify_email', methods: ['GET', 'POST'])]
     public function verifyEmail(Request $request, EntityManagerInterface $em, \App\Notification\Service\OnboardingSequence $onboarding, \App\Media\Service\ReferralService $referrals): Response
     {
-        /** @var User $user */
         $user = $this->getUser();
+        if (!$user instanceof User) {
+            return $this->decoyVerification($request);
+        }
         if ($user->isVerified()) {
             return $this->redirectToRoute('app_dashboard');
         }
@@ -166,8 +172,10 @@ class RegistrationController extends AbstractController
     #[Route('/verification-email/renvoyer', name: 'app_verify_email_resend', methods: ['POST'])]
     public function resendCode(Request $request): Response
     {
-        /** @var User $user */
         $user = $this->getUser();
+        if (!$user instanceof User) {
+            return $this->decoyVerification($request, true);
+        }
         if ($user->isVerified()) {
             return $this->redirectToRoute('app_dashboard');
         }
@@ -182,5 +190,24 @@ class RegistrationController extends AbstractController
         }
 
         return $this->redirectToRoute('app_verify_email');
+    }
+
+    /**
+     * Visiteur non connecté sur l'écran de vérification : soit il a saisi une adresse déjà inscrite (on lui montre la même page qu'à un
+     * nouvel inscrit, tout code est « incorrect »), soit il n'a rien à faire ici (retour à la connexion).
+     */
+    private function decoyVerification(Request $request, bool $resend = false): Response
+    {
+        $email = $request->getSession()->get(self::DECOY_KEY);
+        if (!\is_string($email)) {
+            return $this->redirectToRoute('app_login');
+        }
+        if ($request->isMethod('POST')) {
+            $this->addFlash($resend ? 'success' : 'error', $resend ? 'Un nouveau code vous a été envoyé.' : 'Code incorrect ou expiré. Après 5 essais, demandez un nouveau code.');
+
+            return $this->redirectToRoute('app_verify_email');
+        }
+
+        return $this->render('compte/verify_email.html.twig', ['email' => $email]);
     }
 }

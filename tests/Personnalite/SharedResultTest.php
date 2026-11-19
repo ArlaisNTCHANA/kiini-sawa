@@ -38,7 +38,7 @@ class SharedResultTest extends WebTestCase
         $token = $this->em()->getRepository(\App\Personnalite\Entity\Assessment::class)->find($a->getId())->getShareToken();
         $this->assertMatchesRegularExpression('/^[a-f0-9]{24}$/', $token);
 
-        $client->request('GET', '/logout');
+        $client->request('POST', '/logout', ['_csrf_token' => \App\Tests\Support\FixedCsrfTokenManager::VALUE]);
         $client->request('GET', '/resultat/'.$token);
         $this->assertResponseIsSuccessful();
         $html = $client->getResponse()->getContent();
@@ -50,7 +50,7 @@ class SharedResultTest extends WebTestCase
         $client->loginUser($user);
         $client->request('GET', '/mes-tests/rapport/'.$a->getId());
         $client->submitForm('Arrêter le partage');
-        $client->request('GET', '/logout');
+        $client->request('POST', '/logout', ['_csrf_token' => \App\Tests\Support\FixedCsrfTokenManager::VALUE]);
         $client->request('GET', '/resultat/'.$token);
         $this->assertResponseStatusCodeSame(404);
     }

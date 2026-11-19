@@ -28,7 +28,7 @@ final class SiteTextAdminController extends AbstractController
     {
     }
 
-    #[Route('', name: 'admin_site_texts')]
+    #[Route('', name: 'admin_site_texts', methods: ['GET'])]
     public function index(Request $request): Response
     {
         $q = trim($request->query->getString('q'));

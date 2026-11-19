@@ -26,8 +26,8 @@ class DashboardTest extends WebTestCase
         $user->setIsOnboardingCompleted(true);
         $em->flush();
         $client->loginUser($user);
-        $client->request('POST', '/plan-de-vie/assistant?step=1&single=1', ['purpose_statement' => 'Servir ma ville avec mes talents.']);
-        $client->request('POST', '/plan-de-vie/assistant?step=7&single=1', ['life_goals_give' => ['Créer une école de leadership'], 'life_goals_give_deadlines' => [(new \DateTime('+6 months'))->format('Y-m-d')]]);
+        $client->request('POST', '/plan-de-vie/assistant?step=1&single=1', ['_csrf_token' => \App\Tests\Support\FixedCsrfTokenManager::VALUE, 'purpose_statement' => 'Servir ma ville avec mes talents.']);
+        $client->request('POST', '/plan-de-vie/assistant?step=7&single=1', ['_csrf_token' => \App\Tests\Support\FixedCsrfTokenManager::VALUE, 'life_goals_give' => ['Créer une école de leadership'], 'life_goals_give_deadlines' => [(new \DateTime('+6 months'))->format('Y-m-d')]]);
 
         $client->request('GET', '/dashboard');
         $this->assertResponseIsSuccessful();
@@ -61,7 +61,7 @@ class DashboardTest extends WebTestCase
         $em->persist($profile);
         $em->flush();
         $client->loginUser($user);
-        $client->request('POST', '/plan-de-vie/assistant?step=1&single=1', ['purpose_statement' => 'Servir ma ville.']);
+        $client->request('POST', '/plan-de-vie/assistant?step=1&single=1', ['_csrf_token' => \App\Tests\Support\FixedCsrfTokenManager::VALUE, 'purpose_statement' => 'Servir ma ville.']);
 
         $client->request('GET', '/dashboard');
         $this->assertSelectorTextContains('main h1', 'Bonjour, Esther');

@@ -25,7 +25,7 @@ class MonthlyReviewTest extends WebTestCase
         $client = static::createClient();
         $user = $this->createUser(pro: true);
         $client->loginUser($user);
-        $client->request('POST', '/plan-de-vie/assistant?step=1&single=1', ['purpose_statement' => 'Bâtir des ponts entre les générations.']);
+        $client->request('POST', '/plan-de-vie/assistant?step=1&single=1', ['_csrf_token' => \App\Tests\Support\FixedCsrfTokenManager::VALUE, 'purpose_statement' => 'Bâtir des ponts entre les générations.']);
 
         $crawler = $client->request('GET', '/bilan/revue-mensuelle');
         $this->assertResponseIsSuccessful();

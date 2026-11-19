@@ -39,7 +39,15 @@ class WizardController extends AbstractPlanController
         $this->requirePlan($plan ?: (string) array_key_first(array_filter(LifePlanWizardSaver::STEPS_BY_PLAN, fn ($steps, $key) => '' !== $key && \in_array($step, $steps, true), \ARRAY_FILTER_USE_BOTH)));
 
         if ($request->isMethod('POST')) {
-            // Protection CSRF : contrôle de l'origine (SameOriginRequestSubscriber), comme les autres formulaires des plans
+            // Protection CSRF : contrôle de l'origine (SameOriginRequestSubscriber) ET jeton du formulaire
+            if (!$this->isCsrfTokenValid('plan_wizard', $request->request->getString('_csrf_token'))) {
+                if ($request->request->getBoolean('autosave')) {
+                    return new JsonResponse(['success' => false, 'error' => 'La page a expiré.'], 400);
+                }
+                $this->addFlash('error', 'La page a expiré. Vos réponses n\'ont pas été enregistrées : merci de réessayer.');
+
+                return $this->redirectToRoute('app_plan_wizard', ['step' => $step, 'single' => $single ? 1 : 0, 'plan' => $plan]);
+            }
             // Enregistrement de l'étape quittée (« Suivant »)
             if ($request->request->getBoolean('autosave')) {
                 $autosaveStep = $request->request->getInt('autosave_step');
