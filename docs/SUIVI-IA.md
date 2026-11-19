@@ -9,9 +9,38 @@ teste (`php bin/phpunit`), commit, déploie (`bin/ops/envoyer-hostinger.sh`), v�
 journal `var/log/prod-AAAA-MM-JJ.log` sans erreur) ; **le fondateur fait lui-même `git push`** (refusé à l'IA).
 Ne jamais afficher ni demander de mot de passe ; ne pas publier son nom (mentions légales en attente).
 
+## 2026-11-19 · Application Mobile KIINI SAWA (Expo SDK 58 / React Native) : Lots 2 & 3
+
+- **Lot 2 (Notifications push distantes Expo & rappels quotidiens)** :
+  - **Backend symfony (`web/src/Mobile/`)** :
+    - Entité `MobilePushDevice` (table `mobile_push_device` avec user_id cascade, hash SHA-256 du token Expo, horodatage, nom d'appareil, plateforme).
+    - `ExpoPushSender` : validation regex stricte `Expo(nent)?PushToken[...]`, limitation à 10 appareils par compte, envoi groupé HTTP vers `https://exp.host/--/api/v2/push/send`, élagage automatique des appareils révoqués (`DeviceNotRegistered`), mockable en test via closure statique.
+    - `MobilePushSenderDecorator` : décore `PushSender` (`#[AsDecorator(decorates: PushSender::class)]`) pour injecter sans toucher au code existant l'envoi Expo Push dans `ReminderService` et `Notifier`.
+    - `MobileNotificationController` : endpoints `/api/mobile/v1/notifications/appareil` (POST/DELETE), `/preferences` (GET/PATCH), `/essai` (POST, rate limit 3/h), `/` (GET), `/{id}/lu` (POST), `/tout-lire` (POST).
+    - Tests `MobileNotificationTest` : 6 méthodes testant l'enregistrement d'appareil, la limitation du test, l'isolation des notifications et le décorateur push.
+  - **Mobile (`mobile-v1/`)** :
+    - `expo-notifications` & `expo-device` installés et configurés.
+    - Écran `app/notifications.tsx` : activation appareil, notification d'essai immédiate, réglages fins (heure matinale, jour hebdomadaire, 8 types d'alertes), liste in-app et marquer tout comme lu.
+    - Service `src/notifications/service.ts` & `src/notifications/routing.ts` : synchronisation token, listeners de notification au tap pour router vers l'écran natif adéquat.
+    - Accès direct via l'icône cloche dans `app/(tabs)/index.tsx` et carte dédiée dans `app/(tabs)/menu.tsx`.
+- **Lot 3 (Mes 6 Plans & Progression)** :
+  - **Backend symfony (`web/src/Mobile/`)** :
+    - `MobilePlanSerializer` : sérialise les 6 plans (`VIE`, `CROISSANCE`, `DEVELOPPEMENT`, `HYGIENE`, `INTENDANCE`, `TRANSMISSION`) avec progression `PlanProgress`, 100 % libellés français, zéro terme banni, et contenu riche.
+    - `MobilePlanController` : `GET /api/mobile/v1/plans` (vue d'ensemble des 6 plans, pourcentage global, compteurs) et `GET /api/mobile/v1/plans/{key}` (fiche détaillée d'un plan avec contrôle `Entitlements::require()` renvoyant 403 `pro_required` sans url de paiement).
+    - Tests `MobilePlanTest` : 5 méthodes testant la progression, les libellés, le verrouillage PRO et l'isolation des données.
+  - **Mobile (`mobile-v1/`)** :
+    - Composant `src/components/plans/PlansCircle.tsx` : Cercle SVG interactif reproduisant fidèlement la figure du livre KIINI SAWA (Plan de Vie au centre doré, 5 satellites reliés par rayons et anneaux de progression, cibles tactiles accessibles).
+    - `app/(tabs)/plans.tsx` : affichage hors-ligne instantané via cache SQLite, barre de progression globale, cercle SVG tactile, liste des cartes avec pourcentages, prochaines étapes et liens d'action.
+    - `app/plan/[key].tsx` : écran de lecture native riche complet pour chacun des 6 plans, checklist des étapes franchies, sections détaillées adaptées à chaque plan, cache SQLite et modal `<ProGate />` si verrouillé.
+    - Tests Vitest : 21 tests unitaires passants (`notifications.test.ts`, `apiClient.test.ts`, `syncEngine.test.ts`, `lexicon.test.ts`).
+    - Validation Expo iOS Bundle : `npx expo export --platform ios` compilé à 100 % avec zéro erreur.
+- **Reste à livrer pour les prochains lots** :
+  - **Lot 4** : Mes tests & Mon profil KIINI SAWA (passation des tests, lecture des rapports et synthèse).
+  - **Lot 5** : Revues & bilans (hebdo, mensuel), Agenda (`planner`), Partenaires (`social`), Ensemble & La Méthode.
+
 ---
 
-## 2026-11-17 · Lot C (début) : le cercle des plans vivant
+
 
 - **« Mes plans »** : la figure fixe des 6 plans est remplacée par un cercle SVG interactif
   (`plan_de_vie/_plans_circle.html.twig`) : chaque plan est un lien, entouré d'un **anneau de progression** ; survol, focus
@@ -489,3 +518,11 @@ phrase courte), fichiers JSON nettoyés, nouveau `08-…json`. Pagination PDF co
 - `json_safe` : les séparateurs U+2028/U+2029 sont maintenant remplacés par ` `/` ` littéraux (le remplacement précédent ne faisait rien) ; `JSON_PARTIAL_OUTPUT_ON_ERROR` retiré (en conflit avec `JSON_THROW_ON_ERROR`), `JSON_INVALID_UTF8_SUBSTITUTE` ajouté pour qu'un texte mal encodé ne fasse pas échouer la page.
 - Écran de vérification « leurre » : jetons CSRF contrôlés et délai de 60 s sur le renvoi, mêmes messages qu'une vraie inscription (test comparatif).
 - `.env.prod` : `TRUSTED_HOSTS='^(www\.)?kiinisawa\.com$'` (ni localhost ni IP en production ; le développement garde `.env`). Tests : `tests/Shared/FinalChecksTest.php`.
+
+## 19/11/2026 — Application mobile native V1 : Lot 1 (API `/api/mobile/v1` + socle Expo `mobile-v1/`)
+- **Choix validés avec le fondateur** : nouveau projet indépendant `../mobile-v1/` (sans toucher à `mobile/`) ; approche **consultation seulement** pour l'offre PRO (zéro prix, zéro lien de paiement dans l'app/API, conformité Apple 3.1.1 / EU DSA) + architecture prête pour IAP (`Subscription::$billingSource`, hook `useEntitlements` et composant `<ProGate>` côté mobile) ; français uniquement et thème clair du livre au lancement.
+- **Module `src/Mobile/`** : entité `MobileToken` (table `mobile_token`, empreintes SHA-256 uniquement, `rotated` pour distinguer réutilisation suspecte et simple déconnexion, `ON DELETE CASCADE` vers `user`, migration `Version20261119120000`), colonne `billing_source` sur `subscription`, pare-feu `mobile_api` sans session (`MobileBearerAuthenticator`), rotation à usage unique des jetons (`MobileTokenService`), limitation de débit (`mobile_login_ip`, `mobile_login_account`, `mobile_refresh`), purge dans `app:reminders:send`, `ProRequiredSubscriber` adapté sans `upgradeUrl` sur `/api/mobile/*`.
+- **Points d'accès `/api/mobile/v1`** : `connexion`, `jeton`, `deconnexion`, `moi` (GET/PATCH), `compte` (DELETE avec `SUPPRIMER` + mot de passe), `aujourdhui` & `sync` (contrat `QuickDay`), `rituels` (CRUD + plafond gratuit), `journal` & `journal/carnets` (pagination SQL bornée, filtres). Documentation complète : `docs/api-mobile.md`, `docs/modules/mobile.md`.
+- **Tests Symfony** : `tests/Mobile/MobileApiTest.php` (12 scénarios dont mode strict `APP_SAME_ORIGIN_STRICT=1`, réutilisation de jeton, isolation utilisateurs, suppression cascade). **Piège noté** : dans les tests fonctionnels avec `AbstractBrowser`, appeler `restart()` avant toute requête devant être dépourvue d'en-tête `Referer` automatique.
+- **Reste pour les lots suivants** : Lot 2 (notifications Expo Push + préférences), Lot 3 (lecture des 6 plans), Lot 4 (Mes tests & rapports), Lot 5 (revues, agenda, partenaires, couple/organisation, La Méthode).
+

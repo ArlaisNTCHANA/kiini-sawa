@@ -1,0 +1,34 @@
+# Module Mobile
+
+**Statut** : actif (Lots 1, 2 & 3 — authentification par jetons Bearer, profil/compte, quotidien hors connexion, rituels, journal, push Expo & rappels, progression des 6 plans & cercle SVG).
+
+## Rôle
+
+Exposer l'API REST `/api/mobile/v1/...` utilisée par l'application mobile native Expo (`../mobile-v1/`). Ce module reprend la logique métier et les garanties de sécurité des modules existants (`Compte`, `Rapide`, `Rituels`, `Journal`, `Abonnement`, `Notification`, `PlanDeVie`) sans session ni cookie.
+
+## Emplacements
+
+| Élément | Chemin |
+|---|---|
+| Code | `src/Mobile/` |
+| Contrat API | [`docs/api-mobile.md`](../api-mobile.md) |
+| Migrations | `migrations/Version20261119120000.php`, `Version20261119130000.php` |
+| Tests | `tests/Mobile/` (`MobileApiTest.php`, `MobileNotificationTest.php`, `MobilePlanTest.php`) |
+| Pare-feu | `config/packages/security.yaml` (`mobile_api`, `^/api/mobile`) |
+
+## Entités
+
+- `App\Mobile\Entity\MobileToken` (table `mobile_token`) : session appareil par jeton, stockant uniquement les empreintes SHA-256 (`access_hash`, `refresh_hash`), les dates d'expiration (`20 min` / `60 jours`), `last_used_at`, `revoked_at` et `rotated` (`true` si remplacé par rotation). Relation `ON DELETE CASCADE` vers `user`.
+- `App\Mobile\Entity\MobilePushDevice` (table `mobile_push_device`) : jeton push Expo pour l'appareil mobile (`token_hash` unique, `expo_token`, `platform`, `device_name`, `created_at`, `last_seen_at`). Relation `ON DELETE CASCADE` vers `user`.
+
+## Services
+
+- `App\Mobile\Service\ExpoPushSender` : expédition groupée vers l'API Expo (`https://exp.host/--/api/v2/push/send`), nettoyage automatique des tokens révoqués (`DeviceNotRegistered`), validation de format et mockable en test unitaire.
+- `App\Mobile\Service\MobilePushSenderDecorator` : décore `PushSender` (`#[AsDecorator(decorates: PushSender::class)]`) pour que toute notification existante (`Notifier`, `ReminderService`) notifie aussi les appareils mobiles Expo sans modifier une seule ligne du web existant.
+- `App\Mobile\Service\MobilePlanSerializer` : transformation riche des 6 plans du livre avec `PlanProgress`, 100 % libellés français, zéro terme banni.
+
+## Points d'attention
+
+- Le contrôle d'origine strict (`SameOriginRequestSubscriber`) reste actif pour les sessions cookies et continue de rejeter tout en-tête `Origin` / `Sec-Fetch-Site` cross-site ; les requêtes natives portant uniquement `Authorization: Bearer ...` sans cookie ni `Origin` passent.
+- En cas de réutilisation d'un `refreshToken` déjà remplacé par rotation (`rotated = true`), toutes les sessions mobiles actives de l'utilisateur sont révoquées.
+- Les réponses PRO dans `/api/mobile/*` (`ProRequiredSubscriber`) ne contiennent jamais `upgradeUrl`, ni tarif, ni lien de paiement (conformité App Store / Google Play).
