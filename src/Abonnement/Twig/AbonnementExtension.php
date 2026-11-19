@@ -26,6 +26,8 @@ final class AbonnementExtension extends AbstractExtension
         return [
             new TwigFunction('is_pro', fn (): bool => $this->entitlements->isPro($this->user())),
             new TwigFunction('can', fn (string $feature): bool => $this->entitlements->can($this->user(), $feature)),
+            new TwigFunction('can_take_test', fn (string $slug): bool => $this->entitlements->canTakeTest($this->user(), $slug)),
+            new TwigFunction('free_tests', fn (): array => $this->entitlements->freeTests()),
             new TwigFunction('is_trialing', fn (): bool => ($u = $this->user()) ? $this->entitlements->isTrialing($u) : false),
             new TwigFunction('pro_until', fn (): ?\DateTimeInterface => ($u = $this->user()) ? $this->entitlements->proUntil($u) : null),
         ];

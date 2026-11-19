@@ -190,7 +190,11 @@
             {% if not pdf %}
                 <div class="dr-tile" style="margin-top: 14px;">
                     <div class="dr-label">Regard croisé</div>
-                    <p style="margin: 0;">Passez le <a href="{{ path('app_assessment_take', {slug: 'big-five'}) }}" style="color: var(--primary); font-weight: 700;">Big Five essentiel</a> (8 minutes) : nous confronterons son résultat à votre DISC pour voir si deux méthodes différentes disent la même chose de vous.</p>
+                    {% if can_take_test('big-five') %}
+                        <p style="margin: 0;">Passez le <a href="{{ path('app_assessment_take', {slug: 'big-five'}) }}" style="color: var(--primary); font-weight: 700;">Big Five essentiel</a> (8 minutes) : nous confronterons son résultat à votre DISC pour voir si deux méthodes différentes disent la même chose de vous.</p>
+                    {% else %}
+                        <p style="margin: 0;">Avec <a href="{{ path('app_subscription', {fonction: 'tests'}) }}" style="color: var(--primary); font-weight: 700;">KIINI SAWA PRO</a>, le Big Five essentiel (8 minutes) permet de confronter son résultat à votre DISC pour voir si deux méthodes différentes disent la même chose de vous.</p>
+                    {% endif %}
                 </div>
             {% endif %}
         {% else %}

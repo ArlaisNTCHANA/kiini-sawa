@@ -78,7 +78,7 @@ final class OnboardingSequence
                 : ['j1_vision', 'Où voulez-vous être dans 10 ans ?', '/plan-de-vie/assistant', []],
             3 => match (true) {
                 !$this->hasHabit($user) => ['j3_rituel', 'Un seul petit rituel pour commencer', '/mes-plans/rituels', []],
-                !$this->hasAssessment($user) => ['j3_test', 'Découvrez comment Dieu vous a fait', '/mes-tests/questionnaire/profil-complet', []],
+                !$this->hasAssessment($user) => ['j3_test', 'Découvrez comment Dieu vous a fait', '/mes-tests/questionnaire/'.($this->entitlements->canTakeTest($user, 'profil-complet') ? 'profil-complet' : $this->entitlements->firstFreeTest()), []],
                 default => null,
             },
             7 => ['j7_revue', 'Votre première revue de la semaine', '/bilan/revue-hebdomadaire', ['hasPartner' => $this->hasPartner($user)]],

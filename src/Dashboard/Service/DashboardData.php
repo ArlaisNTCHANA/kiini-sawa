@@ -5,6 +5,7 @@ namespace App\Dashboard\Service;
 use App\Compte\Entity\User;
 use App\Dashboard\Repository\QuoteRepository;
 use App\Personnalite\Entity\Assessment;
+use App\Personnalite\Psychometrie\Instruments;
 use App\Social\Entity\Connection;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
@@ -23,6 +24,7 @@ final class DashboardData
         private readonly QuoteRepository $quotes,
         private readonly EntityManagerInterface $em,
         private readonly UrlGeneratorInterface $urls,
+        private readonly \App\Abonnement\Service\Entitlements $entitlements,
     ) {
     }
 
@@ -37,6 +39,7 @@ final class DashboardData
     public function nextSteps(User $user, array $habits): array
     {
         $plan = $user->getPlanDeVie();
+        $firstTest = $this->entitlements->canTakeTest($user, 'profil-complet') ? 'profil-complet' : $this->entitlements->firstFreeTest();
         $steps = [
             ['label' => 'Poser vos fondations', 'hint' => 'Raison d\'être, valeurs et premier objectif.', 'url' => $this->urls->generate('app_plan_de_vie'),
                 'done' => null !== $plan?->getPurpose()?->getStatement()],
@@ -44,7 +47,7 @@ final class DashboardData
                 'done' => '' !== trim((string) $plan?->getVision()?->getContent())],
             ['label' => 'Choisir un premier rituel', 'hint' => 'Une petite action régulière qui nourrit votre objectif.', 'url' => $this->urls->generate('app_user_habits'),
                 'done' => [] !== $habits],
-            ['label' => 'Découvrir votre personnalité', 'hint' => 'Le profil complet : 15 minutes pour mieux vous connaître.', 'url' => $this->urls->generate('app_assessment_take', ['slug' => 'profil-complet']),
+            ['label' => 'Découvrir votre personnalité', 'hint' => sprintf('Le test « %s » : %d minutes pour mieux vous connaître.', Instruments::CATALOG[$firstTest]['name'], Instruments::CATALOG[$firstTest]['minutes']), 'url' => $this->urls->generate('app_assessment_take', ['slug' => $firstTest]),
                 'done' => $this->em->getRepository(Assessment::class)->count(['user' => $user]) > 0],
             ['label' => 'Inviter un partenaire de redevabilité', 'hint' => 'Quelqu\'un qui vous encourage et vous aide à tenir.', 'url' => $this->urls->generate('app_social'),
                 'done' => $this->em->getRepository(Connection::class)->count(['requester' => $user]) + $this->em->getRepository(Connection::class)->count(['receiver' => $user]) > 0],

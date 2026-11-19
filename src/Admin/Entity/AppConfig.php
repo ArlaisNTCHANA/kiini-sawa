@@ -80,6 +80,12 @@ class AppConfig
     #[ORM\Column(options: ['default' => false])]
     private bool $enableDiscoveryFree = true;
 
+    /** Tests de personnalité accessibles gratuitement (identifiants séparés par des virgules ; null = valeurs par défaut ; vide = aucun). */
+    public const DEFAULT_FREE_TESTS = ['disc', 'dons-spirituels'];
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $freeTests = null;
+
     #[ORM\Column(options: ['default' => false])]
     private bool $enableJournalFree = true;
 
@@ -440,6 +446,20 @@ class AppConfig
     public function setEnableChallengesFree(bool $enableChallengesFree): static
     {
         $this->enableChallengesFree = $enableChallengesFree;
+
+        return $this;
+    }
+
+    /** @return list<string> */
+    public function getFreeTests(): array
+    {
+        return null === $this->freeTests ? self::DEFAULT_FREE_TESTS : array_values(array_filter(explode(',', $this->freeTests)));
+    }
+
+    /** @param list<string> $slugs */
+    public function setFreeTests(array $slugs): static
+    {
+        $this->freeTests = implode(',', $slugs);
 
         return $this;
     }

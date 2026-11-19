@@ -31,6 +31,8 @@ class AssessmentController extends AbstractController
         if (!Instruments::exists($slug)) {
             throw $this->createNotFoundException();
         }
+        // Quelques tests sont gratuits, les autres réservés à PRO (Admin › Configuration) ; les résultats déjà obtenus restent consultables
+        $this->container->get('entitlements')->requireTest($this->user(), $slug);
         if ($request->isMethod('POST')) {
             if (!$this->isCsrfTokenValid('assessment_'.$slug, $request->request->getString('_csrf_token'))) {
                 $this->addFlash('error', 'La page a expiré. Vos réponses n\'ont pas été enregistrées : merci de recommencer.');
@@ -99,6 +101,9 @@ class AssessmentController extends AbstractController
     public function reportPdf(Assessment $assessment, PdfFactory $pdf, \Doctrine\ORM\EntityManagerInterface $em): Response
     {
         $this->denyUnlessOwner($assessment);
+        if (!$this->container->get('entitlements')->isPro($this->user())) {
+            throw new \App\Abonnement\Exception\ProRequiredException('test_pdf', 'Le rapport PDF des tests fait partie de KIINI SAWA PRO.');
+        }
         $data = $this->reports->build($assessment) + ['name' => $this->user()->getDisplayName()];
         $data['confirmation'] = $this->confirmationFor($assessment, $data);
         $data['cross'] = $this->crossViewFor($assessment, $data, $em);

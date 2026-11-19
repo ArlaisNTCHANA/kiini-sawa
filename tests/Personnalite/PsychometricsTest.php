@@ -82,7 +82,7 @@ class PsychometricsTest extends WebTestCase
     public function testTakeTestGetReportAndPdf(): void
     {
         $client = static::createClient();
-        $user = $this->createUser();
+        $user = $this->createUser(pro: true);
         $client->loginUser($user);
 
         $crawler = $client->request('GET', '/mes-tests/questionnaire/type');
@@ -109,7 +109,7 @@ class PsychometricsTest extends WebTestCase
         $client->request('GET', '/mes-tests/rapport/'.$assessment->getId().'/pdf');
         $this->assertResponseHeaderSame('content-type', 'application/pdf');
 
-        $client->loginUser($this->createUser());
+        $client->loginUser($this->createUser(pro: true));
         $client->request('GET', '/mes-tests/rapport/'.$assessment->getId());
         $this->assertResponseStatusCodeSame(404);
     }
@@ -117,7 +117,7 @@ class PsychometricsTest extends WebTestCase
     public function testAnswersAccumulateAcrossTests(): void
     {
         $client = static::createClient();
-        $user = $this->createUser();
+        $user = $this->createUser(pro: true);
         $client->loginUser($user);
         foreach (['type' => ['E1', 'E2', 'E6'], 'style' => ['E3', 'E4']] as $slug => $high) {
             $crawler = $client->request('GET', '/mes-tests/questionnaire/'.$slug);
@@ -133,7 +133,7 @@ class PsychometricsTest extends WebTestCase
     public function testEnneagramAndGifts(): void
     {
         $client = static::createClient();
-        $client->loginUser($this->createUser());
+        $client->loginUser($this->createUser(pro: true));
         $crawler = $client->request('GET', '/mes-tests/questionnaire/enneagramme');
         $answers = [];
         foreach (Instruments::items('enneagramme') as $item) {
@@ -160,7 +160,7 @@ class PsychometricsTest extends WebTestCase
     public function testLegacyLinksRedirectToNewQuestionnaires(): void
     {
         $client = static::createClient();
-        $client->loginUser($this->createUser());
+        $client->loginUser($this->createUser(pro: true));
         $client->request('GET', '/mes-tests/mbti/passer');
         $this->assertResponseRedirects('/mes-tests/questionnaire/type', 301);
         $client->request('GET', '/mes-tests/');

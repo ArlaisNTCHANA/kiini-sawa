@@ -252,7 +252,11 @@
                     <div class="test-card-body"><p>{{ def.description }}</p></div>
                     <div class="questions-count" style="color:{{ def.color }};" title="{{ levels[def.level] ?? '' }}"><i data-lucide="timer" class="ks-ico" aria-hidden="true"></i> {{ def.minutes }} min · {{ def.level }}</div>
                     <div class="test-card-footer">
-                        <a href="{{ path('app_assessment_take', {slug: slug}) }}" class="btn-take" style="background:{{ def.color }};">{{ done ? 'Refaire' : 'Faire le test' }}</a>
+                        {% if can_take_test(slug) %}
+                            <a href="{{ path('app_assessment_take', {slug: slug}) }}" class="btn-take" style="background:{{ def.color }};">{{ done ? 'Refaire' : 'Faire le test' }}</a>
+                        {% else %}
+                            <a href="{{ path('app_subscription', {fonction: 'tests'}) }}" class="btn-take" style="background:var(--bg-alt);color:var(--fg);">{{ done ? 'Refaire' : 'Faire le test' }} · PRO</a>
+                        {% endif %}
                         {% if done %}<a href="{{ path('app_assessment_report', {id: done.id}) }}" class="btn-result">Résultats</a>{% endif %}
                     </div>
                 </div>

@@ -5,6 +5,7 @@ namespace App\Admin\Form;
 use App\Admin\Entity\AppConfig;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
@@ -70,10 +71,19 @@ class AppConfigType extends AbstractType
             'enableTransmissionFree' => 'Plan de Transmission', 'enableHygieneFree' => 'Plan d\'Hygiène de vie', 'enableStewardshipFree' => 'Plan d\'Intendance',
             'enableMapFree' => 'Carte stratégique', 'enablePrintFree' => 'Export PDF',
             'enableMonthlyReviewsFree' => 'Revue mensuelle', 'enablePlanHistoryFree' => 'Historique des plans',
-            'enableCoherenceAnalysisFree' => 'Analyse de cohérence', 'enableDiscoveryFree' => 'Tests', 'enableMethodFree' => 'Le livre en entier (La Méthode)',
+            'enableCoherenceAnalysisFree' => 'Analyse de cohérence', 'enableMethodFree' => 'Le livre en entier (La Méthode)',
         ] as $field => $label) {
             $builder->add($field, CheckboxType::class, ['label' => $label, 'required' => false]);
         }
+        // Tests de personnalité gratuits (les autres sont réservés à PRO ; les résultats déjà obtenus restent consultables)
+        $choices = [];
+        foreach (\App\Personnalite\Psychometrie\Instruments::GROUPS as $slugs) {
+            foreach ($slugs as $slug) {
+                $choices[\App\Personnalite\Psychometrie\Instruments::CATALOG[$slug]['name']] = $slug;
+            }
+        }
+        $builder->add('freeTests', ChoiceType::class, ['label' => 'Tests de personnalité gratuits', 'choices' => $choices, 'multiple' => true, 'expanded' => true, 'required' => false,
+            'help' => 'Les autres tests sont réservés à PRO. Les résultats déjà obtenus restent consultables par ceux qui les ont passés.']);
     }
 
     public function configureOptions(OptionsResolver $resolver): void

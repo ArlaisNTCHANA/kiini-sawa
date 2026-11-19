@@ -68,8 +68,16 @@
             <h3 style="font-size: 15px; font-weight: 700; margin-top: 10px;">Accessible gratuitement</h3>
             <p style="font-size: 12px; color: var(--text-muted); margin-top: -12px;">Décoché = réservé à PRO. Le Plan de Vie, les rituels, le journal, le planner et la revue de la semaine restent toujours gratuits.</p>
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px 20px;">
-                {% for f in ['enableGrowthFree', 'enableDevelopmentFree', 'enableTransmissionFree', 'enableHygieneFree', 'enableStewardshipFree', 'enableMapFree', 'enablePrintFree', 'enableMonthlyReviewsFree', 'enablePlanHistoryFree', 'enableCoherenceAnalysisFree', 'enableDiscoveryFree', 'enableMethodFree'] %}
+                {% for f in ['enableGrowthFree', 'enableDevelopmentFree', 'enableTransmissionFree', 'enableHygieneFree', 'enableStewardshipFree', 'enableMapFree', 'enablePrintFree', 'enableMonthlyReviewsFree', 'enablePlanHistoryFree', 'enableCoherenceAnalysisFree', 'enableMethodFree'] %}
                     <label style="display: flex; gap: 8px; align-items: center; font-size: 14px;">{{ form_widget(form[f]) }} {{ form[f].vars.label }}</label>
+                {% endfor %}
+            </div>
+
+            <h3 style="font-size: 15px; font-weight: 700; margin-top: 10px;">Tests de personnalité gratuits</h3>
+            <p style="font-size: 12px; color: var(--text-muted); margin-top: -12px;">{{ form_help(form.freeTests) }}</p>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px 20px;">
+                {% for choice in form.freeTests %}
+                    <label style="display: flex; gap: 8px; align-items: center; font-size: 14px;">{{ form_widget(choice) }} {{ choice.vars.label }}</label>
                 {% endfor %}
             </div>
 

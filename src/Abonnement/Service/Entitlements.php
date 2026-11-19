@@ -39,7 +39,6 @@ final class Entitlements
         'habits' => ['isEnableHabitsFree', 'Rituels'],
         'planner' => ['isEnablePlannerFree', 'Agenda'],
         'social' => ['isEnableSocialFree', 'Partenaires'],
-        'discovery' => ['isEnableDiscoveryFree', 'Tests'],
         'method' => ['isEnableMethodFree', 'Le livre en entier'],
     ];
 
@@ -157,6 +156,36 @@ final class Entitlements
         return null !== $getter && (bool) $this->config()->{$getter}();
     }
 
+    // ── Tests de personnalité : quelques-uns gratuits, les autres en PRO ─────────
+
+    /** @return list<string> identifiants des tests gratuits (réglés dans Admin › Configuration) */
+    public function freeTests(): array
+    {
+        return $this->config()->getFreeTests();
+    }
+
+    /** Passer (ou repasser) un test. Les résultats déjà obtenus restent consultables dans tous les cas. */
+    public function canTakeTest(?User $user, string $slug): bool
+    {
+        return $this->isPro($user) || \in_array($slug, $this->freeTests(), true);
+    }
+
+    /** Le premier test gratuit : celui que l'on propose aux nouveaux (par défaut DISC). */
+    public function firstFreeTest(): string
+    {
+        return $this->freeTests()[0] ?? 'disc';
+    }
+
+    /** @throws ProRequiredException si ce test est réservé à PRO */
+    public function requireTest(?User $user, string $slug): void
+    {
+        if (!$this->canTakeTest($user, $slug)) {
+            $names = array_map(fn (string $s) => \App\Personnalite\Psychometrie\Instruments::CATALOG[$s]['name'] ?? $s, $this->freeTests());
+            $name = \App\Personnalite\Psychometrie\Instruments::CATALOG[$slug]['name'] ?? $slug;
+            throw new ProRequiredException('tests', '« '.$name.' » fait partie de KIINI SAWA PRO.'.($names ? ' Tests gratuits : '.implode(', ', $names).'.' : ''));
+        }
+    }
+
     /** Limite de l'offre gratuite, ou null si illimité (PRO). */
     public function limit(?User $user, string $key): ?int
     {
@@ -192,7 +221,7 @@ final class Entitlements
 
     public static function featureLabel(string $feature): string
     {
-        return self::FEATURES[$feature][1] ?? ['connections' => 'Partenaires illimités'][$feature] ?? 'Cette fonction';
+        return self::FEATURES[$feature][1] ?? ['connections' => 'Partenaires illimités', 'tests' => 'Tous les tests de personnalité', 'test_pdf' => 'Rapports PDF des tests'][$feature] ?? 'Cette fonction';
     }
 
     /** Ouvre l'essai PRO (une seule fois par compte). */

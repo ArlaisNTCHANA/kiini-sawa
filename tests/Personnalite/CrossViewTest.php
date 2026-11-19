@@ -23,7 +23,7 @@ class CrossViewTest extends WebTestCase
     public function testInvitationWithoutBigFive(): void
     {
         $client = static::createClient();
-        $user = $this->createUser();
+        $user = $this->createUser(pro: true);
         $id = $this->disc($user);
         $client->loginUser($user);
         $client->request('GET', '/mes-tests/rapport/'.$id);

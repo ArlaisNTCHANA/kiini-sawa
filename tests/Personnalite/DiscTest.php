@@ -70,7 +70,7 @@ class DiscTest extends WebTestCase
     public function testTakeTestAndReadFullReport(): void
     {
         $client = static::createClient();
-        $user = $this->createUser();
+        $user = $this->createUser(pro: true);
         $client->loginUser($user);
 
         $crawler = $client->request('GET', '/mes-tests/questionnaire/disc');

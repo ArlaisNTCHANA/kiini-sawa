@@ -3,6 +3,8 @@
 {% block title %}Mon abonnement{% endblock %}
 
 {% block body %}
+{% set freeTestNames = [] %}{% for slug in free_tests() %}{% set freeTestNames = freeTestNames|merge([constant('App\\Personnalite\\Psychometrie\\Instruments::CATALOG')[slug].name]) %}{% endfor %}
+{% set freeTestsLabel = freeTestNames ? (freeTestNames|length > 1 ? 'Tests de personnalité : ' : 'Test de personnalité : ') ~ freeTestNames|join(', ') ~ ', avec leur rapport complet' : 'Tests de personnalité' %}
 <style>
     .ab-wrap { max-width: 900px; margin: 0 auto; padding: 2.5rem 1.25rem 8rem; }
     .ab-card { background: var(--card-bg); border-radius: var(--r-lg); box-shadow: var(--card-shadow); padding: 1.5rem; margin-bottom: 1.25rem; }
@@ -108,7 +110,9 @@
                 ['Journal, agenda, revue de la semaine', true, true],
                 ['Le livre : l\'essentiel de chaque chapitre', true, true],
                 ['Le livre en entier', false, true],
-                ['Tous les tests de personnalité et leurs rapports', true, true],
+                [freeTestsLabel, true, true],
+                ['Les autres tests de personnalité', false, true],
+                ['Rapports PDF des tests, lectures croisées et « Mon profil KIINI SAWA »', false, true],
                 ['Partenaires de redevabilité', freeConnections ~ ' max.', 'Illimités'],
                 ['Plans de Croissance, Développement personnel, Hygiène de vie, Intendance, Transmission', false, true],
                 ['Carte stratégique', false, true],
