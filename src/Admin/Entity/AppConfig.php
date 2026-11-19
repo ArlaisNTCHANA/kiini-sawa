@@ -118,12 +118,12 @@ class AppConfig
     private bool $enableMethodFree = false;
 
     // ── Offres et paiements (phase 5) ──────────────────────────────
-    /** Prix en francs CFA (XAF), pour l'Afrique francophone. */
-    #[ORM\Column(options: ['default' => 3000])]
-    private int $proMonthlyPriceXaf = 3000;
+    /** Prix en francs CFA (XAF), pour l'Afrique francophone (parité stricte avec l'euro). */
+    #[ORM\Column(options: ['default' => 6500])]
+    private int $proMonthlyPriceXaf = 6500;
 
-    #[ORM\Column(options: ['default' => 25000])]
-    private int $proYearlyPriceXaf = 25000;
+    #[ORM\Column(options: ['default' => 52500])]
+    private int $proYearlyPriceXaf = 52500;
 
     #[ORM\Column(options: ['default' => false])]
     private bool $enableDevelopmentFree = false;
@@ -132,15 +132,15 @@ class AppConfig
     #[ORM\Column(options: ['default' => 119.99])]
     private float $duoYearlyPriceEur = 119.99;
 
-    #[ORM\Column(options: ['default' => 39000])]
-    private int $duoYearlyPriceXaf = 39000;
+    #[ORM\Column(options: ['default' => 78500])]
+    private int $duoYearlyPriceXaf = 78500;
 
     /** Prix annuel d'une place dans l'offre Organisation (avant remise de volume). */
     #[ORM\Column(options: ['default' => 30])]
     private float $orgSeatYearlyPriceEur = 30;
 
-    #[ORM\Column(options: ['default' => 10000])]
-    private int $orgSeatYearlyPriceXaf = 10000;
+    #[ORM\Column(options: ['default' => 20000])]
+    private int $orgSeatYearlyPriceXaf = 20000;
 
     /** Coordonnées et consignes affichées au client pour un virement (IBAN, RIB, libellé à indiquer…). */
     #[ORM\Column(type: Types::TEXT, nullable: true)]

@@ -16,7 +16,7 @@ Offres Gratuit / PRO, essai, paiements manuels (virement, Mobile Money, espèces
 | Rapports PDF des tests, lectures croisées, « Mon profil KIINI SAWA » | — | ✓ |
 | Plans de Croissance, Développement, Transmission, Hygiène ; carte ; PDF ; revue du mois ; historique | — (chaque fonction peut être rendue gratuite) | ✓ |
 
-Prix par défaut : 9,99 € ou 3 000 FCFA par mois, 79,99 € ou 25 000 FCFA par an. Essai PRO de 14 jours à l'inscription.
+Prix par défaut : 9,99 € ou 6 500 FCFA par mois, 79,99 € ou 52 500 FCFA par an (alignement strict Euro / FCFA). Essai PRO de 14 jours à l'inscription.
 
 ## Dans le code
 

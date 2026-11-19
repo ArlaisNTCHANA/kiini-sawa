@@ -26,7 +26,7 @@ class OrganisationTest extends WebTestCase
     {
         $this->client = static::createClient();
         $config = $this->em()->getRepository(AppConfig::class)->find('default');
-        $config->setBankTransferInstructions('IBAN FR76 0000')->setOrgSeatYearlyPriceEur(30)->setOrgSeatYearlyPriceXaf(10000);
+        $config->setBankTransferInstructions('IBAN FR76 0000')->setOrgSeatYearlyPriceEur(30)->setOrgSeatYearlyPriceXaf(20000);
         $this->em()->flush();
     }
 
@@ -154,7 +154,7 @@ class OrganisationTest extends WebTestCase
         $reference = 'VIR-ORG-'.uniqid();
         $this->client->request('POST', "/organisation/{$org->getId()}/places", ['seats' => 25, 'currency' => 'XAF', 'method' => 'BANK_TRANSFER', 'reference' => $reference, '_csrf_token' => $token]);
         $order = $this->em()->getRepository(SeatOrder::class)->findOneBy(['reference' => $reference]);
-        $this->assertSame(225000.0, $order->getAmount(), '25 places × 10 000 FCFA − 10 %');
+        $this->assertSame(450000.0, $order->getAmount(), '25 places × 20 000 FCFA − 10 %');
 
         $admin = static::getContainer()->get(UserRepository::class)->findOneByEmail('admin@kiinisawa.com');
         $this->client->loginUser($admin);

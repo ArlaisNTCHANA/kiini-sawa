@@ -79,7 +79,7 @@ class CoupleTest extends WebTestCase
 
         $manager = static::getContainer()->get(SubscriptionManager::class);
         $t = $manager->declare($a, 'DUO', 'XAF', 'MOBILE_MONEY', 'DUO-'.uniqid(), null, null);
-        $this->assertSame(39000.0, $t->getAmount());
+        $this->assertSame(78500.0, $t->getAmount());
         $manager->validate($t);
 
         $entitlements = static::getContainer()->get(Entitlements::class);

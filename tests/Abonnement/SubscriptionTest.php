@@ -100,7 +100,7 @@ class SubscriptionTest extends WebTestCase
         $this->assertSelectorTextContains('main', 'Paiement en cours de vérification');
 
         $t = $this->em()->getRepository(Transaction::class)->findOneBy(['reference' => $ref]);
-        $this->assertSame(25000.0, $t->getAmount());
+        $this->assertSame(52500.0, $t->getAmount());
         $this->assertSame('XAF', $t->getCurrency());
         $this->assertFalse($this->entitlements()->isPro($this->findUser($user->getEmail())), 'Pas de PRO avant validation');
 
@@ -179,7 +179,7 @@ class SubscriptionTest extends WebTestCase
         $this->client->request('GET', '/');
         $this->assertResponseIsSuccessful();
         $this->assertSelectorTextContains('h1', 'Bâtissez la vie pour laquelle Dieu vous a créé');
-        $this->assertStringContainsString('25 000 FCFA', $this->client->getResponse()->getContent());
+        $this->assertStringContainsString('52 500 FCFA', $this->client->getResponse()->getContent());
         $this->assertStringContainsString('79,99 €', $this->client->getResponse()->getContent());
         // Vitrine : couverture du livre sans le nom de l'auteur, schémas, plus d'émojis, promesse exacte sur le livre
         $html = $this->client->getResponse()->getContent();
