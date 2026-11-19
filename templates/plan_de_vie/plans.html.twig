@@ -696,7 +696,7 @@
         }
     });
     const params = new URLSearchParams(window.location.search);
-    const p = params.get('plan') || params.get('activePlan') || {{ (initialPlan ?? null)|json_encode }};
+    const p = params.get('plan') || params.get('activePlan') || {{ (initialPlan ?? null)|json_safe }};
     const t = params.get('tab') || params.get('activeTab');
     if (p && ['CROISSANCE', 'DEVELOPPEMENT', 'TRANSMISSION', 'HYGIENE'].includes(p)) {
         activePlan = p;
@@ -2216,29 +2216,29 @@
                             <!-- Hidden sources for Mermaid code per plan -->
                             <div id="mermaid-croissance-src" style="display:none;">
 graph TD
-  Vision["{{ planDeVie.vision.content|default('Ma Vision')|slice(0, 60)|escape('html') }}..."]
+  Vision["{{ planDeVie.vision.content|default('Ma Vision')|slice(0, 60)|mermaid_label|escape('html') }}..."]
   
   {# Specific Goals BE #}
   {% for g in lifeGoals.BE %}
-    Goal{{ g.id }}["{{ g.title|escape('html') }}"]
+    Goal{{ g.id }}["{{ g.title|mermaid_label|escape('html') }}"]
     Vision --> Goal{{ g.id }}
   {% endfor %}
 
   {# Axes Caractère & Conviction () et Relation & Réseau () #}
   {% for gg in growthGoals.CHARACTER|merge(growthGoals.RELATION) %}
-    GG{{ gg.id }}["{{ gg.axis.value == 'RELATION' ? '' : '' }} {{ gg.title|escape('html') }}"]
+    GG{{ gg.id }}["{{ gg.axis.value == 'RELATION' ? '' : '' }} {{ gg.title|mermaid_label|escape('html') }}"]
     {% for sg in gg.supportedLifeGoals %}
       Goal{{ sg.id }} --> GG{{ gg.id }}
     {% endfor %}
 
     {# Strategy #}
     {% if gg.strategy %}
-      Strat{{ gg.id }}["{{ gg.strategy|slice(0, 40)|escape('html') }}..."]
+      Strat{{ gg.id }}["{{ gg.strategy|slice(0, 40)|mermaid_label|escape('html') }}..."]
       GG{{ gg.id }} --> Strat{{ gg.id }}
       
       {# Habits #}
       {% for h in gg.habits %}
-        H{{ gg.id }}_{{ h.id }}["{{ h.title|escape('html') }}"]
+        H{{ gg.id }}_{{ h.id }}["{{ h.title|mermaid_label|escape('html') }}"]
         Strat{{ gg.id }} --> H{{ gg.id }}_{{ h.id }}
       {% endfor %}
     {% endif %}
@@ -2264,29 +2264,29 @@ graph TD
 
                             <div id="mermaid-developpement-src" style="display:none;">
 graph TD
-  Vision["{{ planDeVie.vision.content|default('Ma Vision')|slice(0, 60)|escape('html') }}..."]
+  Vision["{{ planDeVie.vision.content|default('Ma Vision')|slice(0, 60)|mermaid_label|escape('html') }}..."]
   
   {# Specific Goals DO #}
   {% for g in lifeGoals.DO %}
-    Goal{{ g.id }}["{{ g.title|escape('html') }}"]
+    Goal{{ g.id }}["{{ g.title|mermaid_label|escape('html') }}"]
     Vision --> Goal{{ g.id }}
   {% endfor %}
 
   {# Growth Goals COMPETENCE #}
   {% for gg in growthGoals.COMPETENCE %}
-    GG{{ gg.id }}["{{ gg.title|escape('html') }}"]
+    GG{{ gg.id }}["{{ gg.title|mermaid_label|escape('html') }}"]
     {% for sg in gg.supportedLifeGoals %}
       Goal{{ sg.id }} --> GG{{ gg.id }}
     {% endfor %}
 
     {# Strategy #}
     {% if gg.strategy %}
-      Strat{{ gg.id }}["{{ gg.strategy|slice(0, 40)|escape('html') }}..."]
+      Strat{{ gg.id }}["{{ gg.strategy|slice(0, 40)|mermaid_label|escape('html') }}..."]
       GG{{ gg.id }} --> Strat{{ gg.id }}
       
       {# Habits #}
       {% for h in gg.habits %}
-        H{{ gg.id }}_{{ h.id }}["{{ h.title|escape('html') }}"]
+        H{{ gg.id }}_{{ h.id }}["{{ h.title|mermaid_label|escape('html') }}"]
         Strat{{ gg.id }} --> H{{ gg.id }}_{{ h.id }}
       {% endfor %}
     {% endif %}
@@ -2312,24 +2312,24 @@ graph TD
 
                             <div id="mermaid-transmission-src" style="display:none;">
 graph TD
-  Vision["{{ planDeVie.vision.content|default('Ma Vision')|slice(0, 60)|escape('html') }}..."]
+  Vision["{{ planDeVie.vision.content|default('Ma Vision')|slice(0, 60)|mermaid_label|escape('html') }}..."]
   
   {# Specific Goals GIVE #}
   {% for g in lifeGoals.GIVE %}
-    Goal{{ g.id }}["{{ g.title|escape('html') }}"]
+    Goal{{ g.id }}["{{ g.title|mermaid_label|escape('html') }}"]
     Vision --> Goal{{ g.id }}
   {% endfor %}
 
   {# Projets de transmission #}
   {% for gg in legacyGoals %}
-    LG{{ gg.id }}["{{ gg.title|escape('html') }}"]
+    LG{{ gg.id }}["{{ gg.title|mermaid_label|escape('html') }}"]
     {% for sg in gg.supportedLifeGoals %}
       Goal{{ sg.id }} --> LG{{ gg.id }}
     {% endfor %}
 
     {# Rituels d'ancrage #}
     {% for h in gg.habits %}
-      H{{ gg.id }}_{{ h.id }}["{{ h.title|escape('html') }}"]
+      H{{ gg.id }}_{{ h.id }}["{{ h.title|mermaid_label|escape('html') }}"]
       LG{{ gg.id }} --> H{{ gg.id }}_{{ h.id }}
     {% endfor %}
   {% endfor %}
@@ -2353,24 +2353,24 @@ graph TD
 
                             <div id="mermaid-hygiene-src" style="display:none;">
 graph TD
-  Vision["{{ planDeVie.vision.content|default('Ma Vision')|slice(0, 60)|escape('html') }}..."]
+  Vision["{{ planDeVie.vision.content|default('Ma Vision')|slice(0, 60)|mermaid_label|escape('html') }}..."]
   
   {# Specific Goals HAVE #}
   {% for g in lifeGoals.HAVE %}
-    Goal{{ g.id }}["{{ g.title|escape('html') }}"]
+    Goal{{ g.id }}["{{ g.title|mermaid_label|escape('html') }}"]
     Vision --> Goal{{ g.id }}
   {% endfor %}
 
   {# Hygiene Domains #}
   {% for hd in hygieneDomains %}
-    GG{{ hd.id }}["{{ hd.name|escape('html') }}"]
+    GG{{ hd.id }}["{{ hd.name|mermaid_label|escape('html') }}"]
     {% for sg in hd.supportedLifeGoals %}
       Goal{{ sg.id }} --> GG{{ hd.id }}
     {% endfor %}
     
     {# Habits #}
     {% for h in hd.habits %}
-      H{{ hd.id }}_{{ h.id }}["{{ h.title|escape('html') }}"]
+      H{{ hd.id }}_{{ h.id }}["{{ h.title|mermaid_label|escape('html') }}"]
       GG{{ hd.id }} --> H{{ hd.id }}_{{ h.id }}
     {% endfor %}
   {% endfor %}
@@ -2689,10 +2689,10 @@ graph TD
                     window.mermaid.initialize({
                         startOnLoad: false,
                         theme: 'neutral',
-                        securityLevel: 'loose',
+                        securityLevel: 'strict',
                         flowchart: {
                             useMaxWidth: true,
-                            htmlLabels: true
+                            htmlLabels: false
                         }
                     });
                     window.mermaid.run({

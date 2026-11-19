@@ -561,9 +561,9 @@
 <script>
     function journalHandler() {
         return {
-            entries: {{ initialEntries|json_encode|raw }},
+            entries: {{ initialEntries|json_safe }},
             totalCount: {{ totalCount }},
-            collections: {{ collections|map(c => {id: c.id, name: c.name, color: c.color, icon: c.icon})|json_encode|raw }},
+            collections: {{ collections|map(c => {id: c.id, name: c.name, color: c.color, icon: c.icon})|json_safe }},
             activeCollectionId: null,
             activeTypeFilter: 'ALL',
             showAddCollection: false,

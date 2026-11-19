@@ -90,7 +90,7 @@
         weekly: t('rapide.cette_semaine', 'cette semaine'),
         monthly: t('rapide.ce_mois', 'ce mois-ci'),
         types: journalTypes
-    }|json_encode(constant('JSON_HEX_TAG') b-or constant('JSON_HEX_AMP'))|raw }};
+    }|json_safe }};
 
     // ── Stockage local (IndexedDB) ────────────────────────────────────────────
     var DB = 'ks-rapide';

@@ -1763,6 +1763,11 @@
         container.insertAdjacentHTML('beforeend', html);
     }
 
+    /** Texte saisi par l'utilisateur : toujours échappé avant d'être inséré comme HTML (insertAdjacentHTML). */
+    function ksEscape(value) {
+        return String(value ?? '').replace(/[&<>"'`]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;', '`': '&#96;' }[c]));
+    }
+
     const allLifeGoals = [
         {% for lg in allLifeGoals %}
             { id: {{ lg.id }}, title: "{{ lg.title|escape('js') }}", category: "{{ lg.category|escape('js') }}" },
@@ -1779,7 +1784,7 @@
             html += `
                 <label style="display: flex; align-items: flex-start; gap: 0.5rem; font-size: 0.85rem; color: var(--fg-light); cursor: pointer; padding: 0.25rem 0; margin-bottom: 0;">
                     <input type="checkbox" name="growth_${axis}_goals[${index}][]" value="${lg.id}" style="margin-top: 0.2rem; cursor: pointer;">
-                    <span>[${catLabel}] ${lg.title}</span>
+                    <span>[${ksEscape(catLabel)}] ${ksEscape(lg.title)}</span>
                 </label>
             `;
         });
@@ -1904,7 +1909,7 @@
                 checkboxesHtml += `
                     <label style="display: flex; align-items: flex-start; gap: 0.5rem; font-size: 0.85rem; color: var(--fg-light); cursor: pointer; padding: 0.25rem 0; margin-bottom: 0;">
                         <input type="checkbox" name="legacy_goals[${index}][]" value="${lg.id}" style="margin-top: 0.2rem; cursor: pointer;">
-                        <span>[${lg.category.toUpperCase()}] ${lg.title}</span>
+                        <span>[${ksEscape(lg.category.toUpperCase())}] ${ksEscape(lg.title)}</span>
                     </label>
                 `;
             });
@@ -1975,7 +1980,7 @@
                 checkboxesHtml += `
                     <label style="display: flex; align-items: flex-start; gap: 0.5rem; font-size: 0.85rem; color: var(--fg-light); cursor: pointer; padding: 0.25rem 0; margin-bottom: 0;">
                         <input type="checkbox" name="hygiene_goals[${index}][]" value="${lg.id}" style="margin-top: 0.2rem; cursor: pointer;">
-                        <span>[${lg.category.toUpperCase()}] ${lg.title}</span>
+                        <span>[${ksEscape(lg.category.toUpperCase())}] ${ksEscape(lg.title)}</span>
                     </label>
                 `;
             });

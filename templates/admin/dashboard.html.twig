@@ -403,7 +403,7 @@
                 <canvas
                     data-controller="chart"
                     data-chart-type-value="doughnut"
-                    data-chart-data-value='{{ plansChartData|json_encode|raw }}'
+                    data-chart-data-value='{{ plansChartData|json_safe }}'
                 ></canvas>
             </div>
         </div>
@@ -417,7 +417,7 @@
                 <canvas
                     data-controller="chart"
                     data-chart-type-value="line"
-                    data-chart-data-value='{{ activityChartData|json_encode|raw }}'
+                    data-chart-data-value='{{ activityChartData|json_safe }}'
                 ></canvas>
             </div>
         </div>

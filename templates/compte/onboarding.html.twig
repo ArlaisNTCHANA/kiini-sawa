@@ -47,10 +47,10 @@
     <form method="post" class="ob-card"
           x-data="{
               step: {{ firstErrorStep }},
-              firstName: {{ data.firstName|json_encode }},
-              purpose: {{ data.purpose|json_encode }},
-              values: {{ data.values|json_encode }},
-              goalTitle: {{ data.goalTitle|json_encode }},
+              firstName: {{ data.firstName|json_safe }},
+              purpose: {{ data.purpose|json_safe }},
+              values: {{ data.values|json_safe }},
+              goalTitle: {{ data.goalTitle|json_safe }},
               addValue(v) { const i = this.values.findIndex(x => !x.trim()); if (i >= 0 && !this.values.some(x => x.toLowerCase() === v.toLowerCase())) this.values[i] = v; },
               valid() {
                   if (this.step === 1) return this.firstName.trim().length > 0;
@@ -96,7 +96,7 @@
             </div>
             <div class="ob-chips">
                 {% for s in suggestions %}
-                    <button type="button" class="ob-chip" @click="addValue({{ s|json_encode }})">{{ s }}</button>
+                    <button type="button" class="ob-chip" @click="addValue({{ s|json_safe }})">{{ s }}</button>
                 {% endfor %}
             </div>
             {% if errors.values is defined %}<p class="ob-error">{{ errors.values }}</p>{% endif %}

@@ -545,11 +545,12 @@
                     growthGoalId: habit.growthGoal ? habit.growthGoal.id : '',
                     pillarText: pText,
                     pillarColor: pColor
-                }|json_encode }})"
+                }|json_safe }})"
                         class="habit-item-card"
                         :style="selectedHabitId === {{ habit.id }} ? 'border-color: var(--primary); background: var(--primary-glow);' : 'background: white;'"
                         style="display: flex !important; align-items: flex-start !important; justify-content: flex-start !important; text-align: left !important; padding: 0.85rem 1rem; width: 100%; gap: 0.75rem; height: auto !important; min-height: fit-content !important; overflow: hidden;"
-                        x-show="matchesSearch('{{ habit.title }}') && (selectedPillar === 'ALL' || selectedPillar === '{{ hPillar }}')">
+                        data-title="{{ habit.title }}" data-pillar="{{ hPillar }}"
+                        x-show="matchesSearch($el.dataset.title) && (selectedPillar === 'ALL' || selectedPillar === $el.dataset.pillar)">
                     
                     {# Colored bar on left #}
                     <span style="position: absolute; left: 0; top: 0; bottom: 0; width: 4px; background: {{ pColor }}; border-top-left-radius: 1.25rem; border-bottom-left-radius: 1.25rem;"></span>
@@ -803,7 +804,7 @@
             searchQuery: '',
             selectedHabitId: null,
             isSaving: false,
-            growthGoals: {{ growthGoals|json_encode|raw }},
+            growthGoals: {{ growthGoals|json_safe }},
             
             // Populate list of habits for auto-selection and local state
             habits: [
@@ -854,7 +855,7 @@
                         pillar: hPillar,
                         pillarText: pText,
                         pillarColor: pColor
-                    }|json_encode|raw }},
+                    }|json_safe }},
                 {% endfor %}
             ],
             

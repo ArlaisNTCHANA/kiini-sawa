@@ -561,11 +561,11 @@ function socialData() {
         inviteError: null,
         
         // Data arrays
-        pendingReceived: {{ pendingReceived|json_encode|raw }},
-        pendingSent: {{ pendingSent|json_encode|raw }},
-        activePartners: {{ activePartners|json_encode|raw }},
-        suggestions: {{ suggestions|json_encode|raw }},
-        comments: {{ comments|json_encode|raw }},
+        pendingReceived: {{ pendingReceived|json_safe }},
+        pendingSent: {{ pendingSent|json_safe }},
+        activePartners: {{ activePartners|json_safe }},
+        suggestions: {{ suggestions|json_safe }},
+        comments: {{ comments|json_safe }},
         
         // Modal State
         permissionsModalOpen: false,

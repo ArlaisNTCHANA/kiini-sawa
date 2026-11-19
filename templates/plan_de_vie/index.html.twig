@@ -2049,7 +2049,7 @@
                 <!-- Hidden source container for the raw mermaid code -->
                 <div id="mermaid-code-src" style="display:none;">
 graph TD
-  Vision["{{ planDeVie.vision.content|default('Ma Vision')|slice(0, 60)|escape('html') }}..."]
+  Vision["{{ planDeVie.vision.content|default('Ma Vision')|slice(0, 60)|mermaid_label|escape('html') }}..."]
   
   {# Define goals and index them #}
   {% set allGoals = [] %}
@@ -2058,7 +2058,7 @@ graph TD
   {% endfor %}
 
   {% for g in allGoals %}
-      Goal{{ g.id }}["{{ g.title|escape('html') }}"]
+      Goal{{ g.id }}["{{ g.title|mermaid_label|escape('html') }}"]
       Vision --> Goal{{ g.id }}
   {% endfor %}
 
@@ -2070,7 +2070,7 @@ graph TD
 
   {% for gg in allGrowth %}
       {% set axisLabel = gg.axis == 'COMPETENCE' ? '' : (gg.axis == 'CHARACTER' ? '' : '') %}
-      GG{{ gg.id }}["{{ axisLabel }} {{ gg.title|escape('html') }}"]
+      GG{{ gg.id }}["{{ axisLabel }} {{ gg.title|mermaid_label|escape('html') }}"]
       
       {# Link to supported life goals #}
       {% for sg in gg.supportedLifeGoals %}
@@ -2080,7 +2080,7 @@ graph TD
 
   {# Define legacy goals #}
   {% for lg in legacyGoals %}
-      Legacy{{ lg.id }}["{{ lg.title|escape('html') }}"]
+      Legacy{{ lg.id }}["{{ lg.title|mermaid_label|escape('html') }}"]
       {% for sg in lg.supportedLifeGoals %}
           Goal{{ sg.id }} --> Legacy{{ lg.id }}
       {% endfor %}
@@ -2088,7 +2088,7 @@ graph TD
 
   {# Define hygiene domains #}
   {% for hd in hygieneDomains %}
-      Hygiene{{ hd.id }}["{{ hd.name|escape('html') }}"]
+      Hygiene{{ hd.id }}["{{ hd.name|mermaid_label|escape('html') }}"]
       {% for sg in hd.supportedLifeGoals %}
           Goal{{ sg.id }} --> Hygiene{{ hd.id }}
       {% endfor %}
@@ -2096,7 +2096,7 @@ graph TD
 
   {# Plan d'Intendance : éléments reliés à un objectif #}
   {% for st in stewardshipItems|default([]) %}
-      Stew{{ st.id }}["{{ st.label|slice(0, 60)|escape('html') }}"]
+      Stew{{ st.id }}["{{ st.label|slice(0, 60)|mermaid_label|escape('html') }}"]
       Goal{{ st.lifeGoal.id }} --> Stew{{ st.id }}
   {% endfor %}
 
@@ -2469,10 +2469,10 @@ graph TD
                     window.mermaid.initialize({
                         startOnLoad: false,
                         theme: 'neutral',
-                        securityLevel: 'loose',
+                        securityLevel: 'strict',
                         flowchart: {
                             useMaxWidth: true,
-                            htmlLabels: true
+                            htmlLabels: false
                         }
                     });
                     window.mermaid.run({

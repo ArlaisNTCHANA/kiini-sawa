@@ -6,7 +6,7 @@
 <canvas id="radar-chart-canvas" width="220" height="220" style="display:block;"></canvas>
 <script>
 (function() {
-    const data   = {{ data|json_encode|raw }};
+    const data   = {{ data|json_safe }};
     const color  = '{{ color|e('js') }}';
     const canvas = document.getElementById('radar-chart-canvas');
     if (!canvas || !data.length) return;

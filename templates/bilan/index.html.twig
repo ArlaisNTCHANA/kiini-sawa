@@ -738,8 +738,8 @@ function bilanData() {
         // State
         activeTab: 'COMPETENCE',
         guideOpen: false,
-        goals: {{ goalsJson|json_encode|raw }},
-        challenges: {{ challengesJson|json_encode|raw }},
+        goals: {{ goalsJson|json_safe }},
+        challenges: {{ challengesJson|json_safe }},
         
         // Wizard state
         wizardOpen: false,

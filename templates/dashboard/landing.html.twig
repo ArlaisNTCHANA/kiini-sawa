@@ -314,10 +314,10 @@
     }
     // Devise par défaut : celle du serveur (langue du navigateur), sinon le fuseau horaire (zone CFA → francs CFA)
     (function () {
-        let cur = {{ defaultCurrency|json_encode|raw }};
+        let cur = {{ defaultCurrency|json_safe }};
         try {
             const tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
-            if (cur === 'EUR' && {{ cfaTimezones|json_encode|raw }}.includes(tz)) { cur = 'XAF'; }
+            if (cur === 'EUR' && {{ cfaTimezones|json_safe }}.includes(tz)) { cur = 'XAF'; }
         } catch (e) {}
         if (cur !== 'EUR') { setCur(cur); }
     })();
