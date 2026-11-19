@@ -94,3 +94,16 @@ En cas d'erreur, l'API renvoie `{ "error": "Message en français", "code"?: "...
 | `GET /api/mobile/v1/plans` | — | `200 { overallPercent, completedPlansCount, totalPlansCount, plans }` | Vue d'ensemble des 6 plans, pourcentage global et statut verrouillé/déverrouillé. |
 | `GET /api/mobile/v1/plans/{key}` | — | `200 { plan: { key, label, question, desc, icon, locked, webPath, progress, content } }` | Contenu riche et détaillé pour `VIE`, `CROISSANCE`, `DEVELOPPEMENT`, `HYGIENE`, `INTENDANCE`, `TRANSMISSION`. Renvoie `403 pro_required` si le plan nécessite PRO et que le compte est gratuit. |
 
+---
+
+## 8. Mes tests & Mon profil KIINI SAWA (`/api/mobile/v1/tests`)
+
+| Méthode & URL | Corps / Query | Réponse | Notes |
+|---|---|---|---|
+| `GET /api/mobile/v1/tests` | — | `200 { groups, synthesisSummary }` | Catalogue des tests groupés (Personnalité, Motivations et dons, Auto-évaluations) avec statut d'avancement pour chaque test. |
+| `GET /api/mobile/v1/tests/{slug}/questions` | — | `200 { slug, name, bank, scale, items, totalCount }` | Questions d'un test spécifique (blocs forcé DISC ou échelles de 1 à 5 / 1 à 10). Renvoie `403 pro_required` si le test nécessite PRO pour un compte gratuit. |
+| `POST /api/mobile/v1/tests/{slug}/reponses` | `{ answers: { [key]: value }, durationSeconds? }` | `201 { ok: true, id, headline, report }` | Enregistre la passation, calcule les scores, persiste l'évaluation et alimente les plans. |
+| `GET /api/mobile/v1/tests/{slug}/rapport` | `?id=...` | `200 { id, slug, headline, instrument, scores, details }` | Rapport détaillé du test avec dimensions mesurées, points forts, vigilances, figure biblique et pistes d'action. |
+| `GET /api/mobile/v1/tests/synthese` | — | `200 { locked, enough, count, done, missing, identity?, vocation?, convergence?, resources?, fragile?, priorities?, insights? }` | Synthèse croisée de l'ensemble des tests (« Mon profil KIINI SAWA »). Renvoie un aperçu sans prix si non PRO, ou le profil complet si PRO. |
+
+

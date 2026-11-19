@@ -9,6 +9,26 @@ teste (`php bin/phpunit`), commit, déploie (`bin/ops/envoyer-hostinger.sh`), v�
 journal `var/log/prod-AAAA-MM-JJ.log` sans erreur) ; **le fondateur fait lui-même `git push`** (refusé à l'IA).
 Ne jamais afficher ni demander de mot de passe ; ne pas publier son nom (mentions légales en attente).
 
+## 2026-11-19 · Application Mobile KIINI SAWA (Expo SDK 58 / React Native) : Lot 4
+
+- **Lot 4 (« Me connaître » : Mes tests & Mon profil KIINI SAWA)** :
+  - **Backend Symfony (`web/src/Mobile/`)** :
+    - `MobileTestSerializer` : catalogue structuré des tests par groupes (`personnalite`, `motivations_et_dons`, `auto_evaluations`), questions adaptées pour les blocs de choix forcé DISC (24 blocs de 4 mots) et les échelles de Likert 1-5 / 1-10, rapports détaillés avec points forts, vigilances, figures bibliques et synthèse croisée `ProfileSynthesis`.
+    - `MobileTestController` : endpoints `/api/mobile/v1/tests` (GET), `/tests/{slug}/questions` (GET avec `requireTest`), `/tests/{slug}/reponses` (POST pour passation et enregistrement via `AssessmentService`), `/tests/{slug}/rapport` (GET), `/tests/synthese` (GET avec aperçu neutral gate si gratuit ou complet si PRO).
+    - `MobileTestTest` : 6 tests unitaires couvrant le catalogue, les questions DISC, l'obligation PRO sans prix, la soumission et consultation de rapport, l'isolation et la synthèse.
+    - Suite complète Symfony : **450 tests passants (8 405 assertions), 0 erreur**.
+  - **Mobile (`mobile-v1/`)** :
+    - Écran `app/tests/index.tsx` : catalogue complet par groupes, carte d'accès à la synthèse « Mon profil KIINI SAWA », statuts d'avancement, temps estimés et consultation des rapports.
+    - Écran `app/tests/[slug]/passer.tsx` : passation interactive fluide, support des blocs DISC (choix du plus (+) et du moins (-)) et des échelles 1-5 / 1-10, jauge d'avancement, validation complète et enregistrement.
+    - Écran `app/tests/[slug]/rapport.tsx` : rapport complet adapté au test (profil naturel vs adapté pour DISC, axes de Jung, centre et intégration de l'Ennéagramme, top 3 des dons spirituels, jauges Big Five).
+    - Écran `app/tests/synthese.tsx` : synthèse croisée « Mon profil KIINI SAWA » (zone de vocation, convergences des tests, ressources, fragilités et priorités de cheminement).
+    - Navigation et routage : synchronisés depuis le menu et les notifications.
+    - Tests Vitest : 22 tests passants, compilation iOS bundle 100 % OK.
+- **Reste à livrer pour le prochain lot** :
+  - **Lot 5** : Revues & bilans (hebdo, mensuel), Agenda (`planner`), Partenaires (`social`), Ensemble & La Méthode.
+
+---
+
 ## 2026-11-19 · Application Mobile KIINI SAWA (Expo SDK 58 / React Native) : Lots 2 & 3
 
 - **Lot 2 (Notifications push distantes Expo & rappels quotidiens)** :

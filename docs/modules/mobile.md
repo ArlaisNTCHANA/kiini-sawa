@@ -1,10 +1,10 @@
 # Module Mobile
 
-**Statut** : actif (Lots 1, 2 & 3 — authentification par jetons Bearer, profil/compte, quotidien hors connexion, rituels, journal, push Expo & rappels, progression des 6 plans & cercle SVG).
+**Statut** : actif (Lots 1, 2, 3 & 4 — authentification par jetons Bearer, profil/compte, quotidien hors connexion, rituels, journal, push Expo & rappels, progression des 6 plans & cercle SVG, passation des tests & Mon profil KIINI SAWA).
 
 ## Rôle
 
-Exposer l'API REST `/api/mobile/v1/...` utilisée par l'application mobile native Expo (`../mobile-v1/`). Ce module reprend la logique métier et les garanties de sécurité des modules existants (`Compte`, `Rapide`, `Rituels`, `Journal`, `Abonnement`, `Notification`, `PlanDeVie`) sans session ni cookie.
+Exposer l'API REST `/api/mobile/v1/...` utilisée par l'application mobile native Expo (`../mobile-v1/`). Ce module reprend la logique métier et les garanties de sécurité des modules existants (`Compte`, `Rapide`, `Rituels`, `Journal`, `Abonnement`, `Notification`, `PlanDeVie`, `Personnalite`) sans session ni cookie.
 
 ## Emplacements
 
@@ -13,7 +13,7 @@ Exposer l'API REST `/api/mobile/v1/...` utilisée par l'application mobile nativ
 | Code | `src/Mobile/` |
 | Contrat API | [`docs/api-mobile.md`](../api-mobile.md) |
 | Migrations | `migrations/Version20261119120000.php`, `Version20261119130000.php` |
-| Tests | `tests/Mobile/` (`MobileApiTest.php`, `MobileNotificationTest.php`, `MobilePlanTest.php`) |
+| Tests | `tests/Mobile/` (`MobileApiTest.php`, `MobileNotificationTest.php`, `MobilePlanTest.php`, `MobileTestTest.php`) |
 | Pare-feu | `config/packages/security.yaml` (`mobile_api`, `^/api/mobile`) |
 
 ## Entités
@@ -26,6 +26,7 @@ Exposer l'API REST `/api/mobile/v1/...` utilisée par l'application mobile nativ
 - `App\Mobile\Service\ExpoPushSender` : expédition groupée vers l'API Expo (`https://exp.host/--/api/v2/push/send`), nettoyage automatique des tokens révoqués (`DeviceNotRegistered`), validation de format et mockable en test unitaire.
 - `App\Mobile\Service\MobilePushSenderDecorator` : décore `PushSender` (`#[AsDecorator(decorates: PushSender::class)]`) pour que toute notification existante (`Notifier`, `ReminderService`) notifie aussi les appareils mobiles Expo sans modifier une seule ligne du web existant.
 - `App\Mobile\Service\MobilePlanSerializer` : transformation riche des 6 plans du livre avec `PlanProgress`, 100 % libellés français, zéro terme banni.
+- `App\Mobile\Service\MobileTestSerializer` : catalogue des tests, questions adaptées (blocs DISC, échelles 1-5 et 1-10), rapports détaillés et synthèse globale croisée « Mon profil KIINI SAWA ».
 
 ## Points d'attention
 
