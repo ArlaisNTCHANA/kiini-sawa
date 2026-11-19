@@ -106,4 +106,49 @@ En cas d'erreur, l'API renvoie `{ "error": "Message en français", "code"?: "...
 | `GET /api/mobile/v1/tests/{slug}/rapport` | `?id=...` | `200 { id, slug, headline, instrument, scores, details }` | Rapport détaillé du test avec dimensions mesurées, points forts, vigilances, figure biblique et pistes d'action. |
 | `GET /api/mobile/v1/tests/synthese` | — | `200 { locked, enough, count, done, missing, identity?, vocation?, convergence?, resources?, fragile?, priorities?, insights? }` | Synthèse croisée de l'ensemble des tests (« Mon profil KIINI SAWA »). Renvoie un aperçu sans prix si non PRO, ou le profil complet si PRO. |
 
+---
+
+## 9. Agenda & Tâches (`/api/mobile/v1/agenda`)
+
+| Méthode & URL | Corps / Query | Réponse | Notes |
+|---|---|---|---|
+| `GET /api/mobile/v1/agenda` | `?date=YYYY-MM-DD` ou `?start=...&end=...` | `200 { date, total, tasks: [...] }` | Liste des tâches de l'agenda pour une date ou un intervalle donné, avec heure de début/fin, indicateur journée et liaison aux objectifs. |
+| `POST /api/mobile/v1/agenda` | `{ title, date, isAllDay?, startTime?, endTime?, description?, growthGoalId? }` | `201 { id, title, description, date, isAllDay, isCompleted, startTime, endTime, linkedGoal, linkedGoalId }` | Crée une tâche dans l'agenda. |
+| `PATCH /api/mobile/v1/agenda/{id}` | `{ isCompleted?, title?, description?, date?, startTime?, endTime? }` | `200 { ...tâche modifiée }` | Met à jour une tâche existante ou bascule son état de complétion. |
+| `DELETE /api/mobile/v1/agenda/{id}` | — | `200 { success: true }` | Supprime une tâche de l'agenda. |
+
+---
+
+## 10. Revues & Rythmes (`/api/mobile/v1/revues`)
+
+| Méthode & URL | Corps / Query | Réponse | Notes |
+|---|---|---|---|
+| `GET /api/mobile/v1/revues/rythmes` | — | `200 { rhythms: [...] }` | Liste des 5 respirations temporelles de KIINI SAWA (Jour, Semaine, Mois, Saison, An) avec état (`done`, `late`, `todo`, `later`) et actions. |
+| `GET /api/mobile/v1/revues/hebdo` | — | `200 { weekStart, isCompleted, review?, plans, itemsByPlan, habitsRegularity, journalEntriesCount, recentReviews }` | Données de la revue hebdomadaire de la semaine en cours : victoires, difficultés, leçons, régularité des rituels et items des 4 plans à évaluer. |
+| `POST /api/mobile/v1/revues/hebdo` | `{ wins?, struggles?, lesson?, priorities?: string[], score?: {}, progress?: {}, note?: {} }` | `200 { success: true, review: {...} }` | Enregistre la revue hebdomadaire, applique les notes et progressions aux plans stratégiques, et alimente le journal. |
+| `GET /api/mobile/v1/revues/mensuelle` | — | `200 { isProRequired, month?, isCompleted?, review? }` | Données de la revue mensuelle (réservée aux membres Pro). |
+| `POST /api/mobile/v1/revues/mensuelle` | `{ progress?, stagnation?, blocker?, adjustment?, decision? }` | `200 { success: true, review: {...} }` | Enregistre la revue mensuelle approfondie. |
+
+---
+
+## 11. Partenaires, Défis & Couple (`/api/mobile/v1/partenaires`, `/api/mobile/v1/defis`, `/api/mobile/v1/couple`)
+
+| Méthode & URL | Corps / Query | Réponse | Notes |
+|---|---|---|---|
+| `GET /api/mobile/v1/partenaires` | — | `200 { totalActive, limit, isLimitReached, active: [...], pendingReceived: [...], pendingSent: [...] }` | Liste des partenaires de redevabilité actifs et des invitations reçues/envoyées. |
+| `POST /api/mobile/v1/partenaires/invitation` | `{ email }` | `201 { success: true }` | Envoie une invitation de partenariat de redevabilité (soumis à la limite de la formule). |
+| `POST /api/mobile/v1/partenaires/{id}/repondre` | `{ action: 'ACCEPT' \| 'REJECT' }` | `200 { success: true, status }` | Accepte ou refuse une demande de partenariat reçue. |
+| `GET /api/mobile/v1/defis` | — | `200 { total, challenges: [...] }` | Liste des défis collectifs actifs et avancement de l'utilisateur. |
+| `GET /api/mobile/v1/couple` | — | `200 { hasCouple, isActive?, partnerName?, inviteCode?, vision?, verse? }` | Données de l'espace couple partagé entre conjoints. |
+
+---
+
+## 12. La Méthode (Livre KIINI SAWA) (`/api/mobile/v1/methode`)
+
+| Méthode & URL | Corps / Query | Réponse | Notes |
+|---|---|---|---|
+| `GET /api/mobile/v1/methode/chapitres` | — | `200 { total, hasFullAccess, chapters: [...] }` | Sommaire des 28 chapitres du livre KIINI SAWA avec temps de lecture et accès libre/pro. |
+| `GET /api/mobile/v1/methode/chapitres/{slug}` | — | `200 { slug, title, excerpt, minutes, previous, next, isPublic, isProRequired, hasFullAccess, contentHtml, sanctuary }` | Contenu d'un chapitre : texte intégral (si Pro ou public) ou extrait pratique « L'essentiel » (si gratuit). Aucune mention de prix ni paiement. |
+
+
 

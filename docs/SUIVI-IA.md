@@ -546,3 +546,24 @@ phrase courte), fichiers JSON nettoyés, nouveau `08-…json`. Pagination PDF co
 - **Tests Symfony** : `tests/Mobile/MobileApiTest.php` (12 scénarios dont mode strict `APP_SAME_ORIGIN_STRICT=1`, réutilisation de jeton, isolation utilisateurs, suppression cascade). **Piège noté** : dans les tests fonctionnels avec `AbstractBrowser`, appeler `restart()` avant toute requête devant être dépourvue d'en-tête `Referer` automatique.
 - **Reste pour les lots suivants** : Lot 2 (notifications Expo Push + préférences), Lot 3 (lecture des 6 plans), Lot 4 (Mes tests & rapports), Lot 5 (revues, agenda, partenaires, couple/organisation, La Méthode).
 
+## 19/11/2026 — Application mobile native V1 : Lot 5 (Revues, Agenda, Partenaires, Défis, Couple & La Méthode)
+- **Objectif** : Achever le périmètre complet de l'application mobile native KIINI SAWA.
+- **Backend Symfony (`src/Mobile/`)** :
+  - `MobilePlannerController` : `/api/mobile/v1/agenda` (GET liste bornée par date ou intervalle, POST création, PATCH mise à jour/complétion, DELETE suppression, isolation stricte par utilisateur).
+  - `MobileReviewController` : `/api/mobile/v1/revues/rythmes` (les 5 respirations temporelles de KIINI SAWA via `Rhythms::forUser`), `/api/mobile/v1/revues/hebdo` (GET état et items des 4 plans, POST enregistrement appliquant scores/progrès aux plans et au journal via `WeeklyReviewService::save`), `/api/mobile/v1/revues/mensuelle` (GET/POST réservé Pro sans mention de prix).
+  - `MobileCommunityController` : `/api/mobile/v1/partenaires` (liste des partenaires actifs et invitations reçues/envoyées), `/api/mobile/v1/partenaires/invitation` (invitation par email avec contrôle du quota gratuit), `/api/mobile/v1/partenaires/{id}/repondre` (acceptation ou refus), `/api/mobile/v1/defis` (défis collectifs et avancement), `/api/mobile/v1/couple` (vision commune, verset d'ancrage, code d'invitation conjoint).
+  - `MobileMethodeSerializer` & `MobileMethodeController` : `/api/mobile/v1/methode/chapitres` (sommaire des 28 chapitres du livre KIINI SAWA, temps de lecture, statuts libre/pro), `/api/mobile/v1/methode/chapitres/{slug}` (texte intégral pour les membres Pro et chapitres publics, ou extrait pratique « L'essentiel » et exercice « Le Sanctuaire » pour les comptes gratuits avec zéro prix ni lien de paiement Apple 3.1.1).
+  - Tests unitaires & intégration : `tests/Mobile/MobileLot5Test.php` (5 nouveaux scénarios complets). Suite mobile Symfony : **34 tests, 343 assertions (100 % passants)**. Suite Symfony globale : **455 tests, 8479 assertions (0 régression, 0 échec)**.
+- **Mobile Expo (`mobile-v1/`)** :
+  - `types/api.ts`, `storage/localDb.ts`, `api/client.ts` : typages stricts, cache SQLite complet pour l'agenda, les revues, les partenaires et les chapitres du livre hors connexion.
+  - `i18n/fr.ts` : dictionnaires `planner`, `reviews`, `community`, `methode` conformes au lexique (vouvoiement, zéro terme banni, zéro émoji, zéro mention de tarif).
+  - Écrans natifs créés :
+    - `app/agenda/index.tsx` (agenda interactif au jour le jour, cases à cocher, création rapide avec modal, suppression).
+    - `app/revues/hebdo.tsx` (assistant de revue hebdomadaire : victoires, difficultés, leçons, 3 priorités, évaluation des 4 plans).
+    - `app/revues/rythmes.tsx` (tableau de bord des 5 rythmes de vie avec statuts colorés et boutons d'action).
+    - `app/partenaires/index.tsx` (partenaires de redevabilité avec invitations et gestion des demandes, onglets défis collectifs et couple).
+    - `app/methode/index.tsx` (sommaire visuel des 28 chapitres du livre).
+    - `app/methode/[slug].tsx` (lecteur natif du livre, typographie soignée, bascule de taille de texte A-/A/A+, encart « Le Sanctuaire », navigation précédent/suivant, ProGate d'extrait gratuit).
+  - Routage et menu : `app/(tabs)/menu.tsx` et `src/notifications/routing.ts` connectent directement toutes les routes vers les écrans natifs.
+  - Tests & bundle : **23 tests Vitest passants**, **0 erreur TypeScript**, bundle iOS Expo exporté avec succès (3 552 modules, 5.8 MB HBC).
+
