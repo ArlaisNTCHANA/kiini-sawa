@@ -14,7 +14,7 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 /** Feedback nourricier : la page du membre (lien, synthèse) et le formulaire public de ses proches. */
 class FeedbackController extends AbstractController
 {
-    public function __construct(private readonly FeedbackService $feedback)
+    public function __construct(private readonly FeedbackService $feedback, private readonly \App\Shared\Security\RateLimits $limits)
     {
     }
 
@@ -74,6 +74,10 @@ class FeedbackController extends AbstractController
         $data = ['relationship' => '', 'qualities' => [], 'strengths' => '', 'improvements' => '', 'name' => ''];
 
         if ($request->isMethod('POST')) {
+            // Anti-flood de ce formulaire public : par adresse et lien, puis par adresse (tous liens confondus)
+            $ip = $request->getClientIp() ?? 'inconnue';
+            $this->limits->require('public_form', $ip.'|'.$token);
+            $this->limits->require('public_form_ip', $ip);
             $p = $request->request;
             if ('' !== $p->getString('website')) { // champ piège
                 return $this->render('feedback/thanks.html.twig', ['firstName' => $owner->getDisplayName()]);

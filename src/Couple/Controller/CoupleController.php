@@ -66,9 +66,14 @@ class CoupleController extends AbstractController
     }
 
     #[Route('/couple/creer', name: 'app_couple_create', methods: ['POST'])]
-    public function create(Request $request, MailerInterface $mailer, ValidatorInterface $validator, #[Autowire('%app.mailer_from%')] string $from): Response
+    public function create(Request $request, MailerInterface $mailer, ValidatorInterface $validator, #[Autowire('%app.mailer_from%')] string $from, \App\Shared\Security\RateLimits $limits): Response
     {
         if (!$this->isCsrfTokenValid('couple', $request->request->getString('_csrf_token'))) {
+            return $this->redirectToRoute('app_couple');
+        }
+        if (!$limits->allow('couple_create', (string) $this->user()->getId())) {
+            $this->addFlash('error', 'Trop de tentatives. Réessayez dans une heure.');
+
             return $this->redirectToRoute('app_couple');
         }
         $email = mb_strtolower(trim($request->request->getString('email')));

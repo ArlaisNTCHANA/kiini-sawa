@@ -21,21 +21,29 @@ class NotificationController extends AbstractController
 {
     /** Autorisation des notifications sur cet appareil (appelé par le navigateur, en JSON). */
     #[Route('/notifications/appareil', name: 'app_push_subscribe', methods: ['POST'])]
-    public function pushSubscribe(Request $request, \App\Notification\Service\PushSender $push): \Symfony\Component\HttpFoundation\JsonResponse
+    public function pushSubscribe(Request $request, \App\Notification\Service\PushSender $push, \App\Shared\Security\RateLimits $limits): \Symfony\Component\HttpFoundation\JsonResponse
     {
         $user = $this->getUser();
         $data = json_decode($request->getContent(), true);
         $endpoint = (string) ($data['endpoint'] ?? '');
         $p256dh = (string) ($data['keys']['p256dh'] ?? '');
         $auth = (string) ($data['keys']['auth'] ?? '');
-        if (!$user instanceof \App\Compte\Entity\User || !str_starts_with($endpoint, 'https://') || \strlen($endpoint) > 2000 || '' === $p256dh || '' === $auth) {
+        $remove = 'remove' === ($data['action'] ?? null);
+        // Retirer un appareil ne contacte jamais son adresse : seule l'inscription est soumise à la liste des services Web Push officiels
+        if (!$user instanceof \App\Compte\Entity\User || '' === $endpoint || \strlen($endpoint) > 2000
+            || (!$remove && ('' === $p256dh || '' === $auth || !$push->isEndpointAllowed($endpoint)))) {
             return new \Symfony\Component\HttpFoundation\JsonResponse(['ok' => false], 400);
         }
-        if ('remove' === ($data['action'] ?? null)) {
+        if ($remove) {
             $push->unsubscribe($user, $endpoint);
         } else {
-            $push->subscribe($user, $endpoint, mb_substr($p256dh, 0, 255), mb_substr($auth, 0, 255), $request->headers->get('User-Agent'));
-            if (true === ($data['test'] ?? false)) {
+            try {
+                $push->subscribe($user, $endpoint, mb_substr($p256dh, 0, 255), mb_substr($auth, 0, 255), $request->headers->get('User-Agent'));
+            } catch (\InvalidArgumentException $e) {
+                return new \Symfony\Component\HttpFoundation\JsonResponse(['ok' => false, 'error' => $e->getMessage()], 400);
+            }
+            // Notification d'essai : au plus 3 par heure et par compte (sinon, c'est un moyen d'envoyer des messages en boucle)
+            if (true === ($data['test'] ?? false) && $limits->allow('push_test', (string) $user->getId())) {
                 $push->send($user, 'Notifications activées ✓', 'Vous recevrez ici vos rappels de rituels, votre revue du dimanche et l\'action du jour de vos défis.', '/dashboard', 'bienvenue');
             }
         }

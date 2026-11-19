@@ -16,7 +16,7 @@ use Symfony\Component\Routing\Attribute\Route;
  */
 final class ConfirmationController extends AbstractController
 {
-    public function __construct(private readonly ConfirmationService $confirmations)
+    public function __construct(private readonly ConfirmationService $confirmations, private readonly \App\Shared\Security\RateLimits $limits)
     {
     }
 
@@ -48,6 +48,10 @@ final class ConfirmationController extends AbstractController
         $errors = [];
         $data = ['relationship' => '', 'most' => '', 'least' => '', 'gifts' => [], 'name' => ''];
         if ($request->isMethod('POST')) {
+            // Anti-flood de ce formulaire public : par adresse et lien, puis par adresse (tous liens confondus)
+            $ip = $request->getClientIp() ?? 'inconnue';
+            $this->limits->require('public_form', $ip.'|'.$token);
+            $this->limits->require('public_form_ip', $ip);
             $p = $request->request;
             if ('' !== $p->getString('website')) {
                 return $this->render('personnalite/confirmation/thanks.html.twig', ['firstName' => $owner->getDisplayName()]);

@@ -207,7 +207,7 @@ class OrganisationController extends AbstractController
     }
 
     #[Route('/organisation/{id}/invitations', name: 'app_organisation_invite', requirements: ['id' => '\d+'], methods: ['POST'])]
-    public function invite(Organisation $org, Request $request, MailerInterface $mailer, ValidatorInterface $validator, #[Autowire('%app.mailer_from%')] string $from): Response
+    public function invite(Organisation $org, Request $request, MailerInterface $mailer, ValidatorInterface $validator, #[Autowire('%app.mailer_from%')] string $from, \App\Shared\Security\RateLimits $limits): Response
     {
         $me = $this->managerOf($org, $request);
         if ('regenerate' === $request->request->getString('action')) {
@@ -220,6 +220,14 @@ class OrganisationController extends AbstractController
 
         $emails = array_unique(array_filter(array_map(fn ($e) => mb_strtolower(trim($e)), preg_split('/[\s,;]+/', $request->request->getString('emails')))));
         $valid = array_slice(array_filter($emails, fn ($e) => 0 === \count($validator->validate($e, new Email()))), 0, 200);
+        // Anti-spam : une organisation sans licence valide envoie au plus 5 invitations par jour ; avec licence, 100 par jour
+        if ([] !== $valid && !$limits->allow($org->isLicenseValid() ? 'org_invite_licensed' : 'org_invite', (string) $org->getId(), \count($valid))) {
+            $this->addFlash('error', $org->isLicenseValid()
+                ? 'Limite quotidienne d\'invitations atteinte (100 par jour). Réessayez demain, ou partagez le lien d\'invitation.'
+                : 'Limite quotidienne d\'invitations atteinte (5 par jour sans places). Partagez le lien d\'invitation, ou choisissez un pack de places.');
+
+            return $this->redirectToRoute('app_organisation_index', ['org' => $org->getId()]);
+        }
         $url = $this->generateUrl('app_organisation_join', ['code' => $org->getInviteCode()], UrlGeneratorInterface::ABSOLUTE_URL);
         foreach ($valid as $email) {
             $mailer->send((new TemplatedEmail())->from(Address::create($from))->to($email)

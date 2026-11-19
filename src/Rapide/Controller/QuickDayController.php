@@ -50,6 +50,11 @@ final class QuickDayController extends AbstractController
         if (!\is_array($data) || !\is_array($data['ops'] ?? null)) {
             return new JsonResponse(['error' => 'Requête invalide.'], Response::HTTP_BAD_REQUEST);
         }
+        // Les saisies portent l'identifiant du compte qui les a faites : si un autre compte est connecté, rien n'est appliqué
+        // (ancien client sans identifiant : accepté pour ne pas perdre ses saisies en attente)
+        if (isset($data['account']) && (!\is_string($data['account']) || !hash_equals($quick->accountKey($user), $data['account']))) {
+            return $this->noStore(new JsonResponse(['error' => 'Ces saisies viennent d\'un autre compte.', 'code' => 'account'], Response::HTTP_CONFLICT));
+        }
         $results = $quick->apply($user, $data['ops']);
 
         return $this->noStore(new JsonResponse(['results' => $results, 'snapshot' => $quick->snapshot($user)]));

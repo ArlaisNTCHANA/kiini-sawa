@@ -16,8 +16,12 @@ use Symfony\Component\DependencyInjection\Attribute\Autowire;
  */
 class PushSender
 {
+    /** Appareils autorisés par compte (un téléphone, une tablette, un ordinateur… : 10 suffisent largement). */
+    public const MAX_DEVICES = 10;
+
     public function __construct(
         private readonly EntityManagerInterface $em,
+        private readonly PushEndpointValidator $endpoints,
         private readonly LoggerInterface $logger,
         #[Autowire('%env(default::VAPID_PUBLIC_KEY)%')] private readonly ?string $publicKey,
         #[Autowire('%env(default::VAPID_PRIVATE_KEY)%')] private readonly ?string $privateKey,
@@ -40,10 +44,22 @@ class PushSender
         return $this->em->getRepository(PushSubscription::class)->count(['user' => $user]) > 0;
     }
 
+    public function isEndpointAllowed(string $endpoint): bool
+    {
+        return $this->endpoints->isAllowed($endpoint);
+    }
+
+    /** @throws \InvalidArgumentException adresse refusée ou trop d'appareils */
     public function subscribe(User $user, string $endpoint, string $p256dh, string $auth, ?string $userAgent): PushSubscription
     {
+        if (!$this->endpoints->isAllowed($endpoint)) {
+            throw new \InvalidArgumentException('Adresse de notification non autorisée.');
+        }
         $repo = $this->em->getRepository(PushSubscription::class);
         $existing = $repo->findOneBy(['endpointHash' => hash('sha256', $endpoint)]);
+        if (!$existing && $repo->count(['user' => $user]) >= self::MAX_DEVICES) {
+            throw new \InvalidArgumentException('Nombre maximal d\'appareils atteint.');
+        }
         if ($existing) {
             $existing->setUser($user)->setKeys($p256dh, $auth);
         } else {
@@ -70,7 +86,16 @@ class PushSender
         if (!$this->isConfigured()) {
             return 0;
         }
-        $subs = $this->em->getRepository(PushSubscription::class)->findBy(['user' => $user]);
+        $subs = [];
+        foreach ($this->em->getRepository(PushSubscription::class)->findBy(['user' => $user]) as $s) {
+            // Contrôle renouvelé à chaque envoi : l'adresse d'un abonnement ancien ou altéré n'est jamais appelée (et il est supprimé)
+            if ($this->endpoints->isAllowed($s->getEndpoint())) {
+                $subs[] = $s;
+            } else {
+                $this->em->remove($s);
+            }
+        }
+        $this->em->flush();
         if ([] === $subs) {
             return 0;
         }

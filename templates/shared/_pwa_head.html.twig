@@ -9,8 +9,37 @@
     if ('serviceWorker' in navigator) {
         window.addEventListener('load', function () { navigator.serviceWorker.register('/sw.js').catch(function () {}); });
     }
-    // Déconnexion : la copie du mode rapide gardée sur ce téléphone est effacée (appareil partagé)
-    document.addEventListener('click', function (e) { var a = e.target.closest && e.target.closest('a[href$="/logout"], a[href*="/logout?"]'); if (a && window.indexedDB) { try { indexedDB.deleteDatabase('ks-rapide'); } catch (x) {} } });
+    // Déconnexion : avant de partir, l'appareil oublie ce qui appartient au compte (copie du mode rapide, saisies en attente) et se
+    // désabonne des notifications (appareil partagé : le suivant ne doit rien recevoir ni voir).
+    function ksLogoutCleanup() {
+        var tasks = [];
+        try { if (window.indexedDB) { tasks.push(new Promise(function (ok) { var r = indexedDB.deleteDatabase('ks-rapide'); r.onsuccess = r.onerror = r.onblocked = function () { ok(); }; })); } } catch (x) {}
+        try {
+            if ('serviceWorker' in navigator && 'PushManager' in window) {
+                tasks.push(navigator.serviceWorker.getRegistration().then(function (reg) {
+                    return reg && reg.pushManager.getSubscription();
+                }).then(function (sub) {
+                    if (!sub) return;
+                    var endpoint = sub.endpoint, keys = sub.toJSON().keys || {};
+                    return fetch('/notifications/appareil', { method: 'POST', credentials: 'same-origin', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ action: 'remove', endpoint: endpoint, keys: keys }) })
+                        .catch(function () {}).then(function () { return sub.unsubscribe(); });
+                }).catch(function () {}));
+            }
+        } catch (x) {}
+        return Promise.race([Promise.all(tasks), new Promise(function (ok) { setTimeout(ok, 2000); })]);
+    }
+    document.addEventListener('click', function (e) {
+        var a = e.target.closest && e.target.closest('a[href$="/logout"], a[href*="/logout?"]');
+        if (!a || e.defaultPrevented || e.ctrlKey || e.metaKey || e.shiftKey) return;
+        e.preventDefault();
+        ksLogoutCleanup().then(function () { window.location.assign(a.href); });
+    }, true);
+    document.addEventListener('submit', function (e) {
+        var f = e.target;
+        if (!f || !f.action || !/\/logout(\?|$)/.test(f.action) || f.dataset.ksCleaned) return;
+        e.preventDefault();
+        ksLogoutCleanup().then(function () { f.dataset.ksCleaned = '1'; f.submit(); });
+    }, true);
     // Invitation d'installation (Android, Chrome, Edge) gardée pour le bouton « Installer l'application »
     window.addEventListener('beforeinstallprompt', function (e) { e.preventDefault(); window.ksInstallPrompt = e; document.dispatchEvent(new Event('ks-install-ready')); });
 </script>

@@ -9,6 +9,39 @@ framework:
             policy: sliding_window
             limit: 5
             interval: '1 hour'
+        # Audit de sécurité (19/11/2026) : limites par compte ou par adresse, voir App\Shared\Security\RateLimits
+        push_test:           # notification d'essai
+            policy: sliding_window
+            limit: 3
+            interval: '1 hour'
+        org_invite:          # invitations d'une organisation sans licence valide : plafond strict
+            policy: sliding_window
+            limit: 5
+            interval: '1 day'
+        org_invite_licensed: # organisation avec licence valide
+            policy: sliding_window
+            limit: 100
+            interval: '1 day'
+        couple_create:
+            policy: sliding_window
+            limit: 5
+            interval: '1 hour'
+        plan_email:          # envoi d'un plan par e-mail
+            policy: sliding_window
+            limit: 5
+            interval: '10 minutes'
+        account_security:    # changement de mot de passe, d'e-mail, suppression du compte (mot de passe actuel demandé)
+            policy: sliding_window
+            limit: 5
+            interval: '15 minutes'
+        public_form:         # formulaires publics anonymes (avis, confirmation des proches), par adresse et lien
+            policy: sliding_window
+            limit: 10
+            interval: '10 minutes'
+        public_form_ip:      # idem, tous liens confondus
+            policy: sliding_window
+            limit: 60
+            interval: '10 minutes'
 
 # Les tests enchaînent les inscriptions depuis la même adresse : limites relevées
 when@test:

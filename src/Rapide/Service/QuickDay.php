@@ -32,7 +32,17 @@ final class QuickDay
         private readonly SyncOperationRepository $operations,
         private readonly NextStep $nextStep,
         private readonly UrlGeneratorInterface $urls,
+        #[\Symfony\Component\DependencyInjection\Attribute\Autowire('%kernel.secret%')] private readonly string $secret,
     ) {
+    }
+
+    /**
+     * Identifiant opaque du compte, propre à ce site (HMAC de l'identifiant). Le téléphone le garde avec ses données et ses saisies :
+     * si une autre personne se connecte sur le même appareil, les données de la précédente ne sont ni affichées ni envoyées sous son compte.
+     */
+    public function accountKey(User $user): string
+    {
+        return substr(hash_hmac('sha256', 'rapide|'.$user->getId(), $this->secret), 0, 32);
     }
 
     // ── Lecture ──────────────────────────────────────────────────────────────
@@ -59,6 +69,7 @@ final class QuickDay
 
         return [
             'date' => $now->format('Y-m-d'),
+            'account' => $this->accountKey($user),
             'name' => $user->getDisplayName(),
             'next' => ['title' => $next['title'], 'eyebrow' => $next['eyebrow'], 'text' => $next['text'], 'cta' => $next['cta'], 'url' => $this->urls->generate($next['route'], $next['params'] ?? [])],
             'habits' => $habits,

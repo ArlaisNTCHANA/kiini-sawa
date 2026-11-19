@@ -46,6 +46,7 @@ class ProfileController extends AbstractController
         private readonly EntityManagerInterface $em,
         private readonly UserPasswordHasherInterface $hasher,
         private readonly Security $security,
+        private readonly \App\Shared\Security\RateLimits $limits,
     ) {
     }
 
@@ -132,6 +133,9 @@ class ProfileController extends AbstractController
         if (!$this->isCsrfTokenValid('profile_password', $payload->getString('_csrf_token'))) {
             return $this->expired();
         }
+        if (!$this->limits->allow('account_security', (string) $user->getId())) {
+            return $this->tooManyAttempts();
+        }
         if (!$this->hasher->isPasswordValid($user, $payload->getString('currentPassword'))) {
             $this->addFlash('error', 'Mot de passe actuel incorrect.');
 
@@ -161,6 +165,9 @@ class ProfileController extends AbstractController
         $payload = $request->getPayload();
         if (!$this->isCsrfTokenValid('profile_email', $payload->getString('_csrf_token'))) {
             return $this->expired();
+        }
+        if (!$this->limits->allow('account_security', (string) $user->getId())) {
+            return $this->tooManyAttempts();
         }
         if (!$this->hasher->isPasswordValid($user, $payload->getString('currentPassword'))) {
             $this->addFlash('error', 'Mot de passe incorrect.');
@@ -243,6 +250,9 @@ class ProfileController extends AbstractController
         if (!$this->isCsrfTokenValid('profile_delete', $payload->getString('_csrf_token'))) {
             return $this->expired();
         }
+        if (!$this->limits->allow('account_security', (string) $user->getId())) {
+            return $this->tooManyAttempts();
+        }
         if ('SUPPRIMER' !== mb_strtoupper(trim($payload->getString('confirmation')))
             || !$this->hasher->isPasswordValid($user, $payload->getString('currentPassword'))) {
             $this->addFlash('error', 'Suppression annulée : tapez SUPPRIMER et indiquez votre mot de passe.');
@@ -259,6 +269,14 @@ class ProfileController extends AbstractController
         $this->addFlash('success', 'Votre compte et toutes vos données ont été supprimés.');
 
         return $this->redirectToRoute('app_login');
+    }
+
+    /** Trop d'essais de mot de passe actuel (changement de mot de passe, d'e-mail, suppression du compte) : pause de 15 minutes. */
+    private function tooManyAttempts(): Response
+    {
+        $this->addFlash('error', 'Trop de tentatives. Patientez quelques minutes avant de réessayer.');
+
+        return $this->redirectToRoute('app_profile', ['_fragment' => 'securite']);
     }
 
     private function currentUser(): User

@@ -27,10 +27,12 @@ abstract class AbstractPlanController extends AbstractController
     protected Entitlements $entitlements;
     protected TestResultsForPlans $testResults;
     protected PlanProgress $planProgress;
+    protected \App\Shared\Security\RateLimits $limits;
 
     #[Required]
-    public function setPlanServices(PlanDataProvider $plans, PlanMailer $planMailer, Entitlements $entitlements, TestResultsForPlans $testResults, PlanProgress $planProgress): void
+    public function setPlanServices(PlanDataProvider $plans, PlanMailer $planMailer, Entitlements $entitlements, TestResultsForPlans $testResults, PlanProgress $planProgress, \App\Shared\Security\RateLimits $limits): void
     {
+        $this->limits = $limits;
         $this->planProgress = $planProgress;
         $this->testResults = $testResults;
         $this->plans = $plans;
@@ -93,6 +95,10 @@ abstract class AbstractPlanController extends AbstractController
     protected function sendByEmail(string $planKey): JsonResponse
     {
         $this->requirePlan($planKey);
+        // Au plus 5 envois par tranche de 10 minutes et par compte (sinon : boucle d'e-mails)
+        if (!$this->limits->allow('plan_email', (string) $this->user()->getId())) {
+            return new JsonResponse(['success' => false, 'error' => 'Trop d\'envois. Réessayez dans quelques minutes.'], 429);
+        }
         if (!$this->planMailer->send($this->user(), $planKey)) {
             return new JsonResponse(['success' => false, 'error' => 'L\'email n\'a pas pu être envoyé. Réessayez dans quelques minutes.'], 500);
         }

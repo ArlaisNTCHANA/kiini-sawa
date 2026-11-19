@@ -109,8 +109,13 @@
         return idb().then(function (db) { return new Promise(function (ok) { var t = db.transaction('kv', 'readwrite'); t.objectStore('kv').put(v, k); t.oncomplete = ok; t.onerror = ok; }); }).catch(function () {});
     }
 
+    function kvClear() {
+        return idb().then(function (db) { return new Promise(function (ok) { var t = db.transaction('kv', 'readwrite'); t.objectStore('kv').clear(); t.oncomplete = ok; t.onerror = ok; }); }).catch(function () {});
+    }
+
     // ── État ─────────────────────────────────────────────────────────────────
-    var S = { snap: null, queue: [], syncing: false, auth: true, form: { kept: null, energy: null, mood: null, stress: null }, formFor: null, savedMsg: false };
+    // account : identifiant opaque du compte (HMAC fourni par le serveur) auquel appartiennent la copie et les saisies en attente.
+    var S = { snap: null, queue: [], account: null, syncing: false, auth: true, form: { kept: null, energy: null, mood: null, stress: null }, formFor: null, savedMsg: false };
     var root = document.getElementById('app');
 
     function today() { var d = new Date(); return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0'); }
@@ -129,9 +134,16 @@
         return v;
     }
 
-    function persist() { return Promise.all([kvSet('queue', S.queue), kvSet('snap', S.snap)]); }
+    function persist() { return Promise.all([kvSet('queue', S.queue), kvSet('snap', S.snap), kvSet('account', S.account)]); }
+    /** Efface tout ce qui est gardé sur l'appareil (changement de compte détecté) : rien n'est affiché ni envoyé sous un autre compte. */
+    function wipe() { S.snap = null; S.queue = []; S.account = null; return kvClear(); }
+    /** Adopte l'état reçu du serveur ; si le compte a changé depuis la dernière fois, les anciennes données sont d'abord effacées. */
+    function adopt(snap) {
+        var changed = S.account && snap.account && snap.account !== S.account;
+        return (changed ? wipe() : Promise.resolve()).then(function () { S.snap = snap; S.account = snap.account || S.account; });
+    }
     function enqueue(op, coalesce) {
-        op.uid = uid(); op.date = today(); op.at = new Date().toISOString();
+        op.uid = uid(); op.date = today(); op.at = new Date().toISOString(); op.account = S.account;
         if (coalesce) { S.queue = S.queue.filter(function (o) { return !(o.type === op.type && o.date === op.date && coalesce(o, op)); }); }
         S.queue.push(op);
         persist().then(function () { render(); sync(); });
@@ -139,7 +151,15 @@
 
     // ── Envoi et lecture ─────────────────────────────────────────────────────
     function handle(res) {
-        if (res.status === 401 || res.redirected || !/json/.test(res.headers.get('content-type') || '')) { S.auth = false; throw new Error('auth'); }
+        if (res.status === 401 || res.redirected || !/json/.test(res.headers.get('content-type') || '')) {
+            // Session terminée : la copie des données du jour disparaît tout de suite de l'appareil ; seules les saisies pas encore
+            // envoyées sont gardées (elles seraient perdues sinon), liées à leur compte, et ne partent que pour ce compte.
+            S.auth = false; S.snap = null;
+            throw new Error('auth');
+        }
+        if (res.status === 409) {
+            return res.json().then(function (d) { if (d && d.code === 'account') { return wipe().then(function () { throw new Error('account'); }); } throw new Error('conflict'); });
+        }
         S.auth = true;
         return res.json();
     }
@@ -147,13 +167,13 @@
         if (S.syncing || !navigator.onLine) return Promise.resolve();
         S.syncing = true; render();
         var p = S.queue.length
-            ? fetch('/api/rapide/sync', { method: 'POST', credentials: 'same-origin', headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' }, body: JSON.stringify({ ops: S.queue }) }).then(handle).then(function (d) {
+            ? fetch('/api/rapide/sync', { method: 'POST', credentials: 'same-origin', headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' }, body: JSON.stringify({ account: S.account, ops: S.queue }) }).then(handle).then(function (d) {
                 var done = d.results || {};
                 S.queue = S.queue.filter(function (o) { return !(o.uid in done); });
-                S.snap = d.snapshot;
+                return adopt(d.snapshot);
             })
-            : fetch('/api/rapide/aujourdhui', { credentials: 'same-origin', headers: { 'Accept': 'application/json' } }).then(handle).then(function (d) { S.snap = d; });
-        return p.catch(function () {}).then(function () { S.syncing = false; return persist(); }).then(render);
+            : fetch('/api/rapide/aujourdhui', { credentials: 'same-origin', headers: { 'Accept': 'application/json' } }).then(handle).then(adopt);
+        return p.catch(function (e) { S.syncing = false; if (e && e.message === 'account') { return sync(); } }).then(function () { S.syncing = false; return persist(); }).then(render);
     }
 
     // ── Affichage (textContent uniquement : aucune donnée n'est insérée comme HTML) ──
@@ -263,8 +283,8 @@
     window.addEventListener('online', function () { sync(); });
     window.addEventListener('offline', render);
     document.addEventListener('visibilitychange', function () { if (document.visibilityState === 'visible') sync(); });
-    Promise.all([kvGet('snap'), kvGet('queue')]).then(function (r) {
-        S.snap = r[0] || null; S.queue = Array.isArray(r[1]) ? r[1] : [];
+    Promise.all([kvGet('snap'), kvGet('queue'), kvGet('account')]).then(function (r) {
+        S.snap = r[0] || null; S.queue = Array.isArray(r[1]) ? r[1] : []; S.account = r[2] || (S.snap && S.snap.account) || null;
         render();
         return sync();
     });

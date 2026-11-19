@@ -20,6 +20,18 @@ class PushTest extends WebTestCase
 
     private const ENDPOINT = 'https://fcm.googleapis.com/fcm/send/test-';
 
+    protected function setUp(): void
+    {
+        // Pas d'accès réseau dans les tests : fcm.googleapis.com « se résout » vers une adresse publique
+        \App\Notification\Service\PushEndpointValidator::$resolver = fn (string $host): array => ['142.250.74.10'];
+    }
+
+    protected function tearDown(): void
+    {
+        \App\Notification\Service\PushEndpointValidator::$resolver = null;
+        parent::tearDown();
+    }
+
     public function testDeviceRegistrationAndRemoval(): void
     {
         $client = static::createClient();

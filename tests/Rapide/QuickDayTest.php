@@ -170,4 +170,70 @@ class QuickDayTest extends WebTestCase
         $manifest = json_decode(file_get_contents(\dirname(__DIR__, 2).'/public/manifest.webmanifest'), true);
         $this->assertContains('/rapide', array_column($manifest['shortcuts'], 'url'));
     }
+
+    // ── Audit de sécurité, lot 2 : cloisonnement des comptes sur un même appareil ──
+
+    private function syncAs(array $body): array
+    {
+        $this->client->request('POST', '/api/rapide/sync', server: ['CONTENT_TYPE' => 'application/json', 'HTTP_ACCEPT' => 'application/json'], content: json_encode($body));
+
+        return ['status' => $this->client->getResponse()->getStatusCode(), 'json' => json_decode($this->client->getResponse()->getContent(), true)];
+    }
+
+    public function testTheSnapshotCarriesAnOpaqueAccountKey(): void
+    {
+        $this->client->request('GET', '/api/rapide/aujourdhui');
+        $key = json_decode($this->client->getResponse()->getContent(), true)['account'];
+        $this->assertMatchesRegularExpression('/^[a-f0-9]{32}$/', $key);
+        $this->assertNotSame((string) $this->user->getId(), $key);
+        // Stable pour un compte, différent pour un autre
+        $this->client->request('GET', '/api/rapide/aujourdhui');
+        $this->assertSame($key, json_decode($this->client->getResponse()->getContent(), true)['account']);
+        $this->client->loginUser($this->createUser());
+        $this->client->request('GET', '/api/rapide/aujourdhui');
+        $this->assertNotSame($key, json_decode($this->client->getResponse()->getContent(), true)['account']);
+    }
+
+    public function testQueuedEntriesOfAnotherAccountAreNeverAppliedToTheLoggedInOne(): void
+    {
+        $this->client->request('GET', '/api/rapide/aujourdhui');
+        $mine = json_decode($this->client->getResponse()->getContent(), true)['account'];
+
+        // Un autre compte se connecte sur le même téléphone, qui contient encore les saisies du premier
+        $other = $this->createUser();
+        $this->client->loginUser($other);
+        $r = $this->syncAs(['account' => $mine, 'ops' => [$this->op('journal.add', ['content' => 'Saisie du premier compte'], 'uid-foreign-001')]]);
+        $this->assertSame(409, $r['status']);
+        $this->assertSame('account', $r['json']['code']);
+        $this->assertCount(0, $this->em()->getRepository(ReflectionNote::class)->findBy(['user' => $other->getId()]), 'rien n\'est appliqué au compte connecté');
+        $this->assertSame(0, $this->em()->getRepository(\App\Rapide\Entity\SyncOperation::class)->count(['user' => $other->getId()]));
+    }
+
+    public function testEntriesWithTheRightAccountKeyAndLegacyClientsStillWork(): void
+    {
+        $this->client->request('GET', '/api/rapide/aujourdhui');
+        $mine = json_decode($this->client->getResponse()->getContent(), true)['account'];
+        $ok = $this->syncAs(['account' => $mine, 'ops' => [$this->op('journal.add', ['content' => 'Avec clé'], 'uid-account-001')]]);
+        $this->assertSame(200, $ok['status']);
+        $this->assertSame(['uid-account-001' => 'ok'], $ok['json']['results']);
+        $legacy = $this->syncAs(['ops' => [$this->op('journal.add', ['content' => 'Ancien client'], 'uid-legacy-0001')]]);
+        $this->assertSame(200, $legacy['status'], 'un ancien client (sans clé) ne perd pas ses saisies');
+        $bad = $this->syncAs(['account' => ['x'], 'ops' => []]);
+        $this->assertSame(409, $bad['status'], 'une clé mal formée est refusée');
+    }
+
+    public function testTheOfflineClientWipesItsDataOnAccountChangeAndOnLogout(): void
+    {
+        $root = \dirname(__DIR__, 2);
+        $page = (string) file_get_contents($root.'/templates/rapide/index.html.twig');
+        $this->assertStringContainsString('function wipe()', $page);
+        $this->assertStringContainsString("changed = S.account && snap.account && snap.account !== S.account", $page, 'compte différent : on efface avant d\'adopter');
+        $this->assertStringContainsString("body: JSON.stringify({ account: S.account, ops: S.queue })", $page, 'les saisies partent avec leur compte');
+        $this->assertStringContainsString("S.auth = false; S.snap = null;", $page, 'session terminée : la copie des données disparaît');
+        $head = (string) file_get_contents($root.'/templates/shared/_pwa_head.html.twig');
+        $this->assertStringContainsString("indexedDB.deleteDatabase('ks-rapide')", $head);
+        $this->assertStringContainsString('pushManager.getSubscription()', $head);
+        $this->assertStringContainsString('sub.unsubscribe()', $head);
+        $this->assertStringContainsString("action: 'remove'", $head, 'l\'appareil est aussi retiré côté serveur');
+    }
 }
