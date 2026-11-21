@@ -4,6 +4,7 @@ namespace App\Mobile\Controller;
 
 use App\Couple\Entity\Couple;
 use App\Couple\Entity\CoupleItem;
+use App\Couple\Entity\CoupleReview;
 use App\Couple\Service\CoupleSanctuaryCatalog;
 use App\Couple\Service\CoupleSanctuaryService;
 use App\Couple\Service\CoupleService;
@@ -359,5 +360,93 @@ final class MobileCoupleController extends AbstractController
         }
 
         return $this->jsonNoStore(['sent' => true]);
+    }
+
+    #[Route('/review', name: 'api_mobile_v1_couple_review_get', methods: ['GET'])]
+    public function getReview(): JsonResponse
+    {
+        $couple = $this->requireUsableCouple();
+        if ($couple instanceof JsonResponse) {
+            return $couple;
+        }
+
+        $month = new \DateTimeImmutable('first day of this month midnight');
+        $current = $this->coupleService->reviewFor($couple, $month);
+        $history = array_map(
+            static fn (CoupleReview $r) => [
+                'id' => $r->getId(),
+                'month' => $r->getMonth()->format('Y-m'),
+                'answers' => $r->getAnswers(),
+                'updatedAt' => $r->getUpdatedAt()->format('Y-m-d'),
+            ],
+            \array_slice($this->coupleService->reviews($couple), 0, 6)
+        );
+
+        $questions = [];
+        foreach (CoupleReview::QUESTIONS as $key => [$label, $hint]) {
+            $questions[] = ['key' => $key, 'label' => $label, 'hint' => $hint];
+        }
+
+        return $this->jsonNoStore([
+            'currentMonth' => $month->format('Y-m'),
+            'questions' => $questions,
+            'currentAnswers' => $current?->getAnswers() ?? [],
+            'history' => $history,
+        ]);
+    }
+
+    #[Route('/review', name: 'api_mobile_v1_couple_review_save', methods: ['POST'])]
+    public function saveReview(Request $request): JsonResponse
+    {
+        $couple = $this->requireUsableCouple();
+        if ($couple instanceof JsonResponse) {
+            return $couple;
+        }
+
+        $body = $this->decodeJson($request) ?? [];
+        $answers = \is_array($body['answers'] ?? null) ? $body['answers'] : [];
+
+        $review = $this->coupleService->saveReview($couple, $this->currentMobileUser(), $answers);
+        $couple->recordActivity();
+        $this->em->flush();
+
+        return $this->jsonNoStore([
+            'saved' => true,
+            'streakDays' => $couple->getStreakDays(),
+            'review' => [
+                'id' => $review->getId(),
+                'month' => $review->getMonth()->format('Y-m'),
+                'answers' => $review->getAnswers(),
+                'updatedAt' => $review->getUpdatedAt()->format('Y-m-d'),
+            ],
+        ]);
+    }
+
+    #[Route('/report', name: 'api_mobile_v1_couple_report', methods: ['GET'])]
+    public function getReport(): JsonResponse
+    {
+        $couple = $this->requireUsableCouple();
+        if ($couple instanceof JsonResponse) {
+            return $couple;
+        }
+
+        $raw = $this->coupleService->crossReport($couple);
+
+        return $this->jsonNoStore([
+            'partnerA' => [
+                'name' => $raw['people'][0]['user']->getDisplayName(),
+                'sharesTests' => $raw['people'][0]['shares'],
+                'hasProfile' => null !== $raw['people'][0]['profile'],
+            ],
+            'partnerB' => [
+                'name' => $raw['people'][1]['user']->getDisplayName(),
+                'sharesTests' => $raw['people'][1]['shares'],
+                'hasProfile' => null !== $raw['people'][1]['profile'],
+            ],
+            'domains' => array_values($raw['domains']),
+            'styles' => $raw['styles'],
+            'types' => $raw['types'],
+            'enneagram' => $raw['enneagram'],
+        ]);
     }
 }

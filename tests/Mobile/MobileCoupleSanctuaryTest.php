@@ -176,6 +176,26 @@ class MobileCoupleSanctuaryTest extends WebTestCase
         $notifsB = $em->getRepository(Notification::class)->findBy(['user' => $userB]);
         $this->assertNotEmpty($notifsB);
 
+        // 7. Le Salon : Revue mensuelle & Rapport croisé
+        $getRev = $this->api('GET', '/api/mobile/v1/couple/review', null, $tokenA);
+        $this->assertSame(200, $getRev['status']);
+        $this->assertCount(5, $getRev['json']['questions']);
+
+        $saveRev = $this->api('POST', '/api/mobile/v1/couple/review', [
+            'answers' => [
+                'gratitude' => 'Merci pour notre complicité ce mois-ci.',
+                'decision' => 'Une soirée sans écran chaque vendredi.',
+            ],
+        ], $tokenA);
+        $this->assertSame(200, $saveRev['status']);
+        $this->assertTrue($saveRev['json']['saved']);
+        $this->assertSame('Merci pour notre complicité ce mois-ci.', $saveRev['json']['review']['answers']['gratitude']);
+
+        $report = $this->api('GET', '/api/mobile/v1/couple/report', null, $tokenB);
+        $this->assertSame(200, $report['status']);
+        $this->assertArrayHasKey('partnerA', $report['json']);
+        $this->assertArrayHasKey('partnerB', $report['json']);
+
         // Nettoyage projet & intention
         $delInt = $this->api('DELETE', '/api/mobile/v1/couple/intentions/'.$intentionId, null, $tokenA);
         $this->assertSame(200, $delInt['status']);
