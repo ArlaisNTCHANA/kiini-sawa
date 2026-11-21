@@ -13,7 +13,13 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Entity]
 class CoupleItem
 {
-    public const KINDS = ['VALUE' => 'Valeur', 'PROJECT' => 'Projet', 'THEME' => 'Thème de croissance', 'RITUAL' => 'Rituel'];
+    public const KINDS = [
+        'VALUE' => 'Valeur',
+        'PROJECT' => 'Projet',
+        'THEME' => 'Thème de croissance',
+        'RITUAL' => 'Rituel',
+        'INTENTION' => 'Intention de prière',
+    ];
 
     #[ORM\Id]
     #[ORM\GeneratedValue]

@@ -104,7 +104,7 @@ final class Notifier
     private function wants(NotificationPreference $p, NotificationType $type): bool
     {
         return match ($type) {
-            NotificationType::CONNECTION_REQUEST, NotificationType::CONNECTION_ACCEPTED => $p->isNotifyConnection(),
+            NotificationType::CONNECTION_REQUEST, NotificationType::CONNECTION_ACCEPTED, NotificationType::COUPLE_SANCTUARY => $p->isNotifyConnection(),
             NotificationType::CHALLENGE_INVITE, NotificationType::CHALLENGE_ACCEPTED, NotificationType::CHALLENGE_DAY => $p->isNotifyChallenge(),
             NotificationType::FEEDBACK_RECEIVED => $p->isNotifyFeedback(),
             NotificationType::SUGGESTION_RECEIVED => $p->isNotifySuggestion(),

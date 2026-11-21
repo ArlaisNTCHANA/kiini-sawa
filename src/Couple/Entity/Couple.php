@@ -58,6 +58,14 @@ class Couple
     #[ORM\Column(nullable: true)]
     private ?\DateTimeImmutable $joinedAt = null;
 
+    /** Jours consécutifs d'activité partagée (défi ou méditation). */
+    #[ORM\Column(options: ['default' => 0])]
+    private int $streakDays = 0;
+
+    /** Date de la dernière activité comptabilisée pour le streak. */
+    #[ORM\Column(type: Types::DATE_IMMUTABLE, nullable: true)]
+    private ?\DateTimeImmutable $lastActivityDate = null;
+
     /** @var Collection<int, CoupleItem> */
     #[ORM\OneToMany(mappedBy: 'couple', targetEntity: CoupleItem::class, cascade: ['persist'])]
     #[ORM\OrderBy(['sortOrder' => 'ASC', 'id' => 'ASC'])]
@@ -84,6 +92,26 @@ class Couple
     public function setVerse(?string $verse): static { $this->verse = $verse; return $this; }
     public function getCreatedAt(): \DateTimeImmutable { return $this->createdAt; }
     public function getJoinedAt(): ?\DateTimeImmutable { return $this->joinedAt; }
+    public function getStreakDays(): int { return $this->streakDays; }
+    public function getLastActivityDate(): ?\DateTimeImmutable { return $this->lastActivityDate; }
+
+    /** Enregistre une activité partagée aujourd'hui et met à jour la flamme (streak). */
+    public function recordActivity(?\DateTimeImmutable $today = null): void
+    {
+        $day = ($today ?? new \DateTimeImmutable('today'))->setTime(0, 0);
+        if (null !== $this->lastActivityDate) {
+            $last = $this->lastActivityDate->setTime(0, 0);
+            if ($last == $day) {
+                return;
+            }
+            $diff = (int) $last->diff($day)->format('%r%a');
+            $this->streakDays = (1 === $diff) ? $this->streakDays + 1 : 1;
+        } else {
+            $this->streakDays = 1;
+        }
+        $this->lastActivityDate = $day;
+    }
+
     /** @return Collection<int, CoupleItem> */
     public function getItems(): Collection { return $this->items; }
 

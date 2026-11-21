@@ -31,6 +31,8 @@ enum NotificationType: string
     case REFERRAL_REWARD = 'REFERRAL_REWARD';
     // Rappel du matin « vos rituels du jour » : notification sur le téléphone uniquement
     case DAILY_RITUALS = 'DAILY_RITUALS';
+    // Sanctuaire du couple : défi partagé, méditation et ping de connexion
+    case COUPLE_SANCTUARY = 'COUPLE_SANCTUARY';
 
     /** Icône Lucide affichée dans le centre de notifications. */
     public function icon(): string
@@ -49,6 +51,7 @@ enum NotificationType: string
             self::CHALLENGE_DAY => 'trophy',
             self::REFERRAL_REWARD => 'gift',
             self::DAILY_RITUALS => 'sun',
+            self::COUPLE_SANCTUARY => 'heart',
         };
     }
 
@@ -57,7 +60,7 @@ enum NotificationType: string
     {
         return \in_array($this, [self::WEEKLY_REVIEW_REMINDER, self::MONTHLY_REVIEW_REMINDER, self::HABIT_REMINDER, self::GOAL_DEADLINE,
             self::CHALLENGE_DAY, self::DAILY_RITUALS, self::REFERRAL_REWARD, self::FEEDBACK_RECEIVED, self::CONNECTION_REQUEST,
-            self::CONNECTION_ACCEPTED, self::TRIAL_ENDING, self::SUBSCRIPTION_ENDING, self::PAYMENT_VALIDATED], true);
+            self::CONNECTION_ACCEPTED, self::TRIAL_ENDING, self::SUBSCRIPTION_ENDING, self::PAYMENT_VALIDATED, self::COUPLE_SANCTUARY], true);
     }
 
     /** Messages de service (paiement, fin d'essai) : envoyés quelles que soient les préférences. */
