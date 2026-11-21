@@ -27,3 +27,4 @@ Ce portail est accessible directement depuis le back-end de l'application et com
 9. **[Dépendances JavaScript](dependances-front.md)**
    * Bibliothèques servies par l'application, versions, mise à jour.
 10. [Mise en ligne](mise-en-ligne.md) : choix à faire, variables, déploiement, tâches planifiées, sauvegardes, contrôle `app:launch:check`.
+11. **[Feuille de route Produit & RFCs (Releases à venir)](roadmap/ROADMAP.md)** : vision Sanctuaire de Croissance 360 (cap 1M € ARR), catalogue des prochaines releases et spécifications techniques (RFC-001…).
