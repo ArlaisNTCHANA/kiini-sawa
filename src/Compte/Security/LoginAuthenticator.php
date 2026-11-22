@@ -52,7 +52,13 @@ class LoginAuthenticator extends AbstractLoginFormAuthenticator
             return new RedirectResponse($invite);
         }
         if ($targetPath = $this->getTargetPath($request->getSession(), $firewallName)) {
-            return new RedirectResponse($targetPath);
+            $path = (string) (parse_url($targetPath, PHP_URL_PATH) ?? '');
+            if (str_starts_with($path, '/api/rapide/')) {
+                return new RedirectResponse($this->urlGenerator->generate('app_quick'));
+            }
+            if (!str_starts_with($path, '/api/')) {
+                return new RedirectResponse($targetPath);
+            }
         }
 
         return new RedirectResponse($this->urlGenerator->generate('app_dashboard'));
@@ -65,6 +71,15 @@ class LoginAuthenticator extends AbstractLoginFormAuthenticator
     public function start(Request $request, ?AuthenticationException $authException = null): Response
     {
         if (str_starts_with($request->getPathInfo(), '/api/')) {
+            // Symfony's ExceptionListener mémorise les GET sans X-Requested-With dans target_path :
+            // on nettoie si c'est une URL /api/ pour ne jamais rediriger un humain vers du JSON après /login.
+            if ($request->hasSession()) {
+                $saved = $this->getTargetPath($request->getSession(), 'main');
+                if ($saved && str_starts_with((string) (parse_url($saved, PHP_URL_PATH) ?? ''), '/api/')) {
+                    $this->removeTargetPath($request->getSession(), 'main');
+                }
+            }
+
             return new JsonResponse(['error' => 'Authentification requise.'], Response::HTTP_UNAUTHORIZED);
         }
 

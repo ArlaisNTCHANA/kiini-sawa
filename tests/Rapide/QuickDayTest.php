@@ -236,4 +236,26 @@ class QuickDayTest extends WebTestCase
         $this->assertStringContainsString('sub.unsubscribe()', $head);
         $this->assertStringContainsString("action: 'remove'", $head, 'l\'appareil est aussi retiré côté serveur');
     }
+
+    public function testLoginNeverRedirectsToQuickApiJson(): void
+    {
+        $freshUser = $this->createUser('mot-de-passe-solide');
+        $this->client->getCookieJar()->clear();
+
+        // 1. Appel anonyme à l'API rapide (comme fait par fetch() depuis /rapide)
+        $this->client->request('GET', '/api/rapide/aujourdhui');
+        $this->assertResponseStatusCodeSame(401);
+
+        // 2. Connexion sur /login
+        $crawler = $this->client->request('GET', '/login');
+        $form = $crawler->selectButton('Se connecter')->form([
+            'email' => $freshUser->getEmail(),
+            'password' => 'mot-de-passe-solide',
+        ]);
+        $this->client->submit($form);
+
+        $this->assertResponseRedirects();
+        $location = (string) $this->client->getResponse()->headers->get('Location');
+        $this->assertStringNotContainsString('/api/', $location, 'La connexion ne doit jamais rediriger vers un endpoint JSON /api/');
+    }
 }
