@@ -32,6 +32,7 @@ erDiagram
 
 1. **`Course`** (Parcours pratique)
    * `id`, `slug` (unique), `title`, `subtitle`, `description`
+   * `coverImage` : VARCHAR(500) nullable (visuel éditorial du parcours)
    * `primaryPlan` : enum/string (`VIE | CROISSANCE | DEVELOPPEMENT | HYGIENE | INTENDANCE | TRANSMISSION | COUPLE`)
    * `accessLevel` : `FREE | PRO | DUO` (piloté par `Entitlements`)
    * `estimatedMinutes` : INT (durée totale estimée)
@@ -44,7 +45,8 @@ erDiagram
 3. **`Lesson`** (Leçon pratique — 5 à 10 min)
    * `id`, `module_id` (FK), `slug`, `title`, `sortOrder`
    * `contentMarkdown` : TEXT (enseignement concis, sobre, lisible hors-ligne)
-   * `mediaUrl` : VARCHAR(500) nullable (audio ou vidéo externe — ex. Cloudflare R2 / Bunny Stream ; **jamais** de gros fichiers MP4 sur Hostinger)
+   * `mediaProvider` : VARCHAR(20) (`NONE | BUNNY | VIMEO | YOUTUBE | AUDIO`)
+   * `mediaUrl` : VARCHAR(500) nullable (identifiant ou URL sécurisée — **jamais** de gros fichiers MP4 sur Hostinger)
    * `durationMinutes` : INT
    * **Pont vers les 6 Plans (le cœur de la RFC)** :
      * `practicePrompt` : TEXT nullable (consigne de l'exercice pratique de fin de leçon)
@@ -103,10 +105,37 @@ Service dédié `App\Academie\Service\AcademyPlanBridge` qui reçoit `(User $use
 
 ---
 
-## 5. Administration & Import des Cours Existants
+## 5. Studio Auteur (Admin), Vidéos & Expérience Design
 
-* **Back-office dédié (`/admin/academie`)** : création et édition de parcours, modules, leçons et liaison `targetPlan / targetAction` (en respectant l'architecture contrôleurs Symfony de `docs/admin.md`).
-* **Commande d'import** : `php bin/console app:academie:import` pour importer les cours déjà présents dans `formation/courses_dump.json` en brouillon (`isPublished = false`), afin de les relire et de brancher chaque leçon sur son plan cible avant publication.
+### A. Studio de rédaction dans `/admin/academie`
+Conçu pour permettre au fondateur de rédiger et publier ses cours **en totale autonomie**, sans toucher au code :
+* **Gestion des parcours** : titre, accroche, visuel de couverture, plan associé, accès (`Gratuit / PRO / Duo`), bascule `Brouillon / Publié` en un clic.
+* **Structure modulaire** : ajout, édition et réordonnancement simple des modules et des leçons.
+* **Éditeur de leçon** : rédaction en Markdown propre (titres, citations, listes, points clés) avec **aperçu en direct**, durée estimée, et choix du pont `AcademyPlanBridge` par simple menu déroulant (*Plan cible + Action + Consigne d'exercice*).
+* **Import des cours existants** : commande `php bin/console app:academie:import` pour importer les contenus de `formation/courses_dump.json` en brouillon (`isPublished = false`), prêts à être relus et reliés aux 6 plans.
+
+### B. Stratégie Vidéo & Audio (Europe + Afrique)
+Pour garantir une lecture fluide même sur connexion 3G/4G et ne jamais saturer l'hébergement Hostinger :
+1. **Phase 1 — Intégration par lien (0 € au démarrage)** :
+   * Collage direct d'une URL **Bunny Stream**, **Vimeo** ou **YouTube (non répertorié)** dans le formulaire de leçon.
+   * Validation stricte des domaines autorisés côté serveur (anti-XSS / SSRF) et mise à jour ciblée de la directive CSP `frame-src` uniquement pour les lecteurs autorisés.
+2. **Phase 2 — Upload direct `.mp4` depuis `/admin/academie`** :
+   * Téléversement direct du fichier vidéo depuis l'admin vers **Bunny Stream** (transcodage HLS adaptatif 360p → 1080p automatique, coût très faible ~1–5 €/mois).
+   * Stockage des capsules audio courtes (3–7 min) et fiches PDF éventuelles sur **Cloudflare R2** (0 € de bande passante).
+
+### C. Spécifications UX & Design (Sobre, éditorial, donnant envie)
+Fidèle à la charte KIINI SAWA (`#2E6B53`, `#FAF9F6`, `#B5562F`, *Playfair Display + Inter*, zéro émoji, icônes Lucide) :
+* **Page Catalogue (`/academie`)** :
+  * Cartes éditoriales aérées avec visuel de couverture 16:9, badge couleur du plan associé, durée estimée et barre de progression.
+  * Filtres par plan (*Tous*, *Plan de Vie*, *Croissance*, *Développement*, *Hygiène*, *Intendance*, *Transmission*, *Couple*).
+  * Mise en avant contextuelle du parcours correspondant au plan prioritaire de l'utilisateur.
+* **Lecteur de leçon immersif (`/academie/{slug}/{lessonSlug}`)** :
+  * Mise en page centrée sans distraction : lecteur vidéo/audio 16:9 net en tête de leçon.
+  * Sommaire latéral repliable listant les modules et leçons avec coches de complétion.
+  * Texte éditorial aéré (largeur de lecture confortable ~68 caractères par ligne).
+  * **Encart « Passer à la pratique »** en pied de leçon : formulaire minimaliste connecté à `AcademyPlanBridge`, avec retour immédiat (*« Enregistré et ajouté à votre Plan d'Intendance ✓ — Voir dans mon plan → »*) et option sobre *« Valider la leçon sans modifier mon plan »*.
+* **Application Mobile (`mobile-v1`)** :
+  * Écrans natifs `app/academie/` reprenant la même hiérarchie épurée, avec mise en cache SQLite du texte des leçons pour lecture hors-ligne.
 
 ---
 
