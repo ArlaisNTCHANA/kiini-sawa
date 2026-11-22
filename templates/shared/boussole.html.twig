@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Ma Boussole 360 — KIINI SAWA</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {% include 'shared/_pwa_head.html.twig' %}
+    <meta name="description" content="24 affirmations simples pour faire le point sur l'équilibre de vos 6 plans de vie en 3 minutes.">
+    <meta name="theme-color" content="#2E6B53">
+    <link href="{{ asset('styles/fonts.css') }}" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #2E6B53;
+            --primary-dark: #1F4D3A;
+            --primary-soft: #E9F1EC;
+            --couple: #B5562F;
+            --couple-soft: #F8ECE6;
+            --fg: #0F172A;
+            --muted: #64748B;
+            --bg: #F8FAFC;
+            --border: #E2E8F0;
+            --serif: 'Playfair Display', Georgia, serif;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Inter', -apple-system, sans-serif; color: var(--fg); background: var(--bg); line-height: 1.6; min-height: 100vh; }
+        a { color: inherit; }
+
+        header.hero-bar {
+            background: linear-gradient(135deg, #022c22 0%, #2E6B53 55%, #014751 100%);
+            color: #e2e8f0;
+            padding-bottom: 2.5rem;
+        }
+        .wrap { max-width: 880px; margin: 0 auto; padding: 0 1.25rem; }
+        nav { display: flex; justify-content: space-between; align-items: center; padding: 1.1rem 0; }
+        .logo { font-family: var(--serif); font-weight: 700; font-size: 1.35rem; color: #fff; text-decoration: none; }
+        .nav-back { color: #DCE7DF; text-decoration: none; font-size: .9rem; font-weight: 500; }
+        .nav-back:hover { color: #fff; }
+        .hero-copy { padding-top: 1.25rem; max-width: 660px; }
+        .hero-copy h1 { font-family: var(--serif); color: #fff; font-size: clamp(1.75rem, 4vw, 2.4rem); line-height: 1.18; margin-bottom: .5rem; }
+        .hero-copy p { color: #cbd5e1; font-size: 1rem; }
+
+        main.wrap { padding-top: 2rem; padding-bottom: 4rem; }
+        .card {
+            background: #fff;
+            border-radius: 20px;
+            padding: 1.75rem;
+            box-shadow: 0 4px 20px -4px rgba(46, 107, 83, .08);
+        }
+        .card + .card { margin-top: 1.25rem; }
+
+        .progress-row { display: flex; justify-content: space-between; font-size: .82rem; font-weight: 600; color: var(--muted); margin-bottom: .5rem; }
+        .bar { height: 6px; background: #E2E8F0; border-radius: 999px; overflow: hidden; margin-bottom: 1.75rem; }
+        .bar-fill { height: 100%; background: var(--primary); border-radius: 999px; transition: width .2s ease; }
+
+        .q-text { font-family: var(--serif); font-size: clamp(1.2rem, 2.6vw, 1.5rem); line-height: 1.4; color: var(--fg); margin-bottom: 1.5rem; min-height: 3.2em; }
+        .likert { display: grid; grid-template-columns: 1fr; gap: .55rem; margin-bottom: 1.5rem; }
+        @media (min-width: 640px) { .likert { grid-template-columns: repeat(5, 1fr); gap: .6rem; } }
+        .likert button {
+            display: flex; align-items: center; justify-content: space-between; gap: .5rem;
+            padding: .85rem 1rem; border: 1.5px solid var(--border); border-radius: 12px;
+            background: #fff; font: inherit; color: var(--fg); cursor: pointer; transition: all .14s ease; text-align: left;
+        }
+        @media (min-width: 640px) {
+            .likert button { flex-direction: column; justify-content: center; text-align: center; padding: .9rem .45rem; min-height: 82px; }
+        }
+        .likert button:hover { border-color: var(--primary); background: var(--primary-soft); }
+        .likert button.on { background: var(--primary); border-color: var(--primary); color: #fff; }
+        .likert .num { font-family: var(--serif); font-size: 1.1rem; font-weight: 700; opacity: .7; }
+        .likert button.on .num { opacity: 1; }
+        .likert .lbl { font-size: .82rem; font-weight: 600; line-height: 1.2; }
+        .nav-row { display: flex; justify-content: space-between; align-items: center; gap: .75rem; }
+
+        .btn { display: inline-flex; align-items: center; justify-content: center; gap: .45rem; padding: .85rem 1.45rem; border-radius: 12px; border: none; font: inherit; font-weight: 700; font-size: .94rem; cursor: pointer; text-decoration: none; transition: transform .15s, opacity .15s; }
+        .btn:hover { transform: translateY(-1px); }
+        .btn:disabled { opacity: .45; cursor: not-allowed; transform: none; }
+        .btn-primary { background: linear-gradient(135deg, #7A9E7E, #3D7A5F); color: #fff; box-shadow: 0 6px 20px rgba(61, 122, 95, .3); }
+        .btn-sec { background: #F1F5F9; color: var(--fg); }
+        .btn-ghost { background: transparent; border: 1.5px solid var(--border); color: var(--fg); }
+
+        .summary-head { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: 1rem; margin-bottom: 1.25rem; padding-bottom: 1.15rem; border-bottom: 1px solid var(--border); }
+        .summary-head h2 { font-family: var(--serif); font-size: clamp(1.45rem, 3vw, 1.9rem); line-height: 1.2; }
+        .score-tag { font-family: var(--serif); font-size: 1.55rem; font-weight: 700; color: var(--primary); }
+
+        .reading-box { background: #F8FAFC; border-left: 3px solid var(--primary); border-radius: 0 14px 14px 0; padding: 1.15rem 1.3rem; margin-bottom: 1.35rem; }
+        .reading-box p { font-size: .98rem; line-height: 1.68; color: var(--fg); }
+        .reading-box p + p { margin-top: .65rem; color: #334155; font-size: .93rem; }
+
+        .result-grid { display: grid; grid-template-columns: 1fr; gap: 1.5rem; align-items: center; }
+        @media (min-width: 720px) { .result-grid { grid-template-columns: 1fr 1.05fr; } }
+
+        .bars { display: flex; flex-direction: column; gap: .75rem; }
+        .plan-bar-row { display: flex; flex-direction: column; gap: .25rem; }
+        .plan-bar-head { display: flex; justify-content: space-between; font-size: .86rem; }
+        .plan-bar-head strong { color: var(--fg); }
+        .plan-bar-head span { font-weight: 700; color: var(--muted); }
+        .plan-track { height: 8px; background: #F1F5F9; border-radius: 999px; overflow: hidden; }
+        .plan-fill { height: 100%; border-radius: 999px; }
+
+        .two-cols { display: grid; grid-template-columns: 1fr; gap: 1rem; margin-top: 1.25rem; }
+        @media (min-width: 640px) { .two-cols { grid-template-columns: 1fr 1fr; } }
+        .mini-box { border: 1px solid var(--border); border-radius: 14px; padding: 1.1rem 1.2rem; background: #F8FAFC; }
+        .mini-box.focus { background: var(--couple-soft); border-color: #EBD5CA; }
+        .mini-label { font-size: .72rem; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; color: var(--primary); margin-bottom: .25rem; }
+        .mini-box.focus .mini-label { color: var(--couple); }
+        .mini-title { font-family: var(--serif); font-size: 1.15rem; font-weight: 700; margin-bottom: .35rem; }
+        .mini-text { font-size: .9rem; color: var(--muted); line-height: 1.55; }
+        .mini-box.focus .mini-text { color: #4A3228; }
+
+        .signals-list { list-style: none; display: flex; flex-direction: column; gap: .55rem; margin-top: .75rem; }
+        .signals-list li { padding: .65rem .85rem; background: #FFF7F4; border: 1px solid #F0D9CE; border-radius: 10px; font-size: .89rem; color: #4A3228; line-height: 1.5; }
+
+        .actions-list { list-style: none; display: flex; flex-direction: column; gap: .7rem; margin-top: .9rem; }
+        .actions-list li { display: flex; gap: .75rem; align-items: flex-start; font-size: .93rem; color: var(--fg); }
+        .actions-list .n { width: 24px; height: 24px; border-radius: 50%; background: var(--primary-soft); color: var(--primary); font-weight: 700; font-size: .8rem; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 2px; }
+
+        .next-box { margin-top: 1.5rem; padding: 1.35rem 1.45rem; background: var(--primary-soft); border: 1px solid #CFE3D9; border-radius: 16px; }
+        .next-box h4 { font-family: var(--serif); font-size: 1.2rem; color: var(--primary-dark); margin-bottom: .55rem; }
+        .next-list { list-style: none; display: flex; flex-direction: column; gap: .4rem; margin-bottom: 1.15rem; }
+        .next-list li { font-size: .91rem; color: #1E3A2F; padding-left: 1.25rem; position: relative; }
+        .next-list li::before { content: '✓'; position: absolute; left: 0; color: var(--primary); font-weight: 800; }
+
+        .cta-row { display: flex; flex-wrap: wrap; gap: .7rem; align-items: center; margin-top: 0; }
+        .toast { font-size: .84rem; color: var(--primary); font-weight: 600; margin-top: .65rem; min-height: 1.2em; }
+        [hidden] { display: none !important; }
+    </style>
+</head>
+<body>
+    <header class="hero-bar">
+        <div class="wrap">
+            <nav>
+                <a href="{{ path('app_home') }}" class="logo">KIINI SAWA</a>
+                <a href="{{ path('app_home') }}" class="nav-back">← Retour au site</a>
+            </nav>
+            <div class="hero-copy">
+                <h1 id="page-title">Ma Boussole 360</h1>
+                <p id="page-lead">24 affirmations simples, 3 minutes, sans compte. Répondez selon ce que vous vivez vraiment ces dernières semaines.</p>
+            </div>
+        </div>
+    </header>
+
+    <main class="wrap">
+        <section id="quiz-view" class="card">
+            <div class="progress-row">
+                <span id="step-label">Question 1 sur 24</span>
+                <span id="step-pct">4 %</span>
+            </div>
+            <div class="bar"><div id="bar-fill" class="bar-fill" style="width: 4.2%;"></div></div>
+
+            <p id="q-text" class="q-text"></p>
+
+            <div id="likert" class="likert" role="radiogroup" aria-label="Votre réponse"></div>
+
+            <div class="nav-row">
+                <button id="btn-prev" type="button" class="btn btn-sec" hidden>← Précédent</button>
+                <div style="flex: 1;"></div>
+                <button id="btn-next" type="button" class="btn btn-primary" disabled>Suivant →</button>
+            </div>
+        </section>
+
+        <div id="result-view" hidden>
+            <section class="card">
+                <div class="summary-head">
+                    <div>
+                        <h2>Ce que vos réponses montrent</h2>
+                        <p id="res-intro" style="color: var(--muted); font-size: .92rem; margin-top: .25rem;"></p>
+                    </div>
+                    <div class="score-tag"><span id="res-coherence">—</span></div>
+                </div>
+
+                <div class="reading-box">
+                    <p id="res-reading-main">—</p>
+                    <p id="res-reading-sub">—</p>
+                </div>
+
+                <div class="result-grid">
+                    <div style="text-align: center;">
+                        <svg id="radar-svg" width="310" height="285" viewBox="0 0 320 295" style="max-width: 100%; height: auto;"></svg>
+                    </div>
+                    <div id="res-bars" class="bars"></div>
+                </div>
+
+                <div class="two-cols">
+                    <div id="res-strong-box" class="mini-box">
+                        <div id="res-strong-label" class="mini-label">Ce sur quoi vous pouvez vous appuyer</div>
+                        <div id="res-strong-name" class="mini-title">—</div>
+                        <p id="res-strong-text" class="mini-text">—</p>
+                    </div>
+                    <div id="res-prio-box" class="mini-box focus">
+                        <div id="res-prio-label" class="mini-label">Ce qui vous freine le plus en ce moment</div>
+                        <div id="res-prio-name" class="mini-title">—</div>
+                        <p id="res-prio-text" class="mini-text">—</p>
+                    </div>
+                </div>
+
+                <div id="res-signals-wrap" style="margin-top: 1.35rem;" hidden>
+                    <div class="mini-label" style="color: var(--couple);">Signaux relevés dans vos réponses</div>
+                    <ul id="res-signals" class="signals-list"></ul>
+                </div>
+            </section>
+
+            <section class="card">
+                <h3 id="res-steps-title" style="font-family: var(--serif); font-size: 1.3rem;">3 pistes simples pour cette semaine</h3>
+                <ol id="res-steps" class="actions-list"></ol>
+
+                <div class="next-box">
+                    <h4>Et maintenant ? Passez du constat à l'action</h4>
+                    <ul class="next-list">
+                        <li><strong>Agissez sur votre priorité (<span id="res-next-prio">votre plan prioritaire</span>)</strong> : posez vos premiers rituels et bâtissez vos 6 plans dans votre espace gratuit.</li>
+                        <li><strong>Allez plus loin gratuitement</strong> : cette Boussole dure 3 minutes ; votre compte vous ouvre vos 5 tests approfondis (personnalité, fonctionnement, DISC, ennéagramme, dons spirituels).</li>
+                        <li><strong>Gardez une trace</strong> : utilisez le bouton « Copier mon résultat » ci-dessous si vous souhaitez conserver ce bilan avant de créer votre compte.</li>
+                    </ul>
+                    <div class="cta-row">
+                        <a href="{{ path('app_register') }}" class="btn btn-primary">Créer mon compte gratuit →</a>
+                        <button id="btn-share" type="button" class="btn btn-ghost" style="background: #fff;">Copier mon résultat</button>
+                        <button id="btn-retake" type="button" class="btn btn-sec" style="background: rgba(255,255,255,.65);">Recommencer</button>
+                    </div>
+                    <div id="share-toast" class="toast"></div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <script src="{{ asset('js/boussole-engine.js') }}"></script>
+    <script>
+        (function () {
+            const B = window.KiiniBoussole;
+            const answers = new Array(B.ITEMS.length).fill(null);
+            let idx = 0;
+
+            const pageTitle = document.getElementById('page-title');
+            const pageLead = document.getElementById('page-lead');
+            const quizView = document.getElementById('quiz-view');
+            const resultView = document.getElementById('result-view');
+            const stepLabel = document.getElementById('step-label');
+            const stepPct = document.getElementById('step-pct');
+            const barFill = document.getElementById('bar-fill');
+            const qText = document.getElementById('q-text');
+            const likertEl = document.getElementById('likert');
+            const btnPrev = document.getElementById('btn-prev');
+            const btnNext = document.getElementById('btn-next');
+
+            function renderQuestion() {
+                const item = B.ITEMS[idx];
+                const pct = Math.round(((idx + 1) / B.ITEMS.length) * 100);
+                stepLabel.textContent = 'Question ' + (idx + 1) + ' sur ' + B.ITEMS.length;
+                stepPct.textContent = pct + ' %';
+                barFill.style.width = pct + '%';
+                qText.textContent = item.text;
+                btnPrev.hidden = idx === 0;
+                btnNext.textContent = idx === B.ITEMS.length - 1 ? 'Voir mon résultat →' : 'Suivant →';
+                btnNext.disabled = answers[idx] === null;
+
+                likertEl.innerHTML = '';
+                B.SCALE.forEach(function (opt) {
+                    const btn = document.createElement('button');
+                    btn.type = 'button';
+                    btn.setAttribute('role', 'radio');
+                    btn.setAttribute('aria-checked', answers[idx] === opt.val ? 'true' : 'false');
+                    if (answers[idx] === opt.val) btn.className = 'on';
+                    btn.innerHTML = '<span class="num">' + opt.val + '</span><span class="lbl">' + opt.label + '</span>';
+                    btn.addEventListener('click', function () {
+                        answers[idx] = opt.val;
+                        if (idx < B.ITEMS.length - 1) {
+                            idx++;
+                        }
+                        renderQuestion();
+                    });
+                    likertEl.appendChild(btn);
+                });
+            }
+
+            function polar(cx, cy, r, deg) {
+                const rad = (deg * Math.PI) / 180;
+                return [cx + r * Math.cos(rad), cy + r * Math.sin(rad)];
+            }
+
+            function drawRadar(scores, coherence) {
+                const cx = 160, cy = 148, maxR = 100, lblR = 130;
+                let svg = '';
+                [0.25, 0.5, 0.75, 1].forEach(function (ratio) {
+                    const pts = B.PLAN_ORDER.map(function (k) {
+                        return polar(cx, cy, maxR * ratio, B.PLANS[k].angle).map(function (v) { return v.toFixed(1); }).join(',');
+                    }).join(' ');
+                    svg += '<polygon points="' + pts + '" fill="' + (ratio === 1 ? 'rgba(46,107,83,0.04)' : 'none') + '" stroke="' + (ratio === 1 ? '#CBD5CE' : '#E2E8E4') + '" stroke-width="' + (ratio === 1 ? 1.5 : 1) + '"/>';
+                });
+                B.PLAN_ORDER.forEach(function (k) {
+                    const p = polar(cx, cy, maxR, B.PLANS[k].angle);
+                    svg += '<line x1="' + cx + '" y1="' + cy + '" x2="' + p[0].toFixed(1) + '" y2="' + p[1].toFixed(1) + '" stroke="#DDE5E0"/>';
+                });
+                const dataPts = B.PLAN_ORDER.map(function (k) {
+                    return polar(cx, cy, Math.max(0.1, scores[k] / 100) * maxR, B.PLANS[k].angle).map(function (v) { return v.toFixed(1); }).join(',');
+                }).join(' ');
+                svg += '<polygon points="' + dataPts + '" fill="rgba(46,107,83,0.22)" stroke="#2E6B53" stroke-width="2.5" stroke-linejoin="round"/>';
+                B.PLAN_ORDER.forEach(function (k) {
+                    const plan = B.PLANS[k];
+                    const pt = polar(cx, cy, Math.max(0.1, scores[k] / 100) * maxR, plan.angle);
+                    const lp = polar(cx, cy, lblR, plan.angle);
+                    svg += '<circle cx="' + pt[0].toFixed(1) + '" cy="' + pt[1].toFixed(1) + '" r="6" fill="#fff"/>';
+                    svg += '<circle cx="' + pt[0].toFixed(1) + '" cy="' + pt[1].toFixed(1) + '" r="4.2" fill="' + plan.color + '"/>';
+                    svg += '<text x="' + lp[0].toFixed(1) + '" y="' + (lp[1] + 4).toFixed(1) + '" text-anchor="middle" font-size="11" font-weight="700" fill="#0F172A">' + plan.short + '</text>';
+                });
+                svg += '<circle cx="' + cx + '" cy="' + cy + '" r="30" fill="#FFFFFF" stroke="#DCE7DF" stroke-width="1.5"/>';
+                svg += '<text x="' + cx + '" y="' + (cy + 5) + '" text-anchor="middle" font-family="Playfair Display, Georgia, serif" font-size="18" font-weight="700" fill="#1F4D3A">' + coherence + '%</text>';
+                document.getElementById('radar-svg').innerHTML = svg;
+            }
+
+            function renderResult() {
+                const res = B.evaluate(answers);
+
+                pageTitle.textContent = 'Votre Boussole 360';
+                pageLead.textContent = 'Une lecture directe de votre équilibre actuel, basée sur vos 24 réponses.';
+
+                document.getElementById('res-coherence').textContent = res.coherence + ' %';
+                document.getElementById('res-intro').textContent = res.spread === 0
+                    ? 'Score de cohérence global · Tous vos domaines sont au même niveau.'
+                    : 'Score de cohérence global · Écart de ' + res.spread + ' points entre vos domaines.';
+                document.getElementById('res-reading-main').textContent = res.readingMain;
+                document.getElementById('res-reading-sub').textContent = res.readingSub;
+
+                drawRadar(res.scores, res.coherence);
+
+                const barsEl = document.getElementById('res-bars');
+                barsEl.innerHTML = '';
+                B.PLAN_ORDER.forEach(function (k) {
+                    const p = B.PLANS[k];
+                    const row = document.createElement('div');
+                    row.className = 'plan-bar-row';
+                    row.innerHTML =
+                        '<div class="plan-bar-head"><strong>' + p.name + '</strong><span>' + res.scores[k] + ' %</span></div>' +
+                        '<div class="plan-track"><div class="plan-fill" style="width:' + Math.max(4, res.scores[k]) + '%; background:' + p.color + ';"></div></div>';
+                    barsEl.appendChild(row);
+                });
+
+                const strongBox = document.getElementById('res-strong-box');
+                const prioBox = document.getElementById('res-prio-box');
+                if (res.showStrongCard) {
+                    strongBox.hidden = false;
+                    prioBox.style.gridColumn = '';
+                    document.getElementById('res-strong-label').textContent = res.strongLabel;
+                    document.getElementById('res-strong-name').textContent = res.strongTitle;
+                    document.getElementById('res-strong-text').textContent = res.strongText;
+                } else {
+                    strongBox.hidden = true;
+                    prioBox.style.gridColumn = '1 / -1';
+                }
+
+                document.getElementById('res-prio-label').textContent = res.prioLabel;
+                document.getElementById('res-prio-name').textContent = res.prioTitle;
+                document.getElementById('res-prio-text').textContent = res.prioText;
+                document.getElementById('res-next-prio').textContent = res.nextPriorityBadge;
+
+                const signalsWrap = document.getElementById('res-signals-wrap');
+                const signalsEl = document.getElementById('res-signals');
+                signalsEl.innerHTML = '';
+                if (res.signals.length > 0) {
+                    res.signals.forEach(function (txt) {
+                        const li = document.createElement('li');
+                        li.textContent = txt;
+                        signalsEl.appendChild(li);
+                    });
+                    signalsWrap.hidden = false;
+                } else {
+                    signalsWrap.hidden = true;
+                }
+
+                document.getElementById('res-steps-title').textContent = res.stepsMode === 'stabilisation'
+                    ? '3 actions de stabilisation pour cette semaine'
+                    : '3 actions de structuration pour cette semaine';
+
+                const stepsEl = document.getElementById('res-steps');
+                stepsEl.innerHTML = '';
+                res.steps.forEach(function (txt, i) {
+                    const li = document.createElement('li');
+                    li.innerHTML = '<span class="n">' + (i + 1) + '</span><span>' + txt + '</span>';
+                    stepsEl.appendChild(li);
+                });
+
+                quizView.hidden = true;
+                resultView.hidden = false;
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+
+                document.getElementById('btn-share').onclick = async function () {
+                    const lines = [
+                        'Ma Boussole 360 — KIINI SAWA (' + res.coherence + ' %)',
+                        ...B.PLAN_ORDER.map(function (k) { return '• ' + B.PLANS[k].name + ' : ' + res.scores[k] + ' %'; })
+                    ];
+                    if (res.showStrongCard) {
+                        lines.push(res.strongLabel + ' : ' + res.strongTitle);
+                        lines.push(res.prioLabel + ' : ' + res.prioTitle);
+                    } else {
+                        lines.push('Point de départ recommandé : ' + res.prioTitle);
+                    }
+                    lines.push('https://kiinisawa.com/boussole');
+                    const toast = document.getElementById('share-toast');
+                    if (navigator.clipboard) {
+                        await navigator.clipboard.writeText(lines.join('\n'));
+                        toast.textContent = 'Résultat copié.';
+                    }
+                };
+            }
+
+            btnPrev.addEventListener('click', function () {
+                if (idx > 0) { idx--; renderQuestion(); }
+            });
+            btnNext.addEventListener('click', function () {
+                if (answers[idx] === null) return;
+                if (idx < B.ITEMS.length - 1) { idx++; renderQuestion(); }
+                else { renderResult(); }
+            });
+            document.getElementById('btn-retake').addEventListener('click', function () {
+                answers.fill(null);
+                idx = 0;
+                pageTitle.textContent = 'Ma Boussole 360';
+                pageLead.textContent = '24 affirmations simples, 3 minutes, sans compte. Répondez selon ce que vous vivez vraiment ces dernières semaines.';
+                resultView.hidden = true;
+                quizView.hidden = false;
+                renderQuestion();
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            });
+
+            renderQuestion();
+        })();
+    </script>
+</body>
+</html>

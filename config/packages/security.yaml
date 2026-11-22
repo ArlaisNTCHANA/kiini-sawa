@@ -71,7 +71,7 @@ security:
         - { path: ^/rejoindre/, roles: PUBLIC_ACCESS }
         - { path: ^/couple/rejoindre/, roles: PUBLIC_ACCESS }
         - { path: ^/methode, roles: PUBLIC_ACCESS }
-        - { path: ^/(installer|hors-ligne|rapide)$, roles: PUBLIC_ACCESS }
+        - { path: ^/(installer|hors-ligne|rapide|boussole)$, roles: PUBLIC_ACCESS }
         - { path: ^/(defis$|defi/), roles: PUBLIC_ACCESS }
         - { path: ^/i/, roles: PUBLIC_ACCESS }
         - { path: ^/resultat/, roles: PUBLIC_ACCESS }
