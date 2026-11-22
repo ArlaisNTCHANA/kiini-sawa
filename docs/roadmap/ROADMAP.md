@@ -34,15 +34,19 @@
 
 ---
 
-### Release V1.2 — Parcours Communautés & Sanctuaire Audio *(À spécifier — RFC-002 / RFC-003)*
+### Release V1.2 — Académie Pratique, Parcours Communautés & Sanctuaire Audio
 * **Statut** : Planifié
 
-#### A. Studio d'Accompagnement (Églises, Leaders & Coachs)
+#### A. L'Académie Pratique reliée aux 6 Plans *(Spécifié)*
+* **Spécification technique** : [RFC-002 : L'Académie Pratique KIINI SAWA](RFC-002-academie-pratique.md)
+* **Concept** : Zéro parcours certifiant théorique ; chaque leçon pratique se termine par un exercice qui **alimente directement l'un des 6 plans** (ou les Rituels / Journal / Couple) via `AcademyPlanBridge`, résolvant ainsi la page blanche.
+
+#### B. Studio d'Accompagnement (Églises, Leaders & Coachs)
 * **Socle existant** : Modules `Organisation`, `Coaching`, `Defis`, `Social`.
 * **Concept** : Permettre à un leader (pasteur, responsable, coach certifié) de lancer un parcours collectif de 21 ou 40 jours (ex. *« Préparation au mariage »*, *« 40 jours d'alignement »*, *« Intendance & Finances »*) suivi dans l'app mobile par toute sa communauté, avec suivi d'engagement agrégé (zéro accès aux journaux privés).
 * **Levier** : Acquisition de masse (B2B2C), moteur principal vers le 1M €.
 
-#### B. Sanctuaire Audio (Capsules rituelles de 3 à 7 min)
+#### C. Sanctuaire Audio (Capsules rituelles de 3 à 7 min)
 * **Socle existant** : Module `Media` + Expo (`expo-audio`).
 * **Concept** : Capsules courtes dédiées aux rituels KIINI SAWA (alignement du matin, gratitude du soir, préparation de la revue hebdomadaire, méditation guidée en couple).
 * **Garde-fou** : Rester strictement lié à la Méthode (ne pas devenir une app de relaxation générique). Héberger les fichiers audio sur stockage objet externe (Cloudflare R2).
