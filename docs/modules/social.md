@@ -87,5 +87,14 @@ Plan de Vie, un rituel ou un engagement libre.
 - **Mesure** : interpellations (par motif), taux de réponse, délai moyen, **reprises dans les 72 heures**
   (`AccountabilityNudge::resumedAt` : rituel validé, objectif mis à jour, ou retour dans l'application selon
   l'engagement), historique. `LifeGoal::updatedAt` (nouvelle colonne) sert au signal « objectif sans avancée ».
-- **Lots suivants** : revue de la semaine (chiffres de redevabilité), application mobile.
+- **Revue de la semaine** : encart « Ma redevabilité cette semaine » (`AccountabilityService::weeklySummary`), qui
+  donne les messages, les réponses, les reprises dans les 72 heures et les mots du partenaire, avec une question de
+  revue. Il est sur le web (`/bilan/revue-hebdomadaire#redevabilite`) et dans l'API (`accountability` dans
+  `GET /api/mobile/v1/revues/hebdo`).
+- **Application mobile** :
+  - API `GET /api/mobile/v1/redevabilite`, `POST /{id}/coup-de-main`, `POST /{id}/pause|reprendre|arreter`
+    (`MobileAccountabilityController`) ;
+  - écran `mobile-v1/app/redevabilite/index.tsx` (menu Ensemble › Ma redevabilité ; notifications
+    `/social/redevabilite`) ;
+  - la création d'un engagement s'ouvre sur le site (aperçu et consentement), à l'adresse `createUrl`.
 

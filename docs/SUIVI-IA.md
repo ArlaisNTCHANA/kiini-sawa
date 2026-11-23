@@ -9,6 +9,27 @@ teste (`php bin/phpunit`), commit, déploie (`bin/ops/envoyer-hostinger.sh`), v�
 journal `var/log/prod-AAAA-MM-JJ.log` sans erreur) ; **le fondateur fait lui-même `git push`** (refusé à l'IA).
 Ne jamais afficher ni demander de mot de passe ; ne pas publier son nom (mentions légales en attente).
 
+## 23/11/2026 — Redevabilité : revue de la semaine et application mobile (lots 2 et 4 terminés)
+
+- **Revue de la semaine** : encart « Ma redevabilité cette semaine » :
+  - il donne les messages (alertes et coups de main), les réponses, les reprises dans les 72 heures et les mots du
+    partenaire, avec la question « Qu'est-ce que vos partenaires ont changé pour vous cette semaine… » ;
+  - il n'apparaît que s'il y a un engagement ouvert ou un message dans la semaine ;
+  - source : `AccountabilityService::weeklySummary()`, sur le web et dans `GET /api/mobile/v1/revues/hebdo`.
+- **Mobile** :
+  - API : `MobileAccountabilityController` (liste avec chiffres, règles d'alerte et historique ; coup de main ;
+    pause, reprise, arrêt) ;
+  - écran `app/redevabilite/index.tsx` ; entrée de menu « Ma redevabilité » ; routage des notifications ; encart dans
+    `app/revues/hebdo.tsx`.
+  La création reste sur le site (aperçu exact des e-mails et consentement) : bouton « Nouvel engagement (sur le
+  site) ».
+- **Tests** : `AccountabilityTest` compte 10 tests (encart de la revue ; API : liste, coup de main avec copie, délai
+  de 7 jours, pause, isolement entre comptes). Routage mobile testé. Suite web **477 / 477** ; mobile : `tsc`
+  0 erreur, Vitest 24/24, export iOS réussi.
+- **Non vérifié** : l'écran mobile n'a pas été affiché dans un simulateur (seulement compilé). L'encart web, lui, a
+  été vérifié dans le navigateur.
+- **État de la redevabilité** : lots 1 à 4 faits. Reste l'essai réel des e-mails en production.
+
 ## 23/11/2026 — Redevabilité : alertes automatiques au partenaire (le cœur de la fonction)
 
 - **Remarque du fondateur** : « demander à être interpellé » ne suffit pas. Celui qui décroche n'a souvent plus la

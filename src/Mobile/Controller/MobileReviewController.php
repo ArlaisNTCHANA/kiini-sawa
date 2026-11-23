@@ -30,6 +30,7 @@ final class MobileReviewController extends AbstractController
         private readonly MonthlyReviewRepository $monthlyRepo,
         private readonly Rhythms $rhythms,
         private readonly Entitlements $entitlements,
+        private readonly \App\Social\Service\AccountabilityService $accountability,
     ) {
     }
 
@@ -89,6 +90,7 @@ final class MobileReviewController extends AbstractController
             'habitsRegularity' => $this->weeklyService->habitsThisWeek($user),
             'journalEntriesCount' => $this->weeklyService->journalEntriesThisWeek($user),
             'recentReviews' => $recent,
+            'accountability' => $this->accountability->weeklySummary($user),
         ]);
     }
 

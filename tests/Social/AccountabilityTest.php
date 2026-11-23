@@ -192,10 +192,8 @@ class AccountabilityTest extends WebTestCase
         $owner = $this->createUser();
         $habit = (new Habit())->setTitle('Lire la Bible chaque matin')->setUser($owner);
         $this->em()->persist($habit);
-        $c = new AccountabilityCommitment($owner, 'Samuel', 'samuel-'.uniqid().'@exemple.org', AccountabilityCommitment::TARGET_HABIT, null, 'Lire la Bible chaque matin', null);
-        $this->em()->persist($c);
         $this->em()->flush();
-        $c = new AccountabilityCommitment($owner, 'Samuel', $c->getPartnerEmail(), AccountabilityCommitment::TARGET_HABIT, $habit->getId(), 'Lire la Bible chaque matin', null);
+        $c = new AccountabilityCommitment($owner, 'Samuel', 'samuel-'.uniqid().'@exemple.org', AccountabilityCommitment::TARGET_HABIT, $habit->getId(), 'Lire la Bible chaque matin', null);
         $c->setAlerts($habitDays, null, $inactiveDays);
         $c->accept();
         $this->em()->persist($c);
@@ -293,5 +291,60 @@ class AccountabilityTest extends WebTestCase
         $this->assertSame(4, $c->getAlertHabitDays());
         $this->assertNull($c->getAlertInactiveDays());
         $this->assertNull($c->getAlertGoalDays(), 'Pas d\'alerte « objectif » sur un rituel');
+    }
+
+    public function testWeeklyReviewShowsTheWeekOfAccountability(): void
+    {
+        [$c] = $this->activeHabitCommitment(5);
+        $this->service()->runDailyChecks(new \DateTimeImmutable('today'));
+        $nudge = $this->em()->getRepository(AccountabilityNudge::class)->findOneBy(['commitment' => $c->getId()]);
+        $this->service()->respond($nudge, 'CALLED', 'On a parlé ce soir');
+
+        $this->client->loginUser($this->findUser((string) $c->getOwner()->getEmail()));
+        $this->client->request('GET', '/bilan/revue-hebdomadaire');
+        $this->assertSelectorTextContains('#redevabilite', 'Ma redevabilité cette semaine');
+        $this->assertSelectorTextContains('#redevabilite', '1 alerte');
+        $this->assertSelectorTextContains('#redevabilite', 'Je l\'ai appelé(e)');
+        $this->assertSelectorTextContains('#redevabilite', 'On a parlé ce soir');
+
+        // Sans engagement : pas d'encart
+        $this->client->loginUser($this->createUser());
+        $this->client->request('GET', '/bilan/revue-hebdomadaire');
+        $this->assertSelectorNotExists('#redevabilite');
+    }
+
+    /** @return array{status: int, json: array<string, mixed>} */
+    private function api(string $method, string $path, ?array $payload, string $bearer): array
+    {
+        $this->client->request($method, $path, server: ['HTTP_ACCEPT' => 'application/json', 'CONTENT_TYPE' => 'application/json', 'HTTP_AUTHORIZATION' => 'Bearer '.$bearer], content: null !== $payload ? json_encode($payload) : null);
+
+        return ['status' => $this->client->getResponse()->getStatusCode(), 'json' => json_decode((string) $this->client->getResponse()->getContent(), true) ?? []];
+    }
+
+    public function testMobileApiListsCommitmentsAndSendsHelpWithCopy(): void
+    {
+        [$c] = $this->activeHabitCommitment(1);
+        $owner = $this->findUser((string) $c->getOwner()->getEmail());
+        $token = static::getContainer()->get(\App\Mobile\Service\MobileTokenService::class)->issue($owner, 'Test')['accessToken'];
+        $this->client->restart();
+
+        $list = $this->api('GET', '/api/mobile/v1/redevabilite', null, $token);
+        $this->assertSame(200, $list['status']);
+        $this->assertSame('Lire la Bible chaque matin', $list['json']['commitments'][0]['targetLabel']);
+        $this->assertSame(3, $list['json']['commitments'][0]['alerts']['habitDays']);
+        $this->assertStringContainsString('/social/redevabilite/nouveau', $list['json']['createUrl']);
+
+        $help = $this->api('POST', '/api/mobile/v1/redevabilite/'.$c->getId().'/coup-de-main', ['message' => 'Dur cette semaine'], $token);
+        $this->assertSame(200, $help['status']);
+        $this->assertSame(1, $help['json']['commitment']['stats']['messages']);
+        $this->assertNotEmpty($this->emailsTo((string) $owner->getEmail()), 'Copie à la personne');
+        $this->assertSame(409, $this->api('POST', '/api/mobile/v1/redevabilite/'.$c->getId().'/coup-de-main', [], $token)['status'], 'Au plus un message tous les 7 jours');
+
+        $this->assertSame('PAUSED', $this->api('POST', '/api/mobile/v1/redevabilite/'.$c->getId().'/pause', [], $token)['json']['commitment']['status']);
+
+        // Un autre compte ne voit ni ne touche cet engagement
+        $other = static::getContainer()->get(\App\Mobile\Service\MobileTokenService::class)->issue($this->createUser(), 'Autre')['accessToken'];
+        $this->assertSame(404, $this->api('POST', '/api/mobile/v1/redevabilite/'.$c->getId().'/arreter', [], $other)['status']);
+        $this->assertSame([], $this->api('GET', '/api/mobile/v1/redevabilite', null, $other)['json']['commitments']);
     }
 }

@@ -431,6 +431,42 @@ final class AccountabilityService
         ];
     }
 
+    /**
+     * Résumé des 7 derniers jours pour la revue de la semaine (null si la personne n'a aucun engagement ouvert ni message).
+     *
+     * @return array{items: list<array{label: string, partner: string, alerts: int, helps: int, responses: list<string>, resumed: int, notes: list<string>}>, totals: array{messages: int, responses: int, resumed: int}}|null
+     */
+    public function weeklySummary(User $owner, ?\DateTimeImmutable $now = null): ?array
+    {
+        $since = ($now ?? new \DateTimeImmutable())->modify('-7 days');
+        $items = [];
+        $totals = ['messages' => 0, 'responses' => 0, 'resumed' => 0];
+        foreach ($this->commitmentsOf($owner) as $c) {
+            $week = $this->em->createQueryBuilder()->select('n')->from(AccountabilityNudge::class, 'n')
+                ->where('n.commitment = :c')->andWhere('n.sentAt >= :since')->orderBy('n.sentAt', 'ASC')
+                ->setParameter('c', $c)->setParameter('since', $since)->getQuery()->getResult();
+            if (!$c->isOpen() && [] === $week) {
+                continue;
+            }
+            $responded = array_values(array_filter($week, static fn (AccountabilityNudge $n) => null !== $n->getRespondedAt()));
+            $item = [
+                'label' => $c->getTargetLabel(),
+                'partner' => $c->getPartnerName(),
+                'alerts' => \count(array_filter($week, static fn (AccountabilityNudge $n) => $n->isAutomatic())),
+                'helps' => \count(array_filter($week, static fn (AccountabilityNudge $n) => !$n->isAutomatic())),
+                'responses' => array_map(static fn (AccountabilityNudge $n) => (string) $n->getResponseActionLabel(), $responded),
+                'resumed' => \count(array_filter($week, static fn (AccountabilityNudge $n) => null !== $n->getResumedAt())),
+                'notes' => array_values(array_filter(array_map(static fn (AccountabilityNudge $n) => $n->getResponseNote(), $responded))),
+            ];
+            $totals['messages'] += $item['alerts'] + $item['helps'];
+            $totals['responses'] += \count($responded);
+            $totals['resumed'] += $item['resumed'];
+            $items[] = $item;
+        }
+
+        return [] === $items ? null : ['items' => $items, 'totals' => $totals];
+    }
+
     /** @return array{0: string, 1: int|null, 2: string} */
     private function resolveTarget(User $owner, string $target, string $freeLabel): array
     {

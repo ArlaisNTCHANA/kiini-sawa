@@ -172,3 +172,14 @@ Toutes ces routes demandent un couple actif et utilisable (les deux conjoints PR
 | `POST /couple/retreat/stop` | — | `200 { retreat: null }` | L'un ou l'autre arrête la retraite ou retire la proposition. |
 | `POST /couple/ping` | `{ preset, message? }` | `200 { sent: true }` | Signal au conjoint (notification). |
 | Projets, intentions, revue, rapport | — | — | `GET/POST /couple/projects`, `PATCH/DELETE /couple/projects/{id}`, `GET/POST /couple/intentions`, `DELETE /couple/intentions/{id}`, `GET/POST /couple/review`, `GET /couple/report`. |
+
+## 14. Ma redevabilité (`/api/mobile/v1/redevabilite`)
+
+| Route | Corps | Réponse | Rôle |
+|---|---|---|---|
+| `GET /redevabilite` | — | `200 { commitments: [{ id, targetLabel, targetType, partnerName, status, createdAt, alerts: { habitDays, goalDays, inactiveDays }, nextHelpAllowedOn, stats: { messages, responses, responseRate, avgResponseHours, resumed }, history: [...] }], asPartner, canCreate, createUrl }` | Engagements de la personne et rôles de partenaire. La création se fait sur le site (`createUrl`), avec l'aperçu des e-mails et le consentement. |
+| `POST /redevabilite/{id}/coup-de-main` | `{ message? }` | `200 { commitment }` ou `409 { error }` | « J'ai besoin d'un coup de main » : e-mail au partenaire, copie à la personne. Au plus un message tous les 7 jours (alertes comprises). |
+| `POST /redevabilite/{id}/pause\|reprendre\|arreter` | — | `200 { commitment }` ou `404` | Gestion par la personne (engagement d'un autre compte : `404`). |
+
+Les alertes automatiques partent du serveur chaque matin, sans action de l'application. `GET /revues/hebdo` contient aussi `accountability` (résumé des 7 derniers jours, ou `null`).
+

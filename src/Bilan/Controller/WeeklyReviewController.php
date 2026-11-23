@@ -16,7 +16,7 @@ use Symfony\Component\Routing\Attribute\Route;
 class WeeklyReviewController extends AbstractController
 {
     #[Route('/bilan/revue-hebdomadaire', name: 'app_weekly_review', methods: ['GET', 'POST'])]
-    public function index(Request $request, WeeklyReviewService $service, WeeklyReviewRepository $reviews): Response
+    public function index(Request $request, WeeklyReviewService $service, WeeklyReviewRepository $reviews, \App\Social\Service\AccountabilityService $accountability): Response
     {
         /** @var User $user */
         $user = $this->getUser();
@@ -50,6 +50,7 @@ class WeeklyReviewController extends AbstractController
             'review' => $current,
             'previous' => $previous,
             'history' => $reviews->findRecent($user),
+            'accountability' => $accountability->weeklySummary($user),
         ]);
     }
 }
