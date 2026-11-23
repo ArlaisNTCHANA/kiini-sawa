@@ -5,7 +5,6 @@ namespace App\Mobile\Controller;
 use App\Couple\Entity\Couple;
 use App\Couple\Entity\CoupleItem;
 use App\Couple\Entity\CoupleReview;
-use App\Couple\Service\CoupleSanctuaryCatalog;
 use App\Couple\Service\CoupleSanctuaryService;
 use App\Couple\Service\CoupleService;
 use Doctrine\ORM\EntityManagerInterface;
@@ -29,6 +28,7 @@ final class MobileCoupleController extends AbstractController
         private readonly CoupleService $coupleService,
         private readonly CoupleSanctuaryService $sanctuary,
         private readonly EntityManagerInterface $em,
+        private readonly \App\Couple\Service\CoupleSanctuaryTexts $texts,
     ) {
     }
 
@@ -219,7 +219,7 @@ final class MobileCoupleController extends AbstractController
                 'theme' => $c['theme'],
                 'durationDays' => $c['durationDays'],
             ],
-            CoupleSanctuaryCatalog::CHALLENGES
+            $this->texts->challenges()
         ));
 
         return $this->jsonNoStore([
@@ -289,7 +289,7 @@ final class MobileCoupleController extends AbstractController
                 'durationMinutes' => $m['durationMinutes'],
                 'totalSteps' => \count($m['steps']),
             ],
-            CoupleSanctuaryCatalog::MEDITATIONS
+            $this->texts->meditations()
         ));
 
         return $this->jsonNoStore([

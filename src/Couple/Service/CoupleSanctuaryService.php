@@ -25,6 +25,7 @@ final class CoupleSanctuaryService
     public function __construct(
         private readonly EntityManagerInterface $em,
         private readonly Notifier $notifier,
+        private readonly CoupleSanctuaryTexts $texts,
     ) {
     }
 
@@ -75,7 +76,7 @@ final class CoupleSanctuaryService
                 'vision' => $couple->getVision(),
                 'verse' => $couple->getVerse(),
                 'joinedAt' => $couple->getJoinedAt()?->format('Y-m-d'),
-                'dailyVerse' => CoupleSanctuaryCatalog::dailyVerse(),
+                'dailyVerse' => $this->texts->dailyVerse(),
             ],
             'activeChallenge' => $challenge ? $this->serializeChallenge($challenge, $user) : null,
             'activeMeditation' => $meditation ? $this->serializeMeditation($meditation, $user) : null,
@@ -90,15 +91,15 @@ final class CoupleSanctuaryService
             'reviewDoneThisMonth' => null !== $currentReview,
             'pingPresets' => array_map(
                 static fn (string $code, array $meta) => ['code' => $code, 'label' => $meta['label']],
-                array_keys(CoupleSanctuaryCatalog::PING_PRESETS),
-                CoupleSanctuaryCatalog::PING_PRESETS
+                array_keys($pings = $this->texts->pings()),
+                $pings
             ),
         ];
     }
 
     public function startChallenge(Couple $couple, User $by, string $challengeCode): CoupleChallenge
     {
-        $meta = CoupleSanctuaryCatalog::challenge($challengeCode);
+        $meta = $this->texts->challenge($challengeCode);
         if (null === $meta) {
             throw new \InvalidArgumentException('Défi de couple introuvable.');
         }
@@ -153,7 +154,7 @@ final class CoupleSanctuaryService
         $this->em->flush();
 
         if (!$alreadyMine) {
-            $meta = CoupleSanctuaryCatalog::challenge($challenge->getChallengeCode());
+            $meta = $this->texts->challenge($challenge->getChallengeCode());
             $title = $meta['title'] ?? 'Défi de couple';
             $message = $bothDone
                 ? sprintf('%s a aussi validé le jour %d de « %s » ! Vous avancez ensemble.', $by->getDisplayName(), $dayNumber, $title)
@@ -173,7 +174,7 @@ final class CoupleSanctuaryService
 
     public function startMeditation(Couple $couple, User $by, string $planCode): CoupleMeditation
     {
-        $meta = CoupleSanctuaryCatalog::meditation($planCode);
+        $meta = $this->texts->meditation($planCode);
         if (null === $meta) {
             throw new \InvalidArgumentException('Parcours de méditation introuvable.');
         }
@@ -221,7 +222,7 @@ final class CoupleSanctuaryService
         $this->em->flush();
 
         if (!$alreadyMine) {
-            $meta = CoupleSanctuaryCatalog::meditation($meditation->getPlanCode());
+            $meta = $this->texts->meditation($meditation->getPlanCode());
             $title = $meta['title'] ?? 'Méditation de couple';
             $message = $bothDone
                 ? sprintf('%s a aussi vécu l\'étape %d de « %s ». Vous l\'avez vécue ensemble.', $by->getDisplayName(), $stepNumber, $title)
@@ -408,17 +409,17 @@ final class CoupleSanctuaryService
             throw new \DomainException('Votre conjoint n\'a pas encore rejoint l\'espace couple.');
         }
 
-        $meta = CoupleSanctuaryCatalog::PING_PRESETS[$preset] ?? null;
+        $meta = $this->texts->pings()[$preset] ?? null;
         if (null === $meta) {
             throw new \InvalidArgumentException('Type de signal inconnu.');
         }
 
         $senderName = $by->getDisplayName();
-        $title = str_contains($meta['title'], '%s') ? sprintf($meta['title'], $senderName) : $meta['title'];
+        $title = str_replace('{prenom}', $senderName, $meta['title']);
         $cleanCustom = null !== $customMessage ? trim($customMessage) : '';
         $body = '' !== $cleanCustom
             ? sprintf('%s : « %s »', $senderName, mb_substr($cleanCustom, 0, 240))
-            : sprintf($meta['body'], $senderName);
+            : str_replace('{prenom}', $senderName, $meta['body']);
 
         $this->notifier->notify(
             $partner,
@@ -433,7 +434,7 @@ final class CoupleSanctuaryService
     /** @return array<string, mixed> */
     public function serializeChallenge(CoupleChallenge $challenge, User $user): array
     {
-        $meta = CoupleSanctuaryCatalog::challenge($challenge->getChallengeCode());
+        $meta = $this->texts->challenge($challenge->getChallengeCode());
         $dayNum = $challenge->getCurrentDay();
         $dayEntity = $challenge->getDay($dayNum);
         $couple = $challenge->getCouple();
@@ -466,7 +467,7 @@ final class CoupleSanctuaryService
     /** @return array<string, mixed> */
     public function serializeMeditation(CoupleMeditation $meditation, ?User $user = null): array
     {
-        $meta = CoupleSanctuaryCatalog::meditation($meditation->getPlanCode());
+        $meta = $this->texts->meditation($meditation->getPlanCode());
         $stepNum = $meditation->getCurrentStep();
         $stepData = $meta['steps'][$stepNum] ?? null;
 

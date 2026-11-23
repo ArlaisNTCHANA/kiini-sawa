@@ -5,7 +5,6 @@ namespace App\Couple\Controller;
 use App\Compte\Entity\User;
 use App\Couple\Entity\Couple;
 use App\Couple\Entity\CoupleItem;
-use App\Couple\Service\CoupleSanctuaryCatalog;
 use App\Couple\Service\CoupleSanctuaryService;
 use App\Couple\Service\CoupleService;
 use Doctrine\ORM\EntityManagerInterface;
@@ -24,6 +23,7 @@ class CoupleSanctuaryController extends AbstractController
         private readonly CoupleService $couples,
         private readonly CoupleSanctuaryService $sanctuary,
         private readonly EntityManagerInterface $em,
+        private readonly \App\Couple\Service\CoupleSanctuaryTexts $texts,
     ) {
     }
 
@@ -41,9 +41,9 @@ class CoupleSanctuaryController extends AbstractController
         return $this->render('couple/sanctuary/altar.html.twig', [
             'couple' => $couple,
             'partner' => $couple->partnerOf($this->user()),
-            'dailyVerse' => CoupleSanctuaryCatalog::dailyVerse(),
+            'dailyVerse' => $this->texts->dailyVerse(),
             'meditation' => $active ? $this->sanctuary->serializeMeditation($active, $this->user()) : null,
-            'catalog' => CoupleSanctuaryCatalog::MEDITATIONS,
+            'catalog' => $this->texts->meditations(),
             'intentions' => $couple->itemsOfKind('INTENTION'),
         ] + $this->retreatView($couple));
     }
@@ -122,7 +122,7 @@ class CoupleSanctuaryController extends AbstractController
             'couple' => $couple,
             'partner' => $couple->partnerOf($this->user()),
             'challenge' => $active ? $this->sanctuary->serializeChallenge($active, $this->user()) : null,
-            'catalog' => CoupleSanctuaryCatalog::CHALLENGES,
+            'catalog' => $this->texts->challenges(),
             'themes' => CoupleService::THEMES,
         ] + $this->retreatView($couple));
     }

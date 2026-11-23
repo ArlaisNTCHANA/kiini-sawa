@@ -18,9 +18,15 @@ Objectif (demande du fondateur, 18/11/2026) : **ne plus mettre de texte « en du
 - Le catalogue (`SiteTextCatalog`) trouve les `t('code', 'origine')` en parcourant `templates/` : un nouveau texte apparaît tout seul dans l'administration. **Le même code ne doit pas être réutilisé avec deux textes différents** (le premier trouvé gagne).
 - Le HTML saisi est toujours neutralisé (Markdown en mode sûr) ; les passages `[À COMPLÉTER…]` sont surlignés et comptés par `app:launch:check` (sur le texte **en ligne**).
 - Un document long : un fichier `content/textes/<partie>/<nom>.md`, code `<partie>.<nom>`.
+- **Textes écrits en PHP** (23/11/2026) : un service qui implémente `Contenu\Service\EditableTextProvider`
+  (`editableTexts()` : code => texte d'origine, `editableTextsSource()`) apparaît automatiquement dans
+  l'administration. Pour lire le texte affiché, utiliser `SiteTexts::get($code, $origine)`. Le fournisseur ne doit
+  dépendre d'aucun service (le catalogue le lit, et SiteTexts dépend du catalogue).
+  Premier fournisseur : `CoupleSanctuaryCatalog` (partie « couple », 143 textes), lus via `CoupleSanctuaryTexts`.
 
 ## Où en est la conversion
-- **Fait** : vitrine publique (`dashboard/landing.html.twig`, 121 textes courts), 4 pages légales (documents).
+- **Fait** : vitrine publique (`dashboard/landing.html.twig`, 121 textes courts), 4 pages légales (documents),
+  Sanctuaire du Couple (versets, défis, méditations, signaux : 143 textes, partie « couple »).
 - **À faire (phases suivantes)** : textes écrits en PHP (PlanCatalog, navigation, saisons, rythmes, intendance, schémas du livre, assistant), emails et notifications, reçus, le livre (`content/livre/`, qui vient du manuscrit : prévoir ce qui se passe à la resynchronisation), et les textes des tests (déjà modifiables via `Admin › Textes des tests`, sans brouillon pour l'instant).
 - Règle pour tout nouveau texte visible par l'utilisateur : `t()`/`doc()`, pas de texte brut dans le gabarit.
 

@@ -9,6 +9,27 @@ teste (`php bin/phpunit`), commit, déploie (`bin/ops/envoyer-hostinger.sh`), v�
 journal `var/log/prod-AAAA-MM-JJ.log` sans erreur) ; **le fondateur fait lui-même `git push`** (refusé à l'IA).
 Ne jamais afficher ni demander de mot de passe ; ne pas publier son nom (mentions légales en attente).
 
+## 23/11/2026 — Textes du Sanctuaire du Couple modifiables dans l'administration (point F7)
+
+- **Fait** : le système « Textes du site » accepte maintenant des textes écrits en PHP :
+  - interface `Contenu\Service\EditableTextProvider`, étiquetée `app.editable_text_provider` et lue par
+    `SiteTextCatalog` ;
+  - `CoupleSanctuaryCatalog` en est le premier fournisseur (`defaults()`, 143 textes : versets, défis jour par jour,
+    étapes de méditation, signaux) ;
+  - nouveau service `CoupleSanctuaryTexts`, qui lit les textes affichés (publié, sinon origine ; brouillons en aperçu
+    administrateur) ;
+  - tous les usages passent maintenant par ce service : `CoupleSanctuaryService`, `CoupleSanctuaryController`,
+    `MobileCoupleController` ;
+  - dans les signaux, `%s` devient `{prenom}`, plus lisible pour le fondateur ;
+  - nouvelle partie « Sanctuaire du Couple » dans `/admin/textes`.
+- **Tests** : `tests/Couple/CoupleSanctuaryTextsTest.php` (liste dans l'administration, brouillon invisible puis
+  publication visible sur `/couple/defis`, variable `{prenom}` dans un signal, titre modifié dans l'API mobile).
+  Suite complète **481 / 481**.
+- **Piège** : un fournisseur de textes ne doit dépendre d'aucun service. Sinon, dépendance circulaire : le catalogue
+  lit le fournisseur, et SiteTexts dépend du catalogue.
+- **Reste au fondateur** : relire ces textes (écrits par une IA). Notamment 1 Corinthiens 13:4-7, condensé ; les
+  signaux, au tutoiement ; la relecture théologique.
+
 ## 23/11/2026 — Mobile : calendrier natif pour les dates de retraite
 
 - `mobile-v1/` : `@react-native-community/datetimepicker` 9.2.1, la version recommandée par Expo. Il remplace la

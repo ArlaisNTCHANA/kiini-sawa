@@ -3,11 +3,13 @@
 namespace App\Contenu\Service;
 
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
+use Symfony\Component\DependencyInjection\Attribute\AutowireIterator;
 
 /**
  * Le catalogue des textes modifiables : ce que le code contient aujourd'hui (le texte d'origine de chaque identifiant).
  *  - Textes courts : appels `{{ t('code', 'texte d\'origine') }}` trouvés dans `templates/` ;
- *  - Documents longs : fichiers Markdown `content/textes/<code avec / à la place des points>.md` (pages légales, emails…).
+ *  - Documents longs : fichiers Markdown `content/textes/<code avec / à la place des points>.md` (pages légales, emails…) ;
+ *  - Textes écrits en PHP : services qui implémentent EditableTextProvider (ex. le Sanctuaire du Couple).
  * Le parcours des gabarits ne sert qu'à l'administration (liste, édition) : l'affichage d'une page n'y touche pas.
  */
 final class SiteTextCatalog
@@ -17,8 +19,11 @@ final class SiteTextCatalog
     /** @var ?array<string, array{default: string, format: string, source: string}> */
     private ?array $all = null;
 
-    public function __construct(#[Autowire('%kernel.project_dir%')] private readonly string $dir)
-    {
+    /** @param iterable<EditableTextProvider> $providers */
+    public function __construct(
+        #[Autowire('%kernel.project_dir%')] private readonly string $dir,
+        #[AutowireIterator('app.editable_text_provider')] private readonly iterable $providers = [],
+    ) {
     }
 
     /** @return array<string, array{default: string, format: string, source: string}> */
@@ -41,6 +46,11 @@ final class SiteTextCatalog
             foreach ($m as $hit) {
                 $default = str_replace(['\\'.$hit[3], '\\\\'], [$hit[3], '\\'], $hit[4]);
                 $all[$hit[2]] ??= ['default' => $default, 'format' => ($hit[6] ?? '') ?: 'text', 'source' => substr($file->getPathname(), \strlen($this->dir) + 1)];
+            }
+        }
+        foreach ($this->providers as $provider) {
+            foreach ($provider->editableTexts() as $code => $default) {
+                $all[$code] ??= ['default' => $default, 'format' => 'text', 'source' => $provider->editableTextsSource()];
             }
         }
         foreach (glob($this->dir.'/content/textes/*/*.md') ?: [] as $f) {

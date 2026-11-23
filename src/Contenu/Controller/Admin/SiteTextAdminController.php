@@ -22,6 +22,7 @@ final class SiteTextAdminController extends AbstractController
     public const GROUPS = [
         'vitrine' => 'Page d\'accueil publique',
         'legal' => 'Pages légales',
+        'couple' => 'Sanctuaire du Couple (versets, défis, méditations, signaux)',
     ];
 
     public function __construct(private readonly SiteTexts $texts, private readonly SiteTextCatalog $catalog)

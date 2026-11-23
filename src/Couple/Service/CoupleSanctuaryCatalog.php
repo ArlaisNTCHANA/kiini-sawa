@@ -2,11 +2,16 @@
 
 namespace App\Couple\Service;
 
+use App\Contenu\Service\EditableTextProvider;
+
 /**
  * Catalogue des versets quotidiens, défis de couple, parcours de méditation et signaux de connexion
  * pour le Sanctuaire du Couple 360 (RFC-001).
+ *
+ * Ce sont les **textes d'origine**. Ils sont modifiables dans Admin › Textes du site (partie « couple ») ; pour les
+ * lire tels qu'ils s'affichent (modifiés ou non), passer par CoupleSanctuaryTexts, jamais directement par ces constantes.
  */
-final class CoupleSanctuaryCatalog
+final class CoupleSanctuaryCatalog implements EditableTextProvider
 {
     /** Versets inspirants en rotation quotidienne pour le foyer. */
     public const DAILY_VERSES = [
@@ -259,5 +264,52 @@ final class CoupleSanctuaryCatalog
     public static function meditation(string $code): ?array
     {
         return self::MEDITATIONS[$code] ?? null;
+    }
+
+    /**
+     * Identifiant modifiable => texte d'origine. Dans les signaux, {prenom} est remplacé par le prénom de l'expéditeur.
+     *
+     * @return array<string, string>
+     */
+    public static function defaults(): array
+    {
+        $out = [];
+        foreach (self::DAILY_VERSES as $i => $v) {
+            $out['couple.verset.'.($i + 1).'.reference'] = $v['reference'];
+            $out['couple.verset.'.($i + 1).'.texte'] = $v['text'];
+        }
+        foreach (self::CHALLENGES as $code => $c) {
+            $out["couple.defi.$code.titre"] = $c['title'];
+            $out["couple.defi.$code.sous_titre"] = $c['subtitle'];
+            foreach ($c['days'] as $n => $prompt) {
+                $out["couple.defi.$code.jour.$n"] = $prompt;
+            }
+        }
+        foreach (self::MEDITATIONS as $code => $m) {
+            $out["couple.meditation.$code.titre"] = $m['title'];
+            $out["couple.meditation.$code.sous_titre"] = $m['subtitle'];
+            foreach ($m['steps'] as $n => $step) {
+                foreach (['title' => 'titre', 'verse' => 'verset', 'reflection' => 'reflexion', 'question' => 'question'] as $key => $fr) {
+                    $out["couple.meditation.$code.etape.$n.$fr"] = $step[$key];
+                }
+            }
+        }
+        foreach (self::PING_PRESETS as $code => $p) {
+            $out["couple.signal.$code.bouton"] = $p['label'];
+            $out["couple.signal.$code.titre"] = str_replace('%s', '{prenom}', $p['title']);
+            $out["couple.signal.$code.message"] = str_replace('%s', '{prenom}', $p['body']);
+        }
+
+        return $out;
+    }
+
+    public function editableTexts(): array
+    {
+        return self::defaults();
+    }
+
+    public function editableTextsSource(): string
+    {
+        return 'src/Couple/Service/CoupleSanctuaryCatalog.php';
     }
 }
