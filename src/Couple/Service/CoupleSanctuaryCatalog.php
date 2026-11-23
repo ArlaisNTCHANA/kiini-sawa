@@ -128,7 +128,7 @@ final class CoupleSanctuaryCatalog implements EditableTextProvider
                 3 => [
                     'title' => 'Protéger l\'intimité du foyer',
                     'verse' => 'Proverbes 4:23 — Garde ton cœur plus que toute autre chose.',
-                    'reflection' => 'Nos agendas, nos écrans et les attentes extérieures peuvent peu à peu voler notre temps à deux si nous ne protégeons pas intentionnellement notre sanctuaire.',
+                    'reflection' => 'Nos agendas, nos écrans et les attentes extérieures peuvent peu à peu voler notre temps à deux si nous ne protégeons pas intentionnellement notre foyer.',
                     'question' => 'Quelle petite habitude pourrions-nous instaurer dès cette semaine pour protéger notre temps à deux ?',
                 ],
                 4 => [
@@ -221,7 +221,7 @@ final class CoupleSanctuaryCatalog implements EditableTextProvider
     public const PING_PRESETS = [
         'meditation' => [
             'label' => 'Inviter à méditer',
-            'title' => 'Invitation au Sanctuaire',
+            'title' => 'Invitation à méditer ensemble',
             'body' => '%s t\'invite à prendre 5 minutes pour votre méditation de couple.',
         ],
         'pensee' => [

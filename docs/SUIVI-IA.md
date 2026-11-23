@@ -9,6 +9,31 @@ teste (`php bin/phpunit`), commit, déploie (`bin/ops/envoyer-hostinger.sh`), v�
 journal `var/log/prod-AAAA-MM-JJ.log` sans erreur) ; **le fondateur fait lui-même `git push`** (refusé à l'IA).
 Ne jamais afficher ni demander de mot de passe ; ne pas publier son nom (mentions légales en attente).
 
+## 23/11/2026 — Relecture externe, points 3 et 4 : vitrine honnête sur le mobile, « Sanctuaire » toujours précisé
+
+- **Point 3, vitrine** (aucune modification n'existait en production pour ces codes) :
+  - `vitrine.app.01` passe de « Web & Application Mobile » à « Sur ordinateur et sur téléphone » ;
+  - `vitrine.app.02` passe de « Entrez dans votre sanctuaire » à « Une interface calme, au service de votre chemin » ;
+  - `vitrine.app.03` : « directement dans votre navigateur. L'application mobile arrive bientôt sur l'App Store et
+    Google Play. » (« même hors connexion » est retiré) ;
+  - `vitrine.app.note` : « Captures réelles du site KIINI SAWA ouvert sur un téléphone… » (ce sont des captures du
+    site, pas de l'appli native) ;
+  - `vitrine.s7.02` : « Le Sanctuaire du Couple, votre maison à deux sur le site (et bientôt dans l'application
+    mobile)… ».
+- **Point 4, « Sanctuaire »** :
+  - site : « Notre Sanctuaire du Couple » (bloc de `/couple`), notifications « dans votre Sanctuaire du Couple »,
+    signal « Invitation à méditer ensemble » ; « Le sanctuaire de votre croissance » (accueil) devient « L'espace de
+    votre croissance » ;
+  - méditation « Bâtir sur le roc », étape 3 : « notre sanctuaire » devient « notre foyer » (texte d'origine,
+    modifiable dans l'administration) ;
+  - mobile : « SANCTUAIRE DU COUPLE » sur l'accueil, et messages corrigés dans la méditation, le couple et Ma Pause.
+- **Garde-fous** : `LexiconTest::testSanctuaireIsNeverUsedInAGeneralSense` (templates et src) et un test Vitest dans
+  `mobile-v1/__tests__/lexicon.test.ts` (app et src). Ils refusent « votre / notre / un… sanctuaire » non suivi de
+  « du Couple ». On a vérifié qu'ils échouent sur un vrai cas.
+- **Tests** : suite web **486 / 486** ; mobile : Vitest 25/25, `tsc` 0 erreur.
+- **Reste de la relecture** : point 2 (une seule Boussole, enregistrée dans le compte), puis 1 (accueil mobile
+  allégé), puis 7 (API du couple en français, avant les stores).
+
 ## 23/11/2026 — Relecture externe : redevabilité sécurisée (point 6) et texte en double sur la vitrine (point 5)
 
 - **Contexte** : le fondateur a fait relire le travail récent, avec 7 remarques. Ordre convenu : 6, 5, puis 3 et 4

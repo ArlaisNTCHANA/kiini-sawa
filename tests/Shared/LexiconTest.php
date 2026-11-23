@@ -51,4 +51,25 @@ class LexiconTest extends WebTestCase
             }
         }
     }
+
+    /**
+     * « Sanctuaire » : l'exercice du livre (« Le Sanctuaire ») ou le « Sanctuaire du Couple », jamais un sens général
+     * (« votre sanctuaire », « Entrez dans votre sanctuaire »…). Décision du fondateur du 23/11/2026, docs/lexique.md.
+     */
+    public function testSanctuaireIsNeverUsedInAGeneralSense(): void
+    {
+        $root = static::getContainer()->getParameter('kernel.project_dir');
+        $offenders = [];
+        foreach (['templates', 'src'] as $dir) {
+            foreach (new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($root.'/'.$dir, \FilesystemIterator::SKIP_DOTS)) as $file) {
+                if (!preg_match('/\.(twig|php)$/', $file->getFilename())) {
+                    continue;
+                }
+                if (preg_match('/\b(votre|notre|ton|mon|un|une|leur)\s+sanctuaire\b(?!\s+du\s+couple)/iu', (string) file_get_contents($file->getPathname()))) {
+                    $offenders[] = substr($file->getPathname(), \strlen($root) + 1);
+                }
+            }
+        }
+        $this->assertSame([], $offenders, '« Sanctuaire » doit désigner l\'exercice du livre ou le « Sanctuaire du Couple »');
+    }
 }

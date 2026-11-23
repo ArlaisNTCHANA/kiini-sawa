@@ -1,4 +1,4 @@
-{# Bloc « Notre Sanctuaire » en tête de l'espace couple (RFC-001). Variables : sanctuary (CoupleSanctuaryService::homeData), partner, token. #}
+{# Bloc « Notre Sanctuaire du Couple » en tête de l'espace couple (RFC-001). Variables : sanctuary (CoupleSanctuaryService::homeData), partner, token. #}
 {% set ch = sanctuary.activeChallenge %}
 {% set med = sanctuary.activeMeditation %}
 <style>
@@ -12,7 +12,7 @@
     .sh-turn { display: inline-block; margin-top: .4rem; font-size: .72rem; font-weight: 700; padding: .1rem .5rem; border-radius: 999px; background: var(--couple-soft); color: var(--couple); }
 </style>
 <section class="cp-card" id="sanctuaire">
-    <h2><i data-lucide="flame" class="ks-ico" aria-hidden="true"></i> Notre Sanctuaire</h2>
+    <h2><i data-lucide="flame" class="ks-ico" aria-hidden="true"></i> Notre Sanctuaire du Couple</h2>
     <p class="cp-sub">
         Votre maison à deux.
         {% if sanctuary.couple.streakDays > 0 %}

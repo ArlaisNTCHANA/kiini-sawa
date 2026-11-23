@@ -117,7 +117,7 @@ final class CoupleSanctuaryService
             $couple,
             $by,
             'Nouveau défi de couple',
-            sprintf('%s a lancé le défi « %s » dans votre Sanctuaire.', $by->getDisplayName(), $meta['title']),
+            sprintf('%s a lancé le défi « %s » dans votre Sanctuaire du Couple.', $by->getDisplayName(), $meta['title']),
             'couple-challenge-start-'.$challenge->getId()
         );
 
@@ -192,7 +192,7 @@ final class CoupleSanctuaryService
             $couple,
             $by,
             'Nouvelle méditation à deux',
-            sprintf('%s a ouvert le parcours « %s » dans votre Sanctuaire.', $by->getDisplayName(), $meta['title']),
+            sprintf('%s a ouvert le parcours « %s » dans votre Sanctuaire du Couple.', $by->getDisplayName(), $meta['title']),
             'couple-meditation-start-'.$meditation->getId()
         );
 

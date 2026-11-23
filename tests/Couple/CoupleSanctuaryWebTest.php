@@ -52,7 +52,7 @@ class CoupleSanctuaryWebTest extends WebTestCase
         $this->client->request('GET', '/couple');
 
         $this->assertResponseIsSuccessful();
-        $this->assertSelectorTextContains('#sanctuaire', 'Notre Sanctuaire');
+        $this->assertSelectorTextContains('#sanctuaire', 'Notre Sanctuaire du Couple');
         foreach (['L\'Autel', 'Le Jardin des défis', 'L\'Atelier', 'Le Salon'] as $room) {
             $this->assertSelectorTextContains('#sanctuaire', $room);
         }
