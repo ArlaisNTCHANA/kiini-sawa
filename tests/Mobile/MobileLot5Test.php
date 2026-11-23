@@ -199,7 +199,7 @@ class MobileLot5Test extends WebTestCase
         $inv = $this->api('POST', '/api/mobile/v1/partenaires/invitation', [
             'email' => (string) $userB->getEmail(),
         ], bearer: $tokenA);
-        $this->assertSame(201, $inv['status']);
+        $this->assertSame(200, $inv['status']);
 
         // 3. User B sees pending received invitation
         $listB = $this->api('GET', '/api/mobile/v1/partenaires', bearer: $tokenB);
@@ -229,5 +229,30 @@ class MobileLot5Test extends WebTestCase
         $couple = $this->api('GET', '/api/mobile/v1/couple', bearer: $tokenA);
         $this->assertSame(200, $couple['status']);
         $this->assertFalse($couple['json']['hasCouple']);
+    }
+    public function testPartnerInvitationDoesNotRevealAccountsAndRejectAllowsReinvite(): void
+    {
+        $userA = $this->createUser();
+        $userB = $this->createUser();
+        $tokenA = $this->login((string) $userA->getEmail());
+        $tokenB = $this->login((string) $userB->getEmail());
+
+        // Même réponse, que l'adresse ait un compte ou non
+        $unknown = $this->api('POST', '/api/mobile/v1/partenaires/invitation', ['email' => 'personne-'.uniqid().'@exemple.org'], bearer: $tokenA);
+        $known = $this->api('POST', '/api/mobile/v1/partenaires/invitation', ['email' => (string) $userB->getEmail()], bearer: $tokenA);
+        $this->assertSame(200, $unknown['status']);
+        $this->assertSame($unknown['status'], $known['status']);
+        $this->assertSame($unknown['json'], $known['json']);
+
+        // Refus : la demande disparaît (comme sur le site)…
+        $connId = $this->api('GET', '/api/mobile/v1/partenaires', bearer: $tokenB)['json']['pendingReceived'][0]['id'];
+        $reject = $this->api('POST', '/api/mobile/v1/partenaires/'.$connId.'/repondre', ['action' => 'REJECT'], bearer: $tokenB);
+        $this->assertSame(200, $reject['status']);
+        $this->assertCount(0, $this->api('GET', '/api/mobile/v1/partenaires', bearer: $tokenB)['json']['pendingReceived']);
+
+        // … et une nouvelle invitation reste possible
+        $again = $this->api('POST', '/api/mobile/v1/partenaires/invitation', ['email' => (string) $userB->getEmail()], bearer: $tokenA);
+        $this->assertSame(200, $again['status']);
+        $this->assertCount(1, $this->api('GET', '/api/mobile/v1/partenaires', bearer: $tokenB)['json']['pendingReceived']);
     }
 }

@@ -47,6 +47,7 @@ class ProfileController extends AbstractController
         private readonly UserPasswordHasherInterface $hasher,
         private readonly Security $security,
         private readonly \App\Shared\Security\RateLimits $limits,
+        private readonly \App\Mobile\Service\MobileTokenService $mobileTokens,
     ) {
     }
 
@@ -151,6 +152,8 @@ class ProfileController extends AbstractController
 
         $user->setPassword($this->hasher->hashPassword($user, $new));
         $this->em->flush();
+        // Nouveau mot de passe : les sessions de l'application mobile sont fermées (reconnexion demandée)
+        $this->mobileTokens->revokeAll($user);
         // Le mot de passe fait partie de l'identité de session : on reconnecte l'utilisateur
         $this->security->login($user, LoginAuthenticator::class, 'main');
         $this->addFlash('success', 'Votre mot de passe a été modifié.');
@@ -213,6 +216,7 @@ class ProfileController extends AbstractController
             $user->setEmail($token->getPayload());
             $user->setIsVerified(true);
             $this->em->flush();
+            $this->mobileTokens->revokeAll($user);
             // L'email est l'identifiant de connexion : on met à jour la session
             $this->security->login($user, LoginAuthenticator::class, 'main');
             $this->addFlash('success', 'Votre adresse email est maintenant '.$user->getEmail().'.');

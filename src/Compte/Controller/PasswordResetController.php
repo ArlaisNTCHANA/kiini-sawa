@@ -2,6 +2,7 @@
 
 namespace App\Compte\Controller;
 
+use App\Mobile\Service\MobileTokenService;
 use App\Compte\Entity\AccountToken;
 use App\Compte\Repository\UserRepository;
 use App\Compte\Service\AccountMailer;
@@ -72,6 +73,7 @@ class PasswordResetController extends AbstractController
         EntityManagerInterface $em,
         UserPasswordHasherInterface $hasher,
         PasswordPolicy $passwordPolicy,
+        MobileTokenService $mobileTokens,
         ?string $selector = null,
         ?string $secret = null,
     ): Response {
@@ -101,6 +103,8 @@ class PasswordResetController extends AbstractController
                 $user->setIsVerified(true);
                 $this->tokens->removeAll($user, AccountToken::RESET_PASSWORD);
                 $em->flush();
+                // Un mot de passe réinitialisé ferme aussi les sessions de l'application mobile
+                $mobileTokens->revokeAll($user);
                 $session->remove(self::SESSION_KEY);
                 $this->addFlash('success', 'Votre mot de passe a été modifié. Vous pouvez vous connecter.');
 

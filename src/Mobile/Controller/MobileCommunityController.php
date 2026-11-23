@@ -170,7 +170,8 @@ final class MobileCommunityController extends AbstractController
             '/social'
         );
 
-        return $this->jsonNoStore(['success' => true], Response::HTTP_CREATED);
+        // 200 comme pour une adresse sans compte : la réponse ne révèle pas si un compte existe (même règle que le site)
+        return $this->jsonNoStore(['success' => true]);
     }
 
     #[Route('/api/mobile/v1/partenaires/{id}/repondre', name: 'api_mobile_v1_partners_respond', requirements: ['id' => '\d+'], methods: ['POST'])]
@@ -202,7 +203,8 @@ final class MobileCommunityController extends AbstractController
         }
 
         if ('REJECT' === $action) {
-            $connection->setStatus('REJECTED');
+            // Comme sur le site : la demande refusée est supprimée, une nouvelle invitation reste possible plus tard
+            $this->em->remove($connection);
             $this->em->flush();
 
             return $this->jsonNoStore(['success' => true, 'status' => 'REJECTED']);

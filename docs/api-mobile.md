@@ -136,8 +136,8 @@ En cas d'erreur, l'API renvoie `{ "error": "Message en français", "code"?: "...
 | Méthode & URL | Corps / Query | Réponse | Notes |
 |---|---|---|---|
 | `GET /api/mobile/v1/partenaires` | — | `200 { totalActive, limit, isLimitReached, active: [...], pendingReceived: [...], pendingSent: [...] }` | Liste des partenaires de redevabilité actifs et des invitations reçues/envoyées. |
-| `POST /api/mobile/v1/partenaires/invitation` | `{ email }` | `201 { success: true }` | Envoie une invitation de partenariat de redevabilité (soumis à la limite de la formule). |
-| `POST /api/mobile/v1/partenaires/{id}/repondre` | `{ action: 'ACCEPT' \| 'REJECT' }` | `200 { success: true, status }` | Accepte ou refuse une demande de partenariat reçue. |
+| `POST /api/mobile/v1/partenaires/invitation` | `{ email }` | `200 { success: true }` | Envoie une invitation de partenariat de redevabilité (soumis à la limite de la formule). Même réponse si l'adresse n'a pas de compte, pour ne pas révéler son existence. |
+| `POST /api/mobile/v1/partenaires/{id}/repondre` | `{ action: 'ACCEPT' \| 'REJECT' }` | `200 { success: true, status }` | Accepte ou refuse une demande de partenariat reçue. Un refus supprime la demande (comme sur le site) : le demandeur pourra réinviter plus tard. |
 | `GET /api/mobile/v1/defis` | — | `200 { total, challenges: [...] }` | Liste des défis collectifs actifs et avancement de l'utilisateur. |
 | `GET /api/mobile/v1/couple` | — | `200 { hasCouple, isActive?, partnerName?, inviteCode?, vision?, verse? }` | Données de l'espace couple partagé entre conjoints. |
 

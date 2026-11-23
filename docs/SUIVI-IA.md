@@ -9,6 +9,32 @@ teste (`php bin/phpunit`), commit, déploie (`bin/ops/envoyer-hostinger.sh`), v�
 journal `var/log/prod-AAAA-MM-JJ.log` sans erreur) ; **le fondateur fait lui-même `git push`** (refusé à l'IA).
 Ne jamais afficher ni demander de mot de passe ; ne pas publier son nom (mentions légales en attente).
 
+## 23/11/2026 — Audit de cohérence du travail du 19 au 23/11 et corrections urgentes (points 1 à 4)
+
+- **Audit** : `docs/audit-coherence-ia-2026-11-23.md` (technique, cybersécurité, fonctionnel, RFC). Les décisions du
+  fondateur restent ouvertes : prix FCFA (F5), faux écrans et prénoms de la vitrine (F2), promesses couple de la vitrine
+  (F1), nom de l'espace couple qui détourne « Le Sanctuaire » du livre (F3), une seule Boussole (F4), offres inventées
+  dans `ROADMAP.md`.
+- **S1, tests PRO** : `POST /api/mobile/v1/tests/{slug}/reponses` vérifie maintenant `Entitlements::requireTest()`
+  (`MobileTestController::submit`). Avant, un compte gratuit pouvait passer un test PRO en envoyant directement ses
+  réponses. Test : `MobileTestTest::testFreeUserCannotSubmitProTestAnswers`.
+- **S2, sessions mobiles** : réinitialiser ou changer son mot de passe, ou changer d'adresse e-mail, révoque toutes
+  les sessions mobiles (`MobileTokenService::revokeAll`, dans `PasswordResetController::reset`,
+  `ProfileController::changePassword` et `confirmEmailChange`). Tests ajoutés dans `PasswordResetTest` et `ProfileTest`.
+- **T1, test en échec** : l'assertion FCFA de `OrganisationTest::testPackPricesWithVolumeDiscount` (oubliée lors du
+  passage à 20 000 FCFA le 19/11) est corrigée. La suite était rouge depuis le 19/11 à 17 h 43.
+- **T2, schéma** : migration de rattrapage `Version20261123080000` (valeurs par défaut des prix FCFA, noms des index
+  du couple). `doctrine:schema:validate` repasse au vert. Elle ne modifie pas les prix enregistrés.
+- **S3 et T4, partenaires sur le mobile** : l'invitation répond `200` dans tous les cas (avant : `201` quand le compte
+  existait, ce qui révélait les comptes). Un refus supprime la demande comme sur le site (avant : statut `REJECTED`
+  conservé, qui empêchait toute nouvelle invitation). Test :
+  `MobileLot5Test::testPartnerInvitationDoesNotRevealAccountsAndRejectAllowsReinvite`. `docs/api-mobile.md` est mis à
+  jour. L'application mobile ne dépendait d'aucun des deux comportements.
+- **Résultat** : suite complète **460 / 460**, schéma synchronisé. **À déployer** (migration à exécuter sur Hostinger).
+- **Règle pour la suite** : chaque entrée de ce journal indique le résultat de la suite **complète** (`php bin/phpunit`),
+  pas d'un sous-ensemble.
+- **Reste** : les points 5 à 10 de l'audit.
+
 ## 22–23/11/2026 — Correctif `/login`, Plan « Standout », Ma Boussole 360 & `RFC-002` Académie Pratique
 - **Correctif redirection `/login` (`web/`, commit `69a4e33`)** : `LoginAuthenticator` nettoie désormais tout `target_path` pointant sur `/api/...` et ne redirige plus jamais un utilisateur vers `/api/rapide/aujourdhui` après connexion (test de non-régression dans `tests/Rapide/QuickDayTest.php`).
 - **Plan « Standout » (Mobile & Vitrine)** :

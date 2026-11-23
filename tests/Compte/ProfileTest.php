@@ -55,17 +55,34 @@ class ProfileTest extends WebTestCase
         $this->assertNull($profile->getProfession());
     }
 
+    /** Ouvre une session de l'application mobile pour ce compte et renvoie son jeton d'accès. */
+    private function openMobileSession(\App\Compte\Entity\User $user): string
+    {
+        return static::getContainer()->get(\App\Mobile\Service\MobileTokenService::class)->issue($user, 'Téléphone de test')['accessToken'];
+    }
+
+    private function assertMobileSessionClosed(string $accessToken): void
+    {
+        $this->assertNull(
+            static::getContainer()->get(\App\Mobile\Service\MobileTokenService::class)->findActiveByAccessToken($accessToken),
+            'La session de l\'application mobile doit être fermée'
+        );
+    }
+
     public function testChangePasswordRequiresCurrentPassword(): void
     {
         $user = $this->createUser('mot-de-passe-actuel');
+        $mobileToken = $this->openMobileSession($user);
         $this->loginAs($user);
         $hasher = static::getContainer()->get('security.user_password_hasher');
 
         $this->submitProfileForm('Modifier le mot de passe', ['currentPassword' => 'faux', 'newPassword' => 'un tout nouveau mot de passe']);
         $this->assertTrue($hasher->isPasswordValid($this->findUser($user->getEmail()), 'mot-de-passe-actuel'));
+        $this->assertNotNull(static::getContainer()->get(\App\Mobile\Service\MobileTokenService::class)->findActiveByAccessToken($mobileToken), 'Un essai refusé ne ferme rien');
 
         $this->submitProfileForm('Modifier le mot de passe', ['currentPassword' => 'mot-de-passe-actuel', 'newPassword' => 'un tout nouveau mot de passe']);
         $this->assertTrue($hasher->isPasswordValid($this->findUser($user->getEmail()), 'un tout nouveau mot de passe'));
+        $this->assertMobileSessionClosed($mobileToken);
 
         // L'utilisateur reste connecté après le changement
         $this->client->request('GET', '/profil');
@@ -75,6 +92,7 @@ class ProfileTest extends WebTestCase
     public function testChangeEmailWithCodeSentToNewAddress(): void
     {
         $user = $this->createUser('mot-de-passe-actuel');
+        $mobileToken = $this->openMobileSession($user);
         $this->loginAs($user);
         $newEmail = $this->uniqueEmail('nouvelle');
 
@@ -86,6 +104,7 @@ class ProfileTest extends WebTestCase
         $this->submitProfileForm('Confirmer', ['code' => $this->codeFrom($mail)]);
         $this->assertNotNull($this->findUser($newEmail));
         $this->assertNull($this->findUser($user->getEmail()));
+        $this->assertMobileSessionClosed($mobileToken);
 
         // Toujours connecté avec la nouvelle adresse
         $this->client->request('GET', '/profil');

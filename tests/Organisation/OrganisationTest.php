@@ -49,7 +49,7 @@ class OrganisationTest extends WebTestCase
     {
         $this->assertSame(300.0, $this->orgs()->packPrice(10, 'EUR'));
         $this->assertSame(2250.0, $this->orgs()->packPrice(100, 'EUR'), '−25 % à partir de 100 places');
-        $this->assertSame(750000.0, $this->orgs()->packPrice(100, 'XAF'));
+        $this->assertSame(1500000.0, $this->orgs()->packPrice(100, 'XAF'), '100 places × 20 000 FCFA − 25 %');
     }
 
     public function testCreateOrganisationFromTheApp(): void

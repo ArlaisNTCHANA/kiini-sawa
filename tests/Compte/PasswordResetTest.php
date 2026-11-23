@@ -33,6 +33,20 @@ class PasswordResetTest extends WebTestCase
         return $m[1];
     }
 
+    /** Ouvre une session de l'application mobile pour ce compte et renvoie son jeton d'accès. */
+    private function openMobileSession(\App\Compte\Entity\User $user): string
+    {
+        return static::getContainer()->get(\App\Mobile\Service\MobileTokenService::class)->issue($user, 'Téléphone de test')['accessToken'];
+    }
+
+    private function assertMobileSessionClosed(string $accessToken): void
+    {
+        $this->assertNull(
+            static::getContainer()->get(\App\Mobile\Service\MobileTokenService::class)->findActiveByAccessToken($accessToken),
+            'La session de l\'application mobile doit être fermée'
+        );
+    }
+
     public function testUnknownEmailGetsTheSameAnswerAndNoEmail(): void
     {
         $this->requestReset('personne-'.uniqid().'@exemple.org');
@@ -47,6 +61,7 @@ class PasswordResetTest extends WebTestCase
     public function testFullResetJourney(): void
     {
         $user = $this->createUser('ancien-mot-de-passe', verified: false);
+        $mobileToken = $this->openMobileSession($user);
         $this->requestReset(mb_strtoupper($user->getEmail()));
         $this->assertResponseRedirects('/login');
 
@@ -71,6 +86,7 @@ class PasswordResetTest extends WebTestCase
         $hasher = static::getContainer()->get('security.user_password_hasher');
         $this->assertTrue($hasher->isPasswordValid($updated, 'nouveau mot de passe solide'));
         $this->assertTrue($updated->isVerified(), 'Recevoir le lien prouve la possession de l\'adresse');
+        $this->assertMobileSessionClosed($mobileToken);
 
         // Le lien ne sert qu'une fois
         $this->client->request('GET', $link);

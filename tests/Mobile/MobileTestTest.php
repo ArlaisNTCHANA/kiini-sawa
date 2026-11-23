@@ -118,6 +118,24 @@ class MobileTestTest extends WebTestCase
         $this->assertArrayNotHasKey('upgradeUrl', $res['json']);
     }
 
+    public function testFreeUserCannotSubmitProTestAnswers(): void
+    {
+        $user = $this->createUser(pro: false);
+        $token = $this->login((string) $user->getEmail());
+
+        // Contournement de l'écran des questions : envoi direct des réponses d'un test PRO
+        $answers = [];
+        foreach (Instruments::items('enneagramme') as $item) {
+            $answers[$item['key']] = 4;
+        }
+        $res = $this->api('POST', '/api/mobile/v1/tests/enneagramme/reponses', ['answers' => $answers], $token);
+        $this->assertSame(403, $res['status']);
+        $this->assertSame('pro_required', $res['json']['code']);
+
+        $em = static::getContainer()->get('doctrine')->getManager();
+        $this->assertNull($em->getRepository(Assessment::class)->findOneBy(['user' => $user, 'instrument' => 'enneagramme']));
+    }
+
     public function testProUserCanAccessAndSubmitTest(): void
     {
         $user = $this->createUser(pro: true);

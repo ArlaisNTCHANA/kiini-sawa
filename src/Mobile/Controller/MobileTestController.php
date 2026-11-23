@@ -2,6 +2,7 @@
 
 namespace App\Mobile\Controller;
 
+use App\Abonnement\Service\Entitlements;
 use App\Compte\Entity\User;
 use App\Mobile\Service\MobileTestSerializer;
 use App\Personnalite\Entity\Assessment;
@@ -33,6 +34,7 @@ final class MobileTestController extends AbstractController
         private readonly ProfileTestRepository $profileTestRepository,
         private readonly PersonalityScoreService $scoreService,
         private readonly EntityManagerInterface $em,
+        private readonly Entitlements $entitlements,
     ) {
     }
 
@@ -121,6 +123,9 @@ final class MobileTestController extends AbstractController
         if (!Instruments::exists($slug)) {
             throw new NotFoundHttpException(sprintf('Test inconnu : %s', $slug));
         }
+
+        // Même règle que sur le site : passer un test PRO demande PRO (l'écran des questions ne suffit pas à protéger l'envoi)
+        $this->entitlements->requireTest($user, $slug);
 
         try {
             $assessment = $this->assessmentService->record($user, $slug, $answers, $durationSeconds);
