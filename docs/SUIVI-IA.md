@@ -49,7 +49,7 @@ Ne jamais afficher ni demander de mot de passe ; ne pas publier son nom (mention
 - **Vérifié dans le navigateur** (compte d'exemple local) : passation enregistrée, historique, encart du profil, vue
   visiteur (« Créer mon compte gratuit » / « J'ai déjà un compte »), format téléphone sans débordement, console sans
   erreur. L'écran mobile n'a pas été affiché dans un simulateur.
-- **À déployer** (avec la migration). Ensuite : point 1 (accueil mobile allégé, Ma Pause en doublon), puis point 7.
+- **Déployé** le 23/11/2026 (migration appliquée ; accueil et /boussole 200, API 401 sans jeton, envoi invalide 422, aucun journal d'erreur, schéma de production valide). Ensuite : point 1 (accueil mobile allégé, Ma Pause en doublon), puis point 7.
 
 ## 23/11/2026 — Relecture externe, points 3 et 4 : vitrine honnête sur le mobile, « Sanctuaire » toujours précisé
 
