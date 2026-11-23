@@ -9,6 +9,38 @@ teste (`php bin/phpunit`), commit, déploie (`bin/ops/envoyer-hostinger.sh`), v�
 journal `var/log/prod-AAAA-MM-JJ.log` sans erreur) ; **le fondateur fait lui-même `git push`** (refusé à l'IA).
 Ne jamais afficher ni demander de mot de passe ; ne pas publier son nom (mentions légales en attente).
 
+## 23/11/2026 — Engagements de redevabilité, lot 1 (interpeller par un partenaire, avec copie)
+
+- **Demande du fondateur** : l'application envoie un e-mail à un partenaire de redevabilité pour qu'il interpelle la
+  personne, avec une copie à celle-ci. Le partenaire indique son action, la personne sait ce qui va se passer, et
+  l'ensemble se mesure.
+- **Choix par défaut** (non tranchés par le fondateur, recommandations appliquées) :
+  - partenaire **avec ou sans compte** ;
+  - offre gratuite limitée à 1 engagement ouvert, illimité en PRO ;
+  - nom « Engagement de redevabilité » et page « Ma redevabilité ».
+  Tous ces choix sont modifiables.
+- **Fait** :
+  - entités `AccountabilityCommitment` et `AccountabilityNudge`, `AccountabilityService`, `AccountabilityController` ;
+  - pages et e-mails décrits dans `docs/modules/social.md` ;
+  - entrée « Ma redevabilité » dans la rubrique Ensemble, et carte d'accès sur `/social` ;
+  - notification `ACCOUNTABILITY`, migration `Version20261123100000`.
+- **Garde-fous** :
+  - aperçu exact des e-mails et case « J'ai compris » obligatoire ;
+  - accord du partenaire avant toute interpellation ;
+  - lien « Ne plus recevoir » dans chaque e-mail ;
+  - au plus 1 interpellation tous les 7 jours ;
+  - un simple clic sur un bouton de l'e-mail ne vaut pas réponse : le partenaire confirme sur la page (pas
+    d'écriture sur une requête GET) ;
+  - limite `public_form_ip` sur les pages publiques ; jetons de 48 caractères.
+- **Tests** : `tests/Social/AccountabilityTest.php` (4 scénarios : aperçu et consentement, parcours complet sans
+  compte, refus et isolement, limite gratuite et partenaire inscrit). Suite complète **471 / 471**.
+- **Vérifié dans le navigateur** (local) : création avec aperçu, acceptation par le partenaire, interpellation,
+  réponse « J'ai prié pour lui/elle », chiffres affichés (100 % de réponses). Aucune erreur dans la console.
+- **À savoir** : en local, les e-mails ne partent pas ; en production, ils passent par Brevo. Dans les mails, le
+  partenaire est tutoyé dans la question proposée (« Où en es-tu… »), qui s'adresse à la personne ; le reste du texte
+  vouvoie.
+- **Reste** : lots 2, 3 et 4 (voir `docs/modules/social.md`).
+
 ## 23/11/2026 — Sanctuaire du Couple : rythme quotidien, méditation à deux, temps de retraite (point F6)
 
 - **Décisions du fondateur** :

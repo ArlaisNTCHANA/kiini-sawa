@@ -1,0 +1,111 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Ma redevabilité{% endblock %}
+
+{% block body %}
+<style>
+    .ac-card { margin-bottom: 1.25rem; }
+    .ac-top { display: flex; justify-content: space-between; gap: 1rem; align-items: flex-start; flex-wrap: wrap; }
+    .ac-label { font-family: var(--font-serif); font-size: 1.2rem; font-weight: 600; }
+    .ac-mini { font-size: .84rem; color: var(--fg-muted); }
+    .ac-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: .6rem; margin: 1rem 0; }
+    .ac-stat { background: var(--bg-alt); border-radius: var(--r-md); padding: .7rem .8rem; }
+    .ac-stat strong { display: block; font-size: 1.3rem; font-family: var(--font-serif); }
+    .ac-hist { border-top: 1px solid var(--bg-alt); padding: .55rem 0; font-size: .88rem; }
+    .ac-actions { display: flex; gap: .5rem; flex-wrap: wrap; margin-top: .75rem; }
+</style>
+{% set token = csrf_token('accountability') %}
+{% set statusLabels = {PENDING: 'En attente de l\'accord du partenaire', ACTIVE: 'Actif', PAUSED: 'En pause', DECLINED: 'Refusé par le partenaire', STOPPED: 'Arrêté'} %}
+
+<div class="ks-page ks-page--narrow">
+    {% embed 'shared/_page_header.html.twig' with {
+        back: {url: path('app_social'), label: 'Partenaires'},
+        eyebrow: 'Partenaires', icon: 'shield-check',
+        title: 'Ma redevabilité',
+        lead: 'Demandez à une personne de confiance de vous interpeller sur un objectif ou un rituel. Elle reçoit un e-mail, vous en recevez une copie, et elle indique ce qu\'elle a fait.'
+    } %}
+        {% block actions %}
+            {% if canCreate %}
+                <a class="ks-btn ks-btn--primary" href="{{ path('app_accountability_new') }}" style="margin-top: 1rem;">Nouvel engagement</a>
+            {% else %}
+                <p class="ac-mini" style="margin-top: 1rem;">L'offre gratuite comprend un engagement à la fois. <a href="{{ path('app_subscription') }}" style="color: var(--primary); font-weight: 700;">Passer à PRO</a> pour en ouvrir d'autres.</p>
+            {% endif %}
+        {% endblock %}
+    {% endembed %}
+
+    {% for c in commitments %}
+        {% set s = stats[c.id] %}
+        <section class="ks-card ac-card" id="engagement-{{ c.id }}">
+            <div class="ac-top">
+                <div>
+                    <p class="ac-label">{{ c.targetLabel }}</p>
+                    <p class="ac-mini">Partenaire : <strong>{{ c.partnerName }}</strong> · depuis le {{ c.createdAt|date('d/m/Y') }}</p>
+                </div>
+                <span class="ks-badge{{ c.active ? '' : ' ks-badge--muted' }}">{{ c.active ? 'Actif' : statusLabels[c.status] }}</span>
+            </div>
+
+            {% if c.active or s.nudges > 0 %}
+                <div class="ac-stats">
+                    <div class="ac-stat"><strong>{{ s.nudges }}</strong><span class="ac-mini">interpellation{{ s.nudges > 1 ? 's' }}</span></div>
+                    <div class="ac-stat"><strong>{{ s.rate is null ? '–' : s.rate ~ ' %' }}</strong><span class="ac-mini">de réponses</span></div>
+                    <div class="ac-stat"><strong>{{ s.avgHours is null ? '–' : (s.avgHours < 1 ? '< 1 h' : (s.avgHours < 24 ? s.avgHours ~ ' h' : (s.avgHours / 24)|round ~ ' j')) }}</strong><span class="ac-mini">délai moyen de réponse</span></div>
+                </div>
+            {% endif %}
+
+            {% if c.active %}
+                {% if nextAllowed[c.id] %}
+                    <p class="ac-mini">Prochaine interpellation possible le {{ nextAllowed[c.id]|date('d/m/Y') }} (au plus une tous les {{ c.minDaysBetweenNudges }} jours).</p>
+                {% else %}
+                    <form method="post" action="{{ path('app_accountability_nudge', {id: c.id}) }}" style="display: grid; gap: .5rem;" onsubmit="return confirm('{{ c.partnerName|e('js') }} va recevoir un e-mail, et vous une copie. Envoyer ?')">
+                        <input type="hidden" name="_csrf_token" value="{{ token }}">
+                        <textarea name="message" class="ks-input" rows="2" maxlength="1000" placeholder="Un mot pour {{ c.partnerName }} : où vous en êtes, ce qui est difficile (facultatif)" aria-label="Un mot pour votre partenaire"></textarea>
+                        <div><button class="ks-btn ks-btn--primary ks-btn--sm" type="submit">Demander à {{ c.partnerName }} de m'interpeller</button></div>
+                    </form>
+                {% endif %}
+            {% elseif c.pending %}
+                <p class="ac-mini">{{ c.partnerName }} a reçu une invitation le {{ c.createdAt|date('d/m/Y') }}. Tant qu'il ou elle n'a pas accepté, rien d'autre ne lui est envoyé.</p>
+            {% endif %}
+
+            {% if s.last is not empty %}
+                <p class="ac-mini" style="margin-top: 1rem; font-weight: 700;">Historique</p>
+                {% for n in s.last %}
+                    <div class="ac-hist">
+                        Interpellation du {{ n.sentAt|date('d/m/Y') }} :
+                        {% if n.respondedAt %}
+                            <strong>{{ n.responseActionLabel }}</strong> ({{ n.respondedAt|date('d/m') }}){% if n.responseNote %} · « {{ n.responseNote }} »{% endif %}
+                        {% else %}
+                            <span class="ac-mini">pas encore de réponse</span>
+                        {% endif %}
+                    </div>
+                {% endfor %}
+            {% endif %}
+
+            {% if c.open %}
+                <div class="ac-actions">
+                    {% if c.active %}
+                        <form method="post" action="{{ path('app_accountability_manage', {id: c.id, action: 'pause'}) }}"><input type="hidden" name="_csrf_token" value="{{ token }}"><button class="ks-btn ks-btn--ghost ks-btn--sm" type="submit">Mettre en pause</button></form>
+                    {% elseif c.paused %}
+                        <form method="post" action="{{ path('app_accountability_manage', {id: c.id, action: 'resume'}) }}"><input type="hidden" name="_csrf_token" value="{{ token }}"><button class="ks-btn ks-btn--secondary ks-btn--sm" type="submit">Reprendre</button></form>
+                    {% endif %}
+                    <form method="post" action="{{ path('app_accountability_manage', {id: c.id, action: 'stop'}) }}" onsubmit="return confirm('Arrêter cet engagement ? {{ c.partnerName|e('js') }} ne recevra plus de messages.')"><input type="hidden" name="_csrf_token" value="{{ token }}"><button class="ks-btn ks-btn--ghost ks-btn--sm" type="submit">Arrêter</button></form>
+                </div>
+            {% endif %}
+        </section>
+    {% else %}
+        <div class="ks-card ks-empty">
+            <p class="ks-empty__title">Aucun engagement pour l'instant</p>
+            <p class="ks-empty__text">« Deux valent mieux qu'un : si l'un tombe, l'autre le relève » (Ecclésiaste 4:9-10). Choisissez un objectif ou un rituel et une personne de confiance.</p>
+        </div>
+    {% endfor %}
+
+    {% if asPartner is not empty %}
+        <h2 class="ks-section-title">Je suis partenaire de redevabilité</h2>
+        {% for c in asPartner %}
+            <div class="ks-card ks-card--flat ac-card">
+                <p><strong>{{ c.owner.displayName }}</strong> compte sur vous pour « {{ c.targetLabel }} ».</p>
+                <p class="ac-mini">Vous recevez ses demandes par e-mail. <a href="{{ path('app_accountability_partner', {token: c.partnerToken}) }}" style="color: var(--primary);">Gérer mon rôle</a></p>
+            </div>
+        {% endfor %}
+    {% endif %}
+</div>
+{% endblock %}

@@ -48,3 +48,34 @@ Réseau de redevabilité : connexions, partage, commentaires, liens partagés.
 ## Templates
 
 `social/index.html.twig`
+
+## Engagements de redevabilité (lot 1, 23/11/2026)
+
+Une personne demande à un partenaire de confiance (avec ou sans compte KIINI SAWA) de l'interpeller sur un objectif du
+Plan de Vie, un rituel ou un engagement libre.
+
+- **Pages** : `/social/redevabilite` (Ma redevabilité : engagements, chiffres, historique, « Je suis partenaire »),
+  `/social/redevabilite/nouveau` → `/apercu` (aperçu exact des e-mails et case « J'ai compris ») → `/creer`.
+  Pages publiques du partenaire, ouvertes par lien personnel (jeton de 48 caractères, déclarées publiques dans
+  `security.yaml` et `SecurityGuardsTest`) : `/redevabilite/{jeton}` (accepter, refuser, ne plus recevoir) et
+  `/redevabilite/reponse/{jeton}` (réponse en un clic : appel, message, rencontre, prière, et un mot).
+- **Règles** (`Social\Service\AccountabilityService`) :
+  - consentement explicite de la personne, enregistré dans `ownerConsentAt` ;
+  - **rien n'est envoyé au partenaire tant qu'il n'a pas accepté**, sauf l'invitation elle-même ;
+  - au plus une interpellation tous les 7 jours par engagement (`minDaysBetweenNudges`) ;
+  - chaque interpellation part au partenaire, avec **une copie à la personne** (deux envois séparés) ;
+  - le partenaire ne voit que l'engagement, jamais le journal, les plans ou les tests ;
+  - la personne peut mettre en pause, reprendre ou arrêter ; le partenaire peut refuser ou arrêter ;
+  - offre gratuite : un engagement ouvert à la fois (`FREE_LIMIT`) ; nombre illimité en PRO.
+- **Mesure (lot 1)** : interpellations, taux de réponse, délai moyen, actions du partenaire, historique.
+- **E-mails** : `templates/social/accountability/email/` (invitation, interpellation, copie). Leurs corps
+  (`_invitation_body`, `_nudge_body`) servent aussi à l'aperçu, pour que la personne voie exactement ce qui part.
+- **Entités** : `AccountabilityCommitment`, `AccountabilityNudge` (migration `Version20261123100000`).
+  Notification `NotificationType::ACCOUNTABILITY` (accord, refus, réponse du partenaire).
+- **Tests** : `tests/Social/AccountabilityTest.php`.
+- **Lots suivants** :
+  - lot 2 : effet mesuré (reprise du rituel ou avancée de l'objectif dans les 72 heures), revue de la semaine ;
+  - lot 3 : interpellations automatiques (rituel manqué, échéance, rythme), qui demandent la tâche planifiée des
+    rappels sur Hostinger ;
+  - lot 4 : application mobile.
+

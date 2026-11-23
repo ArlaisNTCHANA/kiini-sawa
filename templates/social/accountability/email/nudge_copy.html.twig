@@ -1,0 +1,10 @@
+{% extends 'compte/email/_layout.html.twig' %}
+{% block content %}
+  <p>Bonjour {{ owner }},</p>
+  <p>Comme convenu, voici la copie du message envoyé à <strong>{{ c.partnerName }}</strong>, votre partenaire de redevabilité. Vous serez prévenu(e) quand il ou elle aura répondu.</p>
+  <div style="border:1px dashed #C9D2C8;border-radius:12px;padding:16px;margin:20px 0;">
+    {% include 'social/accountability/_nudge_body.html.twig' with {owner: owner, partnerName: c.partnerName, label: c.targetLabel, why: c.why, message: nudge.ownerMessage, actions: actions, respondUrl: null} %}
+  </div>
+  <p style="text-align:center;"><a href="{{ manageUrl }}" style="color:#2E6B53;font-weight:bold;">Voir mes engagements de redevabilité</a></p>
+{% endblock %}
+{% block footer %}Vous recevez cette copie parce que vous avez demandé à votre partenaire de vous interpeller.{% endblock %}

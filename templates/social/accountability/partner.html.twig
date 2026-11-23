@@ -1,0 +1,53 @@
+{% extends 'base.html.twig' %}
+
+{% set owner = c.owner.displayName %}
+{% block title %}{{ owner }} compte sur vous{% endblock %}
+{% block head_meta %}<meta name="robots" content="noindex">{% endblock %}
+
+{% block body %}
+{% if not app.user %}{% include 'shared/_public_header.html.twig' %}{% endif %}
+{% set token = csrf_token('accountability_partner') %}
+<div class="ks-page ks-page--narrow">
+    {% include 'shared/_page_header.html.twig' with {
+        eyebrow: 'Partenaire de redevabilité', icon: 'shield-check',
+        title: owner ~ ' compte sur vous',
+        lead: owner ~ ' vous a choisi(e) comme partenaire de redevabilité sur KIINI SAWA.'
+    } %}
+
+    <section class="ks-card" style="margin-bottom: 1.25rem;">
+        <p style="font-size: .82rem; color: var(--fg-muted);">Son engagement</p>
+        <p style="font-family: var(--font-serif); font-size: 1.25rem; font-weight: 600; margin: .2rem 0 .6rem;">{{ c.targetLabel }}</p>
+        {% if c.why %}<p><em>Pourquoi c'est important pour {{ owner }} :</em> « {{ c.why }} »</p>{% endif %}
+    </section>
+
+    {% if c.pending %}
+        <section class="ks-card">
+            <h2 class="ks-section-title" style="margin-top: 0;">Ce que vous acceptez</h2>
+            <ul style="margin-left: 1.2rem; line-height: 1.7; list-style: disc;">
+                <li>Quand {{ owner }} le demandera, vous recevrez un court e-mail pour l'encourager, <strong>au plus un tous les {{ minDays }} jours</strong>.</li>
+                <li>Vous indiquerez en un clic ce que vous avez fait. {{ owner }} reçoit une copie de chaque message et voit vos réponses.</li>
+                <li>Vous ne voyez que cet engagement. Vous pouvez arrêter à tout moment.</li>
+                <li>Votre adresse e-mail sert uniquement à ces messages.</li>
+            </ul>
+            <div style="display: flex; gap: .5rem; flex-wrap: wrap; margin-top: 1rem;">
+                <form method="post"><input type="hidden" name="_csrf_token" value="{{ token }}"><input type="hidden" name="action" value="accept"><button class="ks-btn ks-btn--primary" type="submit">J'accepte d'être son partenaire</button></form>
+                <form method="post"><input type="hidden" name="_csrf_token" value="{{ token }}"><input type="hidden" name="action" value="decline"><button class="ks-btn ks-btn--ghost" type="submit">Je ne peux pas</button></form>
+            </div>
+        </section>
+    {% elseif c.open %}
+        <p class="ks-alert ks-alert--success" style="margin-bottom: 1rem;">Vous êtes le partenaire de redevabilité de {{ owner }}. Merci ! Vous recevrez ses demandes par e-mail.</p>
+        <form method="post" onsubmit="return confirm('Vous ne recevrez plus de messages pour cet engagement. Confirmer ?')">
+            <input type="hidden" name="_csrf_token" value="{{ token }}"><input type="hidden" name="action" value="stop">
+            <button class="ks-btn ks-btn--ghost ks-btn--sm" type="submit">Ne plus recevoir ces messages</button>
+        </form>
+    {% elseif c.status == 'DECLINED' %}
+        <p class="ks-alert ks-alert--info">Vous avez décliné cette invitation. Vous ne recevrez aucun autre message.</p>
+    {% else %}
+        <p class="ks-alert ks-alert--info">Cet engagement est terminé. Vous ne recevrez plus de messages.</p>
+    {% endif %}
+
+    {% if not app.user %}
+        <p style="font-size: .85rem; color: var(--fg-muted); margin-top: 2rem;">KIINI SAWA aide à bâtir sa vie à partir de ce pour quoi Dieu nous a créés. <a href="{{ path('app_home') }}" style="color: var(--primary);">Découvrir</a></p>
+    {% endif %}
+</div>
+{% endblock %}

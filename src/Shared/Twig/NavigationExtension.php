@@ -42,6 +42,7 @@ final class NavigationExtension extends AbstractExtension
         ]],
         'together' => ['label' => 'Ensemble', 'icon' => 'users', 'match' => ['/social', '/couple', '/defis', '/organisation', '/parrainage'], 'items' => [
             ['Partenaires', 'app_social', 'users', 'Redevabilité et partages'],
+            ['Ma redevabilité', 'app_accountability', 'shield-check', 'Être interpellé(e) par une personne de confiance'],
             ['Notre couple', 'app_couple', 'heart', 'Vision et projets à deux'],
             ['Défis', 'app_challenges', 'trophy', 'Avancer ensemble sur 21 jours'],
             ['Mon organisation', 'app_organisation_index', 'building-2', 'Église, association…'],

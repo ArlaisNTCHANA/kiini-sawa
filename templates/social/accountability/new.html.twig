@@ -1,0 +1,56 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Nouvel engagement de redevabilité{% endblock %}
+
+{% block body %}
+<div class="ks-page ks-page--narrow">
+    {% include 'shared/_page_header.html.twig' with {
+        back: {url: path('app_accountability'), label: 'Ma redevabilité'},
+        eyebrow: 'Partenaires', icon: 'shield-check',
+        title: 'Nouvel engagement de redevabilité',
+        lead: 'Choisissez sur quoi vous voulez être interpellé(e), et par qui. À l\'étape suivante, vous verrez exactement ce que votre partenaire recevra avant de valider.'
+    } %}
+
+    <form method="post" action="{{ path('app_accountability_preview') }}" class="ks-card" style="display: grid; gap: 1.25rem;" x-data="{ target: '{{ data.target|default('')|e('js') }}', partner: '{{ data.connectionId|default(0) }}' }">
+        <input type="hidden" name="_csrf_token" value="{{ csrf_token('accountability') }}">
+
+        <div class="ks-field">
+            <label class="ks-label" for="target">1. Sur quoi voulez-vous être interpellé(e) ?</label>
+            <select class="ks-input" id="target" name="target" x-model="target">
+                <option value="">Un engagement que j'écris moi-même</option>
+                {% if targets.goals is not empty %}
+                    <optgroup label="Mes objectifs (Plan de Vie)">
+                        {% for g in targets.goals %}<option value="GOAL:{{ g.id }}" {{ data.target|default('') == 'GOAL:' ~ g.id ? 'selected' }}>{{ g.label }}</option>{% endfor %}
+                    </optgroup>
+                {% endif %}
+                {% if targets.habits is not empty %}
+                    <optgroup label="Mes rituels">
+                        {% for h in targets.habits %}<option value="HABIT:{{ h.id }}" {{ data.target|default('') == 'HABIT:' ~ h.id ? 'selected' }}>{{ h.label }}</option>{% endfor %}
+                    </optgroup>
+                {% endif %}
+            </select>
+            <input class="ks-input" name="freeLabel" maxlength="255" x-show="target === ''" value="{{ data.freeLabel|default('') }}" placeholder="Ex. : Courir trois fois par semaine, finir mon mémoire avant juin" aria-label="Mon engagement" style="margin-top: .5rem;">
+        </div>
+
+        <div class="ks-field">
+            <label class="ks-label" for="why">2. Pourquoi c'est important pour vous ? <span style="font-weight: 400; color: var(--fg-muted);">(facultatif, transmis à votre partenaire)</span></label>
+            <textarea class="ks-input" id="why" name="why" rows="2" maxlength="1000" placeholder="Ex. : Je veux honorer le corps que Dieu m'a confié et avoir de l'énergie pour ma famille.">{{ data.why|default('') }}</textarea>
+        </div>
+
+        <div class="ks-field">
+            <label class="ks-label" for="connectionId">3. Qui sera votre partenaire de redevabilité ?</label>
+            <select class="ks-input" id="connectionId" name="connectionId" x-model="partner">
+                <option value="0">Une personne qui n'est pas (encore) sur KIINI SAWA</option>
+                {% for p in partners %}<option value="{{ p.id }}" {{ data.connectionId|default(0) == p.id ? 'selected' }}>{{ p.name }}</option>{% endfor %}
+            </select>
+            <div x-show="partner === '0'" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: .5rem; margin-top: .5rem;">
+                <input class="ks-input" name="partnerName" maxlength="120" value="{{ data.partnerName|default('') }}" placeholder="Son prénom" aria-label="Prénom du partenaire">
+                <input class="ks-input" type="email" name="partnerEmail" maxlength="180" value="{{ data.partnerEmail|default('') }}" placeholder="Son adresse e-mail" aria-label="E-mail du partenaire">
+            </div>
+            <p style="font-size: .82rem; color: var(--fg-muted); margin-top: .4rem;">Choisissez quelqu'un de confiance, qui vous veut du bien : un ami, un mentor, un responsable d'Église.</p>
+        </div>
+
+        <div><button class="ks-btn ks-btn--primary" type="submit">Voir ce qui sera envoyé</button></div>
+    </form>
+</div>
+{% endblock %}

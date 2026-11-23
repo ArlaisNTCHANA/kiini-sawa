@@ -1,0 +1,5 @@
+{% extends 'compte/email/_layout.html.twig' %}
+{% block content %}
+  {% include 'social/accountability/_invitation_body.html.twig' with {owner: owner, partnerName: c.partnerName, label: c.targetLabel, why: c.why, minDays: c.minDaysBetweenNudges, url: url} %}
+{% endblock %}
+{% block footer %}Vous recevez cet e-mail parce que {{ owner }} vous a choisi(e) comme partenaire de redevabilité sur KIINI SAWA. Sans réponse de votre part, vous ne recevrez rien d'autre.{% endblock %}

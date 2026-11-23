@@ -1,0 +1,42 @@
+{% extends 'base.html.twig' %}
+
+{% set owner = c.owner.displayName %}
+{% block title %}Votre réponse à {{ owner }}{% endblock %}
+{% block head_meta %}<meta name="robots" content="noindex">{% endblock %}
+
+{% block body %}
+{% if not app.user %}{% include 'shared/_public_header.html.twig' %}{% endif %}
+<style>
+    .ac-choice { display: flex; gap: .6rem; align-items: center; border: 1.5px solid var(--border); border-radius: var(--r-md); padding: .8rem 1rem; cursor: pointer; }
+    .ac-choice:has(input:checked) { border-color: var(--primary); background: var(--primary-soft); }
+</style>
+<div class="ks-page ks-page--narrow">
+    {% include 'shared/_page_header.html.twig' with {
+        eyebrow: 'Partenaire de redevabilité', icon: 'shield-check',
+        title: 'Qu\'avez-vous fait pour ' ~ owner ~ ' ?',
+        lead: 'Interpellation du ' ~ nudge.sentAt|date('d/m/Y') ~ ' sur « ' ~ c.targetLabel ~ ' ».'
+    } %}
+
+    {% if nudge.ownerMessage %}
+        <div class="ks-card ks-card--flat" style="margin-bottom: 1.25rem;"><em>Son mot :</em> « {{ nudge.ownerMessage }} »</div>
+    {% endif %}
+
+    {% if nudge.respondedAt %}
+        <p class="ks-alert ks-alert--success" style="margin-bottom: 1rem;">Merci ! Votre réponse « {{ nudge.responseActionLabel }} » a été transmise à {{ owner }}. Vous pouvez la corriger ci-dessous.</p>
+    {% endif %}
+    {% if error %}<p class="ks-alert ks-alert--danger" style="margin-bottom: 1rem;">{{ error }}</p>{% endif %}
+
+    {% if c.open %}
+        <form method="post" class="ks-card" style="display: grid; gap: .6rem;">
+            <input type="hidden" name="_csrf_token" value="{{ csrf_token('accountability_respond') }}">
+            {% for code, label in actions %}
+                <label class="ac-choice"><input type="radio" name="action" value="{{ code }}" {{ preselected == code ? 'checked' }} required style="accent-color: var(--primary);"> {{ label }}</label>
+            {% endfor %}
+            <textarea name="note" class="ks-input" rows="2" maxlength="1000" placeholder="Un mot pour {{ owner }} (facultatif)" aria-label="Un mot">{{ nudge.responseNote }}</textarea>
+            <div><button class="ks-btn ks-btn--primary" type="submit">{{ nudge.respondedAt ? 'Mettre à jour ma réponse' : 'Envoyer ma réponse' }}</button></div>
+        </form>
+    {% else %}
+        <p class="ks-alert ks-alert--info">Cet engagement est terminé.</p>
+    {% endif %}
+</div>
+{% endblock %}

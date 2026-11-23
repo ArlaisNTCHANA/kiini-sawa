@@ -156,6 +156,11 @@
         <p class="ks-header__lead">Les personnes qui vous encouragent et vous aident à tenir vos engagements. Vous choisissez ce que vous partagez avec chacune.</p>
     </header>
 
+    <a href="{{ path('app_accountability') }}" class="ks-card ks-card--link ks-card--accent" style="display: flex; gap: .8rem; align-items: center; margin-bottom: 2rem;">
+        <i data-lucide="shield-check" class="ks-ico" aria-hidden="true" style="width: 22px; height: 22px; color: var(--primary);"></i>
+        <span><strong>Ma redevabilité</strong><br><span style="font-size: .88rem; color: var(--fg-muted);">Demandez à une personne de confiance de vous interpeller sur un objectif ou un rituel, même si elle n'est pas sur KIINI SAWA.</span></span>
+    </a>
+
     <!-- Tabs Navigation -->
     <nav style="display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 2.5rem;">
         <button @click="activeTab = 'ACTIVITY'"
