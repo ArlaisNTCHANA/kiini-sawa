@@ -173,6 +173,15 @@ class AccountabilityCommitment
     }
 
     public function pause(): void { $this->status = self::STATUS_PAUSED; }
+
+    /** L'objet lié a été supprimé : l'engagement devient libre (même libellé), sans alerte liée à cet objet. */
+    public function detachTarget(): void
+    {
+        $this->targetType = self::TARGET_FREE;
+        $this->targetId = null;
+        $this->alertHabitDays = null;
+        $this->alertGoalDays = null;
+    }
     public function resume(): void { $this->status = self::STATUS_ACTIVE; }
 
     public function stop(string $by): void

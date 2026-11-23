@@ -9,6 +9,27 @@ teste (`php bin/phpunit`), commit, déploie (`bin/ops/envoyer-hostinger.sh`), v�
 journal `var/log/prod-AAAA-MM-JJ.log` sans erreur) ; **le fondateur fait lui-même `git push`** (refusé à l'IA).
 Ne jamais afficher ni demander de mot de passe ; ne pas publier son nom (mentions légales en attente).
 
+## 23/11/2026 — Relecture externe : redevabilité sécurisée (point 6) et texte en double sur la vitrine (point 5)
+
+- **Contexte** : le fondateur a fait relire le travail récent, avec 7 remarques. Ordre convenu : 6, 5, puis 3 et 4
+  (formulations de la vitrine, « Sanctuaire »), 2 (une seule Boussole enregistrée), 1 (accueil mobile allégé), 7 (API
+  du couple en français, avant la publication sur les stores).
+- **6a, fausse alerte** : si le rituel ou l'objectif lié est supprimé, `AccountabilityService::pauseIfTargetMissing()`
+  (appelé avant toute alerte dans `runDailyChecks`) met l'engagement en pause. L'engagement devient **libre**
+  (`AccountabilityCommitment::detachTarget()`) : même libellé, alertes rituel et objectif retirées, alerte « plus de
+  connexion » gardée. La personne est prévenue. Une fois repris, il n'est plus remis en pause.
+- **6b, abus d'envoi** : limiteur `accountability_invite`, **3 invitations par jour et par compte**, en gratuit comme
+  en PRO. Sans lui, créer, arrêter et recommencer permettait d'envoyer des e-mails en série, même en gratuit.
+- **6c, mobile** : avant d'ouvrir le site, le bouton « Nouvel engagement (sur le site) » prévient qu'il faudra se
+  connecter avec le même compte, puis actualise la liste au retour. Après la connexion, le site renvoie directement au
+  formulaire (vérifié par un test).
+- **5, vitrine** : la phrase de paiement de la carte PRO a son propre identifiant (`vitrine.s8.paiement`), au lieu de
+  `vitrine.s8.22` partagé. « Les six tests » devient « Tous les tests » : il y a 7 questionnaires et 2
+  auto-évaluations. Aucune modification n'existait en production pour ces codes. Garde-fou :
+  `SiteTextsTest::testNoTextCodeIsUsedWithTwoDifferentOriginals` (on a vérifié qu'il échoue sur un vrai doublon).
+- **Tests** : 3 de plus dans `AccountabilityTest` (rituel supprimé, limite d'invitations, retour au formulaire après
+  connexion) et 1 dans `SiteTextsTest`. Suite complète **485 / 485** ; mobile : `tsc` 0 erreur, Vitest 24/24.
+
 ## 23/11/2026 — Vitrine : vraies captures de l'application (dernier point de l'audit, F1 et F2)
 
 - Les trois écrans de téléphone dessinés à la main de `dashboard/landing.html.twig` (section `#apercu`) sont remplacés

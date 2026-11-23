@@ -347,4 +347,50 @@ class AccountabilityTest extends WebTestCase
         $this->assertSame(404, $this->api('POST', '/api/mobile/v1/redevabilite/'.$c->getId().'/arreter', [], $other)['status']);
         $this->assertSame([], $this->api('GET', '/api/mobile/v1/redevabilite', null, $other)['json']['commitments']);
     }
+
+    public function testDeletedRitualPausesTheCommitmentWithoutAlertingThePartner(): void
+    {
+        [$c, $habitId] = $this->activeHabitCommitment(10);
+        $this->em()->getConnection()->executeStatement('DELETE FROM habit WHERE id = ?', [$habitId]);
+        $this->em()->clear();
+
+        $this->service()->runDailyChecks(new \DateTimeImmutable('today'));
+        $this->assertCount(0, $this->em()->getRepository(AccountabilityNudge::class)->findBy(['commitment' => $c->getId()]), 'Aucune fausse alerte');
+        $this->assertCount(0, $this->emailsTo($c->getPartnerEmail()));
+        $c = $this->em()->find(AccountabilityCommitment::class, $c->getId());
+        $this->assertTrue($c->isPaused());
+        $this->assertSame(AccountabilityCommitment::TARGET_FREE, $c->getTargetType(), 'Devenu un engagement libre');
+        $this->assertNull($c->getAlertHabitDays());
+        $this->assertSame(7, $c->getAlertInactiveDays(), 'L\'alerte « plus de connexion » reste');
+        $notes = $this->em()->getRepository(Notification::class)->findBy(['user' => $c->getOwner()->getId()]);
+        $this->assertTrue((bool) array_filter($notes, fn ($n) => str_contains((string) $n->getMessage(), 'n\'existe plus')));
+
+        // Repris comme engagement libre : il n'est plus remis en pause
+        $this->service()->ownerAction($c, $c->getOwner(), 'resume');
+        $this->service()->runDailyChecks(new \DateTimeImmutable('today'));
+        $this->assertTrue($this->em()->find(AccountabilityCommitment::class, $c->getId())->isActive());
+    }
+
+    public function testInvitationsAreLimitedPerDayEvenForPro(): void
+    {
+        $owner = $this->createUser(pro: true);
+        $this->client->loginUser($owner);
+        for ($i = 1; $i <= 4; ++$i) {
+            $this->createCommitment(['target' => '', 'freeLabel' => 'Engagement '.$i, 'connectionId' => 0, 'partnerName' => 'Ami', 'partnerEmail' => 'ami'.$i.'-'.uniqid().'@exemple.org', 'consent' => '1']);
+        }
+        $this->assertCount(3, $this->em()->getRepository(AccountabilityCommitment::class)->findBy(['owner' => $owner->getId()]));
+        $this->client->followRedirect();
+        $this->assertSelectorTextContains('main', 'plusieurs invitations aujourd\'hui');
+    }
+
+    public function testAfterLoginTheCreationFormOpensDirectly(): void
+    {
+        $owner = $this->createUser();
+        $this->client->request('GET', '/social/redevabilite/nouveau');
+        $this->assertResponseRedirects('/login');
+        $crawler = $this->client->followRedirect();
+        $form = $crawler->filter('form')->form(['email' => $owner->getEmail(), 'password' => 'mot-de-passe-solide']);
+        $this->client->submit($form);
+        $this->assertResponseRedirects('/social/redevabilite/nouveau');
+    }
 }

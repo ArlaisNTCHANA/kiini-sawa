@@ -33,6 +33,7 @@ final class AccountabilityService
         private readonly Notifier $notifier,
         private readonly MailerInterface $mailer,
         private readonly UrlGeneratorInterface $urls,
+        private readonly \App\Shared\Security\RateLimits $limits,
         #[Autowire('%app.mailer_from%')] private readonly string $from,
     ) {
     }
@@ -133,6 +134,12 @@ final class AccountabilityService
         }
         if (mb_strtolower($email) === mb_strtolower((string) $owner->getEmail())) {
             throw new \InvalidArgumentException('Choisissez une autre personne que vous-même.');
+        }
+
+        // Chaque engagement envoie une invitation à une adresse choisie librement : au plus 3 par jour et par compte,
+        // en gratuit comme en PRO (sinon : créer, arrêter, recommencer… et envoyer des e-mails en série).
+        if (!$this->limits->allow('accountability_invite', (string) $owner->getId())) {
+            throw new \DomainException('Vous avez déjà envoyé plusieurs invitations aujourd\'hui. Merci de réessayer demain.');
         }
 
         $commitment = new AccountabilityCommitment($owner, $name, $email, $type, $id, $label, $data['why'] ?? null);
@@ -299,6 +306,9 @@ final class AccountabilityService
         $alerts = 0;
         $resumed = 0;
         foreach ($this->em->getRepository(AccountabilityCommitment::class)->findBy(['status' => AccountabilityCommitment::STATUS_ACTIVE]) as $c) {
+            if ($this->pauseIfTargetMissing($c)) {
+                continue; // jamais d'alerte sur un rituel ou un objectif qui n'existe plus
+            }
             $resumed += $this->recordResumptions($c);
             $signal = $this->dueSignal($c, $today);
             if (null !== $signal && null === $this->nextNudgeAllowedAt($c)) {
@@ -308,6 +318,39 @@ final class AccountabilityService
         }
 
         return ['alertes' => $alerts, 'reprises' => $resumed];
+    }
+
+    /**
+     * Le rituel ou l'objectif lié a été supprimé : l'engagement passe en pause et devient un engagement libre (les
+     * alertes liées à cet objet sont retirées, l'alerte « plus de connexion » reste), et la personne est prévenue. Évite une fausse alerte au
+     * partenaire (« n'a pas validé son rituel depuis… » alors que le rituel n'existe plus).
+     */
+    public function pauseIfTargetMissing(AccountabilityCommitment $c): bool
+    {
+        if ($this->targetExists($c)) {
+            return false;
+        }
+        $kind = AccountabilityCommitment::TARGET_HABIT === $c->getTargetType() ? 'Le rituel' : 'L\'objectif';
+        $c->detachTarget();
+        $c->pause();
+        $this->em->flush();
+        $this->notifier->notify($c->getOwner(), NotificationType::ACCOUNTABILITY, 'Engagement de redevabilité mis en pause',
+            sprintf('%s « %s » n\'existe plus : votre engagement avec %s est en pause, et %s n\'a reçu aucune alerte. Vous pouvez le reprendre comme engagement libre (seule l\'alerte « plus de connexion » restera) ou l\'arrêter.', $kind, $c->getTargetLabel(), $c->getPartnerName(), $c->getPartnerName()),
+            '/social/redevabilite', 'accountability-target-missing-'.$c->getId());
+
+        return true;
+    }
+
+    /** L'objet de l'engagement existe toujours et appartient toujours à la personne (vrai pour un engagement libre). */
+    public function targetExists(AccountabilityCommitment $c): bool
+    {
+        $id = $c->getTargetId();
+
+        return match ($c->getTargetType()) {
+            AccountabilityCommitment::TARGET_HABIT => null !== $id && ($h = $this->em->find(Habit::class, $id)) instanceof Habit && $h->getUser() === $c->getOwner(),
+            AccountabilityCommitment::TARGET_GOAL => null !== $id && ($g = $this->em->find(LifeGoal::class, $id)) instanceof LifeGoal && $g->getPlanDeVie()?->getUser() === $c->getOwner(),
+            default => true,
+        };
     }
 
     /**

@@ -172,4 +172,25 @@ class SiteTextsTest extends WebTestCase
         $client->request('POST', '/admin/textes/modifier?code='.self::CODE, ['_csrf_token' => 'mauvais', 'action' => 'publish', 'content' => 'Pirate']);
         $this->assertSame($this->original(), static::getContainer()->get(SiteTexts::class)->get(self::CODE, $this->original()), 'sans jeton valide, rien ne change');
     }
+
+    /** Un même identifiant ne doit jamais porter deux textes d'origine différents (sinon modifier l'un écrase l'autre). */
+    public function testNoTextCodeIsUsedWithTwoDifferentOriginals(): void
+    {
+        $seen = [];
+        $conflicts = [];
+        $dir = static::getContainer()->getParameter('kernel.project_dir').'/templates';
+        foreach (new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($dir, \FilesystemIterator::SKIP_DOTS)) as $file) {
+            if (!str_ends_with($file->getFilename(), '.twig')) {
+                continue;
+            }
+            preg_match_all('/\bt\(\s*([\'"])([a-z0-9_.\-]+)\1\s*,\s*([\'"])((?:\\\\.|(?!\3).)*)\3/su', (string) file_get_contents($file->getPathname()), $m, \PREG_SET_ORDER);
+            foreach ($m as $hit) {
+                if (isset($seen[$hit[2]]) && $seen[$hit[2]] !== $hit[4]) {
+                    $conflicts[] = $hit[2];
+                }
+                $seen[$hit[2]] ??= $hit[4];
+            }
+        }
+        $this->assertSame([], array_values(array_unique($conflicts)), 'Identifiants de texte utilisés avec deux textes différents');
+    }
 }

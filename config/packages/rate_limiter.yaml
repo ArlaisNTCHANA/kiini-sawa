@@ -30,6 +30,10 @@ framework:
             policy: sliding_window
             limit: 5
             interval: '1 hour'
+        accountability_invite: # invitations de partenaire de redevabilité (e-mail à une adresse quelconque), gratuit et PRO
+            policy: sliding_window
+            limit: 3
+            interval: '24 hours'
         plan_email:          # envoi d'un plan par e-mail
             policy: sliding_window
             limit: 5
