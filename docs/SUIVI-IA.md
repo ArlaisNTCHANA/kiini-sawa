@@ -9,6 +9,19 @@ teste (`php bin/phpunit`), commit, déploie (`bin/ops/envoyer-hostinger.sh`), v�
 journal `var/log/prod-AAAA-MM-JJ.log` sans erreur) ; **le fondateur fait lui-même `git push`** (refusé à l'IA).
 Ne jamais afficher ni demander de mot de passe ; ne pas publier son nom (mentions légales en attente).
 
+## 23/11/2026 — Relecture externe, point 7 : adresses de l'API mobile du couple, reporté
+
+- **Constat** : les adresses de `src/Mobile/Controller/MobileCoupleController.php` sont en anglais (`/couple/home`,
+  `/projects`, `/challenges/*`, `/meditations/*`, `/ping`, `/retreat/*`, `/review`, `/report`), alors que le reste
+  de l'API mobile est en français (`/agenda`, `/partenaires`, `/revues/hebdo`, `/defis`, `/boussole`…).
+- **Décision du fondateur (23/11/2026)** : **ne pas toucher pour l'instant**. Pure question de cohérence, invisible
+  pour les utilisateurs. Aucun code modifié.
+- **Si on y revient** : une table de correspondance a été préparée (`/accueil`, `/projets`, `/defis`,
+  `/defis/commencer`, `/defis/valider-jour`, `/meditations`, `/meditations/commencer`,
+  `/meditations/valider-etape`, `/signal`, `/retraite`, `/retraite/proposer|confirmer|arreter`, `/revue`,
+  `/rapport`), en gardant les clés JSON et les noms de routes internes en anglais. À faire **avant la publication
+  sur les stores** : après, il faudrait maintenir les anciennes adresses pour les anciennes versions de l'appli.
+
 ## 23/11/2026 — Relecture externe, point 1 : accueil de l'application mobile allégé, Ma Pause supprimé
 
 - **Accueil mobile** (`mobile-v1/app/(tabs)/index.tsx`) : les trois bandeaux (Ma Pause, Ma Boussole 360, Sanctuaire
