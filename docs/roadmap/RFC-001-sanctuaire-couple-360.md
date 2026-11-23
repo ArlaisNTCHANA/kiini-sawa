@@ -46,11 +46,11 @@ Transformer l'actuel espace Couple en un **Sanctuaire de Croissance 360**, conç
 
 ### Contrat d'API Mobile (`/api/mobile/v1/couple/...`)
 
-* `GET /api/mobile/v1/couple/home` : Vue globale 360 du Sanctuaire en un appel (Verset, Défi actif, Méditation, Résumé Projets).
-* `GET / POST /api/mobile/v1/couple/projects` : Gestion des projets communs.
-* `GET / POST /api/mobile/v1/couple/challenges` : Inscription et validation quotidienne du défi.
+* `GET /api/mobile/v1/couple/accueil` : Vue globale 360 du Sanctuaire en un appel (Verset, Défi actif, Méditation, Résumé Projets).
+* `GET / POST /api/mobile/v1/couple/projets` : Gestion des projets communs.
+* `GET / POST /api/mobile/v1/couple/defis` : Inscription et validation quotidienne du défi.
 * `GET / POST /api/mobile/v1/couple/meditations` : Suivi des étapes de méditation.
-* `POST /api/mobile/v1/couple/ping` : Notification push instantanée au conjoint (*« ❤️ [Prénom] t'invite à la méditation ce soir »*).
+* `POST /api/mobile/v1/couple/signal` : Notification push instantanée au conjoint (*« ❤️ [Prénom] t'invite à la méditation ce soir »*).
 
 ### Arborescence Mobile (React Native / Expo)
 

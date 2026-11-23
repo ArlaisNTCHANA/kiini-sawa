@@ -9,6 +9,24 @@ teste (`php bin/phpunit`), commit, déploie (`bin/ops/envoyer-hostinger.sh`), v�
 journal `var/log/prod-AAAA-MM-JJ.log` sans erreur) ; **le fondateur fait lui-même `git push`** (refusé à l'IA).
 Ne jamais afficher ni demander de mot de passe ; ne pas publier son nom (mentions légales en attente).
 
+## 23/11/2026 — Relecture externe, point 7 : adresses de l'API mobile du couple en français
+
+- **Fait** (le fondateur l'avait d'abord reporté, puis relancé pour que ce soit corrigé avant la publication sur
+  Google Play). `src/Mobile/Controller/MobileCoupleController.php`, préfixe `/api/mobile/v1/couple` inchangé :
+  `/home` → `/accueil`, `/projects` → `/projets`, `/challenges/catalog|start|check-day` → `/defis`,
+  `/defis/commencer`, `/defis/valider-jour`, `/meditations/catalog|start|complete-step` → `/meditations`,
+  `/meditations/commencer`, `/meditations/valider-etape`, `/ping` → `/signal`, `/retreat[/propose|confirm|stop]` →
+  `/retraite[/proposer|confirmer|arreter]`, `/review` → `/revue`, `/report` → `/rapport`. `/intentions` inchangé.
+- **Pas de double route** : l'appli n'était pas publiée. Test `testOldEnglishAddressesAreGone`
+  (`tests/Mobile/MobileCoupleSanctuaryTest.php`) vérifie que les anciennes adresses répondent 404.
+- **Inchangés, volontairement** : noms internes des routes (`api_mobile_v1_couple_*`, en anglais comme le reste du
+  code), clés JSON, et adresses des **écrans** de l'appli (`app/couple/challenges.tsx`, `/couple/challenges` dans la
+  carte de l'accueil) : ce ne sont pas des adresses d'API.
+- **Appli** : seul `mobile-v1/src/api/client.ts` appelait ces adresses. Docs : `docs/api-mobile.md` (section 13),
+  `docs/roadmap/RFC-001-sanctuaire-couple-360.md`.
+- **Déploiement** : serveur et appli doivent partir ensemble (l'appli en développement qui pointe vers la production
+  ne parle plus aux anciennes adresses).
+
 ## 23/11/2026 — Boussole 360 : jeton CSRF et limites sur l'envoi des réponses
 
 - **Signalé par le fondateur** : `POST /boussole/resultat` (`Boussole\Controller\BoussoleController::submit`) n'avait
@@ -29,19 +47,6 @@ Ne jamais afficher ni demander de mot de passe ; ne pas publier son nom (mention
   page donne le jeton au script) et `MobileBoussoleTest` (limite par compte). Suite complète **502 / 502**. Vérifié
   dans un vrai navigateur : visiteur (« gardé de côté », 200) et compte connecté (« enregistré dans votre compte »,
   200).
-
-## 23/11/2026 — Relecture externe, point 7 : adresses de l'API mobile du couple, reporté
-
-- **Constat** : les adresses de `src/Mobile/Controller/MobileCoupleController.php` sont en anglais (`/couple/home`,
-  `/projects`, `/challenges/*`, `/meditations/*`, `/ping`, `/retreat/*`, `/review`, `/report`), alors que le reste
-  de l'API mobile est en français (`/agenda`, `/partenaires`, `/revues/hebdo`, `/defis`, `/boussole`…).
-- **Décision du fondateur (23/11/2026)** : **ne pas toucher pour l'instant**. Pure question de cohérence, invisible
-  pour les utilisateurs. Aucun code modifié.
-- **Si on y revient** : une table de correspondance a été préparée (`/accueil`, `/projets`, `/defis`,
-  `/defis/commencer`, `/defis/valider-jour`, `/meditations`, `/meditations/commencer`,
-  `/meditations/valider-etape`, `/signal`, `/retraite`, `/retraite/proposer|confirmer|arreter`, `/revue`,
-  `/rapport`), en gardant les clés JSON et les noms de routes internes en anglais. À faire **avant la publication
-  sur les stores** : après, il faudrait maintenir les anciennes adresses pour les anciennes versions de l'appli.
 
 ## 23/11/2026 — Relecture externe, point 1 : accueil de l'application mobile allégé, Ma Pause supprimé
 

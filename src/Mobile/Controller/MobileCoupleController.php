@@ -54,7 +54,7 @@ final class MobileCoupleController extends AbstractController
         return $couple;
     }
 
-    #[Route('/home', name: 'api_mobile_v1_couple_home', methods: ['GET'])]
+    #[Route('/accueil', name: 'api_mobile_v1_couple_home', methods: ['GET'])]
     public function home(): JsonResponse
     {
         $couple = $this->requireUsableCouple();
@@ -65,7 +65,7 @@ final class MobileCoupleController extends AbstractController
         return $this->jsonNoStore($this->sanctuary->homeData($couple, $this->currentMobileUser()));
     }
 
-    #[Route('/projects', name: 'api_mobile_v1_couple_projects_list', methods: ['GET'])]
+    #[Route('/projets', name: 'api_mobile_v1_couple_projects_list', methods: ['GET'])]
     public function listProjects(): JsonResponse
     {
         $couple = $this->requireUsableCouple();
@@ -84,7 +84,7 @@ final class MobileCoupleController extends AbstractController
         ]);
     }
 
-    #[Route('/projects', name: 'api_mobile_v1_couple_projects_create', methods: ['POST'])]
+    #[Route('/projets', name: 'api_mobile_v1_couple_projects_create', methods: ['POST'])]
     public function createProject(Request $request): JsonResponse
     {
         $couple = $this->requireUsableCouple();
@@ -108,7 +108,7 @@ final class MobileCoupleController extends AbstractController
         return $this->jsonNoStore(['project' => $this->sanctuary->serializeItem($item)], Response::HTTP_CREATED);
     }
 
-    #[Route('/projects/{id}', name: 'api_mobile_v1_couple_projects_update', requirements: ['id' => '\d+'], methods: ['PATCH'])]
+    #[Route('/projets/{id}', name: 'api_mobile_v1_couple_projects_update', requirements: ['id' => '\d+'], methods: ['PATCH'])]
     public function updateProject(int $id, Request $request): JsonResponse
     {
         $couple = $this->requireUsableCouple();
@@ -127,7 +127,7 @@ final class MobileCoupleController extends AbstractController
         return $this->jsonNoStore(['project' => $this->sanctuary->serializeItem($item)]);
     }
 
-    #[Route('/projects/{id}', name: 'api_mobile_v1_couple_projects_delete', requirements: ['id' => '\d+'], methods: ['DELETE'])]
+    #[Route('/projets/{id}', name: 'api_mobile_v1_couple_projects_delete', requirements: ['id' => '\d+'], methods: ['DELETE'])]
     public function deleteProject(int $id): JsonResponse
     {
         $couple = $this->requireUsableCouple();
@@ -202,7 +202,7 @@ final class MobileCoupleController extends AbstractController
         return $this->jsonNoStore(['deleted' => true]);
     }
 
-    #[Route('/challenges/catalog', name: 'api_mobile_v1_couple_challenges_catalog', methods: ['GET'])]
+    #[Route('/defis', name: 'api_mobile_v1_couple_challenges_catalog', methods: ['GET'])]
     public function challengesCatalog(): JsonResponse
     {
         $couple = $this->requireUsableCouple();
@@ -228,7 +228,7 @@ final class MobileCoupleController extends AbstractController
         ]);
     }
 
-    #[Route('/challenges/start', name: 'api_mobile_v1_couple_challenges_start', methods: ['POST'])]
+    #[Route('/defis/commencer', name: 'api_mobile_v1_couple_challenges_start', methods: ['POST'])]
     public function startChallenge(Request $request): JsonResponse
     {
         $couple = $this->requireUsableCouple();
@@ -249,7 +249,7 @@ final class MobileCoupleController extends AbstractController
         ], Response::HTTP_CREATED);
     }
 
-    #[Route('/challenges/check-day', name: 'api_mobile_v1_couple_challenges_check_day', methods: ['POST'])]
+    #[Route('/defis/valider-jour', name: 'api_mobile_v1_couple_challenges_check_day', methods: ['POST'])]
     public function checkChallengeDay(Request $request): JsonResponse
     {
         $couple = $this->requireUsableCouple();
@@ -272,7 +272,7 @@ final class MobileCoupleController extends AbstractController
         ]);
     }
 
-    #[Route('/meditations/catalog', name: 'api_mobile_v1_couple_meditations_catalog', methods: ['GET'])]
+    #[Route('/meditations', name: 'api_mobile_v1_couple_meditations_catalog', methods: ['GET'])]
     public function meditationsCatalog(): JsonResponse
     {
         $couple = $this->requireUsableCouple();
@@ -298,7 +298,7 @@ final class MobileCoupleController extends AbstractController
         ]);
     }
 
-    #[Route('/meditations/start', name: 'api_mobile_v1_couple_meditations_start', methods: ['POST'])]
+    #[Route('/meditations/commencer', name: 'api_mobile_v1_couple_meditations_start', methods: ['POST'])]
     public function startMeditation(Request $request): JsonResponse
     {
         $couple = $this->requireUsableCouple();
@@ -319,7 +319,7 @@ final class MobileCoupleController extends AbstractController
         ], Response::HTTP_CREATED);
     }
 
-    #[Route('/meditations/complete-step', name: 'api_mobile_v1_couple_meditations_complete_step', methods: ['POST'])]
+    #[Route('/meditations/valider-etape', name: 'api_mobile_v1_couple_meditations_complete_step', methods: ['POST'])]
     public function completeMeditationStep(): JsonResponse
     {
         $couple = $this->requireUsableCouple();
@@ -339,7 +339,7 @@ final class MobileCoupleController extends AbstractController
         ]);
     }
 
-    #[Route('/ping', name: 'api_mobile_v1_couple_ping', methods: ['POST'])]
+    #[Route('/signal', name: 'api_mobile_v1_couple_ping', methods: ['POST'])]
     public function ping(Request $request): JsonResponse
     {
         $couple = $this->requireUsableCouple();
@@ -362,7 +362,7 @@ final class MobileCoupleController extends AbstractController
         return $this->jsonNoStore(['sent' => true]);
     }
 
-    #[Route('/retreat', name: 'api_mobile_v1_couple_retreat_get', methods: ['GET'])]
+    #[Route('/retraite', name: 'api_mobile_v1_couple_retreat_get', methods: ['GET'])]
     public function getRetreat(): JsonResponse
     {
         $couple = $this->requireUsableCouple();
@@ -374,7 +374,7 @@ final class MobileCoupleController extends AbstractController
     }
 
     /** Proposer un temps de retraite : { startsOn: "AAAA-MM-JJ", endsOn: "AAAA-MM-JJ", note? }. Compte une fois confirmé par l'autre. */
-    #[Route('/retreat/propose', name: 'api_mobile_v1_couple_retreat_propose', methods: ['POST'])]
+    #[Route('/retraite/proposer', name: 'api_mobile_v1_couple_retreat_propose', methods: ['POST'])]
     public function proposeRetreat(Request $request): JsonResponse
     {
         $couple = $this->requireUsableCouple();
@@ -399,7 +399,7 @@ final class MobileCoupleController extends AbstractController
         return $this->jsonNoStore(['retreat' => $this->sanctuary->serializeRetreat($retreat, $this->currentMobileUser())], Response::HTTP_CREATED);
     }
 
-    #[Route('/retreat/confirm', name: 'api_mobile_v1_couple_retreat_confirm', methods: ['POST'])]
+    #[Route('/retraite/confirmer', name: 'api_mobile_v1_couple_retreat_confirm', methods: ['POST'])]
     public function confirmRetreat(): JsonResponse
     {
         $couple = $this->requireUsableCouple();
@@ -415,7 +415,7 @@ final class MobileCoupleController extends AbstractController
         return $this->jsonNoStore(['retreat' => $this->sanctuary->serializeRetreat($retreat, $this->currentMobileUser())]);
     }
 
-    #[Route('/retreat/stop', name: 'api_mobile_v1_couple_retreat_stop', methods: ['POST'])]
+    #[Route('/retraite/arreter', name: 'api_mobile_v1_couple_retreat_stop', methods: ['POST'])]
     public function stopRetreat(): JsonResponse
     {
         $couple = $this->requireUsableCouple();
@@ -431,7 +431,7 @@ final class MobileCoupleController extends AbstractController
         return $this->jsonNoStore(['retreat' => null]);
     }
 
-    #[Route('/review', name: 'api_mobile_v1_couple_review_get', methods: ['GET'])]
+    #[Route('/revue', name: 'api_mobile_v1_couple_review_get', methods: ['GET'])]
     public function getReview(): JsonResponse
     {
         $couple = $this->requireUsableCouple();
@@ -464,7 +464,7 @@ final class MobileCoupleController extends AbstractController
         ]);
     }
 
-    #[Route('/review', name: 'api_mobile_v1_couple_review_save', methods: ['POST'])]
+    #[Route('/revue', name: 'api_mobile_v1_couple_review_save', methods: ['POST'])]
     public function saveReview(Request $request): JsonResponse
     {
         $couple = $this->requireUsableCouple();
@@ -491,7 +491,7 @@ final class MobileCoupleController extends AbstractController
         ]);
     }
 
-    #[Route('/report', name: 'api_mobile_v1_couple_report', methods: ['GET'])]
+    #[Route('/rapport', name: 'api_mobile_v1_couple_report', methods: ['GET'])]
     public function getReport(): JsonResponse
     {
         $couple = $this->requireUsableCouple();

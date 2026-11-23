@@ -112,7 +112,7 @@ class CoupleSanctuaryTextsTest extends WebTestCase
 
         $token = static::getContainer()->get(\App\Mobile\Service\MobileTokenService::class)->issue($this->findUser((string) $a->getEmail()), 'Test')['accessToken'];
         $this->client->restart();
-        $this->client->request('GET', '/api/mobile/v1/couple/meditations/catalog', server: ['HTTP_AUTHORIZATION' => 'Bearer '.$token, 'HTTP_ACCEPT' => 'application/json']);
+        $this->client->request('GET', '/api/mobile/v1/couple/meditations', server: ['HTTP_AUTHORIZATION' => 'Bearer '.$token, 'HTTP_ACCEPT' => 'application/json']);
         $json = json_decode((string) $this->client->getResponse()->getContent(), true);
         $titles = array_column($json['catalog'], 'title');
         $this->assertContains('Bâtir notre maison sur le roc', $titles);
