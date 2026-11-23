@@ -9,6 +9,22 @@ teste (`php bin/phpunit`), commit, déploie (`bin/ops/envoyer-hostinger.sh`), v�
 journal `var/log/prod-AAAA-MM-JJ.log` sans erreur) ; **le fondateur fait lui-même `git push`** (refusé à l'IA).
 Ne jamais afficher ni demander de mot de passe ; ne pas publier son nom (mentions légales en attente).
 
+## 23/11/2026 — Décisions du fondateur sur l'audit (prix, Sanctuaire, vitrine, offres)
+
+- **Prix FCFA** : parité avec l'euro conservée (6 500 / 52 500 / 78 500 / 20 000 FCFA). Le point F5 de l'audit est clos.
+- **« Sanctuaire »** : le mot garde ses deux sens, l'exercice du livre et le Sanctuaire du Couple. C'est inscrit dans
+  `docs/lexique.md` : toujours écrire « Sanctuaire du Couple » pour l'espace couple.
+- **Feuille de route** : les offres Famille, PRO+ et Mentor IA sont retirées de `ROADMAP.md` (jamais décidées).
+  L'objectif d'1 M€ est recalculé avec les seules offres existantes (Duo : environ 2 500 foyers ; PRO : environ
+  2 500 membres). Le Livre de Famille reste une idée, sans offre dédiée.
+- **Vitrine** : le fondateur veut montrer à quoi ressemble l'application. Les aperçus restent, à condition que ce qu'ils
+  montrent **existe partout** : il faut donc porter sur le web les méditations à deux, les défis et les signaux du
+  Sanctuaire du Couple (aujourd'hui sur le mobile seulement), puis remplacer les dessins par de vraies captures.
+- **Reste de l'audit** : le Sanctuaire du Couple sur le web (ci-dessus), une seule Boussole avec le résultat
+  enregistré dans le compte (F4), défis au rythme du calendrier et méditation vraiment à deux (F6), textes du couple
+  relus et modifiables (F7), mise à jour de la RFC-001, lien entre la RFC-002 et le parcours de 90 jours, routes en
+  français (T3).
+
 ## 23/11/2026 — Audit de cohérence du travail du 19 au 23/11 et corrections urgentes (points 1 à 4)
 
 - **Audit** : `docs/audit-coherence-ia-2026-11-23.md` (technique, cybersécurité, fonctionnel, RFC). Les décisions du

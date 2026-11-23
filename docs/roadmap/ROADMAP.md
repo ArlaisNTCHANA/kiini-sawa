@@ -19,8 +19,10 @@
 | Segment | Modèle | Cible indicative | Potentiel annuel |
 | :--- | :--- | :--- | :--- |
 | **Communautés, Églises & Coachs (B2B2C)** | Licences groupées (`Organisation`) & Accompagnateurs | ~150 communautés / réseaux | **500 000 €** |
-| **Foyers (Couple & Famille)** | Abonnements Duo (119,99 €) & Famille (~159 €) | ~2 200 foyers | **300 000 €** |
-| **Individuel (PRO & PRO+ Mentor)** | Abonnements annuels (79,99 € à 150 €) | ~2 000 – 2 500 membres | **200 000 €** |
+| **Foyers (Couple)** | Abonnements Duo (119,99 €) | ~2 500 foyers | **300 000 €** |
+| **Individuel (PRO)** | Abonnements annuels (79,99 €) | ~2 500 membres | **200 000 €** |
+
+*Offres décidées par le fondateur : Gratuit, PRO, Duo et Organisation (23/11/2026 : les offres Famille, PRO+ et Mentor IA, proposées par une IA sans décision, sont retirées). Les paiements étant manuels et sans renouvellement automatique, ces montants supposent que chaque client renouvelle lui-même chaque année.*
 
 ---
 
@@ -54,15 +56,10 @@
 
 ---
 
-### Release V2.0 — Mentor IA & Livre de Famille *(À spécifier — RFC-004 / RFC-005)*
+### Release V2.0 — Livre de Famille *(Idée, à spécifier)*
 * **Statut** : Vision long terme
 
-#### A. Le Mentor IA KIINI SAWA *(Palier PRO+)*
-* **Socle existant** : 5 tests de personnalité, 6 plans, revues hebdomadaires et mensuelles.
-* **Concept** : Un miroir discret formé exclusivement sur la Méthode KIINI SAWA, capable de générer des synthèses mensuelles narratives personnalisées et d'éclairer les dynamiques de couple à partir des profils croisés.
-* **Garde-fous** : Consentement explicite, anonymisation des données avant appel API (RGPD), zéro entraînement sur les données utilisateurs ; l'IA pose des questions et éclaire, sans jamais se substituer à l'humain.
-
-#### B. Livre de Famille & Capsules Temporelles *(Offre Famille)*
+#### Livre de Famille & Capsules Temporelles *(sans offre dédiée : à décider par le fondateur)*
 * **Socle existant** : `PlanDeTransmission`, `Couple`, `Journal`, tâches `cron`.
 * **Concept** : Espace d'héritage familial (valeurs du foyer, mémoires, prières) incluant des capsules temporelles (lettres ou audios programmés pour s'ouvrir aux 18 ans ou au mariage d'un enfant).
 * **Levier** : Rétention long terme quasi permanente.

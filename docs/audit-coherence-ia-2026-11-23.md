@@ -319,3 +319,12 @@ Ma Pause, la Boussole express et tout le Sanctuaire du couple n'existent que sur
 Les points 1 à 4 sont à faire **avant toute publication sur le Play Store**.
 
 **Mise à jour du 23/11/2026** : les points 1 à 4 sont corrigés et testés (S1, S2, S3, T1, T2, T4). La suite complète passe (460 / 460) et le schéma est synchronisé. Détail dans `SUIVI-IA.md`. Restent les points 5 à 10.
+
+## Décisions du fondateur (23/11/2026)
+
+| Point | Décision | Suite |
+|---|---|---|
+| F5 · Prix FCFA | **Parité avec l'euro conservée** (6 500 / 52 500 / 78 500 / 20 000 FCFA) | Clos. Les prix restent réglables dans l'administration |
+| F3 · « Sanctuaire » | **Le mot est gardé avec ses deux sens** : l'exercice du livre et le Sanctuaire du Couple | Clos. Inscrit dans `docs/lexique.md` (toujours préciser « du Couple ») |
+| Feuille de route | **Offres Famille, PRO+ et Mentor IA retirées** | Fait dans `ROADMAP.md`. Objectif recalculé avec Duo et PRO seulement |
+| F1, F2 · Vitrine | **Les aperçus visuels de l'application sont voulus**, à condition que ce qu'ils montrent existe partout (web et mobile) | Reste à faire : le Sanctuaire du Couple sur le web (méditations à deux, défis, signaux). Remplacer ensuite les dessins par de vraies captures de l'application |

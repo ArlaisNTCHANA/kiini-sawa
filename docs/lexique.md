@@ -20,6 +20,7 @@ méthode) restent ceux du livre.
 | Vue chronologique de l'agenda | **Frise** | Gantt |
 | Test des 8 domaines de vie | **Roue de la vie** | Wheel of Life |
 | Accroche sous le logo | **Plan de Vie** | Espace de croissance |
+| Le mot « Sanctuaire » | Deux sens acceptés (décision du fondateur, 23/11/2026) : **Le Sanctuaire**, exercice écrit de chaque chapitre du livre ; **le Sanctuaire du Couple** (ses pièces : L'Autel, Le Jardin des défis, L'Atelier, Le Salon), espace commun des conjoints. Toujours préciser « du Couple » pour le second | — |
 
 ## Les 6 plans de la méthode (référence : le livre, 17/11/2026)
 
