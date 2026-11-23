@@ -1,0 +1,24 @@
+<style>
+    .boussole-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 1rem; padding-bottom: 1rem; border-bottom: 1px solid var(--border); margin-bottom: 1rem; }
+    .boussole-head__intro { margin: .2rem 0 0; color: var(--fg-muted); font-size: .9rem; }
+    .boussole-head__score { font-family: var(--font-serif); font-size: 1.8rem; font-weight: 700; color: var(--primary); white-space: nowrap; }
+    .boussole-quote { border-left: 3px solid var(--primary); background: var(--bg-alt); border-radius: 0 12px 12px 0; padding: 1rem 1.15rem; margin-bottom: 1.25rem; }
+    .boussole-quote p { margin: 0; line-height: 1.65; }
+    .boussole-quote p + p { margin-top: .6rem; color: var(--fg-muted); font-size: .93rem; }
+    .boussole-bars { display: grid; gap: .7rem; }
+    .boussole-bar__head { display: flex; justify-content: space-between; font-size: .88rem; margin-bottom: .2rem; }
+    .boussole-bar__head span { font-weight: 700; color: var(--fg-muted); }
+    .boussole-bar__track { height: 8px; background: var(--bg-alt); border-radius: 999px; overflow: hidden; }
+    .boussole-bar__fill { height: 100%; border-radius: 999px; }
+    .boussole-duo { display: grid; grid-template-columns: 1fr; gap: .9rem; margin-top: 1.25rem; }
+    @media (min-width: 640px) { .boussole-duo { grid-template-columns: 1fr 1fr; } }
+    .boussole-box { border: 1px solid var(--border); border-radius: 14px; padding: 1rem 1.1rem; background: var(--bg-alt); }
+    .boussole-box--focus { background: var(--gold-soft); }
+    .boussole-box__title { display: block; font-family: var(--font-serif); font-size: 1.08rem; margin: .2rem 0 .3rem; }
+    .boussole-box p { margin: 0; color: var(--fg-muted); font-size: .9rem; line-height: 1.55; }
+    .boussole-signals, .boussole-steps { margin: .5rem 0 0; padding-left: 1.2rem; display: grid; gap: .45rem; font-size: .92rem; line-height: 1.5; }
+    .boussole-history { display: grid; gap: .6rem; margin-top: .75rem; }
+    .boussole-history__row { display: flex; justify-content: space-between; align-items: center; gap: 1rem; padding: .8rem 1rem; }
+    .boussole-history__row small { color: var(--fg-muted); }
+    .boussole-history__score { font-family: var(--font-serif); font-weight: 700; font-size: 1.2rem; color: var(--primary); }
+</style>

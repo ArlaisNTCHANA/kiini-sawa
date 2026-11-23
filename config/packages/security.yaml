@@ -72,6 +72,7 @@ security:
         - { path: ^/couple/rejoindre/, roles: PUBLIC_ACCESS }
         - { path: ^/methode, roles: PUBLIC_ACCESS }
         - { path: ^/(installer|hors-ligne|rapide|boussole)$, roles: PUBLIC_ACCESS }
+        - { path: ^/boussole/resultat$, roles: PUBLIC_ACCESS } # envoi des réponses : enregistrées si connecté, sinon gardées en session jusqu'à l'inscription
         - { path: ^/(defis$|defi/), roles: PUBLIC_ACCESS }
         - { path: ^/i/, roles: PUBLIC_ACCESS }
         - { path: ^/resultat/, roles: PUBLIC_ACCESS }

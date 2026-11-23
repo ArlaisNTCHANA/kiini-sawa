@@ -23,6 +23,7 @@ class SecurityGuardsTest extends WebTestCase
     /** Pages volontairement publiques : toute nouvelle entrée doit être justifiée. */
     private const PUBLIC_ROUTES = [
         'app_home', 'app_public_boussole', // page de présentation publique et diagnostic express Boussole 360
+        'app_boussole_submit', // réponses de la Boussole 360 : enregistrées si connecté, sinon gardées en session jusqu'à la création du compte
         'app_health', 'app_robots', 'app_sitemap', // pages techniques publiques
         'app_login', 'app_logout',
         'app_register', 'app_forgot_password', 'app_reset_password', 'app_reset_password_form',

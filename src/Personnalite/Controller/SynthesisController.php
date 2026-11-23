@@ -33,7 +33,7 @@ final class SynthesisController extends AbstractController
     }
 
     #[Route('/synthese', name: 'app_synthesis', methods: ['GET'])]
-    public function show(): Response
+    public function show(\App\Boussole\Repository\BoussoleResultRepository $boussole): Response
     {
         $user = $this->user();
         $data = $this->synthesis->build($user);
@@ -41,6 +41,7 @@ final class SynthesisController extends AbstractController
         return $this->render('personnalite/synthesis.html.twig', $data + [
             'locked' => !$this->entitlements->isPro($user), 'addedActions' => $this->actions->addedBy($user),
             'evolutions' => $this->history->withHistory($user),
+            'boussole' => $boussole->latestFor($user),
         ]);
     }
 

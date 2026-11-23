@@ -121,6 +121,10 @@
 
         .cta-row { display: flex; flex-wrap: wrap; gap: .7rem; align-items: center; margin-top: 0; }
         .toast { font-size: .84rem; color: var(--primary); font-weight: 600; margin-top: .65rem; min-height: 1.2em; }
+        .hero-last { margin-top: .6rem; font-size: .9rem; color: #DCE7DF !important; }
+        .hero-last a { color: #fff; font-weight: 600; }
+        .save-status { margin-top: .9rem; padding: .75rem .95rem; border-radius: 12px; font-size: .9rem; line-height: 1.5; background: #fff; border: 1px solid #CFE3D9; color: #1E3A2F; }
+        .save-status a { color: var(--primary-dark); font-weight: 700; }
         [hidden] { display: none !important; }
     </style>
 </head>
@@ -133,7 +137,8 @@
             </nav>
             <div class="hero-copy">
                 <h1 id="page-title">Ma Boussole 360</h1>
-                <p id="page-lead">24 affirmations simples, 3 minutes, sans compte. Répondez selon ce que vous vivez vraiment ces dernières semaines.</p>
+                <p id="page-lead">{{ connecte ? '24 affirmations simples, 3 minutes. Votre résultat sera enregistré dans votre compte. Répondez selon ce que vous vivez vraiment ces dernières semaines.' : '24 affirmations simples, 3 minutes, sans compte. Répondez selon ce que vous vivez vraiment ces dernières semaines.' }}</p>
+                {% if derniere %}<p class="hero-last">Dernière passation le {{ derniere.createdAt|date('d/m/Y') }} : {{ derniere.coherence }} %. <a href="{{ path('app_boussole_history') }}">Voir mon historique</a></p>{% endif %}
             </div>
         </div>
     </header>
@@ -207,14 +212,24 @@
                     <ul class="next-list">
                         <li><strong>Agissez sur votre priorité (<span id="res-next-prio">votre plan prioritaire</span>)</strong> : posez vos premiers rituels et bâtissez vos 6 plans dans votre espace gratuit.</li>
                         <li><strong>Allez plus loin gratuitement</strong> : cette Boussole dure 3 minutes ; votre compte vous ouvre vos 5 tests approfondis (personnalité, fonctionnement, DISC, ennéagramme, dons spirituels).</li>
-                        <li><strong>Gardez une trace</strong> : utilisez le bouton « Copier mon résultat » ci-dessous si vous souhaitez conserver ce bilan avant de créer votre compte.</li>
+                        {% if connecte %}
+                        <li><strong>Suivez votre évolution</strong> : chaque passation est enregistrée dans votre compte. Refaites la Boussole dans quelques semaines pour mesurer le chemin parcouru.</li>
+                        {% else %}
+                        <li><strong>Gardez votre résultat</strong> : créez votre compte (ou connectez-vous) juste après ; ce résultat y sera enregistré automatiquement, sans repasser le questionnaire.</li>
+                        {% endif %}
                     </ul>
                     <div class="cta-row">
+                        {% if connecte %}
+                        <a href="{{ path('app_boussole_history') }}" class="btn btn-primary">Voir mon historique →</a>
+                        {% else %}
                         <a href="{{ path('app_register') }}" class="btn btn-primary">Créer mon compte gratuit →</a>
+                        <a href="{{ path('app_login') }}" class="btn btn-ghost" style="background: #fff;">J'ai déjà un compte</a>
+                        {% endif %}
                         <button id="btn-share" type="button" class="btn btn-ghost" style="background: #fff;">Copier mon résultat</button>
                         <button id="btn-retake" type="button" class="btn btn-sec" style="background: rgba(255,255,255,.65);">Recommencer</button>
                     </div>
                     <div id="share-toast" class="toast"></div>
+                    <p id="save-status" class="save-status" role="status" hidden></p>
                 </div>
             </section>
         </div>
@@ -375,6 +390,8 @@
                     stepsEl.appendChild(li);
                 });
 
+                saveResult(answers.slice());
+
                 quizView.hidden = true;
                 resultView.hidden = false;
                 window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -399,6 +416,36 @@
                 };
             }
 
+            // Le serveur refait le calcul : enregistré dans le compte si connecté, sinon gardé jusqu'à l'inscription
+            async function saveResult(raw) {
+                const status = document.getElementById('save-status');
+                status.hidden = true;
+                try {
+                    const resp = await fetch({{ path('app_boussole_submit')|json_safe }}, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+                        credentials: 'same-origin',
+                        body: JSON.stringify({ reponses: raw })
+                    });
+                    const data = await resp.json();
+                    if (!resp.ok) throw new Error(data.erreur || 'erreur');
+                    status.innerHTML = '';
+                    if (data.enregistre) {
+                        status.append('Votre résultat est enregistré dans votre compte. ');
+                        const a = document.createElement('a');
+                        a.href = data.historique;
+                        a.textContent = 'Voir mon historique';
+                        status.append(a);
+                    } else {
+                        status.textContent = 'Votre résultat est gardé de côté : créez votre compte ou connectez-vous maintenant, il sera enregistré dans votre compte.';
+                    }
+                    status.hidden = false;
+                } catch (e) {
+                    status.textContent = 'Votre résultat n\'a pas pu être enregistré (connexion ?). Vous pouvez le copier ci-dessous.';
+                    status.hidden = false;
+                }
+            }
+
             btnPrev.addEventListener('click', function () {
                 if (idx > 0) { idx--; renderQuestion(); }
             });
@@ -411,7 +458,7 @@
                 answers.fill(null);
                 idx = 0;
                 pageTitle.textContent = 'Ma Boussole 360';
-                pageLead.textContent = '24 affirmations simples, 3 minutes, sans compte. Répondez selon ce que vous vivez vraiment ces dernières semaines.';
+                pageLead.textContent = {{ (connecte ? '24 affirmations simples, 3 minutes. Votre résultat sera enregistré dans votre compte. Répondez selon ce que vous vivez vraiment ces dernières semaines.' : '24 affirmations simples, 3 minutes, sans compte. Répondez selon ce que vous vivez vraiment ces dernières semaines.')|json_safe }};
                 resultView.hidden = true;
                 quizView.hidden = false;
                 renderQuestion();

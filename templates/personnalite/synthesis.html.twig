@@ -7,6 +7,20 @@
     <a href="{{ path('app_personality_index') }}" style="font-size: .8rem; font-weight: 700; color: var(--fg-muted); text-transform: uppercase; letter-spacing: .05em; text-decoration: none;">← Mes tests</a>
     <h1 style="font-family: var(--font-serif); color: var(--primary); font-size: 2rem; margin: .4rem 0 .25rem;">Mon profil KIINI SAWA</h1>
     <p style="color: var(--fg-muted); margin-bottom: 1.25rem;">La synthèse de vos tests · {{ count }} test{{ count > 1 ? 's' }} sur 5</p>
+    {# Dernière Boussole 360 (module Boussole) #}
+    <a href="{{ path(boussole ? 'app_boussole_history' : 'app_public_boussole') }}" class="ks-card ks-card--flat ks-card--link" data-boussole-card style="display: flex; justify-content: space-between; align-items: center; gap: 1rem; padding: 1rem 1.15rem; margin-bottom: 1.25rem; text-decoration: none;">
+        <span>
+            <span class="ks-eyebrow">Ma Boussole 360</span><br>
+            {% if boussole %}
+                <strong>Priorité : {{ boussole.priorityKey|nom_plan }}</strong><br>
+                <small style="color: var(--fg-muted);">Passation du {{ boussole.createdAt|date('d/m/Y') }} · voir le détail et l'historique</small>
+            {% else %}
+                <strong>Faire le point sur vos 6 plans</strong><br>
+                <small style="color: var(--fg-muted);">24 affirmations, 3 minutes. Le résultat sera enregistré ici.</small>
+            {% endif %}
+        </span>
+        <span style="font-family: var(--font-serif); font-weight: 700; font-size: 1.4rem; color: var(--primary);">{{ boussole ? boussole.coherence ~ ' %' : '→' }}</span>
+    </a>
     {% if enough %}
         <div style="display: flex; gap: .6rem; flex-wrap: wrap; margin-bottom: 1.25rem;">
             {% if not locked %}<a href="{{ path('app_synthesis_pdf') }}" data-turbo="false" class="ks-btn ks-btn--primary">Télécharger le rapport PDF</a>{% endif %}

@@ -9,6 +9,48 @@ teste (`php bin/phpunit`), commit, déploie (`bin/ops/envoyer-hostinger.sh`), v�
 journal `var/log/prod-AAAA-MM-JJ.log` sans erreur) ; **le fondateur fait lui-même `git push`** (refusé à l'IA).
 Ne jamais afficher ni demander de mot de passe ; ne pas publier son nom (mentions légales en attente).
 
+## 23/11/2026 — Relecture externe, point 2 : une seule Boussole 360, enregistrée dans le compte
+
+- **Une seule Boussole** : celle du site (24 affirmations, 6 plans, matrice des dynamiques) est maintenant aussi celle de
+  l'application mobile. L'ancienne version mobile à 6 curseurs sur 10 (calcul sur le téléphone) est supprimée.
+- **Nouveau module `Boussole`** (`docs/modules/boussole.md`) :
+  - calcul serveur `BoussoleEngine`, identique au moteur JS au caractère près (textes dans `BoussoleContent`, copiés
+    du JS ; noms des plans issus de `PlanCatalog::PLANS`) ;
+  - entité `BoussoleResult` (migration `Version20261123163736`, table `boussole_result`) : une ligne par passation,
+    24 réponses brutes, scores, score de cohérence, plans fort et prioritaire, source web ou mobile ;
+  - `/boussole` reste public. Le résultat s'affiche tout de suite (JS), puis les réponses partent vers
+    `POST /boussole/resultat`, où le serveur refait le calcul :
+    - connecté : passation enregistrée ;
+    - visiteur : réponses gardées dans la session, enregistrées dès la première page vue une fois connecté avec un
+      email vérifié (inscription ou connexion), avec le message « Votre résultat de la Boussole 360 est enregistré
+      dans votre compte. » ;
+  - pages `/boussole/historique` (dernière passation complète, écart avec la précédente, historique) et
+    `/boussole/passation/{id}` ; encart « Ma Boussole 360 » dans « Mon profil KIINI SAWA ».
+- **API mobile** `/api/mobile/v1/boussole` : `questions`, `reponses` (POST), `dernier`, `historique`,
+  `passations/{id}`. Clés JSON en français, `no-store`, une passation d'un autre compte répond 404.
+- **Mobile** (`mobile-v1/`) :
+  - écran `app/boussole/index.tsx` réécrit : 24 affirmations venues de l'API, calcul par le serveur, lecture complète,
+    historique ;
+  - radar sur 0 à 100 %, « cohérence » au lieu d'« alignement » ;
+  - la dernière passation est gardée en cache (`boussole_resultat_v2`) pour l'affichage sans connexion ; une nouvelle
+    passation demande la connexion.
+- **Bug corrigé** : l'accueil mobile affichait « Priorité : Plan hygiene ». Il affiche maintenant le nom renvoyé par
+  l'API (« Plan d'Hygiène de vie »). Il n'y a pas d'autre changement sur l'accueil (son allègement est le point 1).
+- **Filtre Twig `nom_plan`** (`LexiconExtension`) pour afficher une clé de plan avec son vrai nom.
+- **Parité** : `node tests/boussole-parite.mjs` (735 cas, fichier `tests/fixtures/boussole-parite.json`) et
+  `tests/Boussole/BoussoleParityTest.php`. Pour modifier un texte de la Boussole, il faut le changer dans le JS
+  **et** dans le PHP, puis relancer `--ecrire`. Ces textes ne sont pas encore modifiables dans l'administration.
+- **Pièges** :
+  - MySQL réordonne les clés JSON : `BoussoleResult::getScores()` remet les plans dans l'ordre.
+  - `XssHardeningTest` refuse `|json_encode|raw` dans un gabarit : utiliser `|json_safe`.
+- **Tests** : 13 nouveaux (parité, enregistrement, visiteur puis inscription, visiteur puis connexion, isolement,
+  API). Suite web **499 / 499**, `doctrine:schema:validate` OK. Mobile : `tsc` 0 erreur, Vitest 27/27 (nouveau
+  `__tests__/boussole.test.ts`).
+- **Vérifié dans le navigateur** (compte d'exemple local) : passation enregistrée, historique, encart du profil, vue
+  visiteur (« Créer mon compte gratuit » / « J'ai déjà un compte »), format téléphone sans débordement, console sans
+  erreur. L'écran mobile n'a pas été affiché dans un simulateur.
+- **À déployer** (avec la migration). Ensuite : point 1 (accueil mobile allégé, Ma Pause en doublon), puis point 7.
+
 ## 23/11/2026 — Relecture externe, points 3 et 4 : vitrine honnête sur le mobile, « Sanctuaire » toujours précisé
 
 - **Point 3, vitrine** (aucune modification n'existait en production pour ces codes) :

@@ -30,12 +30,6 @@ class PublicController extends AbstractController
         return new JsonResponse(['status' => $ok ? 'ok' : 'erreur', 'base' => $ok], $ok ? 200 : 503, ['Cache-Control' => 'no-store']);
     }
 
-    #[Route('/boussole', name: 'app_public_boussole', methods: ['GET'])]
-    public function boussole(): Response
-    {
-        return $this->render('shared/boussole.html.twig');
-    }
-
     #[Route('/robots.txt', name: 'app_robots', methods: ['GET'])]
     public function robots(): Response
     {

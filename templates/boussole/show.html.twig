@@ -1,0 +1,14 @@
+{% extends 'base.html.twig' %}
+{% block title %}Ma Boussole 360 du {{ result.createdAt|date('d/m/Y') }}{% endblock %}
+
+{% block body %}
+{% include 'boussole/_styles.html.twig' %}
+<div class="ks-page ks-page--narrow">
+    {% include 'shared/_page_header.html.twig' with {
+        back: {url: path('app_boussole_history'), label: 'Ma Boussole 360'},
+        eyebrow: 'Diagnostic des 6 plans', icon: 'compass',
+        title: 'Passation du ' ~ result.createdAt|date('d/m/Y')
+    } %}
+    {% include 'boussole/_reading.html.twig' with {reading: reading, plans: plans, planRoutes: planRoutes, date: result.createdAt} only %}
+</div>
+{% endblock %}

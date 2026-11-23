@@ -32,6 +32,7 @@ Exposer l'API REST `/api/mobile/v1/...` utilisée par l'application mobile nativ
 - `App\Mobile\Controller\MobileReviewController` : revues hebdomadaire et mensuelle, grille d'évaluation des 4 plans, vue synthétique des 5 rythmes.
 - `App\Mobile\Controller\MobileCommunityController` : partenaires de redevabilité (invitations, acceptation/refus), défis collectifs et espace couple partagé.
 - `App\Mobile\Controller\MobileMethodeController` : catalogue et lecteur de chapitres.
+- `App\Mobile\Controller\MobileBoussoleController` : Ma Boussole 360, la même que sur le site (voir `docs/modules/boussole.md`). `GET /api/mobile/v1/boussole/questions`, `POST …/reponses` (`{"reponses": [24 entiers de 1 à 5]}`, 201, calcul serveur et enregistrement), `GET …/dernier`, `GET …/historique`, `GET …/passations/{id}` (404 si la passation est à un autre compte). Clés JSON en français ; noms des plans issus de `PlanCatalog::PLANS`.
 
 ## Points d'attention
 

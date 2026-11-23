@@ -50,7 +50,7 @@ Un **module par dossier** : `src/<Module>/{Controller,Entity,Repository,Service,
 - Modules principaux : `Compte`, `Dashboard`, `PlanDeVie` (+ `PlanDeCroissance`, `PlanDeDeveloppement`,
   `PlanDeTransmission`, `PlanDHygiene`, `PlanDIntendance`), `Rituels`, `Journal`, `Planner` (agenda), `Bilan`, `Social` (partenaires),
   `Personnalite` (tests, dont `Psychometrie/` : banque IPIP-NEO, scores, normes), `Couple`, `Organisation`,
-  `Abonnement`, `Notification`, `Methode` (livre), `Media` (provenance des inscrits, liens suivis), `Admin`, `Shared`.
+  `Boussole` (Boussole 360 : calcul serveur, passations enregistrées), `Abonnement`, `Notification`, `Methode` (livre), `Media` (provenance des inscrits, liens suivis), `Admin`, `Shared`.
 - Navigation : une seule définition, `App\Shared\Twig\NavigationExtension` (6 rubriques ; voir `docs/design.md`).
 - Droits PRO : `App\Abonnement\Service\Entitlements` (`can`, `require`, `requireBelowLimit`) ; une exception
   `ProRequiredException` redirige vers `/abonnement`.

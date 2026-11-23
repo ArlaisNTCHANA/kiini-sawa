@@ -1,0 +1,40 @@
+{% extends 'base.html.twig' %}
+{# Ma Boussole 360 : dernière passation (lecture complète) et historique. Module Boussole. #}
+{% block title %}Ma Boussole 360{% endblock %}
+
+{% block body %}
+{% include 'boussole/_styles.html.twig' %}
+<div class="ks-page ks-page--narrow">
+    {% embed 'shared/_page_header.html.twig' with {
+        eyebrow: 'Diagnostic des 6 plans', icon: 'compass',
+        title: 'Ma Boussole 360',
+        lead: 'Vos passations sont enregistrées ici. Refaites la Boussole de temps en temps pour mesurer le chemin parcouru.'
+    } %}
+        {% block actions %}<p style="margin-top: .75rem;"><a class="ks-btn {{ latest ? 'ks-btn--secondary' : 'ks-btn--primary' }}" href="{{ path('app_public_boussole') }}">{{ latest ? 'Refaire la Boussole' : 'Passer la Boussole (3 minutes)' }}</a></p>{% endblock %}
+    {% endembed %}
+
+    {% if latest %}
+        {% if previous %}
+            {% set delta = latest.coherence - previous.coherence %}
+            <p class="ks-alert ks-alert--info" style="margin-bottom: 1rem;">Depuis la passation du {{ previous.createdAt|date('d/m/Y') }} : {{ delta > 0 ? '+' ~ delta : delta }} point{{ delta|abs > 1 ? 's' }} de cohérence ({{ previous.coherence }} % puis {{ latest.coherence }} %).</p>
+        {% endif %}
+        {% include 'boussole/_reading.html.twig' with {reading: reading, plans: plans, planRoutes: planRoutes, date: latest.createdAt} only %}
+
+        {% if history|length > 1 %}
+            <h2 class="ks-section-title" style="margin-top: 1.75rem;">Historique</h2>
+            <div class="boussole-history">
+                {% for r in history %}
+                    <a class="ks-card ks-card--flat ks-card--link boussole-history__row" href="{{ path('app_boussole_show', {id: r.id}) }}">
+                        <span><strong>{{ r.createdAt|date('d/m/Y') }}</strong><br><small>Priorité : {{ r.priorityKey|nom_plan }}{{ r.source == 'mobile' ? ' · sur l\'application' }}</small></span>
+                        <span class="boussole-history__score">{{ r.coherence }} %</span>
+                    </a>
+                {% endfor %}
+            </div>
+        {% endif %}
+    {% else %}
+        <div class="ks-empty">
+            <p>Vous n'avez pas encore de passation enregistrée. En 24 affirmations, la Boussole 360 fait le point sur l'équilibre de vos 6 plans.</p>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

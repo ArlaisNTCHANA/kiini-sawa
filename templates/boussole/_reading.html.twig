@@ -1,0 +1,53 @@
+{# Lecture complète d'une passation de la Boussole 360 (résultat de BoussoleEngine::evaluate()).
+   Paramètres : reading, plans (BoussoleEngine::plans()), planRoutes, date (facultatif). #}
+<section class="ks-card boussole-reading">
+    <div class="boussole-head">
+        <div>
+            <span class="ks-eyebrow">Score de cohérence{% if date is defined and date %} · {{ date|date('d/m/Y') }}{% endif %}</span>
+            <p class="boussole-head__intro">{{ reading.spread == 0 ? 'Tous vos domaines sont au même niveau.' : 'Écart de ' ~ reading.spread ~ ' points entre vos domaines.' }}</p>
+        </div>
+        <span class="boussole-head__score">{{ reading.coherence }} %</span>
+    </div>
+
+    <div class="boussole-quote">
+        <p>{{ reading.readingMain }}</p>
+        <p>{{ reading.readingSub }}</p>
+    </div>
+
+    <div class="boussole-bars">
+        {% for p in plans %}
+            <div class="boussole-bar" data-plan="{{ p.cle }}">
+                <div class="boussole-bar__head"><strong>{{ p.nom }}</strong><span>{{ reading.scores[p.cle] }} %</span></div>
+                <div class="boussole-bar__track"><div class="boussole-bar__fill" style="width: {{ max(4, reading.scores[p.cle]) }}%; background: {{ p.couleur }};"></div></div>
+            </div>
+        {% endfor %}
+    </div>
+
+    <div class="boussole-duo">
+        {% if reading.showStrongCard %}
+        <div class="boussole-box">
+            <span class="ks-eyebrow">{{ reading.strongLabel }}</span>
+            <strong class="boussole-box__title">{{ reading.strongTitle }}</strong>
+            <p>{{ reading.strongText }}</p>
+        </div>
+        {% endif %}
+        <div class="boussole-box boussole-box--focus"{% if not reading.showStrongCard %} style="grid-column: 1 / -1;"{% endif %}>
+            <span class="ks-eyebrow">{{ reading.prioLabel }}</span>
+            <strong class="boussole-box__title">{{ reading.prioTitle }}</strong>
+            <p>{{ reading.prioText }}</p>
+        </div>
+    </div>
+
+    {% if reading.signals is not empty %}
+        <h3 class="ks-section-title" style="margin-top: 1.25rem;">Signaux relevés dans vos réponses</h3>
+        <ul class="boussole-signals">
+            {% for s in reading.signals %}<li>{{ s }}</li>{% endfor %}
+        </ul>
+    {% endif %}
+
+    <h3 class="ks-section-title" style="margin-top: 1.25rem;">{{ reading.stepsMode == 'stabilisation' ? '3 actions de stabilisation pour cette semaine' : '3 actions de structuration pour cette semaine' }}</h3>
+    <ol class="boussole-steps">
+        {% for step in reading.steps %}<li>{{ step }}</li>{% endfor %}
+    </ol>
+    <p style="margin-top: 1rem;"><a class="ks-btn ks-btn--primary" href="{{ path(planRoutes[reading.priorityKey]) }}">Ouvrir mon {{ reading.priorityKey|nom_plan }}</a></p>
+</section>
