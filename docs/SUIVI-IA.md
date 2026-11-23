@@ -9,6 +9,26 @@ teste (`php bin/phpunit`), commit, déploie (`bin/ops/envoyer-hostinger.sh`), v�
 journal `var/log/prod-AAAA-MM-JJ.log` sans erreur) ; **le fondateur fait lui-même `git push`** (refusé à l'IA).
 Ne jamais afficher ni demander de mot de passe ; ne pas publier son nom (mentions légales en attente).
 
+## 23/11/2026 — Vitrine : vraies captures de l'application (dernier point de l'audit, F1 et F2)
+
+- Les trois écrans de téléphone dessinés à la main de `dashboard/landing.html.twig` (section `#apercu`) sont remplacés
+  par de **vraies captures** de l'application web au format téléphone (390 × 844, ×2) :
+  `assets/images/vitrine/apercu-boussole.jpg` (résultat de `/boussole`), `apercu-aujourdhui.jpg` (`/dashboard`),
+  `apercu-couple.jpg` (`/couple`, bloc « Notre Sanctuaire »).
+- **Compte d'exemple local** : `essai-pro` (prénom Modeste) et `essai-conjoint` (Linda), couple actif, 3 rituels.
+  Mention sous les captures : « Captures réelles… compte d'exemple (Modeste et Linda sont des prénoms d'exemple) ».
+- Légendes et textes alternatifs passés dans `t()` (`vitrine.app.shot1..3.titre|texte|alt`, `vitrine.app.note`).
+  Les styles des dessins (`.ph-*`, `.phone-screen`) sont retirés.
+- **Corrections au passage** : « Ma Boussole 360 en 3 minutes » (comme la page), « défis synchronisés » au lieu de
+  « challenges ».
+- **Méthode de capture** : Chrome sans interface, piloté par `puppeteer-core` (aucun navigateur téléchargé), script
+  `capture.mjs` (connexion au compte d'exemple, questionnaire de la Boussole rempli, captures). Il n'est **pas encore
+  dans le dépôt** (dossier temporaire de session) : à ajouter si l'on veut refaire les captures après un changement
+  d'écran.
+- **Vérifié** : section `#apercu` sur ordinateur et sur téléphone, en visiteur non connecté, sans débordement ni
+  erreur. Suite complète **481 / 481**.
+- **À déployer.**
+
 ## 23/11/2026 — Textes du Sanctuaire du Couple modifiables dans l'administration (point F7)
 
 - **Fait** : le système « Textes du site » accepte maintenant des textes écrits en PHP :
