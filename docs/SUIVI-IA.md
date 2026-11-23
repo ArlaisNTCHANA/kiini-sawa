@@ -9,6 +9,34 @@ teste (`php bin/phpunit`), commit, déploie (`bin/ops/envoyer-hostinger.sh`), v�
 journal `var/log/prod-AAAA-MM-JJ.log` sans erreur) ; **le fondateur fait lui-même `git push`** (refusé à l'IA).
 Ne jamais afficher ni demander de mot de passe ; ne pas publier son nom (mentions légales en attente).
 
+## 23/11/2026 — Relecture externe, point 1 : accueil de l'application mobile allégé, Ma Pause supprimé
+
+- **Accueil mobile** (`mobile-v1/app/(tabs)/index.tsx`) : les trois bandeaux (Ma Pause, Ma Boussole 360, Sanctuaire
+  du Couple) sont remplacés par **une seule carte de contexte**, affichée seulement s'il y a quelque chose à faire.
+  Ordre : « Ma prochaine étape », carte de contexte, « Mes rituels », bilan du jour, note rapide.
+- **Carte de contexte** (`mobile-v1/src/home/contextCard.ts`, fonction pure testée). Priorité :
+  1. retraite du couple à confirmer (`retreat.status = pending` et `canConfirm`), vers `/couple` ;
+  2. défi du Sanctuaire du Couple du jour non fait de mon côté et jour ouvert, vers `/couple/challenges` ;
+  3. étape de méditation du Sanctuaire du Couple non validée de mon côté et ouverte, vers `/couple/meditation` ;
+  4. Boussole 360 jamais faite (seulement une fois le cache ou l'API lus) ;
+  5. Boussole 360 de plus de 30 jours (`BOUSSOLE_REFAIRE_APRES_JOURS`), avec le nom du dernier plan prioritaire.
+  Sinon, aucune carte. Le Sanctuaire du Couple est maintenant rechargé à chaque retour sur l'accueil
+  (`useFocusEffect`) : la carte disparaît une fois le défi ou l'étape faits.
+- **Redevabilité** : pas de carte (aucune action à faire tout de suite sur le téléphone, la création se fait sur le
+  site) ; reste dans le menu « Ma redevabilité ».
+- **Ma Pause supprimé** (`mobile-v1/app/pause/`) : elle répétait le bilan du jour et les rituels et n'existait pas
+  sur le site. La phrase d'ancrage du jour qu'elle affichait disparaît avec elle.
+- **Menu mobile** : ajout de « Ma Boussole 360 » dans « Me connaître » (elle n'était accessible que par le bandeau
+  de l'accueil). Le menu du site n'a pas d'entrée Boussole (on y arrive par « Mon profil KIINI SAWA ») : à aligner si
+  le fondateur le souhaite.
+- **Tests mobile** : `tsc` 0 erreur, Vitest 35/35 (nouveau `__tests__/homeContextCard.test.ts` ; le garde-fou
+  « nom du plan venu de l'API » de `boussole.test.ts` vise maintenant `src/home/contextCard.ts`),
+  `npx expo export --platform ios` réussi.
+- **Piège** : `npx expo lint` n'est pas configuré dans `mobile-v1/` ; il tente d'installer ESLint et modifie
+  `package.json` (annulé). Ne pas le lancer sans décider d'ajouter ESLint.
+- **Non vérifié dans le simulateur** : il faut un compte connecté, et aucun mot de passe de compte d'exemple n'est
+  dans le projet. Rien n'est poussé ni publié.
+
 ## 23/11/2026 — Relecture externe, point 2 : une seule Boussole 360, enregistrée dans le compte
 
 - **Une seule Boussole** : celle du site (24 affirmations, 6 plans, matrice des dynamiques) est maintenant aussi celle de
