@@ -14,6 +14,7 @@
     .sc-note { background: var(--couple-soft); border-radius: var(--r-md); padding: .8rem 1rem; margin-bottom: 1rem; font-size: .92rem; }
     .sc-mini { font-size: .82rem; color: var(--fg-muted); }
     section.ks-card { margin-bottom: 1.25rem; }
+    .sc-rhythm { display: flex; gap: .5rem; align-items: flex-start; background: var(--primary-soft); color: var(--primary-dark); border-radius: var(--r-md); padding: .8rem 1rem; margin-bottom: 1rem; font-size: .92rem; }
     .ks-card > .ks-section-title:first-child { margin-top: 0; display: flex; align-items: center; gap: .5rem; }
 </style>
 {% set token = csrf_token('couple') %}
@@ -24,7 +25,7 @@
         back: {url: path('app_couple', {'_fragment': 'sanctuaire'}), label: 'Notre couple'},
         eyebrow: 'Sanctuaire du Couple', icon: 'sprout',
         title: 'Le Jardin des défis',
-        lead: 'Un petit pas par jour, vécu à deux. Le jour suivant s\'ouvre quand vous avez validé tous les deux.'
+        lead: 'Un petit pas par jour, vécu à deux. Le jour suivant s\'ouvre le lendemain, une fois que vous l\'avez validé tous les deux.'
     } %}
 
     <section class="ks-card">
@@ -32,27 +33,34 @@
         {% if active %}
             <p class="sc-step">{{ challenge.title }} · jour {{ challenge.currentDay }} sur {{ challenge.totalDays }}</p>
             <div class="sc-bar" aria-hidden="true"><span style="width: {{ ((challenge.currentDay - 1) / challenge.totalDays * 100)|round }}%;"></span></div>
-            <p class="sc-prompt">{{ challenge.todayPrompt }}</p>
-            <div class="sc-who">
-                <span class="{{ challenge.todayDoneByMe ? 'done' }}"><i data-lucide="{{ challenge.todayDoneByMe ? 'check' : 'circle' }}" class="ks-ico" aria-hidden="true"></i> Vous</span>
-                <span class="{{ challenge.todayDoneByPartner ? 'done' }}"><i data-lucide="{{ challenge.todayDoneByPartner ? 'check' : 'circle' }}" class="ks-ico" aria-hidden="true"></i> {{ partner ? partner.displayName : 'Votre conjoint' }}</span>
-            </div>
-            {% if challenge.partnerNote %}
-                <div class="sc-note"><strong>Le mot de {{ partner ? partner.displayName : 'votre conjoint' }}</strong><br>{{ challenge.partnerNote }}</div>
-            {% endif %}
-            {% if challenge.todayDoneByMe %}
-                <p class="sc-mini">Vous avez validé ce jour. Il reste à {{ partner ? partner.displayName : 'votre conjoint' }} de le valider pour ouvrir le jour suivant.</p>
+            {% set partnerName = partner ? partner.displayName : 'votre conjoint' %}
+            {% if challenge.locked %}
+                <p class="sc-rhythm"><i data-lucide="sunrise" class="ks-ico" aria-hidden="true"></i> Jour {{ challenge.currentDay - 1 }} vécu ensemble. {{ challenge.rhythmMessage }}</p>
             {% else %}
-                <form method="post" action="{{ path('app_couple_challenge_check') }}" style="display: grid; gap: .5rem;">
-                    <input type="hidden" name="_csrf_token" value="{{ token }}">
-                    <textarea name="note" class="ks-input" rows="2" maxlength="500" placeholder="Un mot pour votre conjoint sur ce que vous avez vécu (facultatif)" aria-label="Un mot pour votre conjoint"></textarea>
-                    <div><button class="ks-btn ks-btn--primary" type="submit">J'ai vécu le jour {{ challenge.currentDay }}</button></div>
-                </form>
+                <p class="sc-prompt">{{ challenge.todayPrompt }}</p>
+                <div class="sc-who">
+                    <span class="{{ challenge.todayDoneByMe ? 'done' }}"><i data-lucide="{{ challenge.todayDoneByMe ? 'check' : 'circle' }}" class="ks-ico" aria-hidden="true"></i> Vous</span>
+                    <span class="{{ challenge.todayDoneByPartner ? 'done' }}"><i data-lucide="{{ challenge.todayDoneByPartner ? 'check' : 'circle' }}" class="ks-ico" aria-hidden="true"></i> {{ partnerName }}</span>
+                </div>
+                {% if challenge.partnerNote %}
+                    <div class="sc-note"><strong>Le mot de {{ partnerName }}</strong><br>{{ challenge.partnerNote }}</div>
+                {% endif %}
+                {% if challenge.todayDoneByMe %}
+                    <p class="sc-mini">Vous avez validé ce jour. Il reste à {{ partnerName }} de le valider.</p>
+                {% else %}
+                    <form method="post" action="{{ path('app_couple_challenge_check') }}" style="display: grid; gap: .5rem;">
+                        <input type="hidden" name="_csrf_token" value="{{ token }}">
+                        <textarea name="note" class="ks-input" rows="2" maxlength="500" placeholder="Un mot pour votre conjoint sur ce que vous avez vécu (facultatif)" aria-label="Un mot pour votre conjoint"></textarea>
+                        <div><button class="ks-btn ks-btn--primary" type="submit">J'ai vécu le jour {{ challenge.currentDay }}</button></div>
+                    </form>
+                {% endif %}
             {% endif %}
         {% else %}
             <p class="sc-mini">Aucun défi en cours. Choisissez-en un ci-dessous ; {{ partner ? partner.displayName : 'votre conjoint' }} sera prévenu(e).</p>
         {% endif %}
     </section>
+
+    {% include 'couple/sanctuary/_retreat.html.twig' with {retour: 'defis'} %}
 
     <section class="ks-card">
         <h2 class="ks-section-title"><i data-lucide="list" class="ks-ico" aria-hidden="true"></i> Les défis</h2>

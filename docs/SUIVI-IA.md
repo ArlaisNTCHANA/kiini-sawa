@@ -9,6 +9,45 @@ teste (`php bin/phpunit`), commit, déploie (`bin/ops/envoyer-hostinger.sh`), v�
 journal `var/log/prod-AAAA-MM-JJ.log` sans erreur) ; **le fondateur fait lui-même `git push`** (refusé à l'IA).
 Ne jamais afficher ni demander de mot de passe ; ne pas publier son nom (mentions légales en attente).
 
+## 23/11/2026 — Sanctuaire du Couple : rythme quotidien, méditation à deux, temps de retraite (point F6)
+
+- **Décisions du fondateur** :
+  - un jour de défi par date du calendrier, et un message discret qui met en avant la régularité plutôt que la vitesse ;
+  - méditation validée par les deux conjoints, une étape par jour ;
+  - « Temps de retraite » possible si les deux disent oui : **dates choisies par le couple, sans limite de durée ni de
+    fréquence** (refus explicite du fondateur). La seule garde technique est une date de fin obligatoire, pour qu'une
+    retraite ne reste pas ouverte par oubli.
+- **Modèle** :
+  - nouvelle entité `Couple\Entity\CoupleRetreat` (proposée par, confirmée par, dates, intention, confirmée le, arrêtée
+    le) ;
+  - trois colonnes sur `CoupleMeditation` (`stepValidatedByPartnerA/B`, `lastStepCompletedAt`, méthode
+    `validateStepFor()`) ;
+  - migration `Version20261123090000`.
+- **Règles** (`CoupleSanctuaryService`, communes au web et au mobile) :
+  - `isChallengeDayLocked` : le jour N s'ouvre le lendemain du jour où le jour N-1 a été validé par les deux, sauf
+    pendant une retraite ;
+  - `isMeditationStepLocked` : même règle pour les étapes de méditation ;
+  - `proposeRetreat`, `confirmRetreat` (impossible de confirmer sa propre proposition), `stopRetreat` (l'un ou l'autre) ;
+  - `challengeDaysDuring` alimente l'historique. Chaque étape notifie l'autre conjoint.
+- **Web** :
+  - carte « Temps de retraite » (`templates/couple/sanctuary/_retreat.html.twig`) sur `/couple/defis` et `/couple/autel` ;
+  - routes `/couple/retraite/proposer|confirmer|arreter` ;
+  - états « Vous » et le conjoint pour la méditation ; message de rythme ; bandeau « propose une retraite » sur
+    `/couple`.
+- **API mobile** :
+  - `locked`, `rhythmMessage`, `stepDoneByMe` et `stepDoneByPartner` dans les réponses ;
+  - `retreat` dans `/couple/home` ;
+  - nouvelles routes `GET /couple/retreat` et `POST /couple/retreat/propose|confirm|stop` (documentées dans
+    `docs/api-mobile.md` § 13, ajouté avec tout le contrat du Sanctuaire).
+- **Application mobile** (`mobile-v1/`) : composant `src/components/couple/RetreatCard.tsx` (dates au format JJ/MM/AAAA),
+  défis et méditation avec message de rythme, double validation, messages d'erreur du serveur affichés, bandeau de
+  retraite sur l'accueil du couple. `tsc` 0 erreur, Vitest 24/24, export iOS réussi.
+- **Tests** : `MobileCoupleSanctuaryTest` (rythme, double validation, retraite proposée, refusée à soi-même,
+  confirmée, arrêtée) et `CoupleSanctuaryWebTest` (7 tests). Suite complète **467 / 467**, schéma synchronisé. Vérifié
+  dans le navigateur en local : validation par un seul conjoint, proposition de retraite, aucune erreur.
+- **Reste** : point F7 (textes du Sanctuaire relus par l'auteur et modifiables dans l'administration) et vraies
+  captures pour la vitrine.
+
 ## 23/11/2026 — Le Sanctuaire du Couple sur le web
 
 - **Pourquoi** : la vitrine promet le Sanctuaire « sur le web et le mobile » et le fondateur veut des aperçus de

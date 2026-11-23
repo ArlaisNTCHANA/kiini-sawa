@@ -16,6 +16,10 @@
     .sc-x { background: none; border: none; color: var(--border-strong); cursor: pointer; font-size: 1.1rem; }
     .sc-x:hover { color: var(--danger); }
     section.ks-card { margin-bottom: 1.25rem; }
+    .sc-rhythm { display: flex; gap: .5rem; align-items: flex-start; background: var(--primary-soft); color: var(--primary-dark); border-radius: var(--r-md); padding: .8rem 1rem; margin: .5rem 0 0; font-size: .92rem; }
+    .sc-who { display: flex; gap: .75rem; flex-wrap: wrap; margin-bottom: 1rem; }
+    .sc-who span { display: inline-flex; align-items: center; gap: .35rem; font-size: .85rem; font-weight: 600; padding: .3rem .7rem; border-radius: 999px; background: var(--bg-alt); color: var(--fg-muted); }
+    .sc-who span.done { background: var(--primary-soft); color: var(--primary); }
     .ks-card > .ks-section-title:first-child { margin-top: 0; display: flex; align-items: center; gap: .5rem; }
 </style>
 {% set token = csrf_token('couple') %}
@@ -35,7 +39,10 @@
 
     <section class="ks-card" id="meditation">
         <h2 class="ks-section-title"><i data-lucide="book-open" class="ks-ico" aria-hidden="true"></i> Méditation à deux</h2>
-        {% if meditation and meditation.status != 'FINISHED' and meditation.step %}
+        {% if meditation and meditation.locked %}
+            <p class="sc-step">{{ meditation.title }} · étape {{ meditation.currentStep }} sur {{ meditation.totalSteps }}</p>
+            <p class="sc-rhythm"><i data-lucide="sunrise" class="ks-ico" aria-hidden="true"></i> Étape {{ meditation.currentStep - 1 }} vécue ensemble. {{ meditation.rhythmMessage }}</p>
+        {% elseif meditation and meditation.status != 'FINISHED' and meditation.step %}
             <p class="sc-step">{{ meditation.title }} · étape {{ meditation.currentStep }} sur {{ meditation.totalSteps }}</p>
             <div class="sc-bar" aria-hidden="true"><span style="width: {{ ((meditation.currentStep - 1) / meditation.totalSteps * 100)|round }}%;"></span></div>
             <h3 style="font-family: var(--font-serif); font-size: 1.25rem; margin-bottom: .5rem;">{{ meditation.step.title }}</h3>
@@ -45,13 +52,20 @@
                 <strong>À partager ensemble</strong>
                 <p style="margin-top: .3rem;">{{ meditation.step.question }}</p>
             </div>
-            <form method="post" action="{{ path('app_couple_altar_step') }}">
-                <input type="hidden" name="_csrf_token" value="{{ token }}">
-                <button class="ks-btn ks-btn--primary" type="submit">
-                    {{ meditation.currentStep >= meditation.totalSteps ? 'Nous avons vécu la dernière étape' : 'Nous avons vécu cette étape' }}
-                </button>
-            </form>
-            <p class="sc-mini" style="margin-top: .6rem;">Prenez environ {{ meditation.durationMinutes }} minutes ensemble. {{ partner ? partner.displayName ~ ' est prévenu(e) quand vous validez une étape.' }}</p>
+            {% set partnerName = partner ? partner.displayName : 'votre conjoint' %}
+            <div class="sc-who">
+                <span class="{{ meditation.stepDoneByMe ? 'done' }}"><i data-lucide="{{ meditation.stepDoneByMe ? 'check' : 'circle' }}" class="ks-ico" aria-hidden="true"></i> Vous</span>
+                <span class="{{ meditation.stepDoneByPartner ? 'done' }}"><i data-lucide="{{ meditation.stepDoneByPartner ? 'check' : 'circle' }}" class="ks-ico" aria-hidden="true"></i> {{ partnerName }}</span>
+            </div>
+            {% if meditation.stepDoneByMe %}
+                <p class="sc-mini">Vous avez vécu cette étape. Elle avancera quand {{ partnerName }} l'aura validée à son tour.</p>
+            {% else %}
+                <form method="post" action="{{ path('app_couple_altar_step') }}">
+                    <input type="hidden" name="_csrf_token" value="{{ token }}">
+                    <button class="ks-btn ks-btn--primary" type="submit">J'ai vécu cette étape</button>
+                </form>
+                <p class="sc-mini" style="margin-top: .6rem;">Prenez environ {{ meditation.durationMinutes }} minutes ensemble. L'étape avance quand vous l'avez validée tous les deux.</p>
+            {% endif %}
         {% else %}
             <p class="sc-mini">Aucun parcours en cours. Choisissez-en un ci-dessous : quelques étapes, une parole, une question à partager.</p>
         {% endif %}
@@ -76,6 +90,8 @@
             </div>
         {% endfor %}
     </section>
+
+    {% include 'couple/sanctuary/_retreat.html.twig' with {retour: 'autel'} %}
 
     <section class="ks-card" id="intentions">
         <h2 class="ks-section-title"><i data-lucide="hand-heart" class="ks-ico" aria-hidden="true"></i> Nos intentions de prière</h2>

@@ -42,10 +42,10 @@ class CoupleSanctuaryController extends AbstractController
             'couple' => $couple,
             'partner' => $couple->partnerOf($this->user()),
             'dailyVerse' => CoupleSanctuaryCatalog::dailyVerse(),
-            'meditation' => $active ? $this->sanctuary->serializeMeditation($active) : null,
+            'meditation' => $active ? $this->sanctuary->serializeMeditation($active, $this->user()) : null,
             'catalog' => CoupleSanctuaryCatalog::MEDITATIONS,
             'intentions' => $couple->itemsOfKind('INTENTION'),
-        ]);
+        ] + $this->retreatView($couple));
     }
 
     #[Route('/couple/autel/commencer', name: 'app_couple_altar_start', methods: ['POST'])]
@@ -124,7 +124,7 @@ class CoupleSanctuaryController extends AbstractController
             'challenge' => $active ? $this->sanctuary->serializeChallenge($active, $this->user()) : null,
             'catalog' => CoupleSanctuaryCatalog::CHALLENGES,
             'themes' => CoupleService::THEMES,
-        ]);
+        ] + $this->retreatView($couple));
     }
 
     #[Route('/couple/defis/commencer', name: 'app_couple_challenge_start', methods: ['POST'])]
@@ -157,6 +157,65 @@ class CoupleSanctuaryController extends AbstractController
         return $this->redirectToRoute('app_couple_challenges');
     }
 
+    // ── Temps de retraite ──────────────────────────────────────
+
+    #[Route('/couple/retraite/proposer', name: 'app_couple_retreat_propose', methods: ['POST'])]
+    public function proposeRetreat(Request $request): Response
+    {
+        $couple = $this->postedCouple($request);
+        $start = \DateTimeImmutable::createFromFormat('!Y-m-d', $request->request->getString('startsOn'));
+        $end = \DateTimeImmutable::createFromFormat('!Y-m-d', $request->request->getString('endsOn'));
+        if (!$start || !$end) {
+            $this->addFlash('error', 'Indiquez une date de début et une date de fin.');
+        } else {
+            try {
+                $this->sanctuary->proposeRetreat($couple, $this->user(), $start, $end, $request->request->getString('note'));
+                $partner = $couple->partnerOf($this->user());
+                $this->addFlash('success', 'Proposition envoyée. La retraite comptera dès que '.($partner ? $partner->getDisplayName() : 'votre conjoint').' l\'aura confirmée.');
+            } catch (\InvalidArgumentException|\DomainException $e) {
+                $this->addFlash('error', $e->getMessage());
+            }
+        }
+
+        return $this->redirectBack($request);
+    }
+
+    #[Route('/couple/retraite/confirmer', name: 'app_couple_retreat_confirm', methods: ['POST'])]
+    public function confirmRetreat(Request $request): Response
+    {
+        $couple = $this->postedCouple($request);
+        try {
+            $this->sanctuary->confirmRetreat($couple, $this->user());
+            $this->addFlash('success', 'Temps de retraite confirmé. Pendant ces dates, vous pouvez vivre plusieurs jours de défi et plusieurs étapes de méditation le même jour.');
+        } catch (\DomainException $e) {
+            $this->addFlash('error', $e->getMessage());
+        }
+
+        return $this->redirectBack($request);
+    }
+
+    #[Route('/couple/retraite/arreter', name: 'app_couple_retreat_stop', methods: ['POST'])]
+    public function stopRetreat(Request $request): Response
+    {
+        $couple = $this->postedCouple($request);
+        try {
+            $this->sanctuary->stopRetreat($couple, $this->user());
+            $this->addFlash('success', 'Retraite arrêtée. Le rythme d\'un jour à la fois reprend.');
+        } catch (\DomainException $e) {
+            $this->addFlash('error', $e->getMessage());
+        }
+
+        return $this->redirectBack($request);
+    }
+
+    /** Retour vers la page d'où vient le formulaire (Le Jardin des défis ou L'Autel). */
+    private function redirectBack(Request $request): Response
+    {
+        return 'autel' === $request->request->getString('retour')
+            ? $this->redirectToRoute('app_couple_altar', ['_fragment' => 'retraite'])
+            : $this->redirectToRoute('app_couple_challenges', ['_fragment' => 'retraite']);
+    }
+
     // ── Signaux ────────────────────────────────────────────────
 
     #[Route('/couple/signal', name: 'app_couple_signal', methods: ['POST'])]
@@ -173,6 +232,15 @@ class CoupleSanctuaryController extends AbstractController
         }
 
         return $this->redirectToRoute('app_couple', ['_fragment' => 'sanctuaire']);
+    }
+
+    /** @return array{retreat: array<string, mixed>|null, pastRetreats: list<array{retreat: \App\Couple\Entity\CoupleRetreat, days: int}>} */
+    private function retreatView(Couple $couple): array
+    {
+        return [
+            'retreat' => $this->sanctuary->serializeRetreat($this->sanctuary->currentRetreat($couple), $this->user()),
+            'pastRetreats' => array_map(fn ($r) => ['retreat' => $r, 'days' => $this->sanctuary->challengeDaysDuring($r)], $this->sanctuary->pastRetreats($couple)),
+        ];
     }
 
     private function usableCouple(): ?Couple

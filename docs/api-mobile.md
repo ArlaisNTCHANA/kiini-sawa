@@ -152,3 +152,23 @@ En cas d'erreur, l'API renvoie `{ "error": "Message en français", "code"?: "...
 
 
 
+
+## 13. Sanctuaire du Couple (`/api/mobile/v1/couple/...`, RFC-001)
+
+Toutes ces routes demandent un couple actif et utilisable (les deux conjoints PRO ou Duo) ; sinon `403` avec `code` `no_couple`, `couple_pending` ou `couple_locked`. Mêmes règles que sur le web (`CoupleSanctuaryService`).
+
+| Route | Corps | Réponse | Rôle |
+|---|---|---|---|
+| `GET /couple/home` | — | `200 { couple, activeChallenge, activeMeditation, retreat, counts, nextReviewDate, reviewDoneThisMonth, pingPresets }` | Vue d'ensemble du Sanctuaire. |
+| `GET /couple/challenges/catalog` | — | `200 { active, catalog }` | Défi en cours et catalogue. |
+| `POST /couple/challenges/start` | `{ code }` | `201 { challenge }` | Lance un défi (remplace celui en cours). |
+| `POST /couple/challenges/check-day` | `{ note? }` | `200 { streakDays, challenge }` ou `409 { error }` | Valide le jour pour le conjoint connecté. Le jour suivant s'ouvre **le lendemain** de la double validation (`challenge.locked`, `challenge.rhythmMessage`), sauf pendant un temps de retraite confirmé. |
+| `GET /couple/meditations/catalog` | — | `200 { active, catalog }` | Méditation en cours et catalogue. |
+| `POST /couple/meditations/start` | `{ code }` | `201 { meditation }` | Ouvre un parcours. |
+| `POST /couple/meditations/complete-step` | — | `200 { streakDays, meditation }` ou `409 { error }` | Le conjoint valide l'étape : elle n'avance que quand **les deux** l'ont validée (`stepDoneByMe`, `stepDoneByPartner`), et l'étape suivante s'ouvre le lendemain (`locked`), sauf pendant une retraite. |
+| `GET /couple/retreat` | — | `200 { retreat \| null }` | Temps de retraite en attente, à venir ou en cours : `{ id, status: pending\|upcoming\|active\|finished, startsOn, endsOn, note, proposedByMe, proposedBy, canConfirm }`. |
+| `POST /couple/retreat/propose` | `{ startsOn, endsOn, note? }` (AAAA-MM-JJ) | `201 { retreat }`, `422` ou `409` | Un conjoint propose ; dates choisies par le couple, fin obligatoire, pas de début dans le passé. |
+| `POST /couple/retreat/confirm` | — | `200 { retreat }` ou `409` | L'autre conjoint confirme (impossible de confirmer sa propre proposition). |
+| `POST /couple/retreat/stop` | — | `200 { retreat: null }` | L'un ou l'autre arrête la retraite ou retire la proposition. |
+| `POST /couple/ping` | `{ preset, message? }` | `200 { sent: true }` | Signal au conjoint (notification). |
+| Projets, intentions, revue, rapport | — | — | `GET/POST /couple/projects`, `PATCH/DELETE /couple/projects/{id}`, `GET/POST /couple/intentions`, `DELETE /couple/intentions/{id}`, `GET/POST /couple/review`, `GET /couple/report`. |

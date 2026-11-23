@@ -44,6 +44,17 @@ class CoupleMeditation
     #[ORM\Column(nullable: true)]
     private ?\DateTimeImmutable $completedAt = null;
 
+    /** Étape en cours validée par chacun des conjoints : elle n'avance que quand les deux l'ont vécue. */
+    #[ORM\Column(options: ['default' => false])]
+    private bool $stepValidatedByPartnerA = false;
+
+    #[ORM\Column(options: ['default' => false])]
+    private bool $stepValidatedByPartnerB = false;
+
+    /** Moment où la dernière étape a été validée par les deux (une étape par jour, hors retraite). */
+    #[ORM\Column(nullable: true)]
+    private ?\DateTimeImmutable $lastStepCompletedAt = null;
+
     public function __construct(Couple $couple, string $planCode, int $totalSteps)
     {
         $this->couple = $couple;
@@ -62,6 +73,42 @@ class CoupleMeditation
     public function getStartedAt(): \DateTimeImmutable { return $this->startedAt; }
     public function getLastSessionAt(): ?\DateTimeImmutable { return $this->lastSessionAt; }
     public function getCompletedAt(): ?\DateTimeImmutable { return $this->completedAt; }
+
+    public function getLastStepCompletedAt(): ?\DateTimeImmutable { return $this->lastStepCompletedAt; }
+
+    public function isStepValidatedBy(\App\Compte\Entity\User $user): bool
+    {
+        return $user === $this->couple->getPartnerA() ? $this->stepValidatedByPartnerA : $this->stepValidatedByPartnerB;
+    }
+
+    public function isStepValidatedByPartnerOf(\App\Compte\Entity\User $user): bool
+    {
+        return $user === $this->couple->getPartnerA() ? $this->stepValidatedByPartnerB : $this->stepValidatedByPartnerA;
+    }
+
+    /**
+     * Le conjoint valide l'étape en cours. Quand les deux l'ont validée, le parcours avance.
+     *
+     * @return bool vrai si l'étape vient d'être validée par les deux
+     */
+    public function validateStepFor(\App\Compte\Entity\User $user): bool
+    {
+        if ($user === $this->couple->getPartnerA()) {
+            $this->stepValidatedByPartnerA = true;
+        } elseif ($user === $this->couple->getPartnerB()) {
+            $this->stepValidatedByPartnerB = true;
+        }
+        $this->lastSessionAt = new \DateTimeImmutable();
+        if (!$this->stepValidatedByPartnerA || !$this->stepValidatedByPartnerB) {
+            return false;
+        }
+        $this->stepValidatedByPartnerA = false;
+        $this->stepValidatedByPartnerB = false;
+        $this->lastStepCompletedAt = new \DateTimeImmutable();
+        $this->completeCurrentStep();
+
+        return true;
+    }
 
     public function completeCurrentStep(): void
     {

@@ -152,6 +152,12 @@ class MobileCoupleSanctuaryTest extends WebTestCase
         ], $tokenB);
         $this->assertSame(200, $checkB['status']);
         $this->assertSame(2, $checkB['json']['challenge']['currentDay']);
+        $this->assertTrue($checkB['json']['challenge']['locked'], 'Le jour 2 s\'ouvre demain');
+
+        // Rythme : pas de deuxième jour le même jour
+        $tooFast = $this->api('POST', '/api/mobile/v1/couple/challenges/check-day', [], $tokenA);
+        $this->assertSame(409, $tooFast['status']);
+        $this->assertStringContainsString('régularité', $tooFast['json']['error']);
 
         // 5. Méditation à deux : démarrage & validation d'une étape
         $startMed = $this->api('POST', '/api/mobile/v1/couple/meditations/start', [
@@ -161,9 +167,38 @@ class MobileCoupleSanctuaryTest extends WebTestCase
         $this->assertSame(1, $startMed['json']['meditation']['currentStep']);
         $this->assertNotEmpty($startMed['json']['meditation']['step']['question']);
 
+        // L'étape n'avance que quand les deux l'ont validée
         $stepMed = $this->api('POST', '/api/mobile/v1/couple/meditations/complete-step', [], $tokenA);
         $this->assertSame(200, $stepMed['status']);
-        $this->assertSame(2, $stepMed['json']['meditation']['currentStep']);
+        $this->assertSame(1, $stepMed['json']['meditation']['currentStep']);
+        $this->assertTrue($stepMed['json']['meditation']['stepDoneByMe']);
+        $this->assertFalse($stepMed['json']['meditation']['stepDoneByPartner']);
+
+        $stepMedB = $this->api('POST', '/api/mobile/v1/couple/meditations/complete-step', [], $tokenB);
+        $this->assertSame(200, $stepMedB['status']);
+        $this->assertSame(2, $stepMedB['json']['meditation']['currentStep']);
+        $this->assertTrue($stepMedB['json']['meditation']['locked']);
+        $this->assertSame(409, $this->api('POST', '/api/mobile/v1/couple/meditations/complete-step', [], $tokenA)['status']);
+
+        // Temps de retraite : proposé par A, il ne compte qu'avec l'accord de B
+        $today = (new \DateTimeImmutable('today'))->format('Y-m-d');
+        $propose = $this->api('POST', '/api/mobile/v1/couple/retreat/propose', ['startsOn' => $today, 'endsOn' => (new \DateTimeImmutable('+2 days'))->format('Y-m-d'), 'note' => 'Week-end à Kribi'], $tokenA);
+        $this->assertSame(201, $propose['status']);
+        $this->assertSame('pending', $propose['json']['retreat']['status']);
+        $this->assertSame(409, $this->api('POST', '/api/mobile/v1/couple/retreat/confirm', [], $tokenA)['status'], 'Personne ne confirme sa propre proposition');
+        $this->assertSame(409, $this->api('POST', '/api/mobile/v1/couple/challenges/check-day', [], $tokenA)['status'], 'Pas encore confirmée : le rythme reste d\'un jour');
+
+        $confirm = $this->api('POST', '/api/mobile/v1/couple/retreat/confirm', [], $tokenB);
+        $this->assertSame(200, $confirm['status']);
+        $this->assertSame('active', $confirm['json']['retreat']['status']);
+        $this->api('POST', '/api/mobile/v1/couple/challenges/check-day', [], $tokenA);
+        $day2 = $this->api('POST', '/api/mobile/v1/couple/challenges/check-day', [], $tokenB);
+        $this->assertSame(3, $day2['json']['challenge']['currentDay'], 'Pendant la retraite, plusieurs jours le même jour');
+        $this->assertFalse($day2['json']['challenge']['locked']);
+
+        $this->assertSame(200, $this->api('POST', '/api/mobile/v1/couple/retreat/stop', [], $tokenA)['status']);
+        $this->assertNull($this->api('GET', '/api/mobile/v1/couple/retreat', null, $tokenB)['json']['retreat']);
+        $this->assertTrue($this->api('GET', '/api/mobile/v1/couple/challenges/catalog', null, $tokenA)['json']['active']['locked'], 'Après la retraite, le rythme reprend');
 
         // 6. Ping de connexion -> notification enregistrée pour le conjoint
         $ping = $this->api('POST', '/api/mobile/v1/couple/ping', [

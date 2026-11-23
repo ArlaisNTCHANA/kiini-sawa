@@ -22,6 +22,13 @@
         {% endif %}
     </p>
 
+    {% set rt = sanctuary.retreat %}
+    {% if rt and rt.canConfirm %}
+        <p class="sh-turn" style="display: block; padding: .6rem .9rem; border-radius: var(--r-md); margin-bottom: 1rem; font-size: .85rem;">{{ rt.proposedBy }} propose un temps de retraite du {{ rt.startsOn|date('d/m/Y') }} au {{ rt.endsOn|date('d/m/Y') }}. <a href="{{ path('app_couple_challenges', {'_fragment': 'retraite'}) }}" style="color: inherit; text-decoration: underline;">Voir et confirmer</a></p>
+    {% elseif rt and rt.status == 'active' %}
+        <p class="cp-mini" style="margin-bottom: 1rem;">En retraite jusqu'au {{ rt.endsOn|date('d/m/Y') }} : plusieurs jours de défi et étapes de méditation peuvent être vécus aujourd'hui.</p>
+    {% endif %}
+
     <p class="sh-verse">« {{ sanctuary.couple.dailyVerse.text }} »<span class="sh-ref">{{ sanctuary.couple.dailyVerse.reference }}</span></p>
 
     <div class="sh-rooms">
@@ -29,6 +36,7 @@
             <strong><i data-lucide="book-open" class="ks-ico" aria-hidden="true"></i> L'Autel</strong>
             {% if med %}
                 <p>{{ med.title }} : étape {{ med.currentStep }} sur {{ med.totalSteps }}</p>
+                {% if med.locked %}<span class="sh-turn">Suite demain</span>{% elseif not med.stepDoneByMe %}<span class="sh-turn">À vous de jouer aujourd'hui</span>{% elseif not med.stepDoneByPartner %}<span class="sh-turn">En attente de {{ partner ? partner.displayName : 'votre conjoint' }}</span>{% endif %}
             {% else %}
                 <p>Méditations à deux et intentions de prière{% if sanctuary.counts.intentions > 0 %} ({{ sanctuary.counts.intentions }}){% endif %}.</p>
             {% endif %}
@@ -37,7 +45,7 @@
             <strong><i data-lucide="sprout" class="ks-ico" aria-hidden="true"></i> Le Jardin des défis</strong>
             {% if ch %}
                 <p>{{ ch.title }} : jour {{ ch.currentDay }} sur {{ ch.totalDays }}</p>
-                {% if not ch.todayDoneByMe %}<span class="sh-turn">À vous de jouer aujourd'hui</span>{% elseif not ch.todayDoneByPartner %}<span class="sh-turn">En attente de {{ partner ? partner.displayName : 'votre conjoint' }}</span>{% endif %}
+                {% if ch.locked %}<span class="sh-turn">Suite demain</span>{% elseif not ch.todayDoneByMe %}<span class="sh-turn">À vous de jouer aujourd'hui</span>{% elseif not ch.todayDoneByPartner %}<span class="sh-turn">En attente de {{ partner ? partner.displayName : 'votre conjoint' }}</span>{% endif %}
             {% else %}
                 <p>Un petit pas par jour, vécu ensemble : écoute, gratitude, soirs sans écran, prière.</p>
             {% endif %}

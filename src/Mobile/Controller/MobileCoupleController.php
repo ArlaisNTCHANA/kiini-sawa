@@ -293,7 +293,7 @@ final class MobileCoupleController extends AbstractController
         ));
 
         return $this->jsonNoStore([
-            'active' => $active ? $this->sanctuary->serializeMeditation($active) : null,
+            'active' => $active ? $this->sanctuary->serializeMeditation($active, $this->currentMobileUser()) : null,
             'catalog' => $catalog,
         ]);
     }
@@ -315,7 +315,7 @@ final class MobileCoupleController extends AbstractController
         }
 
         return $this->jsonNoStore([
-            'meditation' => $this->sanctuary->serializeMeditation($meditation),
+            'meditation' => $this->sanctuary->serializeMeditation($meditation, $this->currentMobileUser()),
         ], Response::HTTP_CREATED);
     }
 
@@ -335,7 +335,7 @@ final class MobileCoupleController extends AbstractController
 
         return $this->jsonNoStore([
             'streakDays' => $couple->getStreakDays(),
-            'meditation' => $this->sanctuary->serializeMeditation($meditation),
+            'meditation' => $this->sanctuary->serializeMeditation($meditation, $this->currentMobileUser()),
         ]);
     }
 
@@ -360,6 +360,75 @@ final class MobileCoupleController extends AbstractController
         }
 
         return $this->jsonNoStore(['sent' => true]);
+    }
+
+    #[Route('/retreat', name: 'api_mobile_v1_couple_retreat_get', methods: ['GET'])]
+    public function getRetreat(): JsonResponse
+    {
+        $couple = $this->requireUsableCouple();
+        if ($couple instanceof JsonResponse) {
+            return $couple;
+        }
+
+        return $this->jsonNoStore(['retreat' => $this->sanctuary->serializeRetreat($this->sanctuary->currentRetreat($couple), $this->currentMobileUser())]);
+    }
+
+    /** Proposer un temps de retraite : { startsOn: "AAAA-MM-JJ", endsOn: "AAAA-MM-JJ", note? }. Compte une fois confirmé par l'autre. */
+    #[Route('/retreat/propose', name: 'api_mobile_v1_couple_retreat_propose', methods: ['POST'])]
+    public function proposeRetreat(Request $request): JsonResponse
+    {
+        $couple = $this->requireUsableCouple();
+        if ($couple instanceof JsonResponse) {
+            return $couple;
+        }
+
+        $body = $this->decodeJson($request) ?? [];
+        $start = \DateTimeImmutable::createFromFormat('!Y-m-d', (string) ($body['startsOn'] ?? ''));
+        $end = \DateTimeImmutable::createFromFormat('!Y-m-d', (string) ($body['endsOn'] ?? ''));
+        if (!$start || !$end) {
+            return $this->jsonError('Indiquez une date de début et une date de fin.', Response::HTTP_UNPROCESSABLE_ENTITY);
+        }
+        try {
+            $retreat = $this->sanctuary->proposeRetreat($couple, $this->currentMobileUser(), $start, $end, isset($body['note']) ? (string) $body['note'] : null);
+        } catch (\InvalidArgumentException $e) {
+            return $this->jsonError($e->getMessage(), Response::HTTP_UNPROCESSABLE_ENTITY);
+        } catch (\DomainException $e) {
+            return $this->jsonError($e->getMessage(), Response::HTTP_CONFLICT);
+        }
+
+        return $this->jsonNoStore(['retreat' => $this->sanctuary->serializeRetreat($retreat, $this->currentMobileUser())], Response::HTTP_CREATED);
+    }
+
+    #[Route('/retreat/confirm', name: 'api_mobile_v1_couple_retreat_confirm', methods: ['POST'])]
+    public function confirmRetreat(): JsonResponse
+    {
+        $couple = $this->requireUsableCouple();
+        if ($couple instanceof JsonResponse) {
+            return $couple;
+        }
+        try {
+            $retreat = $this->sanctuary->confirmRetreat($couple, $this->currentMobileUser());
+        } catch (\DomainException $e) {
+            return $this->jsonError($e->getMessage(), Response::HTTP_CONFLICT);
+        }
+
+        return $this->jsonNoStore(['retreat' => $this->sanctuary->serializeRetreat($retreat, $this->currentMobileUser())]);
+    }
+
+    #[Route('/retreat/stop', name: 'api_mobile_v1_couple_retreat_stop', methods: ['POST'])]
+    public function stopRetreat(): JsonResponse
+    {
+        $couple = $this->requireUsableCouple();
+        if ($couple instanceof JsonResponse) {
+            return $couple;
+        }
+        try {
+            $this->sanctuary->stopRetreat($couple, $this->currentMobileUser());
+        } catch (\DomainException $e) {
+            return $this->jsonError($e->getMessage(), Response::HTTP_CONFLICT);
+        }
+
+        return $this->jsonNoStore(['retreat' => null]);
     }
 
     #[Route('/review', name: 'api_mobile_v1_couple_review_get', methods: ['GET'])]

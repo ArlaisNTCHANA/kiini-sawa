@@ -1,0 +1,61 @@
+{# Temps de retraite du couple. Variables : retreat (serializeRetreat ou null), pastRetreats, partner, token, retour ('defis' ou 'autel'). #}
+<section class="ks-card" id="retraite">
+    <h2 class="ks-section-title"><i data-lucide="tent-tree" class="ks-ico" aria-hidden="true"></i> Temps de retraite</h2>
+    {% set partnerName = partner ? partner.displayName : 'votre conjoint' %}
+    {% if retreat and retreat.status == 'pending' %}
+        <p>
+            {{ retreat.proposedByMe ? 'Vous proposez' : retreat.proposedBy ~ ' propose' }} un temps de retraite
+            du <strong>{{ retreat.startsOn|date('d/m/Y') }}</strong> au <strong>{{ retreat.endsOn|date('d/m/Y') }}</strong>{% if retreat.note %} : {{ retreat.note }}{% endif %}.
+        </p>
+        <p class="sc-mini" style="margin: .4rem 0 .9rem;">{{ retreat.canConfirm ? 'Elle ne compte qu\'avec votre accord.' : 'Elle comptera dès que ' ~ partnerName ~ ' l\'aura confirmée.' }}</p>
+        <div style="display: flex; gap: .5rem; flex-wrap: wrap;">
+            {% if retreat.canConfirm %}
+                <form method="post" action="{{ path('app_couple_retreat_confirm') }}">
+                    <input type="hidden" name="_csrf_token" value="{{ token }}"><input type="hidden" name="retour" value="{{ retour }}">
+                    <button class="ks-btn ks-btn--primary ks-btn--sm" type="submit">Je confirme la retraite</button>
+                </form>
+            {% endif %}
+            <form method="post" action="{{ path('app_couple_retreat_stop') }}">
+                <input type="hidden" name="_csrf_token" value="{{ token }}"><input type="hidden" name="retour" value="{{ retour }}">
+                <button class="ks-btn ks-btn--ghost ks-btn--sm" type="submit">{{ retreat.proposedByMe ? 'Retirer ma proposition' : 'Refuser' }}</button>
+            </form>
+        </div>
+    {% elseif retreat %}
+        <p>
+            {{ retreat.status == 'active' ? 'Vous êtes en retraite' : 'Retraite prévue' }}
+            du <strong>{{ retreat.startsOn|date('d/m/Y') }}</strong> au <strong>{{ retreat.endsOn|date('d/m/Y') }}</strong>{% if retreat.note %} : {{ retreat.note }}{% endif %}.
+        </p>
+        <p class="sc-mini" style="margin: .4rem 0 .9rem;">
+            {{ retreat.status == 'active' ? 'Vous pouvez vivre plusieurs jours de défi et plusieurs étapes de méditation aujourd\'hui. ' }}La retraite se termine d'elle-même le {{ retreat.endsOn|date('d/m/Y') }}.
+        </p>
+        <form method="post" action="{{ path('app_couple_retreat_stop') }}" onsubmit="return confirm('Mettre fin à la retraite ? Le rythme d\'un jour à la fois reprendra.')">
+            <input type="hidden" name="_csrf_token" value="{{ token }}"><input type="hidden" name="retour" value="{{ retour }}">
+            <button class="ks-btn ks-btn--ghost ks-btn--sm" type="submit">Arrêter la retraite</button>
+        </form>
+    {% else %}
+        <p class="sc-mini" style="margin-bottom: .9rem;">
+            Le rythme habituel est d'un jour à la fois. Si vous partez en retraite à deux (un week-end, quelques jours au calme),
+            vous pouvez ouvrir ce temps : pendant ces dates, plusieurs jours de défi et plusieurs étapes de méditation peuvent être vécus le même jour.
+            Il compte dès que {{ partnerName }} l'a confirmé.
+        </p>
+        <details>
+            <summary class="ks-btn ks-btn--secondary ks-btn--sm" style="display: inline-flex; cursor: pointer;">Proposer un temps de retraite</summary>
+            <form method="post" action="{{ path('app_couple_retreat_propose') }}" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: .5rem; margin-top: .9rem;">
+                <input type="hidden" name="_csrf_token" value="{{ token }}"><input type="hidden" name="retour" value="{{ retour }}">
+                <label class="sc-mini">Du<input type="date" name="startsOn" class="ks-input" required min="{{ 'now'|date('Y-m-d') }}" value="{{ 'now'|date('Y-m-d') }}"></label>
+                <label class="sc-mini">Au (dernier jour)<input type="date" name="endsOn" class="ks-input" required min="{{ 'now'|date('Y-m-d') }}"></label>
+                <input name="note" class="ks-input" maxlength="255" placeholder="Lieu ou intention (facultatif)" style="grid-column: 1 / -1;" aria-label="Lieu ou intention">
+                <div><button class="ks-btn ks-btn--primary ks-btn--sm" type="submit">Envoyer la proposition</button></div>
+            </form>
+        </details>
+    {% endif %}
+
+    {% if pastRetreats|length > 0 %}
+        <p class="sc-mini" style="margin-top: 1.1rem; font-weight: 700;">Vos retraites</p>
+        <ul class="sc-mini" style="margin: .3rem 0 0 1rem;">
+            {% for p in pastRetreats %}
+                <li>Du {{ p.retreat.startsOn|date('d/m/Y') }} au {{ p.retreat.endsOn|date('d/m/Y') }}{% if p.retreat.note %} ({{ p.retreat.note }}){% endif %}{% if p.retreat.cancelledAt %}, arrêtée{% endif %} : {{ p.days }} jour{{ p.days > 1 ? 's' }} de défi vécu{{ p.days > 1 ? 's' }} ensemble</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+</section>

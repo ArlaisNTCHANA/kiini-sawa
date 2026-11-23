@@ -87,7 +87,32 @@ class CoupleSanctuaryWebTest extends WebTestCase
         $this->assertSelectorTextContains('#meditation', 'étape 1 sur '.$steps);
         $this->assertSelectorTextContains('#meditation', CoupleSanctuaryCatalog::MEDITATIONS[$code]['steps'][1]['question']);
 
-        for ($i = 0; $i < $steps; ++$i) {
+        // Un seul conjoint ne fait pas avancer l'étape
+        $this->post('/couple/autel', '/couple/autel/etape');
+        $this->client->request('GET', '/couple/autel');
+        $this->assertSelectorTextContains('#meditation', 'étape 1 sur '.$steps);
+        $this->assertSelectorTextContains('#meditation', 'avancera quand '.$b->getDisplayName());
+
+        // Les deux : l'étape avance, et la suivante s'ouvre demain
+        $this->client->loginUser($b);
+        $this->post('/couple/autel', '/couple/autel/etape');
+        $this->client->request('GET', '/couple/autel');
+        $this->assertSelectorTextContains('#meditation', 'régularité');
+        $this->post('/couple/autel', '/couple/autel/etape');
+        $this->em()->clear();
+        $this->assertSame(2, $this->em()->getRepository(CoupleMeditation::class)->findOneBy(['couple' => $couple->getId()])->getCurrentStep());
+
+        // Temps de retraite proposé par B, confirmé par A : les étapes suivantes peuvent être vécues le même jour
+        $this->post('/couple/autel', '/couple/retraite/proposer', ['startsOn' => date('Y-m-d'), 'endsOn' => date('Y-m-d', strtotime('+1 day')), 'retour' => 'autel']);
+        $this->client->loginUser($a);
+        $this->client->request('GET', '/couple/autel');
+        $this->assertSelectorTextContains('#retraite', 'Je confirme la retraite');
+        $this->post('/couple/autel', '/couple/retraite/confirmer', ['retour' => 'autel']);
+        $this->assertResponseRedirects('/couple/autel#retraite');
+        for ($i = 2; $i <= $steps; ++$i) {
+            $this->client->loginUser($a);
+            $this->post('/couple/autel', '/couple/autel/etape');
+            $this->client->loginUser($b);
             $this->post('/couple/autel', '/couple/autel/etape');
         }
         $this->em()->clear();
@@ -141,6 +166,28 @@ class CoupleSanctuaryWebTest extends WebTestCase
         $this->em()->clear();
         $challenge = $this->em()->getRepository(CoupleChallenge::class)->findOneBy(['couple' => $couple->getId()]);
         $this->assertSame(2, $challenge->getCurrentDay());
+
+        // Le jour 2 s'ouvre demain : message discret sur la régularité, pas de formulaire
+        $this->client->request('GET', '/couple/defis');
+        $this->assertSelectorTextContains('main', 'la régularité qui fait grandir, pas la vitesse');
+        $this->assertSelectorNotExists('form[action="/couple/defis/valider"]');
+    }
+
+    public function testRetreatNeedsAnEndDateAfterTheStartAndStaysPendingUntilConfirmed(): void
+    {
+        [$couple, $a] = $this->activeCouple();
+        $this->client->loginUser($a);
+
+        $this->post('/couple/defis', '/couple/retraite/proposer', ['startsOn' => date('Y-m-d', strtotime('+3 days')), 'endsOn' => date('Y-m-d', strtotime('+1 day'))]);
+        $this->post('/couple/defis', '/couple/retraite/proposer', ['startsOn' => date('Y-m-d', strtotime('-1 day')), 'endsOn' => date('Y-m-d')]);
+        $this->post('/couple/defis', '/couple/retraite/proposer', ['startsOn' => date('Y-m-d'), 'endsOn' => '']);
+        $this->assertCount(0, $this->em()->getRepository(\App\Couple\Entity\CoupleRetreat::class)->findBy(['couple' => $couple->getId()]));
+
+        $this->post('/couple/defis', '/couple/retraite/proposer', ['startsOn' => date('Y-m-d', strtotime('+7 days')), 'endsOn' => date('Y-m-d', strtotime('+9 days')), 'note' => 'Retraite de Pâques']);
+        $this->client->request('GET', '/couple/defis');
+        $this->assertSelectorTextContains('#retraite', 'Retraite de Pâques');
+        $this->assertSelectorTextContains('#retraite', 'Elle comptera dès que');
+        $this->assertSelectorNotExists('#retraite form[action="/couple/retraite/confirmer"]');
     }
 
     public function testSignalReachesThePartner(): void

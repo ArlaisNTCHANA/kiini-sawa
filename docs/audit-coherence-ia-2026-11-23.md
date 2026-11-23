@@ -328,3 +328,4 @@ Les points 1 à 4 sont à faire **avant toute publication sur le Play Store**.
 | F3 · « Sanctuaire » | **Le mot est gardé avec ses deux sens** : l'exercice du livre et le Sanctuaire du Couple | Clos. Inscrit dans `docs/lexique.md` (toujours préciser « du Couple ») |
 | Feuille de route | **Offres Famille, PRO+ et Mentor IA retirées** | Fait dans `ROADMAP.md`. Objectif recalculé avec Duo et PRO seulement |
 | F1, F2 · Vitrine | **Les aperçus visuels de l'application sont voulus**, à condition que ce qu'ils montrent existe partout (web et mobile) | Fait le 23/11 : le Sanctuaire du Couple existe sur le web (`/couple/autel`, `/couple/defis`, signal). Reste : remplacer les dessins par de vraies captures |
+| F6 · Rythme du couple | **Un jour à la fois, méditation validée par les deux, temps de retraite si les deux disent oui** (dates libres, fin obligatoire, sans limite de fréquence) | Fait le 23/11 (web, API et application mobile) |
