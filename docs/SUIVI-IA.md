@@ -9,6 +9,59 @@ teste (`php bin/phpunit`), commit, déploie (`bin/ops/envoyer-hostinger.sh`), v�
 journal `var/log/prod-AAAA-MM-JJ.log` sans erreur) ; **le fondateur fait lui-même `git push`** (refusé à l'IA).
 Ne jamais afficher ni demander de mot de passe ; ne pas publier son nom (mentions légales en attente).
 
+## 22–23/11/2026 — Correctif `/login`, Plan « Standout », Ma Boussole 360 & `RFC-002` Académie Pratique
+- **Correctif redirection `/login` (`web/`, commit `69a4e33`)** : `LoginAuthenticator` nettoie désormais tout `target_path` pointant sur `/api/...` et ne redirige plus jamais un utilisateur vers `/api/rapide/aujourdhui` après connexion (test de non-régression dans `tests/Rapide/QuickDayTest.php`).
+- **Plan « Standout » (Mobile & Vitrine)** :
+  - `mobile-v1/` (commits `19c29e7`, `434668b`) : **Ma Boussole 360** (`BoussoleRadar.tsx` + `app/boussole/index.tsx` + cache SQLite + partage) et **Ma Pause de 5 minutes** (`app/pause/index.tsx`, libre d'horaire, hors-ligne via `useSync()`). `tsc --noEmit` (0 erreur), Vitest **24/24**.
+  - `web/` (commits `c1f85b0`, `01d4785`, `7063f86`) : section aperçus mobiles (*Ma Boussole 360*, *Modeste*, *Modeste & Linda*) sur `landing.html.twig` (sans émojis, icônes Lucide : `DesignRulesTest` 3/3) et diagnostic public **`/boussole`** (`templates/shared/boussole.html.twig` + `assets/js/boussole-engine.js` : 24 affirmations symétriques 2+2 par plan, 18 textes de tranche, matrice complète 30 dynamiques croisées, gestion profils plats & égalités, 12 jeux d'actions calibrées). Validé par `tests/boussole-engine.test.mjs` (**15/15 profils limites**) et `SecurityGuardsTest` (**7/7**). Déployé et vérifié en production sur `https://kiinisawa.com/boussole`.
+- **Spécification `RFC-002` (`web/`, commits `eab6935`, `2dd94cc`)** : `docs/roadmap/RFC-002-academie-pratique.md` — Académie Pratique sans certificats où chaque leçon alimente directement un des 6 plans via `AcademyPlanBridge`, avec Studio Auteur `/admin/academie` (brouillon / publié / retiré pour édition), stratégie vidéo Bunny Stream / Vimeo et import depuis `formation/courses_dump.json`.
+- **Reste à faire (prochains chantiers)** :
+  1. **Publication Google Play Store (`mobile-v1/`)** : passer `EXPO_PUBLIC_API_URL=https://kiinisawa.com`, ajouter `versionCode: 1` dans `app.json`, configurer `eas.json` et générer le `.aab`.
+  2. **Implémentation Jalon 1 de `RFC-002` (Académie Pratique)** : entités, migration, `AcademyPlanBridge` et back-office `/admin/academie`.
+
+## 21/11/2026 — Sanctuaire du Couple 360 (`RFC-001`) : Backend, API Mobile & Écrans natifs
+- **Roadmap & Spécifications** : création de `docs/roadmap/ROADMAP.md` (trajectoire 1M € ARR) et `docs/roadmap/RFC-001-sanctuaire-couple-360.md`, indexés dans `docs/index.md`.
+- **Backend Symfony (`web/`, commits `6c3325b`, `9ae348d`, `00e6077`)** :
+  - Nouvelles entités `CoupleChallenge`, `CoupleChallengeDay`, `CoupleMeditation` + `streakDays` / `lastActivityDate` sur `Couple` + `INTENTION` sur `CoupleItem`. Migration `Version20261121103000` exécutée sur Hostinger.
+  - `CoupleSanctuaryCatalog` (versets quotidiens, 4 défis de couple jour par jour, 3 parcours de méditation guidée, 5 signaux *Ping*) et `CoupleSanctuaryService` (validation croisée, streak, notifications push `NotificationType::COUPLE_SANCTUARY`).
+  - `MobileCoupleController` : 17 routes sous `/api/mobile/v1/couple/...` (Vue 360 `/home`, projets, intentions, défis, méditations, ping, revue mensuelle `/review` et rapport croisé `/report`).
+  - Tests : `tests/Mobile/MobileCoupleSanctuaryTest.php` (**42/42 tests Mobile + Couple passés**).
+  - Vitrine `landing.html.twig` : section `#couple` enrichie avec les 4 pièces (*L'Autel*, *Le Jardin des Défis*, *L'Atelier*, *Le Salon*).
+- **Mobile Expo (`mobile-v1/`, commits `c7a9324`, `3ec9d9c`)** :
+  - 4 écrans natifs dans `app/couple/` (`index.tsx`, `meditation.tsx`, `challenges.tsx`, `projets.tsx`, `salon.tsx`).
+  - Porte d'entrée progressive sur l'Accueil (`app/(tabs)/index.tsx`, visible uniquement si couple actif) + cache SQLite hors-ligne (`loadCoupleSanctuaryCache` / `saveCoupleSanctuaryCache`).
+
+## 19/11/2026 — Sécurité mobile, parité tarifaire Euro/FCFA et synchronisation `kiini-mobile`
+- **Audit sécurité mobile (`mobile-v1/`, commit `c0fd149`)** :
+  - Protection anti-Open Redirect dans `src/notifications/routing.ts` et garde-fou défensif dans `app/_layout.tsx` (tests ajoutés dans `__tests__/notifications.test.ts`).
+  - Forçage HTTPS strict en production (`!__DEV__`) dans `src/api/client.ts`.
+  - Purge complète de `kv_store` (hors `account` et `push_token`) sur expiration 401 (`clearReadableCacheOnSessionExpiry()` dans `src/storage/localDb.ts`).
+- **Parité stricte des tarifs FCFA / Euro (`web/`, commit `c6c3c4d`, migration `Version20261119183000`)** :
+  - Décision du fondateur : même prix équivalent en Europe et en Afrique (taux fixe `1 € = 655,957 XAF`).
+  - `AppConfig` & base de production Hostinger mis à jour : PRO mensuel **6 500 FCFA** (9,99 €), PRO annuel **52 500 FCFA** (79,99 €), Duo couple **78 500 FCFA** (119,99 €), Organisation **20 000 FCFA** / place / an (30,00 €).
+- **Dépôt Git Mobile** : ancienne version (`mobile/`) archivée sur la branche `v0-legacy` de `github.com/ArlaisNTCHANA/kiini-mobile` ; `mobile-v1/` relié et poussé sur `origin/main`.
+
+## 19/11/2026 — Application mobile native V1 : Lot 5 (Revues, Agenda, Partenaires, Défis, Couple & La Méthode)
+- **Objectif** : Achever le périmètre complet de l'application mobile native KIINI SAWA.
+- **Backend Symfony (`src/Mobile/`)** :
+  - `MobilePlannerController` : `/api/mobile/v1/agenda` (GET liste bornée par date ou intervalle, POST création, PATCH mise à jour/complétion, DELETE suppression, isolation stricte par utilisateur).
+  - `MobileReviewController` : `/api/mobile/v1/revues/rythmes` (les 5 respirations temporelles de KIINI SAWA via `Rhythms::forUser`), `/api/mobile/v1/revues/hebdo` (GET état et items des 4 plans, POST enregistrement appliquant scores/progrès aux plans et au journal via `WeeklyReviewService::save`), `/api/mobile/v1/revues/mensuelle` (GET/POST réservé Pro sans mention de prix).
+  - `MobileCommunityController` : `/api/mobile/v1/partenaires` (liste des partenaires actifs et invitations reçues/envoyées), `/api/mobile/v1/partenaires/invitation` (invitation par email avec contrôle du quota gratuit), `/api/mobile/v1/partenaires/{id}/repondre` (acceptation ou refus), `/api/mobile/v1/defis` (défis collectifs et avancement), `/api/mobile/v1/couple` (vision commune, verset d'ancrage, code d'invitation conjoint).
+  - `MobileMethodeSerializer` & `MobileMethodeController` : `/api/mobile/v1/methode/chapitres` (sommaire des 28 chapitres du livre KIINI SAWA, temps de lecture, statuts libre/pro), `/api/mobile/v1/methode/chapitres/{slug}` (texte intégral pour les membres Pro et chapitres publics, ou extrait pratique « L'essentiel » et exercice « Le Sanctuaire » pour les comptes gratuits avec zéro prix ni lien de paiement Apple 3.1.1).
+  - Tests unitaires & intégration : `tests/Mobile/MobileLot5Test.php` (5 nouveaux scénarios complets). Suite mobile Symfony : **34 tests, 343 assertions (100 % passants)**. Suite Symfony globale : **455 tests, 8479 assertions (0 régression, 0 échec)**.
+- **Mobile Expo (`mobile-v1/`)** :
+  - `types/api.ts`, `storage/localDb.ts`, `api/client.ts` : typages stricts, cache SQLite complet pour l'agenda, les revues, les partenaires et les chapitres du livre hors connexion.
+  - `i18n/fr.ts` : dictionnaires `planner`, `reviews`, `community`, `methode` conformes au lexique (vouvoiement, zéro terme banni, zéro émoji, zéro mention de tarif).
+  - Écrans natifs créés :
+    - `app/agenda/index.tsx` (agenda interactif au jour le jour, cases à cocher, création rapide avec modal, suppression).
+    - `app/revues/hebdo.tsx` (assistant de revue hebdomadaire : victoires, difficultés, leçons, 3 priorités, évaluation des 4 plans).
+    - `app/revues/rythmes.tsx` (tableau de bord des 5 rythmes de vie avec statuts colorés et boutons d'action).
+    - `app/partenaires/index.tsx` (partenaires de redevabilité avec invitations et gestion des demandes, onglets défis collectifs et couple).
+    - `app/methode/index.tsx` (sommaire visuel des 28 chapitres du livre).
+    - `app/methode/[slug].tsx` (lecteur natif du livre, typographie soignée, bascule de taille de texte A-/A/A+, encart « Le Sanctuaire », navigation précédent/suivant, ProGate d'extrait gratuit).
+  - Routage et menu : `app/(tabs)/menu.tsx` et `src/notifications/routing.ts` connectent directement toutes les routes vers les écrans natifs.
+  - Tests & bundle : **23 tests Vitest passants**, **0 erreur TypeScript**, bundle iOS Expo exporté avec succès (3 552 modules, 5.8 MB HBC).
+
 ## 2026-11-19 · Application Mobile KIINI SAWA (Expo SDK 58 / React Native) : Lot 4
 
 - **Lot 4 (« Me connaître » : Mes tests & Mon profil KIINI SAWA)** :
@@ -26,8 +79,6 @@ Ne jamais afficher ni demander de mot de passe ; ne pas publier son nom (mention
     - Tests Vitest : 22 tests passants, compilation iOS bundle 100 % OK.
 - **Reste à livrer pour le prochain lot** :
   - **Lot 5** : Revues & bilans (hebdo, mensuel), Agenda (`planner`), Partenaires (`social`), Ensemble & La Méthode.
-
----
 
 ## 2026-11-19 · Application Mobile KIINI SAWA (Expo SDK 58 / React Native) : Lots 2 & 3
 
@@ -58,9 +109,197 @@ Ne jamais afficher ni demander de mot de passe ; ne pas publier son nom (mention
   - **Lot 4** : Mes tests & Mon profil KIINI SAWA (passation des tests, lecture des rapports et synthèse).
   - **Lot 5** : Revues & bilans (hebdo, mensuel), Agenda (`planner`), Partenaires (`social`), Ensemble & La Méthode.
 
----
+## 19/11/2026 — Application mobile native V1 : Lot 1 (API `/api/mobile/v1` + socle Expo `mobile-v1/`)
+- **Choix validés avec le fondateur** : nouveau projet indépendant `../mobile-v1/` (sans toucher à `mobile/`) ; approche **consultation seulement** pour l'offre PRO (zéro prix, zéro lien de paiement dans l'app/API, conformité Apple 3.1.1 / EU DSA) + architecture prête pour IAP (`Subscription::$billingSource`, hook `useEntitlements` et composant `<ProGate>` côté mobile) ; français uniquement et thème clair du livre au lancement.
+- **Module `src/Mobile/`** : entité `MobileToken` (table `mobile_token`, empreintes SHA-256 uniquement, `rotated` pour distinguer réutilisation suspecte et simple déconnexion, `ON DELETE CASCADE` vers `user`, migration `Version20261119120000`), colonne `billing_source` sur `subscription`, pare-feu `mobile_api` sans session (`MobileBearerAuthenticator`), rotation à usage unique des jetons (`MobileTokenService`), limitation de débit (`mobile_login_ip`, `mobile_login_account`, `mobile_refresh`), purge dans `app:reminders:send`, `ProRequiredSubscriber` adapté sans `upgradeUrl` sur `/api/mobile/*`.
+- **Points d'accès `/api/mobile/v1`** : `connexion`, `jeton`, `deconnexion`, `moi` (GET/PATCH), `compte` (DELETE avec `SUPPRIMER` + mot de passe), `aujourdhui` & `sync` (contrat `QuickDay`), `rituels` (CRUD + plafond gratuit), `journal` & `journal/carnets` (pagination SQL bornée, filtres). Documentation complète : `docs/api-mobile.md`, `docs/modules/mobile.md`.
+- **Tests Symfony** : `tests/Mobile/MobileApiTest.php` (12 scénarios dont mode strict `APP_SAME_ORIGIN_STRICT=1`, réutilisation de jeton, isolation utilisateurs, suppression cascade). **Piège noté** : dans les tests fonctionnels avec `AbstractBrowser`, appeler `restart()` avant toute requête devant être dépourvue d'en-tête `Referer` automatique.
+- **Reste pour les lots suivants** : Lot 2 (notifications Expo Push + préférences), Lot 3 (lecture des 6 plans), Lot 4 (Mes tests & rapports), Lot 5 (revues, agenda, partenaires, couple/organisation, La Méthode).
 
+## 19/11/2026 — Audit de sécurité : contre-vérification, 4 derniers détails
+- Invitations d'organisation sans licence : plafond de 5/jour **par compte** (et non par organisation), et 2 créations d'organisations par compte et par jour (`org_create`). Avec licence : par organisation.
+- `json_safe` : les séparateurs U+2028/U+2029 sont maintenant remplacés par ` `/` ` littéraux (le remplacement précédent ne faisait rien) ; `JSON_PARTIAL_OUTPUT_ON_ERROR` retiré (en conflit avec `JSON_THROW_ON_ERROR`), `JSON_INVALID_UTF8_SUBSTITUTE` ajouté pour qu'un texte mal encodé ne fasse pas échouer la page.
+- Écran de vérification « leurre » : jetons CSRF contrôlés et délai de 60 s sur le renvoi, mêmes messages qu'une vraie inscription (test comparatif).
+- `.env.prod` : `TRUSTED_HOSTS='^(www\.)?kiinisawa\.com$'` (ni localhost ni IP en production ; le développement garde `.env`). Tests : `tests/Shared/FinalChecksTest.php`.
 
+## 19/11/2026 — Audit de sécurité : 4 lots de corrections (commits par lot)
+- **Lot 1 (XSS)** : filtre Twig `|json_safe` (JSON_HEX_*) à la place de tout `|json_encode|raw` ; Mermaid `securityLevel: 'strict'` + `htmlLabels: false` + filtre `|mermaid_label` ; directive Alpine du rituel via `data-title` ; `ksEscape()` avant `insertAdjacentHTML` dans l'assistant. Test : `tests/Shared/Twig/XssHardeningTest.php`.
+- **Lot 2** : Web Push : liste blanche d'hôtes officiels + contrôle DNS (adresses privées refusées, à l'inscription et à chaque envoi), 10 appareils max, essai limité à 3/h (`PushEndpointValidator`, `RateLimits`). Mode rapide : identifiant opaque de compte (HMAC) lié aux données et aux saisies en attente ; effacement local à la déconnexion (+ désabonnement push) et au changement de compte. **Écart assumé** : sur une session expirée (401) la copie des données du jour est effacée tout de suite, mais les saisies en attente sont gardées (liées à leur compte) pour ne pas perdre un journal écrit hors ligne. Anti-spam : invitations d'organisation (5/jour sans licence, 100 avec), couple, plan par e-mail, mot de passe actuel (profil), formulaires publics. Tests : `PushSecurityTest`, `QuickDayTest`, `AntiSpamTest`.
+- **Lot 3** : agenda borné à 366 jours (400 sinon) ; `UserRepository::findAdmins()` ; journal paginé en SQL (50 max, décalage plafonné, COUNT) ; rappels par lots de 200 avec `em->clear()`. Test : `DosProtectionTest`.
+- **Lot 4** : contrôle d'origine « fail-closed » dès qu'un cookie de session est présent (variable `APP_SAME_ORIGIN_STRICT`, 1 par défaut, 0 dans phpunit sauf `SameOriginStrictTest`) ; `trusted_hosts` (variable `TRUSTED_HOSTS`, défaut `localhost`, `127.0.0.1`, `kiinisawa.com`, `www.kiinisawa.com` : **ajouter tout autre nom utilisé, ex. une IP pour tester sur téléphone, dans `.env.local`**) ; jetons CSRF sur intendance, axes, principes, assistant, auto-évaluations ; droits PRO sur axes, principes, PDF des auto-évaluations ; rituels : off-by-one corrigé (le nouveau rituel n'est pas dans la collection) ; `DocController` ADMIN + Parsedown sûr ; parrainage : alias d'e-mail et récompense par IP (migration `Version20261119054400`) ; inscription et changement d'e-mail sans énumération ; déconnexion en formulaire POST + jeton (`logout_form`) ; plus aucune route « toutes méthodes » ; `nelmio/api-doc-bundle` retiré ; scripts `bin/ops` en 600/700. Tests : `CsrfTokensTest`, `AccessControlTest`, `ReferralSecurityTest`, `EnumerationTest`, `SameOriginStrictTest`, `OpsScriptsTest`.
+- Tests : `FixedCsrfTokenManager` (environnement de test seulement) remplace le gestionnaire de jetons ; les compteurs de limitation sont vidés au début de chaque exécution (`tests/bootstrap.php`). Vérifié aussi dans le navigateur local : déconnexion par formulaire, enregistrement automatique de l'assistant avec vrai jeton (200), jeton absent ou falsifié (400).
+- **À vérifier après déploiement** : `chmod 600 .env.local.php` doit rester lisible par PHP-FPM (même utilisateur sur Hostinger) ; le site doit répondre depuis kiinisawa.com ; l'application mobile native (jetons, sans cookie) n'est pas touchée par le mode strict.
+
+## 19/11/2026 — Offre gratuite resserrée : 2 tests gratuits (option A)
+- Décision du fondateur : l'offre gratuite contenait trop (les 6 tests, leurs rapports et leurs PDF). Désormais **DISC et Dons spirituels** gratuits (liste réglable dans Admin › Configuration, `AppConfig::freeTests`, migration `Version20261119045553`) ; les 4 autres tests, les PDF des rapports et les lectures croisées sont PRO. L'ancien interrupteur « Tests » (`enableDiscoveryFree`) n'était lu par aucun écran : retiré du formulaire.
+- Les résultats déjà obtenus restent consultables (seuls passer/repasser un test PRO est bloqué). Tableau gratuit/PRO, vitrine (`vitrine.s8.09`, `s8.22`), tests, page publique de résultat partagé, liste « premiers pas » et e-mail du jour 3 (renvoient vers un test gratuit) mis à jour. Détail dans `docs/modules/abonnement.md`.
+- Mesurer l'effet : `/admin/entonnoir` (comptes, passages à PRO) avant et après ; revoir la liste (ou passer à un rapport allégé, option B) si les gens s'arrêtent trop tôt. Les anciens utilisateurs de production gardent leurs résultats ; à la mise en ligne la liste vaut la valeur par défaut (colonne vide).
+
+## 18/11/2026 — Passation de la version mobile native (Expo)
+- Le fondateur confie l'application mobile native à une autre IA. Instructions complètes : **`docs/passation-mobile-expo.md`** (mission, état des lieux, règles permanentes, contrainte des stores et du paiement manuel, API à construire dont l'authentification par jeton, contrat du mode rapide à réutiliser, design, étapes et critères, publication, questions à poser au fondateur).
+- Points d'attention transmis : l'ancienne app `mobile/` est gelée (branchée sur l'ancien site) ; `docs/api.md` est périmé ; l'application ne doit ni vendre ni afficher de prix tant que le fondateur n'a pas tranché (règles Apple/Google sur les achats intégrés) ; la soumission aux stores attend les pages légales complétées.
+
+## 18/11/2026 — PWA : « Aujourd'hui en un geste » hors connexion (étape 1)
+- Demande : améliorer l'application installable avant de lancer l'application native (qui réutilisera l'API). Détail et règles dans `docs/modules/rapide.md`.
+- Page `/rapide` + `GET /api/rapide/aujourdhui` + `POST /api/rapide/sync` : rituels, bilan du jour, journal, prochaine étape ; saisies faites hors ligne gardées dans IndexedDB puis envoyées sans doublon (`sync_operation`, migration `Version20261118203319`). Service worker v3 : garde la coquille, renvoie les écrans du quotidien vers `/rapide` hors connexion. Lien dans le menu mobile, raccourci du manifeste, page « hors ligne » qui y mène.
+- Vérifié dans le navigateur : saisie hors ligne simulée → rechargement → envoi automatique. **Reste à vérifier sur un vrai téléphone** (iPhone : installer sur l'écran d'accueil ; couper le réseau ; cocher un rituel ; rétablir).
+- Piège de test : `createUser` laisse la collection `habits` vide en mémoire ; vider l'EM (`clear()`) avant la requête. Et `DailyLog` est dans `App\PlanDHygiene\Entity` (l'import erroné a été commis deux fois).
+- Reste (étapes suivantes de la PWA) : lecture hors ligne des plans et du journal complet, revues de la semaine et du mois hors ligne, notifications iPhone à vérifier sur appareil.
+
+## 18/11/2026 — Textes du site modifiables dans l'administration (phase 1)
+- Demande du fondateur : ne plus mettre de texte dans le code, tout pouvoir modifier ; **brouillon puis publication** ; périmètre voulu : vitrine et pages légales, contenu de la méthode, emails et notifications, livre. Phase 1 faite : le moteur (module `Contenu`, voir `docs/modules/contenu.md`), la vitrine (121 textes), les 4 pages légales (documents Markdown `content/textes/legal/`).
+- `Admin › Textes du site` (`/admin/textes`) : recherche, filtres, brouillon, mode aperçu, publication, historique, retour à l'origine. `app:launch:check` compte les `[À COMPLÉTER]` du texte **en ligne** (le juriste peut donc compléter les pages légales sans développeur).
+- La conversion de la vitrine a été faite par script puis comparée au rendu d'origine (HTML identique) ; les codes sont `vitrine.sN.NN` (N = section, ordre), stables tant qu'on n'en réutilise pas.
+- Migration `Version20261118194935` (tables `site_text`, `site_text_version`) : à jouer en production (le déploiement le fait).
+- Reste (phases 2 à 4) : textes écrits en PHP, emails/notifications et reçus, livre, et brouillon/publication pour les textes des tests.
+
+## 18/11/2026 — Schémas du Plan de Vie interactifs
+- `Methode\Service\BookFigures` : le contenu de 7 schémas du livre (convictions, cinq réseaux, héritage, trois horizons, corps-âme-esprit, Équation du But avec ses trois exemples, cascade de l'alignement), tiré mot pour mot des tableaux et listes de `content/livre/`. Fonction Twig `book_figure_data(name)` ; `methode/_figure.html.twig` affiche alors le composant `shared/_cycle_figure.html.twig` et replie l'image du livre en dessous. Un schéma sans entrée reste une image (racines, trois témoins, revues, intendance).
+- Tests : `BookFiguresTest` (chaque phrase figure dans le chapitre source : si le livre est resynchronisé et change, le test le dit) et `BookFiguresPagesTest` (étapes 1, 2, 10, 11, 12, 13 de l'assistant).
+- Piège : l'assistant Plan de Vie n'est accessible qu'après l'onboarding, et les étapes Croissance/Hygiène exigent PRO (compte local de test : onboarding « Plus tard », puis étape 1 gratuite).
+
+## 18/11/2026 — Barre mobile, « Mes rythmes », schéma des saisons interactif
+- **Barre du bas (téléphone)** : les libellés sont toujours visibles sous les icônes (10 px, sans majuscules ni espacement, pour tenir à cinq entrées sur 375 px).
+- **« Mes rythmes »** (`/bilan/rythmes`, `Bilan\Service\Rhythms`, `templates/bilan/rhythms.html.twig`) : jour, semaine, mois, saison, année, chacun « fait / à faire / en retard / pas encore l'heure ». « En retard » n'apparaît que pour qui a déjà l'habitude du rythme (jamais pour un débutant). Lien depuis Bilan et la navigation « Mon quotidien » ; revue du mois verrouillée PRO comme ailleurs.
+- **Schéma des saisons interactif** : composant réutilisable `shared/_cycle_figure.html.twig` (rangée d'étapes à toucher + détail, Alpine) utilisé sur « Ma saison » avec `Seasons::KINDS`, « Vous êtes ici » sur la saison en cours ; l'image du livre reste en dessous, repliée. Autres schémas : le cycle de l'intendant a déjà son étapes vivantes (`stw-steps`) ; les schémas du Plan de Vie (équation, convictions, réseaux, héritage, hygiène, horizons) restent des images du livre, à rendre interactifs avec le même composant si souhaité.
+- **Bug corrigé** : `NextStep` (déjà en production) importait `App\Bilan\Entity\DailyLog` au lieu de `App\PlanDHygiene\Entity\DailyLog` : toute personne ayant un Plan d'Hygiène aurait eu une erreur 500 sur l'accueil dès 18 h. Les tests passaient parce que leurs comptes n'avaient pas de plan d'hygiène ; test de régression ajouté (`RhythmsTest::testDayRhythmWithAHygienePlan`). Piège : tester aussi avec un compte complet.
+
+## 18/11/2026 — Bibliothèque de personnages rattachée au type (phase 3)
+- 16 types × 2 figures : lectures `TYPE:<CODE>` (`content/lectures/types.json`, 32 lectures sur 29 fiches). `TypeProfiles` : slots remplacés (Boaz, Esther, Daniel, Marie mère de Jésus, Noé, Jonathan, Samson, Élie, Salomon, Élisabeth, etc. ; plus de « Paul à Athènes » ni « Moïse et Jéthro »). Rapport « Type » : fiches complètes (3 épisodes en PDF), 13 pages pour les 16 types, aucune page orpheline.
+- Tests : couverture des slots (ennéagramme, dons, type) et clés des fichiers `content/lectures/*.json` (une clé inconnue était ignorée en silence).
+- Les rapprochements « type » sont les plus fragiles (les récits ne décrivent pas de types) : le texte le dit explicitement dans « Ce que le texte ne permet pas de dire ».
+- Les trois tests (ennéagramme, dons, type) sont maintenant rattachés à la bibliothèque. Reste : relecture par le fondateur (champ `relecture`).
+
+## 18/11/2026 — Bibliothèque de personnages rattachée aux dons (phase 2)
+- 15 dons × 2 figures : chaque figure a une fiche avec une lecture `GIFT:<CODE>` (`content/lectures/dons.json`, 29 lectures sur 21 fiches existantes) ; nouvelle fiche Philippe (`content/personnages/10-philippe.json`). `GiftProfiles` : slots remplacés par des personnages individuels (plus de groupes ni de paraboles : Les sept serviteurs, Églises de Macédoine, Bon Samaritain…).
+- Rapport des dons : section « Des figures bibliques qui ont ces dons » après les 3 dons principaux (fiches complètes à l'écran ; en PDF 2 épisodes par fiche, 21 pages, aucune page orpheline sur 8 combinaisons mesurées).
+- Citations des lectures vérifiées contre la LSG avec un script temporaire (extrait des « … » dans les traits) : à refaire pour toute nouvelle lecture. Piège : un macro Twig ne voit pas le contexte (paramètre `maxEpisodes` à passer explicitement).
+- Reste : phase type (16 types × 2 slots, lecture `TYPE:<CODE>`).
+
+## 18/11/2026 — Bibliothèque de personnages rattachée à l'ennéagramme (phase 1)
+- Fiches pilotes migrées en JSON ; 7 nouvelles fiches (Jonas, Marthe, Jacob, Saül, Jérémie, Samson, Isaac) dans `content/personnages/09-*.json` ; lectures par test (`lenses`, clé `ENN:<type>`) dans `content/lectures/enneagramme.json` pour 11 fiches existantes.
+- `EnneagramProfiles` : Tabitha→Barnabé, David le psalmiste→David, L'Ecclésiaste→Thomas, Jacques et Jean→Moïse. Chaque personnage du rapport ennéagramme a une fiche « Son profil » (test de couverture).
+- Reste : mesurer la pagination PDF des 9 rapports ennéagramme ; phases dons (`GIFT:`) et type (`TYPE:`) ; fiches toutes « en cours de relecture ».
+- Pagination PDF ennéagramme mesurée (9 types, 15 pages chacun, aucune page < 35 %) : en PDF, la citation finale et la « question à méditer » passent en tête de la page « Pour grandir », et les fiches à lecture ne montrent que 5 épisodes.
+
+## 18/11/2026 — Six fiches fragiles remplacées
+
+Demande du fondateur : remplacer les personnages à matière mince par des personnages « évidents ». Remplacements (même code DISC) : Béréens → Nicodème (C), Lydie → Jonathan (IS),
+Tabitha → Élisabeth (SI), Jean le disciple bien-aimé → Marie de Béthanie (SI), Luc → Aquilas et Priscille (CI), Betsaleel → Boaz (CS). `DiscCombos` mis à jour (nom, référence,
+phrase courte), fichiers JSON nettoyés, nouveau `08-…json`. Pagination PDF contrôlée (profils C, CI, CS, IS, SI). Citations vérifiées par le test.
+
+## 18/11/2026 — Accueil « Ma prochaine étape » et cercle des plans sur téléphone
+
+**Accueil :** `Dashboard/Service/NextStep` (règles ordonnées : fondations, bilan du jour à partir de 18 h, revue de la semaine samedi soir et dimanche, parcours de
+90 jours, plan accessible le moins avancé, sinon relire le Plan de Vie) renvoie UNE action + deux « ensuite » ; carte en tête de l'accueil (au-dessus du bandeau sur
+téléphone), les anciens encarts du parcours disparaissent (l'action est dans la carte). Tests : `tests/Dashboard/NextStepTest.php` (heure injectable), `JourneyTest` adapté.
+**Cercle des plans :** vérifié en vue téléphone (375 px) : libellés trop petits ; disques 62 → 72, police 14 → 16 px (15 px sous 420 px), cadrage du `viewBox` resserré,
+« LE SYSTÈME » masqué sous 560 px. **Reste :** libellés sous les icônes de la barre du bas sur téléphone ; page « Mes rythmes ».
+
+## 18/11/2026 — Fiches de personnages modifiables dans l'administration
+
+Demande du fondateur. Les fiches deviennent une source de `Content` (`figures.library`) : édition par la page « Textes des tests » existante, sans nouveau code d'écran.
+Champ `relecture` (« en cours » / « faite ») remplace `reviewed`. Citations LSG et noms de rattachement verrouillés. Libellés lisibles pour les indices du profil.
+Piège : `Content::defaults()` est appelé souvent ; `BiblicalFigures::raw()` met les fichiers JSON en cache.
+
+## 18/11/2026 — Bibliothèque de personnages bibliques (32 fiches)
+
+« Lance le tout » : 29 fiches ajoutées (JSON dans `content/personnages/`) sur le modèle validé (profil et indices d'abord, puis récit, fragilité,
+grâce, Christ au centre ; cadre doctrinal du fondateur ; LSG). Citations vérifiées par le test (texte biblique local, non versionné). Cas
+honnêtes signalés dans les fiches : indices indirects (Timothée, Béréens, Luc), fiches minces (Lydie, Tabitha, Betsaleel), contre-indices (Moïse « fort
+patient » ; Jean « fils du tonnerre »), livre d'Esther qui ne nomme pas Dieu. **Non relues par le fondateur** (`reviewed: false`). Reste : relecture doctrinale,
+extension aux autres tests (ennéagramme, dons, type) avec la même bibliothèque.
+
+## 18/11/2026 — Fiches bibliques : le profil d'abord
+
+Retour du fondateur : pour qu'un rapprochement soit crédible, il faut montrer d'abord les traits du profil chez le personnage, ensuite
+commenter. Refonte de `_figure_sheet.html.twig` : en tête « Son profil : SC » avec, pour chaque dimension DISC, la définition de l'application
+(essence), la solidité des indices (nombreux / réels / indirects) et un tableau trait · ce que dit le texte · référence ; puis « Ce que le texte ne
+montre pas » (contre-indices) et les limites ; ensuite seulement le lien avec le lecteur, le récit (épisodes étiquetés par dimension), la
+fragilité, la grâce et le Christ au centre. Le bloc « Notre lecture » disparaît (remplacé par le profil). Données : `BiblicalFigures[...]['profile']`.
+Test : chaque dimension a au moins deux indices référencés (verset cité).
+
+## 18/11/2026 — Fiches de personnages bibliques (pilote)
+
+À la demande du fondateur (les deux phrases par figure « n'apportaient rien ») : 3 fiches complètes (Élie, Joseph, Timothée), structure
+« Dans le texte / Notre lecture / Fragilité / Grâce / Le Christ au centre », citations LSG vérifiées par `bin/outils/bible.py` et
+`BiblicalFiguresTest`. Texte biblique téléchargé avec l'accord du fondateur dans `var/bible/` (non versionné). Intégrées au rapport DISC (profils D
+et SC) ; les mentions courtes « même famille » sont masquées quand des fiches existent. Pagination PDF contrôlée (aucune page orpheline).
+**En attente :** relecture doctrinale par le fondateur (`reviewed => false`), puis extension.
+
+## 18/11/2026 — Le regard des proches entre dans le moteur
+
+`InsightEngine` reçoit le regard des proches (DISC, dons) via `ProfileSynthesis::closeOnes()` ; 6 lectures nouvelles + renfort de la lecture
+« adaptation excessive » ; invitation à demander ce regard dans la synthèse (`closeInvites`). Anonymat : seules les synthèses ≥ 3 réponses.
+Tests : `InsightEngineTest` (15, dont un parcours réel avec trois réponses de proches). **Reste :** recalibrage avec de vrais résultats ;
+ajouter d'autres tests au regard des proches (Big Five, ennéagramme) si le fondateur le décide.
+
+## 18/11/2026 — Lectures internes et vocation nuancée
+
+Suite de l'InsightEngine : 7 rapprochements de facettes du Big Five et 7 paires de dons (lectures « internes », drapeau `internal`),
+`insightsFor()` renvoie jusqu'à 2 lectures croisées + 1 interne par rapport ; panneau titré « Une lecture au sein de ce test » quand il n'y a
+que de l'interne. Zone de vocation : bloc « Comment l'exercer, selon votre tempérament » (`vocationNuances`, Big Five). Tests :
+`InsightEngineTest` (10). Pagination PDF contrôlée. **Non vu à l'écran :** aucun profil de test local ne déclenche encore ces règles internes ;
+elles sont couvertes par des tests unitaires.
+
+## 18/11/2026 — « Mon profil KIINI SAWA » : lectures croisées (InsightEngine)
+
+Demande du fondateur : une vraie intelligence derrière la synthèse, et pas seulement un agrégat. Ajouté : `Service/InsightEngine.php`
+(13 règles explicites, preuves citées, confiance selon le nombre de tests, question + premier pas relié à un plan), page « Lectures croisées »
+dans la synthèse, encart « Ce que vos autres tests ajoutent » dans chaque rapport (écran et PDF, PRO ; teaser pour le gratuit),
+partial `report/_insight_card.html.twig`. Pagination PDF mesurée (synthèse 10 p., ennéagramme 12 p., DISC 14 p., aucune page orpheline).
+**Honnêteté :** règles et seuils écrits à la main, non validés statistiquement ; `ENNEAGRAM_EXPECTS` est une lecture usuelle, pas une
+preuve. **Reste :** recalibrer avec de vrais résultats ; lire aussi le regard des proches (ConfirmationService) dans le moteur ; lectures
+internes à chaque test (facettes Big Five qui se contredisent, combinaisons de dons) ; moteur de vocation qui pèse aussi ennéagramme et Big Five.
+
+## 18/11/2026 — DISC : « Regard croisé » avec le Big Five
+
+Le test « Style comportemental » n'est plus proposé depuis l'arrivée du DISC (absent de `Instruments::GROUPS`, voir `DiscTest`) ; il ne
+sert qu'à relire d'anciens rapports. Son calcul (`Scorer::style`) existe déjà dans tout résultat Big Five / Profil complet.
+Ajout : `ReportBuilder::crossView()` confronte le DISC au style déduit du Big Five le plus récent (confirmé / voisin / nuancé) sans
+mélanger les scores ; bloc dans `disc/_report.html.twig` (page « Votre profil en situation », écran et PDF) ; sans Big Five, invitation
+à le passer (écran seulement). Branché dans `AssessmentController::report` et `reportPdf`. Tests : `tests/Personnalite/CrossViewTest.php`.
+Pagination PDF mesurée : toujours 13 pages, aucune page orpheline.
+
+## 18/11/2026 — Rapports de tests : PDF plus propre (DISC mesuré)
+
+Constat sur le PDF DISC du fondateur (16 pages) : 3 pages presque vides (5, 7, 12 : quelques lignes débordées), page de garde bleu
+nuit hors palette du livre, pastille « Modérée » mal alignée, question réflexe coupée (« ? » seul en bout de ligne).
+Corrigé (rendu local mesuré : 13 pages, aucune page orpheline) : compaction du PDF (interligne, marges, tuiles) dans
+`report/_styles.html.twig`, boussole plus petite, hauteur minimale des tuiles « vu par les autres », espaces insécables avant « ? »,
+intensité en étiquette lisible, page de garde en vert du livre (`report/_cover.html.twig`, commune à tous les rapports).
+Outil de mesure : générer le PDF via un test temporaire (`tests/Personnalite/DiscTest.php` montre comment créer un `Assessment`), puis
+le rendre avec PDFKit (swift) ; poppler/ImageMagick absents sur le Mac. **Pas encore revu :** écran (page web du rapport), Big Five,
+ennéagramme, dons, synthèse : mêmes styles communs, à contrôler de la même façon.
+
+## 18/11/2026 — Icônes affichées en texte et disparues (suite du lot A)
+
+Deux défauts hérités du remplacement des émojis : (1) des balises `<i data-lucide=…>` rangées dans des tableaux Twig étaient
+imprimées échappées (« <i data-lucide… » visible sur Organisation, Couple, humeurs du journal et de l'accueil, états de la
+carte du Plan de Vie) → `|raw` ajouté ; (2) Turbo remplaçait le `<body>` sans redessiner les icônes (menu sans pictogrammes
+après un clic) → `turbo:load/render/frame-load` appellent `lucide.createIcons()`. Étiquettes des diagrammes Mermaid : plus de balise
+d'icône (elle y était invisible). Gardes : `NavigationTest::testNoIconMarkupIsDisplayedAsText`, `DesignRulesTest::testIconsAreRecreatedAfterTurboNavigation`.
+Leçon : après tout remplacement en masse, rendre les pages et chercher `&lt;i data-lucide` dans le HTML.
+
+## 18/11/2026 — Vitrine : figure des six plans en SVG
+
+L'image du livre (`fig_6plans.png`) affichait « Plan de Développement » sans « personnel » ; `figs.py` ne se régénère pas sur ce Mac
+(`rsvg-convert` et polices Carlito/Caladea absents, sortie vers `/home/claude/...`). La vitrine utilise donc un SVG intégré :
+`templates/dashboard/_six_plans_figure.html.twig` (noms complets, couleurs du livre). Le cercle de « Mes plans » dit aussi
+« Développement personnel ». **Reste (auteur) :** corriger la ligne 102 de `figs.py` (`"Plan de\nDéveloppement\npersonnel"`) pour le livre.
+
+## 18/11/2026 — Bascule vers kiinisawa.com (code prêt, pas encore déployé)
+
+Décision du fondateur : l'application passe de `app.kiinisawa.com` à `kiinisawa.com` (le site Hostinger Website Builder
+est abandonné ; personne n'a encore reçu de lien `app.`, donc pas de redirection). Fait : références remplacées
+(README, AGENTS, `env.prod.local.exemple`, page d'installation, rapport de test, brief média, `app:launch:check`,
+`docs/mise-en-ligne.md`), test `tests/Shared/CanonicalDomainTest.php` (aucune mention de `app.` dans templates/src/config).
+**Reste, côté serveur (à faire par le fondateur puis par moi) :** désactiver le Builder, ajouter `kiinisawa.com` à
+l'hébergement vers `~/kiini/public`, SSL ; puis changer `DEFAULT_URI` dans `~/kiini/.env.prod.local`, mettre à jour
+`HOSTINGER_DIR` dans `bin/ops/hostinger.local` si le dossier change, vider le cache, vérifier connexion, email, installation.
+Connexions, notifications poussées et installation sur téléphone sont liées à l'adresse : tout le monde se reconnecte une fois.
+
+## 2026-11-17 · Lot C : le cercle des plans vivant sur « Mes plans »
 
 - **« Mes plans »** : la figure fixe des 6 plans est remplacée par un cercle SVG interactif
   (`plan_de_vie/_plans_circle.html.twig`) : chaque plan est un lien, entouré d'un **anneau de progression** ; survol, focus
@@ -347,7 +586,7 @@ Décision et suite : `docs/DECISION-plan-d-intendance.md`. Le livre et l'applica
 Voir `git log` : mise en ligne Hostinger, emails Brevo, audit en 6 lots, PWA, provenance, parrainage, défis,
 feedback nourricier, notifications push, tableau de rétention.
 
-## Ouvert / à faire
+## Ouvert / à faire (liste du 17/11/2026, voir aussi le « Reste à faire » des entrées récentes)
 
 - **Prochain chantier : décisions du fondateur sur les lots 2 et 3 de `docs/A-FAIRE-coherence-des-plans.md`.**
 
@@ -355,247 +594,3 @@ feedback nourricier, notifications push, tableau de rétention.
 - Suivi de la fidélité de tous les tests (Admin › Fidélité des tests couvre l'IPIP) ; normes dès 200 profils.
 - Relectures humaines : théologien (figures bibliques), psychologue (textes), juriste (mentions) — côté fondateur.
 - Structure juridique (15 « [À COMPLÉTER] »), coordonnées de paiement, site vitrine — côté fondateur.
-
-## 18/11/2026 — Bascule vers kiinisawa.com (code prêt, pas encore déployé)
-
-Décision du fondateur : l'application passe de `app.kiinisawa.com` à `kiinisawa.com` (le site Hostinger Website Builder
-est abandonné ; personne n'a encore reçu de lien `app.`, donc pas de redirection). Fait : références remplacées
-(README, AGENTS, `env.prod.local.exemple`, page d'installation, rapport de test, brief média, `app:launch:check`,
-`docs/mise-en-ligne.md`), test `tests/Shared/CanonicalDomainTest.php` (aucune mention de `app.` dans templates/src/config).
-**Reste, côté serveur (à faire par le fondateur puis par moi) :** désactiver le Builder, ajouter `kiinisawa.com` à
-l'hébergement vers `~/kiini/public`, SSL ; puis changer `DEFAULT_URI` dans `~/kiini/.env.prod.local`, mettre à jour
-`HOSTINGER_DIR` dans `bin/ops/hostinger.local` si le dossier change, vider le cache, vérifier connexion, email, installation.
-Connexions, notifications poussées et installation sur téléphone sont liées à l'adresse : tout le monde se reconnecte une fois.
-
-## 18/11/2026 — Vitrine : figure des six plans en SVG
-
-L'image du livre (`fig_6plans.png`) affichait « Plan de Développement » sans « personnel » ; `figs.py` ne se régénère pas sur ce Mac
-(`rsvg-convert` et polices Carlito/Caladea absents, sortie vers `/home/claude/...`). La vitrine utilise donc un SVG intégré :
-`templates/dashboard/_six_plans_figure.html.twig` (noms complets, couleurs du livre). Le cercle de « Mes plans » dit aussi
-« Développement personnel ». **Reste (auteur) :** corriger la ligne 102 de `figs.py` (`"Plan de\nDéveloppement\npersonnel"`) pour le livre.
-
-## 18/11/2026 — Icônes affichées en texte et disparues (suite du lot A)
-
-Deux défauts hérités du remplacement des émojis : (1) des balises `<i data-lucide=…>` rangées dans des tableaux Twig étaient
-imprimées échappées (« <i data-lucide… » visible sur Organisation, Couple, humeurs du journal et de l'accueil, états de la
-carte du Plan de Vie) → `|raw` ajouté ; (2) Turbo remplaçait le `<body>` sans redessiner les icônes (menu sans pictogrammes
-après un clic) → `turbo:load/render/frame-load` appellent `lucide.createIcons()`. Étiquettes des diagrammes Mermaid : plus de balise
-d'icône (elle y était invisible). Gardes : `NavigationTest::testNoIconMarkupIsDisplayedAsText`, `DesignRulesTest::testIconsAreRecreatedAfterTurboNavigation`.
-Leçon : après tout remplacement en masse, rendre les pages et chercher `&lt;i data-lucide` dans le HTML.
-
-## 18/11/2026 — Rapports de tests : PDF plus propre (DISC mesuré)
-
-Constat sur le PDF DISC du fondateur (16 pages) : 3 pages presque vides (5, 7, 12 : quelques lignes débordées), page de garde bleu
-nuit hors palette du livre, pastille « Modérée » mal alignée, question réflexe coupée (« ? » seul en bout de ligne).
-Corrigé (rendu local mesuré : 13 pages, aucune page orpheline) : compaction du PDF (interligne, marges, tuiles) dans
-`report/_styles.html.twig`, boussole plus petite, hauteur minimale des tuiles « vu par les autres », espaces insécables avant « ? »,
-intensité en étiquette lisible, page de garde en vert du livre (`report/_cover.html.twig`, commune à tous les rapports).
-Outil de mesure : générer le PDF via un test temporaire (`tests/Personnalite/DiscTest.php` montre comment créer un `Assessment`), puis
-le rendre avec PDFKit (swift) ; poppler/ImageMagick absents sur le Mac. **Pas encore revu :** écran (page web du rapport), Big Five,
-ennéagramme, dons, synthèse : mêmes styles communs, à contrôler de la même façon.
-
-## 18/11/2026 — DISC : « Regard croisé » avec le Big Five
-
-Le test « Style comportemental » n'est plus proposé depuis l'arrivée du DISC (absent de `Instruments::GROUPS`, voir `DiscTest`) ; il ne
-sert qu'à relire d'anciens rapports. Son calcul (`Scorer::style`) existe déjà dans tout résultat Big Five / Profil complet.
-Ajout : `ReportBuilder::crossView()` confronte le DISC au style déduit du Big Five le plus récent (confirmé / voisin / nuancé) sans
-mélanger les scores ; bloc dans `disc/_report.html.twig` (page « Votre profil en situation », écran et PDF) ; sans Big Five, invitation
-à le passer (écran seulement). Branché dans `AssessmentController::report` et `reportPdf`. Tests : `tests/Personnalite/CrossViewTest.php`.
-Pagination PDF mesurée : toujours 13 pages, aucune page orpheline.
-
-## 18/11/2026 — « Mon profil KIINI SAWA » : lectures croisées (InsightEngine)
-
-Demande du fondateur : une vraie intelligence derrière la synthèse, et pas seulement un agrégat. Ajouté : `Service/InsightEngine.php`
-(13 règles explicites, preuves citées, confiance selon le nombre de tests, question + premier pas relié à un plan), page « Lectures croisées »
-dans la synthèse, encart « Ce que vos autres tests ajoutent » dans chaque rapport (écran et PDF, PRO ; teaser pour le gratuit),
-partial `report/_insight_card.html.twig`. Pagination PDF mesurée (synthèse 10 p., ennéagramme 12 p., DISC 14 p., aucune page orpheline).
-**Honnêteté :** règles et seuils écrits à la main, non validés statistiquement ; `ENNEAGRAM_EXPECTS` est une lecture usuelle, pas une
-preuve. **Reste :** recalibrer avec de vrais résultats ; lire aussi le regard des proches (ConfirmationService) dans le moteur ; lectures
-internes à chaque test (facettes Big Five qui se contredisent, combinaisons de dons) ; moteur de vocation qui pèse aussi ennéagramme et Big Five.
-
-## 18/11/2026 — Lectures internes et vocation nuancée
-
-Suite de l'InsightEngine : 7 rapprochements de facettes du Big Five et 7 paires de dons (lectures « internes », drapeau `internal`),
-`insightsFor()` renvoie jusqu'à 2 lectures croisées + 1 interne par rapport ; panneau titré « Une lecture au sein de ce test » quand il n'y a
-que de l'interne. Zone de vocation : bloc « Comment l'exercer, selon votre tempérament » (`vocationNuances`, Big Five). Tests :
-`InsightEngineTest` (10). Pagination PDF contrôlée. **Non vu à l'écran :** aucun profil de test local ne déclenche encore ces règles internes ;
-elles sont couvertes par des tests unitaires.
-
-## 18/11/2026 — Le regard des proches entre dans le moteur
-
-`InsightEngine` reçoit le regard des proches (DISC, dons) via `ProfileSynthesis::closeOnes()` ; 6 lectures nouvelles + renfort de la lecture
-« adaptation excessive » ; invitation à demander ce regard dans la synthèse (`closeInvites`). Anonymat : seules les synthèses ≥ 3 réponses.
-Tests : `InsightEngineTest` (15, dont un parcours réel avec trois réponses de proches). **Reste :** recalibrage avec de vrais résultats ;
-ajouter d'autres tests au regard des proches (Big Five, ennéagramme) si le fondateur le décide.
-
-## 18/11/2026 — Fiches de personnages bibliques (pilote)
-
-À la demande du fondateur (les deux phrases par figure « n'apportaient rien ») : 3 fiches complètes (Élie, Joseph, Timothée), structure
-« Dans le texte / Notre lecture / Fragilité / Grâce / Le Christ au centre », citations LSG vérifiées par `bin/outils/bible.py` et
-`BiblicalFiguresTest`. Texte biblique téléchargé avec l'accord du fondateur dans `var/bible/` (non versionné). Intégrées au rapport DISC (profils D
-et SC) ; les mentions courtes « même famille » sont masquées quand des fiches existent. Pagination PDF contrôlée (aucune page orpheline).
-**En attente :** relecture doctrinale par le fondateur (`reviewed => false`), puis extension.
-
-## 18/11/2026 — Fiches bibliques : le profil d'abord
-
-Retour du fondateur : pour qu'un rapprochement soit crédible, il faut montrer d'abord les traits du profil chez le personnage, ensuite
-commenter. Refonte de `_figure_sheet.html.twig` : en tête « Son profil : SC » avec, pour chaque dimension DISC, la définition de l'application
-(essence), la solidité des indices (nombreux / réels / indirects) et un tableau trait · ce que dit le texte · référence ; puis « Ce que le texte ne
-montre pas » (contre-indices) et les limites ; ensuite seulement le lien avec le lecteur, le récit (épisodes étiquetés par dimension), la
-fragilité, la grâce et le Christ au centre. Le bloc « Notre lecture » disparaît (remplacé par le profil). Données : `BiblicalFigures[...]['profile']`.
-Test : chaque dimension a au moins deux indices référencés (verset cité).
-
-## 18/11/2026 — Bibliothèque de personnages bibliques (32 fiches)
-
-« Lance le tout » : 29 fiches ajoutées (JSON dans `content/personnages/`) sur le modèle validé (profil et indices d'abord, puis récit, fragilité,
-grâce, Christ au centre ; cadre doctrinal du fondateur ; LSG). Citations vérifiées par le test (texte biblique local, non versionné). Cas
-honnêtes signalés dans les fiches : indices indirects (Timothée, Béréens, Luc), fiches minces (Lydie, Tabitha, Betsaleel), contre-indices (Moïse « fort
-patient » ; Jean « fils du tonnerre »), livre d'Esther qui ne nomme pas Dieu. **Non relues par le fondateur** (`reviewed: false`). Reste : relecture doctrinale,
-extension aux autres tests (ennéagramme, dons, type) avec la même bibliothèque.
-
-## 18/11/2026 — Fiches de personnages modifiables dans l'administration
-
-Demande du fondateur. Les fiches deviennent une source de `Content` (`figures.library`) : édition par la page « Textes des tests » existante, sans nouveau code d'écran.
-Champ `relecture` (« en cours » / « faite ») remplace `reviewed`. Citations LSG et noms de rattachement verrouillés. Libellés lisibles pour les indices du profil.
-Piège : `Content::defaults()` est appelé souvent ; `BiblicalFigures::raw()` met les fichiers JSON en cache.
-
-## 18/11/2026 — Accueil « Ma prochaine étape » et cercle des plans sur téléphone
-
-**Accueil :** `Dashboard/Service/NextStep` (règles ordonnées : fondations, bilan du jour à partir de 18 h, revue de la semaine samedi soir et dimanche, parcours de
-90 jours, plan accessible le moins avancé, sinon relire le Plan de Vie) renvoie UNE action + deux « ensuite » ; carte en tête de l'accueil (au-dessus du bandeau sur
-téléphone), les anciens encarts du parcours disparaissent (l'action est dans la carte). Tests : `tests/Dashboard/NextStepTest.php` (heure injectable), `JourneyTest` adapté.
-**Cercle des plans :** vérifié en vue téléphone (375 px) : libellés trop petits ; disques 62 → 72, police 14 → 16 px (15 px sous 420 px), cadrage du `viewBox` resserré,
-« LE SYSTÈME » masqué sous 560 px. **Reste :** libellés sous les icônes de la barre du bas sur téléphone ; page « Mes rythmes ».
-
-## 18/11/2026 — Six fiches fragiles remplacées
-
-Demande du fondateur : remplacer les personnages à matière mince par des personnages « évidents ». Remplacements (même code DISC) : Béréens → Nicodème (C), Lydie → Jonathan (IS),
-Tabitha → Élisabeth (SI), Jean le disciple bien-aimé → Marie de Béthanie (SI), Luc → Aquilas et Priscille (CI), Betsaleel → Boaz (CS). `DiscCombos` mis à jour (nom, référence,
-phrase courte), fichiers JSON nettoyés, nouveau `08-…json`. Pagination PDF contrôlée (profils C, CI, CS, IS, SI). Citations vérifiées par le test.
-
-## 18/11/2026 — Bibliothèque de personnages rattachée à l'ennéagramme (phase 1)
-- Fiches pilotes migrées en JSON ; 7 nouvelles fiches (Jonas, Marthe, Jacob, Saül, Jérémie, Samson, Isaac) dans `content/personnages/09-*.json` ; lectures par test (`lenses`, clé `ENN:<type>`) dans `content/lectures/enneagramme.json` pour 11 fiches existantes.
-- `EnneagramProfiles` : Tabitha→Barnabé, David le psalmiste→David, L'Ecclésiaste→Thomas, Jacques et Jean→Moïse. Chaque personnage du rapport ennéagramme a une fiche « Son profil » (test de couverture).
-- Reste : mesurer la pagination PDF des 9 rapports ennéagramme ; phases dons (`GIFT:`) et type (`TYPE:`) ; fiches toutes « en cours de relecture ».
-- Pagination PDF ennéagramme mesurée (9 types, 15 pages chacun, aucune page < 35 %) : en PDF, la citation finale et la « question à méditer » passent en tête de la page « Pour grandir », et les fiches à lecture ne montrent que 5 épisodes.
-
-## 18/11/2026 — Bibliothèque de personnages rattachée aux dons (phase 2)
-- 15 dons × 2 figures : chaque figure a une fiche avec une lecture `GIFT:<CODE>` (`content/lectures/dons.json`, 29 lectures sur 21 fiches existantes) ; nouvelle fiche Philippe (`content/personnages/10-philippe.json`). `GiftProfiles` : slots remplacés par des personnages individuels (plus de groupes ni de paraboles : Les sept serviteurs, Églises de Macédoine, Bon Samaritain…).
-- Rapport des dons : section « Des figures bibliques qui ont ces dons » après les 3 dons principaux (fiches complètes à l'écran ; en PDF 2 épisodes par fiche, 21 pages, aucune page orpheline sur 8 combinaisons mesurées).
-- Citations des lectures vérifiées contre la LSG avec un script temporaire (extrait des « … » dans les traits) : à refaire pour toute nouvelle lecture. Piège : un macro Twig ne voit pas le contexte (paramètre `maxEpisodes` à passer explicitement).
-- Reste : phase type (16 types × 2 slots, lecture `TYPE:<CODE>`).
-
-## 18/11/2026 — Bibliothèque de personnages rattachée au type (phase 3)
-- 16 types × 2 figures : lectures `TYPE:<CODE>` (`content/lectures/types.json`, 32 lectures sur 29 fiches). `TypeProfiles` : slots remplacés (Boaz, Esther, Daniel, Marie mère de Jésus, Noé, Jonathan, Samson, Élie, Salomon, Élisabeth, etc. ; plus de « Paul à Athènes » ni « Moïse et Jéthro »). Rapport « Type » : fiches complètes (3 épisodes en PDF), 13 pages pour les 16 types, aucune page orpheline.
-- Tests : couverture des slots (ennéagramme, dons, type) et clés des fichiers `content/lectures/*.json` (une clé inconnue était ignorée en silence).
-- Les rapprochements « type » sont les plus fragiles (les récits ne décrivent pas de types) : le texte le dit explicitement dans « Ce que le texte ne permet pas de dire ».
-- Les trois tests (ennéagramme, dons, type) sont maintenant rattachés à la bibliothèque. Reste : relecture par le fondateur (champ `relecture`).
-
-## 18/11/2026 — Barre mobile, « Mes rythmes », schéma des saisons interactif
-- **Barre du bas (téléphone)** : les libellés sont toujours visibles sous les icônes (10 px, sans majuscules ni espacement, pour tenir à cinq entrées sur 375 px).
-- **« Mes rythmes »** (`/bilan/rythmes`, `Bilan\Service\Rhythms`, `templates/bilan/rhythms.html.twig`) : jour, semaine, mois, saison, année, chacun « fait / à faire / en retard / pas encore l'heure ». « En retard » n'apparaît que pour qui a déjà l'habitude du rythme (jamais pour un débutant). Lien depuis Bilan et la navigation « Mon quotidien » ; revue du mois verrouillée PRO comme ailleurs.
-- **Schéma des saisons interactif** : composant réutilisable `shared/_cycle_figure.html.twig` (rangée d'étapes à toucher + détail, Alpine) utilisé sur « Ma saison » avec `Seasons::KINDS`, « Vous êtes ici » sur la saison en cours ; l'image du livre reste en dessous, repliée. Autres schémas : le cycle de l'intendant a déjà son étapes vivantes (`stw-steps`) ; les schémas du Plan de Vie (équation, convictions, réseaux, héritage, hygiène, horizons) restent des images du livre, à rendre interactifs avec le même composant si souhaité.
-- **Bug corrigé** : `NextStep` (déjà en production) importait `App\Bilan\Entity\DailyLog` au lieu de `App\PlanDHygiene\Entity\DailyLog` : toute personne ayant un Plan d'Hygiène aurait eu une erreur 500 sur l'accueil dès 18 h. Les tests passaient parce que leurs comptes n'avaient pas de plan d'hygiène ; test de régression ajouté (`RhythmsTest::testDayRhythmWithAHygienePlan`). Piège : tester aussi avec un compte complet.
-
-## 18/11/2026 — Schémas du Plan de Vie interactifs
-- `Methode\Service\BookFigures` : le contenu de 7 schémas du livre (convictions, cinq réseaux, héritage, trois horizons, corps-âme-esprit, Équation du But avec ses trois exemples, cascade de l'alignement), tiré mot pour mot des tableaux et listes de `content/livre/`. Fonction Twig `book_figure_data(name)` ; `methode/_figure.html.twig` affiche alors le composant `shared/_cycle_figure.html.twig` et replie l'image du livre en dessous. Un schéma sans entrée reste une image (racines, trois témoins, revues, intendance).
-- Tests : `BookFiguresTest` (chaque phrase figure dans le chapitre source : si le livre est resynchronisé et change, le test le dit) et `BookFiguresPagesTest` (étapes 1, 2, 10, 11, 12, 13 de l'assistant).
-- Piège : l'assistant Plan de Vie n'est accessible qu'après l'onboarding, et les étapes Croissance/Hygiène exigent PRO (compte local de test : onboarding « Plus tard », puis étape 1 gratuite).
-
-## 18/11/2026 — Textes du site modifiables dans l'administration (phase 1)
-- Demande du fondateur : ne plus mettre de texte dans le code, tout pouvoir modifier ; **brouillon puis publication** ; périmètre voulu : vitrine et pages légales, contenu de la méthode, emails et notifications, livre. Phase 1 faite : le moteur (module `Contenu`, voir `docs/modules/contenu.md`), la vitrine (121 textes), les 4 pages légales (documents Markdown `content/textes/legal/`).
-- `Admin › Textes du site` (`/admin/textes`) : recherche, filtres, brouillon, mode aperçu, publication, historique, retour à l'origine. `app:launch:check` compte les `[À COMPLÉTER]` du texte **en ligne** (le juriste peut donc compléter les pages légales sans développeur).
-- La conversion de la vitrine a été faite par script puis comparée au rendu d'origine (HTML identique) ; les codes sont `vitrine.sN.NN` (N = section, ordre), stables tant qu'on n'en réutilise pas.
-- Migration `Version20261118194935` (tables `site_text`, `site_text_version`) : à jouer en production (le déploiement le fait).
-- Reste (phases 2 à 4) : textes écrits en PHP, emails/notifications et reçus, livre, et brouillon/publication pour les textes des tests.
-
-## 18/11/2026 — PWA : « Aujourd'hui en un geste » hors connexion (étape 1)
-- Demande : améliorer l'application installable avant de lancer l'application native (qui réutilisera l'API). Détail et règles dans `docs/modules/rapide.md`.
-- Page `/rapide` + `GET /api/rapide/aujourdhui` + `POST /api/rapide/sync` : rituels, bilan du jour, journal, prochaine étape ; saisies faites hors ligne gardées dans IndexedDB puis envoyées sans doublon (`sync_operation`, migration `Version20261118203319`). Service worker v3 : garde la coquille, renvoie les écrans du quotidien vers `/rapide` hors connexion. Lien dans le menu mobile, raccourci du manifeste, page « hors ligne » qui y mène.
-- Vérifié dans le navigateur : saisie hors ligne simulée → rechargement → envoi automatique. **Reste à vérifier sur un vrai téléphone** (iPhone : installer sur l'écran d'accueil ; couper le réseau ; cocher un rituel ; rétablir).
-- Piège de test : `createUser` laisse la collection `habits` vide en mémoire ; vider l'EM (`clear()`) avant la requête. Et `DailyLog` est dans `App\PlanDHygiene\Entity` (l'import erroné a été commis deux fois).
-- Reste (étapes suivantes de la PWA) : lecture hors ligne des plans et du journal complet, revues de la semaine et du mois hors ligne, notifications iPhone à vérifier sur appareil.
-
-## 18/11/2026 — Passation de la version mobile native (Expo)
-- Le fondateur confie l'application mobile native à une autre IA. Instructions complètes : **`docs/passation-mobile-expo.md`** (mission, état des lieux, règles permanentes, contrainte des stores et du paiement manuel, API à construire dont l'authentification par jeton, contrat du mode rapide à réutiliser, design, étapes et critères, publication, questions à poser au fondateur).
-- Points d'attention transmis : l'ancienne app `mobile/` est gelée (branchée sur l'ancien site) ; `docs/api.md` est périmé ; l'application ne doit ni vendre ni afficher de prix tant que le fondateur n'a pas tranché (règles Apple/Google sur les achats intégrés) ; la soumission aux stores attend les pages légales complétées.
-
-## 19/11/2026 — Offre gratuite resserrée : 2 tests gratuits (option A)
-- Décision du fondateur : l'offre gratuite contenait trop (les 6 tests, leurs rapports et leurs PDF). Désormais **DISC et Dons spirituels** gratuits (liste réglable dans Admin › Configuration, `AppConfig::freeTests`, migration `Version20261119045553`) ; les 4 autres tests, les PDF des rapports et les lectures croisées sont PRO. L'ancien interrupteur « Tests » (`enableDiscoveryFree`) n'était lu par aucun écran : retiré du formulaire.
-- Les résultats déjà obtenus restent consultables (seuls passer/repasser un test PRO est bloqué). Tableau gratuit/PRO, vitrine (`vitrine.s8.09`, `s8.22`), tests, page publique de résultat partagé, liste « premiers pas » et e-mail du jour 3 (renvoient vers un test gratuit) mis à jour. Détail dans `docs/modules/abonnement.md`.
-- Mesurer l'effet : `/admin/entonnoir` (comptes, passages à PRO) avant et après ; revoir la liste (ou passer à un rapport allégé, option B) si les gens s'arrêtent trop tôt. Les anciens utilisateurs de production gardent leurs résultats ; à la mise en ligne la liste vaut la valeur par défaut (colonne vide).
-
-## 19/11/2026 — Audit de sécurité : 4 lots de corrections (commits par lot)
-- **Lot 1 (XSS)** : filtre Twig `|json_safe` (JSON_HEX_*) à la place de tout `|json_encode|raw` ; Mermaid `securityLevel: 'strict'` + `htmlLabels: false` + filtre `|mermaid_label` ; directive Alpine du rituel via `data-title` ; `ksEscape()` avant `insertAdjacentHTML` dans l'assistant. Test : `tests/Shared/Twig/XssHardeningTest.php`.
-- **Lot 2** : Web Push : liste blanche d'hôtes officiels + contrôle DNS (adresses privées refusées, à l'inscription et à chaque envoi), 10 appareils max, essai limité à 3/h (`PushEndpointValidator`, `RateLimits`). Mode rapide : identifiant opaque de compte (HMAC) lié aux données et aux saisies en attente ; effacement local à la déconnexion (+ désabonnement push) et au changement de compte. **Écart assumé** : sur une session expirée (401) la copie des données du jour est effacée tout de suite, mais les saisies en attente sont gardées (liées à leur compte) pour ne pas perdre un journal écrit hors ligne. Anti-spam : invitations d'organisation (5/jour sans licence, 100 avec), couple, plan par e-mail, mot de passe actuel (profil), formulaires publics. Tests : `PushSecurityTest`, `QuickDayTest`, `AntiSpamTest`.
-- **Lot 3** : agenda borné à 366 jours (400 sinon) ; `UserRepository::findAdmins()` ; journal paginé en SQL (50 max, décalage plafonné, COUNT) ; rappels par lots de 200 avec `em->clear()`. Test : `DosProtectionTest`.
-- **Lot 4** : contrôle d'origine « fail-closed » dès qu'un cookie de session est présent (variable `APP_SAME_ORIGIN_STRICT`, 1 par défaut, 0 dans phpunit sauf `SameOriginStrictTest`) ; `trusted_hosts` (variable `TRUSTED_HOSTS`, défaut `localhost`, `127.0.0.1`, `kiinisawa.com`, `www.kiinisawa.com` : **ajouter tout autre nom utilisé, ex. une IP pour tester sur téléphone, dans `.env.local`**) ; jetons CSRF sur intendance, axes, principes, assistant, auto-évaluations ; droits PRO sur axes, principes, PDF des auto-évaluations ; rituels : off-by-one corrigé (le nouveau rituel n'est pas dans la collection) ; `DocController` ADMIN + Parsedown sûr ; parrainage : alias d'e-mail et récompense par IP (migration `Version20261119054400`) ; inscription et changement d'e-mail sans énumération ; déconnexion en formulaire POST + jeton (`logout_form`) ; plus aucune route « toutes méthodes » ; `nelmio/api-doc-bundle` retiré ; scripts `bin/ops` en 600/700. Tests : `CsrfTokensTest`, `AccessControlTest`, `ReferralSecurityTest`, `EnumerationTest`, `SameOriginStrictTest`, `OpsScriptsTest`.
-- Tests : `FixedCsrfTokenManager` (environnement de test seulement) remplace le gestionnaire de jetons ; les compteurs de limitation sont vidés au début de chaque exécution (`tests/bootstrap.php`). Vérifié aussi dans le navigateur local : déconnexion par formulaire, enregistrement automatique de l'assistant avec vrai jeton (200), jeton absent ou falsifié (400).
-- **À vérifier après déploiement** : `chmod 600 .env.local.php` doit rester lisible par PHP-FPM (même utilisateur sur Hostinger) ; le site doit répondre depuis kiinisawa.com ; l'application mobile native (jetons, sans cookie) n'est pas touchée par le mode strict.
-
-## 19/11/2026 — Audit de sécurité : contre-vérification, 4 derniers détails
-- Invitations d'organisation sans licence : plafond de 5/jour **par compte** (et non par organisation), et 2 créations d'organisations par compte et par jour (`org_create`). Avec licence : par organisation.
-- `json_safe` : les séparateurs U+2028/U+2029 sont maintenant remplacés par ` `/` ` littéraux (le remplacement précédent ne faisait rien) ; `JSON_PARTIAL_OUTPUT_ON_ERROR` retiré (en conflit avec `JSON_THROW_ON_ERROR`), `JSON_INVALID_UTF8_SUBSTITUTE` ajouté pour qu'un texte mal encodé ne fasse pas échouer la page.
-- Écran de vérification « leurre » : jetons CSRF contrôlés et délai de 60 s sur le renvoi, mêmes messages qu'une vraie inscription (test comparatif).
-- `.env.prod` : `TRUSTED_HOSTS='^(www\.)?kiinisawa\.com$'` (ni localhost ni IP en production ; le développement garde `.env`). Tests : `tests/Shared/FinalChecksTest.php`.
-
-## 19/11/2026 — Application mobile native V1 : Lot 1 (API `/api/mobile/v1` + socle Expo `mobile-v1/`)
-- **Choix validés avec le fondateur** : nouveau projet indépendant `../mobile-v1/` (sans toucher à `mobile/`) ; approche **consultation seulement** pour l'offre PRO (zéro prix, zéro lien de paiement dans l'app/API, conformité Apple 3.1.1 / EU DSA) + architecture prête pour IAP (`Subscription::$billingSource`, hook `useEntitlements` et composant `<ProGate>` côté mobile) ; français uniquement et thème clair du livre au lancement.
-- **Module `src/Mobile/`** : entité `MobileToken` (table `mobile_token`, empreintes SHA-256 uniquement, `rotated` pour distinguer réutilisation suspecte et simple déconnexion, `ON DELETE CASCADE` vers `user`, migration `Version20261119120000`), colonne `billing_source` sur `subscription`, pare-feu `mobile_api` sans session (`MobileBearerAuthenticator`), rotation à usage unique des jetons (`MobileTokenService`), limitation de débit (`mobile_login_ip`, `mobile_login_account`, `mobile_refresh`), purge dans `app:reminders:send`, `ProRequiredSubscriber` adapté sans `upgradeUrl` sur `/api/mobile/*`.
-- **Points d'accès `/api/mobile/v1`** : `connexion`, `jeton`, `deconnexion`, `moi` (GET/PATCH), `compte` (DELETE avec `SUPPRIMER` + mot de passe), `aujourdhui` & `sync` (contrat `QuickDay`), `rituels` (CRUD + plafond gratuit), `journal` & `journal/carnets` (pagination SQL bornée, filtres). Documentation complète : `docs/api-mobile.md`, `docs/modules/mobile.md`.
-- **Tests Symfony** : `tests/Mobile/MobileApiTest.php` (12 scénarios dont mode strict `APP_SAME_ORIGIN_STRICT=1`, réutilisation de jeton, isolation utilisateurs, suppression cascade). **Piège noté** : dans les tests fonctionnels avec `AbstractBrowser`, appeler `restart()` avant toute requête devant être dépourvue d'en-tête `Referer` automatique.
-- **Reste pour les lots suivants** : Lot 2 (notifications Expo Push + préférences), Lot 3 (lecture des 6 plans), Lot 4 (Mes tests & rapports), Lot 5 (revues, agenda, partenaires, couple/organisation, La Méthode).
-
-## 19/11/2026 — Application mobile native V1 : Lot 5 (Revues, Agenda, Partenaires, Défis, Couple & La Méthode)
-- **Objectif** : Achever le périmètre complet de l'application mobile native KIINI SAWA.
-- **Backend Symfony (`src/Mobile/`)** :
-  - `MobilePlannerController` : `/api/mobile/v1/agenda` (GET liste bornée par date ou intervalle, POST création, PATCH mise à jour/complétion, DELETE suppression, isolation stricte par utilisateur).
-  - `MobileReviewController` : `/api/mobile/v1/revues/rythmes` (les 5 respirations temporelles de KIINI SAWA via `Rhythms::forUser`), `/api/mobile/v1/revues/hebdo` (GET état et items des 4 plans, POST enregistrement appliquant scores/progrès aux plans et au journal via `WeeklyReviewService::save`), `/api/mobile/v1/revues/mensuelle` (GET/POST réservé Pro sans mention de prix).
-  - `MobileCommunityController` : `/api/mobile/v1/partenaires` (liste des partenaires actifs et invitations reçues/envoyées), `/api/mobile/v1/partenaires/invitation` (invitation par email avec contrôle du quota gratuit), `/api/mobile/v1/partenaires/{id}/repondre` (acceptation ou refus), `/api/mobile/v1/defis` (défis collectifs et avancement), `/api/mobile/v1/couple` (vision commune, verset d'ancrage, code d'invitation conjoint).
-  - `MobileMethodeSerializer` & `MobileMethodeController` : `/api/mobile/v1/methode/chapitres` (sommaire des 28 chapitres du livre KIINI SAWA, temps de lecture, statuts libre/pro), `/api/mobile/v1/methode/chapitres/{slug}` (texte intégral pour les membres Pro et chapitres publics, ou extrait pratique « L'essentiel » et exercice « Le Sanctuaire » pour les comptes gratuits avec zéro prix ni lien de paiement Apple 3.1.1).
-  - Tests unitaires & intégration : `tests/Mobile/MobileLot5Test.php` (5 nouveaux scénarios complets). Suite mobile Symfony : **34 tests, 343 assertions (100 % passants)**. Suite Symfony globale : **455 tests, 8479 assertions (0 régression, 0 échec)**.
-- **Mobile Expo (`mobile-v1/`)** :
-  - `types/api.ts`, `storage/localDb.ts`, `api/client.ts` : typages stricts, cache SQLite complet pour l'agenda, les revues, les partenaires et les chapitres du livre hors connexion.
-  - `i18n/fr.ts` : dictionnaires `planner`, `reviews`, `community`, `methode` conformes au lexique (vouvoiement, zéro terme banni, zéro émoji, zéro mention de tarif).
-  - Écrans natifs créés :
-    - `app/agenda/index.tsx` (agenda interactif au jour le jour, cases à cocher, création rapide avec modal, suppression).
-    - `app/revues/hebdo.tsx` (assistant de revue hebdomadaire : victoires, difficultés, leçons, 3 priorités, évaluation des 4 plans).
-    - `app/revues/rythmes.tsx` (tableau de bord des 5 rythmes de vie avec statuts colorés et boutons d'action).
-    - `app/partenaires/index.tsx` (partenaires de redevabilité avec invitations et gestion des demandes, onglets défis collectifs et couple).
-    - `app/methode/index.tsx` (sommaire visuel des 28 chapitres du livre).
-    - `app/methode/[slug].tsx` (lecteur natif du livre, typographie soignée, bascule de taille de texte A-/A/A+, encart « Le Sanctuaire », navigation précédent/suivant, ProGate d'extrait gratuit).
-  - Routage et menu : `app/(tabs)/menu.tsx` et `src/notifications/routing.ts` connectent directement toutes les routes vers les écrans natifs.
-  - Tests & bundle : **23 tests Vitest passants**, **0 erreur TypeScript**, bundle iOS Expo exporté avec succès (3 552 modules, 5.8 MB HBC).
-
-
-## 19/11/2026 — Sécurité mobile, parité tarifaire Euro/FCFA et synchronisation `kiini-mobile`
-- **Audit sécurité mobile (`mobile-v1/`, commit `c0fd149`)** :
-  - Protection anti-Open Redirect dans `src/notifications/routing.ts` et garde-fou défensif dans `app/_layout.tsx` (tests ajoutés dans `__tests__/notifications.test.ts`).
-  - Forçage HTTPS strict en production (`!__DEV__`) dans `src/api/client.ts`.
-  - Purge complète de `kv_store` (hors `account` et `push_token`) sur expiration 401 (`clearReadableCacheOnSessionExpiry()` dans `src/storage/localDb.ts`).
-- **Parité stricte des tarifs FCFA / Euro (`web/`, commit `c6c3c4d`, migration `Version20261119183000`)** :
-  - Décision du fondateur : même prix équivalent en Europe et en Afrique (taux fixe `1 € = 655,957 XAF`).
-  - `AppConfig` & base de production Hostinger mis à jour : PRO mensuel **6 500 FCFA** (9,99 €), PRO annuel **52 500 FCFA** (79,99 €), Duo couple **78 500 FCFA** (119,99 €), Organisation **20 000 FCFA** / place / an (30,00 €).
-- **Dépôt Git Mobile** : ancienne version (`mobile/`) archivée sur la branche `v0-legacy` de `github.com/ArlaisNTCHANA/kiini-mobile` ; `mobile-v1/` relié et poussé sur `origin/main`.
-
-## 21/11/2026 — Sanctuaire du Couple 360 (`RFC-001`) : Backend, API Mobile & Écrans natifs
-- **Roadmap & Spécifications** : création de `docs/roadmap/ROADMAP.md` (trajectoire 1M € ARR) et `docs/roadmap/RFC-001-sanctuaire-couple-360.md`, indexés dans `docs/index.md`.
-- **Backend Symfony (`web/`, commits `6c3325b`, `9ae348d`, `00e6077`)** :
-  - Nouvelles entités `CoupleChallenge`, `CoupleChallengeDay`, `CoupleMeditation` + `streakDays` / `lastActivityDate` sur `Couple` + `INTENTION` sur `CoupleItem`. Migration `Version20261121103000` exécutée sur Hostinger.
-  - `CoupleSanctuaryCatalog` (versets quotidiens, 4 défis de couple jour par jour, 3 parcours de méditation guidée, 5 signaux *Ping*) et `CoupleSanctuaryService` (validation croisée, streak, notifications push `NotificationType::COUPLE_SANCTUARY`).
-  - `MobileCoupleController` : 17 routes sous `/api/mobile/v1/couple/...` (Vue 360 `/home`, projets, intentions, défis, méditations, ping, revue mensuelle `/review` et rapport croisé `/report`).
-  - Tests : `tests/Mobile/MobileCoupleSanctuaryTest.php` (**42/42 tests Mobile + Couple passés**).
-  - Vitrine `landing.html.twig` : section `#couple` enrichie avec les 4 pièces (*L'Autel*, *Le Jardin des Défis*, *L'Atelier*, *Le Salon*).
-- **Mobile Expo (`mobile-v1/`, commits `c7a9324`, `3ec9d9c`)** :
-  - 4 écrans natifs dans `app/couple/` (`index.tsx`, `meditation.tsx`, `challenges.tsx`, `projets.tsx`, `salon.tsx`).
-  - Porte d'entrée progressive sur l'Accueil (`app/(tabs)/index.tsx`, visible uniquement si couple actif) + cache SQLite hors-ligne (`loadCoupleSanctuaryCache` / `saveCoupleSanctuaryCache`).
-
-## 22–23/11/2026 — Correctif `/login`, Plan « Standout », Ma Boussole 360 & `RFC-002` Académie Pratique
-- **Correctif redirection `/login` (`web/`, commit `69a4e33`)** : `LoginAuthenticator` nettoie désormais tout `target_path` pointant sur `/api/...` et ne redirige plus jamais un utilisateur vers `/api/rapide/aujourdhui` après connexion (test de non-régression dans `tests/Rapide/QuickDayTest.php`).
-- **Plan « Standout » (Mobile & Vitrine)** :
-  - `mobile-v1/` (commits `19c29e7`, `434668b`) : **Ma Boussole 360** (`BoussoleRadar.tsx` + `app/boussole/index.tsx` + cache SQLite + partage) et **Ma Pause de 5 minutes** (`app/pause/index.tsx`, libre d'horaire, hors-ligne via `useSync()`). `tsc --noEmit` (0 erreur), Vitest **24/24**.
-  - `web/` (commits `c1f85b0`, `01d4785`, `7063f86`) : section aperçus mobiles (*Ma Boussole 360*, *Modeste*, *Modeste & Linda*) sur `landing.html.twig` (sans émojis, icônes Lucide : `DesignRulesTest` 3/3) et diagnostic public **`/boussole`** (`templates/shared/boussole.html.twig` + `assets/js/boussole-engine.js` : 24 affirmations symétriques 2+2 par plan, 18 textes de tranche, matrice complète 30 dynamiques croisées, gestion profils plats & égalités, 12 jeux d'actions calibrées). Validé par `tests/boussole-engine.test.mjs` (**15/15 profils limites**) et `SecurityGuardsTest` (**7/7**). Déployé et vérifié en production sur `https://kiinisawa.com/boussole`.
-- **Spécification `RFC-002` (`web/`, commits `eab6935`, `2dd94cc`)** : `docs/roadmap/RFC-002-academie-pratique.md` — Académie Pratique sans certificats où chaque leçon alimente directement un des 6 plans via `AcademyPlanBridge`, avec Studio Auteur `/admin/academie` (brouillon / publié / retiré pour édition), stratégie vidéo Bunny Stream / Vimeo et import depuis `formation/courses_dump.json`.
-- **Reste à faire (prochains chantiers)** :
-  1. **Publication Google Play Store (`mobile-v1/`)** : passer `EXPO_PUBLIC_API_URL=https://kiinisawa.com`, ajouter `versionCode: 1` dans `app.json`, configurer `eas.json` et générer le `.aab`.
-  2. **Implémentation Jalon 1 de `RFC-002` (Académie Pratique)** : entités, migration, `AcademyPlanBridge` et back-office `/admin/academie`.
