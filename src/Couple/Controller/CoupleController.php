@@ -33,7 +33,7 @@ class CoupleController extends AbstractController
     }
 
     #[Route('/couple', name: 'app_couple', methods: ['GET'])]
-    public function index(SubscriptionManager $prices): Response
+    public function index(SubscriptionManager $prices, \App\Couple\Service\CoupleSanctuaryService $sanctuary): Response
     {
         $user = $this->user();
         $couple = $this->couples->coupleOf($user);
@@ -62,6 +62,7 @@ class CoupleController extends AbstractController
             'questions' => CoupleReview::QUESTIONS,
             'month' => $month,
             'sharesTests' => $couple->sharesTests($user),
+            'sanctuary' => $sanctuary->homeData($couple, $user),
         ]);
     }
 

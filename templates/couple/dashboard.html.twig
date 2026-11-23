@@ -27,6 +27,8 @@
     <h1 class="ks-header__title">{{ couple.partnerA.displayName }} &amp; {{ couple.partnerB.displayName }}</h1>
     <p class="cp-mini" style="margin-bottom: 1.25rem;">Ensemble sur KIINI SAWA depuis {{ couple.joinedAt|format_date(pattern: 'MMMM y', locale: 'fr') }} · <a href="{{ path('app_couple_report') }}" style="color: var(--primary); font-weight: 700;"><i data-lucide="search" class="ks-ico" aria-hidden="true"></i> Notre rapport croisé</a></p>
 
+    {% include 'couple/sanctuary/_home.html.twig' %}
+
     {# ── Vision ───────────────────────────── #}
     <section class="cp-card" id="vision">
         <h2><i data-lucide="compass" class="ks-ico" aria-hidden="true"></i> Notre vision commune</h2>

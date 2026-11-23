@@ -1,0 +1,66 @@
+{# Bloc « Notre Sanctuaire » en tête de l'espace couple (RFC-001). Variables : sanctuary (CoupleSanctuaryService::homeData), partner, token. #}
+{% set ch = sanctuary.activeChallenge %}
+{% set med = sanctuary.activeMeditation %}
+<style>
+    .sh-verse { font-family: var(--font-serif); font-size: 1.05rem; line-height: 1.5; }
+    .sh-ref { display: block; margin-top: .35rem; font-size: .74rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--couple); }
+    .sh-rooms { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: .75rem; margin: 1rem 0; }
+    .sh-room { display: block; border: 1.5px solid var(--bg-alt); border-radius: var(--r-md); padding: .9rem; text-decoration: none; color: inherit; transition: border-color .2s; }
+    .sh-room:hover { border-color: var(--couple); }
+    .sh-room strong { display: flex; align-items: center; gap: .4rem; color: var(--couple); font-size: .95rem; }
+    .sh-room p { font-size: .82rem; color: var(--fg-muted); margin-top: .3rem; }
+    .sh-turn { display: inline-block; margin-top: .4rem; font-size: .72rem; font-weight: 700; padding: .1rem .5rem; border-radius: 999px; background: var(--couple-soft); color: var(--couple); }
+</style>
+<section class="cp-card" id="sanctuaire">
+    <h2><i data-lucide="flame" class="ks-ico" aria-hidden="true"></i> Notre Sanctuaire</h2>
+    <p class="cp-sub">
+        Votre maison à deux.
+        {% if sanctuary.couple.streakDays > 0 %}
+            Flamme commune : {{ sanctuary.couple.streakDays }} jour{{ sanctuary.couple.streakDays > 1 ? 's' }} d'affilée.
+        {% else %}
+            Un défi ou une méditation vécus aujourd'hui allument votre flamme commune.
+        {% endif %}
+    </p>
+
+    <p class="sh-verse">« {{ sanctuary.couple.dailyVerse.text }} »<span class="sh-ref">{{ sanctuary.couple.dailyVerse.reference }}</span></p>
+
+    <div class="sh-rooms">
+        <a class="sh-room" href="{{ path('app_couple_altar') }}">
+            <strong><i data-lucide="book-open" class="ks-ico" aria-hidden="true"></i> L'Autel</strong>
+            {% if med %}
+                <p>{{ med.title }} : étape {{ med.currentStep }} sur {{ med.totalSteps }}</p>
+            {% else %}
+                <p>Méditations à deux et intentions de prière{% if sanctuary.counts.intentions > 0 %} ({{ sanctuary.counts.intentions }}){% endif %}.</p>
+            {% endif %}
+        </a>
+        <a class="sh-room" href="{{ path('app_couple_challenges') }}">
+            <strong><i data-lucide="sprout" class="ks-ico" aria-hidden="true"></i> Le Jardin des défis</strong>
+            {% if ch %}
+                <p>{{ ch.title }} : jour {{ ch.currentDay }} sur {{ ch.totalDays }}</p>
+                {% if not ch.todayDoneByMe %}<span class="sh-turn">À vous de jouer aujourd'hui</span>{% elseif not ch.todayDoneByPartner %}<span class="sh-turn">En attente de {{ partner ? partner.displayName : 'votre conjoint' }}</span>{% endif %}
+            {% else %}
+                <p>Un petit pas par jour, vécu ensemble : écoute, gratitude, soirs sans écran, prière.</p>
+            {% endif %}
+        </a>
+        <a class="sh-room" href="#vision">
+            <strong><i data-lucide="hammer" class="ks-ico" aria-hidden="true"></i> L'Atelier</strong>
+            <p>Vision commune, verset du foyer et projets{% if sanctuary.counts.projects > 0 %} ({{ sanctuary.counts.projects }}){% endif %}.</p>
+        </a>
+        <a class="sh-room" href="#revue">
+            <strong><i data-lucide="sofa" class="ks-ico" aria-hidden="true"></i> Le Salon</strong>
+            <p>Thèmes de croissance, rituels et revue du mois{% if not sanctuary.reviewDoneThisMonth %} (à faire ce mois-ci){% endif %}.</p>
+        </a>
+    </div>
+
+    {% if partner %}
+        <form method="post" action="{{ path('app_couple_signal') }}" style="display: flex; gap: .5rem; flex-wrap: wrap; align-items: center;">
+            <input type="hidden" name="_csrf_token" value="{{ token }}">
+            <label for="signal-preset" class="cp-mini">Envoyer un signal à {{ partner.displayName }} :</label>
+            <select id="signal-preset" name="preset" class="cp-input">
+                {% for p in sanctuary.pingPresets %}<option value="{{ p.code }}">{{ p.label }}</option>{% endfor %}
+            </select>
+            <input name="message" class="cp-input" maxlength="240" placeholder="Votre mot (facultatif)" style="flex: 1; min-width: 180px;" aria-label="Votre mot">
+            <button class="cp-btn" type="submit">Envoyer</button>
+        </form>
+    {% endif %}
+</section>

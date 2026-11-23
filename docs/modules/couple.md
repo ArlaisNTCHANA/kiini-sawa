@@ -1,6 +1,6 @@
 # Module Couple
 
-**Interface utilisateur** : Oui (`/couple`, invitation `/couple/rejoindre/{code}`, rapport `/couple/rapport`)
+**Interface utilisateur** : Oui (`/couple`, invitation `/couple/rejoindre/{code}`, rapport `/couple/rapport`, Sanctuaire du Couple : `/couple/autel`, `/couple/defis`, signal `/couple/signal`)
 
 ## Rôle
 
@@ -12,7 +12,7 @@ revue de couple mensuelle et rapport croisé des deux profils de personnalité.
 ## Règles
 
 - **Accès** : les deux conjoints doivent être PRO. L'abonnement **Duo** (par défaut 119,99 € ou 78 500 FCFA par an) rend les deux PRO en un seul paiement, validé dans `/admin/paiements` (`SubscriptionManager`, période `DUO`).
-- **Évolution future** : voir la spécification technique [RFC-001 : Sanctuaire de Croissance 360 (Espace Couple V2)](../roadmap/RFC-001-sanctuaire-couple-360.md).
+- **Sanctuaire du Couple** (RFC-001, sur le web et dans l'application mobile, même service `CoupleSanctuaryService`) : bloc « Notre Sanctuaire » en tête de `/couple` (parole du jour, flamme commune, les 4 pièces, signal au conjoint) ; **L'Autel** `/couple/autel` (méditations à deux, intentions de prière `CoupleItem` INTENTION) ; **Le Jardin des défis** `/couple/defis` (le jour suivant s'ouvre quand les deux ont validé) ; **L'Atelier** (vision, verset, projets) et **Le Salon** (thèmes, rituels, revue du mois) sont les sections existantes de `/couple`. Contrôleur web : `CoupleSanctuaryController` ; textes dans `CoupleSanctuaryCatalog`. Spécification : [RFC-001](../roadmap/RFC-001-sanctuaire-couple-360.md).
 - **Confidentialité** : les espaces personnels (plans, journal) restent privés. Le rapport croisé n'utilise les résultats de tests que si chacun l'accepte (modifiable dans les réglages).
 - **Fermeture** : supprime l'espace commun, jamais les espaces personnels. La suppression du compte d'un conjoint ferme aussi l'espace.
 - Un conjoint sans compte ouvre le lien, s'inscrit, et revient automatiquement sur l'invitation (`PendingInvitation::COUPLE_KEY`).

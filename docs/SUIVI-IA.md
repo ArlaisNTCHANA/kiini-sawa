@@ -9,6 +9,36 @@ teste (`php bin/phpunit`), commit, déploie (`bin/ops/envoyer-hostinger.sh`), v�
 journal `var/log/prod-AAAA-MM-JJ.log` sans erreur) ; **le fondateur fait lui-même `git push`** (refusé à l'IA).
 Ne jamais afficher ni demander de mot de passe ; ne pas publier son nom (mentions légales en attente).
 
+## 23/11/2026 — Le Sanctuaire du Couple sur le web
+
+- **Pourquoi** : la vitrine promet le Sanctuaire « sur le web et le mobile » et le fondateur veut des aperçus de
+  l'application **à condition que tout existe partout**. Jusqu'ici, les méditations, les défis, les intentions et les
+  signaux n'existaient que sur le mobile.
+- **Fait** : `Couple\Controller\CoupleSanctuaryController`, qui réutilise `CoupleSanctuaryService` (même logique que
+  l'API mobile, aucune duplication) :
+  - bloc « Notre Sanctuaire » en tête de `/couple` (`templates/couple/sanctuary/_home.html.twig`) : parole du jour,
+    flamme commune, les 4 pièces (L'Autel, Le Jardin des défis, L'Atelier → `#vision`, Le Salon → `#revue`), et
+    formulaire de signal au conjoint ;
+  - `/couple/autel` : parcours de méditation (commencer, valider une étape) et intentions de prière (ajout et retrait,
+    contrôle du couple propriétaire) ;
+  - `/couple/defis` : défis (commencer, valider le jour avec un mot pour le conjoint, statut des deux conjoints) ;
+  - `POST /couple/signal`.
+  Toutes les actions demandent un couple utilisable (les deux PRO ou Duo) et le jeton CSRF `couple`. Les composants
+  utilisés sont les composants `ks-…`, et il n'y a aucun émoji.
+- **Tests** : `tests/Couple/CoupleSanctuaryWebTest.php` (6 tests : les 4 pièces, accès fermé, parcours complet,
+  intentions isolées entre couples, jour de défi ouvert après les deux validations, signal reçu). Suite complète
+  **466 / 466**, schéma synchronisé.
+- **Vérifié dans le navigateur** (local, compte `essai-pro` et conjoint `essai-conjoint@kiinisawa.test`, accès dans
+  `var/compte-de-test.local`) : défi lancé puis validé avec un mot, méditation lancée, intention ajoutée, signal
+  envoyé, affichage sur téléphone (375 px, sans défilement horizontal), aucune erreur dans la console ni dans le
+  journal du serveur.
+- **Documentation** : `docs/modules/couple.md` et RFC-001, désormais au statut « Livré ».
+- **Reste** :
+  - point F6 de l'audit, qui touche le service commun au web et au mobile : ouvrir un jour de défi par date du
+    calendrier, et faire valider la méditation par les deux conjoints ;
+  - point F7 : textes du Sanctuaire relus par l'auteur et modifiables dans l'administration ;
+  - remplacer les dessins de la vitrine par de vraies captures.
+
 ## 23/11/2026 — Décisions du fondateur sur l'audit (prix, Sanctuaire, vitrine, offres)
 
 - **Prix FCFA** : parité avec l'euro conservée (6 500 / 52 500 / 78 500 / 20 000 FCFA). Le point F5 de l'audit est clos.

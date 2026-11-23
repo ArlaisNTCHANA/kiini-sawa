@@ -1,6 +1,6 @@
 # RFC-001 : Sanctuaire de Croissance 360 (Espace Couple V2)
 
-* **Statut** : Planifié / En Roadmap (Upcoming Release)
+* **Statut** : **Livré** sur le mobile (21/11/2026) et sur le web (23/11/2026 : `/couple/autel`, `/couple/defis`, signal depuis `/couple`). Écarts connus avec cette spécification : voir `docs/audit-coherence-ia-2026-11-23.md` (§ 4, RFC-001) : pas d'entité par jour pour les méditations, jours de défi non liés au calendrier, routes mobiles différentes de la section « Contrat d'API ».
 * **Date de conception** : Novembre 2026
 * **Cible** : Abonnements Duo (Mobile & Web)
 * **Type de document** : Architecture Blueprint & Spécification Technique
