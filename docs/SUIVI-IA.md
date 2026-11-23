@@ -567,3 +567,35 @@ phrase courte), fichiers JSON nettoyés, nouveau `08-…json`. Pagination PDF co
   - Routage et menu : `app/(tabs)/menu.tsx` et `src/notifications/routing.ts` connectent directement toutes les routes vers les écrans natifs.
   - Tests & bundle : **23 tests Vitest passants**, **0 erreur TypeScript**, bundle iOS Expo exporté avec succès (3 552 modules, 5.8 MB HBC).
 
+
+## 19/11/2026 — Sécurité mobile, parité tarifaire Euro/FCFA et synchronisation `kiini-mobile`
+- **Audit sécurité mobile (`mobile-v1/`, commit `c0fd149`)** :
+  - Protection anti-Open Redirect dans `src/notifications/routing.ts` et garde-fou défensif dans `app/_layout.tsx` (tests ajoutés dans `__tests__/notifications.test.ts`).
+  - Forçage HTTPS strict en production (`!__DEV__`) dans `src/api/client.ts`.
+  - Purge complète de `kv_store` (hors `account` et `push_token`) sur expiration 401 (`clearReadableCacheOnSessionExpiry()` dans `src/storage/localDb.ts`).
+- **Parité stricte des tarifs FCFA / Euro (`web/`, commit `c6c3c4d`, migration `Version20261119183000`)** :
+  - Décision du fondateur : même prix équivalent en Europe et en Afrique (taux fixe `1 € = 655,957 XAF`).
+  - `AppConfig` & base de production Hostinger mis à jour : PRO mensuel **6 500 FCFA** (9,99 €), PRO annuel **52 500 FCFA** (79,99 €), Duo couple **78 500 FCFA** (119,99 €), Organisation **20 000 FCFA** / place / an (30,00 €).
+- **Dépôt Git Mobile** : ancienne version (`mobile/`) archivée sur la branche `v0-legacy` de `github.com/ArlaisNTCHANA/kiini-mobile` ; `mobile-v1/` relié et poussé sur `origin/main`.
+
+## 21/11/2026 — Sanctuaire du Couple 360 (`RFC-001`) : Backend, API Mobile & Écrans natifs
+- **Roadmap & Spécifications** : création de `docs/roadmap/ROADMAP.md` (trajectoire 1M € ARR) et `docs/roadmap/RFC-001-sanctuaire-couple-360.md`, indexés dans `docs/index.md`.
+- **Backend Symfony (`web/`, commits `6c3325b`, `9ae348d`, `00e6077`)** :
+  - Nouvelles entités `CoupleChallenge`, `CoupleChallengeDay`, `CoupleMeditation` + `streakDays` / `lastActivityDate` sur `Couple` + `INTENTION` sur `CoupleItem`. Migration `Version20261121103000` exécutée sur Hostinger.
+  - `CoupleSanctuaryCatalog` (versets quotidiens, 4 défis de couple jour par jour, 3 parcours de méditation guidée, 5 signaux *Ping*) et `CoupleSanctuaryService` (validation croisée, streak, notifications push `NotificationType::COUPLE_SANCTUARY`).
+  - `MobileCoupleController` : 17 routes sous `/api/mobile/v1/couple/...` (Vue 360 `/home`, projets, intentions, défis, méditations, ping, revue mensuelle `/review` et rapport croisé `/report`).
+  - Tests : `tests/Mobile/MobileCoupleSanctuaryTest.php` (**42/42 tests Mobile + Couple passés**).
+  - Vitrine `landing.html.twig` : section `#couple` enrichie avec les 4 pièces (*L'Autel*, *Le Jardin des Défis*, *L'Atelier*, *Le Salon*).
+- **Mobile Expo (`mobile-v1/`, commits `c7a9324`, `3ec9d9c`)** :
+  - 4 écrans natifs dans `app/couple/` (`index.tsx`, `meditation.tsx`, `challenges.tsx`, `projets.tsx`, `salon.tsx`).
+  - Porte d'entrée progressive sur l'Accueil (`app/(tabs)/index.tsx`, visible uniquement si couple actif) + cache SQLite hors-ligne (`loadCoupleSanctuaryCache` / `saveCoupleSanctuaryCache`).
+
+## 22–23/11/2026 — Correctif `/login`, Plan « Standout », Ma Boussole 360 & `RFC-002` Académie Pratique
+- **Correctif redirection `/login` (`web/`, commit `69a4e33`)** : `LoginAuthenticator` nettoie désormais tout `target_path` pointant sur `/api/...` et ne redirige plus jamais un utilisateur vers `/api/rapide/aujourdhui` après connexion (test de non-régression dans `tests/Rapide/QuickDayTest.php`).
+- **Plan « Standout » (Mobile & Vitrine)** :
+  - `mobile-v1/` (commits `19c29e7`, `434668b`) : **Ma Boussole 360** (`BoussoleRadar.tsx` + `app/boussole/index.tsx` + cache SQLite + partage) et **Ma Pause de 5 minutes** (`app/pause/index.tsx`, libre d'horaire, hors-ligne via `useSync()`). `tsc --noEmit` (0 erreur), Vitest **24/24**.
+  - `web/` (commits `c1f85b0`, `01d4785`, `7063f86`) : section aperçus mobiles (*Ma Boussole 360*, *Modeste*, *Modeste & Linda*) sur `landing.html.twig` (sans émojis, icônes Lucide : `DesignRulesTest` 3/3) et diagnostic public **`/boussole`** (`templates/shared/boussole.html.twig` + `assets/js/boussole-engine.js` : 24 affirmations symétriques 2+2 par plan, 18 textes de tranche, matrice complète 30 dynamiques croisées, gestion profils plats & égalités, 12 jeux d'actions calibrées). Validé par `tests/boussole-engine.test.mjs` (**15/15 profils limites**) et `SecurityGuardsTest` (**7/7**). Déployé et vérifié en production sur `https://kiinisawa.com/boussole`.
+- **Spécification `RFC-002` (`web/`, commits `eab6935`, `2dd94cc`)** : `docs/roadmap/RFC-002-academie-pratique.md` — Académie Pratique sans certificats où chaque leçon alimente directement un des 6 plans via `AcademyPlanBridge`, avec Studio Auteur `/admin/academie` (brouillon / publié / retiré pour édition), stratégie vidéo Bunny Stream / Vimeo et import depuis `formation/courses_dump.json`.
+- **Reste à faire (prochains chantiers)** :
+  1. **Publication Google Play Store (`mobile-v1/`)** : passer `EXPO_PUBLIC_API_URL=https://kiinisawa.com`, ajouter `versionCode: 1` dans `app.json`, configurer `eas.json` et générer le `.aab`.
+  2. **Implémentation Jalon 1 de `RFC-002` (Académie Pratique)** : entités, migration, `AcademyPlanBridge` et back-office `/admin/academie`.
