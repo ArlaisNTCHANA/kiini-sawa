@@ -29,6 +29,8 @@ final class RateLimits
         #[Autowire(service: 'limiter.mobile_login_account')] RateLimiterFactory $mobileLoginAccountLimiter,
         #[Autowire(service: 'limiter.mobile_refresh')] RateLimiterFactory $mobileRefreshLimiter,
         #[Autowire(service: 'limiter.accountability_invite')] RateLimiterFactory $accountabilityInviteLimiter,
+        #[Autowire(service: 'limiter.boussole_submit')] RateLimiterFactory $boussoleSubmitLimiter,
+        #[Autowire(service: 'limiter.boussole_submit_ip')] RateLimiterFactory $boussoleSubmitIpLimiter,
     ) {
         $this->factories = [
             'push_test' => $pushTestLimiter, 'org_invite' => $orgInviteLimiter, 'org_invite_licensed' => $orgInviteLicensedLimiter,
@@ -36,6 +38,7 @@ final class RateLimits
             'public_form' => $publicFormLimiter, 'public_form_ip' => $publicFormIpLimiter,
             'mobile_login_ip' => $mobileLoginIpLimiter, 'mobile_login_account' => $mobileLoginAccountLimiter, 'mobile_refresh' => $mobileRefreshLimiter,
             'accountability_invite' => $accountabilityInviteLimiter,
+            'boussole_submit' => $boussoleSubmitLimiter, 'boussole_submit_ip' => $boussoleSubmitIpLimiter,
         ];
     }
 

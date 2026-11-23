@@ -27,6 +27,7 @@ final class MobileBoussoleController extends AbstractController
     public function __construct(
         private readonly BoussoleRecorder $recorder,
         private readonly BoussoleResultRepository $results,
+        private readonly \App\Shared\Security\RateLimits $limits,
     ) {
     }
 
@@ -52,6 +53,10 @@ final class MobileBoussoleController extends AbstractController
         $answers = BoussoleEngine::normalizeAnswers(($this->decodeJson($request) ?? [])['reponses'] ?? null);
         if (null === $answers) {
             return $this->jsonError('Les 24 réponses (de 1 à 5) sont attendues dans « reponses ».', Response::HTTP_UNPROCESSABLE_ENTITY, 'reponses_invalides');
+        }
+        // Même limite que sur le site : 10 passations par heure et par compte
+        if (!$this->limits->allow('boussole_submit', (string) $this->currentMobileUser()->getId())) {
+            return $this->jsonError('Trop de passations en peu de temps. Merci de réessayer dans une heure.', Response::HTTP_TOO_MANY_REQUESTS, 'rate_limited');
         }
         $result = $this->recorder->record($this->currentMobileUser(), $answers, BoussoleResult::SOURCE_MOBILE);
 

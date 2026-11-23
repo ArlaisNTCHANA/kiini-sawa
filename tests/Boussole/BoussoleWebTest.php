@@ -20,13 +20,13 @@ final class BoussoleWebTest extends WebTestCase
     /** Réponses brutes qui donnent un profil contrasté : Vie au plus haut, Hygiène au plus bas. */
     private const ANSWERS = [5, 4, 4, 5, 4, 4, 1, 2, 2, 1, 2, 2, 5, 4, 4, 1, 4, 4, 1, 2, 2, 5, 2, 2];
 
-    private function submit(KernelBrowser $client, mixed $answers): array
+    private function submit(KernelBrowser $client, mixed $answers, ?string $csrf = \App\Tests\Support\FixedCsrfTokenManager::VALUE): array
     {
-        $client->request('POST', '/boussole/resultat', server: [
-            'CONTENT_TYPE' => 'application/json',
-            'HTTP_ORIGIN' => 'http://localhost',
-            'HTTP_SEC_FETCH_SITE' => 'same-origin',
-        ], content: json_encode(['reponses' => $answers]));
+        $server = ['CONTENT_TYPE' => 'application/json', 'HTTP_ORIGIN' => 'http://localhost', 'HTTP_SEC_FETCH_SITE' => 'same-origin'];
+        if (null !== $csrf) {
+            $server['HTTP_X_CSRF_TOKEN'] = $csrf;
+        }
+        $client->request('POST', '/boussole/resultat', server: $server, content: json_encode(['reponses' => $answers]));
 
         return json_decode((string) $client->getResponse()->getContent(), true) ?? [];
     }
@@ -153,5 +153,40 @@ final class BoussoleWebTest extends WebTestCase
         $this->assertResponseStatusCodeSame(404);
         $client->request('GET', '/boussole/historique');
         $this->assertSelectorTextContains('.ks-empty', 'pas encore de passation');
+    }
+
+    public function testSubmissionNeedsTheCsrfTokenAndIsLimited(): void
+    {
+        $client = static::createClient();
+        $user = $this->createUser();
+        $client->loginUser($user);
+
+        // Sans jeton ou avec un faux jeton : refusé, rien d'enregistré
+        $this->submit($client, self::ANSWERS, null);
+        $this->assertResponseStatusCodeSame(403);
+        $this->submit($client, self::ANSWERS, 'faux-jeton');
+        $this->assertResponseStatusCodeSame(403);
+        $this->assertCount(0, $this->resultsOf($user));
+
+        // Au plus 10 passations par heure et par compte (réponses différentes : deux envois identiques coup sur coup ne
+        // créent qu'une passation, BoussoleRecorder::DUPLICATE_WINDOW_SECONDS)
+        for ($i = 0; $i < 10; ++$i) {
+            $answers = self::ANSWERS;
+            $answers[0] = ($i % 5) + 1;
+            $answers[1] = (intdiv($i, 5) % 5) + 1;
+            $this->submit($client, $answers);
+            $this->assertResponseIsSuccessful();
+        }
+        $res = $this->submit($client, self::ANSWERS);
+        $this->assertResponseStatusCodeSame(429);
+        $this->assertStringContainsString('réessayer', $res['erreur']);
+        $this->assertCount(10, $this->resultsOf($user));
+    }
+
+    public function testThePageGivesTheCsrfTokenToTheScript(): void
+    {
+        $client = static::createClient();
+        $client->request('GET', '/boussole');
+        $this->assertStringContainsString('X-CSRF-Token', (string) $client->getResponse()->getContent());
     }
 }

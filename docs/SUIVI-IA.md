@@ -9,6 +9,27 @@ teste (`php bin/phpunit`), commit, déploie (`bin/ops/envoyer-hostinger.sh`), v�
 journal `var/log/prod-AAAA-MM-JJ.log` sans erreur) ; **le fondateur fait lui-même `git push`** (refusé à l'IA).
 Ne jamais afficher ni demander de mot de passe ; ne pas publier son nom (mentions légales en attente).
 
+## 23/11/2026 — Boussole 360 : jeton CSRF et limites sur l'envoi des réponses
+
+- **Signalé par le fondateur** : `POST /boussole/resultat` (`Boussole\Controller\BoussoleController::submit`) n'avait
+  ni jeton CSRF ni limite de fréquence.
+  - Risque réel : un compte connecté pouvait créer des passations à volonté et remplir la base. Un visiteur ne remplit
+    pas la base (réponses gardées en session), mais il pouvait faire grossir sa session.
+  - Risque déjà couvert : l'injection d'un faux résultat dans le compte d'une autre personne était déjà bloquée par
+    `SameOriginRequestSubscriber` (requêtes d'un autre site refusées ; requête avec cookie de session mais sans
+    en-tête de navigateur refusée en mode strict).
+- **Fait** :
+  - jeton CSRF `boussole`, envoyé par la page dans l'en-tête `X-CSRF-Token` (`templates/shared/boussole.html.twig`) ;
+    sans jeton valide, réponse 403 ;
+  - limiteurs `boussole_submit` (10 passations par heure et par compte, site et application :
+    `MobileBoussoleController::submit` répond 429 `rate_limited`) et `boussole_submit_ip` (30 envois par heure et par
+    adresse IP, relevé à 1 000 en environnement de test) ;
+  - rappel : deux envois identiques coup sur coup ne créent qu'une passation (`BoussoleRecorder::DUPLICATE_WINDOW_SECONDS`).
+- **Tests** : `BoussoleWebTest` (jeton absent ou faux : 403, rien d'enregistré ; 11e passation de l'heure : 429 ; la
+  page donne le jeton au script) et `MobileBoussoleTest` (limite par compte). Suite complète **502 / 502**. Vérifié
+  dans un vrai navigateur : visiteur (« gardé de côté », 200) et compte connecté (« enregistré dans votre compte »,
+  200).
+
 ## 23/11/2026 — Relecture externe, point 7 : adresses de l'API mobile du couple, reporté
 
 - **Constat** : les adresses de `src/Mobile/Controller/MobileCoupleController.php` sont en anglais (`/couple/home`,

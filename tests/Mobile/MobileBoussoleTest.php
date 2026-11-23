@@ -139,4 +139,16 @@ final class MobileBoussoleTest extends WebTestCase
         $this->assertSame([], $this->api('GET', '/api/mobile/v1/boussole/historique', bearer: $tokenB)['json']['passations']);
         $this->assertSame(401, $this->api('GET', '/api/mobile/v1/boussole/dernier')['status']);
     }
+
+    public function testSubmissionsAreLimitedPerAccount(): void
+    {
+        $user = $this->createUser();
+        $token = $this->login((string) $user->getEmail());
+        for ($i = 0; $i < 10; ++$i) {
+            $this->assertSame(201, $this->api('POST', '/api/mobile/v1/boussole/reponses', ['reponses' => self::ANSWERS], $token)['status']);
+        }
+        $res = $this->api('POST', '/api/mobile/v1/boussole/reponses', ['reponses' => self::ANSWERS], $token);
+        $this->assertSame(429, $res['status']);
+        $this->assertSame('rate_limited', $res['json']['code']);
+    }
 }

@@ -423,7 +423,7 @@
                 try {
                     const resp = await fetch({{ path('app_boussole_submit')|json_safe }}, {
                         method: 'POST',
-                        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+                        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json', 'X-CSRF-Token': {{ csrf_token('boussole')|json_safe }} },
                         credentials: 'same-origin',
                         body: JSON.stringify({ reponses: raw })
                     });

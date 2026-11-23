@@ -25,6 +25,7 @@ final class BoussoleController extends AbstractController
     public function __construct(
         private readonly BoussoleRecorder $recorder,
         private readonly BoussoleResultRepository $results,
+        private readonly \App\Shared\Security\RateLimits $limits,
     ) {
     }
 
@@ -46,13 +47,23 @@ final class BoussoleController extends AbstractController
     #[Route('/boussole/resultat', name: 'app_boussole_submit', methods: ['POST'])]
     public function submit(Request $request): JsonResponse
     {
+        // Jeton CSRF (en-tête X-CSRF-Token, donné par la page), en plus du contrôle d'origine du site
+        if (!$this->isCsrfTokenValid('boussole', (string) $request->headers->get('X-CSRF-Token', ''))) {
+            return $this->noStore(['erreur' => 'La page a expiré. Merci de la recharger.'], Response::HTTP_FORBIDDEN);
+        }
+        $user = $this->getUser();
+        // Pas d'envois en boucle : 10 passations par heure et par compte, 30 envois par heure et par adresse IP
+        if (!$this->limits->allow('boussole_submit_ip', (string) $request->getClientIp())
+            || ($user instanceof User && !$this->limits->allow('boussole_submit', (string) $user->getId()))) {
+            return $this->noStore(['erreur' => 'Trop de passations en peu de temps. Merci de réessayer dans une heure.'], Response::HTTP_TOO_MANY_REQUESTS);
+        }
+
         $payload = json_decode($request->getContent(), true);
         $answers = BoussoleEngine::normalizeAnswers(\is_array($payload) ? ($payload['reponses'] ?? null) : null);
         if (null === $answers) {
             return $this->noStore(['erreur' => 'Les 24 réponses (de 1 à 5) sont attendues.'], Response::HTTP_UNPROCESSABLE_ENTITY);
         }
 
-        $user = $this->getUser();
         if ($user instanceof User && $user->isVerified()) {
             $result = $this->recorder->record($user, $answers, BoussoleResult::SOURCE_WEB);
 
