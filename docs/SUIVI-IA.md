@@ -9,6 +9,21 @@ teste (`php bin/phpunit`), commit, déploie (`bin/ops/envoyer-hostinger.sh`), v�
 journal `var/log/prod-AAAA-MM-JJ.log` sans erreur) ; **le fondateur fait lui-même `git push`** (refusé à l'IA).
 Ne jamais afficher ni demander de mot de passe ; ne pas publier son nom (mentions légales en attente).
 
+## 23/11/2026 — Mobile : calendrier natif pour les dates de retraite
+
+- `mobile-v1/` : `@react-native-community/datetimepicker` 9.2.1, la version recommandée par Expo. Il remplace la
+  saisie JJ/MM/AAAA dans `src/components/couple/RetreatCard.tsx` (composant `DateField`) :
+  - sur iPhone, un sélecteur compact intégré ; sur Android, la fenêtre de calendrier ; sur le web (aperçu de
+    développement), la saisie au clavier reste ;
+  - dates passées impossibles, et la fin ne peut pas précéder le début.
+- **Piège** : `npx expo install` échoue (ERESOLVE) à cause d'un écart déjà présent entre react-dom 19.3.1 et react
+  19.3.0.
+  - `--legacy-peer-deps` **retire** du lockfile react-native-reanimated, react-native-worklets, react-dom et
+    @react-native/babel-preset : à ne pas utiliser.
+  - `npm install <paquet> --force` n'ajoute que le paquet voulu : c'est cette commande qui a été retenue.
+- Vérifié : `tsc` 0 erreur, Vitest 24/24, exports iOS et Android réussis, `expo-doctor` 20/20. Le sélecteur n'a pas
+  été affiché dans un simulateur.
+
 ## 23/11/2026 — Redevabilité : revue de la semaine et application mobile (lots 2 et 4 terminés)
 
 - **Revue de la semaine** : encart « Ma redevabilité cette semaine » :
