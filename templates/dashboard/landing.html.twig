@@ -82,21 +82,11 @@
         .split { display: grid; grid-template-columns: 1fr; gap: 2rem; align-items: center; }
         @media (min-width: 860px) { .split { grid-template-columns: 1fr 1fr; } }
         .book img { width: 100%; max-width: 280px; display: block; margin: 0 auto; border-radius: 6px; box-shadow: 0 24px 50px -18px rgba(31,77,58,.5); }
-        /* Aperçus mobiles (Mockups du Sanctuaire) */
-        .showcase-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(270px, 1fr)); gap: 1.75rem; align-items: start; margin-top: 2rem; }
+        /* Aperçus : vraies captures de l'application au format téléphone */
+        .showcase-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1.75rem; align-items: start; margin-top: 2rem; }
         .phone-wrap { display: flex; flex-direction: column; align-items: center; }
-        .phone { width: 100%; max-width: 300px; background: #0F172A; border-radius: 34px; padding: 10px; box-shadow: 0 24px 54px -20px rgba(15,23,42,.38), 0 0 0 1px rgba(15,23,42,.08); }
-        .phone-screen { background: #FAF9F6; border-radius: 25px; overflow: hidden; min-height: 410px; display: flex; flex-direction: column; text-align: left; }
-        .phone-notch { width: 84px; height: 18px; background: #0F172A; border-radius: 0 0 12px 12px; margin: 0 auto 6px; }
-        .phone-body { padding: .6rem .95rem 1.1rem; display: flex; flex-direction: column; gap: .6rem; flex: 1; }
-        .ph-eyebrow { font-size: .62rem; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; color: var(--primary); }
-        .ph-title { font-family: var(--serif); font-size: 1.05rem; font-weight: 700; color: var(--fg); line-height: 1.2; }
-        .ph-card { background: #fff; border: 1px solid #E5EAE7; border-radius: 14px; padding: .65rem .75rem; }
-        .ph-row { display: flex; align-items: center; justify-content: space-between; gap: .5rem; }
-        .ph-pill { display: inline-flex; align-items: center; gap: 4px; font-size: .68rem; font-weight: 700; padding: .2rem .55rem; border-radius: 999px; }
-        .ph-check { display: flex; align-items: center; gap: .45rem; font-size: .78rem; color: var(--fg); padding: .28rem 0; border-top: 1px solid #F1F5F3; }
-        .ph-check:first-of-type { border-top: none; }
-        .ph-dot { width: 16px; height: 16px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: .62rem; font-weight: 800; flex-shrink: 0; }
+        .phone { width: 100%; max-width: 270px; background: #0F172A; border-radius: 34px; padding: 9px; box-shadow: 0 24px 54px -20px rgba(15,23,42,.38), 0 0 0 1px rgba(15,23,42,.08); }
+        .phone-shot { display: block; width: 100%; height: auto; border-radius: 26px; }
         .phone-caption { text-align: center; margin-top: .95rem; max-width: 280px; }
         .phone-caption strong { display: block; font-size: .98rem; color: var(--fg); margin-bottom: .2rem; }
         .phone-caption span { font-size: .85rem; color: var(--muted); }
@@ -147,147 +137,35 @@
         <p class="sub" style="text-align: center; margin-left: auto; margin-right: auto;">{{ t('vitrine.app.03', 'Une interface calme, pensée pour vous accompagner sans surcharge — sur ordinateur comme sur votre téléphone, même hors connexion.') }}</p>
 
         <div class="showcase-grid">
-            {# Mockup 1 : Ma Boussole 360 #}
             <div class="phone-wrap">
-                <div class="phone" aria-hidden="true">
-                    <div class="phone-screen">
-                        <div class="phone-notch"></div>
-                        <div class="phone-body">
-                            <div>
-                                <div class="ph-eyebrow">DIAGNOSTIC EXPRESS 360</div>
-                                <div class="ph-title">Ma Boussole KIINI SAWA</div>
-                            </div>
-                            <div class="ph-card" style="text-align: center; padding: .75rem .5rem;">
-                                <svg width="210" height="190" viewBox="0 0 220 200" style="display: block; margin: 0 auto;">
-                                    <polygon points="110,28 172,64 172,136 110,172 48,136 48,64" fill="rgba(46,107,83,0.04)" stroke="#CBD5CE" stroke-width="1.2"/>
-                                    <polygon points="110,52 151,76 151,124 110,148 69,124 69,76" fill="none" stroke="#E2E8E4" stroke-width="1"/>
-                                    <polygon points="110,76 131,88 131,112 110,124 89,112 89,88" fill="none" stroke="#E2E8E4" stroke-width="1"/>
-                                    <line x1="110" y1="100" x2="110" y2="28" stroke="#DDE5E0"/>
-                                    <line x1="110" y1="100" x2="172" y2="64" stroke="#DDE5E0"/>
-                                    <line x1="110" y1="100" x2="172" y2="136" stroke="#DDE5E0"/>
-                                    <line x1="110" y1="100" x2="110" y2="172" stroke="#DDE5E0"/>
-                                    <line x1="110" y1="100" x2="48" y2="136" stroke="#DDE5E0"/>
-                                    <line x1="110" y1="100" x2="48" y2="64" stroke="#DDE5E0"/>
-                                    <polygon points="110,40 162,70 154,125 110,142 64,126 62,72" fill="rgba(46,107,83,0.22)" stroke="#2E6B53" stroke-width="2.2" stroke-linejoin="round"/>
-                                    <circle cx="110" cy="40" r="4" fill="#C8962E"/>
-                                    <circle cx="162" cy="70" r="4" fill="#1F4D3A"/>
-                                    <circle cx="154" cy="125" r="4" fill="#2E6B53"/>
-                                    <circle cx="110" cy="142" r="4" fill="#B5562F"/>
-                                    <circle cx="64" cy="126" r="4" fill="#5E8463"/>
-                                    <circle cx="62" cy="72" r="4" fill="#A87A1F"/>
-                                    <circle cx="110" cy="100" r="24" fill="#FFFFFF" stroke="#DCE7DF" stroke-width="1.5"/>
-                                    <text x="110" y="101" text-anchor="middle" font-family="Playfair Display, Georgia, serif" font-size="14" font-weight="700" fill="#1F4D3A">78%</text>
-                                    <text x="110" y="112" text-anchor="middle" font-size="6.5" font-weight="700" fill="#64748B">ALIGNEMENT</text>
-                                    <text x="110" y="18" text-anchor="middle" font-size="9" font-weight="700" fill="#0F172A">Vie</text>
-                                    <text x="192" y="64" text-anchor="middle" font-size="9" font-weight="700" fill="#0F172A">Croiss.</text>
-                                    <text x="192" y="142" text-anchor="middle" font-size="9" font-weight="700" fill="#0F172A">Dével.</text>
-                                    <text x="110" y="188" text-anchor="middle" font-size="9" font-weight="700" fill="#0F172A">Hygiène</text>
-                                    <text x="26" y="142" text-anchor="middle" font-size="9" font-weight="700" fill="#0F172A">Intend.</text>
-                                    <text x="26" y="64" text-anchor="middle" font-size="9" font-weight="700" fill="#0F172A">Transm.</text>
-                                </svg>
-                            </div>
-                            <div class="ph-row" style="gap: .45rem;">
-                                <div class="ph-card" style="flex: 1; padding: .5rem .6rem;">
-                                    <div style="font-size: .58rem; font-weight: 800; color: var(--primary);">POINT D'APPUI</div>
-                                    <div style="font-size: .78rem; font-weight: 700; margin-top: 2px;">Plan de Vie · 9/10</div>
-                                </div>
-                                <div class="ph-card" style="flex: 1; padding: .5rem .6rem; background: #F8ECE6; border-color: #EBD5CA;">
-                                    <div style="font-size: .58rem; font-weight: 800; color: #B5562F;">PRIORITÉ DU MOIS</div>
-                                    <div style="font-size: .78rem; font-weight: 700; margin-top: 2px;">Hygiène · 5/10</div>
-                                </div>
-                            </div>
-                            <div style="background: var(--primary); color: #fff; border-radius: 12px; padding: .6rem .75rem; font-size: .75rem; font-weight: 700; text-align: center;">Ouvrir mon Plan d'Hygiène →</div>
-                        </div>
-                    </div>
+                <div class="phone">
+                    <img class="phone-shot" src="{{ asset('images/vitrine/apercu-boussole.jpg') }}" alt="{{ t('vitrine.app.shot1.alt', 'Résultat de Ma Boussole 360 : score de cohérence et radar des 6 plans') }}" width="390" height="844" loading="lazy">
                 </div>
                 <div class="phone-caption">
-                    <strong>Ma Boussole 360 en 2 minutes</strong>
-                    <span>Visualisez l'équilibre de vos 6 plans et identifiez votre priorité du mois dès le premier jour.</span>
+                    <strong>{{ t('vitrine.app.shot1.titre', 'Ma Boussole 360 en 3 minutes') }}</strong>
+                    <span>{{ t('vitrine.app.shot1.texte', 'Visualisez l\'équilibre de vos 6 plans et identifiez votre priorité du mois dès le premier jour.') }}</span>
                 </div>
             </div>
-
-            {# Mockup 2 : Quotidien apaisé #}
             <div class="phone-wrap">
-                <div class="phone" aria-hidden="true">
-                    <div class="phone-screen">
-                        <div class="phone-notch"></div>
-                        <div class="phone-body">
-                            <div class="ph-row">
-                                <div>
-                                    <div class="ph-eyebrow">AUJOURD'HUI</div>
-                                    <div class="ph-title">Bonjour, Modeste</div>
-                                </div>
-                                <span class="ph-pill" style="background: #E9F1EC; color: var(--primary);">● Synchronisé</span>
-                            </div>
-                            <div class="ph-card" style="border-left: 3px solid #C8962E;">
-                                <div style="font-size: .6rem; font-weight: 800; color: #A87A1F;">MA PROCHAINE ÉTAPE</div>
-                                <div style="font-family: var(--serif); font-size: .92rem; font-weight: 700; margin: 2px 0;">Faire ma revue de la semaine</div>
-                                <div style="font-size: .72rem; color: var(--muted);">10 min pour relire ce qui a avancé et préparer la suite.</div>
-                            </div>
-                            <div class="ph-card">
-                                <div style="font-size: .68rem; font-weight: 800; color: var(--fg); margin-bottom: .35rem;">MES RITUELS DU JOUR</div>
-                                <div class="ph-check"><span class="ph-dot" style="background: var(--primary); color: #fff;">✓</span><span>15 min de méditation &amp; prière</span></div>
-                                <div class="ph-check"><span class="ph-dot" style="background: var(--primary); color: #fff;">✓</span><span>30 min de marche active</span></div>
-                                <div class="ph-check"><span class="ph-dot" style="background: #E2E8F0; color: transparent;">·</span><span style="color: var(--muted);">20 min de lecture avant 22h</span></div>
-                            </div>
-                            <div class="ph-card" style="background: #F8ECE6; border-color: #EBD5CA;">
-                                <div class="ph-row">
-                                    <div>
-                                        <div style="font-size: .58rem; font-weight: 800; color: #B5562F;">NOTRE SANCTUAIRE</div>
-                                        <div style="font-family: var(--serif); font-size: .84rem; font-weight: 700;">Entrer dans notre maison</div>
-                                    </div>
-                                    <span class="ph-pill" style="background: #fff; color: #B5562F;"><i data-lucide="flame" style="width:12px;height:12px;"></i> 12 j</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                <div class="phone">
+                    <img class="phone-shot" src="{{ asset('images/vitrine/apercu-aujourdhui.jpg') }}" alt="{{ t('vitrine.app.shot2.alt', 'Écran Aujourd\'hui : prochaine étape, parole du jour et rituels du jour') }}" width="390" height="844" loading="lazy">
                 </div>
                 <div class="phone-caption">
-                    <strong>Votre quotidien, sans surcharge</strong>
-                    <span>Une seule prochaine étape, vos rituels essentiels et vos espaces activés au fil de votre rythme.</span>
+                    <strong>{{ t('vitrine.app.shot2.titre', 'Votre quotidien, sans surcharge') }}</strong>
+                    <span>{{ t('vitrine.app.shot2.texte', 'Une seule prochaine étape, vos rituels essentiels et vos espaces activés au fil de votre rythme.') }}</span>
                 </div>
             </div>
-
-            {# Mockup 3 : Sanctuaire du Couple 360 #}
             <div class="phone-wrap">
-                <div class="phone" aria-hidden="true">
-                    <div class="phone-screen">
-                        <div class="phone-notch"></div>
-                        <div class="phone-body">
-                            <div class="ph-row">
-                                <div>
-                                    <div class="ph-eyebrow" style="color: #B5562F;">SANCTUAIRE DU COUPLE</div>
-                                    <div class="ph-title">Modeste &amp; Linda</div>
-                                </div>
-                                <span class="ph-pill" style="background: #F8ECE6; color: #B5562F;"><i data-lucide="flame" style="width:12px;height:12px;"></i> 12 j</span>
-                            </div>
-                            <div class="ph-card" style="background: #F8ECE6; border-color: #EBD5CA;">
-                                <div style="font-size: .58rem; font-weight: 800; color: #B5562F;">PAROLE DU JOUR</div>
-                                <div style="font-family: var(--serif); font-size: .82rem; font-style: italic; margin-top: 2px;">« Deux valent mieux qu'un : s'ils tombent, l'un relève son compagnon. »</div>
-                                <div style="font-size: .65rem; color: var(--muted); margin-top: 2px;">Ecclésiaste 4:9-10</div>
-                            </div>
-                            <div class="ph-card" style="padding: .55rem .7rem;">
-                                <div style="font-size: .58rem; font-weight: 800; color: #B5562F;">L'AUTEL · MÉDITATION</div>
-                                <div style="font-size: .8rem; font-weight: 700;">Bâtir sur le roc · Étape 3/5</div>
-                            </div>
-                            <div class="ph-card" style="padding: .55rem .7rem;">
-                                <div style="font-size: .58rem; font-weight: 800; color: var(--primary);">LE JARDIN · DÉFI EN COURS</div>
-                                <div style="font-size: .8rem; font-weight: 700;">7 jours d'écoute bienveillante</div>
-                                <div style="font-size: .68rem; color: var(--primary); margin-top: 1px;">Vous ✓ · Linda ✓ · Jour 4/7</div>
-                            </div>
-                            <div class="ph-card" style="padding: .55rem .7rem;">
-                                <div style="font-size: .58rem; font-weight: 800; color: #4338CA;">L'ATELIER &amp; LE SALON</div>
-                                <div style="font-size: .8rem; font-weight: 700;">3 projets communs · Revue prête</div>
-                            </div>
-                        </div>
-                    </div>
+                <div class="phone">
+                    <img class="phone-shot" src="{{ asset('images/vitrine/apercu-couple.jpg') }}" alt="{{ t('vitrine.app.shot3.alt', 'Sanctuaire du Couple : parole du foyer, L\'Autel, Le Jardin des défis, L\'Atelier et Le Salon') }}" width="390" height="844" loading="lazy">
                 </div>
                 <div class="phone-caption">
-                    <strong>Le Sanctuaire du Couple 360</strong>
-                    <span>Votre maison commune : méditation à deux, défis synchronisés, projets et revue mensuelle.</span>
+                    <strong>{{ t('vitrine.app.shot3.titre', 'Le Sanctuaire du Couple 360') }}</strong>
+                    <span>{{ t('vitrine.app.shot3.texte', 'Votre maison commune : méditation à deux, défis synchronisés, projets et revue mensuelle.') }}</span>
                 </div>
             </div>
         </div>
+        <p style="text-align: center; font-size: .78rem; color: var(--muted); margin-top: 1.25rem;">{{ t('vitrine.app.note', 'Captures réelles de l\'application sur téléphone, avec un compte d\'exemple (Modeste et Linda sont des prénoms d\'exemple).') }}</p>
     </div>
 </section>
 
@@ -374,7 +252,7 @@
             <p class="sub" style="margin-bottom: 1.25rem;">{{ t('vitrine.s7.02', '« Deux valent mieux qu\'un » (Ecclésiaste 4:9). Un véritable sanctuaire commun — votre maison à deux sur le web et le mobile — pour prier, relever des défis, bâtir vos projets et faire le point chaque mois. Vos espaces personnels restent strictement privés.') }}</p>
             <ul class="check" style="margin-top: 0;">
                 <li>{{ t('vitrine.s7.03', 'L\'Autel : parcours de méditation à deux, parole quotidienne du foyer et intentions de prière partagées') }}</li>
-                <li>{{ t('vitrine.s7.04', 'Le Jardin des Défis : challenges synchronisés (écoute, gratitude, soirs sans écran), flamme commune et pensées envoyées en un clic') }}</li>
+                <li>{{ t('vitrine.s7.04', 'Le Jardin des Défis : défis synchronisés (écoute, gratitude, soirs sans écran), flamme commune et pensées envoyées en un clic') }}</li>
                 <li>{{ t('vitrine.s7.05', 'L\'Atelier : votre vision commune, votre verset fondateur et vos projets de vie avec échéances') }}</li>
                 <li>{{ t('vitrine.s7.06', 'Le Salon : 10 thèmes de croissance, vos rituels de couple et votre revue mensuelle guidée') }}</li>
                 <li>{{ t('vitrine.s7.07', 'Un rapport croisé de vos personnalités, pour mieux vous comprendre et honorer vos complémentarités') }}</li>
