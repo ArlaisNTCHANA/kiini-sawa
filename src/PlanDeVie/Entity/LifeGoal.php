@@ -17,8 +17,25 @@ use App\PlanDeTransmission\Entity\LegacyGoal;
 use App\Rituels\Entity\Habit;
 
 #[ORM\Entity(repositoryClass: LifeGoalRepository::class)]
+#[ORM\HasLifecycleCallbacks]
 class LifeGoal
 {
+    /** Dernière modification (avancement, échéance, texte) : sert à l'alerte « objectif qui n'avance plus » de la redevabilité. */
+    #[ORM\Column(nullable: true)]
+    private ?\DateTimeImmutable $updatedAt = null;
+
+    #[ORM\PrePersist]
+    #[ORM\PreUpdate]
+    public function touch(): void
+    {
+        $this->updatedAt = new \DateTimeImmutable();
+    }
+
+    public function getUpdatedAt(): ?\DateTimeImmutable
+    {
+        return $this->updatedAt;
+    }
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]

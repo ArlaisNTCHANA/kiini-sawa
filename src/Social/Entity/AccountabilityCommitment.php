@@ -71,6 +71,18 @@ class AccountabilityCommitment
     #[ORM\Column]
     private int $minDaysBetweenNudges = self::DEFAULT_MIN_DAYS;
 
+    /** Alertes automatiques choisies par la personne (null : désactivée). Rituel non validé depuis N jours. */
+    #[ORM\Column(nullable: true)]
+    private ?int $alertHabitDays = null;
+
+    /** Objectif sans mise à jour depuis N jours. */
+    #[ORM\Column(nullable: true)]
+    private ?int $alertGoalDays = null;
+
+    /** Aucune connexion à KIINI SAWA depuis N jours (filet de sécurité). */
+    #[ORM\Column(nullable: true)]
+    private ?int $alertInactiveDays = null;
+
     /** La personne a lu et accepté ce qui serait envoyé (aperçu du message). */
     #[ORM\Column]
     private \DateTimeImmutable $ownerConsentAt;
@@ -117,6 +129,25 @@ class AccountabilityCommitment
     public function getPartnerToken(): string { return $this->partnerToken; }
     public function getMinDaysBetweenNudges(): int { return $this->minDaysBetweenNudges; }
     public function getOwnerConsentAt(): \DateTimeImmutable { return $this->ownerConsentAt; }
+    public function getAlertHabitDays(): ?int { return $this->alertHabitDays; }
+    public function getAlertGoalDays(): ?int { return $this->alertGoalDays; }
+    public function getAlertInactiveDays(): ?int { return $this->alertInactiveDays; }
+
+    /** Seuils bornés (2 à 90 jours) ; une alerte qui ne correspond pas à l'objet de l'engagement est ignorée. */
+    public function setAlerts(?int $habitDays, ?int $goalDays, ?int $inactiveDays): static
+    {
+        $clamp = static fn (?int $d) => null === $d || $d <= 0 ? null : max(2, min(90, $d));
+        $this->alertHabitDays = self::TARGET_HABIT === $this->targetType ? $clamp($habitDays) : null;
+        $this->alertGoalDays = self::TARGET_GOAL === $this->targetType ? $clamp($goalDays) : null;
+        $this->alertInactiveDays = $clamp($inactiveDays);
+
+        return $this;
+    }
+
+    public function hasAutomaticAlerts(): bool
+    {
+        return null !== $this->alertHabitDays || null !== $this->alertGoalDays || null !== $this->alertInactiveDays;
+    }
     public function getPartnerAcceptedAt(): ?\DateTimeImmutable { return $this->partnerAcceptedAt; }
     public function getEndedAt(): ?\DateTimeImmutable { return $this->endedAt; }
     public function getEndedBy(): ?string { return $this->endedBy; }

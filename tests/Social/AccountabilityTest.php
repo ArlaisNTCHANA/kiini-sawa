@@ -52,7 +52,7 @@ class AccountabilityTest extends WebTestCase
         ]);
         $this->assertResponseIsSuccessful();
         $this->assertSelectorTextContains('main', 'Rien d\'autre ne lui sera envoyé tant qu\'il ou elle n\'aura pas accepté');
-        $this->assertSelectorTextContains('main', 'Vous recevrez une copie');
+        $this->assertSelectorTextContains('main', 'vous recevrez une copie');
         $this->assertSelectorTextContains('main', 'Courir trois fois par semaine');
         $this->assertSelectorExists('input[name="consent"][required]');
 
@@ -184,5 +184,114 @@ class AccountabilityTest extends WebTestCase
         $this->client->request('GET', '/social/redevabilite');
         $this->assertSelectorTextContains('main', 'Je suis partenaire de redevabilité');
         $this->assertSelectorTextContains('main', 'Épargner 10 %');
+    }
+
+    /** Engagement actif sur un rituel, accepté il y a $daysAgo jours (dates reculées en SQL). */
+    private function activeHabitCommitment(int $daysAgo, ?int $habitDays = 3, ?int $inactiveDays = 7): array
+    {
+        $owner = $this->createUser();
+        $habit = (new Habit())->setTitle('Lire la Bible chaque matin')->setUser($owner);
+        $this->em()->persist($habit);
+        $c = new AccountabilityCommitment($owner, 'Samuel', 'samuel-'.uniqid().'@exemple.org', AccountabilityCommitment::TARGET_HABIT, null, 'Lire la Bible chaque matin', null);
+        $this->em()->persist($c);
+        $this->em()->flush();
+        $c = new AccountabilityCommitment($owner, 'Samuel', $c->getPartnerEmail(), AccountabilityCommitment::TARGET_HABIT, $habit->getId(), 'Lire la Bible chaque matin', null);
+        $c->setAlerts($habitDays, null, $inactiveDays);
+        $c->accept();
+        $this->em()->persist($c);
+        $this->em()->flush();
+        $date = (new \DateTimeImmutable("-$daysAgo days"))->format('Y-m-d H:i:s');
+        $conn = $this->em()->getConnection();
+        $conn->executeStatement('UPDATE accountability_commitment SET partner_accepted_at = ?, created_at = ? WHERE id = ?', [$date, $date, $c->getId()]);
+        $conn->executeStatement('UPDATE `user` SET last_active_at = ? WHERE id = ?', [(new \DateTimeImmutable())->format('Y-m-d H:i:s'), $owner->getId()]);
+        $this->em()->clear();
+
+        return [$this->em()->find(AccountabilityCommitment::class, $c->getId()), $habit->getId()];
+    }
+
+    private function service(): \App\Social\Service\AccountabilityService
+    {
+        return static::getContainer()->get(\App\Social\Service\AccountabilityService::class);
+    }
+
+    public function testPartnerIsAlertedAutomaticallyWhenTheRitualIsMissedAndOnlyOncePerSlip(): void
+    {
+        [$c, $habitId] = $this->activeHabitCommitment(5);
+
+        $this->service()->runDailyChecks(new \DateTimeImmutable('today'));
+        $nudges = $this->em()->getRepository(AccountabilityNudge::class)->findBy(['commitment' => $c->getId()]);
+        $this->assertCount(1, $nudges);
+        $this->assertSame(AccountabilityNudge::REASON_HABIT_MISSED, $nudges[0]->getReason());
+        $this->assertStringContainsString('depuis 5 jours', (string) $nudges[0]->getFact());
+        $partnerMail = $this->emailsTo($c->getPartnerEmail());
+        $this->assertNotEmpty($partnerMail);
+        $this->assertStringContainsString('a peut-être besoin de vous', (string) $partnerMail[0]->getSubject());
+        $this->assertNotEmpty($this->emailsTo((string) $c->getOwner()->getEmail()), 'Copie à la personne');
+
+        // Le même décrochage ne redéclenche pas d'alerte, même après le délai de 7 jours
+        $this->em()->getConnection()->executeStatement('UPDATE accountability_nudge SET sent_at = ? WHERE id = ?', [(new \DateTimeImmutable('-8 days'))->format('Y-m-d H:i:s'), $nudges[0]->getId()]);
+        $this->em()->getConnection()->executeStatement('UPDATE accountability_commitment SET partner_accepted_at = ? WHERE id = ?', [(new \DateTimeImmutable('-13 days'))->format('Y-m-d H:i:s'), $c->getId()]);
+        $this->em()->clear();
+        $this->service()->runDailyChecks(new \DateTimeImmutable('today'));
+        $this->assertCount(1, $this->em()->getRepository(AccountabilityNudge::class)->findBy(['commitment' => $c->getId()]));
+    }
+
+    public function testNoAlertBeforeTheThresholdOrWhenPausedOrDisabled(): void
+    {
+        [$recent] = $this->activeHabitCommitment(2);
+        [$paused] = $this->activeHabitCommitment(10);
+        $paused->pause();
+        [$disabled] = $this->activeHabitCommitment(10, null, null);
+        $this->em()->flush();
+
+        $this->service()->runDailyChecks(new \DateTimeImmutable('today'));
+        foreach ([$recent, $paused, $disabled] as $c) {
+            $this->assertCount(0, $this->em()->getRepository(AccountabilityNudge::class)->findBy(['commitment' => $c->getId()]));
+        }
+    }
+
+    public function testInactivityAlertAndResumptionWithin72Hours(): void
+    {
+        [$c, $habitId] = $this->activeHabitCommitment(10, null, 7);
+        $this->em()->getConnection()->executeStatement('UPDATE `user` SET last_active_at = ? WHERE id = ?', [(new \DateTimeImmutable('-9 days'))->format('Y-m-d H:i:s'), $c->getOwner()->getId()]);
+        $this->em()->clear();
+
+        $this->service()->runDailyChecks(new \DateTimeImmutable('today'));
+        $nudge = $this->em()->getRepository(AccountabilityNudge::class)->findOneBy(['commitment' => $c->getId()]);
+        $this->assertSame(AccountabilityNudge::REASON_INACTIVE, $nudge->getReason());
+        $this->assertStringContainsString('ne s\'est pas connecté(e)', (string) $nudge->getFact());
+
+        // Le lendemain de l'alerte, la personne valide son rituel : reprise comptée
+        $this->em()->getConnection()->executeStatement('UPDATE accountability_nudge SET sent_at = ? WHERE id = ?', [(new \DateTimeImmutable('-1 day'))->format('Y-m-d H:i:s'), $nudge->getId()]);
+        $log = (new \App\Rituels\Entity\HabitLog())->setHabit($this->em()->find(Habit::class, $habitId))->setDate(new \DateTime('today'))->setStatus(true);
+        $this->em()->persist($log);
+        $this->em()->flush();
+        $this->em()->clear();
+        $this->service()->runDailyChecks(new \DateTimeImmutable('today'));
+        $this->assertNotNull($this->em()->find(AccountabilityNudge::class, $nudge->getId())->getResumedAt());
+        $this->assertSame(1, $this->service()->stats($this->em()->find(AccountabilityCommitment::class, $c->getId()))['resumed']);
+    }
+
+    public function testChosenAlertsAreSavedFromTheFormAndShownInThePreview(): void
+    {
+        $owner = $this->createUser();
+        $habit = (new Habit())->setTitle('Marcher 30 minutes')->setUser($owner);
+        $this->em()->persist($habit);
+        $this->em()->flush();
+        $this->client->loginUser($owner);
+        $fields = ['target' => 'HABIT:'.$habit->getId(), 'connectionId' => 0, 'partnerName' => 'Ruth', 'partnerEmail' => 'ruth-'.uniqid().'@exemple.org',
+            'alertsForm' => '1', 'alertHabit' => '1', 'alertHabitDays' => 4, 'alertInactiveDays' => 7, '_csrf_token' => $this->token()];
+        $this->client->request('POST', '/social/redevabilite/apercu', $fields);
+        $this->assertSelectorTextContains('main', 'Sans que vous ayez à le demander');
+        $this->assertSelectorTextContains('main', '4 jours de suite');
+        $this->assertSelectorTextNotContains('main', 'vous ne vous connectez plus', 'Case « inactivité » décochée');
+        $this->assertSelectorTextContains('main', 'Exemple d\'alerte automatique');
+
+        unset($fields['alertsForm'], $fields['alertHabit']);
+        $this->client->request('POST', '/social/redevabilite/creer', ['alertHabitDays' => 4, 'alertInactiveDays' => 0, 'consent' => '1'] + $fields);
+        $c = $this->em()->getRepository(AccountabilityCommitment::class)->findOneBy(['owner' => $owner->getId()]);
+        $this->assertSame(4, $c->getAlertHabitDays());
+        $this->assertNull($c->getAlertInactiveDays());
+        $this->assertNull($c->getAlertGoalDays(), 'Pas d\'alerte « objectif » sur un rituel');
     }
 }

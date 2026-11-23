@@ -22,7 +22,16 @@
         <h2 class="ks-section-title" style="margin-top: 0;">Ce qui va se passer</h2>
         <ol class="ac-list" style="margin-left: 1.2rem;">
             <li><strong>{{ partnerName }}</strong> reçoit une invitation à devenir votre partenaire de redevabilité. <strong>Rien d'autre ne lui sera envoyé tant qu'il ou elle n'aura pas accepté.</strong></li>
-            <li>Quand vous le demanderez, {{ partnerName }} recevra un e-mail pour vous interpeller sur « {{ label }} », <strong>au plus un tous les {{ minDays }} jours</strong>. <strong>Vous recevrez une copie</strong> de chaque message.</li>
+            {% set alerts = [] %}
+            {% if targetType == 'HABIT' and data.alertHabitDays > 0 %}{% set alerts = alerts|merge(['vous ne validez pas ce rituel pendant ' ~ data.alertHabitDays ~ ' jours de suite']) %}{% endif %}
+            {% if targetType == 'GOAL' and data.alertGoalDays > 0 %}{% set alerts = alerts|merge(['votre objectif n\'avance pas pendant ' ~ data.alertGoalDays ~ ' jours']) %}{% endif %}
+            {% if data.alertInactiveDays > 0 %}{% set alerts = alerts|merge(['vous ne vous connectez plus à KIINI SAWA pendant ' ~ data.alertInactiveDays ~ ' jours']) %}{% endif %}
+            {% if alerts is not empty %}
+                <li><strong>Sans que vous ayez à le demander</strong>, {{ partnerName }} sera prévenu(e) si {{ alerts|join(', ou si ') }}.</li>
+            {% else %}
+                <li>Aucune alerte automatique : {{ partnerName }} ne sera prévenu(e) que si vous le demandez.</li>
+            {% endif %}
+            <li>Vous pourrez aussi, à tout moment, lui demander un coup de main. <strong>Au plus un message tous les {{ minDays }} jours</strong>, et <strong>vous recevrez une copie</strong> de chacun.</li>
             <li>{{ partnerName }} indiquera en un clic ce qu'il ou elle a fait (appel, message, rencontre, prière). Vous serez prévenu(e) et vous le verrez dans « Ma redevabilité ».</li>
             <li>{{ partnerName }} ne verra que cet engagement : <strong>ni votre journal, ni vos autres plans, ni vos tests</strong>.</li>
             <li>Vous pouvez mettre en pause ou arrêter à tout moment ; {{ partnerName }} aussi.</li>
@@ -34,7 +43,19 @@
         {% include 'social/accountability/_invitation_body.html.twig' with {owner: owner, partnerName: partnerName, label: label, why: data.why, minDays: minDays, url: null} %}
     </div>
 
-    <p class="ac-step">Un exemple d'interpellation (quand vous la demanderez)</p>
+    {% if alerts is not empty %}
+        {% set sampleFact = targetType == 'HABIT' and data.alertHabitDays > 0
+            ? owner ~ ' n\'a pas validé son rituel « ' ~ label ~ ' » depuis ' ~ data.alertHabitDays ~ ' jours.'
+            : (targetType == 'GOAL' and data.alertGoalDays > 0
+                ? 'L\'objectif « ' ~ label ~ ' » de ' ~ owner ~ ' n\'a pas avancé depuis ' ~ data.alertGoalDays ~ ' jours.'
+                : owner ~ ' ne s\'est pas connecté(e) à KIINI SAWA depuis ' ~ data.alertInactiveDays ~ ' jours.') %}
+        <p class="ac-step">Exemple d'alerte automatique</p>
+        <div class="ac-mail">
+            {% include 'social/accountability/_nudge_body.html.twig' with {owner: owner, partnerName: partnerName, label: label, why: data.why, message: null, actions: actions, respondUrl: null, fact: sampleFact} %}
+        </div>
+    {% endif %}
+
+    <p class="ac-step">Exemple de demande de coup de main (quand vous la ferez)</p>
     <div class="ac-mail">
         {% include 'social/accountability/_nudge_body.html.twig' with {owner: owner, partnerName: partnerName, label: label, why: data.why, message: 'Cette semaine est difficile, j\'ai besoin d\'un coup de pouce.', actions: actions, respondUrl: null} %}
     </div>
@@ -44,7 +65,7 @@
         {% for k, v in data %}<input type="hidden" name="{{ k }}" value="{{ v }}">{% endfor %}
         <label style="display: flex; gap: .6rem; align-items: flex-start; cursor: pointer;">
             <input type="checkbox" name="consent" value="1" required style="margin-top: .3rem; accent-color: var(--primary);">
-            <span>J'ai compris : {{ partnerName }} recevra ces messages quand je le demanderai, j'en recevrai une copie, et ses réponses seront enregistrées dans KIINI SAWA.</span>
+            <span>J'ai compris : {{ partnerName }} recevra ces messages{{ alerts is not empty ? ' (alertes automatiques comprises)' }}, j'en recevrai une copie, et ses réponses seront enregistrées dans KIINI SAWA.</span>
         </label>
         <div style="margin-top: 1rem; display: flex; gap: .5rem; flex-wrap: wrap;">
             <button class="ks-btn ks-btn--primary" type="submit">Activer et inviter {{ partnerName }}</button>

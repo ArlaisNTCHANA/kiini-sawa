@@ -65,16 +65,18 @@ final class AccountabilityService
      */
     public function targetsFor(User $owner): array
     {
+        // Lecture en base (et non par les collections de l'utilisateur, qui peuvent être incomplètes en mémoire)
         $goals = [];
-        foreach ($owner->getPlanDeVie()?->getLifeGoals() ?? [] as $goal) {
-            if ($goal instanceof LifeGoal && $goal->getId() && '' !== trim((string) $goal->getTitle())) {
-                $goals[] = ['id' => $goal->getId(), 'label' => (string) $goal->getTitle()];
+        $plan = $owner->getPlanDeVie();
+        foreach (null !== $plan ? $this->em->getRepository(LifeGoal::class)->findBy(['planDeVie' => $plan], ['id' => 'ASC']) : [] as $goal) {
+            if ('' !== trim((string) $goal->getTitle())) {
+                $goals[] = ['id' => (int) $goal->getId(), 'label' => (string) $goal->getTitle()];
             }
         }
         $habits = [];
-        foreach ($owner->getHabits() as $habit) {
-            if ($habit instanceof Habit && $habit->getId() && '' !== trim((string) $habit->getTitle())) {
-                $habits[] = ['id' => $habit->getId(), 'label' => (string) $habit->getTitle()];
+        foreach ($this->em->getRepository(Habit::class)->findBy(['user' => $owner], ['id' => 'ASC']) as $habit) {
+            if ('' !== trim((string) $habit->getTitle())) {
+                $habits[] = ['id' => (int) $habit->getId(), 'label' => (string) $habit->getTitle()];
             }
         }
 
@@ -135,6 +137,11 @@ final class AccountabilityService
 
         $commitment = new AccountabilityCommitment($owner, $name, $email, $type, $id, $label, $data['why'] ?? null);
         $commitment->setPartnerUser($partnerUser);
+        $commitment->setAlerts(
+            isset($data['alertHabitDays']) ? (int) $data['alertHabitDays'] : null,
+            isset($data['alertGoalDays']) ? (int) $data['alertGoalDays'] : null,
+            isset($data['alertInactiveDays']) ? (int) $data['alertInactiveDays'] : null,
+        );
         $this->em->persist($commitment);
         $this->em->flush();
 
@@ -233,7 +240,15 @@ final class AccountabilityService
             throw new \DomainException('Votre partenaire a déjà été interpellé récemment. Prochaine demande possible le '.$next->format('d/m/Y').'.');
         }
 
-        $nudge = new AccountabilityNudge($c, AccountabilityNudge::REASON_OWNER_REQUEST, $message);
+        return $this->sendNudge($c, AccountabilityNudge::REASON_OWNER_REQUEST, $message, null);
+    }
+
+    /** Envoie l'interpellation au partenaire et la copie à la personne. */
+    private function sendNudge(AccountabilityCommitment $c, string $reason, ?string $message, ?string $fact): AccountabilityNudge
+    {
+        $owner = $c->getOwner();
+        $nudge = new AccountabilityNudge($c, $reason, $message);
+        $nudge->setFact($fact);
         $this->em->persist($nudge);
         $this->em->flush();
 
@@ -245,8 +260,9 @@ final class AccountabilityService
             'respondUrl' => $this->urls->generate('app_accountability_respond', ['token' => $nudge->getToken()], UrlGeneratorInterface::ABSOLUTE_URL),
             'stopUrl' => $this->urls->generate('app_accountability_partner', ['token' => $c->getPartnerToken()], UrlGeneratorInterface::ABSOLUTE_URL),
         ];
-        $this->mail($c->getPartnerEmail(), $owner->getDisplayName().' compte sur vous', 'social/accountability/email/nudge.html.twig', $context);
-        $this->mail((string) $owner->getEmail(), 'Copie : votre partenaire '.$c->getPartnerName().' a été interpellé', 'social/accountability/email/nudge_copy.html.twig', $context + [
+        $subject = null !== $fact ? $owner->getDisplayName().' a peut-être besoin de vous' : $owner->getDisplayName().' compte sur vous';
+        $this->mail($c->getPartnerEmail(), $subject, 'social/accountability/email/nudge.html.twig', $context);
+        $this->mail((string) $owner->getEmail(), 'Copie : votre partenaire '.$c->getPartnerName().' a été prévenu(e)', 'social/accountability/email/nudge_copy.html.twig', $context + [
             'manageUrl' => $this->urls->generate('app_accountability', [], UrlGeneratorInterface::ABSOLUTE_URL),
         ]);
 
@@ -270,10 +286,128 @@ final class AccountabilityService
         }
     }
 
+    // ── Alertes automatiques (tâche quotidienne app:reminders:send) ─────────
+
     /**
-     * Chiffres de l'engagement (lot 1 : interpellations, réponses, délai ; l'effet sur l'objectif viendra au lot 2).
+     * Vérifie chaque engagement actif : si un signal choisi par la personne se déclenche, le partenaire est prévenu
+     * (copie à la personne). Note aussi les reprises dans les 72 heures qui suivent une interpellation.
      *
-     * @return array{nudges: int, responses: int, rate: int|null, avgHours: int|null, byAction: array<string, int>, last: list<AccountabilityNudge>}
+     * @return array{alertes: int, reprises: int}
+     */
+    public function runDailyChecks(\DateTimeImmutable $today): array
+    {
+        $alerts = 0;
+        $resumed = 0;
+        foreach ($this->em->getRepository(AccountabilityCommitment::class)->findBy(['status' => AccountabilityCommitment::STATUS_ACTIVE]) as $c) {
+            $resumed += $this->recordResumptions($c);
+            $signal = $this->dueSignal($c, $today);
+            if (null !== $signal && null === $this->nextNudgeAllowedAt($c)) {
+                $this->sendNudge($c, $signal[0], null, $signal[1]);
+                ++$alerts;
+            }
+        }
+
+        return ['alertes' => $alerts, 'reprises' => $resumed];
+    }
+
+    /**
+     * Le signal qui se déclenche aujourd'hui, s'il y en a un : [motif, constat].
+     * Jamais deux alertes pour le même décrochage : il faut une reprise après la dernière alerte du même motif.
+     *
+     * @return array{0: string, 1: string}|null
+     */
+    public function dueSignal(AccountabilityCommitment $c, \DateTimeImmutable $today): ?array
+    {
+        $owner = $c->getOwner()->getDisplayName();
+        $since = $c->getPartnerAcceptedAt() ?? $c->getCreatedAt();
+        $checks = [
+            [AccountabilityNudge::REASON_HABIT_MISSED, $c->getAlertHabitDays(), fn () => $this->lastHabitDone($c), fn (int $d) => sprintf('%s n\'a pas validé son rituel « %s » depuis %d jours.', $owner, $c->getTargetLabel(), $d)],
+            [AccountabilityNudge::REASON_GOAL_STALLED, $c->getAlertGoalDays(), fn () => $this->lastGoalUpdate($c), fn (int $d) => sprintf('L\'objectif « %s » de %s n\'a pas avancé depuis %d jours.', $c->getTargetLabel(), $owner, $d)],
+            [AccountabilityNudge::REASON_INACTIVE, $c->getAlertInactiveDays(), fn () => $c->getOwner()->getLastActiveAt(), fn (int $d) => sprintf('%s ne s\'est pas connecté(e) à KIINI SAWA depuis %d jours.', $owner, $d)],
+        ];
+        foreach ($checks as [$reason, $days, $lastActivity, $fact]) {
+            if (null === $days) {
+                continue;
+            }
+            $last = $lastActivity();
+            $reference = null === $last || $last < $since ? $since : \DateTimeImmutable::createFromInterface($last);
+            $elapsed = (int) $reference->setTime(0, 0)->diff($today->setTime(0, 0))->format('%r%a');
+            if ($elapsed < $days) {
+                continue;
+            }
+            $lastAlert = $this->em->getRepository(AccountabilityNudge::class)->findOneBy(['commitment' => $c, 'reason' => $reason], ['sentAt' => 'DESC']);
+            if (null !== $lastAlert && $lastAlert->getSentAt() > $reference) {
+                continue; // déjà prévenu pour ce décrochage
+            }
+
+            return [$reason, $fact($elapsed)];
+        }
+
+        return null;
+    }
+
+    /** Marque les interpellations des 72 dernières heures suivies d'une reprise. */
+    private function recordResumptions(AccountabilityCommitment $c): int
+    {
+        $count = 0;
+        $activity = $this->lastTargetActivity($c);
+        if (null === $activity) {
+            return 0;
+        }
+        // Seules les interpellations des 4 derniers jours peuvent encore être suivies d'une reprise dans leurs 72 heures
+        $recent = $this->em->createQueryBuilder()->select('n')->from(AccountabilityNudge::class, 'n')
+            ->where('n.commitment = :c')->andWhere('n.resumedAt IS NULL')->andWhere('n.sentAt >= :from')
+            ->setParameter('c', $c)->setParameter('from', new \DateTimeImmutable('-4 days'))
+            ->getQuery()->getResult();
+        foreach ($recent as $nudge) {
+            if ($activity > $nudge->getSentAt() && $activity <= $nudge->getSentAt()->modify('+72 hours')) {
+                $nudge->markResumed($activity);
+                ++$count;
+            }
+        }
+        if ($count > 0) {
+            $this->em->flush();
+        }
+
+        return $count;
+    }
+
+    /** Dernière activité qui compte comme une reprise pour cet engagement. */
+    public function lastTargetActivity(AccountabilityCommitment $c): ?\DateTimeImmutable
+    {
+        return match ($c->getTargetType()) {
+            AccountabilityCommitment::TARGET_HABIT => $this->lastHabitDone($c),
+            AccountabilityCommitment::TARGET_GOAL => $this->lastGoalUpdate($c),
+            default => $c->getOwner()->getLastActiveAt(),
+        };
+    }
+
+    private function lastHabitDone(AccountabilityCommitment $c): ?\DateTimeImmutable
+    {
+        if (AccountabilityCommitment::TARGET_HABIT !== $c->getTargetType() || null === $c->getTargetId()) {
+            return null;
+        }
+        $last = $this->em->createQueryBuilder()->select('MAX(l.createdAt)')->from(\App\Rituels\Entity\HabitLog::class, 'l')
+            ->where('IDENTITY(l.habit) = :h')->andWhere('l.status = true')->setParameter('h', $c->getTargetId())
+            ->getQuery()->getSingleScalarResult();
+
+        return $last ? new \DateTimeImmutable((string) $last) : null;
+    }
+
+    private function lastGoalUpdate(AccountabilityCommitment $c): ?\DateTimeImmutable
+    {
+        if (AccountabilityCommitment::TARGET_GOAL !== $c->getTargetType() || null === $c->getTargetId()) {
+            return null;
+        }
+        $goal = $this->em->find(LifeGoal::class, $c->getTargetId());
+
+        return $goal instanceof LifeGoal ? $goal->getUpdatedAt() : null;
+    }
+
+    /**
+     * Chiffres de l'engagement : interpellations, réponses, délai, et reprises dans les 72 heures.
+     *
+     * @return array{nudges: int, responses: int, rate: int|null, avgHours: int|null, resumed: int, byAction: array<string, int>, last: list<AccountabilityNudge>}
      */
     public function stats(AccountabilityCommitment $c): array
     {
@@ -291,6 +425,7 @@ final class AccountabilityService
             'responses' => \count($responded),
             'rate' => \count($nudges) > 0 ? (int) round(100 * \count($responded) / \count($nudges)) : null,
             'avgHours' => $hours ? (int) round(array_sum($hours) / \count($hours)) : null,
+            'resumed' => \count(array_filter($nudges, static fn (AccountabilityNudge $n) => null !== $n->getResumedAt())),
             'byAction' => $byAction,
             'last' => \array_slice($nudges, 0, 5),
         ];

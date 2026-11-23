@@ -14,6 +14,17 @@ use Doctrine\ORM\Mapping as ORM;
 class AccountabilityNudge
 {
     public const REASON_OWNER_REQUEST = 'OWNER_REQUEST';
+    public const REASON_HABIT_MISSED = 'HABIT_MISSED';
+    public const REASON_GOAL_STALLED = 'GOAL_STALLED';
+    public const REASON_INACTIVE = 'INACTIVE';
+
+    /** Libellés des motifs, affichés dans l'historique. */
+    public const REASONS = [
+        self::REASON_OWNER_REQUEST => 'Demande de coup de main',
+        self::REASON_HABIT_MISSED => 'Alerte : rituel non validé',
+        self::REASON_GOAL_STALLED => 'Alerte : objectif sans avancée',
+        self::REASON_INACTIVE => 'Alerte : plus de connexion',
+    ];
 
     /** Actions que le partenaire peut indiquer. */
     public const ACTIONS = [
@@ -51,6 +62,14 @@ class AccountabilityNudge
     #[ORM\Column(length: 20, nullable: true)]
     private ?string $responseAction = null;
 
+    /** Constat envoyé avec une alerte automatique (ex. « n'a pas validé son rituel depuis 3 jours »). */
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $fact = null;
+
+    /** La personne a repris (rituel validé, objectif mis à jour, retour dans l'application) dans les 72 heures. */
+    #[ORM\Column(nullable: true)]
+    private ?\DateTimeImmutable $resumedAt = null;
+
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $responseNote = null;
 
@@ -74,6 +93,12 @@ class AccountabilityNudge
     public function getResponseAction(): ?string { return $this->responseAction; }
     public function getResponseActionLabel(): ?string { return null !== $this->responseAction ? (self::ACTIONS[$this->responseAction] ?? null) : null; }
     public function getResponseNote(): ?string { return $this->responseNote; }
+    public function getFact(): ?string { return $this->fact; }
+    public function setFact(?string $fact): static { $this->fact = null !== $fact ? mb_substr($fact, 0, 255) : null; return $this; }
+    public function getResumedAt(): ?\DateTimeImmutable { return $this->resumedAt; }
+    public function markResumed(\DateTimeImmutable $at): void { $this->resumedAt ??= $at; }
+    public function getReasonLabel(): string { return self::REASONS[$this->reason] ?? $this->reason; }
+    public function isAutomatic(): bool { return self::REASON_OWNER_REQUEST !== $this->reason; }
 
     public function respond(string $action, ?string $note): void
     {

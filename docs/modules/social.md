@@ -73,9 +73,19 @@ Plan de Vie, un rituel ou un engagement libre.
 - **Entités** : `AccountabilityCommitment`, `AccountabilityNudge` (migration `Version20261123100000`).
   Notification `NotificationType::ACCOUNTABILITY` (accord, refus, réponse du partenaire).
 - **Tests** : `tests/Social/AccountabilityTest.php`.
-- **Lots suivants** :
-  - lot 2 : effet mesuré (reprise du rituel ou avancée de l'objectif dans les 72 heures), revue de la semaine ;
-  - lot 3 : interpellations automatiques (rituel manqué, échéance, rythme), qui demandent la tâche planifiée des
-    rappels sur Hostinger ;
-  - lot 4 : application mobile.
+- **Alertes automatiques** (23/11/2026, demande du fondateur : « la personne peut ne plus avoir la force de demander ») :
+  - à la création, la personne choisit les signaux qui préviennent son partenaire sans qu'elle ait à le demander :
+    rituel non validé N jours de suite (par défaut 3), objectif sans mise à jour depuis N jours (14), aucune connexion
+    depuis N jours (7, pour tous les engagements). Seuils de 2 à 90 jours ;
+  - `AccountabilityService::runDailyChecks()` est appelé chaque matin par `app:reminders:send` (tâche hPanel
+    `cron-rappels.sh`, 7 h) ;
+  - jamais deux alertes pour le même décrochage : une reprise doit avoir lieu après la dernière alerte du même motif ;
+    au plus un message tous les 7 jours (alertes et demandes confondues) ; rien pendant une pause ;
+  - l'e-mail au partenaire énonce le constat sans juger (« … n'a pas validé son rituel depuis 3 jours ») ;
+    la personne reçoit une copie qui rappelle que c'est elle qui a choisi ce filet de sécurité.
+- **Demande manuelle** : bouton « J'ai besoin d'un coup de main », avec un mot facultatif.
+- **Mesure** : interpellations (par motif), taux de réponse, délai moyen, **reprises dans les 72 heures**
+  (`AccountabilityNudge::resumedAt` : rituel validé, objectif mis à jour, ou retour dans l'application selon
+  l'engagement), historique. `LifeGoal::updatedAt` (nouvelle colonne) sert au signal « objectif sans avancée ».
+- **Lots suivants** : revue de la semaine (chiffres de redevabilité), application mobile.
 

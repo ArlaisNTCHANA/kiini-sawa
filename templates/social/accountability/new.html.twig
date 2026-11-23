@@ -3,6 +3,12 @@
 {% block title %}Nouvel engagement de redevabilité{% endblock %}
 
 {% block body %}
+<style>
+    .ac-alert { display: flex; gap: .6rem; align-items: center; padding: .55rem 0; cursor: pointer; flex-wrap: wrap; }
+    .ac-alert input[type=checkbox] { accent-color: var(--primary); }
+    .ac-alert input.ks-input.ac-days { width: 4.5rem; min-width: 0; display: inline-block; padding: .3rem .5rem; margin: 0 .25rem; }
+    .ac-alert span { flex: 1; min-width: 0; }
+</style>
 <div class="ks-page ks-page--narrow">
     {% include 'shared/_page_header.html.twig' with {
         back: {url: path('app_accountability'), label: 'Ma redevabilité'},
@@ -48,6 +54,27 @@
                 <input class="ks-input" type="email" name="partnerEmail" maxlength="180" value="{{ data.partnerEmail|default('') }}" placeholder="Son adresse e-mail" aria-label="E-mail du partenaire">
             </div>
             <p style="font-size: .82rem; color: var(--fg-muted); margin-top: .4rem;">Choisissez quelqu'un de confiance, qui vous veut du bien : un ami, un mentor, un responsable d'Église.</p>
+        </div>
+
+        <div class="ks-field">
+            <input type="hidden" name="alertsForm" value="1">
+            <p class="ks-label">4. Quand prévenir votre partenaire, sans que vous ayez à le demander ?</p>
+            <p style="font-size: .84rem; color: var(--fg-muted); margin-bottom: .6rem;">Quand on décroche, on n'a souvent plus la force de demander de l'aide. Choisissez les signaux qui préviendront votre partenaire (vous recevrez une copie). Au plus une alerte tous les 7 jours.</p>
+            {% set hd = data.alertHabitDays is defined ? data.alertHabitDays : 3 %}
+            {% set gd = data.alertGoalDays is defined ? data.alertGoalDays : 14 %}
+            {% set id = data.alertInactiveDays is defined ? data.alertInactiveDays : 7 %}
+            <label class="ac-alert" x-show="target.startsWith('HABIT:')">
+                <input type="checkbox" name="alertHabit" value="1" {{ hd > 0 ? 'checked' }}>
+                <span>Si je ne valide pas ce rituel pendant <input type="number" name="alertHabitDays" min="2" max="90" value="{{ hd > 0 ? hd : 3 }}" class="ks-input ac-days" aria-label="Nombre de jours"> jours de suite</span>
+            </label>
+            <label class="ac-alert" x-show="target.startsWith('GOAL:')">
+                <input type="checkbox" name="alertGoal" value="1" {{ gd > 0 ? 'checked' }}>
+                <span>Si mon objectif n'avance pas pendant <input type="number" name="alertGoalDays" min="2" max="90" value="{{ gd > 0 ? gd : 14 }}" class="ks-input ac-days" aria-label="Nombre de jours"> jours</span>
+            </label>
+            <label class="ac-alert">
+                <input type="checkbox" name="alertInactive" value="1" {{ id > 0 ? 'checked' }}>
+                <span>Si je ne me connecte plus à KIINI SAWA pendant <input type="number" name="alertInactiveDays" min="2" max="90" value="{{ id > 0 ? id : 7 }}" class="ks-input ac-days" aria-label="Nombre de jours"> jours</span>
+            </label>
         </div>
 
         <div><button class="ks-btn ks-btn--primary" type="submit">Voir ce qui sera envoyé</button></div>

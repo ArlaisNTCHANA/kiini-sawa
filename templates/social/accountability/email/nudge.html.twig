@@ -1,5 +1,5 @@
 {% extends 'compte/email/_layout.html.twig' %}
 {% block content %}
-  {% include 'social/accountability/_nudge_body.html.twig' with {owner: owner, partnerName: c.partnerName, label: c.targetLabel, why: c.why, message: nudge.ownerMessage, actions: actions, respondUrl: respondUrl} %}
+  {% include 'social/accountability/_nudge_body.html.twig' with {owner: owner, partnerName: c.partnerName, label: c.targetLabel, why: c.why, message: nudge.ownerMessage, actions: actions, respondUrl: respondUrl, fact: nudge.fact} %}
 {% endblock %}
 {% block footer %}Vous avez accepté d'être le partenaire de redevabilité de {{ owner }}. <a href="{{ stopUrl }}" style="color:#64748b;">Ne plus recevoir ces messages</a>.{% endblock %}

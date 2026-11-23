@@ -105,6 +105,7 @@ class AccountabilityController extends AbstractController
             'owner' => $user->getDisplayName(),
             'actions' => AccountabilityNudge::ACTIONS,
             'minDays' => AccountabilityCommitment::DEFAULT_MIN_DAYS,
+            'targetType' => str_starts_with($data['target'], 'HABIT:') ? 'HABIT' : (str_starts_with($data['target'], 'GOAL:') ? 'GOAL' : 'FREE'),
         ]);
     }
 
@@ -206,10 +207,13 @@ class AccountabilityController extends AbstractController
         ]);
     }
 
-    /** @return array{target: string, freeLabel: string, why: string, connectionId: int, partnerName: string, partnerEmail: string} */
+    /** @return array{target: string, freeLabel: string, why: string, connectionId: int, partnerName: string, partnerEmail: string, alertHabitDays: int, alertGoalDays: int, alertInactiveDays: int} */
     private function formData(Request $request): array
     {
         $r = $request->request;
+        // Alertes automatiques. Formulaire de départ : case cochée + nombre de jours ; aperçu → création : nombre seul (0 = désactivée).
+        $fromForm = $r->has('alertsForm');
+        $days = static fn (string $k): int => $fromForm && !$r->getBoolean('alert'.$k) ? 0 : max(0, $r->getInt('alert'.$k.'Days'));
 
         return [
             'target' => $r->getString('target'),
@@ -218,6 +222,9 @@ class AccountabilityController extends AbstractController
             'connectionId' => $r->getInt('connectionId'),
             'partnerName' => mb_substr(trim($r->getString('partnerName')), 0, 120),
             'partnerEmail' => mb_strtolower(trim($r->getString('partnerEmail'))),
+            'alertHabitDays' => $days('Habit'),
+            'alertGoalDays' => $days('Goal'),
+            'alertInactiveDays' => $days('Inactive'),
         ];
     }
 

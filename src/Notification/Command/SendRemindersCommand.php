@@ -23,6 +23,7 @@ class SendRemindersCommand extends Command
         private readonly \Psr\Cache\CacheItemPoolInterface $cacheApp,
         private readonly \App\Rapide\Repository\SyncOperationRepository $syncOperations,
         private readonly \App\Mobile\Repository\MobileTokenRepository $mobileTokens,
+        private readonly \App\Social\Service\AccountabilityService $accountability,
     )
     {
         parent::__construct();
@@ -44,6 +45,9 @@ class SendRemindersCommand extends Command
         }
 
         $sent = $this->reminders->sendAll($date);
+        // Redevabilité : alertes automatiques au partenaire (avec copie à la personne) et reprises à 72 heures
+        $accountability = $this->accountability->runDailyChecks($date);
+        $sent['redevabilité (alertes)'] = $accountability['alertes'];
         // Ménage quotidien : les identifiants de synchronisation du mode rapide de plus de 60 jours ne servent plus
         $this->syncOperations->purgeOlderThan($date->modify('-60 days'));
         $this->mobileTokens->purgeExpired($date->modify('-60 days'));

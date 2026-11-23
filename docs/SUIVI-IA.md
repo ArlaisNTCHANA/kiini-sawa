@@ -9,6 +9,35 @@ teste (`php bin/phpunit`), commit, déploie (`bin/ops/envoyer-hostinger.sh`), v�
 journal `var/log/prod-AAAA-MM-JJ.log` sans erreur) ; **le fondateur fait lui-même `git push`** (refusé à l'IA).
 Ne jamais afficher ni demander de mot de passe ; ne pas publier son nom (mentions légales en attente).
 
+## 23/11/2026 — Redevabilité : alertes automatiques au partenaire (le cœur de la fonction)
+
+- **Remarque du fondateur** : « demander à être interpellé » ne suffit pas. Celui qui décroche n'a souvent plus la
+  force de demander. L'automatique devient donc le cœur de la fonction, la demande manuelle un complément.
+- **Fait** :
+  - seuils sur `AccountabilityCommitment` (`alertHabitDays`, `alertGoalDays`, `alertInactiveDays`) ;
+  - motifs, constat et reprise sur `AccountabilityNudge` ;
+  - `LifeGoal::updatedAt` (rempli au `PrePersist` et au `PreUpdate`) ; migration `Version20261123110000` ;
+  - `AccountabilityService::runDailyChecks()` / `dueSignal()` / `recordResumptions()`, branchés dans
+    `SendRemindersCommand` (ligne « redevabilité (alertes) ») ;
+  - formulaire : étape 4 « Quand prévenir votre partenaire, sans que vous ayez à le demander ? » ;
+  - aperçu : liste des alertes choisies et exemple réel d'alerte ; consentement mis à jour ;
+  - page : règles actives, bouton « J'ai besoin d'un coup de main », statistique « reprises dans les 72 h », motif et
+    badge « reprise » dans l'historique ;
+  - invitation et page du partenaire : les alertes y sont mentionnées.
+- **Vérifié** :
+  - la tâche quotidienne tourne bien en production : `var/log/rappels.log`, chaque jour à 7 h depuis le 17/11 ;
+  - `User::lastActiveAt` est bien mis à jour (`LastActivitySubscriber`, au plus une fois par heure, sur le web et le
+    mobile) ;
+  - `targetsFor()` lit maintenant les objectifs et rituels en base (les collections de l'utilisateur peuvent être
+    incomplètes en mémoire).
+- **Tests** : 4 de plus dans `AccountabilityTest` :
+  - alerte « rituel manqué », une seule par décrochage ;
+  - rien avant le seuil, en pause ou si l'alerte est désactivée ;
+  - alerte « inactivité » et reprise à 72 h ;
+  - choix enregistrés depuis le formulaire et visibles dans l'aperçu.
+  Suite complète **475 / 475**.
+- **Reste** : revue de la semaine (chiffres), application mobile, essai réel des e-mails en production.
+
 ## 23/11/2026 — Engagements de redevabilité, lot 1 (interpeller par un partenaire, avec copie)
 
 - **Demande du fondateur** : l'application envoie un e-mail à un partenaire de redevabilité pour qu'il interpelle la
