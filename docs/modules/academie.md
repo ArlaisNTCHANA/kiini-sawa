@@ -61,6 +61,20 @@ La durée d'un parcours est calculée (somme des leçons visibles), elle n'est p
   (`POST /admin/academie/apercu-texte`).
 - Toutes les modifications : POST + jeton CSRF `admin_academie` (403 sinon).
 
+## Charger un parcours écrit dans un fichier (24/11/2026)
+
+`php bin/console app:academie:import content/academie/<parcours>.yaml` (`src/Academie/Command/ImportCourseCommand.php`)
+crée le parcours **en brouillon** : modules, leçons (Markdown), questions, exercices (cibles de `PracticeCatalog`).
+`--verifier` contrôle le fichier sans rien enregistrer. Un parcours de même adresse n'est jamais écrasé, sauf
+`--remplacer` sur un brouillon **jamais publié**. Ensuite, tout se relit et se publie dans le studio ; le fichier ne
+sert qu'au premier chargement (les modifications du studio ne reviennent pas dans le fichier).
+
+**Piège** : le texte des leçons garde les retours à la ligne (un retour = un saut de ligne à l'écran). Dans le fichier,
+écrire chaque paragraphe sur une seule ligne ; `AcademyImportTest` refuse une phrase coupée.
+
+Premier parcours chargé ainsi : `content/academie/de-la-productivite-a-la-fecondite.yaml`, tiré de la présentation
+« Maximiser sa productivité » du fondateur (diapositives et notes d'orateur), rattaché au Plan d'Hygiène de vie, PRO.
+
 ## Sécurité
 
 - Texte : Markdown rendu côté serveur par `LessonMarkdown` (Parsedown en mode sûr : HTML brut échappé, liens

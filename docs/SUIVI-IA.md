@@ -9,6 +9,22 @@ teste (`php bin/phpunit`), commit, déploie (`bin/ops/envoyer-hostinger.sh`), v�
 journal `var/log/prod-AAAA-MM-JJ.log` sans erreur) ; **le fondateur fait lui-même `git push`** (refusé à l'IA).
 Ne jamais afficher ni demander de mot de passe ; ne pas publier son nom (mentions légales en attente).
 
+## 24/11/2026 — Académie : parcours « De la productivité à la fécondité » (brouillon)
+
+- **Demande du fondateur** : structurer un exemple de cours à partir de sa présentation « Maximiser sa productivité »
+  (49 diapositives, formation de deux jours) en s'appuyant sur ses notes. Plan proposé puis validé (« Oui, rédige-le »).
+- **Fait** : `content/academie/de-la-productivite-a-la-fecondite.yaml` (5 modules, 22 leçons de 6 à 9 minutes,
+  17 questions, exercices vers le Journal, le Plan d'Hygiène de vie, les Rituels, le Plan de Vie et le Plan de
+  Croissance), commande `app:academie:import` (chargement en brouillon, voir `docs/modules/academie.md`), test
+  `tests/Academie/AcademyImportTest.php`. Styles des leçons : tableaux, puces des listes, boutons « leçon
+  précédente / suivante » qui passent à la ligne sur téléphone (`templates/academie/_styles.html.twig`).
+- **Choix de rédaction** : textes du fondateur réécrits pour être lus (vouvoiement, sans emoji) ; les cinq principes,
+  présentés deux fois dans les diapositives, regroupés en un module ; « 4 piliers » de l'agenda → 5 principes ;
+  **« Marc » retiré** (cité dans les notes sans jamais être présenté) : le fondateur peut redonner son histoire ;
+  « il y a deux semaines » (diapo 23) corrigé. Fécondité, Kairos, élagage ne viennent pas du livre : le cours ne les
+  lui attribue pas ; liens vers les chapitres 4, 7, 8, 9, 11, 15, 17 et 22, citations du livre vérifiées mot pour mot.
+- **Reste ouvert** : relecture et publication par le fondateur dans Admin › Académie (le parcours est en brouillon).
+
 ## 24/11/2026 — Messages « Saviez-vous que… » pour les fonctions pas encore utilisées
 
 - **Demande du fondateur** : envoyer de temps en temps un e-mail « Saviez-vous que vous pouvez demander un feedback /

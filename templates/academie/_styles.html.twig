@@ -5,7 +5,17 @@
     .academie-texte h3 { font-size: 1.15rem; }
     .academie-texte p, .academie-texte ul, .academie-texte ol { margin: 0 0 1rem; }
     .academie-texte ul, .academie-texte ol { padding-left: 1.4rem; }
+    .academie-texte ul { list-style: disc; }
+    .academie-texte ol { list-style: decimal; }
+    .academie-texte li { margin-bottom: .3rem; }
+    .academie-texte li::marker { color: var(--primary); }
     .academie-texte blockquote { border-left: 3px solid var(--gold); background: var(--primary-soft); padding: .75rem 1rem; border-radius: 0 10px 10px 0; color: var(--primary-dark); margin: 1.2rem 0; font-family: var(--font-serif); }
+    /* Tableaux du texte d'une leçon : défilent de côté sur téléphone plutôt que de déborder */
+    .academie-texte table { display: block; overflow-x: auto; max-width: 100%; border-collapse: collapse; margin: 1.2rem 0; font-size: .95rem; line-height: 1.5; }
+    .academie-texte th, .academie-texte td { border: 1px solid var(--border); padding: .55rem .75rem; text-align: left; vertical-align: top; min-width: 8rem; }
+    .academie-texte th { background: var(--primary-soft); color: var(--primary-dark); font-weight: 700; }
+    .academie-texte tr:nth-child(even) td { background: var(--bg-alt); }
+    .academie-texte blockquote p { margin: 0; }
     .academie-texte a { color: var(--primary); }
     .academie-texte strong { color: var(--fg); }
     .academie-cover { display: flex; align-items: center; gap: 1rem; border-radius: var(--r-lg); padding: 1.4rem; }
@@ -23,6 +33,8 @@
     .academie-choice.is-wrong { border-color: var(--couple); background: var(--couple-soft); }
     .academie-explain { margin-top: .8rem; padding: .8rem 1rem; border-radius: var(--r-sm); background: var(--bg-alt); color: var(--fg-light); }
     .academie-steps { display: flex; justify-content: space-between; gap: .6rem; flex-wrap: wrap; margin-top: 2rem; }
+    /* Titres de leçon longs : le bouton passe à la ligne au lieu de déborder sur téléphone */
+    .academie-steps .ks-btn { max-width: 100%; white-space: normal; text-align: left; height: auto; }
     .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
     .academie-banner { background: var(--primary-soft); border: 1px solid var(--border); border-radius: var(--r-md); padding: .7rem 1rem; display: flex; flex-wrap: wrap; gap: .6rem; align-items: center; justify-content: space-between; margin-bottom: 1.5rem; font-size: .9rem; }
     /* Catalogue */
