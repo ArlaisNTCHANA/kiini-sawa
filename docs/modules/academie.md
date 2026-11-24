@@ -106,6 +106,22 @@ modèle, avec un **aperçu en direct** (largeur ordinateur ou téléphone), puis
   les leçons ; suppression refusée tant qu'une leçon le place.
 - Les dessins libres (arbre et racines, courbes) restent des schémas du code ou des images envoyées.
 
+## Éditeur de leçon par blocs (24/11/2026)
+
+Dans le studio, le texte d'une leçon s'édite **bloc par bloc** (mode par défaut) : paragraphe (boutons gras, italique,
+lien), titre (partie ou sous-titre), liste (puces ou numérotée, un point par ligne), citation, encadré, schéma (atelier
+ou dessiné dans le code), image (du parcours, avec sa description) et « texte avancé » (Markdown libre : tableaux…).
+Glisser-déposer par la poignée ou flèches, « + » entre deux blocs, aperçu en direct à droite.
+
+- `LessonBlocks` : `fromMarkdown` (texte → blocs ; tout ce qui n'est pas reconnu devient un bloc avancé, rien ne se
+  perd), `toMarkdown` (blocs → texte), `sanitize` (types et valeurs en listes fermées, images du studio seulement, un
+  encadré ne peut pas en fermer un autre). Le texte enregistré **garde le même format** : pages des membres, API mobile
+  et chargement de fichiers inchangés. Aller-retour sans perte vérifié sur les 22 leçons du parcours livré.
+- Formulaire de leçon : `editor=blocs` + `blocks` (JSON) → converti en texte par le serveur ; sinon `content` comme
+  avant (le formulaire marche aussi sans JavaScript). `POST /admin/academie/blocs` convertit d'un mode à l'autre ;
+  l'aperçu `apercu-texte` accepte aussi des blocs.
+- « Texte (avancé) » : l'ancien champ texte, avec son panneau d'insertion, toujours disponible.
+
 ## Charger un parcours écrit dans un fichier (24/11/2026)
 
 `php bin/console app:academie:import content/academie/<parcours>.yaml` (`src/Academie/Command/ImportCourseCommand.php`)

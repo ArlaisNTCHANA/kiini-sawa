@@ -274,7 +274,11 @@ class AcademyAdminController extends AbstractController
             $p = $request->request;
             $data = [
                 'title' => trim($p->getString('title')), 'module' => $p->getInt('module'), 'duration' => $p->getInt('duration'),
-                'content' => str_replace("\r\n", "\n", $p->getString('content')), 'video' => trim($p->getString('video')),
+                // Éditeur par blocs : les blocs sont convertis en texte, enregistré au même format qu'avant
+                'content' => 'blocs' === $p->getString('editor')
+                    ? \App\Academie\Service\LessonBlocks::toMarkdown(\App\Academie\Service\LessonBlocks::sanitize(json_decode($p->getString('blocks'), true)))
+                    : str_replace("\r\n", "\n", $p->getString('content')),
+                'video' => trim($p->getString('video')),
                 'practice' => $p->getString('practice'), 'prompt' => trim($p->getString('prompt')), 'visible' => $p->getBoolean('visible'),
             ];
             $target = null;
@@ -320,6 +324,7 @@ class AcademyAdminController extends AbstractController
             'images' => $this->images->list($course->getId()), 'diagrams' => \App\Academie\Service\LessonRenderer::DIAGRAMS,
             'callouts' => \App\Academie\Service\LessonMarkdown::CALLOUTS,
             'customDiagrams' => $this->em->getRepository(\App\Academie\Entity\LessonDiagram::class)->findBy([], ['title' => 'ASC']),
+            'editor' => $this->blockEditor($course, $data['content']),
         ]);
     }
 
@@ -371,8 +376,23 @@ class AcademyAdminController extends AbstractController
     public function markdownPreview(Request $request, \App\Academie\Service\LessonRenderer $renderer): Response
     {
         $this->checkCsrf($request);
+        $content = $request->request->has('blocks')
+            ? \App\Academie\Service\LessonBlocks::toMarkdown(\App\Academie\Service\LessonBlocks::sanitize(json_decode($request->request->getString('blocks'), true)))
+            : $request->request->getString('content');
 
-        return new Response($renderer->toHtml(mb_substr($request->request->getString('content'), 0, 100000)), 200, ['Content-Type' => 'text/html; charset=UTF-8']);
+        return new Response($renderer->toHtml(mb_substr($content, 0, 100000)), 200, ['Content-Type' => 'text/html; charset=UTF-8']);
+    }
+
+    /** Passage d'un mode d'édition à l'autre : texte → blocs (`content`) ou blocs → texte (`blocks`), sans rien enregistrer. */
+    #[Route('/blocs', name: '_blocks', methods: ['POST'])]
+    public function convertBlocks(Request $request): Response
+    {
+        $this->checkCsrf($request);
+        if ($request->request->has('blocks')) {
+            return $this->json(['content' => \App\Academie\Service\LessonBlocks::toMarkdown(\App\Academie\Service\LessonBlocks::sanitize(json_decode($request->request->getString('blocks'), true)))]);
+        }
+
+        return $this->json(['blocks' => \App\Academie\Service\LessonBlocks::fromMarkdown(mb_substr(str_replace("\r\n", "\n", $request->request->getString('content')), 0, 100000))]);
     }
 
     // ── Questions de discernement ─────────────────────────────────────────
@@ -507,6 +527,25 @@ class AcademyAdminController extends AbstractController
      *
      * @return T
      */
+    /** Données de l'éditeur par blocs : les blocs de la leçon et ce qu'on peut y placer (encadrés, schémas, images). */
+    private function blockEditor(Course $course, string $content): array
+    {
+        $diagrams = [];
+        foreach ($this->em->getRepository(\App\Academie\Entity\LessonDiagram::class)->findBy([], ['title' => 'ASC']) as $d) {
+            $diagrams[] = ['code' => $d->getCode(), 'label' => $d->getTitle(), 'perso' => true];
+        }
+        foreach (\App\Academie\Service\LessonRenderer::DIAGRAMS as $code => $label) {
+            $diagrams[] = ['code' => $code, 'label' => $label, 'perso' => false];
+        }
+
+        return [
+            'blocks' => \App\Academie\Service\LessonBlocks::fromMarkdown($content),
+            'callouts' => array_map(fn (string $code, array $c) => ['code' => $code, 'icon' => $c[0], 'label' => $c[1]], array_keys(\App\Academie\Service\LessonMarkdown::CALLOUTS), \App\Academie\Service\LessonMarkdown::CALLOUTS),
+            'diagrams' => $diagrams,
+            'images' => array_column($this->images->list($course->getId()), 'path'),
+        ];
+    }
+
     private function find(string $class, int $id): object
     {
         return $this->em->find($class, $id) ?? throw $this->createNotFoundException();

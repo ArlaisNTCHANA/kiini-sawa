@@ -66,4 +66,37 @@
     .ac-item__grid { display: grid; gap: .6rem; }
     @media (min-width: 640px) { .ac-item__grid { grid-template-columns: 2fr 1fr 1fr; } }
     .ac-item .ks-field { margin: 0; }
+    /* Éditeur de leçon par blocs */
+    .ac-modes { display: inline-flex; align-self: flex-start; background: var(--bg-alt); border-radius: var(--r-full); padding: .25rem; }
+    .ac-modes button { display: inline-flex; align-items: center; gap: .4rem; border: 0; background: transparent; font: inherit; font-weight: 600; font-size: .9rem; color: var(--fg-muted); padding: .45rem 1rem; border-radius: var(--r-full); cursor: pointer; }
+    .ac-modes button[aria-pressed="true"] { background: var(--card-bg); color: var(--primary-dark); box-shadow: var(--card-shadow); }
+    .ac-modes svg { width: 16px; height: 16px; }
+    .ac-blocs-layout { display: grid; gap: 1.25rem; align-items: start; }
+    @media (min-width: 1100px) { .ac-blocs-layout { grid-template-columns: minmax(0, 3fr) minmax(0, 2fr); } }
+    .ac-bloc { border: 1px solid var(--border); border-radius: var(--r-md); padding: .7rem .8rem .8rem; background: var(--card-bg); display: grid; gap: .55rem; }
+    .ac-bloc.is-dragging { opacity: .45; border-style: dashed; }
+    .ac-bloc:focus-within { border-color: var(--primary-light); box-shadow: 0 0 0 3px var(--primary-soft); }
+    .ac-bloc__head { display: flex; align-items: center; gap: .5rem; }
+    .ac-bloc__head .ks-toolbar { margin-left: auto; }
+    .ac-bloc__handle { cursor: grab; color: var(--fg-muted); display: inline-flex; padding: .2rem; border-radius: 6px; }
+    .ac-bloc__handle:hover { background: var(--bg-alt); }
+    .ac-bloc__handle svg { width: 18px; height: 18px; }
+    .ac-bloc__type { display: inline-flex; align-items: center; gap: .35rem; font-size: .78rem; font-weight: 800; letter-spacing: .05em; text-transform: uppercase; color: var(--primary-dark); }
+    .ac-bloc__type svg { width: 15px; height: 15px; }
+    .ac-bloc__tools { display: flex; gap: .3rem; }
+    .ac-bloc__tools button { border: 1px solid var(--border); background: var(--bg-alt); border-radius: 6px; min-width: 2rem; height: 2rem; display: inline-flex; align-items: center; justify-content: center; cursor: pointer; color: var(--fg); font: inherit; }
+    .ac-bloc__tools button:hover { border-color: var(--primary); }
+    .ac-bloc__tools svg { width: 15px; height: 15px; }
+    .ac-bloc__row { display: grid; gap: .5rem; }
+    @media (min-width: 640px) { .ac-bloc__row { grid-template-columns: 200px 1fr; } }
+    .ac-bloc__check { display: flex; gap: .5rem; align-items: center; font-size: .9rem; }
+    .ac-bloc__code { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: .85rem; }
+    .ac-bloc__between { display: flex; flex-direction: column; align-items: center; gap: .4rem; padding: .3rem 0; }
+    .ac-bloc__plus { width: 1.8rem; height: 1.8rem; border-radius: 50%; border: 1px dashed var(--border-strong); background: var(--card-bg); color: var(--fg-muted); display: inline-flex; align-items: center; justify-content: center; cursor: pointer; opacity: .6; }
+    .ac-bloc__plus:hover, .ac-bloc__plus:focus-visible { opacity: 1; color: var(--primary); border-color: var(--primary); }
+    .ac-bloc__plus svg { width: 15px; height: 15px; }
+    .ac-bloc__menu { display: flex; flex-wrap: wrap; justify-content: center; gap: .3rem; padding: .5rem; border: 1px solid var(--border); border-radius: var(--r-md); background: var(--bg-alt); }
+    .ac-bloc__add { border-top: 1px solid var(--border); padding-top: .4rem; }
+    .ac-insert__image.is-chosen { border-color: var(--primary); box-shadow: 0 0 0 3px var(--primary-soft); }
+    .ac-blocs-preview .ac-workshop__frame { max-height: 80vh; overflow: auto; }
 </style>

@@ -8,7 +8,7 @@
 {% block crumbs %}<span aria-hidden="true">›</span><a href="{{ path('admin_academie_course', {id: course.id}) }}">{{ course.title }}</a><span aria-hidden="true">›</span><span aria-current="page">{{ name }}</span>{% endblock %}
 {% block page_actions %}{% if lesson %}<a href="{{ path('admin_academie_lesson_preview', {id: lesson.id}) }}" class="ks-btn ks-btn--secondary"><i data-lucide="eye"></i> Prévisualiser comme un apprenant</a>{% endif %}{% endblock %}
 {% block content %}
-<div class="ks-stack" style="max-width: 880px;">
+<div class="ks-stack" style="max-width: 1240px;">
     {% for e in errors %}<div class="ks-alert ks-alert--danger" role="alert">{{ e }}</div>{% endfor %}
 
     <form method="post" action="{{ lesson ? path('admin_academie_lesson', {id: lesson.id}) : path('admin_academie_lesson_new', {id: module.id}) }}" class="ks-stack">
@@ -27,8 +27,152 @@
             <label style="display: flex; gap: .6rem; align-items: center; font-size: .92rem;"><input type="checkbox" name="visible" value="1" {{ data.visible ? 'checked' }}> Visible des apprenants (une fois le parcours publié)</label>
         </section>
 
-        <section class="ks-card ks-stack" x-data="{ html: '', loading: false, async show() { this.loading = true; const body = new FormData(); body.append('_csrf_token', '{{ token }}'); body.append('content', this.$refs.content.value); const r = await fetch('{{ path('admin_academie_markdown') }}', { method: 'POST', body, credentials: 'same-origin' }); this.html = r.ok ? await r.text() : '<p>Aperçu indisponible : rechargez la page.</p>'; this.loading = false; this.$nextTick(() => window.lucide && window.lucide.createIcons()); }, insert(text) { const t = this.$refs.content; const at = t.selectionStart ?? t.value.length; const before = t.value.slice(0, at); const sep = before === '' || before.endsWith('\n\n') ? '' : (before.endsWith('\n') ? '\n' : '\n\n'); t.value = before + sep + text + '\n\n' + t.value.slice(at); t.focus(); const pos = (before + sep + text).length; t.setSelectionRange(pos, pos); } }">
-            <h2 class="ks-card__title"><i data-lucide="pen-line"></i> Le texte</h2>
+        {% set editorInit = editor|merge({token: token, previewUrl: path('admin_academie_markdown'), convertUrl: path('admin_academie_blocks')}) %}
+        <script>
+        document.addEventListener('alpine:init', () => {
+            const empty = { paragraphe: { text: '' }, titre: { level: 2, text: '' }, liste: { ordered: false, items: '' }, citation: { text: '' },
+                encadre: { kind: 'retenir', title: '', text: '' }, schema: { code: '' }, image: { src: '', alt: '' }, avance: { text: '' } };
+            Alpine.data('lessonEditor', (init) => { let timer = null; let uid = 0; return {
+                mode: 'blocs', blocks: init.blocks.map((b) => ({ ...b, _id: ++uid })), html: '', menuAt: null, dragFrom: null, busy: false,
+                callouts: init.callouts, diagrams: init.diagrams, images: init.images,
+                json() { return JSON.stringify(this.blocks.map(({ _id, ...b }) => b)); },
+                schedule() { clearTimeout(timer); timer = setTimeout(() => this.refresh(), 400); },
+                async post(url, field, value) { const body = new FormData(); body.append('_csrf_token', init.token); body.append(field, value); const r = await fetch(url, { method: 'POST', body, credentials: 'same-origin' }); if (!r.ok) throw new Error(); return r; },
+                async refresh() { if (this.mode !== 'blocs') return; try { this.html = await (await this.post(init.previewUrl, 'blocks', this.json())).text(); } catch (e) { this.html = '<p>Aperçu indisponible : rechargez la page.</p>'; } this.icons(); },
+                icons() { this.$nextTick(() => window.lucide && window.lucide.createIcons()); },
+                add(type, at) { const i = at ?? this.blocks.length; this.blocks.splice(i, 0, { type, ...JSON.parse(JSON.stringify(empty[type])), _id: ++uid }); this.menuAt = null; this.icons(); this.$nextTick(() => { const el = document.querySelector('[data-bloc="' + i + '"] textarea, [data-bloc="' + i + '"] input'); el && el.focus(); }); },
+                remove(i) { if (confirm('Retirer ce bloc ?')) { this.blocks.splice(i, 1); this.icons(); } },
+                move(i, d) { const j = i + d; if (j < 0 || j >= this.blocks.length) return; const b = this.blocks.splice(i, 1)[0]; this.blocks.splice(j, 0, b); this.icons(); },
+                drop(i) { if (this.dragFrom === null || this.dragFrom === i) { this.dragFrom = null; return; } const b = this.blocks.splice(this.dragFrom, 1)[0]; this.blocks.splice(i, 0, b); this.dragFrom = null; this.icons(); },
+                wrap(ev, before, after) { const t = ev.target.closest('.ac-bloc').querySelector('textarea'); const a = t.selectionStart, z = t.selectionEnd; const sel = t.value.slice(a, z) || 'texte'; t.setRangeText(before + sel + after, a, z, 'select'); t.dispatchEvent(new Event('input')); t.focus(); },
+                link(ev) { const url = prompt('Adresse du lien (https://… ou /methode/…)'); if (url) this.wrap(ev, '[', '](' + url + ')'); },
+                async toTexte() { this.busy = true; try { const r = await this.post(init.convertUrl, 'blocks', this.json()); document.getElementById('content').value = (await r.json()).content; this.mode = 'texte'; } catch (e) { alert('Passage au mode avancé impossible : rechargez la page.'); } this.busy = false; this.icons(); },
+                async toBlocs() { this.busy = true; try { const r = await this.post(init.convertUrl, 'content', document.getElementById('content').value); this.blocks = (await r.json()).blocks.map((b) => ({ ...b, _id: ++uid })); this.mode = 'blocs'; } catch (e) { alert('Passage aux blocs impossible : rechargez la page.'); } this.busy = false; this.icons(); },
+                label(type) { return { paragraphe: 'Paragraphe', titre: 'Titre', liste: 'Liste', citation: 'Citation', encadre: 'Encadré', schema: 'Schéma', image: 'Image', avance: 'Texte avancé' }[type]; },
+                icon(type) { return { paragraphe: 'pilcrow', titre: 'heading', liste: 'list', citation: 'quote', encadre: 'square-dashed', schema: 'shapes', image: 'image', avance: 'code' }[type]; },
+            }; });
+        });
+        </script>
+
+        <div class="ks-stack" x-data="lessonEditor({{ editorInit|json_encode|e('html_attr') }})" x-effect="json(); schedule()">
+            <input type="hidden" name="editor" :value="mode">
+            <input type="hidden" name="blocks" :value="json()">
+            <div class="ac-modes" role="group" aria-label="Mode d'édition du texte">
+                <button type="button" :aria-pressed="(mode === 'blocs').toString()" @click="mode === 'texte' && toBlocs()" :disabled="busy"><i data-lucide="blocks"></i> Blocs</button>
+                <button type="button" :aria-pressed="(mode === 'texte').toString()" @click="mode === 'blocs' && toTexte()" :disabled="busy"><i data-lucide="code"></i> Texte (avancé)</button>
+            </div>
+
+            <div class="ac-blocs-layout" x-show="mode === 'blocs'">
+                <section class="ks-card ks-stack">
+                    <h2 class="ks-card__title"><i data-lucide="blocks"></i> Le texte, bloc par bloc</h2>
+                    <p class="ks-help">Chaque bloc est un morceau de la leçon. Pour changer l'ordre, glissez la poignée à gauche d'un bloc, ou utilisez les flèches. Le « + » entre deux blocs en ajoute un à cet endroit. L'aperçu se met à jour pendant que vous écrivez.</p>
+                    <template x-if="blocks.length === 0"><p class="ks-muted">La leçon est vide : ajoutez un premier bloc ci-dessous.</p></template>
+
+                    <template x-for="(b, i) in blocks" :key="b._id">
+                        <div>
+                            <div class="ac-bloc" :data-bloc="i" :class="dragFrom === i && 'is-dragging'" @dragover.prevent @drop.prevent="drop(i)">
+                                <div class="ac-bloc__head">
+                                    <span class="ac-bloc__handle" draggable="true" @dragstart="dragFrom = i" @dragend="dragFrom = null" title="Glisser pour déplacer" aria-hidden="true"><i data-lucide="grip-vertical"></i></span>
+                                    <span class="ac-bloc__type"><i :data-lucide="icon(b.type)"></i> <span x-text="label(b.type)"></span></span>
+                                    <div class="ks-toolbar">
+                                        <button type="button" class="ks-btn ks-btn--ghost ks-btn--sm" @click="move(i, -1)" :disabled="i === 0" aria-label="Monter ce bloc"><i data-lucide="arrow-up"></i></button>
+                                        <button type="button" class="ks-btn ks-btn--ghost ks-btn--sm" @click="move(i, 1)" :disabled="i === blocks.length - 1" aria-label="Descendre ce bloc"><i data-lucide="arrow-down"></i></button>
+                                        <button type="button" class="ks-btn ks-btn--ghost ks-btn--sm" @click="remove(i)" aria-label="Retirer ce bloc"><i data-lucide="trash-2"></i></button>
+                                    </div>
+                                </div>
+
+                                <template x-if="b.type === 'paragraphe'">
+                                    <div class="ks-stack">
+                                        <div class="ac-bloc__tools">
+                                            <button type="button" @click="wrap($event, '**', '**')" title="Gras"><strong>G</strong></button>
+                                            <button type="button" @click="wrap($event, '*', '*')" title="Italique"><em>I</em></button>
+                                            <button type="button" @click="link($event)" title="Lien"><i data-lucide="link"></i></button>
+                                        </div>
+                                        <textarea class="ks-input" rows="4" x-model="b.text" aria-label="Paragraphe"></textarea>
+                                    </div>
+                                </template>
+                                <template x-if="b.type === 'titre'">
+                                    <div class="ac-bloc__row">
+                                        <select class="ks-input" x-model.number="b.level" aria-label="Niveau du titre"><option value="2">Titre de partie</option><option value="3">Sous-titre</option></select>
+                                        <input class="ks-input" x-model="b.text" maxlength="160" aria-label="Titre" placeholder="Le titre de cette partie">
+                                    </div>
+                                </template>
+                                <template x-if="b.type === 'liste'">
+                                    <div class="ks-stack">
+                                        <label class="ac-bloc__check"><input type="checkbox" x-model="b.ordered"> Liste numérotée (1, 2, 3…)</label>
+                                        <textarea class="ks-input" rows="4" x-model="b.items" aria-label="Points de la liste" placeholder="Un point par ligne"></textarea>
+                                        <p class="ks-help">Un point par ligne. **gras** et *italique* sont acceptés.</p>
+                                    </div>
+                                </template>
+                                <template x-if="b.type === 'citation'">
+                                    <div class="ks-stack">
+                                        <textarea class="ks-input" rows="3" x-model="b.text" aria-label="Citation" placeholder="« La citation »&#10;La Méthode, chapitre 11"></textarea>
+                                        <p class="ks-help">Une ligne par ligne affichée : mettez la source (livre, verset) sur la dernière.</p>
+                                    </div>
+                                </template>
+                                <template x-if="b.type === 'encadre'">
+                                    <div class="ks-stack">
+                                        <div class="ac-bloc__row">
+                                            <select class="ks-input" x-model="b.kind" aria-label="Sorte d'encadré">
+                                                <template x-for="c in callouts" :key="c.code"><option :value="c.code" x-text="c.label" :selected="c.code === b.kind"></option></template>
+                                            </select>
+                                            <input class="ks-input" x-model="b.title" maxlength="80" aria-label="Titre de l'encadré" placeholder="Titre (facultatif)">
+                                        </div>
+                                        <textarea class="ks-input" rows="3" x-model="b.text" aria-label="Texte de l'encadré"></textarea>
+                                    </div>
+                                </template>
+                                <template x-if="b.type === 'schema'">
+                                    <div class="ks-stack">
+                                        <select class="ks-input" x-model="b.code" aria-label="Schéma">
+                                            <option value="">Choisissez un schéma…</option>
+                                            <template x-for="d in diagrams" :key="d.code"><option :value="d.code" x-text="(d.perso ? 'Atelier : ' : '') + d.label" :selected="d.code === b.code"></option></template>
+                                        </select>
+                                        <p class="ks-help"><a href="{{ path('admin_academie_diagrams') }}" target="_blank" rel="noopener">Créer un schéma dans l'atelier</a> (nouvel onglet ; enregistrez la leçon puis rechargez-la pour le voir ici).</p>
+                                    </div>
+                                </template>
+                                <template x-if="b.type === 'image'">
+                                    <div class="ks-stack">
+                                        <template x-if="images.length === 0"><p class="ks-help">Aucune image dans ce parcours : <a href="{{ path('admin_academie_course', {id: course.id}) }}#images" target="_blank" rel="noopener">ajoutez-en depuis la page du parcours</a>.</p></template>
+                                        <div class="ac-insert__images">
+                                            <template x-for="src in images" :key="src"><button type="button" class="ac-insert__image" :class="b.src === src && 'is-chosen'" @click="b.src = src" :aria-pressed="(b.src === src).toString()"><img :src="src" alt="" loading="lazy"></button></template>
+                                        </div>
+                                        <input class="ks-input" x-model="b.alt" maxlength="160" aria-label="Description de l'image" placeholder="Décrivez l'image en quelques mots (pour les personnes malvoyantes)">
+                                    </div>
+                                </template>
+                                <template x-if="b.type === 'avance'">
+                                    <div class="ks-stack">
+                                        <textarea class="ks-input ac-bloc__code" rows="5" x-model="b.text" aria-label="Texte avancé"></textarea>
+                                        <p class="ks-help">Texte avec ses marques de mise en forme (par exemple un tableau). Il s'affiche tel quel dans la leçon.</p>
+                                    </div>
+                                </template>
+                            </div>
+                            <div class="ac-bloc__between">
+                                <button type="button" class="ac-bloc__plus" @click="menuAt = menuAt === i + 1 ? null : i + 1" aria-label="Ajouter un bloc ici"><i data-lucide="plus"></i></button>
+                                <div class="ac-bloc__menu" x-show="menuAt === i + 1" x-cloak>
+                                    <template x-for="t in ['paragraphe', 'titre', 'liste', 'citation', 'encadre', 'schema', 'image', 'avance']" :key="t"><button type="button" class="ks-btn ks-btn--ghost ks-btn--sm" @click="add(t, i + 1)"><i :data-lucide="icon(t)"></i> <span x-text="label(t)"></span></button></template>
+                                </div>
+                            </div>
+                        </div>
+                    </template>
+
+                    <div class="ac-bloc__add">
+                        <p class="ac-insert__label">Ajouter un bloc à la fin</p>
+                        <div class="ac-insert__row">
+                            <template x-for="t in ['paragraphe', 'titre', 'liste', 'citation', 'encadre', 'schema', 'image', 'avance']" :key="t"><button type="button" class="ks-btn ks-btn--secondary ks-btn--sm" @click="add(t)"><i :data-lucide="icon(t)"></i> <span x-text="label(t)"></span></button></template>
+                        </div>
+                    </div>
+                </section>
+                <aside class="ac-blocs-preview">
+                    <div class="ac-workshop__sticky">
+                        <p class="ac-insert__label" style="margin-top: 0;">Aperçu en direct</p>
+                        <div class="ac-workshop__frame academie-texte" x-html="html" aria-live="polite"></div>
+                    </div>
+                </aside>
+            </div>
+
+        <section class="ks-card ks-stack" x-show="mode === 'texte'" x-cloak x-data="{ html: '', loading: false, async show() { this.loading = true; const body = new FormData(); body.append('_csrf_token', '{{ token }}'); body.append('content', this.$refs.content.value); const r = await fetch('{{ path('admin_academie_markdown') }}', { method: 'POST', body, credentials: 'same-origin' }); this.html = r.ok ? await r.text() : '<p>Aperçu indisponible : rechargez la page.</p>'; this.loading = false; this.$nextTick(() => window.lucide && window.lucide.createIcons()); }, insert(text) { const t = this.$refs.content; const at = t.selectionStart ?? t.value.length; const before = t.value.slice(0, at); const sep = before === '' || before.endsWith('\n\n') ? '' : (before.endsWith('\n') ? '\n' : '\n\n'); t.value = before + sep + text + '\n\n' + t.value.slice(at); t.focus(); const pos = (before + sep + text).length; t.setSelectionRange(pos, pos); } }">
+            <h2 class="ks-card__title"><i data-lucide="code"></i> Le texte (mode avancé)</h2>
+            <p class="ks-help">Le texte brut de la leçon, avec ses marques de mise en forme. Les deux modes montrent la même leçon : passez de l'un à l'autre à tout moment.</p>
             <div class="ks-field">
                 <label class="ks-label" for="content">Texte de la leçon</label>
                 <textarea class="ks-input" id="content" name="content" rows="18" x-ref="content" placeholder="## Un titre de partie&#10;&#10;Un paragraphe. **Un mot important.** *Une nuance.*&#10;&#10;> Une citation ou un verset.&#10;&#10;- un point&#10;- un autre point">{{ data.content }}</textarea>
@@ -75,6 +219,7 @@
             <div><button type="button" class="ks-btn ks-btn--ghost ks-btn--sm" @click="show()"><i data-lucide="eye"></i> <span x-text="loading ? 'Mise en forme…' : 'Prévisualiser le texte'">Prévisualiser le texte</span></button></div>
             <div class="ac-preview academie-texte" x-show="html" x-cloak x-html="html" aria-live="polite"></div>
         </section>
+        </div>
 
         <section class="ks-card ks-stack">
             <h2 class="ks-card__title"><i data-lucide="video"></i> Vidéo (facultatif)</h2>

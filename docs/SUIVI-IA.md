@@ -9,6 +9,17 @@ teste (`php bin/phpunit`), commit, déploie (`bin/ops/envoyer-hostinger.sh`), v�
 journal `var/log/prod-AAAA-MM-JJ.log` sans erreur) ; **le fondateur fait lui-même `git push`** (refusé à l'IA).
 Ne jamais afficher ni demander de mot de passe ; ne pas publier son nom (mentions légales en attente).
 
+## 24/11/2026 — Académie : éditeur de leçon par blocs
+
+- **Demande du fondateur** : la suite de l'atelier, « l'éditeur par blocs ».
+- **Fait** (détail : `docs/modules/academie.md`, « Éditeur de leçon par blocs ») : `LessonBlocks` (texte ↔ blocs, sans
+  perte, contrôlé sur les 22 leçons du parcours livré), éditeur Alpine dans `academie/admin/lesson.html.twig` (8 sortes
+  de blocs, glisser-déposer, « + » entre deux blocs, aperçu en direct), mode « Texte (avancé) » conservé, route
+  `admin_academie_blocks`. Tests : `tests/Academie/AcademyBlockEditorTest.php`.
+- **Vérification** : éditeur essayé sur une copie de la page générée comme administrateur (5 blocs reconnus, ajout,
+  déplacement, passage texte ↔ blocs) ; pas de connexion administrateur locale (mot de passe de test non lu).
+- **Piège** : le formulaire sans JavaScript envoie `editor` vide, donc le champ texte : les anciens tests passent tels quels.
+
 ## 24/11/2026 — Académie : atelier de schémas dans le studio
 
 - **Demande du fondateur** : « que le studio fasse ce que le code fait, mais en visuel ». Proposition : un atelier de
@@ -19,7 +30,6 @@ Ne jamais afficher ni demander de mot de passe ; ne pas publier son nom (mention
 - **Vérification** : rendu des 6 modèles vu chez un membre en local (téléphone et ordinateur) ; éditeur vérifié sur une
   copie de la page générée comme administrateur (frappe → aperçu relancé, ajout d'élément). Connexion administrateur
   locale non utilisée (mot de passe de test non lu).
-- **Reste ouvert** : éditeur de leçon visuel par blocs (deuxième chantier proposé, pas commencé).
 
 ## 24/11/2026 — Académie : leçons plus visuelles (encadrés, schémas, images)
 
