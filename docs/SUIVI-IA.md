@@ -44,6 +44,10 @@ Ne jamais afficher ni demander de mot de passe ; ne pas publier son nom (mention
   dans `../captures-admin/` (hors dépôt).
 - **Local uniquement** : compte administrateur de développement `admin-local@…` créé (accès dans
   `var/compte-de-test.local`, non versionné) ; l'ancien compte de ce fichier n'était pas administrateur.
+- **Déployé le 24/11/2026** (accord du fondateur), depuis une copie propre du commit 20cf082 (`git archive`) pour ne pas
+  embarquer le travail en cours d'une autre session. Contrôle : accueil 200, `/admin` redirige vers la connexion, styles
+  de l'administration présents dans `public/assets/styles/app-*.css`, aucun journal d'erreur du jour. Non vérifié
+  connecté en production (pas d'identifiants d'administrateur côté IA, voulu).
 - **Reste / pistes** : la page d'onboarding affiche du code Alpine brut dans certains cas (erreurs JavaScript
   « step is not defined » vues en se connectant) : à examiner, hors de ce chantier.
 
