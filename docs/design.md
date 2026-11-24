@@ -62,7 +62,7 @@ Une seule définition pour l'ordinateur et le téléphone : `App\Shared\Twig\Nav
 | Mes plans | Plan de Vie, Plan de Croissance, Plan de Développement, Plan de Transmission, Plan d'Hygiène de Vie, Vue d'ensemble de mes plans |
 | Mon quotidien | Rituels, Agenda, Journal, Bilan |
 | Ensemble | Partenaires, Notre couple, Défis, Mon organisation, Inviter mes proches |
-| La Méthode | Les chapitres du livre |
+| La Méthode | Le livre (chapitres), L'Académie (parcours pratiques) |
 
 - Ordinateur : barre du haut, un panneau par rubrique (survol ou clic, Échap pour fermer).
 - Téléphone : barre du bas (Aujourd'hui, Mes plans, Rituels, Journal, Menu) ; « Menu » ouvre les six rubriques puis le compte.

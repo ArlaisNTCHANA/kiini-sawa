@@ -9,6 +9,36 @@ teste (`php bin/phpunit`), commit, déploie (`bin/ops/envoyer-hostinger.sh`), v�
 journal `var/log/prod-AAAA-MM-JJ.log` sans erreur) ; **le fondateur fait lui-même `git push`** (refusé à l'IA).
 Ne jamais afficher ni demander de mot de passe ; ne pas publier son nom (mentions légales en attente).
 
+## 24/11/2026 — L'Académie, Lot 2 : pages des membres
+
+- **Demande du fondateur** : « Oui, Lot 2 » (après validation du Lot 1). Détail : `docs/modules/academie.md`.
+- **Fait** :
+  - `/academie` (menu « La Méthode », qui devient une rubrique à deux pages : Le livre, L'Académie) : catalogue,
+    « Mes parcours en cours », filtres par plan avec le **Sanctuaire du Couple séparé**, parcours recommandé d'après la
+    dernière Boussole 360 ; page d'un parcours (Commencer / Reprendre / PRO / terminé, et « Refaire ma Boussole 360 » à
+    la fin si elle date de plus de 30 jours) ; lecture d'une leçon avec progression, vidéo, texte, questions, « Mettre en
+    pratique » et panneau **Mes notes** ;
+  - entités `CourseEnrollment`, `LessonCompletion`, `LessonNote` (migration `Version20261124050346`) ; services
+    `AcademyCatalog` (catalogue, accès, recommandation), `AcademyJournal` (notes dans le Journal, carnet « Académie »),
+    `AcademyPlanBridge` (le pont vers les plans : accord explicite, sans doublon, appartenance vérifiée, droits PRO et
+    limite de rituels, Sanctuaire du Couple ouvert) ;
+  - tous les textes des pages des membres passent par `t('academie.…')` (Admin › Textes du site).
+- **Choix** : le « Point à développer » libre est fondu dans « Mettre en pratique » (leçon sans exercice : le membre note
+  un point et choisit son plan). Les réponses aux questions ne sont pas enregistrées (pas de note, rien à garder).
+- **Piège découvert** : sur le site, le Plan de Développement personnel range compétences et connaissances dans le Plan
+  de Croissance (`GrowthGoal`, axe Compétence) ; `SkillGoal` et `LearningResource` ne s'affichent nulle part sur le web.
+  Les exercices `add_skill_goal` et `add_learning_resource` écrivent donc dans `GrowthGoal` (le libellé du second devient
+  « Ajouter une connaissance à acquérir »). Les éléments créés portent `sourceType = ACADEMIE`.
+- **Tests** : `tests/Academie/AcademyMemberTest.php` (leçon de bout en bout : note dans le Journal, valeur dans le Plan de
+  Vie, mise à jour sans doublon, parcours terminé ; point à travailler ; parcours PRO ; droits du Plan d'Intendance ;
+  parcours retiré gardé par les inscrits ; recommandation Boussole 360 ; sécurité) et `AcademyPlanBridgeTest.php` (chaque
+  exercice crée puis met à jour le même élément ; élément d'un autre membre jamais touché ; limite de rituels ; règles du
+  couple et du Journal). Suite complète **538 / 538**. `doctrine:schema:validate` OK.
+- **Vérifié en local** dans un vrai navigateur (ordinateur et téléphone 375 px, sans débordement) : catalogue, parcours,
+  note ajoutée au Journal, valeur enregistrée dans le Plan de Vie puis passage à la leçon suivante. Le parcours d'exemple
+  est publié dans la base **locale** seulement, avec une 2e leçon sans exercice.
+- **Reste** : Lot 3 (rythme par e-mail), Lot 4 (mobile). Rien n'est poussé ni déployé.
+
 ## 24/11/2026 — L'Académie, Lot 1 : studio auteur
 
 - **Demande du fondateur** : réaliser tout le cahier des charges de l'Académie (`docs/roadmap/CDC-academie-pratique.md`,

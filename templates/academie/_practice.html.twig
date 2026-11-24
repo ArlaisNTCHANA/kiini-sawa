@@ -1,0 +1,64 @@
+{#
+    « Mettre en pratique », chez les membres. Paramètres : course, lesson, practice, completion.
+    - Exercice prévu par l'auteur (practice.fixed) : la cible est fixée, le membre écrit sa réponse.
+    - Sinon : le membre peut noter un point à travailler et choisir où l'envoyer.
+    Rien n'est écrit dans un plan sans un clic sur le bouton d'accord ; l'autre bouton termine la leçon sans rien modifier.
+#}
+{% set answer = completion ? completion.response : null %}
+{% set saved = completion and completion.hasCreatedEntity %}
+<section class="ks-card ks-card--accent" id="pratique" style="margin-top: 2rem;" aria-labelledby="pratique-title">
+    <h2 class="ks-card__title" id="pratique-title"><i data-lucide="target"></i> {{ t('academie.pratique.titre', 'Mettre en pratique') }}</h2>
+    <form method="post" action="{{ path('app_academie_complete', {slug: course.slug, lessonSlug: lesson.slug}) }}">
+        <input type="hidden" name="_csrf_token" value="{{ csrf_token('academie') }}">
+        {% if practice.fixed %}
+            {% set form = practice.form %}
+            <p style="margin-bottom: .8rem;">{{ lesson.practicePrompt|nl2br }}</p>
+            <p class="ks-small" style="margin-bottom: .8rem;">{{ t('academie.pratique.cible', 'Votre réponse peut aller dans : {cible}.', 'text', {cible: academie_exercice(practice.target, practice.action)}) }}</p>
+            {% if practice.blocker %}
+                <div class="ks-alert ks-alert--info" style="margin-bottom: .8rem;">{{ practice.blocker }}{% if 'PRO' in practice.blocker %} <a href="{{ path('app_subscription') }}">{{ t('academie.pratique.decouvrir_pro', 'Découvrir KIINI SAWA PRO') }}</a>{% endif %}</div>
+            {% else %}
+                <label class="ks-label" for="practice-title">{{ form.title }}</label>
+                {% if practice.action == 'add_note' %}
+                    <textarea class="ks-input" id="practice-title" name="title" rows="4" maxlength="5000" required>{{ answer.title ?? '' }}</textarea>
+                {% else %}
+                    <input class="ks-input" id="practice-title" name="title" maxlength="255" required value="{{ answer.title ?? '' }}">
+                {% endif %}
+                {% if form.choice %}
+                    <label class="ks-label" for="practice-choice" style="margin-top: .7rem;">{{ form.choice.label }}</label>
+                    <select class="ks-input" id="practice-choice" name="choice">
+                        {% for value, label in form.choice.options %}
+                            <option value="{{ value }}" {{ (answer.choice ?? form.choice.default) == value ? 'selected' }}>{{ label }}</option>
+                        {% endfor %}
+                    </select>
+                {% endif %}
+                {% if form.detail %}
+                    <label class="ks-label" for="practice-detail" style="margin-top: .7rem;">{{ form.detail }}</label>
+                    <textarea class="ks-input" id="practice-detail" name="detail" rows="2" maxlength="2000">{{ answer.detail ?? '' }}</textarea>
+                {% endif %}
+            {% endif %}
+            {% set button = saved ? t('academie.pratique.mettre_a_jour', 'Mettre à jour dans mes plans') : academie_bouton(practice.target) %}
+            {% set can_save = not practice.blocker %}
+        {% else %}
+            <p style="margin-bottom: .8rem;">{{ t('academie.pratique.point_intro', 'Un point à travailler après cette leçon ? Notez-le et choisissez où l\'inscrire. C\'est facultatif.') }}</p>
+            <label class="ks-label" for="practice-title">{{ t('academie.pratique.point', 'Le point à travailler') }}</label>
+            <input class="ks-input" id="practice-title" name="title" maxlength="255" value="{{ answer.title ?? '' }}" placeholder="{{ t('academie.pratique.point_exemple', 'Par exemple : apprendre à dire non aux sollicitations urgentes') }}">
+            <label class="ks-label" for="practice-destination" style="margin-top: .7rem;">{{ t('academie.pratique.ou', 'Où l\'inscrire') }}</label>
+            {% set current = answer ? answer.target ~ '|' ~ answer.action : practice.default %}
+            <select class="ks-input" id="practice-destination" name="destination">
+                {% for value, d in practice.destinations %}
+                    <option value="{{ value }}" {{ current == value ? 'selected' }} {{ d.blocker ? 'disabled' }}>{{ d.label }}{{ d.blocker ? ' (' ~ t('academie.pratique.indisponible', 'non disponible avec votre offre') ~ ')' }}</option>
+                {% endfor %}
+            </select>
+            <label class="ks-label" for="practice-detail" style="margin-top: .7rem;">{{ t('academie.pratique.precisions', 'Précisions (facultatif)') }}</label>
+            <textarea class="ks-input" id="practice-detail" name="detail" rows="2" maxlength="2000">{{ answer.detail ?? '' }}</textarea>
+            {% set button = saved ? t('academie.pratique.mettre_a_jour', 'Mettre à jour dans mes plans') : t('academie.pratique.inscrire', 'Inscrire dans mon plan') %}
+            {% set can_save = true %}
+        {% endif %}
+
+        {% if saved %}<p class="ks-small" style="margin-top: .7rem;"><i data-lucide="check" style="width: 13px; height: 13px;"></i> {{ t('academie.pratique.deja', 'Déjà enregistré dans vos plans : le modifier ici met à jour le même élément, sans en créer un second.') }}</p>{% endif %}
+        <div class="ks-toolbar" style="margin-top: .9rem;">
+            {% if can_save %}<button type="submit" name="mode" value="plan" class="ks-btn ks-btn--primary">{{ button }}</button>{% endif %}
+            <button type="submit" name="mode" value="sans" class="ks-btn ks-btn--ghost" formnovalidate>{{ completion ? t('academie.pratique.suite', 'Continuer sans modifier mes plans') : t('academie.pratique.sans', 'Terminer la leçon sans modifier mon plan') }}</button>
+        </div>
+    </form>
+</section>

@@ -1,0 +1,36 @@
+{#
+    Mes notes de la leçon : elles vont dans le Journal (carnet « Académie »), classées sur un des 6 plans.
+    Paramètres : course, lesson, notes, can_journal.
+#}
+<section class="academie-notes" id="notes" aria-labelledby="notes-title" x-data="{ open: {{ notes|length ? 'true' : 'false' }} }">
+    <button type="button" class="academie-notes__toggle" @click="open = !open" :aria-expanded="open.toString()">
+        <span id="notes-title"><i data-lucide="notebook-pen"></i> {{ t('academie.notes.titre', 'Mes notes') }}{% if notes|length %} ({{ notes|length }}){% endif %}</span>
+        <i data-lucide="chevron-down" class="academie-notes__chevron"></i>
+    </button>
+    <div class="academie-notes__body" x-show="open" x-cloak>
+        <p class="ks-small">{{ t('academie.notes.aide', 'Un déclic, une citation, une question personnelle : vos notes vont dans votre Journal, carnet « Académie ».') }}</p>
+        <form method="post" action="{{ path('app_academie_note_add', {slug: course.slug, lessonSlug: lesson.slug}) }}" style="margin-top: .6rem;">
+            <input type="hidden" name="_csrf_token" value="{{ csrf_token('academie') }}">
+            <label class="sr-only" for="note-content">{{ t('academie.notes.champ', 'Votre note') }}</label>
+            <textarea class="ks-input" id="note-content" name="content" rows="3" maxlength="5000" required placeholder="{{ t('academie.notes.champ', 'Votre note') }}"></textarea>
+            <label class="ks-label" for="note-plan" style="margin-top: .5rem;">{{ t('academie.notes.plan', 'Plan concerné') }}</label>
+            <select class="ks-input ks-input--sm" id="note-plan" name="plan">
+                {% for key, label in academie_plans() %}
+                    <option value="{{ key }}" {{ key == (course.primaryPlan ?? 'VIE') ? 'selected' }}>{{ label }}</option>
+                {% endfor %}
+            </select>
+            <button type="submit" class="ks-btn ks-btn--secondary ks-btn--sm" style="margin-top: .6rem;">{{ t('academie.notes.ajouter', 'Ajouter la note') }}</button>
+        </form>
+        {% for n in notes %}
+            <div class="academie-note">
+                <p class="ks-small">{{ n.createdAt|date('d/m/Y') }}{% if n.planKey %} · {{ academie_lieu(n.planKey) }}{% endif %}</p>
+                <p>{{ n.note.content|nl2br }}</p>
+                <form method="post" action="{{ path('app_academie_note_delete', {id: n.id}) }}" onsubmit="return confirm('{{ t('academie.notes.confirmer', 'Supprimer cette note de votre Journal ?')|e('js') }}')">
+                    <input type="hidden" name="_csrf_token" value="{{ csrf_token('academie') }}">
+                    <button type="submit" class="ks-btn ks-btn--ghost ks-btn--sm"><i data-lucide="trash-2"></i> {{ t('academie.notes.supprimer', 'Supprimer') }}</button>
+                </form>
+            </div>
+        {% endfor %}
+        {% if can_journal and notes|length %}<a href="{{ path('app_journal') }}" class="ks-small" style="display: inline-block; margin-top: .6rem;">{{ t('academie.notes.journal', 'Ouvrir mon Journal') }}</a>{% endif %}
+    </div>
+</section>

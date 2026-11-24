@@ -8,8 +8,8 @@
         <template x-if="on"><iframe :src="$root.dataset.src" title="Vidéo de la leçon : {{ lesson.title }}" allow="autoplay; fullscreen; picture-in-picture; encrypted-media" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe></template>
         <button type="button" class="academie-video__start" x-show="!on" @click="on = true">
             <i data-lucide="circle-play"></i>
-            <strong>Lancer la vidéo</strong>
-            <small>La vidéo est hébergée par {{ academie_video_source(lesson.mediaProvider) }}. En la lançant, vous vous connectez à ce service, qui peut déposer ses propres cookies.</small>
+            <strong>{{ t('academie.video.lancer', 'Lancer la vidéo') }}</strong>
+            <small>{{ t('academie.video.avertissement', 'La vidéo est hébergée par {service}. En la lançant, vous vous connectez à ce service, qui peut déposer ses propres cookies.', 'text', {service: academie_video_source(lesson.mediaProvider)}) }}</small>
         </button>
     </div>
 {% endif %}

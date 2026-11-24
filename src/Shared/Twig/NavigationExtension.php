@@ -48,7 +48,10 @@ final class NavigationExtension extends AbstractExtension
             ['Mon organisation', 'app_organisation_index', 'building-2', 'Église, association…'],
             ['Inviter mes proches', 'app_referral', 'gift', '1 mois PRO offert par ami'],
         ]],
-        'method' => ['label' => 'La Méthode', 'icon' => 'library', 'route' => 'app_methode_index', 'match' => ['/methode'], 'items' => []],
+        'method' => ['label' => 'La Méthode', 'icon' => 'library', 'route' => 'app_methode_index', 'match' => ['/methode', '/academie'], 'items' => [
+            ['Le livre', 'app_methode_index', 'library', 'La méthode KIINI SAWA, chapitre par chapitre'],
+            ['L\'Académie', 'app_academie', 'graduation-cap', 'Des parcours courts pour passer à l\'action dans vos plans'],
+        ]],
     ];
 
     /** Barre du bas sur téléphone : les usages quotidiens, puis « Menu ». */

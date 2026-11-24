@@ -1,0 +1,63 @@
+{% extends 'base.html.twig' %}
+{% block title %}{{ t('academie.catalogue.titre_page', 'L\'Académie') }}{% endblock %}
+{% block stylesheets %}{{ parent() }}{% include 'academie/_styles.html.twig' %}{% endblock %}
+{% block body %}
+<div class="ks-page" data-academie>
+    {% include 'shared/_page_header.html.twig' with {
+        eyebrow: t('academie.catalogue.surtitre', 'La Méthode'),
+        icon: 'graduation-cap',
+        title: t('academie.catalogue.titre', 'L\'Académie'),
+        lead: t('academie.catalogue.chapo', 'Des parcours courts, leçon par leçon. Chacune se termine par une décision que vous inscrivez, si vous le voulez, dans vos plans.'),
+    } %}
+
+    {% if recommended %}
+        <section class="academie-reco" aria-labelledby="reco-title">
+            <p class="ks-eyebrow" id="reco-title"><i data-lucide="compass" style="width: 14px; height: 14px;"></i> {{ t('academie.catalogue.reco', 'Recommandé d\'après votre Boussole 360 : priorité {plan}', 'text', {plan: academie_lieu(recommended.plan)}) }}</p>
+            <div class="ks-grid academie-grid" style="margin-top: .6rem;">
+                {% include 'academie/_course_card.html.twig' with {course: recommended.course, enrollment: enrollments[recommended.course.id] ?? null} %}
+            </div>
+        </section>
+    {% endif %}
+
+    {% if in_progress|length and place is null %}
+        <section style="margin-top: 2rem;" aria-labelledby="progress-title">
+            <h2 class="ks-section-title" id="progress-title">{{ t('academie.catalogue.en_cours', 'Mes parcours en cours') }}</h2>
+            <div class="ks-grid academie-grid">
+                {% for e in in_progress %}
+                    {% include 'academie/_course_card.html.twig' with {course: e.course, enrollment: e} %}
+                {% endfor %}
+            </div>
+        </section>
+    {% endif %}
+
+    {% if all_count %}
+        <nav class="academie-filters" aria-label="{{ t('academie.catalogue.filtrer', 'Filtrer par plan') }}">
+            <a href="{{ path('app_academie') }}" class="ks-tab {{ place is null ? 'is-active' }}">{{ t('academie.catalogue.tous', 'Tous les parcours') }}</a>
+            {% for key, label in plans %}
+                <a href="{{ path('app_academie', {lieu: key}) }}" class="ks-tab {{ place == key ? 'is-active' }}">{{ label }}</a>
+            {% endfor %}
+            {% if has_couple %}
+                <span class="academie-filters__sep" aria-hidden="true"></span>
+                <a href="{{ path('app_academie', {lieu: 'COUPLE'}) }}" class="ks-tab {{ place == 'COUPLE' ? 'is-active' }}"><i data-lucide="heart-handshake" style="width: 13px; height: 13px;"></i> Sanctuaire du Couple</a>
+            {% endif %}
+        </nav>
+    {% endif %}
+
+    <section style="margin-top: 1.4rem;" aria-label="{{ t('academie.catalogue.parcours', 'Parcours') }}">
+        {% if courses|length %}
+            <div class="ks-grid academie-grid">
+                {% for c in courses %}
+                    {% include 'academie/_course_card.html.twig' with {course: c, enrollment: enrollments[c.id] ?? null} %}
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="ks-empty">
+                <div class="ks-empty__icon"><i data-lucide="graduation-cap"></i></div>
+                <p class="ks-empty__title">{{ all_count ? t('academie.catalogue.vide_filtre', 'Pas encore de parcours pour ce plan.') : t('academie.catalogue.vide', 'Les premiers parcours arrivent bientôt.') }}</p>
+                <p class="ks-empty__text">{{ t('academie.catalogue.vide_texte', 'En attendant, la Méthode et votre Parcours 90 jours vous accompagnent pas à pas.') }}</p>
+                {% if all_count %}<a href="{{ path('app_academie') }}" class="ks-btn ks-btn--secondary">{{ t('academie.catalogue.tous', 'Tous les parcours') }}</a>{% else %}<a href="{{ path('app_methode_index') }}" class="ks-btn ks-btn--secondary">{{ t('academie.catalogue.methode', 'Ouvrir la Méthode') }}</a>{% endif %}
+            </div>
+        {% endif %}
+    </section>
+</div>
+{% endblock %}

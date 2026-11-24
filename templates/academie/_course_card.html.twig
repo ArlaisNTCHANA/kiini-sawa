@@ -1,0 +1,26 @@
+{#
+    Carte d'un parcours dans le catalogue. Paramètres : course, enrollment (ou null), is_pro, highlight (texte facultatif).
+#}
+{% set look = academie_apparence(course.place) %}
+{% set progress = enrollment ? enrollment.progress : null %}
+<a href="{{ path('app_academie_course', {slug: course.slug}) }}" class="ks-card ks-card--link academie-card" data-course="{{ course.slug }}">
+    <span class="academie-card__band" style="background: {{ look.soft }}; color: {{ look.color }};">
+        <i data-lucide="{{ look.icon }}"></i>
+        <span>{{ academie_lieu(course.place) }}</span>
+    </span>
+    {% if highlight|default(false) %}<span class="ks-badge ks-badge--gold" style="margin-top: .8rem;">{{ highlight }}</span>{% endif %}
+    <h3 class="academie-card__title">{{ course.title }}</h3>
+    {% if course.subtitle %}<p class="ks-muted academie-card__lead">{{ course.subtitle }}</p>{% endif %}
+    <p class="ks-small academie-card__meta">
+        {{ course.lessons(true)|length }} {{ course.lessons(true)|length > 1 ? t('academie.carte.lecons', 'leçons') : t('academie.carte.lecon', 'leçon') }}
+        · {{ t('academie.carte.duree', 'environ {minutes} min', 'text', {minutes: course.estimatedMinutes}) }}
+        ·
+        {% if course.free %}{{ t('academie.carte.gratuit', 'Gratuit') }}{% elseif is_pro %}{{ t('academie.carte.pro_inclus', 'Inclus dans votre offre PRO') }}{% else %}<i data-lucide="lock" style="width: 12px; height: 12px;"></i> {{ t('academie.carte.pro', 'KIINI SAWA PRO') }}{% endif %}
+    </p>
+    {% if progress %}
+        <div class="academie-progress" role="progressbar" aria-valuenow="{{ progress.percent }}" aria-valuemin="0" aria-valuemax="100" aria-label="Progression">
+            <span style="width: {{ progress.percent }}%;"></span>
+        </div>
+        <p class="ks-small">{% if enrollment.completed %}{{ t('academie.carte.termine', 'Parcours terminé') }}{% else %}{{ t('academie.carte.avancement', '{faites} leçon(s) sur {total}', 'text', {faites: progress.done, total: progress.total}) }}{% endif %}</p>
+    {% endif %}
+</a>

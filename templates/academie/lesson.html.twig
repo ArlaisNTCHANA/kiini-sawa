@@ -1,0 +1,25 @@
+{% extends 'base.html.twig' %}
+{% block title %}{{ lesson.title }} · {{ course.title }}{% endblock %}
+{% block stylesheets %}{{ parent() }}{% include 'academie/_styles.html.twig' %}{% endblock %}
+{% block body %}
+{% set progress = enrollment.progress %}
+<div class="academie-reader" data-academie-lesson="{{ lesson.slug }}">
+    <article class="academie-reader__main">
+        <a href="{{ path('app_academie_course', {slug: course.slug}) }}" class="ks-header__back">← {{ course.title }}</a>
+        <div class="academie-progress" role="progressbar" aria-valuenow="{{ progress.percent }}" aria-valuemin="0" aria-valuemax="100" aria-label="{{ t('academie.lecon.progression', 'Progression dans le parcours') }}" style="margin-top: .8rem;">
+            <span style="width: {{ progress.percent }}%;"></span>
+        </div>
+        <p class="ks-eyebrow" style="margin-top: 1rem;">{{ lesson.module.title }} · {{ t('academie.lecon.position', 'Leçon {position} sur {total}', 'text', {position: position, total: total}) }} · {{ lesson.durationMinutes }} min{% if completion %} · <span style="color: var(--primary);">{{ t('academie.lecon.faite', 'Terminée') }}</span>{% endif %}</p>
+        <h1 class="ks-header__title" style="margin: .3rem 0 1.4rem;">{{ lesson.title }}</h1>
+        {% include 'academie/_lesson_body.html.twig' with {preview: false} %}
+        {% include 'academie/_practice.html.twig' %}
+        <nav class="academie-steps" aria-label="{{ t('academie.lecon.navigation', 'Leçons') }}">
+            {% if previous %}<a href="{{ path('app_academie_lesson', {slug: course.slug, lessonSlug: previous.slug}) }}" class="ks-btn ks-btn--ghost"><i data-lucide="arrow-left"></i> {{ previous.title }}</a>{% else %}<span></span>{% endif %}
+            {% if next %}<a href="{{ path('app_academie_lesson', {slug: course.slug, lessonSlug: next.slug}) }}" class="ks-btn ks-btn--ghost">{{ next.title }} <i data-lucide="arrow-right"></i></a>{% endif %}
+        </nav>
+    </article>
+    <aside class="academie-reader__side">
+        {% include 'academie/_notes.html.twig' %}
+    </aside>
+</div>
+{% endblock %}

@@ -20,8 +20,10 @@ final class PracticeCatalog
             'add_principle' => ['label' => 'Ajouter un principe', 'entity' => 'Principle'],
         ]],
         'DEVELOPPEMENT' => ['label' => 'Plan de Développement personnel', 'button' => 'Enregistrer dans mon Plan de Développement personnel', 'actions' => [
-            'add_skill_goal' => ['label' => 'Ajouter une compétence à développer', 'entity' => 'SkillGoal'],
-            'add_learning_resource' => ['label' => 'Ajouter une ressource d\'apprentissage', 'entity' => 'LearningResource'],
+            // Sur le site, le Plan de Développement personnel range compétences et connaissances parmi les objectifs du
+            // Plan de Croissance (axe Compétence) : c'est là que l'exercice écrit, pour que la personne le voie.
+            'add_skill_goal' => ['label' => 'Ajouter une compétence à développer', 'entity' => 'GrowthGoal'],
+            'add_learning_resource' => ['label' => 'Ajouter une connaissance à acquérir', 'entity' => 'GrowthGoal'],
         ]],
         'HYGIENE' => ['label' => 'Plan d\'Hygiène de vie', 'button' => 'Enregistrer dans mon Plan d\'Hygiène de vie', 'actions' => [
             'add_hygiene_domain' => ['label' => 'Ajouter un domaine à soigner', 'entity' => 'HygieneDomain'],

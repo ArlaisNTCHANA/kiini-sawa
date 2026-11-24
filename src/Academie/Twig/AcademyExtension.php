@@ -24,6 +24,7 @@ final class AcademyExtension extends AbstractExtension
     {
         return [
             new TwigFunction('academie_lieu', AcademyPlaces::label(...)),
+            new TwigFunction('academie_plans', AcademyPlaces::plans(...)),
             new TwigFunction('academie_apparence', AcademyPlaces::look(...)),
             new TwigFunction('academie_exercice', PracticeCatalog::label(...)),
             new TwigFunction('academie_bouton', PracticeCatalog::button(...)),
