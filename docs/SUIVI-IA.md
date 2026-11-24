@@ -9,6 +9,38 @@ teste (`php bin/phpunit`), commit, déploie (`bin/ops/envoyer-hostinger.sh`), v�
 journal `var/log/prod-AAAA-MM-JJ.log` sans erreur) ; **le fondateur fait lui-même `git push`** (refusé à l'IA).
 Ne jamais afficher ni demander de mot de passe ; ne pas publier son nom (mentions légales en attente).
 
+## 24/11/2026 — L'Académie, Lot 1 : studio auteur
+
+- **Demande du fondateur** : réaliser tout le cahier des charges de l'Académie (`docs/roadmap/CDC-academie-pratique.md`,
+  4 lots) avant le lancement, lot par lot, chacun validé. Avis critique présenté avant de coder ; le fondateur a accepté
+  toutes les recommandations (« D'accord, recommandations ») : accès gratuit/PRO seulement (pas de niveau Duo), nom
+  « L'Académie », contenu repris de zéro, cours retiré gardé par ceux qui l'ont commencé, illustration par plan (pas
+  d'image envoyée), notes de leçon dans le Journal (Lot 2), vidéos YouTube/Vimeo avec CSP et politique de
+  confidentialité mises à jour, l'Académie ajoute sans jamais remplacer (ni raison d'être ni Vision). Détail :
+  `docs/modules/academie.md`.
+- **Fait** :
+  - nouveau module `src/Academie/` : entités `Course`, `CourseModule`, `Lesson`, `LessonQuestion` (migration
+    `Version20261124001621`, tables `academy_*`) ; services `AcademyPlaces` (6 plans + Sanctuaire du Couple à part),
+    `PracticeCatalog` (exercices possibles, liste fermée), `VideoEmbed`, `LessonMarkdown`, `AcademyStudio` (ordre,
+    publication, suppression) ; extension Twig `AcademyExtension` ;
+  - studio `/admin/academie` sur le gabarit d'administration : parcours, modules, leçons (texte avec « Prévisualiser le
+    texte », vidéo, exercice relié aux plans, visible/masquée), questions de discernement, publier / repasser en
+    brouillon, aperçu comme un apprenant. Entrée « L'Académie » dans « Les contenus » (`AdminNavigationExtension`) ;
+  - vidéos : YouTube (youtube-nocookie.com) et Vimeo (dnt=1) seulement, chargées au clic ; CSP `frame-src` limitée à ces
+    deux lecteurs ; paragraphe ajouté à `content/textes/legal/confidentialite.md` (section Cookies).
+- **Choix** : le pont vers les plans (`AcademyPlanBridge`) passe au Lot 2, avec le côté apprenant, pour être testé de bout
+  en bout ; le Lot 1 en prépare la liste des actions. Après une première publication, on ne supprime plus ni parcours ni
+  leçon (on masque, on repasse en brouillon) : les progressions du Lot 2 ne pourront pas disparaître.
+- **Tests** : `tests/Academie/AcademyStudioTest.php` (parcours complet créé, prévisualisé, publié, retiré ; accès
+  administrateur ; CSRF ; texte sans HTML ni script ; liens vidéo étrangers refusés ; CSP) et `AcademyRulesTest.php`.
+  Suite complète **526 / 526**. `doctrine:schema:validate` OK.
+- **Vérifié en local** dans un vrai navigateur (ordinateur et téléphone 375 px, sans débordement) : création d'un parcours
+  et d'une leçon par les écrans, aperçu du texte, vidéo Vimeo lancée au clic sans blocage CSP, question validée avec
+  explication. Un parcours « [Exemple] Découvrir sa raison d'être » (brouillon) existe dans la base **locale** seulement.
+- **À vérifier à la mise en ligne** : si la politique de confidentialité a été modifiée dans Admin › Textes du site, la
+  version en base prime sur le fichier : y reporter le paragraphe « Vidéos des leçons de l'Académie ». Rien n'est déployé.
+- **Reste** : Lots 2 (pages des membres, pont vers les plans, notes dans le Journal), 3 (rythme par e-mail), 4 (mobile).
+
 ## 24/11/2026 — Onboarding : code Alpine brut à la place du formulaire
 
 - **Symptôme** : sur `/onboarding`, le formulaire était remplacé par du code (`step: 1, firstName: …`) ; console :

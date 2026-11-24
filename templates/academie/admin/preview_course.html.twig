@@ -1,0 +1,34 @@
+{% extends 'base.html.twig' %}
+{% block title %}Aperçu : {{ course.title }}{% endblock %}
+{% block stylesheets %}{{ parent() }}{% include 'academie/_styles.html.twig' %}{% endblock %}
+{% block body %}
+{% set look = academie_apparence(course.place) %}
+<article style="max-width: 760px; margin: 0 auto; padding: 1.5rem 1rem 6rem;" data-academie-preview>
+    {% include 'academie/admin/_preview_banner.html.twig' with {back: path('admin_academie_course', {id: course.id})} %}
+    <div class="academie-cover" style="background: {{ look.soft }}; color: {{ look.color }};">
+        <span class="academie-cover__icon"><i data-lucide="{{ look.icon }}"></i></span>
+        <div>
+            <p class="ks-eyebrow" style="color: {{ look.color }};">L'Académie · {{ academie_lieu(course.place) }}</p>
+            <h1 class="ks-header__title" style="margin: .2rem 0 0;">{{ course.title }}</h1>
+        </div>
+    </div>
+    {% if course.subtitle %}<p class="ks-header__lead" style="margin-top: 1rem;">{{ course.subtitle }}</p>{% endif %}
+    <p class="ks-small" style="margin: .6rem 0 1.4rem;">{{ course.lessons(true)|length }} leçon{{ course.lessons(true)|length > 1 ? 's' }} · environ {{ course.estimatedMinutes }} minutes · {{ course.free ? 'Gratuit' : 'Inclus dans KIINI SAWA PRO' }}</p>
+    {% if course.description %}<div class="academie-texte">{{ course.description|lecon_markdown }}</div>{% endif %}
+
+    {% for m in course.modules %}
+        {% set visible = m.lessons|filter(l => l.visible) %}
+        {% if visible|length %}
+            <section class="ks-card" style="margin-top: 1.2rem;">
+                <h2 class="ks-card__title">{{ m.title }}</h2>
+                {% for l in visible %}
+                    <a class="ks-row-link" href="{{ path('admin_academie_lesson_preview', {id: l.id}) }}">
+                        <span>{{ l.title }}</span>
+                        <span class="ks-row-link__meta">{{ l.durationMinutes }} min{% if l.hasVideo %} · vidéo{% endif %}</span>
+                    </a>
+                {% endfor %}
+            </section>
+        {% endif %}
+    {% endfor %}
+</article>
+{% endblock %}

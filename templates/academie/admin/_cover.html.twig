@@ -1,0 +1,3 @@
+{# Illustration d'un parcours : icône et couleurs de son plan (pas d'image envoyée en V1). Paramètre : place. #}
+{% set look = academie_apparence(place) %}
+<span class="ac-cover" style="background: {{ look.soft }}; color: {{ look.color }};" aria-hidden="true"><i data-lucide="{{ look.icon }}"></i></span>

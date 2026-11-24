@@ -1,0 +1,52 @@
+{#
+    Corps d'une leçon, tel que l'apprenant le voit : vidéo, texte, questions de discernement, exercice.
+    Paramètres : lesson ; preview (bool) : aperçu du studio, l'exercice n'enregistre rien.
+#}
+{% if lesson.hasVideo %}{% include 'academie/_video.html.twig' %}{% endif %}
+
+{% if lesson.contentMarkdown|trim %}
+    <div class="academie-texte">{{ lesson.contentMarkdown|lecon_markdown }}</div>
+{% endif %}
+
+{% if lesson.questions|length %}
+    <section style="margin-top: 2rem;" aria-labelledby="questions-title">
+        <h2 id="questions-title" class="ks-card__title" style="font-family: var(--font-serif); font-size: 1.3rem;"><i data-lucide="list-checks"></i> Questions de discernement</h2>
+        <p class="ks-muted" style="margin-bottom: 1rem;">Pour vérifier ce que vous avez compris. Aucune note : lisez l'explication, et recommencez si vous le souhaitez.</p>
+        {% for q in lesson.questions %}
+            {% set right = q.correctOptionIds %}
+            <div class="academie-question" x-data="{ picked: [], done: false, toggle(id, multi) { if (this.done) return; this.picked = multi ? (this.picked.includes(id) ? this.picked.filter(x => x !== id) : [...this.picked, id]) : [id]; } }" data-question="{{ q.id }}">
+                <p style="font-weight: 600; color: var(--fg);">{{ loop.index }}. {{ q.question }}</p>
+                <p class="ks-small">{{ q.multiple ? 'Plusieurs réponses possibles.' : 'Une seule réponse.' }}</p>
+                {% for o in q.options %}
+                    {% set ok = o.id in right %}
+                    <label class="academie-choice" :class="done && ({{ ok ? 'true' : 'false' }} ? 'is-right' : (picked.includes('{{ o.id }}') ? 'is-wrong' : ''))">
+                        <input type="{{ q.multiple ? 'checkbox' : 'radio' }}" name="q{{ q.id }}" value="{{ o.id }}" :checked="picked.includes('{{ o.id }}')" :disabled="done" @change="toggle('{{ o.id }}', {{ q.multiple ? 'true' : 'false' }})">
+                        <span>{{ o.label }}</span>
+                    </label>
+                {% endfor %}
+                <div class="ks-toolbar" style="margin-top: .8rem;">
+                    <button type="button" class="ks-btn ks-btn--secondary ks-btn--sm" x-show="!done" :disabled="picked.length === 0" @click="done = true">Valider ma réponse</button>
+                    <button type="button" class="ks-btn ks-btn--ghost ks-btn--sm" x-show="done" x-cloak @click="done = false; picked = []"><i data-lucide="rotate-ccw"></i> Recommencer</button>
+                </div>
+                <div class="academie-explain" x-show="done" x-cloak>
+                    <p><strong>{{ q.multiple ? 'Les bonnes réponses' : 'La bonne réponse' }} :</strong> {{ q.options|filter(o => o.id in right)|map(o => o.label)|join(' ; ') }}</p>
+                    <p style="margin-top: .4rem;">{{ q.explanation|nl2br }}</p>
+                </div>
+            </div>
+        {% endfor %}
+    </section>
+{% endif %}
+
+{% if lesson.hasPractice %}
+    <section class="ks-card ks-card--accent" style="margin-top: 2rem;">
+        <h2 class="ks-card__title"><i data-lucide="target"></i> Mettre en pratique</h2>
+        <p style="margin-bottom: .8rem;">{{ lesson.practicePrompt|nl2br }}</p>
+        <label class="sr-only" for="practice-answer">Votre réponse</label>
+        <textarea class="ks-input" id="practice-answer" rows="3" placeholder="Votre décision, en une ou deux phrases" {{ preview|default(false) ? 'disabled' }}></textarea>
+        <div class="ks-toolbar" style="margin-top: .8rem;">
+            <button type="button" class="ks-btn ks-btn--primary" disabled>{{ academie_bouton(lesson.targetPlan) }}</button>
+            <button type="button" class="ks-btn ks-btn--ghost" disabled>Terminer la leçon sans modifier mon plan</button>
+        </div>
+        {% if preview|default(false) %}<p class="ks-small" style="margin-top: .6rem;">Aperçu : ici, l'apprenant écrira sa réponse et l'ajoutera, avec son accord, à : {{ academie_exercice(lesson.targetPlan, lesson.targetAction) }}.</p>{% endif %}
+    </section>
+{% endif %}

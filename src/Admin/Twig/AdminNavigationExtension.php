@@ -25,6 +25,7 @@ final class AdminNavigationExtension extends AbstractExtension
             ['Avis reçus', 'admin_app_feedback', 'message-square-heart', ['admin_app_feedback'], 'feedback'],
         ]],
         'content' => ['label' => 'Les contenus', 'items' => [
+            ['L\'Académie', 'admin_academie', 'graduation-cap', ['admin_academie']],
             ['Textes du site', 'admin_site_texts', 'file-pen-line', ['admin_site_texts', 'admin_site_text'], 'drafts'],
             ['Citations', 'admin_quotes', 'quote', ['admin_quotes']],
             ['Défis collectifs', 'admin_challenges', 'trophy', ['admin_challenges']],

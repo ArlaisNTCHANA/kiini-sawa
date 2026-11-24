@@ -1,0 +1,15 @@
+{#
+    Vidéo d'une leçon (YouTube ou Vimeo). Rien n'est chargé depuis YouTube ou Vimeo avant le clic de l'apprenant
+    (politique de confidentialité, section Cookies). Paramètre : lesson.
+#}
+{% set src = academie_video(lesson.mediaProvider, lesson.mediaRef) %}
+{% if src %}
+    <div class="academie-video" x-data="{ on: false }" data-video="{{ lesson.mediaProvider|lower }}" data-src="{{ src }}">
+        <template x-if="on"><iframe :src="$root.dataset.src" title="Vidéo de la leçon : {{ lesson.title }}" allow="autoplay; fullscreen; picture-in-picture; encrypted-media" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe></template>
+        <button type="button" class="academie-video__start" x-show="!on" @click="on = true">
+            <i data-lucide="circle-play"></i>
+            <strong>Lancer la vidéo</strong>
+            <small>La vidéo est hébergée par {{ academie_video_source(lesson.mediaProvider) }}. En la lançant, vous vous connectez à ce service, qui peut déposer ses propres cookies.</small>
+        </button>
+    </div>
+{% endif %}

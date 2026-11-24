@@ -7,6 +7,7 @@ Le code de KIINI SAWA est rangé **par module métier**. Chaque module regroupe 
 | Module | Rôle | Entités | Routes | Interface |
 |---|---|---|---|---|
 | [Abonnement](modules/abonnement.md) | Offres Gratuit / PRO, essai, paiements manuels validés par l'admin, reçus, revenus | 2 | 8 | Oui |
+| [Academie](modules/academie.md) | L'Académie : parcours pratiques reliés aux 6 plans ; studio auteur `/admin/academie` (Lot 1), pages des membres à venir (Lots 2 à 4) | 4 | 21 | Studio seulement |
 | [Admin](modules/admin.md) | Back-office | 2 | 3 | Partielle |
 | [Bilan](modules/bilan.md) | Bilans et revues : revue hebdomadaire sur les 4 plans, revue mensuelle, scores de croissance | 3 | 4 | Oui |
 | [Coaching](modules/coaching.md) | Mentorat | 4 | 0 | Non |

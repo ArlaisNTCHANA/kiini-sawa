@@ -63,6 +63,8 @@ KIINI SAWA utilise uniquement :
 - un cookie de mesure d'audience propre au site, « ks_origine » (30 jours) : il retient seulement par quel canal vous êtes arrivé (par exemple un lien publié sur un réseau social ou le site d'origine), pour savoir quels contenus font connaître KIINI SAWA. Il ne contient aucune donnée personnelle, n'est partagé avec personne, ne sert pas à la publicité et ne suit pas votre navigation sur d'autres sites. À la création d'un compte, ce canal est enregistré avec le compte, puis le cookie est effacé.
 - un cookie de parrainage, « ks_parrain » (30 jours), posé seulement si vous ouvrez le lien d'invitation d'un membre : il retient le code de ce membre pour lui attribuer son mois offert si vous créez un compte. Le membre voit alors votre prénom dans sa liste d'invitations.
 
+Vidéos des leçons de l'Académie : certaines leçons contiennent une vidéo hébergée par YouTube (Google) ou Vimeo. Rien n'est chargé depuis ces services tant que vous ne cliquez pas sur « Lancer la vidéo ». Si vous la lancez, votre navigateur se connecte au service concerné, qui reçoit votre adresse IP et peut déposer ses propres cookies, selon sa politique de confidentialité. Nous utilisons la version de YouTube qui ne dépose pas de cookie avant la lecture (youtube-nocookie.com) et le réglage de Vimeo qui désactive le suivi.
+
 Aucun cookie publicitaire ni outil de mesure d'audience tiers. Conformément aux recommandations de la CNIL sur les cookies de mesure d'audience exemptés de consentement, aucun bandeau n'est affiché. Vous pouvez supprimer ces cookies à tout moment depuis votre navigateur.
 
 ## Sécurité

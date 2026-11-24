@@ -1,0 +1,138 @@
+{% extends 'admin/layout.html.twig' %}
+{% set name = course ? course.title : 'Nouveau parcours' %}
+{% set token = csrf_token('admin_academie') %}
+{% block title %}{{ name }}{% endblock %}
+{% block stylesheets %}{% include 'academie/admin/_styles.html.twig' %}{% endblock %}
+{% block page_title %}{{ name }}{% endblock %}
+{% block crumbs %}<span aria-hidden="true">›</span><span aria-current="page">{{ name }}</span>{% endblock %}
+{% block page_actions %}{% if course %}<a href="{{ path('admin_academie_preview', {id: course.id}) }}" class="ks-btn ks-btn--secondary"><i data-lucide="eye"></i> Prévisualiser comme un apprenant</a>{% endif %}{% endblock %}
+{% block content %}
+<div class="ks-stack" style="max-width: 880px;">
+    {% for e in errors %}<div class="ks-alert ks-alert--danger" role="alert">{{ e }}</div>{% endfor %}
+
+    {% if course %}
+        <section class="ks-card {{ course.published ? 'ks-card--accent' }}" id="statut">
+            <h2 class="ks-card__title"><i data-lucide="{{ course.published ? 'globe' : 'file-pen-line' }}"></i> {{ course.published ? 'Publié : visible dans l\'Académie' : 'Brouillon : invisible des membres' }}</h2>
+            {% if course.published %}
+                <p class="ks-muted">Pour le retravailler sans qu'il soit visible, repassez-le en brouillon. Les membres qui l'ont commencé le gardent, avec leur progression et leurs notes.</p>
+            {% elseif problems is not empty %}
+                <p class="ks-muted">Avant de publier :</p>
+                <ul style="margin: .4rem 0 0 1.2rem;">{% for p in problems %}<li>{{ p }}</li>{% endfor %}</ul>
+            {% else %}
+                <p class="ks-muted">Relisez-le avec l'aperçu, puis publiez-le quand il est prêt.</p>
+            {% endif %}
+            <form method="post" action="{{ path('admin_academie_status', {id: course.id}) }}" style="margin-top: .9rem;">
+                <input type="hidden" name="_csrf_token" value="{{ token }}">
+                {% if course.published %}
+                    <button type="submit" name="action" value="retirer" class="ks-btn ks-btn--secondary"><i data-lucide="eye-off"></i> Repasser en brouillon</button>
+                {% else %}
+                    <button type="submit" name="action" value="publier" class="ks-btn ks-btn--secondary" {{ problems is not empty ? 'disabled' }}><i data-lucide="send"></i> Publier le parcours</button>
+                {% endif %}
+            </form>
+        </section>
+    {% endif %}
+
+    <form method="post" action="{{ course ? path('admin_academie_course', {id: course.id}) : path('admin_academie_new') }}" class="ks-card ks-stack">
+        <h2 class="ks-card__title"><i data-lucide="info"></i> Présentation du parcours</h2>
+        <input type="hidden" name="_csrf_token" value="{{ token }}">
+        <div class="ks-field"><label class="ks-label" for="title">Titre</label><input class="ks-input" id="title" name="title" value="{{ data.title }}" maxlength="160" placeholder="Trouver sa raison d'être" required></div>
+        <div class="ks-field"><label class="ks-label" for="subtitle">Accroche</label><input class="ks-input" id="subtitle" name="subtitle" value="{{ data.subtitle }}" maxlength="255" placeholder="Sept leçons pour formuler ce pour quoi Dieu vous a fait."></div>
+        <div class="ks-field"><label class="ks-label" for="description">Présentation</label><textarea class="ks-input" id="description" name="description" rows="5" placeholder="À qui s'adresse ce parcours, ce qu'il va changer, comment il se déroule.">{{ data.description }}</textarea><p class="ks-help">Mise en forme possible : **gras**, *italique*, listes avec « - ».</p></div>
+        <div class="ks-form-grid">
+            <div class="ks-field">
+                <label class="ks-label" for="place">Plan principal</label>
+                <select class="ks-input" id="place" name="place">
+                    <optgroup label="Les 6 plans">
+                        {% for key, label in plans %}<option value="{{ key }}" {{ data.place == key ? 'selected' }}>{{ label }}</option>{% endfor %}
+                    </optgroup>
+                    <optgroup label="À part">
+                        <option value="COUPLE" {{ data.place == 'COUPLE' ? 'selected' }}>Sanctuaire du Couple</option>
+                        <option value="" {{ data.place == '' ? 'selected' }}>Sans plan précis</option>
+                    </optgroup>
+                </select>
+                <p class="ks-help">Donne la couleur et l'icône du parcours, et le range dans les filtres de l'Académie.</p>
+            </div>
+            <div class="ks-field">
+                <label class="ks-label" for="access">Qui peut le suivre</label>
+                <select class="ks-input" id="access" name="access">
+                    {% for key, label in accessLevels %}<option value="{{ key }}" {{ data.access == key ? 'selected' }}>{{ label }}</option>{% endfor %}
+                </select>
+            </div>
+        </div>
+        <div class="ks-form-grid">
+            <div class="ks-field"><label class="ks-label" for="slug">Adresse (après /academie/)</label><input class="ks-input" id="slug" name="slug" value="{{ data.slug }}" placeholder="trouver-sa-raison-d-etre"><p class="ks-help">Laissez vide pour la créer à partir du titre. Évitez de la changer une fois publié : les liens partagés ne marcheraient plus.</p></div>
+            <div class="ks-field"><label class="ks-label" for="sortOrder">Ordre d'affichage</label><input class="ks-input" type="number" min="0" max="999" id="sortOrder" name="sortOrder" value="{{ data.sortOrder }}"><p class="ks-help">Les plus petits nombres apparaissent en premier.</p></div>
+        </div>
+        <div class="ks-sticky-actions">
+            <button type="submit" class="ks-btn ks-btn--primary"><i data-lucide="check"></i> {{ course ? 'Enregistrer' : 'Créer le parcours' }}</button>
+            <a href="{{ path('admin_academie') }}" class="ks-btn ks-btn--ghost">Annuler</a>
+        </div>
+    </form>
+
+    {% if course %}
+        <section class="ks-card" id="structure">
+            <h2 class="ks-card__title"><i data-lucide="list-tree"></i> Modules et leçons</h2>
+            <p class="ks-muted" style="margin-bottom: 1rem;">{{ course.lessons(true)|length }} leçon{{ course.lessons(true)|length > 1 ? 's' }} visible{{ course.lessons(true)|length > 1 ? 's' }} · environ {{ course.estimatedMinutes }} minutes au total.</p>
+            {% for m in course.modules %}
+                <div class="ac-module" data-module="{{ m.id }}">
+                    <div class="ac-module__head">
+                        <form method="post" action="{{ path('admin_academie_module_rename', {id: m.id}) }}" class="ac-rename">
+                            <input type="hidden" name="_csrf_token" value="{{ token }}">
+                            <label class="sr-only" for="module-{{ m.id }}">Titre du module</label>
+                            <input class="ks-input" id="module-{{ m.id }}" name="title" value="{{ m.title }}" maxlength="160" style="font-weight: 700;">
+                            <button type="submit" class="ac-icon-btn" title="Renommer le module" aria-label="Renommer le module"><i data-lucide="check"></i></button>
+                        </form>
+                        <div class="ac-tools">
+                            {% for sens, icon in {monter: 'arrow-up', descendre: 'arrow-down'} %}
+                                <form method="post" action="{{ path('admin_academie_module_move', {id: m.id}) }}"><input type="hidden" name="_csrf_token" value="{{ token }}"><button type="submit" name="sens" value="{{ sens }}" class="ac-icon-btn" title="{{ sens == 'monter' ? 'Monter' : 'Descendre' }} le module" aria-label="{{ sens == 'monter' ? 'Monter' : 'Descendre' }} le module" {{ (sens == 'monter' and loop.parent.loop.first) or (sens == 'descendre' and loop.parent.loop.last) ? 'disabled' }}><i data-lucide="{{ icon }}"></i></button></form>
+                            {% endfor %}
+                            {% if m.lessons is empty or canDelete %}
+                                <form method="post" action="{{ path('admin_academie_module_delete', {id: m.id}) }}" onsubmit="return confirm('Supprimer ce module{{ m.lessons is empty ? '' : ' et ses leçons' }} ?');"><input type="hidden" name="_csrf_token" value="{{ token }}"><button type="submit" class="ac-icon-btn" title="Supprimer le module" aria-label="Supprimer le module"><i data-lucide="trash-2"></i></button></form>
+                            {% endif %}
+                        </div>
+                    </div>
+                    {% for l in m.lessons %}
+                        <div class="ac-lesson {{ l.visible ? '' : 'is-hidden' }}" data-lesson="{{ l.id }}">
+                            <div class="ac-lesson__title">
+                                <a href="{{ path('admin_academie_lesson', {id: l.id}) }}">{{ l.title }}</a>
+                                <div class="ac-meta">
+                                    {% if not l.visible %}<span class="ks-badge ks-badge--warning">Masquée</span>{% endif %}
+                                    <span class="ks-small">{{ l.durationMinutes }} min{% if l.hasVideo %} · vidéo {{ academie_video_source(l.mediaProvider) }}{% endif %}{% if l.questions|length %} · {{ l.questions|length }} question{{ l.questions|length > 1 ? 's' }}{% endif %}{% if l.hasPractice %} · exercice : {{ academie_exercice(l.targetPlan, l.targetAction) }}{% endif %}</span>
+                                </div>
+                            </div>
+                            <div class="ac-tools">
+                                {% for sens, icon in {monter: 'arrow-up', descendre: 'arrow-down'} %}
+                                    <form method="post" action="{{ path('admin_academie_lesson_move', {id: l.id}) }}"><input type="hidden" name="_csrf_token" value="{{ token }}"><button type="submit" name="sens" value="{{ sens }}" class="ac-icon-btn" title="{{ sens == 'monter' ? 'Monter' : 'Descendre' }} la leçon" aria-label="{{ sens == 'monter' ? 'Monter' : 'Descendre' }} la leçon" {{ (sens == 'monter' and loop.parent.loop.first) or (sens == 'descendre' and loop.parent.loop.last) ? 'disabled' }}><i data-lucide="{{ icon }}"></i></button></form>
+                                {% endfor %}
+                                <form method="post" action="{{ path('admin_academie_lesson_visibility', {id: l.id}) }}"><input type="hidden" name="_csrf_token" value="{{ token }}"><button type="submit" class="ac-icon-btn" title="{{ l.visible ? 'Masquer aux apprenants' : 'Rendre visible' }}" aria-label="{{ l.visible ? 'Masquer aux apprenants' : 'Rendre visible' }}"><i data-lucide="{{ l.visible ? 'eye' : 'eye-off' }}"></i></button></form>
+                                <a href="{{ path('admin_academie_lesson_preview', {id: l.id}) }}" class="ac-icon-btn" title="Aperçu de la leçon" aria-label="Aperçu de la leçon"><i data-lucide="monitor-play"></i></a>
+                            </div>
+                        </div>
+                    {% else %}
+                        <p class="ks-small" style="padding: .4rem .2rem;">Aucune leçon dans ce module.</p>
+                    {% endfor %}
+                    <a href="{{ path('admin_academie_lesson_new', {id: m.id}) }}" class="ks-btn ks-btn--ghost ks-btn--sm" style="margin-top: .4rem;"><i data-lucide="plus"></i> Ajouter une leçon</a>
+                </div>
+            {% endfor %}
+            <form method="post" action="{{ path('admin_academie_module_add', {id: course.id}) }}" class="ks-toolbar" style="margin-top: 1rem;">
+                <input type="hidden" name="_csrf_token" value="{{ token }}">
+                <label class="sr-only" for="new-module">Titre du nouveau module</label>
+                <input class="ks-input" id="new-module" name="title" maxlength="160" placeholder="Titre du nouveau module" style="flex: 1 1 240px;">
+                <button type="submit" class="ks-btn ks-btn--secondary ks-btn--sm"><i data-lucide="folder-plus"></i> Ajouter un module</button>
+            </form>
+        </section>
+
+        <section class="ks-card ac-danger-zone">
+            {% if canDelete %}
+                <form method="post" action="{{ path('admin_academie_course_delete', {id: course.id}) }}" onsubmit="return confirm('Supprimer définitivement ce parcours, ses modules, ses leçons et ses questions ?');">
+                    <input type="hidden" name="_csrf_token" value="{{ token }}">
+                    <button type="submit" class="ks-btn ks-btn--danger ks-btn--sm"><i data-lucide="trash-2"></i> Supprimer ce parcours</button>
+                    <span class="ks-small">Possible tant qu'il n'a jamais été publié.</span>
+                </form>
+            {% else %}
+                <p class="ks-small">Ce parcours a déjà été publié : il ne peut plus être supprimé, pour que les membres gardent leur progression. Repassez-le en brouillon pour le retirer du catalogue.</p>
+            {% endif %}
+        </section>
+    {% endif %}
+</div>
+{% endblock %}

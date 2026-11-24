@@ -1,0 +1,32 @@
+{% extends 'admin/layout.html.twig' %}
+{% set name = question ? 'Modifier la question' : 'Nouvelle question' %}
+{% block title %}{{ name }}{% endblock %}
+{% block stylesheets %}{% include 'academie/admin/_styles.html.twig' %}{% endblock %}
+{% block page_title %}{{ name }}{% endblock %}
+{% block page_lead %}Leçon « {{ lesson.title }} »{% endblock %}
+{% block crumbs %}<span aria-hidden="true">›</span><a href="{{ path('admin_academie_course', {id: course.id}) }}">{{ course.title }}</a><span aria-hidden="true">›</span><a href="{{ path('admin_academie_lesson', {id: lesson.id}) }}">{{ lesson.title }}</a><span aria-hidden="true">›</span><span aria-current="page">{{ name }}</span>{% endblock %}
+{% block content %}
+<div class="ks-stack" style="max-width: 820px;">
+    {% for e in errors %}<div class="ks-alert ks-alert--danger" role="alert">{{ e }}</div>{% endfor %}
+    <form method="post" class="ks-card ks-stack">
+        <input type="hidden" name="_csrf_token" value="{{ csrf_token('admin_academie') }}">
+        <div class="ks-field"><label class="ks-label" for="question">Question</label><textarea class="ks-input" id="question" name="question" rows="3" placeholder="Un ami vous demande un service urgent le jour où vous aviez réservé du temps pour votre famille. Que faites-vous ?" required>{{ data.question }}</textarea><p class="ks-help">Préférez une mise en situation concrète à une question de mémoire.</p></div>
+        <fieldset class="ks-stack" style="border: 0; padding: 0; margin: 0;">
+            <legend class="ks-label">Réponses proposées (2 à 5) : cochez la ou les bonnes réponses</legend>
+            {% for i, o in data.options %}
+                <div class="ac-option">
+                    <label class="sr-only" for="option-{{ i }}">Réponse {{ i + 1 }}</label>
+                    <input class="ks-input" id="option-{{ i }}" name="options[{{ i }}]" value="{{ o.label }}" maxlength="300" placeholder="Réponse {{ i + 1 }}{{ i >= 2 ? ' (facultatif)' }}">
+                    <label><input type="checkbox" name="correct[{{ i }}]" value="1" {{ o.correct ? 'checked' }}> Bonne réponse</label>
+                </div>
+            {% endfor %}
+            <p class="ks-help">Avec plusieurs bonnes réponses, l'apprenant pourra cocher plusieurs cases.</p>
+        </fieldset>
+        <div class="ks-field"><label class="ks-label" for="explanation">Explication</label><textarea class="ks-input" id="explanation" name="explanation" rows="4" placeholder="Pourquoi telle réponse est juste, et pourquoi les autres sont trompeuses." required>{{ data.explanation }}</textarea><p class="ks-help">Affichée après la réponse, qu'elle soit juste ou non.</p></div>
+        <div class="ks-sticky-actions">
+            <button type="submit" class="ks-btn ks-btn--primary"><i data-lucide="check"></i> Enregistrer la question</button>
+            <a href="{{ path('admin_academie_lesson', {id: lesson.id, _fragment: 'questions'}) }}" class="ks-btn ks-btn--ghost">Annuler</a>
+        </div>
+    </form>
+</div>
+{% endblock %}

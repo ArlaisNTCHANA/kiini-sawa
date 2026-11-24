@@ -1,0 +1,108 @@
+{% extends 'admin/layout.html.twig' %}
+{% set name = lesson ? lesson.title : 'Nouvelle leçon' %}
+{% set token = csrf_token('admin_academie') %}
+{% block title %}{{ name }}{% endblock %}
+{% block stylesheets %}{% include 'academie/admin/_styles.html.twig' %}{% include 'academie/_styles.html.twig' %}{% endblock %}
+{% block page_title %}{{ name }}{% endblock %}
+{% block page_lead %}Parcours « {{ course.title }} »{% endblock %}
+{% block crumbs %}<span aria-hidden="true">›</span><a href="{{ path('admin_academie_course', {id: course.id}) }}">{{ course.title }}</a><span aria-hidden="true">›</span><span aria-current="page">{{ name }}</span>{% endblock %}
+{% block page_actions %}{% if lesson %}<a href="{{ path('admin_academie_lesson_preview', {id: lesson.id}) }}" class="ks-btn ks-btn--secondary"><i data-lucide="eye"></i> Prévisualiser comme un apprenant</a>{% endif %}{% endblock %}
+{% block content %}
+<div class="ks-stack" style="max-width: 880px;">
+    {% for e in errors %}<div class="ks-alert ks-alert--danger" role="alert">{{ e }}</div>{% endfor %}
+
+    <form method="post" action="{{ lesson ? path('admin_academie_lesson', {id: lesson.id}) : path('admin_academie_lesson_new', {id: module.id}) }}" class="ks-stack">
+        <input type="hidden" name="_csrf_token" value="{{ token }}">
+
+        <section class="ks-card ks-stack">
+            <h2 class="ks-card__title"><i data-lucide="file-text"></i> La leçon</h2>
+            <div class="ks-field"><label class="ks-label" for="title">Titre</label><input class="ks-input" id="title" name="title" value="{{ data.title }}" maxlength="160" placeholder="Ce que Dieu a déposé en vous" required></div>
+            <div class="ks-form-grid">
+                <div class="ks-field">
+                    <label class="ks-label" for="module">Module</label>
+                    <select class="ks-input" id="module" name="module">{% for m in course.modules %}<option value="{{ m.id }}" {{ data.module == m.id ? 'selected' }}>{{ m.title }}</option>{% endfor %}</select>
+                </div>
+                <div class="ks-field"><label class="ks-label" for="duration">Durée estimée (minutes)</label><input class="ks-input" type="number" min="1" max="60" id="duration" name="duration" value="{{ data.duration }}" required><p class="ks-help">Visez 5 à 10 minutes.</p></div>
+            </div>
+            <label style="display: flex; gap: .6rem; align-items: center; font-size: .92rem;"><input type="checkbox" name="visible" value="1" {{ data.visible ? 'checked' }}> Visible des apprenants (une fois le parcours publié)</label>
+        </section>
+
+        <section class="ks-card ks-stack" x-data="{ html: '', loading: false, async show() { this.loading = true; const body = new FormData(); body.append('_csrf_token', '{{ token }}'); body.append('content', this.$refs.content.value); const r = await fetch('{{ path('admin_academie_markdown') }}', { method: 'POST', body, credentials: 'same-origin' }); this.html = r.ok ? await r.text() : '<p>Aperçu indisponible : rechargez la page.</p>'; this.loading = false; } }">
+            <h2 class="ks-card__title"><i data-lucide="pen-line"></i> Le texte</h2>
+            <div class="ks-field">
+                <label class="ks-label" for="content">Texte de la leçon</label>
+                <textarea class="ks-input" id="content" name="content" rows="18" x-ref="content" placeholder="## Un titre de partie&#10;&#10;Un paragraphe. **Un mot important.** *Une nuance.*&#10;&#10;> Une citation ou un verset.&#10;&#10;- un point&#10;- un autre point">{{ data.content }}</textarea>
+                <p class="ks-help">Mise en forme : « ## » pour un titre de partie, **gras**, *italique*, « &gt; » pour une citation, « - » pour une liste, une ligne vide entre deux paragraphes.</p>
+            </div>
+            <div><button type="button" class="ks-btn ks-btn--ghost ks-btn--sm" @click="show()"><i data-lucide="eye"></i> <span x-text="loading ? 'Mise en forme…' : 'Prévisualiser le texte'">Prévisualiser le texte</span></button></div>
+            <div class="ac-preview academie-texte" x-show="html" x-cloak x-html="html" aria-live="polite"></div>
+        </section>
+
+        <section class="ks-card ks-stack">
+            <h2 class="ks-card__title"><i data-lucide="video"></i> Vidéo (facultatif)</h2>
+            <div class="ks-field">
+                <label class="ks-label" for="video">Lien de la vidéo YouTube ou Vimeo</label>
+                <input class="ks-input" id="video" name="video" value="{{ data.video }}" inputmode="url" placeholder="https://www.youtube.com/watch?v=…">
+                <p class="ks-help">Collez simplement l'adresse de la vidéo. Seuls YouTube et Vimeo sont acceptés. La vidéo ne se charge que si l'apprenant clique dessus (aucune connexion à YouTube ou Vimeo avant).</p>
+            </div>
+        </section>
+
+        <section class="ks-card ks-stack">
+            <h2 class="ks-card__title"><i data-lucide="target"></i> Mettre en pratique : l'exercice relié aux plans (facultatif)</h2>
+            <p class="ks-muted">À la fin de la leçon, l'apprenant écrit sa décision ; avec son accord, elle s'ajoute dans le plan choisi. L'Académie ajoute toujours, elle ne remplace jamais ce que la personne a déjà écrit.</p>
+            <div class="ks-field">
+                <label class="ks-label" for="practice">Ce que l'exercice ajoute</label>
+                <select class="ks-input" id="practice" name="practice">
+                    <option value="">Pas d'exercice dans cette leçon</option>
+                    {% for group, actions in practices %}
+                        <optgroup label="{{ group }}">{% for value, label in actions %}<option value="{{ value }}" {{ data.practice == value ? 'selected' }}>{{ label }}</option>{% endfor %}</optgroup>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="ks-field"><label class="ks-label" for="prompt">Consigne</label><textarea class="ks-input" id="prompt" name="prompt" rows="3" placeholder="Nommez une valeur que vous voulez voir guider vos décisions cette semaine.">{{ data.prompt }}</textarea></div>
+        </section>
+
+        <div class="ks-sticky-actions">
+            <button type="submit" class="ks-btn ks-btn--primary"><i data-lucide="check"></i> {{ lesson ? 'Enregistrer la leçon' : 'Créer la leçon' }}</button>
+            <a href="{{ path('admin_academie_course', {id: course.id, _fragment: 'structure'}) }}" class="ks-btn ks-btn--ghost">Retour au parcours</a>
+        </div>
+    </form>
+
+    {% if lesson %}
+        <section class="ks-card" id="questions">
+            <h2 class="ks-card__title"><i data-lucide="list-checks"></i> Questions de discernement ({{ lesson.questions|length }} sur {{ maxQuestions }})</h2>
+            <p class="ks-muted" style="margin-bottom: .8rem;">Des mises en situation pour vérifier la compréhension. Jamais de note : l'apprenant voit l'explication et peut recommencer.</p>
+            {% for q in lesson.questions %}
+                <div class="ac-lesson" data-question="{{ q.id }}">
+                    <div class="ac-lesson__title">
+                        <a href="{{ path('admin_academie_question', {id: q.id}) }}">{{ q.question|length > 140 ? q.question|slice(0, 140) ~ '…' : q.question }}</a>
+                        <div class="ac-meta"><span class="ks-small">{{ q.options|length }} réponses · {{ q.multiple ? 'plusieurs bonnes réponses' : 'une bonne réponse' }}</span></div>
+                    </div>
+                    <div class="ac-tools">
+                        {% for sens, icon in {monter: 'arrow-up', descendre: 'arrow-down'} %}
+                            <form method="post" action="{{ path('admin_academie_question_move', {id: q.id}) }}"><input type="hidden" name="_csrf_token" value="{{ token }}"><button type="submit" name="sens" value="{{ sens }}" class="ac-icon-btn" title="{{ sens == 'monter' ? 'Monter' : 'Descendre' }} la question" aria-label="{{ sens == 'monter' ? 'Monter' : 'Descendre' }} la question" {{ (sens == 'monter' and loop.parent.loop.first) or (sens == 'descendre' and loop.parent.loop.last) ? 'disabled' }}><i data-lucide="{{ icon }}"></i></button></form>
+                        {% endfor %}
+                        <form method="post" action="{{ path('admin_academie_question_delete', {id: q.id}) }}" onsubmit="return confirm('Supprimer cette question ?');"><input type="hidden" name="_csrf_token" value="{{ token }}"><button type="submit" class="ac-icon-btn" title="Supprimer la question" aria-label="Supprimer la question"><i data-lucide="trash-2"></i></button></form>
+                    </div>
+                </div>
+            {% else %}
+                <p class="ks-small">Aucune question pour l'instant.</p>
+            {% endfor %}
+            {% if lesson.questions|length < maxQuestions %}
+                <a href="{{ path('admin_academie_question_new', {id: lesson.id}) }}" class="ks-btn ks-btn--ghost ks-btn--sm" style="margin-top: .6rem;"><i data-lucide="plus"></i> Ajouter une question</a>
+            {% endif %}
+        </section>
+
+        <section class="ks-card ac-danger-zone">
+            {% if canDelete %}
+                <form method="post" action="{{ path('admin_academie_lesson_delete', {id: lesson.id}) }}" onsubmit="return confirm('Supprimer définitivement cette leçon et ses questions ?');">
+                    <input type="hidden" name="_csrf_token" value="{{ token }}">
+                    <button type="submit" class="ks-btn ks-btn--danger ks-btn--sm"><i data-lucide="trash-2"></i> Supprimer cette leçon</button>
+                </form>
+            {% else %}
+                <p class="ks-small">Ce parcours a déjà été publié : pour retirer cette leçon, décochez « Visible des apprenants ». Elle n'est pas supprimée, pour que les membres gardent leur progression.</p>
+            {% endif %}
+        </section>
+    {% endif %}
+</div>
+{% endblock %}

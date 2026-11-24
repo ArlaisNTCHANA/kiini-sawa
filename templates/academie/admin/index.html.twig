@@ -1,0 +1,38 @@
+{% extends 'admin/layout.html.twig' %}
+{% block title %}L'Académie{% endblock %}
+{% block stylesheets %}{% include 'academie/admin/_styles.html.twig' %}{% endblock %}
+{% block page_title %}L'Académie{% endblock %}
+{% block page_lead %}Vos parcours pratiques : des leçons courtes qui débouchent sur une décision inscrite dans les plans de chacun. Un parcours reste en brouillon, invisible des membres, tant que vous ne le publiez pas.{% endblock %}
+{% block page_actions %}<a href="{{ path('admin_academie_new') }}" class="ks-btn ks-btn--primary"><i data-lucide="plus"></i> Nouveau parcours</a>{% endblock %}
+{% block content %}
+{% if courses is empty %}
+    <div class="ks-card ks-empty">
+        <span class="ks-empty__icon"><i data-lucide="graduation-cap"></i></span>
+        <p class="ks-empty__title">Aucun parcours pour l'instant</p>
+        <p class="ks-empty__text">Commencez par le parcours de découverte, par exemple sur le Plan de Vie.</p>
+        <a href="{{ path('admin_academie_new') }}" class="ks-btn ks-btn--secondary"><i data-lucide="plus"></i> Créer un parcours</a>
+    </div>
+{% else %}
+    <section class="ks-card ks-stack">
+        {% for c in courses %}
+            {% set lessons = c.lessons %}
+            {% set visible = c.lessons(true) %}
+            <div class="ac-course" data-course="{{ c.id }}">
+                {% include 'academie/admin/_cover.html.twig' with {place: c.place} %}
+                <div>
+                    <a href="{{ path('admin_academie_course', {id: c.id}) }}" style="color: var(--fg); font-weight: 700; text-decoration: none;">{{ c.title }}</a>
+                    <div class="ac-meta">
+                        <span class="ks-badge {{ c.published ? 'ks-badge--success' : 'ks-badge--warning' }}">{{ c.published ? 'Publié' : 'Brouillon' }}</span>
+                        <span class="ks-badge ks-badge--muted">{{ c.free ? 'Gratuit' : 'PRO' }}</span>
+                        <span class="ks-small">{{ academie_lieu(c.place) }} · {{ visible|length }} leçon{{ visible|length > 1 ? 's' }} visible{{ visible|length > 1 ? 's' }}{% if lessons|length > visible|length %} ({{ lessons|length - visible|length }} masquée{{ lessons|length - visible|length > 1 ? 's' }}){% endif %} · {{ c.estimatedMinutes }} min</span>
+                    </div>
+                </div>
+                <div class="ks-toolbar">
+                    <a href="{{ path('admin_academie_preview', {id: c.id}) }}" class="ks-btn ks-btn--ghost ks-btn--sm"><i data-lucide="eye"></i> Aperçu</a>
+                    <a href="{{ path('admin_academie_course', {id: c.id}) }}" class="ks-btn ks-btn--secondary ks-btn--sm"><i data-lucide="pencil"></i> Modifier</a>
+                </div>
+            </div>
+        {% endfor %}
+    </section>
+{% endif %}
+{% endblock %}

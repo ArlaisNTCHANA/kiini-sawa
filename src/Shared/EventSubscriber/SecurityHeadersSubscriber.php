@@ -16,6 +16,9 @@ use Symfony\Component\HttpKernel\KernelEvents;
  * sera sorti dans des contrôleurs Stimulus (voir docs/plan-v1.md, phase 3).
  *
  * Toute nouvelle origine externe doit être ajoutée ici.
+ *
+ * frame-src : seuls les lecteurs vidéo des leçons de l'Académie (YouTube sans cookie publicitaire, Vimeo), chargés
+ * uniquement au clic de l'apprenant (templates/academie/_video.html.twig ; App\Academie\Service\VideoEmbed).
  */
 final class SecurityHeadersSubscriber implements EventSubscriberInterface
 {
@@ -26,6 +29,7 @@ final class SecurityHeadersSubscriber implements EventSubscriberInterface
         "font-src 'self' data:",
         "img-src 'self' data: blob: https:",
         "connect-src 'self'",
+        "frame-src https://www.youtube-nocookie.com https://player.vimeo.com",
         "frame-ancestors 'none'",
         "base-uri 'self'",
         "form-action 'self'",

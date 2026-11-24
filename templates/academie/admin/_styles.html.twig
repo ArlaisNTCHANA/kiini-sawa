@@ -1,0 +1,28 @@
+<style>
+    .ac-cover { display: flex; align-items: center; justify-content: center; border-radius: var(--r-md); }
+    .ac-cover i { width: 22px; height: 22px; }
+    .ac-course { display: grid; grid-template-columns: 48px 1fr auto; gap: .9rem; align-items: center; }
+    .ac-course .ac-cover { width: 48px; height: 48px; }
+    .ac-meta { display: flex; flex-wrap: wrap; gap: .4rem; align-items: center; margin-top: .3rem; }
+    .ac-module { border: 1px solid var(--border); border-radius: var(--r-md); padding: .9rem; background: var(--card-bg); }
+    .ac-module + .ac-module { margin-top: .9rem; }
+    .ac-module__head { display: flex; flex-wrap: wrap; gap: .5rem; align-items: center; justify-content: space-between; margin-bottom: .6rem; }
+    .ac-module__head form.ac-rename { display: flex; gap: .4rem; flex: 1 1 260px; }
+    .ac-lesson { display: flex; flex-wrap: wrap; gap: .5rem; align-items: center; justify-content: space-between; padding: .55rem .2rem; border-top: 1px solid var(--border); }
+    .ac-lesson__title { flex: 1 1 220px; min-width: 0; }
+    .ac-lesson__title a { color: var(--fg); font-weight: 600; text-decoration: none; overflow-wrap: anywhere; }
+    .ac-lesson.is-hidden .ac-lesson__title a { color: var(--fg-muted); }
+    .ac-tools { display: flex; flex-wrap: wrap; gap: .3rem; align-items: center; }
+    .ac-tools form { display: inline; }
+    .ac-icon-btn { display: inline-flex; align-items: center; justify-content: center; width: 32px; height: 32px; border-radius: var(--r-sm); border: 1px solid var(--border); background: var(--card-bg); color: var(--fg-muted); cursor: pointer; }
+    .ac-icon-btn:hover { color: var(--primary); border-color: var(--primary-light); }
+    .ac-icon-btn i { width: 16px; height: 16px; }
+    .ac-editor { display: grid; gap: 1rem; }
+    .ac-editor textarea { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: .9rem; line-height: 1.6; }
+    .ac-preview { border: 1px dashed var(--border); border-radius: var(--r-md); padding: 1rem 1.2rem; background: var(--bg); }
+    .ac-option { display: grid; grid-template-columns: 1fr auto; gap: .6rem; align-items: center; }
+    .ac-option label { display: flex; gap: .4rem; align-items: center; font-size: .88rem; white-space: nowrap; }
+    .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
+    .ac-danger-zone { border-top: 1px solid var(--border); padding-top: 1rem; }
+    @media (max-width: 640px) { .ac-course { grid-template-columns: 40px 1fr; } .ac-course > :last-child { grid-column: 1 / -1; } .ac-course .ac-cover { width: 40px; height: 40px; } }
+</style>

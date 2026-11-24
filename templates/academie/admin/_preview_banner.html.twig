@@ -1,0 +1,4 @@
+<div class="academie-banner" role="note">
+    <span><strong>Aperçu administrateur</strong> · {{ course.published ? 'parcours publié' : 'parcours en brouillon, invisible des membres' }}{% if lesson is defined and lesson and not lesson.visible %} · leçon masquée aux apprenants{% endif %}</span>
+    <a href="{{ back }}" class="ks-btn ks-btn--secondary ks-btn--sm"><i data-lucide="arrow-left"></i> Retour au studio</a>
+</div>

@@ -1,0 +1,16 @@
+{% extends 'base.html.twig' %}
+{% block title %}Aperçu : {{ lesson.title }}{% endblock %}
+{% block stylesheets %}{{ parent() }}{% include 'academie/_styles.html.twig' %}{% endblock %}
+{% block body %}
+<article style="max-width: 720px; margin: 0 auto; padding: 1.5rem 1rem 6rem;" data-academie-preview>
+    {% include 'academie/admin/_preview_banner.html.twig' with {back: path('admin_academie_lesson', {id: lesson.id})} %}
+    <a href="{{ path('admin_academie_preview', {id: course.id}) }}" class="ks-header__back">← {{ course.title }}</a>
+    <p class="ks-eyebrow" style="margin-top: 1rem;">{{ lesson.module.title }} · Leçon {{ position }} sur {{ total }} · {{ lesson.durationMinutes }} min</p>
+    <h1 class="ks-header__title" style="margin: .3rem 0 1.4rem;">{{ lesson.title }}</h1>
+    {% include 'academie/_lesson_body.html.twig' with {preview: true} %}
+    <nav class="academie-steps" aria-label="Leçons">
+        {% if previous %}<a href="{{ path('admin_academie_lesson_preview', {id: previous.id}) }}" class="ks-btn ks-btn--ghost"><i data-lucide="arrow-left"></i> {{ previous.title }}</a>{% else %}<span></span>{% endif %}
+        {% if next %}<a href="{{ path('admin_academie_lesson_preview', {id: next.id}) }}" class="ks-btn ks-btn--secondary">{{ next.title }} <i data-lucide="arrow-right"></i></a>{% endif %}
+    </nav>
+</article>
+{% endblock %}

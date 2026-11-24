@@ -1,0 +1,28 @@
+{# Styles de l'Académie côté apprenant (aperçu du studio, puis pages des membres au Lot 2). Couleurs : variables seulement. #}
+<style>
+    .academie-texte { font-size: 1.04rem; line-height: 1.8; color: var(--fg-light); }
+    .academie-texte h2, .academie-texte h3 { font-family: var(--font-serif); color: var(--fg); margin: 1.6rem 0 .6rem; }
+    .academie-texte h3 { font-size: 1.15rem; }
+    .academie-texte p, .academie-texte ul, .academie-texte ol { margin: 0 0 1rem; }
+    .academie-texte ul, .academie-texte ol { padding-left: 1.4rem; }
+    .academie-texte blockquote { border-left: 3px solid var(--gold); background: var(--primary-soft); padding: .75rem 1rem; border-radius: 0 10px 10px 0; color: var(--primary-dark); margin: 1.2rem 0; font-family: var(--font-serif); }
+    .academie-texte a { color: var(--primary); }
+    .academie-texte strong { color: var(--fg); }
+    .academie-cover { display: flex; align-items: center; gap: 1rem; border-radius: var(--r-lg); padding: 1.4rem; }
+    .academie-cover__icon { display: flex; align-items: center; justify-content: center; width: 56px; height: 56px; border-radius: 50%; background: var(--card-bg); flex: none; }
+    .academie-cover__icon i { width: 28px; height: 28px; }
+    .academie-video { position: relative; aspect-ratio: 16 / 9; border-radius: var(--r-lg); overflow: hidden; background: var(--primary-dark); margin: 0 0 1.5rem; }
+    .academie-video iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+    .academie-video__start { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: .6rem; width: 100%; border: 0; background: transparent; color: var(--bg); cursor: pointer; font: inherit; padding: 1rem; text-align: center; }
+    .academie-video__start i { width: 52px; height: 52px; }
+    .academie-video__start small { opacity: .8; max-width: 34rem; }
+    .academie-question { border: 1px solid var(--border); border-radius: var(--r-md); padding: 1rem; background: var(--card-bg); }
+    .academie-question + .academie-question { margin-top: .9rem; }
+    .academie-choice { display: flex; gap: .6rem; align-items: flex-start; padding: .55rem .7rem; border: 1px solid var(--border); border-radius: var(--r-sm); margin-top: .45rem; cursor: pointer; }
+    .academie-choice.is-right { border-color: var(--primary); background: var(--primary-soft); }
+    .academie-choice.is-wrong { border-color: var(--couple); background: var(--couple-soft); }
+    .academie-explain { margin-top: .8rem; padding: .8rem 1rem; border-radius: var(--r-sm); background: var(--bg-alt); color: var(--fg-light); }
+    .academie-steps { display: flex; justify-content: space-between; gap: .6rem; flex-wrap: wrap; margin-top: 2rem; }
+    .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
+    .academie-banner { background: var(--primary-soft); border: 1px solid var(--border); border-radius: var(--r-md); padding: .7rem 1rem; display: flex; flex-wrap: wrap; gap: .6rem; align-items: center; justify-content: space-between; margin-bottom: 1.5rem; font-size: .9rem; }
+</style>
