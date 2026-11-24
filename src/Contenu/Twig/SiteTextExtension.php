@@ -30,16 +30,33 @@ final class SiteTextExtension extends AbstractExtension
     /** @param array<string, scalar> $vars */
     public function text(string $code, string $default, string $format = 'text', array $vars = []): string|Markup
     {
-        $value = $this->texts->get($code, $default);
-        foreach ($vars as $k => $v) {
-            $value = str_replace('{'.$k.'}', (string) $v, $value);
-        }
+        $value = self::fill($this->texts->get($code, $default), $vars);
 
         return match ($format) {
             'inline' => new Markup(self::markdown($value, true), 'UTF-8'),
             'markdown' => new Markup(self::markdown($value, false), 'UTF-8'),
             default => $value,
         };
+    }
+
+    /**
+     * Remplace les {variables}, avec l'élision du français devant une valeur qui commence par une voyelle ou un h :
+     * « que {prenom} » donne « qu'Arlais », « de {prenom} » donne « d'Arlais » (et « de Marie » reste « de Marie »).
+     *
+     * @param array<string, scalar> $vars
+     */
+    public static function fill(string $text, array $vars): string
+    {
+        foreach ($vars as $k => $v) {
+            $v = (string) $v;
+            if (1 === preg_match('/^[AEIOUÀÂÄÉÈÊËÎÏÔÖÙÛÜHaeiouàâäéèêëîïôöùûüh]/u', $v)) {
+                $text = preg_replace_callback('/\b(que|Que|de|De|jusque|lorsque|puisque) \{'.preg_quote((string) $k, '/').'\}/u',
+                    fn (array $m) => mb_substr($m[1], 0, -1).'\''.$v, $text) ?? $text;
+            }
+            $text = str_replace('{'.$k.'}', $v, $text);
+        }
+
+        return $text;
     }
 
     public function document(string $code): string

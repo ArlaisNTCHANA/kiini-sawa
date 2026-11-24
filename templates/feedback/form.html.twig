@@ -29,22 +29,22 @@
             <a href="#questionnaire" class="ks-btn ks-btn--primary fb-hero__cta">{{ t('feedback.public.commencer', 'Commencer') }} <i data-lucide="arrow-down" aria-hidden="true"></i></a>
             <a href="#pourquoi" class="fb-hero__more">{{ t('feedback.public.pourquoi_moi', 'Pourquoi vous ?') }}</a>
         </div>
-        <p class="fb-hero__about"><strong>KIINI SAWA</strong> {{ t('feedback.public.kiini_phrase', 'est une application chrétienne, née d\'un livre, qui aide chacun à découvrir sa raison d\'être et à bâtir son Plan de Vie.') }}</p>
+        <p class="fb-hero__about"><strong>KIINI SAWA</strong> {{ t('feedback.public.kiini_phrase', 'est une application chrétienne qui aide chacun à découvrir sa raison d\'être et à bâtir son Plan de Vie. Elle est née d\'un livre, *KIINI : Bâtis la vie pour laquelle tu as été créé*, que nous appellerons ici « le livre KIINI ».', 'inline') }}</p>
     </section>
 
     {# 2. Pourquoi votre regard compte (livre, chapitres 12 et 23) #}
     <section class="ks-card fb-section" id="pourquoi" aria-labelledby="fb-pourquoi">
         <p class="ks-eyebrow">{{ t('feedback.public.pourquoi_surtitre', 'Pourquoi votre regard compte') }}</p>
         <h2 class="ks-section-title" id="fb-pourquoi"><i data-lucide="eye" aria-hidden="true"></i> {{ t('feedback.public.pourquoi_titre', 'Personne ne se voit tout entier') }}</h2>
-        <blockquote class="fb-quote">« Personne n'a une vue à 360 degrés sur lui-même. Pour grandir, nous avons besoin de miroirs. »<cite>{{ t('feedback.public.source_ch12', 'Le livre de la méthode, chapitre 12 « Confirmations »') }}</cite></blockquote>
-        <p class="fb-text">{{ t('feedback.public.pourquoi_texte', 'La méthode appelle cela le **feedback nourricier** : « une ressource gratuite que les autres t\'offrent pour t\'aider à voir tes angles morts » (chapitre 23). Un regard offert pour aider à grandir, pas pour juger. Vous n\'avez pas besoin de bien écrire. Ce qui compte, c\'est ce que vous avez vu de {prenom}, dans la vie de tous les jours.', 'inline', {prenom: firstName}) }}</p>
+        <blockquote class="fb-quote">« Personne n'a une vue à 360 degrés sur lui-même. Pour grandir, nous avons besoin de miroirs. »<cite>{{ t('feedback.public.source_ch12', 'Le livre KIINI, chapitre 12 « Confirmations »') }}</cite></blockquote>
+        <p class="fb-text">{{ t('feedback.public.pourquoi_texte', 'C\'est ce que KIINI SAWA appelle le **feedback nourricier** : le regard que des proches offrent à quelqu\'un pour l\'aider à voir ce qu\'il ne voit pas de lui-même, ses « angles morts ». Un regard pour aider à grandir, pas pour juger. Vous n\'avez pas besoin de bien écrire. Ce qui compte, c\'est ce que vous avez vu de {prenom}, dans la vie de tous les jours.', 'inline', {prenom: firstName}) }}</p>
     </section>
 
     {# 3. Les trois témoins : schéma interactif commun avec la page du membre (feedback/_temoins.html.twig, mode public) #}
     <section class="ks-card fb-section" data-temoins-public aria-labelledby="fb-temoins">
         <p class="ks-eyebrow">{{ t('feedback.public.temoins_surtitre', 'Les trois témoins') }}</p>
         <h2 class="ks-section-title" id="fb-temoins"><i data-lucide="sparkles" aria-hidden="true"></i> {{ t('feedback.public.temoins_titre', 'Votre regard est le troisième témoin') }}</h2>
-        <p class="fb-text">{{ t('feedback.public.temoins_principe', 'Le livre part d\'un principe biblique : « Toute affaire se réglera sur la déclaration de deux ou de trois témoins » (2 Corinthiens 13:1). Ce que {prenom} croit de soi devient une certitude quand trois témoins vont dans le même sens. Touchez un cercle pour découvrir chacun d\'eux.', 'text', {prenom: firstName}) }}</p>
+        <p class="fb-text">{{ t('feedback.public.temoins_principe', 'Le livre KIINI s\'appuie sur un principe de la Bible : « Toute affaire se réglera sur la déclaration de deux ou de trois témoins » (2 Corinthiens 13:1). Une qualité que {prenom} pense avoir devient une certitude quand trois témoins vont dans le même sens. Prenons un exemple : imaginons que {prenom} se dise « je suis à l\'écoute des autres ». Touchez un cercle pour voir ce que chaque témoin apporte.', 'text', {prenom: firstName}) }}</p>
         {% include 'feedback/_temoins.html.twig' with {mode: 'public', firstName: firstName} only %}
     </section>
 

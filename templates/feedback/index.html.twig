@@ -30,15 +30,15 @@
     {# Les explications : les trois témoins du livre, puis le mode d'emploi. Placées avant le bouton pour une première demande, après les résultats ensuite. #}
     {% set explain %}
         <section class="ks-card fb-section" id="trois-temoins">
-            <p class="ks-eyebrow">{{ t('feedback.membre.temoins_surtitre', 'Le livre, chapitre 12 · Confirmations') }}</p>
+            <p class="ks-eyebrow">{{ t('feedback.membre.temoins_surtitre', 'Le livre KIINI, chapitre 12 · Confirmations') }}</p>
             <h2 class="ks-section-title">{{ t('feedback.membre.temoins_titre', 'Pourquoi demander le regard des autres ?') }}</h2>
-            <p class="fb-text">{{ t('feedback.membre.temoins_intro', 'Nous avons tous tendance à nous voir plus grands, ou plus petits, que nous ne le sommes. Le livre s\'appuie sur un principe biblique : « Toute affaire se réglera sur la déclaration de deux ou de trois témoins » (2 Corinthiens 13:1). Ce que vous croyez de vous-même devient une certitude quand **trois témoins** vont dans le même sens. Le feedback nourricier est le troisième : touchez chaque cercle pour voir ce qu\'il apporte.', 'inline') }}</p>
+            <p class="fb-text">{{ t('feedback.membre.temoins_intro', 'Nous avons tous tendance à nous voir plus grands, ou plus petits, que nous ne le sommes. Le livre KIINI, à l\'origine de KIINI SAWA, s\'appuie sur un principe biblique : « Toute affaire se réglera sur la déclaration de deux ou de trois témoins » (2 Corinthiens 13:1). Ce que vous croyez de vous-même devient une certitude quand **trois témoins** vont dans le même sens. Le feedback nourricier est le troisième : touchez chaque cercle pour voir ce qu\'il apporte.', 'inline') }}</p>
             {% include 'feedback/_temoins.html.twig' with {mode: 'membre'} only %}
         </section>
 
         <section class="ks-card fb-section">
             <h2 class="ks-section-title"><i data-lucide="user-check" aria-hidden="true"></i> {{ t('feedback.membre.choisir_titre', 'Bien choisir les personnes') }}</h2>
-            <blockquote class="fb-quote">{{ t('feedback.membre.choisir_citation', '« Choisis des personnes qui t\'aiment assez pour te dire la vérité, et qui t\'ont vu agir. »') }}<cite>{{ t('feedback.membre.choisir_source', 'Le livre, chapitre 12') }}</cite></blockquote>
+            <blockquote class="fb-quote">{{ t('feedback.membre.choisir_citation', '« Choisis des personnes qui t\'aiment assez pour te dire la vérité, et qui t\'ont vu agir. »') }}<cite>{{ t('feedback.membre.choisir_source', 'Le livre KIINI, chapitre 12') }}</cite></blockquote>
             <ul class="fb-tips">
                 <li><i data-lucide="eye" aria-hidden="true"></i><div><strong>{{ t('feedback.membre.choisir_1_titre', 'Qui vous ont vu agir') }}</strong><p>{{ t('feedback.membre.choisir_1', 'Plutôt quelqu\'un qui vous côtoie vraiment qu\'une connaissance flatteuse. Un regard juste vaut mieux qu\'un compliment poli.') }}</p></div></li>
                 <li><i data-lucide="layers" aria-hidden="true"></i><div><strong>{{ t('feedback.membre.choisir_2_titre', 'Dans des cercles différents') }}</strong><p>{{ t('feedback.membre.choisir_2', 'Famille, couple, amitié, travail, Église : chacun vous voit sous un autre jour. Les qualités citées partout sont souvent les plus sûres.') }}</p></div></li>
@@ -72,18 +72,18 @@
 
         <section class="ks-card fb-section">
             <h2 class="ks-section-title"><i data-lucide="sprout" aria-hidden="true"></i> {{ t('feedback.membre.relire_titre', 'Relire avec bienveillance') }}</h2>
-            <p class="fb-text">{{ t('feedback.membre.relire_intro', 'Le livre appelle ce retour un **feedback nourricier** : une ressource gratuite que les autres vous offrent pour voir vos angles morts. « Les blessures d\'un ami prouvent sa fidélité » (Proverbes 27:6).', 'inline') }}</p>
+            <p class="fb-text">{{ t('feedback.membre.relire_intro', 'Le livre KIINI appelle ce retour un **feedback nourricier** : une ressource gratuite que les autres vous offrent pour voir vos angles morts. « Les blessures d\'un ami prouvent sa fidélité » (Proverbes 27:6).', 'inline') }}</p>
             <ol class="fb-steps">
                 <li><strong>{{ t('feedback.membre.relire_1_titre', 'Recevoir') }}</strong><p>{{ t('feedback.membre.relire_1', 'Ne vous justifiez pas. Dites simplement merci, même pour ce qui pique.') }}</p></li>
                 <li><strong>{{ t('feedback.membre.relire_2_titre', 'Filtrer') }}</strong><p>{{ t('feedback.membre.relire_2', 'Retenez ce qui nourrit votre but, laissez tomber le reste. Ce qui revient plusieurs fois mérite plus d\'attention qu\'une remarque isolée.') }}</p></li>
                 <li><strong>{{ t('feedback.membre.relire_3_titre', 'Croiser') }}</strong><p>{{ t('feedback.membre.relire_3', 'Rapprochez ce regard de vos actes et de vos résultats de tests. Accord : une confirmation. Écart : un angle mort à explorer, sans vous condamner.') }}</p></li>
                 <li><strong>{{ t('feedback.membre.relire_4_titre', 'Agir') }}</strong><p>{{ t('feedback.membre.relire_4', 'Reportez vos dons confirmés dans votre Plan de Vie, et choisissez un seul point de croissance pour votre Plan de Croissance.') }}</p></li>
             </ol>
-            <p class="fb-note"><i data-lucide="book-open" aria-hidden="true"></i> {{ t('feedback.membre.relire_banque', 'Gardez une trace de ce que vous découvrez, et relisez-le lors de votre revue annuelle : le livre parle de votre « banque de découvertes ».') }}</p>
+            <p class="fb-note"><i data-lucide="book-open" aria-hidden="true"></i> {{ t('feedback.membre.relire_banque', 'Gardez une trace de ce que vous découvrez, et relisez-le lors de votre revue annuelle : le livre KIINI parle de votre « banque de découvertes ».') }}</p>
         </section>
 
         <section class="fb-more">
-            <h2 class="ks-eyebrow">{{ t('feedback.membre.plus_loin', 'Pour aller plus loin dans le livre') }}</h2>
+            <h2 class="ks-eyebrow">{{ t('feedback.membre.plus_loin', 'Pour aller plus loin dans le livre KIINI') }}</h2>
             {{ book_panel('personnalite') }}
             <div class="fb-more__links">
                 <a href="{{ path('app_methode_chapter', {slug: 'confirmations'}) }}" class="ks-btn ks-btn--ghost ks-btn--sm"><i data-lucide="book-open"></i> {{ t('feedback.membre.lien_chap12', 'Chapitre 12 : Confirmations') }}</a>

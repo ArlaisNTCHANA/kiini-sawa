@@ -36,6 +36,23 @@ Ne jamais afficher ni demander de mot de passe ; ne pas publier son nom (mention
 - **Reste** : vrai téléphone non essayé ; la page `/confirmer/{jeton}` (confirmation de test par les proches) garde
   l'ancien style et pourrait recevoir le même accueil.
 
+## 24/11/2026 — Feedback nourricier : textes clarifiés pour une première lecture
+
+- **Remarque du fondateur** : des formulations « bancales » et déroutantes pour qui découvre la page : « Le livre parle
+  de… » (quel livre ?), « La méthode appelle cela… » (quelle méthode ?), et les phrases du livre au « tu » (« Un acte
+  concret que tu as posé » : moi ? quand ? où ?), un exemple à la première personne sans dire qui parle.
+- **Fait** :
+  - Page du proche (`form.html.twig`) : le livre est présenté une fois par son titre (*KIINI : Bâtis la vie pour
+    laquelle tu as été créé*, « le livre KIINI »), plus de « la méthode », plus de citation au « tu ». Les trois témoins
+    (`_temoins.html.twig`, mode public) suivent **un seul exemple**, à la troisième personne avec le prénom (« imaginons
+    qu'Arlais se dise « je suis à l'écoute des autres » »), et nomment la part du proche (« C'est votre part »).
+  - Page du membre : définitions des témoins au « vous » ; l'exemple du livre (mot pour mot) est présenté comme tel
+    (« Exemple du livre KIINI : quelqu'un pense… »). Page de remerciement : la citation au « tu » devient une phrase
+    claire (« {prenom} a pensé à vous pour cela »).
+  - **Élision** : `SiteTextExtension::fill` écrit « qu'Arlais », « d'Élodie » (et garde « de Marie ») partout où un
+    texte modifiable insère une valeur après « que » ou « de ». Test : `tests/Contenu/TextElisionTest.php`.
+- **Tests** : `FeedbackTest` mis à jour (pas de « la méthode », pas de citation au « tu » chez le proche, exemple suivi).
+
 ## 24/11/2026 — Académie : éditeur de leçon par blocs
 
 - **Demande du fondateur** : la suite de l'atelier, « l'éditeur par blocs ».

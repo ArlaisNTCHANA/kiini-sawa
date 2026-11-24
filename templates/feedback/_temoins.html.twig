@@ -1,23 +1,43 @@
 {#
     Les trois témoins (livre, chapitre 12 « Confirmations »), en schéma interactif : trois cercles qui se recoupent, avec la
     certitude au centre, comme la figure du livre. Toucher un cercle (ou un onglet, au clavier : flèches gauche et droite)
-    affiche ce qu'apporte ce témoin. La définition et l'exemple sont ceux du livre, mot pour mot (BookFigures::FIGURES['fig_temoins'],
-    vérifié par tests/Methode/BookFiguresTest.php) ; le lien avec KIINI SAWA et le feedback nourricier est modifiable dans Admin › Textes du site.
+    affiche ce qu'apporte ce témoin. Page du membre : définition au « vous » et exemple du livre mot pour mot (BookFigures::FIGURES['fig_temoins'],
+    vérifié par tests/Methode/BookFiguresTest.php), présenté comme les paroles de la personne de l'exemple. Page du proche (mode public) :
+    rien au « tu » ni de renvoi à un livre inconnu du lecteur, un exemple suivi avec le prénom. Textes modifiables dans Admin › Textes du site.
     Paramètres : mode ('membre' par défaut, ou 'public' pour la page des proches), firstName (mode public).
 #}
 {% set fig = book_figure_data('fig_temoins') %}
 {% set public = (mode|default('membre')) == 'public' %}
 {% if public %}
+    {# Page du proche : souvent sa première visite. Rien au « tu » (il croirait qu'on lui parle) : un exemple suivi, avec le prénom. #}
+    {% set def = {
+        PREUVE: t('feedback.temoins.public.def.preuve', 'Des actes concrets que {prenom} a vraiment posés.', 'text', {prenom: firstName}),
+        OUTIL: t('feedback.temoins.public.def.outil', 'Le résultat d\'un test ou d\'une mesure sérieuse, par exemple les tests de personnalité de KIINI SAWA.', 'text', {prenom: firstName}),
+        TEMOIGNAGE: t('feedback.temoins.public.def.temoignage', 'Ce que les personnes proches de {prenom} ont vu et peuvent confirmer.', 'text', {prenom: firstName}),
+    } %}
+    {% set example = {
+        PREUVE: t('feedback.temoins.public.exemple.preuve', '{prenom} se souvient d\'avoir pris le temps d\'écouter chaque membre de son équipe avant de décider.', 'text', {prenom: firstName}),
+        OUTIL: t('feedback.temoins.public.exemple.outil', 'Son test de personnalité montre une forte attention aux autres.', 'text', {prenom: firstName}),
+        TEMOIGNAGE: t('feedback.temoins.public.exemple.temoignage', 'Deux collègues disent à {prenom} qu\'ils se sentent écoutés en réunion.', 'text', {prenom: firstName}),
+    } %}
+    {% set exampleTitle = t('feedback.temoins.public.exemple_titre', 'Dans notre exemple') %}
     {% set extra = {
-        PREUVE: [[t('feedback.temoins.public.preuve_titre', 'Pour {prenom}', 'text', {prenom: firstName}), t('feedback.temoins.public.preuve', 'Ce que {prenom} a fait concrètement, jour après jour.', 'text', {prenom: firstName})]],
-        OUTIL: [[t('feedback.temoins.public.outil_titre', 'Pour {prenom}', 'text', {prenom: firstName}), t('feedback.temoins.public.outil', 'Les tests de personnalité et de dons que {prenom} a passés dans KIINI SAWA.', 'text', {prenom: firstName})]],
-        TEMOIGNAGE: [[t('feedback.temoins.public.temoignage_titre', 'C\'est votre part', 'text'), t('feedback.temoins.public.temoignage', 'Ce que vous avez vu de {prenom} vient confirmer, ou nuancer, les deux autres témoins. Personne ne peut le voir à votre place.', 'text', {prenom: firstName})]],
+        PREUVE: [], OUTIL: [],
+        TEMOIGNAGE: [[t('feedback.temoins.public.temoignage_titre', 'C\'est votre part'), t('feedback.temoins.public.temoignage', 'Ce que vous avez vu de {prenom} vient confirmer, ou nuancer, ce que montrent ses actes et ses tests. Personne ne peut le voir à votre place.', 'text', {prenom: firstName})]],
     } %}
 {% else %}
+    {% set def = {
+        PREUVE: t('feedback.temoins.def.preuve', 'Un acte concret que vous avez posé.'),
+        OUTIL: t('feedback.temoins.def.outil', 'Une donnée issue d\'un test ou d\'une mesure sérieuse.'),
+        TEMOIGNAGE: t('feedback.temoins.def.temoignage', 'Ce que les autres ont vu et confirmé.'),
+    } %}
+    {# L'exemple du livre, mot pour mot (BookFigures), présenté comme les paroles de la personne de l'exemple #}
+    {% set example = fig.items|reduce((acc, i) => acc|merge({(i.key): '« ' ~ (i.lines|first)[1] ~ ' »'}), {}) %}
+    {% set exampleTitle = t('feedback.temoins.exemple_titre', 'Exemple du livre KIINI : quelqu\'un pense « je suis un leader empathique »') %}
     {% set extra = {
         PREUVE: [
             [t('feedback.temoins.dans_kiini', 'Dans KIINI SAWA'), t('feedback.temoins.preuve.kiini', 'Vos propres actes : ce que vous notez dans votre journal, les rituels que vous tenez, ce que vous relevez dans vos revues de la semaine.')],
-            [t('feedback.temoins.avec_feedback', 'Avec le feedback nourricier'), t('feedback.temoins.preuve.feedback', 'Quand un proche cite un moment précis, cherchez dans vos souvenirs des faits qui vont dans le même sens. Si vous n\'en trouvez aucun, le livre y voit un objectif de croissance.')],
+            [t('feedback.temoins.avec_feedback', 'Avec le feedback nourricier'), t('feedback.temoins.preuve.feedback', 'Quand un proche cite un moment précis, cherchez dans vos souvenirs des faits qui vont dans le même sens. Si vous n\'en trouvez aucun, le livre KIINI y voit un objectif de croissance.')],
         ],
         OUTIL: [
             [t('feedback.temoins.dans_kiini', 'Dans KIINI SAWA'), t('feedback.temoins.outil.kiini', 'Vos résultats dans Mes tests : personnalité, dons, Boussole 360, Roue de la vie.')],
@@ -25,7 +45,7 @@
         ],
         TEMOIGNAGE: [
             [t('feedback.temoins.dans_kiini', 'Dans KIINI SAWA'), t('feedback.temoins.temoignage.kiini', 'C\'est exactement le rôle du feedback nourricier : recueillir le regard de 5 à 10 personnes qui vous ont vu agir.')],
-            [t('feedback.temoins.exemple_livre', 'Un exemple du livre'), t('feedback.temoins.temoignage.barnabas', 'Barnabas ne s\'est pas proclamé encourageur : ce sont les apôtres qui lui ont donné ce surnom, « fils d\'encouragement », après l\'avoir vu à l\'œuvre (Actes 4:36).')],
+            [t('feedback.temoins.exemple_livre', 'Un exemple biblique, cité par le livre'), t('feedback.temoins.temoignage.barnabas', 'Barnabas ne s\'est pas proclamé encourageur : ce sont les apôtres qui lui ont donné ce surnom, « fils d\'encouragement », après l\'avoir vu à l\'œuvre (Actes 4:36).')],
         ],
     } %}
 {% endif %}
@@ -110,10 +130,8 @@
                 <div class="tm__panel" role="tabpanel" id="tm-panel-{{ public ? 'p' : 'm' }}-{{ it.key }}" aria-labelledby="tm-tab-{{ public ? 'p' : 'm' }}-{{ it.key }}" tabindex="0"
                      style="border-left-color: {{ it.color }};" x-show="cur === '{{ it.key }}'" {{ it.key == 'TEMOIGNAGE' ? '' : 'x-cloak' }}>
                     <h3>{{ it.label }}</h3>
-                    <p class="tm__def">{{ it.summary }}.</p>
-                    {% for l in it.lines %}
-                        <p class="tm__book"><strong>{{ l[0] }}</strong><em>« {{ l[1] }} »</em></p>
-                    {% endfor %}
+                    <p class="tm__def">{{ def[it.key] }}</p>
+                    <p class="tm__book"><strong>{{ exampleTitle }}</strong><em>{{ example[it.key] }}</em></p>
                     {% for l in extra[it.key] %}
                         <div class="tm__line"><strong>{{ l[0] }}</strong><p>{{ l[1] }}</p></div>
                     {% endfor %}
@@ -123,13 +141,18 @@
     </div>
 
     <div class="tm__verdict">
-        <div><i data-lucide="badge-check" style="color: var(--success);" aria-hidden="true"></i><span>{{ t('feedback.temoins.concordent', '**Quand les trois témoins concordent**, une conviction devient une certitude.', 'inline') }}</span></div>
-        <div><i data-lucide="eye" style="color: var(--accent);" aria-hidden="true"></i><span>{{ t('feedback.temoins.contredisent', '**Quand ils se contredisent**, vous avez découvert quelque chose de précieux : un angle mort.', 'inline') }}</span></div>
+        {% if public %}
+            <div><i data-lucide="badge-check" style="color: var(--success);" aria-hidden="true"></i><span>{{ t('feedback.temoins.public.concordent', '**Quand les trois témoins vont dans le même sens**, ce que {prenom} croit de soi devient une certitude.', 'inline', {prenom: firstName}) }}</span></div>
+            <div><i data-lucide="eye" style="color: var(--accent);" aria-hidden="true"></i><span>{{ t('feedback.temoins.public.contredisent', '**Quand ils ne s\'accordent pas**, {prenom} découvre quelque chose de précieux : un angle mort, une part de soi qu\'on voit mal de l\'intérieur.', 'inline', {prenom: firstName}) }}</span></div>
+        {% else %}
+            <div><i data-lucide="badge-check" style="color: var(--success);" aria-hidden="true"></i><span>{{ t('feedback.temoins.concordent', '**Quand les trois témoins concordent**, une conviction devient une certitude.', 'inline') }}</span></div>
+            <div><i data-lucide="eye" style="color: var(--accent);" aria-hidden="true"></i><span>{{ t('feedback.temoins.contredisent', '**Quand ils se contredisent**, vous avez découvert quelque chose de précieux : un angle mort.', 'inline') }}</span></div>
+        {% endif %}
     </div>
 
     {% if not public %}
         <details class="tm__fig" data-book-figure="fig_temoins">
-            <summary><i data-lucide="image" style="width: 14px; height: 14px; color: var(--gold);" aria-hidden="true"></i> {{ t('feedback.temoins.voir_figure', 'Voir le schéma tel qu\'il figure dans le livre') }}</summary>
+            <summary><i data-lucide="image" style="width: 14px; height: 14px; color: var(--gold);" aria-hidden="true"></i> {{ t('feedback.temoins.voir_figure', 'Voir le schéma tel qu\'il figure dans le livre KIINI') }}</summary>
             <img src="{{ asset('images/livre/fig_temoins.png') }}" alt="Les trois témoins : la preuve personnelle (un acte posé), l'outil (un test, une mesure) et le témoignage (ce que les autres voient) se recoupent ; au centre, la certitude." loading="lazy">
         </details>
     {% endif %}

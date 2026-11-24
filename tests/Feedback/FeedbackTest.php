@@ -245,8 +245,9 @@ class FeedbackTest extends WebTestCase
         $this->assertCount(3, $crawler->filter('[data-temoin-cercle]'), 'les trois cercles du schéma');
         $this->assertSame('true', $crawler->filter('[data-temoin="TEMOIGNAGE"]')->attr('aria-selected'), 'le témoignage (le feedback nourricier) est montré d\'abord');
         $text = $crawler->filter('main')->text();
-        foreach (['Un acte concret que tu as posé', 'Une donnée issue d\'un test ou d\'une mesure sérieuse', 'Ce que les autres ont vu et confirmé',
-            'Deux collègues m\'ont dit qu\'ils se sentaient écoutés en réunion', 'Pourquoi demander le regard des autres', 'Bien choisir les personnes',
+        // Définitions au « vous » (le membre ne doit pas croire qu'une phrase au « tu » lui parle d'un acte précis) ; exemple du livre mot pour mot, présenté comme tel
+        foreach (['Un acte concret que vous avez posé', 'Une donnée issue d\'un test ou d\'une mesure sérieuse', 'Ce que les autres ont vu et confirmé',
+            'Exemple du livre KIINI', 'Deux collègues m\'ont dit qu\'ils se sentaient écoutés en réunion', 'Pourquoi demander le regard des autres', 'Bien choisir les personnes',
             'Ce que vos proches verront', 'Ce que vous recevrez', 'Relire avec bienveillance', 'Comment ça marche'] as $expected) {
             $this->assertStringContainsString($expected, $text);
         }
@@ -319,6 +320,14 @@ class FeedbackTest extends WebTestCase
         $this->assertCount(7, $crawler->filter('#questionnaire input[type="radio"][name="relationship"]'));
         $this->assertCount(1, $crawler->filter('[data-temoins-public] [data-temoins] [role="tab"][data-temoin="TEMOIGNAGE"][aria-selected="true"]'), 'le schéma s\'ouvre sur « votre regard »');
         $this->assertSame(0, $crawler->filter('main details[data-temoins-public]')->count(), 'les trois témoins ne sont plus repliés');
+        // Le proche lit pour la première fois : un exemple suivi avec le prénom, rien au « tu » qui semblerait lui parler
+        $temoins = $crawler->filter('[data-temoins-public]')->text();
+        $this->assertStringContainsString('imaginons que Noémie se dise', $temoins);
+        $this->assertStringContainsString('Noémie se souvient d\'avoir pris le temps d\'écouter', $temoins);
+        $this->assertStringContainsString('C\'est votre part', $temoins);
+        foreach (['que tu as posé', 'm\'ont dit', 'vous avez découvert'] as $confusing) {
+            $this->assertStringNotContainsString($confusing, $temoins);
+        }
         $html = (string) $client->getResponse()->getContent();
         $this->assertStringContainsString('Anonyme si vous le souhaitez', $html);
         $this->assertStringContainsString('Noémie vous demande d\'être son témoin', $crawler->filter('meta[property="og:title"]')->attr('content'));
@@ -354,16 +363,21 @@ class FeedbackTest extends WebTestCase
         $book = str_replace('’', '\'', $book);
         foreach (['templates/feedback/form.html.twig', 'templates/feedback/thanks.html.twig'] as $file) {
             preg_match_all('/<blockquote class="fb-quote">« (.+?) »</u', (string) file_get_contents($dir.'/'.$file), $m);
-            $this->assertNotEmpty($m[1], $file);
             foreach ($m[1] as $quote) {
                 $this->assertStringContainsString($quote, $book, 'citation fidèle au livre : '.$quote);
             }
         }
         $form = (string) file_get_contents($dir.'/templates/feedback/form.html.twig');
-        foreach (['une ressource gratuite que les autres t\\\'offrent pour t\\\'aider à voir tes angles morts', 'Toute affaire se réglera sur la déclaration de deux ou de trois témoins » (2 Corinthiens 13:1)'] as $quote) {
-            $this->assertStringContainsString($quote, $form);
-            $this->assertStringContainsString(str_replace('\\\'', '\'', $quote), $book);
+        $this->assertStringContainsString('Toute affaire se réglera sur la déclaration de deux ou de trois témoins » (2 Corinthiens 13:1)', $form);
+        $this->assertStringContainsString('Toute affaire se réglera sur la déclaration de deux ou de trois témoins » (2 Corinthiens 13:1)', $book);
+        // Le proche découvre souvent KIINI SAWA : le livre est présenté par son titre, jamais « la méthode » ni une citation au « tu » qui semblerait lui parler
+        foreach (['form.html.twig', 'thanks.html.twig', '_temoins.html.twig'] as $file) {
+            $content = (string) file_get_contents($dir.'/templates/feedback/'.$file);
+            $this->assertStringNotContainsString('La méthode appelle', $content, $file);
+            $this->assertStringNotContainsString('Le livre de la méthode', $content, $file);
+            $this->assertStringNotContainsString('t\\\'aiment', $content, $file);
         }
+        $this->assertStringContainsString('KIINI : Bâtis la vie pour laquelle tu as été créé', $form);
     }
 
     private function service(): FeedbackService
