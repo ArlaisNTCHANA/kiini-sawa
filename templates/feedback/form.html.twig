@@ -1,49 +1,101 @@
 {% extends 'base.html.twig' %}
-
+{#
+    Page publique du feedback nourricier : la personne invitée l'ouvre depuis le lien reçu (WhatsApp, e-mail), sans compte.
+    C'est souvent son premier contact avec KIINI SAWA. Ordre : accueil (son rôle de témoin, KIINI SAWA en une phrase),
+    pourquoi son regard compte (livre, chapitres 12 et 23), les trois témoins, comment ça se passe, puis le questionnaire en
+    quatre étapes avec barre de progression (sans JavaScript, les quatre étapes s'affichent l'une sous l'autre).
+    Citations du livre mot pour mot (laissées en « tu », comme dans le livre) ; textes de la page en « vous », tournures neutres.
+#}
 {% block title %}{{ t('feedback.public.onglet', 'Votre regard sur {prenom}', 'text', {prenom: firstName}) }}{% endblock %}
 {% block head_meta %}{% include 'feedback/_share_meta.html.twig' with {firstName: firstName} only %}{% endblock %}
 
 {% block body %}
 {% if not app.user %}{% include 'shared/_public_header.html.twig' with {minimal: true} %}{% endif %}
 {% include 'feedback/_styles.html.twig' %}
+{% set anonymous = not request.forceRealName %}
 <div class="ks-page ks-page--narrow fb-public">
-    {% include 'shared/_page_header.html.twig' with {
-        eyebrow: t('feedback.public.surtitre', 'Feedback nourricier'), icon: 'heart',
-        title: t('feedback.public.titre', '{prenom} aimerait votre regard', 'text', {prenom: firstName}),
-        lead: t('feedback.public.intro', '{prenom} construit son Plan de Vie avec KIINI SAWA. Nos proches voient souvent en nous ce que nous ne voyons pas nous-mêmes : votre regard bienveillant compte.', 'text', {prenom: firstName}),
-    } %}
 
-    <ul class="fb-reassure" aria-label="{{ t('feedback.public.reperes', 'En bref') }}">
-        <li><i data-lucide="clock"></i>{{ t('feedback.public.duree', '3 minutes') }}</li>
-        <li><i data-lucide="{{ request.forceRealName ? 'user' : 'eye-off' }}"></i>{{ request.forceRealName ? t('feedback.public.avec_prenom', 'Votre prénom sera indiqué') : t('feedback.public.anonyme', 'Anonyme si vous le souhaitez') }}</li>
-        {% if hasExpiry %}<li><i data-lucide="calendar"></i>{{ t('feedback.public.jusqua', 'Jusqu\'au {date}', 'text', {date: expiresLabel}) }}</li>{% endif %}
-    </ul>
+    {# 1. Accueil : le rôle de la personne, KIINI SAWA en une phrase, une seule action #}
+    <section class="fb-hero" aria-labelledby="fb-hero-title">
+        <p class="fb-hero__eyebrow"><i data-lucide="heart-handshake" aria-hidden="true"></i> {{ t('feedback.public.surtitre', 'Feedback nourricier') }} · {{ t('feedback.public.surtitre_invitation', 'Invitation personnelle') }}</p>
+        <h1 id="fb-hero-title" class="fb-hero__title">{{ t('feedback.public.accueil_titre', '{prenom} vous demande d\'être son témoin', 'text', {prenom: firstName}) }}</h1>
+        <p class="fb-hero__lead">{{ t('feedback.public.accueil_intro', 'Vous connaissez {prenom} : vous voyez ce qu\'aucun test ne peut montrer. En quelques minutes, votre regard bienveillant peut l\'aider à mieux se connaître.', 'text', {prenom: firstName}) }}</p>
+        <ul class="fb-hero__facts" aria-label="{{ t('feedback.public.reperes', 'En bref') }}">
+            <li><i data-lucide="clock" aria-hidden="true"></i>{{ t('feedback.public.duree', '3 minutes') }}</li>
+            <li><i data-lucide="{{ anonymous ? 'eye-off' : 'user' }}" aria-hidden="true"></i>{{ anonymous ? t('feedback.public.anonyme', 'Anonyme si vous le souhaitez') : t('feedback.public.avec_prenom', 'Votre prénom sera indiqué') }}</li>
+            {% if hasExpiry %}<li><i data-lucide="calendar" aria-hidden="true"></i>{{ t('feedback.public.jusqua', 'Jusqu\'au {date}', 'text', {date: expiresLabel}) }}</li>{% endif %}
+        </ul>
+        <div class="fb-hero__actions">
+            <a href="#questionnaire" class="ks-btn ks-btn--primary fb-hero__cta">{{ t('feedback.public.commencer', 'Commencer') }} <i data-lucide="arrow-down" aria-hidden="true"></i></a>
+            <a href="#pourquoi" class="fb-hero__more">{{ t('feedback.public.pourquoi_moi', 'Pourquoi vous ?') }}</a>
+        </div>
+        <p class="fb-hero__about"><strong>KIINI SAWA</strong> {{ t('feedback.public.kiini_phrase', 'est une application chrétienne, née d\'un livre, qui aide chacun à découvrir sa raison d\'être et à bâtir son Plan de Vie.') }}</p>
+    </section>
 
-    <details class="ks-card fb-intro" data-temoins-public>
-        <summary><i data-lucide="sparkles" aria-hidden="true"></i> {{ t('feedback.public.temoins_resume', 'Pourquoi votre regard compte : il est l\'un des trois témoins') }}</summary>
-        <p style="color: var(--fg-light); line-height: 1.6; margin: 0 0 1rem;">{{ t('feedback.public.temoins_intro', 'La méthode KIINI SAWA reprend un principe biblique : « Toute affaire se réglera sur la déclaration de deux ou de trois témoins » (2 Corinthiens 13:1). Ce que {prenom} croit de soi devient une certitude quand trois témoins vont dans le même sens. Vous êtes le troisième.', 'text', {prenom: firstName}) }}</p>
+    {# 2. Pourquoi votre regard compte (livre, chapitres 12 et 23) #}
+    <section class="ks-card fb-section" id="pourquoi" aria-labelledby="fb-pourquoi">
+        <p class="ks-eyebrow">{{ t('feedback.public.pourquoi_surtitre', 'Pourquoi votre regard compte') }}</p>
+        <h2 class="ks-section-title" id="fb-pourquoi"><i data-lucide="eye" aria-hidden="true"></i> {{ t('feedback.public.pourquoi_titre', 'Personne ne se voit tout entier') }}</h2>
+        <blockquote class="fb-quote">« Personne n'a une vue à 360 degrés sur lui-même. Pour grandir, nous avons besoin de miroirs. »<cite>{{ t('feedback.public.source_ch12', 'Le livre de la méthode, chapitre 12 « Confirmations »') }}</cite></blockquote>
+        <p class="fb-text">{{ t('feedback.public.pourquoi_texte', 'La méthode appelle cela le **feedback nourricier** : « une ressource gratuite que les autres t\'offrent pour t\'aider à voir tes angles morts » (chapitre 23). Un regard offert pour aider à grandir, pas pour juger. Vous n\'avez pas besoin de bien écrire. Ce qui compte, c\'est ce que vous avez vu de {prenom}, dans la vie de tous les jours.', 'inline', {prenom: firstName}) }}</p>
+    </section>
+
+    {# 3. Les trois témoins : schéma interactif commun avec la page du membre (feedback/_temoins.html.twig, mode public) #}
+    <section class="ks-card fb-section" data-temoins-public aria-labelledby="fb-temoins">
+        <p class="ks-eyebrow">{{ t('feedback.public.temoins_surtitre', 'Les trois témoins') }}</p>
+        <h2 class="ks-section-title" id="fb-temoins"><i data-lucide="sparkles" aria-hidden="true"></i> {{ t('feedback.public.temoins_titre', 'Votre regard est le troisième témoin') }}</h2>
+        <p class="fb-text">{{ t('feedback.public.temoins_principe', 'Le livre part d\'un principe biblique : « Toute affaire se réglera sur la déclaration de deux ou de trois témoins » (2 Corinthiens 13:1). Ce que {prenom} croit de soi devient une certitude quand trois témoins vont dans le même sens. Touchez un cercle pour découvrir chacun d\'eux.', 'text', {prenom: firstName}) }}</p>
         {% include 'feedback/_temoins.html.twig' with {mode: 'public', firstName: firstName} only %}
-    </details>
+    </section>
 
-    {% for e in errors %}<p class="ks-alert ks-alert--danger" style="margin-bottom: .6rem;" role="alert">{{ e }}</p>{% endfor %}
-    <form method="post" class="ks-card" x-data="{ picked: {{ data.qualities|length }}, max: {{ maxQualities }}, maxOwn: {{ maxOwn }}, own: {{ data.otherQualities|json_encode|e('html_attr') }}, draft: '',
-        get total() { return this.picked + this.own.length },
-        add() { const q = this.draft.trim().replace(/\s+/g, ' ').slice(0, {{ wordLength }}); if (!q) return;
-            const fold = v => v.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
-            const listed = [...this.$root.querySelectorAll('input[name=\'qualities[]\']')].find(c => fold(c.value) === fold(q));
-            if (listed) { if (!listed.checked && this.total < this.max) { listed.checked = true; this.picked++ } this.draft = ''; return; }
-            if (this.total >= this.max || this.own.length >= this.maxOwn || this.own.some(o => fold(o) === fold(q))) { this.draft = ''; return; }
-            this.own.push(q.charAt(0).toUpperCase() + q.slice(1)); this.draft = ''; this.$nextTick(() => window.lucide && window.lucide.createIcons()) } }">
+    {# 4. Comment ça se passe : étapes, temps, confidentialité, ce que la personne en retire #}
+    <section class="ks-card fb-section" aria-labelledby="fb-deroule">
+        <p class="ks-eyebrow">{{ t('feedback.public.deroule_surtitre', 'Avant de commencer') }}</p>
+        <h2 class="ks-section-title" id="fb-deroule"><i data-lucide="route" aria-hidden="true"></i> {{ t('feedback.public.deroule_titre', 'Comment ça se passe') }}</h2>
+        <ol class="fb-timeline">
+            <li><strong>{{ t('feedback.public.etape1', 'Vous et {prenom}', 'text', {prenom: firstName}) }}</strong><span>{{ t('feedback.public.etape1_aide', 'Comment vous connaissez-vous ?') }}</span></li>
+            <li><strong>{{ t('feedback.public.etape2', 'Ses qualités') }}</strong><span>{{ t('feedback.public.etape2_aide', 'De 1 à 5, dans une liste ou avec vos mots.') }}</span></li>
+            <li><strong>{{ t('feedback.public.etape3', 'En quelques mots') }}</strong><span>{{ t('feedback.public.etape3_aide', 'Ce que {prenom} fait de mieux.', 'text', {prenom: firstName}) }}</span></li>
+            <li><strong>{{ t('feedback.public.etape4', 'Pour finir') }}</strong><span>{{ t('feedback.public.etape4_aide', 'Un point de croissance, si vous le souhaitez, puis l\'envoi.') }}</span></li>
+        </ol>
+        <div class="fb-assure">
+            <div><i data-lucide="clock" aria-hidden="true"></i><div><strong>{{ t('feedback.public.assure_temps_titre', 'Environ 3 minutes') }}</strong><p>{{ t('feedback.public.assure_temps', 'Seules deux réponses sont demandées : une qualité au moins, et ce que {prenom} fait de mieux.', 'text', {prenom: firstName}) }}</p></div></div>
+            <div><i data-lucide="lock" aria-hidden="true"></i><div><strong>{{ t('feedback.public.assure_prive_titre', 'Confidentiel') }}</strong><p>
+                {% if anonymous %}{{ t('feedback.public.assure_prive_anonyme', 'Vos réponses ne vont qu\'à {prenom} et ne sont jamais publiées. Sans prénom, elles restent anonymes : {prenom} ne les découvre qu\'à partir de trois réponses, mêlées à celles des autres.', 'text', {prenom: firstName}) }}
+                {% else %}{{ t('feedback.public.assure_prive_nomme', 'Vos réponses ne vont qu\'à {prenom} et ne sont jamais publiées. {prenom} a souhaité connaître le prénom de chaque personne.', 'text', {prenom: firstName}) }}{% endif %}
+            </p></div></div>
+            <div><i data-lucide="gift" aria-hidden="true"></i><div><strong>{{ t('feedback.public.assure_recevoir_titre', 'Et pour vous') }}</strong><p>{{ t('feedback.public.assure_recevoir', 'À la fin, si vous le souhaitez : la Boussole 360, gratuite et sans compte, pour faire le point sur votre propre vie.') }}</p></div></div>
+        </div>
+    </section>
+
+    {# 5. Le questionnaire, en quatre étapes #}
+    <form method="post" class="ks-card fb-form" id="questionnaire" novalidate
+          x-data="feedbackForm({ picked: {{ data.qualities|length }}, max: {{ maxQualities }}, maxOwn: {{ maxOwn }}, own: {{ data.otherQualities|json_encode|e('html_attr') }}, wordLength: {{ wordLength }}, relationship: {{ data.relationship|json_encode|e('html_attr') }}, strengths: {{ data.strengths != '' ? 'true' : 'false' }}, needName: {{ request.forceRealName ? 'true' : 'false' }}, start: {{ errors is empty ? 1 : 4 }} })"
+          @submit="if (!checkAll()) $event.preventDefault()">
         <input type="hidden" name="_csrf_token" value="{{ csrf_token('feedback_form') }}">
         <div style="position: absolute; left: -9999px;" aria-hidden="true"><input name="website" tabindex="-1" autocomplete="off"></div>
 
-        <div class="ks-field fb-field">
-            <label class="ks-label" for="relationship">{{ t('feedback.public.lien', 'Vous connaissez {prenom} par…', 'text', {prenom: firstName}) }}</label>
-            <select class="ks-input" id="relationship" name="relationship">{% for k, v in relationships %}<option value="{{ k }}" {{ data.relationship == k ? 'selected' }}>{{ v }}</option>{% endfor %}</select>
+        <div class="fb-progress" x-show="ready" x-cloak>
+            <div class="fb-progress__top"><span x-text="'{{ t('feedback.public.etape_sur', 'Étape')|e('js') }} ' + step + ' / 4'"></span><span class="fb-progress__name" x-text="names[step - 1]"></span></div>
+            <div class="fb-progress__bar" role="progressbar" aria-valuemin="1" aria-valuemax="4" :aria-valuenow="step" aria-label="{{ t('feedback.public.progression', 'Progression') }}"><span :style="'width:' + (step * 25) + '%'"></span></div>
         </div>
 
-        <fieldset class="fb-field" style="border: 0; padding: 0; margin-left: 0; margin-right: 0;">
-            <legend class="ks-label" style="margin-bottom: .25rem;">{{ t('feedback.public.qualites', 'Les qualités que vous voyez chez {prenom}', 'text', {prenom: firstName}) }}</legend>
+        {% for e in errors %}<p class="ks-alert ks-alert--danger" style="margin-bottom: .6rem;" role="alert">{{ e }}</p>{% endfor %}
+        <p class="ks-alert ks-alert--warning" role="alert" x-show="hint" x-text="hint" x-cloak style="margin-bottom: .8rem;"></p>
+
+        {# Étape 1 #}
+        <fieldset class="fb-step" x-show="!ready || step === 1" data-step="1">
+            <legend class="fb-step__title"><span class="fb-step__num">1</span>{{ t('feedback.public.lien', 'Vous connaissez {prenom} par…', 'text', {prenom: firstName}) }}</legend>
+            <div class="fb-choices">
+                {% for k, v in relationships %}
+                    <label class="fb-choice"><input type="radio" name="relationship" value="{{ k }}" {{ data.relationship == k ? 'checked' }} x-model="relationship"><span>{{ v }}</span></label>
+                {% endfor %}
+            </div>
+        </fieldset>
+
+        {# Étape 2 #}
+        <fieldset class="fb-step" x-show="!ready || step === 2" data-step="2">
+            <legend class="fb-step__title"><span class="fb-step__num">2</span>{{ t('feedback.public.qualites', 'Les qualités que vous voyez chez {prenom}', 'text', {prenom: firstName}) }}</legend>
             <p class="fb-hint">{{ t('feedback.public.qualites_aide', 'Choisissez de 1 à {max} qualités.', 'text', {max: maxQualities}) }} <span x-text="total + ' / ' + max" aria-live="polite"></span></p>
             <div class="fb-chips">
                 {% for q in qualities %}
@@ -65,30 +117,45 @@
             </div>
         </fieldset>
 
-        <div class="fb-words">
-            <div class="ks-field fb-field">
-                <label class="ks-label" for="word">{{ t('feedback.public.un_mot', 'Si vous deviez décrire {prenom} en un mot, que diriez-vous ?', 'text', {prenom: firstName}) }}</label>
-                <input class="ks-input" id="word" name="word" value="{{ data.word }}" maxlength="{{ wordLength }}" autocomplete="off" placeholder="{{ t('feedback.public.un_mot_aide', 'Un mot (facultatif)') }}">
+        {# Étape 3 #}
+        <fieldset class="fb-step" x-show="!ready || step === 3" data-step="3">
+            <legend class="fb-step__title"><span class="fb-step__num">3</span>{{ t('feedback.public.etape3_titre', 'En quelques mots') }}</legend>
+            <div class="fb-words">
+                <div class="ks-field fb-field">
+                    <label class="ks-label" for="word">{{ t('feedback.public.un_mot', 'Si vous deviez décrire {prenom} en un mot, que diriez-vous ?', 'text', {prenom: firstName}) }}</label>
+                    <input class="ks-input" id="word" name="word" value="{{ data.word }}" maxlength="{{ wordLength }}" autocomplete="off" placeholder="{{ t('feedback.public.un_mot_aide', 'Un mot (facultatif)') }}">
+                </div>
+                <div class="ks-field fb-field">
+                    <label class="ks-label" for="notWord">{{ t('feedback.public.pas_mot', 'Et en un mot, ce que {prenom} n\'est pas ?', 'text', {prenom: firstName}) }}</label>
+                    <input class="ks-input" id="notWord" name="notWord" value="{{ data.notWord }}" maxlength="{{ wordLength }}" autocomplete="off" placeholder="{{ t('feedback.public.pas_mot_aide', 'Un mot (facultatif)') }}">
+                </div>
             </div>
             <div class="ks-field fb-field">
-                <label class="ks-label" for="notWord">{{ t('feedback.public.pas_mot', 'Et en un mot, ce que {prenom} n\'est pas ?', 'text', {prenom: firstName}) }}</label>
-                <input class="ks-input" id="notWord" name="notWord" value="{{ data.notWord }}" maxlength="{{ wordLength }}" autocomplete="off" placeholder="{{ t('feedback.public.pas_mot_aide', 'Un mot (facultatif)') }}">
+                <label class="ks-label" for="strengths">{{ t('feedback.public.forces', 'Ce que {prenom} fait de mieux', 'text', {prenom: firstName}) }}</label>
+                <textarea class="ks-input" id="strengths" name="strengths" rows="4" required maxlength="2000" @input="strengths = $event.target.value.trim() !== ''" placeholder="{{ t('feedback.public.forces_exemple', 'Un talent, une façon d\'être, un moment où {prenom} a brillé…', 'text', {prenom: firstName}) }}">{{ data.strengths }}</textarea>
+                <p class="fb-hint" style="margin-top: .4rem;">{{ t('feedback.public.forces_conseil', 'Un exemple précis vaut mieux qu\'un compliment général.') }}</p>
             </div>
-        </div>
+        </fieldset>
 
-        <div class="ks-field fb-field">
-            <label class="ks-label" for="strengths">{{ t('feedback.public.forces', 'Ce que {prenom} fait de mieux', 'text', {prenom: firstName}) }}</label>
-            <textarea class="ks-input" id="strengths" name="strengths" rows="3" required maxlength="2000" placeholder="{{ t('feedback.public.forces_exemple', 'Un talent, une façon d\'être, un moment où {prenom} a brillé…', 'text', {prenom: firstName}) }}">{{ data.strengths }}</textarea>
+        {# Étape 4 #}
+        <fieldset class="fb-step" x-show="!ready || step === 4" data-step="4">
+            <legend class="fb-step__title"><span class="fb-step__num">4</span>{{ t('feedback.public.etape4_titre', 'Pour finir') }}</legend>
+            <div class="ks-field fb-field">
+                <label class="ks-label" for="improvements">{{ t('feedback.public.grandir', 'Un point où {prenom} gagnerait à grandir (facultatif)', 'text', {prenom: firstName}) }}</label>
+                <textarea class="ks-input" id="improvements" name="improvements" rows="3" maxlength="2000" placeholder="{{ t('feedback.public.grandir_exemple', 'Avec bienveillance : ce qui pourrait l\'aider à aller plus loin.') }}">{{ data.improvements }}</textarea>
+            </div>
+            <div class="ks-field fb-field">
+                <label class="ks-label" for="name">{{ request.forceRealName ? t('feedback.public.prenom_obligatoire', 'Votre prénom') : t('feedback.public.prenom_facultatif', 'Votre prénom (facultatif : laissez vide pour rester anonyme)') }}</label>
+                <input class="ks-input" id="name" name="name" value="{{ data.name }}" maxlength="100" autocomplete="given-name" {{ request.forceRealName ? 'required' }}>
+            </div>
+            <p class="fb-note"><i data-lucide="lock" aria-hidden="true"></i>{{ t('feedback.public.envoi_note', 'Vos réponses ne vont qu\'à {prenom}. Merci pour ce cadeau.', 'text', {prenom: firstName}) }}</p>
+        </fieldset>
+
+        <div class="fb-nav">
+            <button type="button" class="ks-btn ks-btn--ghost" x-show="ready && step > 1" x-cloak @click="back()"><i data-lucide="arrow-left" aria-hidden="true"></i> {{ t('feedback.public.retour', 'Retour') }}</button>
+            <button type="button" class="ks-btn ks-btn--primary fb-nav__next" x-show="ready && step < 4" x-cloak @click="next()">{{ t('feedback.public.continuer', 'Continuer') }} <i data-lucide="arrow-right" aria-hidden="true"></i></button>
+            <button type="submit" class="ks-btn ks-btn--primary fb-nav__next" x-show="!ready || step === 4"><i data-lucide="send" aria-hidden="true"></i> {{ t('feedback.public.envoyer', 'Envoyer mon regard') }}</button>
         </div>
-        <div class="ks-field fb-field">
-            <label class="ks-label" for="improvements">{{ t('feedback.public.grandir', 'Un point où {prenom} gagnerait à grandir (facultatif)', 'text', {prenom: firstName}) }}</label>
-            <textarea class="ks-input" id="improvements" name="improvements" rows="3" maxlength="2000" placeholder="{{ t('feedback.public.grandir_exemple', 'Avec bienveillance : ce qui pourrait l\'aider à aller plus loin.') }}">{{ data.improvements }}</textarea>
-        </div>
-        <div class="ks-field fb-field">
-            <label class="ks-label" for="name">{{ request.forceRealName ? t('feedback.public.prenom_obligatoire', 'Votre prénom') : t('feedback.public.prenom_facultatif', 'Votre prénom (facultatif : laissez vide pour rester anonyme)') }}</label>
-            <input class="ks-input" id="name" name="name" value="{{ data.name }}" maxlength="100" autocomplete="given-name" {{ request.forceRealName ? 'required' }}>
-        </div>
-        <button type="submit" class="ks-btn ks-btn--primary fb-submit"><i data-lucide="send"></i> {{ t('feedback.public.envoyer', 'Envoyer mon regard') }}</button>
     </form>
 
     <details class="ks-card ks-card--flat fb-intro fb-about">
@@ -98,4 +165,34 @@
 
     <p class="fb-footnote">{{ t('feedback.public.mention', 'KIINI SAWA est une application chrétienne de planification de vie. Vos réponses ne servent qu\'à {prenom} et ne sont jamais publiées. [Confidentialité](/confidentialite)', 'inline', {prenom: firstName}) }}</p>
 </div>
+
+<script>
+    // Questionnaire en quatre étapes (Alpine). Sans JavaScript, tout le formulaire reste affiché et s'envoie normalement.
+    function feedbackForm(o) {
+        return {
+            ready: false, step: o.start, hint: '', draft: '',
+            picked: o.picked, max: o.max, maxOwn: o.maxOwn, own: o.own, relationship: o.relationship, strengths: o.strengths, needName: o.needName,
+            names: {{ [t('feedback.public.etape1', 'Vous et {prenom}', 'text', {prenom: firstName}), t('feedback.public.etape2', 'Ses qualités'), t('feedback.public.etape3', 'En quelques mots'), t('feedback.public.etape4', 'Pour finir')]|json_safe }},
+            init() { this.ready = true },
+            get total() { return this.picked + this.own.length },
+            check(s) {
+                if (s === 1 && !this.relationship) return {{ t('feedback.public.err_lien', 'Choisissez comment vous connaissez {prenom}.', 'text', {prenom: firstName})|json_safe }};
+                if (s === 2 && this.total === 0) return {{ t('feedback.public.err_qualite', 'Choisissez au moins une qualité.')|json_safe }};
+                if (s === 3 && !this.strengths) return {{ t('feedback.public.err_forces', 'Dites en quelques mots ce que {prenom} fait de mieux.', 'text', {prenom: firstName})|json_safe }};
+                if (s === 4 && this.needName && !this.$root.querySelector('#name').value.trim()) return {{ t('feedback.public.err_prenom', 'Indiquez votre prénom.')|json_safe }};
+                return '';
+            },
+            go(s) { this.step = s; this.hint = ''; this.$nextTick(() => { this.$root.scrollIntoView({ behavior: 'smooth', block: 'start' }); const f = this.$root.querySelector('[data-step="' + s + '"] input:not([type=hidden]), [data-step="' + s + '"] textarea'); if (f) f.focus({ preventScroll: true }); }) },
+            next() { this.hint = this.check(this.step); if (!this.hint) this.go(this.step + 1) },
+            back() { this.go(this.step - 1) },
+            checkAll() { for (let s = 1; s <= 4; s++) { const h = this.check(s); if (h) { this.go(s); this.$nextTick(() => this.hint = h); return false; } } return true },
+            add() { const q = this.draft.trim().replace(/\s+/g, ' ').slice(0, o.wordLength); if (!q) return;
+                const fold = v => v.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase();
+                const listed = [...this.$root.querySelectorAll('input[name=\'qualities[]\']')].find(c => fold(c.value) === fold(q));
+                if (listed) { if (!listed.checked && this.total < this.max) { listed.checked = true; this.picked++ } this.draft = ''; return; }
+                if (this.total >= this.max || this.own.length >= this.maxOwn || this.own.some(x => fold(x) === fold(q))) { this.draft = ''; return; }
+                this.own.push(q.charAt(0).toUpperCase() + q.slice(1)); this.draft = ''; this.$nextTick(() => window.lucide && window.lucide.createIcons()) },
+        };
+    }
+</script>
 {% endblock %}

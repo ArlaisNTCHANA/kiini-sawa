@@ -1,4 +1,9 @@
-{# Invitation discrète à découvrir KIINI SAWA, après une réponse ou sur un lien terminé. Provenance suivie : « feedback » par défaut (paramètres source et campaign). #}
+{#
+    Invitation à découvrir KIINI SAWA, après une réponse ou sur un lien terminé, sans forcer : une action principale
+    (la Boussole 360, gratuite et sans compte), puis la création de compte et la présentation. Provenance suivie
+    (« feedback » par défaut). Paramètres : content (merci, lien-termine), firstName (facultatif).
+#}
+{% set utm = {utm_source: source|default('feedback'), utm_medium: 'formulaire', utm_campaign: campaign|default('feedback-nourricier'), utm_content: content|default('merci')} %}
 {% if app.user %}
     <div class="ks-card fb-discover">
         <h2 class="ks-section-title" style="margin-top: 0;">{{ t('feedback.decouvrir.membre_titre', 'Et vous, que verraient vos proches chez vous ?') }}</h2>
@@ -6,12 +11,19 @@
         <div class="fb-discover__actions"><a href="{{ path('app_feedback') }}" class="ks-btn ks-btn--secondary"><i data-lucide="users"></i> {{ t('feedback.decouvrir.membre_bouton', 'Demander mon feedback nourricier') }}</a></div>
     </div>
 {% else %}
-    <div class="ks-card fb-discover">
-        <h2 class="ks-section-title" style="margin-top: 0;">{{ t('feedback.decouvrir.titre', 'Et vous, que verraient vos proches chez vous ?') }}</h2>
-        <p style="color: var(--fg-muted); margin: 0;">{{ t('feedback.decouvrir.texte', 'KIINI SAWA vous aide à découvrir votre raison d\'être, vos dons et votre personnalité, puis à bâtir votre Plan de Vie pas à pas, avec la foi au cœur. Gratuit, en quelques minutes par jour.') }}</p>
-        <div class="fb-discover__actions">
-            <a href="{{ path('app_home', {utm_source: source|default('feedback'), utm_medium: 'formulaire', utm_campaign: campaign|default('feedback-nourricier'), utm_content: content|default('merci')}) }}" class="ks-btn ks-btn--primary">{{ t('feedback.decouvrir.bouton', 'Découvrir KIINI SAWA') }}</a>
-            <a href="{{ path('app_register', {utm_source: source|default('feedback'), utm_medium: 'formulaire', utm_campaign: campaign|default('feedback-nourricier'), utm_content: content|default('merci')}) }}" class="ks-btn ks-btn--ghost">{{ t('feedback.decouvrir.inscription', 'Créer mon compte gratuit') }}</a>
+    <section class="ks-card fb-invite" aria-labelledby="fb-invite-title">
+        <p class="ks-eyebrow">{{ t('feedback.decouvrir.surtitre', 'Et vous ?') }}</p>
+        <h2 id="fb-invite-title">{{ t('feedback.decouvrir.titre', 'Et vous, que verraient vos proches chez vous ?') }}</h2>
+        <p>{{ t('feedback.decouvrir.texte', 'KIINI SAWA vous aide à découvrir votre raison d\'être, vos dons et votre personnalité, puis à bâtir votre Plan de Vie pas à pas, avec la foi au cœur. Gratuit, en quelques minutes par jour.') }}</p>
+        <ul class="fb-offer">
+            <li><i data-lucide="compass" aria-hidden="true"></i><div><strong>{{ t('feedback.decouvrir.offre1_titre', 'La Boussole 360') }}</strong><span>{{ t('feedback.decouvrir.offre1', '24 affirmations, 3 minutes, pour voir l\'équilibre de votre vie. Sans compte.') }}</span></div></li>
+            <li><i data-lucide="fingerprint" aria-hidden="true"></i><div><strong>{{ t('feedback.decouvrir.offre2_titre', 'Vos tests') }}</strong><span>{{ t('feedback.decouvrir.offre2', 'Personnalité, dons spirituels, manière d\'agir : mieux vous connaître.') }}</span></div></li>
+            <li><i data-lucide="map" aria-hidden="true"></i><div><strong>{{ t('feedback.decouvrir.offre3_titre', 'Votre Plan de Vie') }}</strong><span>{{ t('feedback.decouvrir.offre3', 'De l\'Être au Faire : une méthode née d\'un livre, pas à pas.') }}</span></div></li>
+        </ul>
+        <div class="fb-invite__actions">
+            <a href="{{ path('app_public_boussole', utm) }}" class="ks-btn ks-btn--primary"><i data-lucide="compass" aria-hidden="true"></i> {{ t('feedback.decouvrir.boussole', 'Faire ma Boussole 360 gratuite') }}</a>
+            <a href="{{ path('app_register', utm) }}" class="ks-btn ks-btn--ghost">{{ t('feedback.decouvrir.inscription', 'Créer mon compte gratuit') }}</a>
+            <a href="{{ path('app_home', utm) }}" class="fb-invite__link">{{ t('feedback.decouvrir.bouton', 'Découvrir KIINI SAWA') }}</a>
         </div>
-    </div>
+    </section>
 {% endif %}

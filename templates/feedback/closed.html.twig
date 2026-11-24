@@ -1,14 +1,15 @@
 {% extends 'base.html.twig' %}
+{# Lien terminé (expiré ou fermé) ou inconnu : explication claire, puis la même porte d'entrée vers KIINI SAWA. #}
 {% block title %}{{ t('feedback.ferme.onglet', 'Lien terminé') }}{% endblock %}
 {% block head_meta %}<meta name="robots" content="noindex">{% endblock %}
 {% block body %}
 {% if not app.user %}{% include 'shared/_public_header.html.twig' with {minimal: true} %}{% endif %}
 {% include 'feedback/_styles.html.twig' %}
 <div class="ks-page ks-page--narrow fb-public">
-    <div class="ks-card ks-empty">
-        <div class="ks-empty__icon"><i data-lucide="hourglass" style="width: 26px; height: 26px;"></i></div>
-        <h1 class="ks-empty__title">{{ t('feedback.ferme.titre', 'Ce lien n\'accepte plus de réponses') }}</h1>
-        <p class="ks-empty__text">
+    <section class="ks-card fb-thanks">
+        <div class="fb-thanks__icon"><i data-lucide="hourglass" aria-hidden="true"></i></div>
+        <h1>{{ t('feedback.ferme.titre', 'Ce lien n\'accepte plus de réponses') }}</h1>
+        <p>
             {% if firstName and expired %}
                 {{ t('feedback.ferme.expire', 'Le délai pour répondre à {prenom} est passé. Si vous aviez envie de répondre, dites-le à {prenom} : un nouveau lien se crée en un instant.', 'text', {prenom: firstName}) }}
             {% elseif firstName %}
@@ -17,7 +18,8 @@
                 {{ t('feedback.ferme.inconnu', 'Ce lien n\'existe pas ou n\'est plus actif. Vérifiez-le auprès de la personne qui vous l\'a envoyé.') }}
             {% endif %}
         </p>
-    </div>
+        <p style="font-size: .9rem; color: var(--fg-muted);">{{ t('feedback.ferme.pourquoi', 'Un lien de feedback nourricier reste ouvert une semaine, pour que les regards arrivent pendant que la demande est encore fraîche.') }}</p>
+    </section>
     {% include 'feedback/_discover.html.twig' with {content: 'lien-termine'} %}
 </div>
 {% endblock %}

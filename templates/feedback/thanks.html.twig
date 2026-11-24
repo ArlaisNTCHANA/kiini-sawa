@@ -1,15 +1,17 @@
 {% extends 'base.html.twig' %}
+{# Remerciement après la réponse d'un proche, puis invitation (sans forcer) à découvrir KIINI SAWA pour soi. #}
 {% block title %}{{ t('feedback.merci.onglet', 'Merci') }}{% endblock %}
 {% block head_meta %}<meta name="robots" content="noindex">{% endblock %}
 {% block body %}
 {% if not app.user %}{% include 'shared/_public_header.html.twig' with {minimal: true} %}{% endif %}
 {% include 'feedback/_styles.html.twig' %}
 <div class="ks-page ks-page--narrow fb-public">
-    <div class="ks-card ks-empty">
-        <div class="ks-empty__icon"><i data-lucide="heart" style="width: 26px; height: 26px;"></i></div>
-        <h1 class="ks-empty__title">{{ t('feedback.merci.titre', 'Merci pour votre regard') }}</h1>
-        <p class="ks-empty__text">{{ t('feedback.merci.texte', 'Votre réponse est bien arrivée. {prenom} la découvrira avec celles des autres proches. Une parole bienveillante peut changer une trajectoire.', 'text', {prenom: firstName}) }}</p>
-    </div>
+    <section class="ks-card fb-thanks">
+        <div class="fb-thanks__icon"><i data-lucide="heart" aria-hidden="true"></i></div>
+        <h1>{{ t('feedback.merci.titre', 'Merci pour votre regard') }}</h1>
+        <p>{{ t('feedback.merci.texte', 'Votre réponse est bien arrivée. {prenom} la découvrira avec celles des autres proches. Une parole bienveillante peut changer une trajectoire.', 'text', {prenom: firstName}) }}</p>
+        <blockquote class="fb-quote">« Choisis des personnes qui t'aiment assez pour te dire la vérité, et qui t'ont vu agir. »<cite>{{ t('feedback.merci.source', 'Le livre de la méthode, chapitre 12 : c\'est ce que {prenom} a fait en vous écrivant', 'text', {prenom: firstName}) }}</cite></blockquote>
+    </section>
     {% include 'feedback/_discover.html.twig' with {content: 'merci'} %}
 </div>
 {% endblock %}

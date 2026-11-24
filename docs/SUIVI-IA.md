@@ -9,6 +9,33 @@ teste (`php bin/phpunit`), commit, déploie (`bin/ops/envoyer-hostinger.sh`), v�
 journal `var/log/prod-AAAA-MM-JJ.log` sans erreur) ; **le fondateur fait lui-même `git push`** (refusé à l'IA).
 Ne jamais afficher ni demander de mot de passe ; ne pas publier son nom (mentions légales en attente).
 
+## 24/11/2026 — Feedback nourricier : la page de la personne invitée devient une vraie porte d'entrée
+
+- **Demande du fondateur** : « que le professionnalisme de la page vende ; c'est quoi KIINI SAWA, pourquoi le feedback,
+  les trois témoins, l'enchaînement du feedback… ça peut l'amener à créer aussi son compte ». Page concernée : celle
+  que la personne invitée ouvre depuis WhatsApp ou l'e-mail, sans compte (`/avis/{jeton}`, merci, lien terminé).
+  Proposition avec maquette (captures `../captures-page-invitee/maquette/`), accord « Oui, réalise-la ».
+- **Fait** (détail : `docs/modules/feedback.md`) : accueil « [prénom] vous demande d'être son témoin » + KIINI SAWA en
+  une phrase + une seule action ; « Pourquoi votre regard compte » (livre, chapitres 12 et 23, mot pour mot) ; schéma
+  des trois témoins **réutilisé** (`_temoins.html.twig`, ouvert) ; « Comment ça se passe » (étapes, temps,
+  confidentialité, ce que la personne en retire) ; questionnaire en 4 étapes avec barre de progression (sans
+  JavaScript : tout s'affiche) ; merci avec citation du chapitre 12 puis invitation (Boussole 360 gratuite et sans
+  compte en action principale, création de compte, découverte) ; page « lien terminé » soignée ; aperçu WhatsApp
+  « [prénom] vous demande d'être son témoin ». Aucune question ni protection retirée (CSRF, piège, limites).
+- **Codes de textes** : nouveaux codes quand le sens change (`feedback.public.accueil_titre`, `accueil_intro`,
+  `temoins_principe`, `feedback.apercu.titre_temoin`, `description_temoin`) pour qu'un texte déjà retouché dans
+  l'administration ne s'affiche pas à contresens.
+- **Partagé** : `_discover.html.twig` sert aussi après une confirmation de test (DISC, dons) : la Boussole 360 y devient
+  aussi l'action principale.
+- **Tests** : `FeedbackTest::testGuestPageWelcomesExplainsAndInvites`, `testGuestPagesQuoteTheBookWordForWord` ; titres
+  mis à jour dans `testFriendsAnswerAndSummaryAppearsAfterThreeAnswers`.
+- **Vérifié en local** (téléphone 375 px et ordinateur 1280 px, en visiteur) : 4 étapes, messages si une réponse
+  manque, qualité ajoutée, envoi enregistré, merci, lien expiré (410), pas de défilement horizontal, console sans erreur.
+- **Piège local** : le navigateur intégré est connecté sur `localhost` et `127.0.0.1` ; pour voir la page en visiteur,
+  `invite.localhost` a été ajouté à `TRUSTED_HOSTS` dans `.env.local` (non versionné).
+- **Reste** : vrai téléphone non essayé ; la page `/confirmer/{jeton}` (confirmation de test par les proches) garde
+  l'ancien style et pourrait recevoir le même accueil.
+
 ## 24/11/2026 — Académie : éditeur de leçon par blocs
 
 - **Demande du fondateur** : la suite de l'atelier, « l'éditeur par blocs ».

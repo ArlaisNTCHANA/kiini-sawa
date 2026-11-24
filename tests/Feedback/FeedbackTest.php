@@ -38,12 +38,12 @@ class FeedbackTest extends WebTestCase
             $client->getCookieJar()->clear();
             $crawler = $client->request('GET', '/avis/'.$request->getToken());
             $this->assertResponseIsSuccessful();
-            $this->assertSelectorTextContains('h1', 'Abigaïl aimerait votre regard');
+            $this->assertSelectorTextContains('h1', 'Abigaïl vous demande d\'être son témoin');
             $html = (string) $client->getResponse()->getContent();
             $this->assertStringNotContainsString('lui ou en elle', $html, 'tournures neutres : l\'application ne connaît pas le sexe');
             $this->assertStringNotContainsString('vu(e)', $html);
             $this->assertStringContainsString('og:image', $html, 'aperçu du lien dans WhatsApp');
-            $this->assertStringContainsString('Abigaïl aimerait votre regard', $crawler->filter('meta[property="og:title"]')->attr('content'));
+            $this->assertStringContainsString('Abigaïl vous demande d\'être son témoin', $crawler->filter('meta[property="og:title"]')->attr('content'));
             $form = $crawler->selectButton('Envoyer mon regard')->form();
             foreach ($qualities as $q) {
                 $form['qualities'][array_search($q, FeedbackService::QUALITIES, true)]->tick();
@@ -292,6 +292,78 @@ class FeedbackTest extends WebTestCase
         $this->assertSelectorTextContains('main', 'En un mot, vous êtes…');
         $this->assertSelectorTextContains('main', 'Lumineuse · 3');
         $this->assertSelectorTextContains('main', 'Rancunière');
+    }
+
+    /**
+     * Page de la personne invitée (souvent son premier contact avec KIINI SAWA) : son rôle de témoin, KIINI SAWA en une
+     * phrase, pourquoi son regard compte (citations du livre mot pour mot), les trois témoins, le déroulé, le questionnaire
+     * en quatre étapes ; puis remerciement et invitation à la Boussole 360 ; lien terminé = même porte d'entrée.
+     */
+    public function testGuestPageWelcomesExplainsAndInvites(): void
+    {
+        $client = static::createClient();
+        $owner = $this->ownerNamed('Noémie');
+        $request = $this->service()->open($owner, false);
+
+        $crawler = $client->request('GET', '/avis/'.$request->getToken());
+        $this->assertResponseIsSuccessful();
+        $text = $crawler->filter('main')->text();
+        foreach (['Noémie vous demande d\'être son témoin', 'KIINI SAWA est une application chrétienne', 'Pourquoi votre regard compte',
+            'Votre regard est le troisième témoin', 'Comment ça se passe', 'Environ 3 minutes', 'Confidentiel', 'Boussole 360, gratuite et sans compte',
+            'Vous et Noémie', 'Ses qualités', 'En quelques mots', 'Pour finir'] as $expected) {
+            $this->assertStringContainsString($expected, $text);
+        }
+        $this->assertCount(1, $crawler->filter('.fb-hero a.ks-btn--primary[href="#questionnaire"]'), 'une seule action dans l\'accueil : commencer');
+        $this->assertCount(4, $crawler->filter('#questionnaire fieldset[data-step]'), 'questionnaire en quatre étapes');
+        $this->assertCount(1, $crawler->filter('#questionnaire [role="progressbar"]'), 'barre de progression');
+        $this->assertCount(7, $crawler->filter('#questionnaire input[type="radio"][name="relationship"]'));
+        $this->assertCount(1, $crawler->filter('[data-temoins-public] [data-temoins] [role="tab"][data-temoin="TEMOIGNAGE"][aria-selected="true"]'), 'le schéma s\'ouvre sur « votre regard »');
+        $this->assertSame(0, $crawler->filter('main details[data-temoins-public]')->count(), 'les trois témoins ne sont plus repliés');
+        $html = (string) $client->getResponse()->getContent();
+        $this->assertStringContainsString('Anonyme si vous le souhaitez', $html);
+        $this->assertStringContainsString('Noémie vous demande d\'être son témoin', $crawler->filter('meta[property="og:title"]')->attr('content'));
+        $this->assertStringContainsString('confidentielles', $crawler->filter('meta[property="og:description"]')->attr('content'));
+        $this->assertStringNotContainsString('choisi(e)', $html);
+
+        // Envoi (sans JavaScript : toutes les étapes sont dans le formulaire), puis remerciement et invitation
+        $form = $crawler->selectButton('Envoyer mon regard')->form();
+        $form['relationship']->select('eglise');
+        $form['qualities'][0]->tick();
+        $client->submit($form, ['strengths' => 'Sa fidélité']);
+        $this->assertResponseRedirects('/avis/'.$request->getToken().'/merci');
+        $crawler = $client->followRedirect();
+        $this->assertSelectorTextContains('main', 'Merci pour votre regard');
+        $boussole = $crawler->filter('main a.ks-btn--primary');
+        $this->assertCount(1, $boussole, 'une seule action principale');
+        $this->assertStringStartsWith('/boussole?', (string) $boussole->attr('href'), 'la Boussole 360, sans compte');
+        $this->assertStringContainsString('utm_source=feedback', (string) $boussole->attr('href'));
+        $this->assertCount(1, $crawler->filter('main a[href^="/inscription?"]'));
+
+        // Lien inconnu : même porte d'entrée
+        $client->getCookieJar()->clear();
+        $crawler = $client->request('GET', '/avis/'.str_repeat('1', 24));
+        $this->assertResponseStatusCodeSame(404);
+        $this->assertStringContainsString('utm_content=lien-termine', (string) $crawler->filter('main a.ks-btn--primary')->attr('href'));
+    }
+
+    /** Les phrases du livre citées sur les pages des proches existent mot pour mot dans le livre. */
+    public function testGuestPagesQuoteTheBookWordForWord(): void
+    {
+        $dir = \dirname(__DIR__, 2);
+        $book = file_get_contents($dir.'/content/livre/CHAP_12.md').file_get_contents($dir.'/content/livre/CHAP_23.md');
+        $book = str_replace('’', '\'', $book);
+        foreach (['templates/feedback/form.html.twig', 'templates/feedback/thanks.html.twig'] as $file) {
+            preg_match_all('/<blockquote class="fb-quote">« (.+?) »</u', (string) file_get_contents($dir.'/'.$file), $m);
+            $this->assertNotEmpty($m[1], $file);
+            foreach ($m[1] as $quote) {
+                $this->assertStringContainsString($quote, $book, 'citation fidèle au livre : '.$quote);
+            }
+        }
+        $form = (string) file_get_contents($dir.'/templates/feedback/form.html.twig');
+        foreach (['une ressource gratuite que les autres t\\\'offrent pour t\\\'aider à voir tes angles morts', 'Toute affaire se réglera sur la déclaration de deux ou de trois témoins » (2 Corinthiens 13:1)'] as $quote) {
+            $this->assertStringContainsString($quote, $form);
+            $this->assertStringContainsString(str_replace('\\\'', '\'', $quote), $book);
+        }
     }
 
     private function service(): FeedbackService
