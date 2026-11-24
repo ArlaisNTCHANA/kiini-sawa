@@ -15,6 +15,7 @@ use App\PlanDHygiene\Repository\PlanDHygieneRepository;
 use App\Personnalite\Repository\ProfileTestRepository;
 use App\Journal\Repository\ReflectionNoteRepository;
 use App\Compte\Repository\UserRepository;
+use Doctrine\DBAL\Connection;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -24,6 +25,8 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 #[IsGranted('ROLE_ADMIN')]
 class DashboardController extends AbstractController
 {
+    private const MONTHS = ['janv.', 'févr.', 'mars', 'avr.', 'mai', 'juin', 'juil.', 'août', 'sept.', 'oct.', 'nov.', 'déc.'];
+
     #[Route('', name: 'admin_dashboard', methods: ['GET'])]
     public function index(
         UserRepository $userRepo,
@@ -39,6 +42,7 @@ class DashboardController extends AbstractController
         ReflectionNoteRepository $noteRepo,
         ProfileTestRepository $testRepo,
         ChallengeRepository $challengeRepo,
+        Connection $db,
     ): Response {
         // --- Core metrics ---
         $totalUsers = $userRepo->count();
@@ -76,9 +80,10 @@ class DashboardController extends AbstractController
 
         // --- Chart data: Plans distribution ---
         $plansChartData = [
-            'labels' => ['Vie', 'Croissance', 'PDP', 'Hygiène', 'Transmission'],
+            'labels' => ['Plan de Vie', 'Plan de Croissance', 'Plan de Développement personnel', 'Plan d\'Hygiène de vie', 'Plan de Transmission'],
             'data' => array_values($plansData),
-            'colors' => ['#6366f1', '#8b5cf6', '#a855f7', '#c084fc', '#e879f9'],
+            // Graphique (JavaScript) : les variables CSS n'y fonctionnent pas ; couleurs des plans de docs/design.md
+            'colors' => ['#C8962E', '#1F4D3A', '#2E6B53', '#5D7368', '#A87A1F'],
         ];
 
         // --- Chart data: Activity (habit logs per month, last 6 months) ---
@@ -87,7 +92,7 @@ class DashboardController extends AbstractController
         for ($i = 5; $i >= 0; $i--) {
             $start = new \DateTime("first day of -$i months midnight");
             $end = (clone $start)->modify('last day of this month 23:59:59');
-            $activityLabels[] = $start->format('M Y');
+            $activityLabels[] = self::MONTHS[(int) $start->format('n') - 1].' '.$start->format('Y');
 
             $count = (int) $habitLogRepo->createQueryBuilder('hl')
                 ->select('COUNT(hl.id)')
@@ -104,6 +109,17 @@ class DashboardController extends AbstractController
         $activityChartData = [
             'labels' => $activityLabels,
             'data' => $activityData,
+        ];
+
+        // --- Membres : arrivées, activité, abonnements (mêmes définitions que Paiements et Rétention) ---
+        $count = static function (string $sql) use ($db): int {
+            return (int) $db->fetchOne($sql);
+        };
+        $members = [
+            'new7' => $count('SELECT COUNT(*) FROM `user` WHERE created_at >= DATE_SUB(NOW(), INTERVAL 7 DAY)'),
+            'active30' => $count('SELECT COUNT(*) FROM `user` WHERE last_active_at >= DATE_SUB(NOW(), INTERVAL 30 DAY)'),
+            'pro' => $count("SELECT COUNT(*) FROM subscription WHERE tier <> 'FREE' AND status = 'ACTIVE' AND current_period_end > NOW()"),
+            'trial' => $count("SELECT COUNT(*) FROM subscription WHERE status = 'TRIAL' AND trial_end_at > NOW()"),
         ];
 
         // --- Recent users ---
@@ -124,6 +140,7 @@ class DashboardController extends AbstractController
             'plansChartData' => $plansChartData,
             'activityChartData' => $activityChartData,
             'recentUsers' => $recentUsers,
+            'members' => $members,
         ]);
     }
 }

@@ -69,3 +69,11 @@ Une seule définition pour l'ordinateur et le téléphone : `App\Shared\Twig\Nav
 - Menu du compte : profil, abonnement, notifications, installation, avis, déconnexion ; **jamais de fonctionnalité**.
 - Ajouter une page : l'inscrire dans `NavigationExtension::SECTIONS` (et son préfixe d'adresse dans `match`) ;
   `tests/Shared/NavigationTest.php` vérifie que chaque page du menu s'ouvre.
+
+## Administration (23/11/2026)
+
+Même système visuel que l'application. Gabarit `templates/admin/layout.html.twig` (menu latéral, tiroir sur téléphone,
+fil d'Ariane, en-tête `ks-header`, messages), menu unique `App\Admin\Twig\AdminNavigationExtension`. Les variables
+de couleur vivent dans `templates/shared/_design_tokens.html.twig`, partagé par `base.html.twig` et l'administration.
+Tableaux : `ks-table ks-table--cards` (en fiches sous 720 px, libellé de chaque cellule dans `data-label`).
+Détail : `docs/modules/admin.md`.

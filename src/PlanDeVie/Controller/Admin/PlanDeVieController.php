@@ -49,6 +49,7 @@ class PlanDeVieController extends AbstractController
             $purpose = new Purpose();
             $purpose->setPlanDeVie($planDeVie);
             $purpose->setStatement('');
+            $planDeVie->setPurpose($purpose); // côté inverse aussi, sinon la page plante à la première visite
             $em->persist($purpose);
             $em->flush();
         }
@@ -62,6 +63,7 @@ class PlanDeVieController extends AbstractController
             $vision->setHorizon('');
             $vision->setBeneficiaries('');
             $vision->setIndicators('');
+            $planDeVie->setVision($vision);
             $em->persist($vision);
             $em->flush();
         }

@@ -2,102 +2,113 @@
 
 {% block title %}Paiements{% endblock %}
 {% block page_title %}Paiements et revenus{% endblock %}
-
-{% block stylesheets %}
-<style>
-    .k-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 16px; margin-bottom: 24px; }
-    .k-stat { font-size: 26px; font-weight: 800; }
-    .k-label { font-size: 12px; color: var(--text-secondary); }
-    .k-table { width: 100%; border-collapse: collapse; font-size: 14px; }
-    .k-table th, .k-table td { padding: 10px 8px; border-top: 1px solid rgba(255,255,255,.06); text-align: left; vertical-align: top; }
-    .k-btn { display: inline-flex; padding: 6px 12px; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer; border: 1px solid rgba(255,255,255,.15); background: transparent; color: inherit; }
-    .k-btn--ok { background: #059669; border-color: #059669; color: #fff; }
-    .k-input { padding: 6px 10px; border-radius: 8px; background: rgba(0,0,0,.2); color: inherit; border: 1px solid rgba(255,255,255,.12); font-size: 13px; }
-</style>
-{% endblock %}
+{% block page_lead %}Validez les virements et paiements Mobile Money reçus, puis suivez ce que KIINI SAWA encaisse.{% endblock %}
 
 {% block content %}
-{% for label, messages in app.flashes %}{% for m in messages %}<div style="padding: 12px 16px; border-radius: 8px; margin-bottom: 16px; {{ label == 'success' ? 'background: rgba(16,185,129,.1); color: #34d399;' : 'background: rgba(239,68,68,.1); color: #f87171;' }}">{{ m }}</div>{% endfor %}{% endfor %}
+<div class="ks-stack">
+    <div class="ks-stat-grid">
+        <div class="ks-stat{{ pending|length ? ' ks-stat--attention' }}"><div class="ks-stat__value">{{ pending|length }}</div><div class="ks-stat__label">paiement(s) à vérifier</div></div>
+        <div class="ks-stat"><div class="ks-stat__value">{{ proCount }}</div><div class="ks-stat__label">abonnés PRO payants actifs</div></div>
+        <div class="ks-stat"><div class="ks-stat__value">{{ trialCount }}</div><div class="ks-stat__label">essais en cours</div></div>
+        <div class="ks-stat"><div class="ks-stat__value">{{ userCount }}</div><div class="ks-stat__label">comptes</div></div>
+        <div class="ks-stat"><div class="ks-stat__value" style="font-size: 1.2rem;">{% for cur, total in totals %}{{ total|money(cur) }}<br>{% else %}—{% endfor %}</div><div class="ks-stat__label">encaissé depuis le début</div></div>
+    </div>
 
-<div class="k-grid">
-    <div class="ks-card"><div class="k-stat">{{ pending|length }}</div><div class="k-label">paiement(s) à vérifier</div></div>
-    <div class="ks-card"><div class="k-stat">{{ proCount }}</div><div class="k-label">abonnés PRO payants actifs</div></div>
-    <div class="ks-card"><div class="k-stat">{{ trialCount }}</div><div class="k-label">essais en cours</div></div>
-    <div class="ks-card"><div class="k-stat">{{ userCount }}</div><div class="k-label">comptes</div></div>
-    <div class="ks-card"><div class="k-stat" style="font-size: 18px;">{% for cur, total in totals %}{{ total|money(cur) }}<br>{% else %}—{% endfor %}</div><div class="k-label">encaissé depuis le début</div></div>
-</div>
+    <section class="ks-card" aria-labelledby="pay-pending">
+        <h2 class="ks-card__title" id="pay-pending"><i data-lucide="wallet"></i> À vérifier</h2>
+        <p class="ks-muted" style="margin-bottom: 1rem;">Vérifiez la réception sur votre compte bancaire ou Mobile Money avant de valider. La validation active PRO et envoie le reçu au client.</p>
+        <div class="ks-table-wrap">
+            <table class="ks-table ks-table--cards">
+                <thead><tr><th>Membre</th><th>Montant</th><th>Moyen de paiement</th><th>Décision</th></tr></thead>
+                <tbody>
+                {% for t in pending %}
+                    <tr>
+                        <td><strong>{{ t.subscription.user.displayName }}</strong><br><span class="ks-small">{{ t.subscription.user.email }}</span></td>
+                        <td data-label="Montant"><span><strong>{{ t.amount|money(t.currency) }}</strong><br><span class="ks-small">{{ t.description }}</span></span></td>
+                        <td data-label="Moyen"><span>{{ t.methodLabel }}<br><span class="ks-small">réf. <strong>{{ t.reference ?: '—' }}</strong>{{ t.paidAt ? ' · payé le ' ~ t.paidAt|date('d/m/Y') }}</span></span></td>
+                        <td data-label="">
+                            <div class="ks-stack" style="gap: .5rem;">
+                                <form method="post" action="{{ path('admin_payments_validate', {id: t.id}) }}">
+                                    <input type="hidden" name="_csrf_token" value="{{ csrf_token('admin_payment') }}">
+                                    <button class="ks-btn ks-btn--primary ks-btn--sm" type="submit"><i data-lucide="check"></i> Reçu, valider</button>
+                                </form>
+                                <form method="post" action="{{ path('admin_payments_reject', {id: t.id}) }}" class="ks-inline-form">
+                                    <input class="ks-input ks-input--sm" name="reason" placeholder="Motif du refus" required aria-label="Motif du refus">
+                                    <input type="hidden" name="_csrf_token" value="{{ csrf_token('admin_payment') }}">
+                                    <button class="ks-btn ks-btn--danger ks-btn--sm" type="submit">Refuser</button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                {% else %}
+                    <tr><td colspan="4" class="is-empty"><i data-lucide="check" class="ks-ico"></i> Aucun paiement en attente.</td></tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </section>
 
-<div class="ks-card" style="margin-bottom: 24px;">
-    <h2 style="font-size: 16px; font-weight: 700; margin-bottom: 4px;">À vérifier</h2>
-    <p class="k-label" style="margin-bottom: 12px;">Vérifiez la réception sur votre compte bancaire ou Mobile Money avant de valider. La validation active PRO et envoie le reçu au client.</p>
-    <table class="k-table">
-        {% for t in pending %}
-            <tr>
-                <td><strong>{{ t.subscription.user.displayName }}</strong><br><span class="k-label">{{ t.subscription.user.email }}</span></td>
-                <td><strong>{{ t.amount|money(t.currency) }}</strong><br><span class="k-label">{{ t.description }}</span></td>
-                <td>{{ t.methodLabel }}<br><span class="k-label">réf. <strong>{{ t.reference ?: '—' }}</strong>{{ t.paidAt ? ' · payé le ' ~ t.paidAt|date('d/m/Y') }}</span></td>
-                <td style="white-space: nowrap;">
-                    <form method="post" action="{{ path('admin_payments_validate', {id: t.id}) }}" style="margin-bottom: 6px;">
-                        <input type="hidden" name="_csrf_token" value="{{ csrf_token('admin_payment') }}">
-                        <button class="k-btn k-btn--ok" type="submit">✓ Reçu, valider</button>
-                    </form>
-                    <form method="post" action="{{ path('admin_payments_reject', {id: t.id}) }}" style="display: flex; gap: 6px;">
-                        <input class="k-input" name="reason" placeholder="Motif du refus" required>
-                        <input type="hidden" name="_csrf_token" value="{{ csrf_token('admin_payment') }}">
-                        <button class="k-btn" type="submit">Refuser</button>
-                    </form>
-                </td>
-            </tr>
-        {% else %}
-            <tr><td class="k-label">Aucun paiement en attente.</td></tr>
-        {% endfor %}
-    </table>
-</div>
+    <section class="ks-card" id="commandes" aria-labelledby="pay-orders">
+        <h2 class="ks-card__title" id="pay-orders"><i data-lucide="building-2"></i> Commandes de places (organisations)</h2>
+        <div class="ks-table-wrap">
+            <table class="ks-table ks-table--cards">
+                <thead><tr><th>Organisation</th><th>Montant</th><th>Moyen de paiement</th><th>Décision</th></tr></thead>
+                <tbody>
+                {% for o in pendingOrders %}
+                    <tr>
+                        <td><strong>{{ o.organisation.name }}</strong><br><span class="ks-small">{{ o.orderedBy ? o.orderedBy.email }}</span></td>
+                        <td data-label="Montant"><span><strong>{{ o.amount|money(o.currency) }}</strong><br><span class="ks-small">{{ o.seats }} places, 1 an</span></span></td>
+                        <td data-label="Moyen"><span>{{ o.methodLabel }}<br><span class="ks-small">réf. <strong>{{ o.reference ?: '—' }}</strong></span></span></td>
+                        <td data-label="">
+                            <div class="ks-stack" style="gap: .5rem;">
+                                <form method="post" action="{{ path('admin_seat_order', {id: o.id, decision: 'valider'}) }}"><input type="hidden" name="_csrf_token" value="{{ csrf_token('admin_payment') }}"><button class="ks-btn ks-btn--primary ks-btn--sm" type="submit"><i data-lucide="check"></i> Reçu, activer</button></form>
+                                <form method="post" action="{{ path('admin_seat_order', {id: o.id, decision: 'refuser'}) }}" class="ks-inline-form"><input class="ks-input ks-input--sm" name="reason" placeholder="Motif du refus" required aria-label="Motif du refus"><input type="hidden" name="_csrf_token" value="{{ csrf_token('admin_payment') }}"><button class="ks-btn ks-btn--danger ks-btn--sm" type="submit">Refuser</button></form>
+                            </div>
+                        </td>
+                    </tr>
+                {% else %}
+                    <tr><td colspan="4" class="is-empty">Aucune commande en attente.</td></tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </section>
 
-<div class="ks-card" style="margin-bottom: 24px;">
-    <h2 style="font-size: 16px; font-weight: 700; margin-bottom: 12px;">Commandes de places (organisations)</h2>
-    <table class="k-table">
-        {% for o in pendingOrders %}
-            <tr>
-                <td><strong>{{ o.organisation.name }}</strong><br><span class="k-label">{{ o.orderedBy ? o.orderedBy.email }}</span></td>
-                <td><strong>{{ o.amount|money(o.currency) }}</strong><br><span class="k-label">{{ o.seats }} places, 1 an</span></td>
-                <td>{{ o.methodLabel }}<br><span class="k-label">réf. <strong>{{ o.reference ?: '—' }}</strong></span></td>
-                <td style="white-space: nowrap;">
-                    <form method="post" action="{{ path('admin_seat_order', {id: o.id, decision: 'valider'}) }}" style="margin-bottom: 6px;"><input type="hidden" name="_csrf_token" value="{{ csrf_token('admin_payment') }}"><button class="k-btn k-btn--ok" type="submit">✓ Reçu, activer</button></form>
-                    <form method="post" action="{{ path('admin_seat_order', {id: o.id, decision: 'refuser'}) }}" style="display: flex; gap: 6px;"><input class="k-input" name="reason" placeholder="Motif du refus" required><input type="hidden" name="_csrf_token" value="{{ csrf_token('admin_payment') }}"><button class="k-btn" type="submit">Refuser</button></form>
-                </td>
-            </tr>
-        {% else %}
-            <tr><td class="k-label">Aucune commande en attente.</td></tr>
-        {% endfor %}
-    </table>
-</div>
+    <section class="ks-card" aria-labelledby="pay-months">
+        <h2 class="ks-card__title" id="pay-months"><i data-lucide="bar-chart-2"></i> Revenus par mois</h2>
+        <div class="ks-table-wrap">
+            <table class="ks-table ks-table--cards">
+                <thead><tr><th>Mois</th><th>Devise</th><th class="is-num">Paiements</th><th class="is-num">Total</th></tr></thead>
+                <tbody>
+                {% for r in revenue %}
+                    <tr><td>{{ r.month }}</td><td data-label="Devise">{{ r.currency }}</td><td data-label="Paiements" class="is-num">{{ r.count }}</td><td data-label="Total" class="is-num"><strong>{{ r.total|money(r.currency) }}</strong></td></tr>
+                {% else %}
+                    <tr><td colspan="4" class="is-empty">Pas encore de revenus.</td></tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </section>
 
-<div class="ks-card" style="margin-bottom: 24px;">
-    <h2 style="font-size: 16px; font-weight: 700; margin-bottom: 12px;">Revenus par mois</h2>
-    <table class="k-table">
-        <tr><th>Mois</th><th>Devise</th><th>Paiements</th><th>Total</th></tr>
-        {% for r in revenue %}
-            <tr><td>{{ r.month }}</td><td>{{ r.currency }}</td><td>{{ r.count }}</td><td><strong>{{ r.total|money(r.currency) }}</strong></td></tr>
-        {% else %}
-            <tr><td class="k-label" colspan="4">Pas encore de revenus.</td></tr>
-        {% endfor %}
-    </table>
-</div>
-
-<div class="ks-card">
-    <h2 style="font-size: 16px; font-weight: 700; margin-bottom: 12px;">Derniers paiements traités</h2>
-    <table class="k-table">
-        {% for t in processed %}
-            <tr>
-                <td>{{ t.processedAt ? t.processedAt|date('d/m/Y') }}</td>
-                <td>{{ t.subscription.user.email }}</td>
-                <td>{{ t.method == 'GIFT' ? 'Offert' : t.amount|money(t.currency) }} · {{ t.methodLabel }}</td>
-                <td>{% if t.status == 'VALIDATED' %}<span style="color: #34d399;">Validé</span>{% if t.receiptNumber %} · <a href="{{ path('app_subscription_receipt', {id: t.id}) }}" data-turbo="false" style="color: inherit;">{{ t.receiptNumber }}</a>{% endif %}{% else %}<span style="color: #f87171;">Refusé</span> · {{ t.adminNote }}{% endif %}</td>
-            </tr>
-        {% else %}
-            <tr><td class="k-label">Aucun.</td></tr>
-        {% endfor %}
-    </table>
+    <section class="ks-card" aria-labelledby="pay-done">
+        <h2 class="ks-card__title" id="pay-done"><i data-lucide="history"></i> Derniers paiements traités</h2>
+        <div class="ks-table-wrap">
+            <table class="ks-table ks-table--cards">
+                <thead><tr><th>Date</th><th>Membre</th><th>Montant</th><th>Décision</th></tr></thead>
+                <tbody>
+                {% for t in processed %}
+                    <tr>
+                        <td>{{ t.processedAt ? t.processedAt|date('d/m/Y') }}</td>
+                        <td data-label="Membre" style="overflow-wrap: anywhere;">{{ t.subscription.user.email }}</td>
+                        <td data-label="Montant">{{ t.method == 'GIFT' ? 'Offert' : t.amount|money(t.currency) }} · {{ t.methodLabel }}</td>
+                        <td data-label="Décision">{% if t.status == 'VALIDATED' %}<span class="ks-badge ks-badge--success">Validé</span>{% if t.receiptNumber %} <a href="{{ path('app_subscription_receipt', {id: t.id}) }}" data-turbo="false" style="color: var(--primary);">{{ t.receiptNumber }}</a>{% endif %}{% else %}<span class="ks-badge ks-badge--danger">Refusé</span> <span class="ks-small">{{ t.adminNote }}</span>{% endif %}</td>
+                    </tr>
+                {% else %}
+                    <tr><td colspan="4" class="is-empty">Aucun paiement traité pour l'instant.</td></tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </section>
 </div>
 {% endblock %}

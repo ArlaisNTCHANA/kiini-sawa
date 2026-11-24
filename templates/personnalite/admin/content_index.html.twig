@@ -1,22 +1,26 @@
 {% extends 'admin/layout.html.twig' %}
 {% block title %}Textes des tests{% endblock %}
 {% block page_title %}Textes des tests{% endblock %}
-{% block stylesheets %}{% include 'personnalite/admin/_content_styles.html.twig' %}{% endblock %}
+{% block page_lead %}Reformulez les questions et les textes des rapports. Le calcul ne change pas.{% endblock %}
+{% block page_actions %}<a class="ks-btn ks-btn--secondary" href="{{ path('admin_content_export') }}"><i data-lucide="download"></i> Exporter les modifications</a>{% endblock %}
 {% block content %}
-<div class="ct-crumb"><a href="{{ path('admin_personality_dashboard') }}">Tests</a> › Textes des tests</div>
-<div class="ct-card">
-    <p class="ct-note">Reformulez ici les questions et les textes des rapports. <strong>Le calcul ne change pas</strong> : les lettres, les dimensions, le sens des questions et les couleurs restent fixés dans le code. Chaque texte peut revenir à sa version d'origine en un clic. Les questions du Big Five, issues de la recherche (IPIP), ne sont pas modifiables pour garder leur validité.</p>
-    <p class="ct-note" style="margin-top: 8px;">{{ total }} texte(s) modifié(s) au total. <a class="ct-btn sec" style="margin-left: 8px;" href="{{ path('admin_content_export') }}">Exporter les modifications</a></p>
-</div>
-{% for test, sources in groups %}
-    <div class="ct-card">
-        <h2>{{ test }}</h2>
-        {% for key, s in sources %}
-            <a class="ct-row" href="{{ path('admin_content_source', {source: key}) }}">
-                <span>{{ s.label }}{% if s.modified %}<span class="ct-badge">{{ s.modified }} modifié{{ s.modified > 1 ? 's' }}</span>{% endif %}</span>
-                <span class="ct-meta">{{ s.count }} textes ›</span>
-            </a>
+<div class="ks-stack">
+    <section class="ks-card ks-card--accent">
+        <p class="ks-muted"><strong>Le calcul ne change pas</strong> : les lettres, les dimensions, le sens des questions et les couleurs restent fixés dans le code. Chaque texte peut revenir à sa version d'origine en un clic. Les questions du Big Five, issues de la recherche (IPIP), ne sont pas modifiables pour garder leur validité.</p>
+        <p class="ks-muted" style="margin-top: .5rem;"><span class="ks-badge{{ total ? ' ks-badge--gold' : ' ks-badge--muted' }}">{{ total }} texte(s) modifié(s) au total</span></p>
+    </section>
+    <div class="ks-grid">
+        {% for test, sources in groups %}
+            <section class="ks-card">
+                <h2 class="ks-card__title">{{ test }}</h2>
+                {% for key, s in sources %}
+                    <a class="ks-row-link" href="{{ path('admin_content_source', {source: key}) }}">
+                        <span>{{ s.label }}{% if s.modified %} <span class="ks-badge ks-badge--gold">{{ s.modified }} modifié{{ s.modified > 1 ? 's' }}</span>{% endif %}</span>
+                        <span class="ks-row-link__meta">{{ s.count }} textes ›</span>
+                    </a>
+                {% endfor %}
+            </section>
         {% endfor %}
     </div>
-{% endfor %}
+</div>
 {% endblock %}

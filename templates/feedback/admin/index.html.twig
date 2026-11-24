@@ -1,21 +1,33 @@
 {% extends 'admin/layout.html.twig' %}
-{% block title %}Avis des utilisateurs{% endblock %}
-{% block page_title %}Avis des utilisateurs{% endblock %}
+{% block title %}Avis reçus{% endblock %}
+{% block page_title %}Avis reçus{% endblock %}
+{% block page_lead %}Les messages que les membres vous envoient depuis l'application. Répondez par email, puis marquez-les comme traités.{% endblock %}
 {% block content %}
-<div style="display: flex; gap: 8px; margin-bottom: 16px;">
-    <a href="{{ path('admin_app_feedback') }}" style="padding: 6px 12px; border-radius: 99px; text-decoration: none; color: inherit; border: 1px solid rgba(255,255,255,.12); {{ status == 'PENDING' ? 'background: #2E6B53; border-color: #2E6B53; color: #fff;' }}">À traiter ({{ pendingCount }})</a>
-    <a href="{{ path('admin_app_feedback', {vue: 'traites'}) }}" style="padding: 6px 12px; border-radius: 99px; text-decoration: none; color: inherit; border: 1px solid rgba(255,255,255,.12); {{ status == 'DONE' ? 'background: #2E6B53; border-color: #2E6B53; color: #fff;' }}">Traités</a>
-</div>
-{% for i in items %}
-    <div class="ks-card" style="margin-bottom: 12px;">
-        <div style="display: flex; justify-content: space-between; gap: 12px; font-size: 13px; color: var(--text-secondary); margin-bottom: 6px;">
-            <span><strong style="color: inherit;">{{ categories[i.category] ?? i.category }}</strong> · {{ i.user.displayName }} ({{ i.user.email }}) · {{ i.createdAt|date('d/m/Y H:i') }}</span>
-            <form method="post" action="{{ path('admin_app_feedback_done', {id: i.id}) }}"><input type="hidden" name="_csrf_token" value="{{ csrf_token('admin_feedback') }}"><button type="submit" style="background: none; border: 1px solid rgba(255,255,255,.15); color: inherit; border-radius: 8px; padding: 4px 10px; cursor: pointer;">{{ i.status == 'PENDING' ? 'Marquer traité' : 'Remettre à traiter' }}</button></form>
+<div class="ks-stack">
+    <nav class="ks-tabs" aria-label="Filtrer les avis">
+        <a href="{{ path('admin_app_feedback') }}" class="ks-tab{{ status == 'PENDING' ? ' is-active' }}">À traiter ({{ pendingCount }})</a>
+        <a href="{{ path('admin_app_feedback', {vue: 'traites'}) }}" class="ks-tab{{ status == 'DONE' ? ' is-active' }}">Traités</a>
+    </nav>
+    {% for i in items %}
+        <article class="ks-card">
+            <div class="ks-card__head">
+                <p class="ks-small"><span class="ks-badge">{{ categories[i.category] ?? i.category }}</span> {{ i.user.displayName }} ({{ i.user.email }}) · {{ i.createdAt|date('d/m/Y à H:i') }}</p>
+            </div>
+            <p style="white-space: pre-line; line-height: 1.6;">{{ i.content }}</p>
+            <div class="ks-toolbar" style="margin-top: 1rem;">
+                <a class="ks-btn ks-btn--secondary ks-btn--sm" href="mailto:{{ i.user.email }}?subject={{ 'Votre avis sur KIINI SAWA'|url_encode }}"><i data-lucide="mail"></i> Répondre par email</a>
+                <form method="post" action="{{ path('admin_app_feedback_done', {id: i.id}) }}" class="ks-inline-form">
+                    <input type="hidden" name="_csrf_token" value="{{ csrf_token('admin_feedback') }}">
+                    <button type="submit" class="ks-btn ks-btn--ghost ks-btn--sm"><i data-lucide="{{ i.status == 'PENDING' ? 'check' : 'rotate-ccw' }}"></i> {{ i.status == 'PENDING' ? 'Marquer traité' : 'Remettre à traiter' }}</button>
+                </form>
+            </div>
+        </article>
+    {% else %}
+        <div class="ks-card ks-empty">
+            <span class="ks-empty__icon"><i data-lucide="{{ status == 'PENDING' ? 'check' : 'inbox' }}"></i></span>
+            <p class="ks-empty__title">{{ status == 'PENDING' ? 'Aucun avis à traiter' : 'Aucun avis traité pour l\'instant' }}</p>
+            <p class="ks-empty__text">{{ status == 'PENDING' ? 'Vous avez tout lu. Les nouveaux messages arriveront ici.' : 'Les avis que vous marquez comme traités se rangent ici.' }}</p>
         </div>
-        <p style="white-space: pre-line; font-size: 14px;">{{ i.content }}</p>
-        <p style="margin-top: 8px; font-size: 13px;"><a href="mailto:{{ i.user.email }}?subject={{ 'Votre avis sur KIINI SAWA'|url_encode }}" style="color: #7A9E7E;">Répondre par email</a></p>
-    </div>
-{% else %}
-    <div class="ks-card"><p style="color: var(--text-secondary);">Aucun message {{ status == 'PENDING' ? 'à traiter' : 'traité' }}.</p></div>
-{% endfor %}
+    {% endfor %}
+</div>
 {% endblock %}

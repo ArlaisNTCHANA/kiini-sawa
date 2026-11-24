@@ -1,35 +1,33 @@
 {% extends 'admin/layout.html.twig' %}
 
-{% block title %}Entonnoir{% endblock %}
-{% block page_title %}Entonnoir d'acquisition{% endblock %}
-
-{% block stylesheets %}
-<style>
-    .k-muted { color: var(--text-secondary); font-size: 13px; }
-    .k-tabs { display: flex; gap: 6px; margin-bottom: 20px; }
-    .k-tab { padding: 6px 12px; border-radius: 999px; font-size: 13px; text-decoration: none; color: inherit; border: 1px solid rgba(255,255,255,.12); }
-    .k-tab.on { background: #2E6B53; border-color: #2E6B53; color: #fff; }
-    .k-step { display: grid; grid-template-columns: 220px 1fr 140px; gap: 14px; align-items: center; padding: 12px 0; border-top: 1px solid rgba(255,255,255,.06); }
-    .k-bar { height: 10px; border-radius: 5px; background: #5E9479; min-width: 3px; }
-    .k-num { text-align: right; font-variant-numeric: tabular-nums; }
-</style>
-{% endblock %}
+{% block title %}Du visiteur au membre{% endblock %}
+{% block page_title %}Du visiteur au membre{% endblock %}
+{% block page_lead %}Combien de visiteurs franchissent chaque étape, de la première visite jusqu'au parcours commencé.{% endblock %}
 
 {% block content %}
-<div class="k-tabs">
-    {% for d in [7, 30, 90] %}<a class="k-tab {{ days == d ? 'on' }}" href="{{ path('admin_funnel', {jours: d}) }}">{{ d }} jours</a>{% endfor %}
-</div>
-<div class="ks-card">
-    <p class="k-muted" style="margin-bottom: 12px;">Depuis le {{ since|date('d/m/Y') }}. Les inscrits sont ceux créés pendant la période ; le pourcentage est la part de l'étape précédente.
-    {% if visitsSince %}Les visites sont comptées depuis le {{ visitsSince|date('d/m/Y') }} (compteur par jour, robots écartés, aucune donnée personnelle).{% else %}Le comptage des visites commence avec la mise en ligne de cette page : revenez dans quelques jours.{% endif %}</p>
-    {% set top = steps[0].count > 0 ? steps[0].count : (steps[1].count > 0 ? steps[1].count : 1) %}
-    {% for st in steps %}
-        <div class="k-step">
-            <strong>{{ st.label }}</strong>
-            <div><div class="k-bar" style="width: {{ min((st.count / top * 100)|round, 100) }}%;"></div></div>
-            <div class="k-num"><strong>{{ st.count }}</strong>{% if st.rate is not null %} <span class="k-muted">· {{ st.rate|number_format(1, ',') }} %</span>{% endif %}</div>
+<div class="ks-stack">
+    <nav class="ks-tabs" aria-label="Période">
+        {% for d in [7, 30, 90] %}<a class="ks-tab{{ days == d ? ' is-active' }}" href="{{ path('admin_funnel', {jours: d}) }}">{{ d }} jours</a>{% endfor %}
+    </nav>
+    <section class="ks-card">
+        <p class="ks-muted" style="margin-bottom: 1rem;">Depuis le {{ since|date('d/m/Y') }}. Les inscrits sont ceux créés pendant la période ; le pourcentage est la part de l'étape précédente.
+        {% if visitsSince %}Les visites sont comptées depuis le {{ visitsSince|date('d/m/Y') }} (compteur par jour, robots écartés, aucune donnée personnelle).{% else %}Le comptage des visites commence avec la mise en ligne de cette page : revenez dans quelques jours.{% endif %}</p>
+        {% set top = steps[0].count > 0 ? steps[0].count : (steps[1].count > 0 ? steps[1].count : 1) %}
+        <div class="ks-table-wrap">
+            <table class="ks-table">
+                <thead><tr><th>Étape</th><th style="width: 45%;"><span class="sr-only">Proportion</span></th><th class="is-num">Personnes</th></tr></thead>
+                <tbody>
+                {% for st in steps %}
+                    <tr>
+                        <td><strong>{{ st.label }}</strong></td>
+                        <td><div class="ks-bar ks-bar--primary" style="width: {{ min((st.count / top * 100)|round, 100) }}%;"></div></td>
+                        <td class="is-num"><strong>{{ st.count }}</strong>{% if st.rate is not null %} <span class="ks-small">· {{ st.rate|number_format(1, ',') }} %</span>{% endif %}</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
         </div>
-    {% endfor %}
+    </section>
+    <p class="ks-alert ks-alert--info">Où agir : si peu de visiteurs créent un compte, c'est la vitrine ; si peu terminent la prise en main, c'est le premier usage ; si peu commencent le parcours, c'est l'accueil.</p>
 </div>
-<p class="k-muted" style="margin-top: 14px;">Où agir : si peu de visiteurs créent un compte, c'est la vitrine ; si peu terminent l'onboarding, c'est le premier usage ; si peu commencent le parcours, c'est l'accueil.</p>
 {% endblock %}

@@ -25,7 +25,8 @@ class DashboardControllerTest extends WebTestCase
         $crawler = $client->request('GET', '/admin');
 
         $this->assertResponseIsSuccessful();
-        $this->assertSelectorTextContains('h2', 'Bienvenue, admin@kiinisawa.com');
+        $this->assertSelectorTextContains('h1', 'Bonjour');
+        $this->assertSelectorTextContains('#todo-title', 'À traiter');
         $this->assertSelectorExists('#stat-users');
         $this->assertSelectorExists('#stat-plans');
         $this->assertSelectorExists('#recent-users-table');

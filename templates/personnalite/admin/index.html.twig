@@ -1,218 +1,27 @@
 {% extends 'admin/layout.html.twig' %}
 
-{% block title %}Gestion des Tests{% endblock %}
-{% block page_title %}Gestion des Tests de Personnalité{% endblock %}
-
-{% block stylesheets %}
-<style>
-    /* Grid layout */
-    .tests-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-        gap: 20px;
-        margin-top: 20px;
-    }
-
-    .test-card {
-        background: var(--bg-card);
-        border: 1px solid var(--border);
-        border-radius: var(--radius-lg);
-        padding: 24px;
-        position: relative;
-        overflow: hidden;
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-        min-height: 240px;
-        transition: all var(--transition);
-        backdrop-filter: blur(8px);
-    }
-
-    .test-card::before {
-        content: '';
-        position: absolute;
-        top: 0; left: 0; right: 0;
-        height: 3px;
-        background: var(--test-color, var(--accent));
-        opacity: 0.8;
-        transition: opacity var(--transition);
-    }
-
-    .test-card:hover {
-        border-color: var(--test-color, var(--border-active));
-        background: var(--bg-card-hover);
-        transform: translateY(-4px);
-        box-shadow: 0 12px 30px rgba(0, 0, 0, 0.3), 0 0 40px rgba(99, 102, 241, 0.05);
-    }
-
-    .test-card__header {
-        margin-bottom: 20px;
-    }
-
-    .test-card__badge {
-        display: inline-flex;
-        align-items: center;
-        gap: 6px;
-        padding: 6px 12px;
-        border-radius: var(--radius-sm);
-        font-size: 11px;
-        font-weight: 600;
-        text-transform: uppercase;
-        letter-spacing: 0.5px;
-        margin-bottom: 14px;
-    }
-
-    .test-card__title {
-        font-size: 20px;
-        font-weight: 700;
-        color: var(--text-primary);
-        margin-bottom: 4px;
-    }
-
-    .test-card__subtitle {
-        font-size: 13px;
-        color: var(--text-secondary);
-        font-weight: 400;
-    }
-
-    .test-card__stats {
-        display: flex;
-        gap: 16px;
-        padding: 14px 0;
-        border-top: 1px solid var(--border);
-        border-bottom: 1px solid var(--border);
-        margin-bottom: 20px;
-    }
-
-    .test-stat {
-        flex: 1;
-    }
-
-    .test-stat__value {
-        font-size: 22px;
-        font-weight: 700;
-        color: var(--text-primary);
-    }
-
-    .test-stat__label {
-        font-size: 11px;
-        color: var(--text-muted);
-        text-transform: uppercase;
-        letter-spacing: 0.5px;
-        font-weight: 500;
-    }
-
-    .test-card__actions {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 10px;
-    }
-
-    .btn-action {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        gap: 8px;
-        padding: 10px;
-        border-radius: var(--radius-sm);
-        font-size: 13px;
-        font-weight: 600;
-        text-decoration: none;
-        transition: all var(--transition);
-        border: 1px solid var(--border);
-    }
-
-    .btn-action--primary {
-        background: rgba(99, 102, 241, 0.1);
-        color: var(--accent-light);
-        border-color: rgba(99, 102, 241, 0.2);
-    }
-
-    .btn-action--primary:hover {
-        background: var(--accent);
-        color: #fff;
-        border-color: var(--accent);
-    }
-
-    .btn-action--secondary {
-        background: rgba(255, 255, 255, 0.03);
-        color: var(--text-secondary);
-    }
-
-    .btn-action--secondary:hover {
-        background: rgba(255, 255, 255, 0.08);
-        color: var(--text-primary);
-        border-color: var(--text-secondary);
-    }
-
-    /* Animation */
-    @keyframes fadeUp {
-        from { opacity: 0; transform: translateY(12px); }
-        to   { opacity: 1; transform: translateY(0); }
-    }
-
-    .animate-card {
-        animation: fadeUp 0.4s ease both;
-    }
-</style>
-{% endblock %}
+{% block title %}Tests : questions et profils{% endblock %}
+{% block page_title %}Tests : questions et profils{% endblock %}
+{% block page_lead %}Choisissez un test pour gérer ses questions ou les fiches qui expliquent chaque résultat.{% endblock %}
 
 {% block content %}
-    <div style="margin-bottom: 24px;">
-        <p style="color: var(--text-secondary); font-size: 14px;">Sélectionnez un test pour gérer ses questions ou ses fiches d'explications détaillées des résultats.</p>
-    </div>
-
-    {# Flash Messages #}
-    {% for label, messages in app.flashes %}
-        {% for message in messages %}
-            <div style="padding: 16px; border-radius: var(--radius-md); margin-bottom: 20px; font-size: 14px; display: flex; align-items: center; gap: 10px; 
-                {% if label == 'success' %}
-                    background: rgba(16, 185, 129, 0.15); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.3);
-                {% else %}
-                    background: rgba(244, 63, 94, 0.15); color: #fb7185; border: 1px solid rgba(244, 63, 94, 0.3);
-                {% endif %}
-            ">
-                <i data-lucide="{% if label == 'success' %}check-circle{% else %}alert-circle{% endif %}" style="width: 18px; height: 18px;"></i>
-                <span>{{ message }}</span>
-            </div>
-        {% endfor %}
-    {% endfor %}
-
-    <div class="tests-grid">
+<div class="ks-stack">
+    <div class="ks-grid">
         {% for type, test in tests %}
-            <article class="test-card animate-card" style="--test-color: {{ test.color }}; animation-delay: {{ loop.index0 * 0.05 }}s;">
-                <div class="test-card__header">
-                    <span class="test-card__badge" style="background: {{ test.color }}20; color: {{ test.color }};">
-                        {{ type }}
-                    </span>
-                    <h2 class="test-card__title">{{ test.name }}</h2>
-                    <p class="test-card__subtitle">{{ test.subtitle }}</p>
+            <article class="ks-card">
+                <h2 class="ks-card__title"><i data-lucide="sparkles"></i> {{ test.name }}</h2>
+                <p class="ks-muted">{{ test.subtitle }}</p>
+                <div class="ks-stat-grid" style="grid-template-columns: 1fr 1fr; margin: 1rem 0;">
+                    <div class="ks-stat"><div class="ks-stat__value">{{ test.questions }}</div><div class="ks-stat__label">questions</div></div>
+                    <div class="ks-stat"><div class="ks-stat__value">{{ test.profiles }}</div><div class="ks-stat__label">profils</div></div>
                 </div>
-
-                <div>
-                    <div class="test-card__stats">
-                        <div class="test-stat">
-                            <div class="test-stat__value">{{ test.questions }}</div>
-                            <div class="test-stat__label">Questions</div>
-                        </div>
-                        <div class="test-stat">
-                            <div class="test-stat__value">{{ test.profiles }}</div>
-                            <div class="test-stat__label">Profils</div>
-                        </div>
-                    </div>
-
-                    <div class="test-card__actions">
-                        <a href="{{ path('admin_personality_questions', {type: type|lower}) }}" class="btn-action btn-action--primary">
-                            <i data-lucide="help-circle" style="width: 14px; height: 14px;"></i>
-                            Questions
-                        </a>
-                        <a href="{{ path('admin_personality_profiles', {type: type|lower}) }}" class="btn-action btn-action--secondary">
-                            <i data-lucide="file-text" style="width: 14px; height: 14px;"></i>
-                            Profils
-                        </a>
-                    </div>
+                <div class="ks-toolbar">
+                    <a href="{{ path('admin_personality_questions', {type: type|lower}) }}" class="ks-btn ks-btn--secondary ks-btn--sm"><i data-lucide="help-circle"></i> Questions</a>
+                    <a href="{{ path('admin_personality_profiles', {type: type|lower}) }}" class="ks-btn ks-btn--secondary ks-btn--sm"><i data-lucide="file-text"></i> Profils</a>
                 </div>
             </article>
         {% endfor %}
     </div>
+    <p class="ks-alert ks-alert--info">Les autres tests (personnalité, dons, ennéagramme…) se modifient dans <a href="{{ path('admin_content_index') }}" style="font-weight: 700; color: inherit;">Textes des tests</a>.</p>
+</div>
 {% endblock %}

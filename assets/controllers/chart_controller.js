@@ -35,7 +35,7 @@ export default class extends Controller {
 
         // Color palette
         const gradientColors = chartData.colors || [
-            '#6366f1', '#8b5cf6', '#a855f7', '#c084fc', '#e879f9',
+            '#C8962E', '#1F4D3A', '#2E6B53', '#5D7368', '#A87A1F',
         ];
 
         const config = type === 'doughnut'
@@ -53,7 +53,7 @@ export default class extends Controller {
                 datasets: [{
                     data: data.data,
                     backgroundColor: colors,
-                    borderColor: 'rgba(11, 15, 25, 0.8)',
+                    borderColor: '#FFFFFF',
                     borderWidth: 3,
                     hoverBorderWidth: 0,
                     hoverOffset: 8,
@@ -67,7 +67,7 @@ export default class extends Controller {
                     legend: {
                         position: 'bottom',
                         labels: {
-                            color: '#94a3b8',
+                            color: '#66706A',
                             font: { family: "'Inter', sans-serif", size: 12 },
                             padding: 16,
                             usePointStyle: true,
@@ -75,11 +75,11 @@ export default class extends Controller {
                         },
                     },
                     tooltip: {
-                        backgroundColor: 'rgba(15, 23, 42, 0.9)',
-                        borderColor: 'rgba(99, 102, 241, 0.3)',
+                        backgroundColor: '#1F4D3A',
+                        borderColor: '#2E6B53',
                         borderWidth: 1,
-                        titleColor: '#f8fafc',
-                        bodyColor: '#cbd5e1',
+                        titleColor: '#FFFFFF',
+                        bodyColor: '#EEF3EF',
                         titleFont: { family: "'Inter', sans-serif", weight: '600' },
                         bodyFont: { family: "'Inter', sans-serif" },
                         cornerRadius: 8,
@@ -98,25 +98,25 @@ export default class extends Controller {
                 datasets: [{
                     label: 'Activité Habitudes',
                     data: data.data,
-                    borderColor: '#6366f1',
+                    borderColor: '#2E6B53',
                     backgroundColor: (context) => {
                         const chart = context.chart;
                         const { ctx, chartArea } = chart;
-                        if (!chartArea) return 'rgba(99,102,241,0.1)';
+                        if (!chartArea) return 'rgba(46,107,83,0.1)';
                         const gradient = ctx.createLinearGradient(0, chartArea.top, 0, chartArea.bottom);
-                        gradient.addColorStop(0, 'rgba(99, 102, 241, 0.25)');
-                        gradient.addColorStop(1, 'rgba(99, 102, 241, 0.02)');
+                        gradient.addColorStop(0, 'rgba(46, 107, 83, 0.22)');
+                        gradient.addColorStop(1, 'rgba(46, 107, 83, 0.02)');
                         return gradient;
                     },
                     borderWidth: 2.5,
                     fill: true,
                     tension: 0.4,
                     pointRadius: 4,
-                    pointBackgroundColor: '#6366f1',
-                    pointBorderColor: '#0b0f19',
+                    pointBackgroundColor: '#2E6B53',
+                    pointBorderColor: '#FFFFFF',
                     pointBorderWidth: 2,
                     pointHoverRadius: 7,
-                    pointHoverBackgroundColor: '#a855f7',
+                    pointHoverBackgroundColor: '#C8962E',
                 }],
             },
             options: {
@@ -124,17 +124,17 @@ export default class extends Controller {
                 maintainAspectRatio: false,
                 scales: {
                     x: {
-                        grid: { color: 'rgba(255,255,255,0.04)' },
+                        grid: { color: 'rgba(31,77,58,0.07)' },
                         ticks: {
-                            color: '#64748b',
+                            color: '#66706A',
                             font: { family: "'Inter', sans-serif", size: 11 },
                         },
                     },
                     y: {
                         beginAtZero: true,
-                        grid: { color: 'rgba(255,255,255,0.04)' },
+                        grid: { color: 'rgba(31,77,58,0.07)' },
                         ticks: {
-                            color: '#64748b',
+                            color: '#66706A',
                             font: { family: "'Inter', sans-serif", size: 11 },
                             stepSize: 1,
                         },
@@ -143,11 +143,11 @@ export default class extends Controller {
                 plugins: {
                     legend: { display: false },
                     tooltip: {
-                        backgroundColor: 'rgba(15, 23, 42, 0.9)',
-                        borderColor: 'rgba(99, 102, 241, 0.3)',
+                        backgroundColor: '#1F4D3A',
+                        borderColor: '#2E6B53',
                         borderWidth: 1,
-                        titleColor: '#f8fafc',
-                        bodyColor: '#cbd5e1',
+                        titleColor: '#FFFFFF',
+                        bodyColor: '#EEF3EF',
                         cornerRadius: 8,
                         padding: 12,
                         titleFont: { family: "'Inter', sans-serif", weight: '600' },

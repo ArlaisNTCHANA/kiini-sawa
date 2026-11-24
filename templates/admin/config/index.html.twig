@@ -1,136 +1,76 @@
 {% extends 'admin/layout.html.twig' %}
 
-{% block title %}Configuration Système{% endblock %}
-{% block page_title %}Configuration Système{% endblock %}
+{% block title %}Réglages de l'application{% endblock %}
+{% block page_title %}Réglages de l'application{% endblock %}
+{% block page_lead %}Prix, coordonnées de paiement et ce qui reste gratuit. Les changements s'appliquent dès l'enregistrement.{% endblock %}
+
+{% macro field(f, wide) %}
+    <div class="ks-field{{ wide|default(false) ? ' ks-field--wide' }}">
+        {{ form_label(f, null, {label_attr: {class: 'ks-label'}}) }}
+        {{ form_widget(f, {attr: {class: 'ks-input'}}) }}
+        {% if f.vars.help %}<p class="ks-help">{{ form_help(f) }}</p>{% endif %}
+        {{ form_errors(f) }}
+    </div>
+{% endmacro %}
 
 {% block content %}
-<div class="ks-card" style="max-width: 800px; margin: 0 auto;">
-    <h2 style="font-size: 18px; font-weight: 700; margin-bottom: 24px; display: flex; align-items: center; gap: 8px;">
-        <i data-lucide="settings" style="color: var(--accent-light);"></i>
-        Paramètres de la Plateforme
-    </h2>
-
-    {% for label, messages in app.flashes %}
-        {% for message in messages %}
-            <div style="padding: 12px 16px; border-radius: var(--radius-sm); margin-bottom: 20px; font-size: 14px; 
-                {% if label == 'success' %}
-                    background: rgba(16, 185, 129, 0.1); border: 1px solid rgba(16, 185, 129, 0.2); color: #34d399;
-                {% else %}
-                    background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.2); color: #f87171;
-                {% endif %}
-            ">
-                {{ message }}
-            </div>
-        {% endfor %}
-    {% endfor %}
-
-    {{ form_start(form) }}
-        <div style="display: flex; flex-direction: column; gap: 20px;">
-            <div class="form-group">
-                {{ form_label(form.defaultPurposeStatement, null, {'label_attr': {'style': 'display: block; font-size: 12px; font-weight: 600; color: var(--text-secondary); margin-bottom: 8px;'}}) }}
-                {{ form_widget(form.defaultPurposeStatement, {'attr': {'class': 'form-control', 'style': 'width: 100%; min-height: 120px;'}}) }}
-                <div style="font-size: 11px; color: var(--text-muted); margin-top: 4px;">{{ form_help(form.defaultPurposeStatement) }}</div>
-            </div>
-
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
-                <div class="form-group">
-                    {{ form_label(form.proMonthlyPrice, null, {'label_attr': {'style': 'display: block; font-size: 12px; font-weight: 600; color: var(--text-secondary); margin-bottom: 8px;'}}) }}
-                    {{ form_widget(form.proMonthlyPrice, {'attr': {'class': 'form-control'}}) }}
-                </div>
-                <div class="form-group">
-                    {{ form_label(form.proYearlyPrice, null, {'label_attr': {'style': 'display: block; font-size: 12px; font-weight: 600; color: var(--text-secondary); margin-bottom: 8px;'}}) }}
-                    {{ form_widget(form.proYearlyPrice, {'attr': {'class': 'form-control'}}) }}
-                </div>
-            </div>
-
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
-                <div class="form-group">
-                    {{ form_label(form.trialDurationDays, null, {'label_attr': {'style': 'display: block; font-size: 12px; font-weight: 600; color: var(--text-secondary); margin-bottom: 8px;'}}) }}
-                    {{ form_widget(form.trialDurationDays, {'attr': {'class': 'form-control'}}) }}
-                </div>
-            </div>
-
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
-                {% for f in ['proMonthlyPriceXaf', 'proYearlyPriceXaf', 'duoYearlyPriceEur', 'duoYearlyPriceXaf', 'orgSeatYearlyPriceEur', 'orgSeatYearlyPriceXaf', 'maxHabitsFree', 'maxConnectionsFree'] %}
-                    <div class="form-group">{{ form_label(form[f], null, {'label_attr': {'style': 'display: block; font-size: 12px; font-weight: 600; color: var(--text-secondary); margin-bottom: 8px;'}}) }}{{ form_widget(form[f], {'attr': {'class': 'form-control'}}) }}</div>
-                {% endfor %}
-            </div>
-
-            <h3 style="font-size: 15px; font-weight: 700; margin-top: 10px;">Paiements manuels</h3>
-            {% for f in ['bankTransferInstructions', 'mobileMoneyInstructions', 'paymentNotificationEmail'] %}
-                <div class="form-group">
-                    {{ form_label(form[f], null, {'label_attr': {'style': 'display: block; font-size: 12px; font-weight: 600; color: var(--text-secondary); margin-bottom: 8px;'}}) }}
-                    {{ form_widget(form[f], {'attr': {'class': 'form-control', 'style': 'width: 100%;'}}) }}
-                    <div style="font-size: 11px; color: var(--text-muted); margin-top: 4px;">{{ form_help(form[f]) }}</div>
-                </div>
-            {% endfor %}
-
-            <h3 style="font-size: 15px; font-weight: 700; margin-top: 10px;">Accessible gratuitement</h3>
-            <p style="font-size: 12px; color: var(--text-muted); margin-top: -12px;">Décoché = réservé à PRO. Le Plan de Vie, les rituels, le journal, le planner et la revue de la semaine restent toujours gratuits.</p>
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px 20px;">
-                {% for f in ['enableGrowthFree', 'enableDevelopmentFree', 'enableTransmissionFree', 'enableHygieneFree', 'enableStewardshipFree', 'enableMapFree', 'enablePrintFree', 'enableMonthlyReviewsFree', 'enablePlanHistoryFree', 'enableCoherenceAnalysisFree', 'enableMethodFree'] %}
-                    <label style="display: flex; gap: 8px; align-items: center; font-size: 14px;">{{ form_widget(form[f]) }} {{ form[f].vars.label }}</label>
-                {% endfor %}
-            </div>
-
-            <h3 style="font-size: 15px; font-weight: 700; margin-top: 10px;">Tests de personnalité gratuits</h3>
-            <p style="font-size: 12px; color: var(--text-muted); margin-top: -12px;">{{ form_help(form.freeTests) }}</p>
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px 20px;">
-                {% for choice in form.freeTests %}
-                    <label style="display: flex; gap: 8px; align-items: center; font-size: 14px;">{{ form_widget(choice) }} {{ choice.vars.label }}</label>
-                {% endfor %}
-            </div>
-
-            <div style="display: flex; justify-content: flex-end; margin-top: 10px;">
-                <button type="submit" class="ks-btn ks-btn--primary">
-                    <i data-lucide="save"></i> Enregistrer les modifications
-                </button>
-            </div>
+{% import _self as m %}
+{{ form_start(form) }}
+<div class="ks-stack" style="max-width: 860px;">
+    <section class="ks-card">
+        <h2 class="ks-card__title"><i data-lucide="tag"></i> Prix et essai</h2>
+        <div class="ks-form-grid" style="margin-top: .9rem;">
+            {{ m.field(form.proMonthlyPrice) }}
+            {{ m.field(form.proYearlyPrice) }}
+            {{ m.field(form.proMonthlyPriceXaf) }}
+            {{ m.field(form.proYearlyPriceXaf) }}
+            {{ m.field(form.duoYearlyPriceEur) }}
+            {{ m.field(form.duoYearlyPriceXaf) }}
+            {{ m.field(form.orgSeatYearlyPriceEur) }}
+            {{ m.field(form.orgSeatYearlyPriceXaf) }}
+            {{ m.field(form.trialDurationDays) }}
         </div>
-    {{ form_end(form) }}
-</div>
+    </section>
 
-<style>
-    .form-group {
-        margin-bottom: 0px;
-    }
-    .form-control {
-        width: 100%;
-        background: var(--bg-input);
-        border: 1px solid var(--border);
-        border-radius: var(--radius-sm);
-        padding: 10px 14px;
-        color: var(--text-primary);
-        font-family: inherit;
-        font-size: 14px;
-        transition: all var(--transition);
-    }
-    .form-control:focus {
-        border-color: var(--accent);
-        outline: none;
-        box-shadow: 0 0 10px rgba(99, 102, 241, 0.15);
-    }
-    .ks-btn {
-        display: inline-flex;
-        align-items: center;
-        gap: 8px;
-        padding: 10px 20px;
-        border-radius: var(--radius-sm);
-        font-size: 14px;
-        font-weight: 600;
-        cursor: pointer;
-        border: 1px solid transparent;
-        transition: all var(--transition);
-        text-decoration: none;
-    }
-    .ks-btn--primary {
-        background: var(--accent-gradient);
-        color: #fff;
-    }
-    .ks-btn--primary:hover {
-        opacity: 0.9;
-        transform: translateY(-1px);
-        box-shadow: var(--shadow-glow);
-    }
-</style>
+    <section class="ks-card">
+        <h2 class="ks-card__title"><i data-lucide="wallet"></i> Paiements manuels</h2>
+        <div class="ks-stack" style="margin-top: .9rem; gap: 1rem;">
+            {% for f in ['bankTransferInstructions', 'mobileMoneyInstructions', 'paymentNotificationEmail'] %}{{ m.field(form[f], true) }}{% endfor %}
+        </div>
+    </section>
+
+    <section class="ks-card">
+        <h2 class="ks-card__title"><i data-lucide="gift"></i> Accessible gratuitement</h2>
+        <p class="ks-muted">Décoché = réservé à PRO. Le Plan de Vie, les rituels, le journal, l'agenda et la revue de la semaine restent toujours gratuits.</p>
+        <div class="ks-form-grid" style="margin: .9rem 0;">
+            {{ m.field(form.maxHabitsFree) }}
+            {{ m.field(form.maxConnectionsFree) }}
+        </div>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: .6rem 1.25rem;">
+            {% for f in ['enableGrowthFree', 'enableDevelopmentFree', 'enableTransmissionFree', 'enableHygieneFree', 'enableStewardshipFree', 'enableMapFree', 'enablePrintFree', 'enableMonthlyReviewsFree', 'enablePlanHistoryFree', 'enableCoherenceAnalysisFree', 'enableMethodFree'] %}
+                <label style="display: flex; gap: .55rem; align-items: center; font-size: .92rem;">{{ form_widget(form[f]) }} {{ form[f].vars.label }}</label>
+            {% endfor %}
+        </div>
+    </section>
+
+    <section class="ks-card">
+        <h2 class="ks-card__title"><i data-lucide="sparkles"></i> Tests de personnalité gratuits</h2>
+        <p class="ks-muted">{{ form_help(form.freeTests) }}</p>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: .6rem 1.25rem; margin-top: .9rem;">
+            {% for choice in form.freeTests %}
+                <label style="display: flex; gap: .55rem; align-items: center; font-size: .92rem;">{{ form_widget(choice) }} {{ choice.vars.label }}</label>
+            {% endfor %}
+        </div>
+    </section>
+
+    <section class="ks-card">
+        <h2 class="ks-card__title"><i data-lucide="compass"></i> Texte proposé aux nouveaux membres</h2>
+        <div style="margin-top: .9rem;">{{ m.field(form.defaultPurposeStatement, true) }}</div>
+    </section>
+
+    <div class="ks-sticky-actions" style="background: linear-gradient(to top, var(--bg) 75%, transparent);">
+        <button type="submit" class="ks-btn ks-btn--primary"><i data-lucide="save"></i> Enregistrer les modifications</button>
+    </div>
+</div>
+{{ form_end(form) }}
 {% endblock %}

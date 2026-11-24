@@ -9,6 +9,44 @@ teste (`php bin/phpunit`), commit, déploie (`bin/ops/envoyer-hostinger.sh`), v�
 journal `var/log/prod-AAAA-MM-JJ.log` sans erreur) ; **le fondateur fait lui-même `git push`** (refusé à l'IA).
 Ne jamais afficher ni demander de mot de passe ; ne pas publier son nom (mentions légales en attente).
 
+## 23/11/2026 — Refonte de l'interface d'administration
+
+- **Demande du fondateur** : l'administration était « complètement pas OK ». Constat présenté avec captures et maquette,
+  validé (« Oui, vas-y ») avant la réécriture.
+- **Avant** : thème sombre violet sans lien avec l'application, couleurs en dur dans chaque page, menu rangé au hasard
+  (« Défis » sous « Croissance »…), deux pages hors menu (documentation sans retour, ancienne page « Mon Plan de Vie »),
+  libellés anglais ou techniques (User, Admin, PDP, Logs d'habitudes, DevPortal, Toggle sidebar), tableaux qui
+  débordaient sur téléphone, messages de confirmation affichés sur certaines pages seulement.
+- **Fait** :
+  - gabarit commun `templates/admin/layout.html.twig` (menu latéral, tiroir « Menu » sur téléphone, fil d'Ariane, titre,
+    une action principale, messages de confirmation pour toutes les pages) ; palette de l'application extraite dans
+    `templates/shared/_design_tokens.html.twig` (incluse par `base.html.twig` et par l'administration) ;
+  - menu regroupé par usage, défini une seule fois : `src/Admin/Twig/AdminNavigationExtension.php` (Accueil, Les membres,
+    Les contenus, Les chiffres, Réglages), avec pastilles « à traiter » ;
+  - tableau de bord : bloc « À traiter » (paiements, commandes de places, avis, brouillons de textes), chiffres des membres
+    (nouveaux, actifs, PRO, essais), usage, graphiques aux couleurs des plans (`assets/controllers/chart_controller.js`),
+    derniers inscrits. Tous les anciens compteurs sont conservés (libellés en français) ;
+  - les 23 gabarits d'administration réécrits avec les composants `ks-…` (nouveaux composants dans
+    `assets/styles/app.css`, section Administration ; tableaux en fiches sur téléphone) ; la documentation technique
+    (`templates/admin/doc.html.twig`) utilise le gabarit commun ; `_content_styles.html.twig` remplacé par les composants
+    communs, `personnalite/admin/_editor_styles.html.twig` pour Questions et Profils ;
+  - libellés : Membres, Avis reçus, D'où viennent les inscrits (ex Provenance), Du visiteur au membre (ex Entonnoir),
+    Qui revient (ex Rétention), Qualité des tests, Réglages de l'application (ex Configuration Système).
+- **Inchangé** : routes, noms de routes, droits d'accès, connexion en deux étapes, formulaires et jetons CSRF, toutes les
+  fonctionnalités. L'ancienne page `/admin/plan-de-vie` reste hors menu (fil d'Ariane : « ancienne page »).
+- **Correction au passage** : `/admin/plan-de-vie` plantait (erreur 500) à la première visite d'un administrateur sans
+  Plan de Vie (côté inverse de la relation non renseigné, `PlanDeVie\Controller\Admin\PlanDeVieController`).
+- **Tests** : `tests/Admin/AdminNavigationTest.php` (chaque page du menu s'ouvre avec le cadre commun et une seule
+  entrée active, aucune route `/admin` oubliée, bloc « À traiter », documentation, pas de couleur en dur ni de libellé
+  anglais, ancienne page Plan de Vie à la première visite) ; tests du tableau de bord et des réglages mis à jour.
+  Le test a trouvé un défaut corrigé avant livraison (« Textes du site » non allumé dans le menu).
+- **Vérifié en local** sur ordinateur (1366 px) et téléphone (390 px), aucune page ne déborde ; captures avant/après
+  dans `../captures-admin/` (hors dépôt).
+- **Local uniquement** : compte administrateur de développement `admin-local@…` créé (accès dans
+  `var/compte-de-test.local`, non versionné) ; l'ancien compte de ce fichier n'était pas administrateur.
+- **Reste / pistes** : la page d'onboarding affiche du code Alpine brut dans certains cas (erreurs JavaScript
+  « step is not defined » vues en se connectant) : à examiner, hors de ce chantier.
+
 ## 23/11/2026 — Relecture externe, point 7 : adresses de l'API mobile du couple en français
 
 - **Fait** (le fondateur l'avait d'abord reporté, puis relancé pour que ce soit corrigé avant la publication sur

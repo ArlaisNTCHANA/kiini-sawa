@@ -1,21 +1,23 @@
 {% extends 'admin/layout.html.twig' %}
 {% block title %}{{ meta[1] }}{% endblock %}
-{% block page_title %}{{ meta[0] }} · {{ meta[1] }}{% endblock %}
-{% block stylesheets %}{% include 'personnalite/admin/_content_styles.html.twig' %}{% endblock %}
+{% block page_title %}{{ meta[1] }}{% endblock %}
+{% block page_lead %}{{ meta[0] }}{% endblock %}
+{% block crumbs %}<span aria-hidden="true">›</span><span aria-current="page">{{ meta[0] }} · {{ meta[1] }}</span>{% endblock %}
 {% block content %}
-<div class="ct-crumb"><a href="{{ path('admin_personality_dashboard') }}">Tests</a> › <a href="{{ path('admin_content_index') }}">Textes des tests</a> › {{ meta[1] }}</div>
-<form method="get" class="ct-card" style="display: flex; gap: 10px;">
-    <input class="ct-search" type="search" name="q" value="{{ q }}" placeholder="Rechercher un mot dans ces textes…">
-    <button class="ct-btn" type="submit">Rechercher</button>
-</form>
-<div class="ct-card">
-    {% for key, e in entries %}
-        <a class="ct-row" href="{{ path('admin_content_entry', {source: source, entry: key}) }}">
-            <span>{{ e.title }}{% if e.modified %}<span class="ct-badge">{{ e.modified }} modifié{{ e.modified > 1 ? 's' }}</span>{% endif %}</span>
-            <span class="ct-meta">{{ e.fields }} texte{{ e.fields > 1 ? 's' }} ›</span>
-        </a>
-    {% else %}
-        <p class="ct-note">Aucun texte ne correspond à votre recherche.</p>
-    {% endfor %}
+<div class="ks-stack">
+    <form method="get" class="ks-card ks-card--flat ks-toolbar" role="search">
+        <input class="ks-input" type="search" name="q" value="{{ q }}" placeholder="Rechercher un mot dans ces textes…" aria-label="Rechercher un mot">
+        <button class="ks-btn ks-btn--secondary" type="submit"><i data-lucide="search"></i> Rechercher</button>
+    </form>
+    <section class="ks-card">
+        {% for key, e in entries %}
+            <a class="ks-row-link" href="{{ path('admin_content_entry', {source: source, entry: key}) }}">
+                <span style="min-width: 0;">{{ e.title }}{% if e.modified %} <span class="ks-badge ks-badge--gold">{{ e.modified }} modifié{{ e.modified > 1 ? 's' }}</span>{% endif %}</span>
+                <span class="ks-row-link__meta">{{ e.fields }} texte{{ e.fields > 1 ? 's' }} ›</span>
+            </a>
+        {% else %}
+            <p class="ks-muted">Aucun texte ne correspond à votre recherche.</p>
+        {% endfor %}
+    </section>
 </div>
 {% endblock %}

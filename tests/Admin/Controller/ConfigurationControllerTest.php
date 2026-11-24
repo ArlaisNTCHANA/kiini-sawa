@@ -27,7 +27,7 @@ class ConfigurationControllerTest extends WebTestCase
         $crawler = $client->request('GET', '/admin/config');
 
         $this->assertResponseIsSuccessful();
-        $this->assertSelectorTextContains('h2', 'Paramètres de la Plateforme');
+        $this->assertSelectorTextContains('h1', 'Réglages de l\'application');
         $this->assertSelectorExists('textarea[name="app_config[defaultPurposeStatement]"]');
     }
 

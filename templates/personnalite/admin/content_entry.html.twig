@@ -1,29 +1,28 @@
 {% extends 'admin/layout.html.twig' %}
 {% block title %}{{ title }}{% endblock %}
-{% block page_title %}{{ meta[0] }} · {{ title }}{% endblock %}
-{% block stylesheets %}{% include 'personnalite/admin/_content_styles.html.twig' %}{% endblock %}
+{% block page_title %}{{ title }}{% endblock %}
+{% block page_lead %}{{ meta[0] }} · {{ meta[1] }}. Un champ vidé ou remis à l'identique revient au texte d'origine.{% endblock %}
+{% block crumbs %}<span aria-hidden="true">›</span><a href="{{ path('admin_content_source', {source: source}) }}">{{ meta[0] }} · {{ meta[1] }}</a><span aria-hidden="true">›</span><span aria-current="page">{{ title }}</span>{% endblock %}
 {% block content %}
-<div class="ct-crumb"><a href="{{ path('admin_personality_dashboard') }}">Tests</a> › <a href="{{ path('admin_content_index') }}">Textes des tests</a> › <a href="{{ path('admin_content_source', {source: source}) }}">{{ meta[1] }}</a> › {{ title }}</div>
-<form method="post" class="ct-card">
-    <p class="ct-note">Modifiez les textes puis enregistrez. Un champ vidé ou remis à l'identique revient au texte d'origine.</p>
+<form method="post" class="ks-card ks-stack" style="max-width: 900px;">
     {% for f in fields %}
-        <div class="ct-field">
-            <label class="ct-l" for="f{{ loop.index }}">{{ f.label }}{% if f.override %}<span class="ct-badge">modifié le {{ f.override.updatedAt|date('d/m/Y') }}{{ f.override.updatedBy ? ' par ' ~ f.override.updatedBy.displayName }}</span>{% endif %}</label>
+        <div class="ks-field"{% if not loop.first %} style="border-top: 1px solid var(--border); padding-top: 1.1rem;"{% endif %}>
+            <label class="ks-label" for="f{{ loop.index }}">{{ f.label }}{% if f.override %} <span class="ks-badge ks-badge--gold" style="text-transform: none; letter-spacing: 0;">modifié le {{ f.override.updatedAt|date('d/m/Y') }}{{ f.override.updatedBy ? ' par ' ~ f.override.updatedBy.displayName }}</span>{% endif %}</label>
             {% if f.long %}
-                <textarea id="f{{ loop.index }}" name="f[{{ f.key }}]" rows="{{ max(2, (f.value|length / 90)|round(0, 'ceil')) }}">{{ f.value }}</textarea>
+                <textarea class="ks-input" id="f{{ loop.index }}" name="f[{{ f.key }}]" rows="{{ max(2, (f.value|length / 90)|round(0, 'ceil')) }}">{{ f.value }}</textarea>
             {% else %}
-                <input id="f{{ loop.index }}" type="text" name="f[{{ f.key }}]" value="{{ f.value }}">
+                <input class="ks-input" id="f{{ loop.index }}" type="text" name="f[{{ f.key }}]" value="{{ f.value }}">
             {% endif %}
             {% if f.override %}
-                <details class="ct-orig"><summary>Voir le texte d'origine</summary>{{ f.default }}</details>
-                <label class="ct-reset"><input type="checkbox" name="reset[{{ f.key }}]" value="1"> Revenir au texte d'origine</label>
+                <details class="ks-help"><summary style="cursor: pointer;">Voir le texte d'origine</summary>{{ f.default }}</details>
+                <label class="ks-help" style="display: inline-flex; gap: .4rem; align-items: center;"><input type="checkbox" name="reset[{{ f.key }}]" value="1"> Revenir au texte d'origine</label>
             {% endif %}
         </div>
     {% endfor %}
     <input type="hidden" name="_csrf_token" value="{{ csrf_token('content_' ~ source ~ '_' ~ entry) }}">
-    <div class="ct-sticky">
-        <button class="ct-btn" type="submit">Enregistrer</button>
-        <a class="ct-btn sec" href="{{ path('admin_content_source', {source: source}) }}">Retour à la liste</a>
+    <div class="ks-sticky-actions">
+        <button class="ks-btn ks-btn--primary" type="submit"><i data-lucide="save"></i> Enregistrer</button>
+        <a class="ks-btn ks-btn--ghost" href="{{ path('admin_content_source', {source: source}) }}">Retour à la liste</a>
     </div>
 </form>
 {% endblock %}

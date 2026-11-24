@@ -1,297 +1,15 @@
 {% extends 'admin/layout.html.twig' %}
 
-{% block title %}Questions — {{ testMeta.name }}{% endblock %}
-{% block page_title %}Questions — {{ testMeta.name }}{% endblock %}
+{% block title %}Questions · {{ testMeta.name }}{% endblock %}
+{% block page_title %}Questions · {{ testMeta.name }}{% endblock %}
+{% block page_lead %}Les questions posées dans ce test et leurs réponses possibles.{% endblock %}
 
-{% block stylesheets %}
-<style>
-    .header-actions {
-        display: flex;
-        align-items: center;
-        gap: 12px;
-        margin-bottom: 24px;
-    }
+{% block crumbs %}<span aria-hidden="true">›</span><span aria-current="page">{{ testMeta.name }}</span>{% endblock %}
+{% block page_actions %}<button type="button" class="ks-btn ks-btn--primary" onclick="openModal('add-modal')"><i data-lucide="plus"></i> Ajouter une question</button>{% endblock %}
 
-    .btn {
-        display: inline-flex;
-        align-items: center;
-        gap: 8px;
-        padding: 10px 16px;
-        border-radius: var(--radius-md);
-        font-size: 14px;
-        font-weight: 600;
-        text-decoration: none;
-        cursor: pointer;
-        transition: all var(--transition);
-        border: 1px solid transparent;
-    }
-
-    .btn--secondary {
-        background: rgba(255, 255, 255, 0.03);
-        color: var(--text-secondary);
-        border-color: var(--border);
-    }
-
-    .btn--secondary:hover {
-        background: rgba(255, 255, 255, 0.08);
-        color: var(--text-primary);
-    }
-
-    .btn--primary {
-        background: var(--accent);
-        color: #fff;
-    }
-
-    .btn--primary:hover {
-        background: var(--accent-light);
-        box-shadow: var(--shadow-glow);
-    }
-
-    .btn--danger {
-        background: rgba(239, 68, 68, 0.1);
-        color: #ef4444;
-        border-color: rgba(239, 68, 68, 0.2);
-    }
-
-    .btn--danger:hover {
-        background: #ef4444;
-        color: #fff;
-        border-color: #ef4444;
-    }
-
-    /* Questions Table Card */
-    .questions-card {
-        background: var(--bg-card);
-        border: 1px solid var(--border);
-        border-radius: var(--radius-lg);
-        padding: 24px;
-        backdrop-filter: blur(8px);
-    }
-
-    .q-table {
-        width: 100%;
-        border-collapse: collapse;
-    }
-
-    .q-table th {
-        font-size: 11px;
-        font-weight: 600;
-        text-transform: uppercase;
-        letter-spacing: 0.5px;
-        color: var(--text-muted);
-        padding: 12px 16px;
-        text-align: left;
-        border-bottom: 1px solid var(--border);
-    }
-
-    .q-table td {
-        padding: 16px;
-        font-size: 14px;
-        color: var(--text-secondary);
-        border-bottom: 1px solid var(--border);
-        vertical-align: top;
-    }
-
-    .q-table tr:last-child td {
-        border-bottom: none;
-    }
-
-    .q-table tr:hover td {
-        color: var(--text-primary);
-        background: rgba(255, 255, 255, 0.01);
-    }
-
-    .q-order {
-        font-weight: 700;
-        color: var(--text-primary);
-        background: rgba(255, 255, 255, 0.05);
-        border-radius: var(--radius-sm);
-        padding: 2px 6px;
-        font-size: 12px;
-    }
-
-    .q-category {
-        display: inline-block;
-        padding: 2px 8px;
-        border-radius: 20px;
-        font-size: 11px;
-        font-weight: 600;
-        background: rgba(99, 102, 241, 0.1);
-        color: var(--accent-light);
-        border: 1px solid rgba(99, 102, 241, 0.2);
-    }
-
-    .answer-badge-list {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 6px;
-        margin-top: 8px;
-    }
-
-    .answer-badge {
-        font-size: 12px;
-        background: rgba(255, 255, 255, 0.04);
-        border: 1px solid var(--border);
-        padding: 4px 8px;
-        border-radius: var(--radius-sm);
-        color: var(--text-secondary);
-    }
-
-    .answer-badge strong {
-        color: var(--accent-light);
-        margin-right: 4px;
-    }
-
-    /* Modal Styles */
-    .ks-modal {
-        display: none;
-        position: fixed;
-        inset: 0;
-        z-index: 1000;
-        align-items: center;
-        justify-content: center;
-        padding: 20px;
-    }
-
-    .ks-modal.active {
-        display: flex;
-    }
-
-    .ks-modal__overlay {
-        position: absolute;
-        inset: 0;
-        background: rgba(0, 0, 0, 0.8);
-        backdrop-filter: blur(8px);
-    }
-
-    .ks-modal__container {
-        position: relative;
-        background: #0d121f;
-        border: 1px solid var(--border-active);
-        border-radius: var(--radius-lg);
-        width: 100%;
-        max-width: 600px;
-        max-height: 90vh;
-        overflow-y: auto;
-        box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
-        animation: modalIn 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-        z-index: 1001;
-    }
-
-    @keyframes modalIn {
-        from { opacity: 0; transform: scale(0.95) translateY(10px); }
-        to { opacity: 1; transform: scale(1) translateY(0); }
-    }
-
-    .ks-modal__header {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        padding: 20px 24px;
-        border-bottom: 1px solid var(--border);
-    }
-
-    .ks-modal__title {
-        font-size: 18px;
-        font-weight: 700;
-        color: var(--text-primary);
-    }
-
-    .ks-modal__close {
-        background: none;
-        border: none;
-        color: var(--text-secondary);
-        cursor: pointer;
-        padding: 4px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        transition: color var(--transition);
-    }
-
-    .ks-modal__close:hover {
-        color: var(--text-primary);
-    }
-
-    .ks-modal__body {
-        padding: 24px;
-    }
-
-    /* Form control styling */
-    .form-group {
-        margin-bottom: 20px;
-    }
-
-    .form-group label {
-        display: block;
-        font-size: 13px;
-        font-weight: 600;
-        color: var(--text-secondary);
-        margin-bottom: 8px;
-    }
-
-    .form-control {
-        width: 100%;
-        background: var(--bg-input);
-        border: 1px solid var(--border);
-        border-radius: var(--radius-md);
-        padding: 12px 14px;
-        color: var(--text-primary);
-        font-family: inherit;
-        font-size: 14px;
-        transition: all var(--transition);
-    }
-
-    .form-control:focus {
-        outline: none;
-        border-color: var(--accent);
-        box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15);
-    }
-
-    .form-help {
-        font-size: 12px;
-        color: var(--text-muted);
-        margin-top: 6px;
-        line-height: 1.4;
-    }
-
-    .ks-modal__footer {
-        padding: 16px 24px;
-        border-top: 1px solid var(--border);
-        display: flex;
-        justify-content: flex-end;
-        gap: 12px;
-    }
-</style>
-{% endblock %}
+{% block stylesheets %}{% include 'personnalite/admin/_editor_styles.html.twig' %}{% endblock %}
 
 {% block content %}
-    <div class="header-actions">
-        <a href="{{ path('admin_personality_dashboard') }}" class="btn btn--secondary">
-            <i data-lucide="arrow-left" style="width: 16px; height: 16px;"></i>
-            Retour aux tests
-        </a>
-        <button class="btn btn--primary" onclick="openModal('add-modal')">
-            <i data-lucide="plus" style="width: 16px; height: 16px;"></i>
-            Ajouter une question
-        </button>
-    </div>
-
-    {# Flash Messages #}
-    {% for label, messages in app.flashes %}
-        {% for message in messages %}
-            <div style="padding: 16px; border-radius: var(--radius-md); margin-bottom: 20px; font-size: 14px; display: flex; align-items: center; gap: 10px; 
-                {% if label == 'success' %}
-                    background: rgba(16, 185, 129, 0.15); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.3);
-                {% else %}
-                    background: rgba(244, 63, 94, 0.15); color: #fb7185; border: 1px solid rgba(244, 63, 94, 0.3);
-                {% endif %}
-            ">
-                <i data-lucide="{% if label == 'success' %}check-circle{% else %}alert-circle{% endif %}" style="width: 18px; height: 18px;"></i>
-                <span>{{ message }}</span>
-            </div>
-        {% endfor %}
-    {% endfor %}
 
     <div class="questions-card">
         <table class="q-table" id="questions-table">
@@ -317,11 +35,11 @@
                             {% if q.category %}
                                 <span class="q-category">{{ q.category }}</span>
                             {% else %}
-                                <span style="color: var(--text-muted); font-style: italic; font-size: 12px;">Aucune</span>
+                                <span style="color: var(--fg-subtle); font-style: italic; font-size: 12px;">Aucune</span>
                             {% endif %}
                         </td>
                         <td>
-                            <div style="font-weight: 600; color: var(--text-primary); margin-bottom: 8px;">
+                            <div style="font-weight: 600; color: var(--fg); margin-bottom: 8px;">
                                 {{ q.question }}
                             </div>
                             <div class="answer-badge-list">
@@ -330,7 +48,7 @@
                                         <strong>{{ ans.value }}</strong> {{ ans.text }}
                                     </span>
                                 {% else %}
-                                    <span style="color: var(--text-muted); font-size: 12px; font-style: italic;">Aucune réponse configurée</span>
+                                    <span style="color: var(--fg-subtle); font-size: 12px; font-style: italic;">Aucune réponse configurée</span>
                                 {% endfor %}
                             </div>
                         </td>
@@ -353,7 +71,7 @@
                     </tr>
                 {% else %}
                     <tr>
-                        <td colspan="4" style="text-align: center; padding: 40px; color: var(--text-muted); font-style: italic;">
+                        <td colspan="4" style="text-align: center; padding: 40px; color: var(--fg-subtle); font-style: italic;">
                             Aucune question n'a été ajoutée pour ce test.
                         </td>
                     </tr>
