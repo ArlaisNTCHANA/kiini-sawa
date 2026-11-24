@@ -21,7 +21,7 @@
     <section class="ks-card">
         <h2 class="ks-section-title" style="margin-top: 0;">Ce qui va se passer</h2>
         <ol class="ac-list" style="margin-left: 1.2rem;">
-            <li><strong>{{ partnerName }}</strong> reçoit une invitation à devenir votre partenaire de redevabilité. <strong>Rien d'autre ne lui sera envoyé tant qu'il ou elle n'aura pas accepté.</strong></li>
+            <li><strong>{{ partnerName }}</strong> reçoit une invitation à devenir votre partenaire de redevabilité. <strong>Rien d'autre ne sera envoyé tant que l'invitation n'aura pas été acceptée.</strong></li>
             {% set alerts = [] %}
             {% if targetType == 'HABIT' and data.alertHabitDays > 0 %}{% set alerts = alerts|merge(['vous ne validez pas ce rituel pendant ' ~ data.alertHabitDays ~ ' jours de suite']) %}{% endif %}
             {% if targetType == 'GOAL' and data.alertGoalDays > 0 %}{% set alerts = alerts|merge(['votre objectif n\'avance pas pendant ' ~ data.alertGoalDays ~ ' jours']) %}{% endif %}
@@ -32,7 +32,7 @@
                 <li>Aucune alerte automatique : {{ partnerName }} ne sera prévenu(e) que si vous le demandez.</li>
             {% endif %}
             <li>Vous pourrez aussi, à tout moment, lui demander un coup de main. <strong>Au plus un message tous les {{ minDays }} jours</strong>, et <strong>vous recevrez une copie</strong> de chacun.</li>
-            <li>{{ partnerName }} indiquera en un clic ce qu'il ou elle a fait (appel, message, rencontre, prière). Vous serez prévenu(e) et vous le verrez dans « Ma redevabilité ».</li>
+            <li>{{ partnerName }} indiquera en un clic ce qui a été fait (appel, message, rencontre, prière). Vous serez prévenu(e) et vous le verrez dans « Ma redevabilité ».</li>
             <li>{{ partnerName }} ne verra que cet engagement : <strong>ni votre journal, ni vos autres plans, ni vos tests</strong>.</li>
             <li>Vous pouvez mettre en pause ou arrêter à tout moment ; {{ partnerName }} aussi.</li>
         </ol>

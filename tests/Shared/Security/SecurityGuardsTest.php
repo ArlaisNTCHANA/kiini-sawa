@@ -32,6 +32,7 @@ class SecurityGuardsTest extends WebTestCase
         'app_referral_link', // lien de parrainage partagé
         'app_shared_result', // résultat de test partagé par son auteur
         'app_feedback_form', // formulaire de feedback envoyé aux proches
+        'app_feedback_thanks', // remerciement après la réponse d'un proche
         'app_confirmation_form', // confirmation d'un résultat de test par les proches
         'app_accountability_partner', 'app_accountability_respond', // partenaire de redevabilité : lien personnel reçu par e-mail, sans compte
         'app_challenges', 'app_challenge', 'app_challenge_join', // défis collectifs : pages publiques ; inscription sans compte (renvoie vers la création de compte)

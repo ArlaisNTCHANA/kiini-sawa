@@ -7,11 +7,12 @@ use App\Feedback\Entity\CommunityFeedback;
 use App\Feedback\Entity\FeedbackRequest;
 use App\Notification\Enum\NotificationType;
 use App\Notification\Service\Notifier;
+use App\Contenu\Service\SiteTexts;
 use Doctrine\ORM\EntityManagerInterface;
 
 /**
  * « Feedback nourricier » (chapitre 14 du livre) : le regard des proches. Le membre partage un lien ; chacun choisit
- * les qualités qu'il voit en lui, dit ce qu'il fait de mieux et un point où il gagnerait à grandir.
+ * les qualités qu'il voit chez cette personne, ce qu'elle fait de mieux et un point où elle gagnerait à grandir.
  * Anonyme par défaut ; le détail n'apparaît qu'à partir de 3 réponses pour protéger l'anonymat.
  */
 final class FeedbackService
@@ -19,44 +20,187 @@ final class FeedbackService
     public const MIN_FOR_DETAIL = 3;
     public const MAX_RESPONSES = 50;
     public const MAX_QUALITIES = 5;
+    /** Durée d'un lien, puis d'une prolongation (jours) ; un lien ne court jamais plus de 3 semaines devant lui. */
+    public const DURATION_DAYS = 7;
+    public const MAX_AHEAD_DAYS = 21;
+    /** Rappel au membre si moins de MIN_FOR_DETAIL réponses après ce nombre de jours. */
+    public const NUDGE_AFTER_DAYS = 3;
 
-    public const QUALITIES = ['Fiable', 'Généreux', 'À l\'écoute', 'Courageux', 'Créatif', 'Organisé', 'Patient', 'Encourageant',
-        'Honnête', 'Humble', 'Joyeux', 'Persévérant', 'Sage', 'Bienveillant', 'Rassembleur', 'Travailleur', 'Fidèle', 'Calme',
-        'Enthousiaste', 'Visionnaire', 'Serviable', 'Drôle', 'Discipliné', 'Inspirant'];
+    /** Qualités en noms : justes pour tout le monde (l'application ne connaît pas le sexe des personnes). */
+    public const QUALITIES = ['Fiabilité', 'Générosité', 'Écoute', 'Courage', 'Créativité', 'Sens de l\'organisation', 'Patience', 'Encouragement',
+        'Honnêteté', 'Humilité', 'Joie', 'Persévérance', 'Sagesse', 'Bienveillance', 'Sens du rassemblement', 'Ardeur au travail', 'Fidélité', 'Calme',
+        'Enthousiasme', 'Vision', 'Serviabilité', 'Humour', 'Discipline', 'Inspiration'];
 
-    public const RELATIONSHIPS = ['famille' => 'Famille', 'conjoint' => 'Conjoint(e)', 'ami' => 'Ami(e)', 'collegue' => 'Collègue',
-        'eglise' => 'Église, communauté', 'mentor' => 'Mentor, responsable', 'autre' => 'Autre'];
+    /** Anciennes qualités (adjectifs au masculin, avant le 24/11/2026) → nom correspondant, pour les réponses déjà reçues. */
+    public const LEGACY_QUALITIES = ['Fiable' => 'Fiabilité', 'Généreux' => 'Générosité', 'À l\'écoute' => 'Écoute', 'Courageux' => 'Courage',
+        'Créatif' => 'Créativité', 'Organisé' => 'Sens de l\'organisation', 'Patient' => 'Patience', 'Encourageant' => 'Encouragement',
+        'Honnête' => 'Honnêteté', 'Humble' => 'Humilité', 'Joyeux' => 'Joie', 'Persévérant' => 'Persévérance', 'Sage' => 'Sagesse',
+        'Bienveillant' => 'Bienveillance', 'Rassembleur' => 'Sens du rassemblement', 'Travailleur' => 'Ardeur au travail', 'Fidèle' => 'Fidélité',
+        'Enthousiaste' => 'Enthousiasme', 'Visionnaire' => 'Vision', 'Serviable' => 'Serviabilité', 'Drôle' => 'Humour', 'Discipliné' => 'Discipline',
+        'Inspirant' => 'Inspiration'];
 
-    public function __construct(private readonly EntityManagerInterface $em, private readonly Notifier $notifier)
-    {
+    /** « Vous connaissez … par » : tournures neutres (ni « Conjoint(e) » ni « Ami(e) »). Les clés ne changent pas. */
+    public const RELATIONSHIPS = ['famille' => 'La famille', 'conjoint' => 'Le couple', 'ami' => 'L\'amitié', 'collegue' => 'Le travail',
+        'eglise' => 'L\'Église, la communauté', 'mentor' => 'Un accompagnement (mentorat, responsabilité)', 'autre' => 'Autre'];
+
+    public function __construct(
+        private readonly EntityManagerInterface $em,
+        private readonly Notifier $notifier,
+        private readonly SiteTexts $texts,
+    ) {
     }
 
+    /** La demande en cours : ni fermée, ni expirée. */
     public function activeRequest(User $user): ?FeedbackRequest
     {
-        return $this->em->getRepository(FeedbackRequest::class)->findOneBy(['user' => $user, 'isActive' => true], ['id' => 'DESC']);
+        $latest = $this->latestRequest($user);
+
+        return $latest && $latest->isOpen() ? $latest : null;
+    }
+
+    /** La dernière demande, quel que soit son état (ses résultats restent visibles après la fin du lien). */
+    public function latestRequest(User $user): ?FeedbackRequest
+    {
+        return $this->em->getRepository(FeedbackRequest::class)->findOneBy(['user' => $user], ['id' => 'DESC']);
+    }
+
+    /** @return list<FeedbackRequest> toutes les demandes du membre, de la plus récente à la plus ancienne */
+    public function requestsOf(User $user): array
+    {
+        return $this->em->getRepository(FeedbackRequest::class)->findBy(['user' => $user], ['id' => 'DESC']);
+    }
+
+    public function findByToken(string $token): ?FeedbackRequest
+    {
+        return $this->em->getRepository(FeedbackRequest::class)->findOneBy(['token' => $token]);
     }
 
     public function findOpen(string $token): ?FeedbackRequest
     {
-        return $this->em->getRepository(FeedbackRequest::class)->findOneBy(['token' => $token, 'isActive' => true]);
+        $request = $this->findByToken($token);
+
+        return $request && $request->isOpen() ? $request : null;
     }
 
     public function open(User $user, bool $forceRealName): FeedbackRequest
     {
         if ($existing = $this->activeRequest($user)) {
-            return $existing->setForceRealName($forceRealName);
+            $existing->setForceRealName($forceRealName);
+            $this->em->flush();
+
+            return $existing;
         }
-        $request = (new FeedbackRequest())->setUser($user)->setToken(bin2hex(random_bytes(12)))->setForceRealName($forceRealName)->setIsActive(true);
+        $request = (new FeedbackRequest())->setUser($user)->setToken(bin2hex(random_bytes(12)))->setForceRealName($forceRealName)->setIsActive(true)
+            ->setExpiresAt(new \DateTimeImmutable('+'.self::DURATION_DAYS.' days'));
         $this->em->persist($request);
         $this->em->flush();
 
         return $request;
     }
 
+    /** Une semaine de plus (à partir d'aujourd'hui si le lien a déjà expiré). Impossible pour une demande fermée. */
+    public function extend(FeedbackRequest $request): bool
+    {
+        if (!$request->isActive() || !$this->canExtend($request)) {
+            return false;
+        }
+        $now = new \DateTimeImmutable();
+        $from = $request->getExpiresAt() && $request->getExpiresAt() > $now ? $request->getExpiresAt() : $now;
+        $request->setExpiresAt($from->modify('+'.self::DURATION_DAYS.' days'));
+        $this->em->flush();
+
+        return true;
+    }
+
+    public function canExtend(FeedbackRequest $request): bool
+    {
+        $now = new \DateTimeImmutable();
+        $from = $request->getExpiresAt() && $request->getExpiresAt() > $now ? $request->getExpiresAt() : $now;
+
+        return $request->isActive() && $from->modify('+'.self::DURATION_DAYS.' days') <= $now->modify('+'.self::MAX_AHEAD_DAYS.' days');
+    }
+
     public function close(FeedbackRequest $request): void
     {
         $request->setIsActive(false);
         $this->em->flush();
+    }
+
+    /**
+     * Le message prêt à envoyer (WhatsApp, SMS, e-mail), en « tu » ou en « vous ».
+     */
+    public function shareMessage(FeedbackRequest $request, string $url, string $tone = 'tu'): string
+    {
+        $tone = 'vous' === $tone ? 'vous' : 'tu';
+        $defaults = FeedbackTexts::defaults();
+        $anonymous = $request->isForceRealName() ? '' : $this->text('feedback.message.'.$tone.'.anonyme');
+
+        return strtr($this->texts->get('feedback.message.'.$tone, $defaults['feedback.message.'.$tone]), [
+            '{anonymat}' => $anonymous,
+            '{date}' => self::frenchDate($request->getExpiresAt()),
+            '{lien}' => $url,
+        ]);
+    }
+
+    public function text(string $code, array $vars = []): string
+    {
+        $value = $this->texts->get($code, FeedbackTexts::defaults()[$code] ?? '');
+        foreach ($vars as $k => $v) {
+            $value = str_replace('{'.$k.'}', (string) $v, $value);
+        }
+
+        return $value;
+    }
+
+    /** « mardi 1er décembre » ; « dans une semaine » pour une ancienne demande sans date. */
+    public static function frenchDate(?\DateTimeInterface $date): string
+    {
+        if (null === $date) {
+            return 'dans une semaine';
+        }
+        $day = (int) $date->format('j');
+        $weekday = (new \IntlDateFormatter('fr_FR', \IntlDateFormatter::NONE, \IntlDateFormatter::NONE, null, null, 'EEEE'))->format($date);
+        $month = (new \IntlDateFormatter('fr_FR', \IntlDateFormatter::NONE, \IntlDateFormatter::NONE, null, null, 'MMMM'))->format($date);
+
+        return sprintf('%s %s %s', $weekday, 1 === $day ? '1er' : (string) $day, $month);
+    }
+
+    /**
+     * Tâche quotidienne : prévenir le membre quand son lien arrive à son terme, et l'encourager à relancer ses proches
+     * si peu de réponses sont arrivées après quelques jours. Sans doublon (clé de notification).
+     *
+     * @return array{fin: int, relance: int}
+     */
+    public function runDailyChecks(\DateTimeImmutable $today): array
+    {
+        $sent = ['fin' => 0, 'relance' => 0];
+        $now = $today->setTime((int) date('H'), (int) date('i'));
+        $repo = $this->em->getRepository(FeedbackRequest::class);
+
+        $ended = $repo->createQueryBuilder('r')->where('r.isActive = true')->andWhere('r.expiresAt <= :now')->andWhere('r.expiresAt > :since')
+            ->setParameter('now', $now)->setParameter('since', $now->modify('-3 days'))->getQuery()->getResult();
+        foreach ($ended as $request) {
+            $count = $this->responseCount($request);
+            if ($this->notifier->notify($request->getUser(), NotificationType::FEEDBACK_RECEIVED, $this->text('feedback.notif.fin.titre'),
+                $this->text('feedback.notif.fin.texte', ['nombre' => $count]), '/mes-tests/feedback', 'feedback-fin-'.$request->getId().'-'.$request->getExpiresAt()->format('Ymd'))) {
+                ++$sent['fin'];
+            }
+        }
+
+        $waiting = $repo->createQueryBuilder('r')->where('r.isActive = true')->andWhere('r.expiresAt > :now')->andWhere('r.createdAt <= :before')
+            ->setParameter('now', $now)->setParameter('before', $now->modify('-'.self::NUDGE_AFTER_DAYS.' days'))->getQuery()->getResult();
+        foreach ($waiting as $request) {
+            $count = $this->responseCount($request);
+            if ($count >= self::MIN_FOR_DETAIL) {
+                continue;
+            }
+            if ($this->notifier->notify($request->getUser(), NotificationType::FEEDBACK_RECEIVED, $this->text('feedback.notif.relance.titre'),
+                $this->text('feedback.notif.relance.texte', ['nombre' => $count, 'seuil' => self::MIN_FOR_DETAIL]), '/mes-tests/feedback', 'feedback-relance-'.$request->getId())) {
+                ++$sent['relance'];
+            }
+        }
+
+        return $sent;
     }
 
     public function responseCount(FeedbackRequest $request): int
@@ -81,6 +225,7 @@ final class FeedbackService
         if ([] === $qualities) { $errors[] = 'Choisissez au moins une qualité.'; }
         if (\count($qualities) > self::MAX_QUALITIES) { $errors[] = 'Choisissez au plus '.self::MAX_QUALITIES.' qualités.'; }
         if ('' === $strengths) { $errors[] = 'Dites ce que cette personne fait de mieux.'; }
+        if (!$request->isOpen()) { $errors[] = 'Ce lien n\'accepte plus de réponses.'; }
         if ($request->isForceRealName() && '' === $name) { $errors[] = 'Indiquez votre prénom.'; }
         if ($this->responseCount($request) >= self::MAX_RESPONSES) { $errors[] = 'Cette demande a reçu le nombre maximal de réponses.'; }
         if ([] !== $errors) {
@@ -95,9 +240,9 @@ final class FeedbackService
         $this->em->flush();
 
         $count = $this->responseCount($request);
-        $this->notifier->notify($request->getUser(), NotificationType::FEEDBACK_RECEIVED, 'Un nouveau regard sur vous',
-            $count >= self::MIN_FOR_DETAIL ? 'Quelqu\'un a répondu à votre demande de feedback. Découvrez ce que vos proches voient en vous.'
-                : sprintf('Quelqu\'un a répondu à votre demande de feedback (%d sur %d avant de voir le détail).', $count, self::MIN_FOR_DETAIL),
+        $this->notifier->notify($request->getUser(), NotificationType::FEEDBACK_RECEIVED, $this->text('feedback.notif.reponse.titre'),
+            $count >= self::MIN_FOR_DETAIL || $request->isForceRealName() ? $this->text('feedback.notif.reponse.detail')
+                : $this->text('feedback.notif.reponse.attente', ['nombre' => $count, 'seuil' => self::MIN_FOR_DETAIL]),
             '/mes-tests/feedback');
 
         return [];
@@ -115,6 +260,7 @@ final class FeedbackService
         $strengths = $improvements = [];
         foreach ($rows as $f) {
             foreach ((array) json_decode((string) $f->getQualities(), true) as $q) {
+                $q = self::LEGACY_QUALITIES[$q] ?? $q;
                 $qualities[$q] = ($qualities[$q] ?? 0) + 1;
             }
             $rel = self::RELATIONSHIPS[$f->getRelationship()] ?? 'Autre';

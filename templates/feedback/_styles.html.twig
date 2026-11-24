@@ -1,0 +1,32 @@
+{# Styles du feedback nourricier (pages publiques et page du membre), sur la palette commune : aucune couleur en dur. #}
+<style>
+    .fb-reassure { display: flex; flex-wrap: wrap; gap: .5rem; list-style: none; padding: 0; margin: 0 0 1.25rem; }
+    .fb-reassure li { display: inline-flex; align-items: center; gap: .4rem; font-size: .85rem; font-weight: 600; color: var(--primary-dark); background: var(--primary-soft); border-radius: var(--r-full); padding: .35rem .8rem; }
+    .fb-reassure i, .fb-reassure svg { width: 15px; height: 15px; }
+    .fb-field { margin-bottom: 1.4rem; }
+    .fb-hint { font-size: .85rem; color: var(--fg-muted); margin: 0 0 .6rem; }
+    .fb-hint span { font-weight: 700; color: var(--primary); margin-left: .25rem; }
+    .fb-chips { display: flex; flex-wrap: wrap; gap: .5rem; }
+    .fb-chip { position: relative; cursor: pointer; }
+    .fb-chip input { position: absolute; opacity: 0; width: 1px; height: 1px; }
+    .fb-chip span { display: inline-flex; align-items: center; gap: .3rem; font-size: .9rem; font-weight: 600; padding: .5rem .9rem; border-radius: var(--r-full);
+        background: var(--bg-alt); color: var(--fg-light); border: 1.5px solid transparent; transition: background .15s, color .15s, border-color .15s; }
+    .fb-chip:hover span { border-color: var(--border-strong); }
+    .fb-chip input:checked + span { background: var(--primary); color: var(--card-bg); border-color: var(--primary); }
+    .fb-chip input:checked + span::before { content: '✓'; font-weight: 800; }
+    .fb-chip input:focus-visible + span { outline: 3px solid var(--gold-light); outline-offset: 2px; }
+    .fb-submit { width: 100%; justify-content: center; padding-top: .85rem; padding-bottom: .85rem; font-size: 1rem; }
+    @media (min-width: 640px) { .fb-submit { width: auto; } }
+    .fb-footnote { font-size: .8rem; color: var(--fg-muted); text-align: center; margin: 1.25rem auto 2rem; max-width: 520px; line-height: 1.6; }
+    .fb-footnote a { color: var(--primary); }
+    .fb-discover { text-align: center; margin-top: 1rem; border-top: 3px solid var(--gold); }
+    .fb-discover__actions { display: flex; flex-wrap: wrap; gap: .6rem; justify-content: center; margin-top: 1.1rem; }
+    .fb-message { width: 100%; min-height: 11rem; font-size: .92rem; line-height: 1.55; resize: vertical; }
+    .fb-tone { display: inline-flex; background: var(--bg-alt); border-radius: var(--r-full); padding: .2rem; margin-bottom: .75rem; }
+    .fb-tone button { border: 0; background: transparent; font: inherit; font-size: .85rem; font-weight: 600; color: var(--fg-muted); padding: .35rem .9rem; border-radius: var(--r-full); cursor: pointer; }
+    .fb-tone button[aria-pressed="true"] { background: var(--card-bg); color: var(--primary-dark); box-shadow: var(--card-shadow); }
+    .fb-actions { display: flex; flex-wrap: wrap; gap: .6rem; margin-top: .9rem; }
+    .fb-past { list-style: none; padding: 0; margin: 0; }
+    .fb-past li { display: flex; justify-content: space-between; align-items: center; gap: 1rem; padding: .7rem 0; border-top: 1px solid var(--border); }
+    .fb-past li:first-child { border-top: 0; }
+</style>

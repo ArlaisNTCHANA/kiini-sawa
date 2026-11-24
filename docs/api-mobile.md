@@ -202,3 +202,21 @@ signalé `reservePro: true` ; l'ouvrir renvoie `403 { code: "pro_required" }`).
 
 L'application garde le catalogue, les parcours et les leçons ouverts (clés `academie_…` du stockage local) pour les relire
 hors connexion ; terminer une leçon et écrire une note demandent le réseau.
+
+---
+
+## 16. Feedback nourricier (`/api/mobile/v1/feedback`)
+
+Même lien que sur le site (7 jours, prolongeable) ; les proches répondent toujours sur le site (`/avis/{jeton}`).
+
+| Méthode & URL | Corps | Réponse | Notes |
+|---|---|---|---|
+| `GET /feedback` | — | `200 { request, messages, summary, past, needsFirstName, minForDetail, durationDays }` | `request` = dernière demande (ouverte, terminée ou fermée) ou `null` ; `messages` = `{ tu, vous }` prêts à partager (lien compris), `null` si le lien n'accepte plus de réponses. |
+| `POST /feedback` | `{ forceRealName?, firstName? }` | `201` (même forme) ou `422 first_name_required` | Crée un lien (ou un nouveau lien après la fin du précédent). `firstName` est exigé si le profil n'en a pas. |
+| `POST /feedback/prolonger` | `{}` | `200` ou `409` | Une semaine de plus (jamais plus de 21 jours devant soi) ; impossible pour une demande fermée. |
+| `POST /feedback/fermer` | `{}` | `200` | Le lien ne fonctionne plus ; les résultats restent. |
+| `GET /feedback/demandes/{id}` | — | `200 { createdAt, summary }` ou `404` | Résultats d'une demande passée (celle d'un autre compte : `404`). |
+
+`summary` : `{ count, detail, qualities: [{ label, count }], strengths: [{ text, from }], improvements: [{ text, from }] }` ; le
+détail n'apparaît qu'à partir de `minForDetail` réponses (anonymat), sauf si le prénom était demandé. Les notifications
+`/mes-tests/feedback` ouvrent l'écran natif `app/feedback`.

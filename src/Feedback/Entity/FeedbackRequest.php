@@ -31,6 +31,10 @@ class FeedbackRequest
     #[ORM\Column]
     private bool $forceRealName = false;
 
+    /** Fin des réponses (une semaine après la création, prolongeable) ; null pour les demandes antérieures au 24/11/2026. */
+    #[ORM\Column(type: Types::DATETIME_IMMUTABLE, nullable: true)]
+    private ?\DateTimeImmutable $expiresAt = null;
+
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $createdAt = null;
 
@@ -114,6 +118,29 @@ class FeedbackRequest
         $this->forceRealName = $forceRealName;
 
         return $this;
+    }
+
+    public function getExpiresAt(): ?\DateTimeImmutable
+    {
+        return $this->expiresAt;
+    }
+
+    public function setExpiresAt(?\DateTimeImmutable $expiresAt): static
+    {
+        $this->expiresAt = $expiresAt;
+
+        return $this;
+    }
+
+    public function isExpired(?\DateTimeImmutable $now = null): bool
+    {
+        return null !== $this->expiresAt && $this->expiresAt <= ($now ?? new \DateTimeImmutable());
+    }
+
+    /** Le lien accepte encore des réponses : ni fermé, ni expiré. */
+    public function isOpen(?\DateTimeImmutable $now = null): bool
+    {
+        return $this->isActive && !$this->isExpired($now);
     }
 
     public function getCreatedAt(): ?\DateTimeInterface

@@ -1,54 +1,63 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Votre regard sur {{ firstName }}{% endblock %}
-{% block head_meta %}<meta name="robots" content="noindex"><meta property="og:title" content="{{ firstName }} aimerait votre regard"><meta property="og:description" content="3 minutes pour dire à {{ firstName }} les qualités que vous voyez en lui ou en elle."><meta property="og:image" content="{{ absolute_url('/icons/icon-512.png') }}">{% endblock %}
+{% block title %}{{ t('feedback.public.onglet', 'Votre regard sur {prenom}', 'text', {prenom: firstName}) }}{% endblock %}
+{% block head_meta %}{% include 'feedback/_share_meta.html.twig' with {firstName: firstName} only %}{% endblock %}
 
 {% block body %}
-{% if not app.user %}{% include 'shared/_public_header.html.twig' %}{% endif %}
-<div class="ks-page ks-page--narrow">
+{% if not app.user %}{% include 'shared/_public_header.html.twig' with {minimal: true} %}{% endif %}
+{% include 'feedback/_styles.html.twig' %}
+<div class="ks-page ks-page--narrow fb-public">
     {% include 'shared/_page_header.html.twig' with {
-        eyebrow: 'Feedback nourricier', icon: 'heart',
-        title: firstName ~ ' aimerait votre regard',
-        lead: firstName ~ ' avance sur son Plan de Vie avec KIINI SAWA et vous demande, en toute confiance, ce que vous voyez en lui ou en elle. 3 minutes. ' ~ (request.forceRealName ? 'Votre prénom sera indiqué.' : 'Vos réponses sont anonymes.'),
+        eyebrow: t('feedback.public.surtitre', 'Feedback nourricier'), icon: 'heart',
+        title: t('feedback.public.titre', '{prenom} aimerait votre regard', 'text', {prenom: firstName}),
+        lead: t('feedback.public.intro', '{prenom} construit son Plan de Vie avec KIINI SAWA. Nos proches voient souvent en nous ce que nous ne voyons pas nous-mêmes : votre regard bienveillant compte.', 'text', {prenom: firstName}),
     } %}
-    {% if alreadyDone %}
-        <p class="ks-alert ks-alert--success">Vous avez déjà répondu. Merci pour votre bienveillance !</p>
-    {% else %}
-    {% for e in errors %}<p class="ks-alert ks-alert--danger" style="margin-bottom: .6rem;">{{ e }}</p>{% endfor %}
-    <form method="post" class="ks-card" x-data="{ picked: {{ data.qualities|length }} }">
+
+    <ul class="fb-reassure" aria-label="{{ t('feedback.public.reperes', 'En bref') }}">
+        <li><i data-lucide="clock"></i>{{ t('feedback.public.duree', '3 minutes') }}</li>
+        <li><i data-lucide="{{ request.forceRealName ? 'user' : 'eye-off' }}"></i>{{ request.forceRealName ? t('feedback.public.avec_prenom', 'Votre prénom sera indiqué') : t('feedback.public.anonyme', 'Anonyme si vous le souhaitez') }}</li>
+        {% if hasExpiry %}<li><i data-lucide="calendar"></i>{{ t('feedback.public.jusqua', 'Jusqu\'au {date}', 'text', {date: expiresLabel}) }}</li>{% endif %}
+    </ul>
+
+    {% for e in errors %}<p class="ks-alert ks-alert--danger" style="margin-bottom: .6rem;" role="alert">{{ e }}</p>{% endfor %}
+    <form method="post" class="ks-card" x-data="{ picked: {{ data.qualities|length }}, max: {{ maxQualities }} }">
         <input type="hidden" name="_csrf_token" value="{{ csrf_token('feedback_form') }}">
         <div style="position: absolute; left: -9999px;" aria-hidden="true"><input name="website" tabindex="-1" autocomplete="off"></div>
 
-        <div class="ks-field" style="margin-bottom: 1.25rem;">
-            <label class="ks-label" for="relationship">Vous êtes…</label>
+        <div class="ks-field fb-field">
+            <label class="ks-label" for="relationship">{{ t('feedback.public.lien', 'Vous connaissez {prenom} par…', 'text', {prenom: firstName}) }}</label>
             <select class="ks-input" id="relationship" name="relationship">{% for k, v in relationships %}<option value="{{ k }}" {{ data.relationship == k ? 'selected' }}>{{ v }}</option>{% endfor %}</select>
         </div>
 
-        <p class="ks-label" style="margin-bottom: .5rem;">Les qualités que vous voyez en {{ firstName }} ({{ maxQualities }} au plus)</p>
-        <div style="display: flex; flex-wrap: wrap; gap: .45rem; margin-bottom: 1.25rem;">
-            {% for q in qualities %}
-                <label style="cursor: pointer;">
-                    <input type="checkbox" name="qualities[]" value="{{ q }}" {{ q in data.qualities ? 'checked' }} style="position: absolute; opacity: 0;"
-                           @change="picked += $event.target.checked ? 1 : -1; if (picked > {{ maxQualities }}) { $event.target.checked = false; picked--; }">
-                    <span class="ks-badge ks-badge--muted" style="font-size: .85rem; padding: .35rem .8rem;" :class="$el.previousElementSibling.checked ? '' : 'ks-badge--muted'" x-effect="picked; $el.className = $el.previousElementSibling.checked ? 'ks-badge' : 'ks-badge ks-badge--muted'">{{ q }}</span>
-                </label>
-            {% endfor %}
-        </div>
+        <fieldset class="fb-field" style="border: 0; padding: 0; margin-left: 0; margin-right: 0;">
+            <legend class="ks-label" style="margin-bottom: .25rem;">{{ t('feedback.public.qualites', 'Les qualités que vous voyez chez {prenom}', 'text', {prenom: firstName}) }}</legend>
+            <p class="fb-hint">{{ t('feedback.public.qualites_aide', 'Choisissez de 1 à {max} qualités.', 'text', {max: maxQualities}) }} <span x-text="picked + ' / ' + max" aria-live="polite"></span></p>
+            <div class="fb-chips">
+                {% for q in qualities %}
+                    <label class="fb-chip">
+                        <input type="checkbox" name="qualities[]" value="{{ q }}" {{ q in data.qualities ? 'checked' }}
+                               @change="if ($event.target.checked && picked >= max) { $event.target.checked = false; return; } picked += $event.target.checked ? 1 : -1">
+                        <span>{{ q }}</span>
+                    </label>
+                {% endfor %}
+            </div>
+        </fieldset>
 
-        <div class="ks-field" style="margin-bottom: 1.25rem;">
-            <label class="ks-label" for="strengths">Ce que {{ firstName }} fait de mieux</label>
-            <textarea class="ks-input" id="strengths" name="strengths" rows="3" required placeholder="Un talent, une façon d'être, un moment où vous l'avez vu(e) briller…">{{ data.strengths }}</textarea>
+        <div class="ks-field fb-field">
+            <label class="ks-label" for="strengths">{{ t('feedback.public.forces', 'Ce que {prenom} fait de mieux', 'text', {prenom: firstName}) }}</label>
+            <textarea class="ks-input" id="strengths" name="strengths" rows="3" required maxlength="2000" placeholder="{{ t('feedback.public.forces_exemple', 'Un talent, une façon d\'être, un moment où {prenom} a brillé…', 'text', {prenom: firstName}) }}">{{ data.strengths }}</textarea>
         </div>
-        <div class="ks-field" style="margin-bottom: 1.25rem;">
-            <label class="ks-label" for="improvements">Un point où {{ firstName }} gagnerait à grandir (facultatif)</label>
-            <textarea class="ks-input" id="improvements" name="improvements" rows="3" placeholder="Avec bienveillance : ce qui l'aiderait à aller plus loin.">{{ data.improvements }}</textarea>
+        <div class="ks-field fb-field">
+            <label class="ks-label" for="improvements">{{ t('feedback.public.grandir', 'Un point où {prenom} gagnerait à grandir (facultatif)', 'text', {prenom: firstName}) }}</label>
+            <textarea class="ks-input" id="improvements" name="improvements" rows="3" maxlength="2000" placeholder="{{ t('feedback.public.grandir_exemple', 'Avec bienveillance : ce qui pourrait l\'aider à aller plus loin.') }}">{{ data.improvements }}</textarea>
         </div>
-        <div class="ks-field" style="margin-bottom: 1.25rem;">
-            <label class="ks-label" for="name">Votre prénom {{ request.forceRealName ? '' : '(facultatif : laissez vide pour rester anonyme)' }}</label>
-            <input class="ks-input" id="name" name="name" value="{{ data.name }}" maxlength="100" {{ request.forceRealName ? 'required' }}>
+        <div class="ks-field fb-field">
+            <label class="ks-label" for="name">{{ request.forceRealName ? t('feedback.public.prenom_obligatoire', 'Votre prénom') : t('feedback.public.prenom_facultatif', 'Votre prénom (facultatif : laissez vide pour rester anonyme)') }}</label>
+            <input class="ks-input" id="name" name="name" value="{{ data.name }}" maxlength="100" autocomplete="given-name" {{ request.forceRealName ? 'required' }}>
         </div>
-        <button type="submit" class="ks-btn ks-btn--primary">Envoyer mon regard</button>
+        <button type="submit" class="ks-btn ks-btn--primary fb-submit"><i data-lucide="send"></i> {{ t('feedback.public.envoyer', 'Envoyer mon regard') }}</button>
     </form>
-    {% endif %}
+
+    <p class="fb-footnote">{{ t('feedback.public.mention', 'KIINI SAWA est une application chrétienne de planification de vie. Vos réponses ne servent qu\'à {prenom} et ne sont jamais publiées. [Confidentialité](/confidentialite)', 'inline', {prenom: firstName}) }}</p>
 </div>
 {% endblock %}

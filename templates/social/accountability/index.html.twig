@@ -72,7 +72,7 @@
                     </form>
                 {% endif %}
             {% elseif c.pending %}
-                <p class="ac-mini">{{ c.partnerName }} a reçu une invitation le {{ c.createdAt|date('d/m/Y') }}. Tant qu'il ou elle n'a pas accepté, rien d'autre ne lui est envoyé.</p>
+                <p class="ac-mini">{{ c.partnerName }} a reçu une invitation le {{ c.createdAt|date('d/m/Y') }}. Tant que l'invitation n'est pas acceptée, rien d'autre n'est envoyé.</p>
             {% endif %}
 
             {% if s.last is not empty %}

@@ -1,0 +1,31 @@
+{# Synthèse d'une demande : qualités les plus citées, forces, pistes de croissance (détail à partir de {{ min }} réponses). #}
+<div class="ks-card" style="margin-bottom: 1rem;">
+    <div style="display: flex; justify-content: space-between; align-items: baseline; gap: 1rem;">
+        <h2 class="ks-section-title" style="margin-top: 0;">{{ t('feedback.membre.synthese_titre', 'Ce que vos proches voient chez vous') }}</h2>
+        <span class="ks-badge" style="white-space: nowrap;">{{ summary.count }} réponse{{ summary.count > 1 ? 's' }}</span>
+    </div>
+    {% if not summary.detail %}
+        <div class="ks-empty" style="padding: 1.5rem 0;">
+            <div class="ks-empty__icon"><i data-lucide="hourglass" style="width: 24px; height: 24px;"></i></div>
+            <p class="ks-empty__text">Encore {{ min - summary.count }} réponse{{ min - summary.count > 1 ? 's' }} avant de découvrir la synthèse. {{ t('feedback.membre.seuil', 'Ce seuil protège l\'anonymat des personnes qui répondent.') }}</p>
+        </div>
+    {% else %}
+        <p class="ks-eyebrow" style="margin: .5rem 0;">{{ t('feedback.membre.qualites', 'Les qualités les plus citées') }}</p>
+        <div style="display: flex; flex-wrap: wrap; gap: .5rem; margin-bottom: 1.25rem;">
+            {% for q, n in summary.qualities %}
+                <span class="ks-badge" style="font-size: {{ n > 1 ? (0.8 + n * 0.08)|round(2) : 0.8 }}rem; padding: .3rem .75rem;">{{ q }} · {{ n }}</span>
+            {% endfor %}
+        </div>
+        <p class="ks-eyebrow" style="margin-bottom: .5rem;">{{ t('feedback.membre.forces', 'Ce que vous faites de mieux') }}</p>
+        {% for s in summary.strengths %}
+            <blockquote style="border-left: 3px solid var(--primary); padding: .4rem .9rem; margin: 0 0 .6rem; color: var(--fg-light);">« {{ s.text }} »{% if s.from %}<span style="display: block; font-size: .8rem; color: var(--fg-muted); margin-top: .2rem;">— {{ s.from }}</span>{% endif %}</blockquote>
+        {% endfor %}
+        {% if summary.improvements|length %}
+            <p class="ks-eyebrow" style="margin: 1.25rem 0 .5rem;">{{ t('feedback.membre.grandir', 'Là où vous pourriez grandir') }}</p>
+            {% for s in summary.improvements %}
+                <blockquote style="border-left: 3px solid var(--warning); padding: .4rem .9rem; margin: 0 0 .6rem; color: var(--fg-light);">« {{ s.text }} »{% if s.from %}<span style="display: block; font-size: .8rem; color: var(--fg-muted); margin-top: .2rem;">— {{ s.from }}</span>{% endif %}</blockquote>
+            {% endfor %}
+        {% endif %}
+        <p class="ks-alert ks-alert--info" style="margin-top: 1.25rem;">{{ t('feedback.membre.suite', 'Reportez ce qui vous touche dans votre Plan de Vie (« Dons et talents ») et choisissez un point de croissance pour votre Plan de Croissance. Remerciez celles et ceux qui ont pris le temps de répondre.') }}</p>
+    {% endif %}
+</div>

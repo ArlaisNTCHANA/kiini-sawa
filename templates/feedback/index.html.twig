@@ -3,80 +3,110 @@
 {% block title %}Feedback nourricier{% endblock %}
 
 {% block body %}
-{% set message = 'Bonjour ! J\'avance sur mon Plan de Vie et j\'aimerais connaître ton regard sur moi : quelles qualités tu vois, ce que je fais de mieux, et un point où je pourrais grandir. 3 minutes, anonyme si tu veux : ' ~ url %}
-<div class="ks-page ks-page--narrow" x-data="{ copied: false }">
+{% include 'feedback/_styles.html.twig' %}
+<div class="ks-page ks-page--narrow">
     {% include 'shared/_page_header.html.twig' with {
         eyebrow: 'Mes tests · le regard des autres', icon: 'users',
         title: 'Feedback nourricier',
-        lead: 'Les tests disent comment vous vous voyez ; vos proches voient parfois ce que vous ne voyez pas. Demandez-leur, en toute bienveillance.',
+        lead: t('feedback.membre.intro', 'Les tests disent comment vous vous voyez ; vos proches voient parfois ce que vous ne voyez pas. Demandez-leur, en toute bienveillance.'),
         back: {url: path('app_personality_index'), label: 'Mes tests'},
     } %}
     <div style="max-width: 680px; margin-bottom: 1rem;">{{ book_panel('personnalite') }}{% include 'methode/_figure.html.twig' with {name: 'fig_temoins', alt: 'Les trois témoins : preuve personnelle, résultat d\'un outil, témoignage extérieur', caption: 'les trois témoins', collapsed: true, max: '560px'} only %}</div>
+
+    {% set createForm %}
+        <form method="post" action="{{ path('app_feedback_open') }}">
+            <input type="hidden" name="_csrf_token" value="{{ csrf_token('feedback') }}">
+            {% if needsFirstName %}
+                <div class="ks-field" style="margin-bottom: 1rem;">
+                    <label class="ks-label" for="firstName">{{ t('feedback.membre.prenom', 'Votre prénom, tel que vos proches le verront') }}</label>
+                    <input class="ks-input" id="firstName" name="firstName" maxlength="60" required autocomplete="given-name" style="max-width: 320px;">
+                </div>
+            {% endif %}
+            <label style="display: flex; gap: .6rem; align-items: flex-start; margin-bottom: 1rem; color: var(--fg-light);"><input type="checkbox" name="forceRealName" value="1" style="margin-top: .3rem; accent-color: var(--primary);"> {{ t('feedback.membre.option_prenom', 'Demander à chaque personne d\'indiquer son prénom (sinon, les réponses sont anonymes, ce qui libère souvent la parole)') }}</label>
+            <button type="submit" class="ks-btn ks-btn--{{ request and canExtend ? 'secondary' : 'primary' }}"><i data-lucide="link"></i> {{ request ? t('feedback.membre.nouveau', 'Créer un nouveau lien') : t('feedback.membre.creer', 'Créer mon lien') }}</button>
+            <p style="font-size: .85rem; color: var(--fg-muted); margin: .6rem 0 0;">{{ t('feedback.membre.duree', 'Le lien reste ouvert une semaine. Vous pourrez le prolonger.') }}</p>
+        </form>
+    {% endset %}
 
     {% if not request %}
         <div class="ks-card">
             <h2 class="ks-section-title" style="margin-top: 0;">Comment ça marche</h2>
             <ol style="list-style: decimal; padding-left: 1.3rem; line-height: 1.9; color: var(--fg-light); margin-bottom: 1rem;">
-                <li>Vous créez votre lien personnel.</li>
+                <li>Vous créez votre lien personnel, valable une semaine.</li>
                 <li>Vous l'envoyez à 5 à 10 personnes qui vous connaissent bien : famille, amis, collègues, membres de votre Église.</li>
-                <li>Chacune choisit les qualités qu'elle voit en vous, dit ce que vous faites de mieux, et un point où vous gagneriez à grandir.</li>
+                <li>Chacune choisit les qualités qu'elle voit chez vous, dit ce que vous faites de mieux, et un point où vous gagneriez à grandir.</li>
                 <li>Dès {{ min }} réponses, vous découvrez la synthèse.</li>
             </ol>
-            <form method="post" action="{{ path('app_feedback_open') }}">
-                <input type="hidden" name="_csrf_token" value="{{ csrf_token('feedback') }}">
-                <label style="display: flex; gap: .6rem; align-items: flex-start; margin-bottom: 1rem; color: var(--fg-light);"><input type="checkbox" name="forceRealName" value="1" style="margin-top: .3rem; accent-color: var(--primary);"> Demander à chacun d'indiquer son prénom (sinon, les réponses sont anonymes, ce qui libère souvent la parole)</label>
-                <button type="submit" class="ks-btn ks-btn--primary"><i data-lucide="link"></i> Créer mon lien</button>
-            </form>
+            {{ createForm }}
+        </div>
+    {% elseif open %}
+        <div class="ks-card" style="margin-bottom: 1rem;"
+             x-data="{ tone: 'tu', messages: {{ messages|json_encode|e('html_attr') }}, msg: '', copied: '', canShare: !!navigator.share,
+                       init() { this.msg = this.messages.tu },
+                       setTone(t) { this.tone = t; this.msg = this.messages[t] },
+                       copy(text, what) { const done = () => { this.copied = what; setTimeout(() => this.copied = '', 2500) };
+                           if (navigator.clipboard && window.isSecureContext) { navigator.clipboard.writeText(text).then(done) }
+                           else { const a = document.createElement('textarea'); a.value = text; document.body.appendChild(a); a.select(); document.execCommand('copy'); a.remove(); done() } } }">
+            <p class="ks-eyebrow" style="margin-bottom: .35rem;">Votre lien · {{ request.forceRealName ? 'avec prénom' : 'réponses anonymes' }}</p>
+            <p style="color: var(--fg-light); margin: 0 0 1rem; display: flex; flex-wrap: wrap; align-items: center; gap: .4rem;">{% if request.expiresAt %}<i data-lucide="calendar" style="width: 16px; height: 16px; flex: none;"></i> {{ t('feedback.membre.ouvert_jusqua', 'Ouvert jusqu\'au {date}.', 'text', {date: expiresLabel}) }}{% endif %}
+                {% if canExtend and request.expiresAt and request.expiresAt|date('U') < 'now'|date_modify('+3 days')|date('U') %}<form method="post" action="{{ path('app_feedback_extend') }}" style="display: inline;"><input type="hidden" name="_csrf_token" value="{{ csrf_token('feedback') }}"><button type="submit" class="ks-btn ks-btn--ghost ks-btn--sm" style="padding: .1rem .4rem;">{{ t('feedback.membre.prolonger', 'Prolonger d\'une semaine') }}</button></form>{% endif %}
+            </p>
+
+            <label class="ks-label" for="fb-message">{{ t('feedback.membre.message_titre', 'Votre message, prêt à envoyer') }}</label>
+            <div class="fb-tone" role="group" aria-label="Tutoiement ou vouvoiement">
+                <button type="button" :aria-pressed="tone === 'tu'" @click="setTone('tu')">{{ t('feedback.membre.ton_tu', 'Pour mes proches (tu)') }}</button>
+                <button type="button" :aria-pressed="tone === 'vous'" @click="setTone('vous')">{{ t('feedback.membre.ton_vous', 'Plus formel (vous)') }}</button>
+            </div>
+            <textarea id="fb-message" class="ks-input fb-message" x-model="msg">{{ messages.tu }}</textarea>
+            <p style="font-size: .82rem; color: var(--fg-muted); margin: .35rem 0 0;">{{ t('feedback.membre.message_aide', 'Vous pouvez modifier le texte avant de l\'envoyer. Astuce : envoyez-le à chaque personne séparément plutôt que dans un groupe, chaque personne se sent ainsi invitée personnellement.') }}</p>
+
+            <div class="fb-actions">
+                <a class="ks-btn ks-btn--primary" target="_blank" rel="noopener" :href="'https://wa.me/?text=' + encodeURIComponent(msg)" href="https://wa.me/?text={{ messages.tu|url_encode }}"><i data-lucide="message-circle"></i> {{ t('feedback.membre.whatsapp', 'Envoyer sur WhatsApp') }}</a>
+                <button type="button" class="ks-btn ks-btn--secondary" @click="copy(msg, 'message')"><i data-lucide="copy"></i> <span x-text="copied === 'message' ? 'Message copié ✓' : 'Copier le message'">{{ t('feedback.membre.copier_message', 'Copier le message') }}</span></button>
+                <button type="button" class="ks-btn ks-btn--secondary" x-show="canShare" x-cloak @click="navigator.share({ text: msg }).catch(() => {})"><i data-lucide="share-2"></i> {{ t('feedback.membre.partager', 'Partager…') }}</button>
+                <a class="ks-btn ks-btn--ghost" :href="'mailto:?subject=' + encodeURIComponent({{ emailSubject|json_encode|e('html_attr') }}) + '&body=' + encodeURIComponent(msg)" href="mailto:?subject={{ emailSubject|url_encode }}&body={{ messages.tu|url_encode }}"><i data-lucide="mail"></i> {{ t('feedback.membre.email', 'Par e-mail') }}</a>
+            </div>
+
+            <div style="display: flex; gap: .6rem; flex-wrap: wrap; margin-top: 1.1rem; padding-top: 1rem; border-top: 1px solid var(--border);">
+                <input class="ks-input" style="flex: 1; min-width: 200px; font-size: .85rem;" value="{{ url }}" readonly aria-label="Votre lien">
+                <button type="button" class="ks-btn ks-btn--ghost ks-btn--sm" @click="copy({{ url|json_encode|e('html_attr') }}, 'lien')"><span x-text="copied === 'lien' ? 'Lien copié ✓' : 'Copier le lien seul'">Copier le lien seul</span></button>
+            </div>
         </div>
     {% else %}
         <div class="ks-card" style="margin-bottom: 1rem;">
-            <p class="ks-eyebrow" style="margin-bottom: .5rem;">Votre lien · {{ request.forceRealName ? 'avec prénom' : 'réponses anonymes' }}</p>
-            <div style="display: flex; gap: .6rem; flex-wrap: wrap;">
-                <input class="ks-input" style="flex: 1; min-width: 220px;" value="{{ url }}" readonly>
-                <button type="button" class="ks-btn ks-btn--secondary" @click="navigator.clipboard.writeText('{{ url|e('js') }}'); copied = true; setTimeout(() => copied = false, 2000)"><span x-text="copied ? 'Copié ✓' : 'Copier'">Copier</span></button>
-            </div>
-            <div style="display: flex; gap: .6rem; flex-wrap: wrap; margin-top: 1rem;">
-                <a class="ks-btn ks-btn--primary" style="background: #25D366;" target="_blank" rel="noopener" href="https://wa.me/?text={{ message|url_encode }}"><i data-lucide="message-circle"></i> Demander sur WhatsApp</a>
-                <a class="ks-btn ks-btn--secondary" href="mailto:?subject={{ 'J\'aimerais ton regard sur moi'|url_encode }}&body={{ message|url_encode }}"><i data-lucide="mail"></i> Par email</a>
-            </div>
-        </div>
-
-        <div class="ks-card" style="margin-bottom: 1rem;">
-            <div style="display: flex; justify-content: space-between; align-items: baseline;">
-                <h2 class="ks-section-title" style="margin-top: 0;">Ce que vos proches voient en vous</h2>
-                <span class="ks-badge">{{ summary.count }} réponse{{ summary.count > 1 ? 's' }}</span>
-            </div>
-            {% if not summary.detail %}
-                <div class="ks-empty" style="padding: 1.5rem 0;">
-                    <div class="ks-empty__icon"><i data-lucide="hourglass" style="width: 24px; height: 24px;"></i></div>
-                    <p class="ks-empty__text">Encore {{ min - summary.count }} réponse{{ min - summary.count > 1 ? 's' }} avant de découvrir la synthèse. Ce seuil protège l'anonymat de ceux qui répondent.</p>
-                </div>
-            {% else %}
-                {% set top = summary.qualities|keys|slice(0, 1)|first %}
-                <p class="ks-eyebrow" style="margin: .5rem 0;">Les qualités les plus citées</p>
-                <div style="display: flex; flex-wrap: wrap; gap: .5rem; margin-bottom: 1.25rem;">
-                    {% for q, n in summary.qualities %}
-                        <span class="ks-badge" style="font-size: {{ n > 1 ? (0.8 + n * 0.08)|round(2) : 0.8 }}rem; padding: .3rem .75rem;">{{ q }} · {{ n }}</span>
-                    {% endfor %}
-                </div>
-                <p class="ks-eyebrow" style="margin-bottom: .5rem;">Ce que vous faites de mieux</p>
-                {% for s in summary.strengths %}
-                    <blockquote style="border-left: 3px solid var(--primary); padding: .4rem .9rem; margin: 0 0 .6rem; color: var(--fg-light);">« {{ s.text }} »{% if s.from %}<span style="display: block; font-size: .8rem; color: var(--fg-muted); margin-top: .2rem;">— {{ s.from }}</span>{% endif %}</blockquote>
-                {% endfor %}
-                {% if summary.improvements|length %}
-                    <p class="ks-eyebrow" style="margin: 1.25rem 0 .5rem;">Là où vous pourriez grandir</p>
-                    {% for s in summary.improvements %}
-                        <blockquote style="border-left: 3px solid var(--warning); padding: .4rem .9rem; margin: 0 0 .6rem; color: var(--fg-light);">« {{ s.text }} »{% if s.from %}<span style="display: block; font-size: .8rem; color: var(--fg-muted); margin-top: .2rem;">— {{ s.from }}</span>{% endif %}</blockquote>
-                    {% endfor %}
-                {% endif %}
-                <p class="ks-alert ks-alert--info" style="margin-top: 1.25rem;">Reportez ce qui vous touche dans votre Plan de Vie (« Dons et talents ») et choisissez un point de croissance pour votre Plan de Croissance. Remerciez ceux qui ont pris le temps de répondre.</p>
+            <p class="ks-eyebrow" style="margin-bottom: .35rem;">{{ request.isActive ? 'Lien arrivé à son terme' : 'Demande fermée' }}</p>
+            <p style="color: var(--fg-light); margin: 0 0 1rem;">
+                {% if request.isActive %}{{ t('feedback.membre.termine', 'Votre lien n\'accepte plus de réponses depuis le {date}. Vos résultats restent ci-dessous.', 'text', {date: expiresLabel}) }}
+                {% else %}{{ t('feedback.membre.ferme', 'Vous avez fermé cette demande. Vos résultats restent ci-dessous.') }}{% endif %}
+            </p>
+            {% if canExtend %}
+                <form method="post" action="{{ path('app_feedback_extend') }}" style="margin-bottom: 1rem;"><input type="hidden" name="_csrf_token" value="{{ csrf_token('feedback') }}"><button type="submit" class="ks-btn ks-btn--primary"><i data-lucide="calendar-plus"></i> {{ t('feedback.membre.rouvrir', 'Rouvrir ce lien une semaine') }}</button></form>
             {% endif %}
+            {{ createForm }}
         </div>
+    {% endif %}
 
+    {% if request %}
+        {% include 'feedback/_summary.html.twig' %}
+    {% endif %}
+
+    {% if open %}
         <form method="post" action="{{ path('app_feedback_close') }}">
             <input type="hidden" name="_csrf_token" value="{{ csrf_token('feedback') }}">
-            <button type="submit" class="ks-btn ks-btn--ghost" style="padding-left: 0;" onclick="return confirm('Fermer cette demande ? Le lien ne fonctionnera plus.')">Fermer cette demande</button>
+            <button type="submit" class="ks-btn ks-btn--ghost" style="padding-left: 0;" onclick="return confirm('Fermer cette demande ? Le lien ne fonctionnera plus ; vos résultats resteront visibles.')">Fermer cette demande</button>
         </form>
+    {% endif %}
+
+    {% if past is not empty %}
+        <div class="ks-card" style="margin-top: 1rem;">
+            <h2 class="ks-section-title" style="margin-top: 0;">{{ t('feedback.membre.passees', 'Mes demandes précédentes') }}</h2>
+            <ul class="fb-past">
+                {% for p in past %}
+                    <li><span>Demande du {{ p.request.createdAt|format_date(pattern: 'd MMMM y', locale: 'fr') }} · {{ p.count }} réponse{{ p.count > 1 ? 's' }}</span>
+                        <a href="{{ path('app_feedback_past', {id: p.request.id}) }}" class="ks-btn ks-btn--ghost ks-btn--sm">Voir</a></li>
+                {% endfor %}
+            </ul>
+        </div>
     {% endif %}
 </div>
 {% endblock %}

@@ -9,6 +9,44 @@ teste (`php bin/phpunit`), commit, déploie (`bin/ops/envoyer-hostinger.sh`), v�
 journal `var/log/prod-AAAA-MM-JJ.log` sans erreur) ; **le fondateur fait lui-même `git push`** (refusé à l'IA).
 Ne jamais afficher ni demander de mot de passe ; ne pas publier son nom (mentions légales en attente).
 
+## 24/11/2026 — Feedback nourricier soigné : une porte d'entrée vers KIINI SAWA
+
+- **Demande du fondateur** : soigner le feedback nourricier, car celles et ceux qui reçoivent le lien découvrent KIINI SAWA
+  à cette occasion ; textes « il ou elle » alors que l'application ne connaît pas le sexe ; lien qui expire (1 semaine) ;
+  texte prêt à coller dans WhatsApp ; avis sur un visuel. Constat présenté avant de coder ; accord « Oui » (sans changement
+  au final). Question annexe du fondateur (demander sexe et date de naissance) : réponse donnée, **pas de question sur le
+  sexe** (tournures neutres), **date de naissance = chantier séparé à venir** (âge minimum des CGU + message d'anniversaire).
+- **Bug grave corrigé** : après « Envoyer mon regard », la page ne changeait pas (Turbo refuse une réponse 200 à un POST :
+  « Form responses must redirect »). La réponse était enregistrée, mais la personne ne voyait ni le merci ni l'invitation à
+  découvrir KIINI SAWA. Désormais redirection vers `/avis/{jeton}/merci`. **Même schéma probable dans
+  `personnalite/confirmation`** (`ConfirmationController` rend `thanks` en 200 après POST) : non corrigé ici.
+- **Fait** (détail : `docs/modules/feedback.md`) :
+  - lien valable 7 jours (`FeedbackRequest::expiresAt`, migration `Version20261124061530` : les liens ouverts reçoivent
+    7 jours à partir de la mise à jour), prolongation d'une semaine (plafond 21 jours devant soi), lien terminé rouvrable,
+    résultats gardés après la fin ou la fermeture, demandes précédentes consultables ;
+  - message prêt à envoyer en « tu » / « vous », modifiable, boutons WhatsApp, Copier, Partager, e-mail, Copier le lien
+    (textes dans `FeedbackTexts`, modifiables dans Admin › Textes du site) ; prénom demandé avant de créer le lien ;
+  - pages publiques refaites (bandeau réduit, repères 3 minutes / anonymat / date limite, qualités choisies bien visibles,
+    bouton pleine largeur sur téléphone), merci + invitation discrète, page « lien terminé » (410) et lien inconnu (404) ;
+  - qualités en noms (Générosité, Courage…) et liens neutres (« Vous connaissez Marie par… La famille, L'amitié… ») ;
+    anciennes réponses converties à l'affichage ; plus aucun « il ou elle » ni « (e) » dans ces pages ;
+  - aperçu WhatsApp : balises Open Graph + image 1200 × 630 (`assets/images/partage/feedback-nourricier.jpg`) ;
+  - notifications quotidiennes (dans `app:reminders:send`) : lien arrivé à son terme, rappel s'il manque des réponses ;
+  - « il ou elle » retirés aussi de la **redevabilité** (5 gabarits, 1 message, écran mobile) ;
+  - **mobile** : écran natif `app/feedback` (l'entrée du menu ouvrait « Mes tests ») + API `/api/mobile/v1/feedback`
+    (`docs/api-mobile.md` §16), WhatsApp et feuille de partage du téléphone (pas de nouvelle dépendance), notifications
+    routées vers l'écran.
+- **Choix** : image d'aperçu commune à tous (le titre de l'aperçu porte déjà le prénom) ; pas d'image à télécharger.
+  WhatsApp garde en cache l'aperçu d'un lien : chaque lien étant unique, pas de souci.
+- **Tests** : `tests/Feedback/FeedbackTest.php` (7 scénarios : parcours complet avec redirection, doublons, lien fermé /
+  inconnu, expiration / prolongation / historique, prénom obligatoire, messages, anciennes qualités, tâche quotidienne),
+  `tests/Mobile/MobileFeedbackTest.php`, `AntiSpamTest` adapté (la limite passe avant tout traitement d'un envoi), page de remerciement ajoutée aux pages publiques de `SecurityGuardsTest`. Suite complète **553 / 553**.
+  Mobile : `tsc` OK, Vitest 40/40 (`__tests__/feedbackShare.test.ts`, routage des notifications).
+- **Vérifié en local** dans un navigateur au format téléphone (375 px) : page invitée, qualités cochées, envoi → merci,
+  lien expiré, page du membre (message, WhatsApp). Captures : `../captures-feedback/` (avant) et `../captures-feedback/apres/`.
+- **Reste** : rien n'est poussé ni déployé (la migration partira avec le prochain déploiement) ; la confirmation de
+  personnalité par les proches a sans doute le même bug d'envoi ; chantier « date de naissance » à lancer.
+
 ## 24/11/2026 — L'Académie, Lot 4 : application mobile
 
 - **Demande du fondateur** : « Non, passer au Lot 4 » (le dernier rappel de redevabilité la veille n'est pas retenu).

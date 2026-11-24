@@ -125,7 +125,7 @@ class AccountabilityController extends AbstractController
         $data = $this->formData($request) + ['consent' => $request->request->getBoolean('consent')];
         try {
             $c = $this->service->create($this->user(), $data);
-            $this->addFlash('success', 'Engagement créé. '.$c->getPartnerName().' a reçu une invitation : rien d\'autre ne lui sera envoyé tant qu\'il ou elle n\'aura pas accepté.');
+            $this->addFlash('success', 'Engagement créé. '.$c->getPartnerName().' a reçu une invitation : rien d\'autre ne sera envoyé tant que l\'invitation n\'aura pas été acceptée.');
         } catch (\InvalidArgumentException|\DomainException $e) {
             $this->addFlash('error', $e->getMessage());
 

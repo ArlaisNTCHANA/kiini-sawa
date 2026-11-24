@@ -1,0 +1,12 @@
+{% extends 'base.html.twig' %}
+{% block title %}Feedback nourricier{% endblock %}
+{% block body %}
+<div class="ks-page ks-page--narrow">
+    {% include 'shared/_page_header.html.twig' with {
+        eyebrow: 'Mes tests · le regard des autres', icon: 'users',
+        title: 'Demande du ' ~ request.createdAt|format_date(pattern: 'd MMMM y', locale: 'fr'),
+        back: {url: path('app_feedback'), label: 'Feedback nourricier'},
+    } %}
+    {% include 'feedback/_summary.html.twig' %}
+</div>
+{% endblock %}

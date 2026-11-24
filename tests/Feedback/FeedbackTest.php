@@ -4,6 +4,8 @@ namespace App\Tests\Feedback;
 
 use App\Compte\Repository\UserRepository;
 use App\Feedback\Entity\AppFeedback;
+use App\Feedback\Entity\CommunityFeedback;
+use App\Notification\Entity\Notification;
 use App\Feedback\Service\FeedbackService;
 use App\Tests\Compte\AccountTestTrait;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
@@ -18,66 +20,234 @@ class FeedbackTest extends WebTestCase
     public function testFriendsAnswerAndSummaryAppearsAfterThreeAnswers(): void
     {
         $client = static::createClient();
-        $owner = $this->createUser();
-        $profile = $owner->getUserProfile() ?? (new \App\Compte\Entity\UserProfile())->setUser($owner);
-        $profile->setFirstName('Abigaïl');
-        $this->em()->persist($profile);
-        $owner->setIsOnboardingCompleted(true);
-        $this->em()->flush();
+        $owner = $this->ownerNamed('Abigaïl');
         $client->loginUser($owner);
 
         $client->request('GET', '/mes-tests/feedback');
         $client->submitForm('Créer mon lien');
-        $request = static::getContainer()->get(FeedbackService::class)->activeRequest($owner);
+        $request = $this->service()->activeRequest($owner);
         $this->assertNotNull($request);
+        $this->assertEqualsWithDelta((new \DateTimeImmutable('+7 days'))->getTimestamp(), $request->getExpiresAt()->getTimestamp(), 120, 'lien valable une semaine');
+        $client->followRedirect();
+        $this->assertSelectorTextContains('main', 'Votre message, prêt à envoyer');
+        $this->assertSelectorTextContains('main', 'Envoyer sur WhatsApp');
         $client->request('POST', '/logout', ['_csrf_token' => \App\Tests\Support\FixedCsrfTokenManager::VALUE]);
 
         // Trois proches répondent (sessions différentes)
-        foreach ([['Fiable', 'Patient'], ['Fiable', 'Sage'], ['Fiable', 'Courageux']] as $i => $qualities) {
+        foreach ([['Fiabilité', 'Patience'], ['Fiabilité', 'Sagesse'], ['Fiabilité', 'Courage']] as $i => $qualities) {
             $client->getCookieJar()->clear();
             $crawler = $client->request('GET', '/avis/'.$request->getToken());
             $this->assertResponseIsSuccessful();
             $this->assertSelectorTextContains('h1', 'Abigaïl aimerait votre regard');
+            $html = (string) $client->getResponse()->getContent();
+            $this->assertStringNotContainsString('lui ou en elle', $html, 'tournures neutres : l\'application ne connaît pas le sexe');
+            $this->assertStringNotContainsString('vu(e)', $html);
+            $this->assertStringContainsString('og:image', $html, 'aperçu du lien dans WhatsApp');
+            $this->assertStringContainsString('Abigaïl aimerait votre regard', $crawler->filter('meta[property="og:title"]')->attr('content'));
             $form = $crawler->selectButton('Envoyer mon regard')->form();
             foreach ($qualities as $q) {
                 $form['qualities'][array_search($q, FeedbackService::QUALITIES, true)]->tick();
             }
             $client->submit($form, ['strengths' => 'Force numéro '.$i, 'improvements' => 2 === $i ? 'Oser dire non' : '']);
+            // Redirection après l'envoi : sans elle, Turbo laissait le formulaire affiché (la personne croyait que rien n'était parti)
+            $this->assertResponseRedirects('/avis/'.$request->getToken().'/merci');
+            $client->followRedirect();
             $this->assertSelectorTextContains('main', 'Merci pour votre regard');
+            $this->assertSelectorTextContains('main', 'Découvrir KIINI SAWA');
             if (1 === $i) {
-                $summary = static::getContainer()->get(FeedbackService::class)->summary($request);
-                $this->assertFalse($summary['detail'], 'Pas de détail avant 3 réponses');
+                $this->assertFalse($this->service()->summary($request)['detail'], 'Pas de détail avant 3 réponses');
             }
         }
 
         $client->loginUser(static::getContainer()->get(UserRepository::class)->find($owner->getId()));
         $client->request('GET', '/mes-tests/feedback');
         $this->assertSelectorTextContains('main', '3 réponses');
-        $this->assertSelectorTextContains('main', 'Fiable · 3');
+        $this->assertSelectorTextContains('main', 'Fiabilité · 3');
         $this->assertSelectorTextContains('main', 'Oser dire non');
     }
 
     public function testValidationAndDuplicatesAndClosedLinks(): void
     {
         $client = static::createClient();
-        $owner = $this->createUser();
-        $service = static::getContainer()->get(FeedbackService::class);
+        $owner = $this->ownerNamed('Samuel');
+        $service = $this->service();
         $request = $service->open($owner, false);
 
         $this->assertNotEmpty($service->submit($request, ['qualities' => [], 'strengths' => '']));
         $this->assertNotEmpty($service->submit($request, ['qualities' => \array_slice(FeedbackService::QUALITIES, 0, 6), 'strengths' => 'x']), 'Au plus 5 qualités');
+        $this->assertNotEmpty($service->submit($request, ['qualities' => ['Généreux'], 'strengths' => 'x']), 'les anciennes qualités ne sont plus acceptées');
 
         $crawler = $client->request('GET', '/avis/'.$request->getToken());
         $form = $crawler->selectButton('Envoyer mon regard')->form();
         $form['qualities'][0]->tick();
         $client->submit($form, ['strengths' => 'Très à l\'écoute']);
         $client->request('GET', '/avis/'.$request->getToken());
-        $this->assertSelectorTextContains('main', 'déjà répondu');
+        $this->assertResponseRedirects('/avis/'.$request->getToken().'/merci', null, 'une deuxième visite mène au remerciement');
 
-        $fresh = static::getContainer()->get(FeedbackService::class);
+        // Sans réponse depuis ce navigateur, la page de remerciement renvoie au formulaire
+        $client->getCookieJar()->clear();
+        $client->request('GET', '/avis/'.$request->getToken().'/merci');
+        $this->assertResponseRedirects('/avis/'.$request->getToken());
+
+        $fresh = $this->service();
         $fresh->close($fresh->findOpen($request->getToken()));
         $client->request('GET', '/avis/'.$request->getToken());
+        $this->assertResponseStatusCodeSame(410);
+        $this->assertSelectorTextContains('main', 'Samuel a clôturé cette demande');
+        $this->assertSelectorTextContains('main', 'Découvrir KIINI SAWA');
+
+        $client->request('GET', '/avis/'.str_repeat('0', 24));
         $this->assertResponseStatusCodeSame(404);
+        $this->assertSelectorTextContains('main', 'n\'existe pas ou n\'est plus actif');
+    }
+
+    public function testExpiredLinkKeepsResultsAndCanBeExtendedOrRenewed(): void
+    {
+        $client = static::createClient();
+        $owner = $this->ownerNamed('Esther');
+        $service = $this->service();
+        $request = $service->open($owner, false);
+        $this->assertSame([], $service->submit($request, ['qualities' => ['Joie'], 'strengths' => 'Sa joie communicative']));
+        $request->setExpiresAt(new \DateTimeImmutable('-1 hour'));
+        $this->em()->flush();
+
+        // La personne invitée voit une page claire, et ne peut plus répondre
+        $client->request('GET', '/avis/'.$request->getToken());
+        $this->assertResponseStatusCodeSame(410);
+        $this->assertSelectorTextContains('main', 'Le délai pour répondre à Esther est passé');
+        $this->assertNotEmpty($service->submit($request, ['qualities' => ['Joie'], 'strengths' => 'Trop tard']));
+        $this->assertNull($service->activeRequest($owner));
+
+        // Le membre garde ses résultats et peut rouvrir le lien une semaine
+        $client->loginUser($owner);
+        $client->request('GET', '/mes-tests/feedback');
+        $this->assertSelectorTextContains('main', 'n\'accepte plus de réponses');
+        $this->assertSelectorTextContains('main', '1 réponse');
+        $client->submitForm('Rouvrir ce lien une semaine');
+        $this->em()->clear();
+        $reopened = $this->service()->findOpen($request->getToken());
+        $this->assertNotNull($reopened, 'le même lien fonctionne de nouveau');
+        $this->assertGreaterThan(new \DateTimeImmutable('+6 days'), $reopened->getExpiresAt());
+
+        // Prolongation plafonnée : jamais plus de 3 semaines devant soi
+        $this->assertTrue($this->service()->extend($reopened));
+        $this->assertTrue($this->service()->extend($reopened));
+        $this->assertFalse($this->service()->extend($reopened));
+        $this->assertLessThanOrEqual((new \DateTimeImmutable('+21 days'))->getTimestamp(), $reopened->getExpiresAt()->getTimestamp());
+
+        // Une demande fermée ne se prolonge pas ; un nouveau lien la remplace, l'ancienne reste consultable
+        $this->service()->close($reopened);
+        $this->assertFalse($this->service()->extend($reopened));
+        $client->request('GET', '/mes-tests/feedback');
+        $this->assertSelectorTextContains('main', 'Vous avez fermé cette demande');
+        $client->submitForm('Créer un nouveau lien');
+        $client->followRedirect();
+        $new = $this->service()->activeRequest($owner);
+        $this->assertNotSame($request->getToken(), $new->getToken());
+        $this->assertSelectorTextContains('main', 'Mes demandes précédentes');
+        $client->request('GET', '/mes-tests/feedback/demande/'.$request->getId());
+        $this->assertResponseIsSuccessful();
+        $this->assertSelectorTextContains('main', '1 réponse');
+
+        // Les demandes d'un autre membre restent privées
+        $client->loginUser($this->ownerNamed('Autre'));
+        $client->request('GET', '/mes-tests/feedback/demande/'.$request->getId());
+        $this->assertResponseStatusCodeSame(404);
+    }
+
+    public function testTheFirstNameIsAskedBeforeCreatingTheLink(): void
+    {
+        $client = static::createClient();
+        $owner = $this->createUser();
+        $owner->setIsOnboardingCompleted(true);
+        $this->em()->flush();
+        $client->loginUser($owner);
+
+        $client->request('GET', '/mes-tests/feedback');
+        $this->assertSelectorExists('input[name="firstName"]');
+        $client->submitForm('Créer mon lien', ['firstName' => '']);
+        $this->assertNull($this->service()->activeRequest($owner), 'sans prénom, les proches verraient le début de l\'adresse e-mail');
+        $client->request('GET', '/mes-tests/feedback');
+        $client->submitForm('Créer mon lien', ['firstName' => 'Noémie']);
+        $this->assertNotNull($this->service()->activeRequest($owner));
+        $this->em()->clear();
+        $this->assertSame('Noémie', static::getContainer()->get(UserRepository::class)->find($owner->getId())->getUserProfile()->getFirstName());
+    }
+
+    public function testShareMessagesAreReadyToPaste(): void
+    {
+        static::createClient();
+        $service = $this->service();
+        $request = $service->open($this->ownerNamed('Paul'), false);
+        $url = 'https://kiinisawa.com/avis/'.$request->getToken();
+
+        $tu = $service->shareMessage($request, $url, 'tu');
+        $this->assertStringContainsString($url, $tu);
+        $this->assertStringContainsString('ton regard', $tu);
+        $this->assertStringContainsString('tu peux rester anonyme', $tu);
+        $this->assertStringContainsString(FeedbackService::frenchDate($request->getExpiresAt()), $tu);
+        $vous = $service->shareMessage($request, $url, 'vous');
+        $this->assertStringContainsString('votre regard', $vous);
+
+        $request->setForceRealName(true);
+        $this->assertStringNotContainsString('anonyme', $service->shareMessage($request, $url, 'tu'), 'pas de promesse d\'anonymat si le prénom est demandé');
+
+        $this->assertSame('mardi 1er décembre', FeedbackService::frenchDate(new \DateTimeImmutable('2026-12-01')));
+        $this->assertSame('jeudi 3 décembre', FeedbackService::frenchDate(new \DateTimeImmutable('2026-12-03')));
+    }
+
+    public function testOldAnswersWithAdjectivesAreShownAsNouns(): void
+    {
+        static::createClient();
+        $service = $this->service();
+        $request = $service->open($this->ownerNamed('Ruth'), true);
+        $old = (new CommunityFeedback())->setUser($request->getUser())->setFeedbackRequest($request)->setRelationship('ami')
+            ->setQualities(json_encode(['Généreux', 'Drôle'], \JSON_UNESCAPED_UNICODE))->setStrengths('Toujours là')->setIsAnonymous(true);
+        $this->em()->persist($old);
+        $this->em()->flush();
+
+        $summary = $service->summary($request);
+        $this->assertSame(['Générosité' => 1, 'Humour' => 1], $summary['qualities']);
+    }
+
+    public function testDailyChecksTellTheMemberWhenTheLinkEndsOrNeedsAReminder(): void
+    {
+        static::createClient();
+        $service = $this->service();
+        $ended = $service->open($this->ownerNamed('Marthe'), false);
+        $ended->setExpiresAt(new \DateTimeImmutable('-2 hours'));
+        $quiet = $service->open($this->ownerNamed('Jonas'), false);
+        $this->em()->getConnection()->executeStatement('UPDATE feedback_request SET created_at = :d WHERE id = :id', ['d' => (new \DateTime('-4 days'))->format('Y-m-d H:i:s'), 'id' => $quiet->getId()]);
+        $this->em()->flush();
+
+        $first = $service->runDailyChecks(new \DateTimeImmutable('today'));
+        $this->assertGreaterThanOrEqual(1, $first['fin']);
+        $this->assertGreaterThanOrEqual(1, $first['relance']);
+        $notifications = $this->em()->getRepository(Notification::class);
+        $this->assertNotNull($notifications->findOneBy(['user' => $ended->getUser(), 'metadata' => 'feedback-fin-'.$ended->getId().'-'.$ended->getExpiresAt()->format('Ymd')]));
+        $this->assertNotNull($notifications->findOneBy(['user' => $quiet->getUser(), 'metadata' => 'feedback-relance-'.$quiet->getId()]));
+
+        $again = $service->runDailyChecks(new \DateTimeImmutable('today'));
+        $this->assertNull($notifications->findOneBy(['user' => $ended->getUser(), 'metadata' => 'feedback-fin-'.$ended->getId().'-x']));
+        $this->assertSame(1, $notifications->count(['user' => $quiet->getUser(), 'metadata' => 'feedback-relance-'.$quiet->getId()]), 'pas de doublon');
+    }
+
+    private function service(): FeedbackService
+    {
+        return static::getContainer()->get(FeedbackService::class);
+    }
+
+    private function ownerNamed(string $firstName): \App\Compte\Entity\User
+    {
+        $owner = $this->createUser();
+        $profile = $owner->getUserProfile() ?? (new \App\Compte\Entity\UserProfile())->setUser($owner);
+        $profile->setFirstName($firstName);
+        $owner->setUserProfile($profile);
+        $this->em()->persist($profile);
+        $owner->setIsOnboardingCompleted(true);
+        $this->em()->flush();
+
+        return $owner;
     }
 
     public function testAppFeedbackReachesTheAdmin(): void

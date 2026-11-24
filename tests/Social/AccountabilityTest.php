@@ -51,7 +51,7 @@ class AccountabilityTest extends WebTestCase
             'why' => 'Avoir de l\'énergie pour ma famille', 'connectionId' => 0, 'partnerName' => 'Paul', 'partnerEmail' => 'paul-'.uniqid().'@exemple.org',
         ]);
         $this->assertResponseIsSuccessful();
-        $this->assertSelectorTextContains('main', 'Rien d\'autre ne lui sera envoyé tant qu\'il ou elle n\'aura pas accepté');
+        $this->assertSelectorTextContains('main', 'Rien d\'autre ne sera envoyé tant que l\'invitation n\'aura pas été acceptée');
         $this->assertSelectorTextContains('main', 'vous recevrez une copie');
         $this->assertSelectorTextContains('main', 'Courir trois fois par semaine');
         $this->assertSelectorExists('input[name="consent"][required]');

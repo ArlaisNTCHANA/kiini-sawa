@@ -167,9 +167,9 @@ class AntiSpamTest extends WebTestCase
             $client->request('POST', $url, ['website' => 'robot'], server: ['REMOTE_ADDR' => $ip]);
             $statuses[] = $client->getResponse()->getStatusCode();
         }
-        $this->assertSame(200, $statuses[0]);
+        $this->assertSame(302, $statuses[0], 'le robot est renvoyé vers le remerciement, sans rien enregistrer');
         $this->assertSame(429, $statuses[11], 'au-delà de 10 envois en 10 minutes pour un même lien : 429');
-        $this->assertSame(10, \count(array_filter($statuses, fn ($c) => 200 === $c)));
+        $this->assertSame(10, \count(array_filter($statuses, fn ($c) => 302 === $c)));
     }
 
     public function testTheLimiterIsPerKey(): void
