@@ -33,6 +33,15 @@ final class BookFigures
                 ['ENVIRONNEMENT', 'Environnement', 'church', 'var(--fg-muted)', 'Ta communauté, ton église, ton cercle social', [['Son rôle', 'Façonner ton climat quotidien'], ['Exemple biblique', 'L\'Église d\'Antioche']]],
             ],
         ],
+        'fig_temoins' => [
+            'title' => 'Les trois témoins', 'chapter' => 'CHAP_12',
+            'hint' => 'Toucher un témoin. Quand les trois témoins concordent, ta conviction devient une certitude. Quand ils se contredisent, tu as découvert quelque chose de précieux : un angle mort.',
+            'items' => [
+                ['PREUVE', 'La preuve personnelle', 'footprints', 'var(--primary-dark)', 'Un acte concret que tu as posé', [['Exemple pour « je suis un leader empathique »', 'J\'ai pris le temps d\'écouter chaque membre de l\'équipe avant la décision']]],
+                ['OUTIL', 'Le résultat d\'un outil', 'clipboard-list', 'var(--primary)', 'Une donnée issue d\'un test ou d\'une mesure sérieuse', [['Exemple pour « je suis un leader empathique »', 'Mon résultat au test de personnalité montre une agréabilité élevée']]],
+                ['TEMOIGNAGE', 'Le témoignage extérieur', 'users', 'var(--gold)', 'Ce que les autres ont vu et confirmé', [['Exemple pour « je suis un leader empathique »', 'Deux collègues m\'ont dit qu\'ils se sentaient écoutés en réunion']]],
+            ],
+        ],
         'fig_heritage' => [
             'title' => 'Les trois héritages', 'chapter' => 'CHAP_20',
             'hint' => 'Toucher une dimension pour voir la question à se poser.',

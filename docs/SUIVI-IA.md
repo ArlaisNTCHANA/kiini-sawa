@@ -9,6 +9,43 @@ teste (`php bin/phpunit`), commit, déploie (`bin/ops/envoyer-hostinger.sh`), v�
 journal `var/log/prod-AAAA-MM-JJ.log` sans erreur) ; **le fondateur fait lui-même `git push`** (refusé à l'IA).
 Ne jamais afficher ni demander de mot de passe ; ne pas publier son nom (mentions légales en attente).
 
+## 24/11/2026 — Feedback nourricier : page du membre refaite, schéma des trois témoins, questions « en un mot »
+
+- **Demande du fondateur** (accord donné pour commiter et mettre en ligne) : revoir le design de `/mes-tests/feedback`
+  (le cadre du schéma n'avait pas la même largeur que le reste), expliquer le schéma du livre « les trois témoins » de
+  façon interactive, enrichir le texte. En cours de chantier : ajouter au formulaire des proches « Si vous deviez le
+  décrire en un mot » et « en un mot, ce qu'il n'est pas », permettre d'ajouter des qualités absentes de la liste,
+  présenter un peu KIINI SAWA et le schéma des trois témoins aux proches en y situant leur regard.
+- **Source** : livre, chapitre 12 « Confirmations » (tableau des trois témoins, Barnabas, « Choisis des personnes qui
+  t'aiment assez… ») et chapitre 23 (« Le regard : le feedback nourricier » : recevoir, filtrer, demander ; Proverbes 27:6 ;
+  banque de découvertes). Citations du livre laissées en « tu », textes de l'application en « vous ».
+- **Fait** (détail : `docs/modules/feedback.md`) :
+  - `feedback/_temoins.html.twig` : les trois cercles de la figure du livre (SVG, couleurs en variables), « Certitude »
+    au centre, touchables au doigt ou à la souris, plus trois onglets (`role="tab"`, flèches gauche/droite) ; pour
+    chaque témoin : définition et exemple **du livre mot pour mot** (`BookFigures::FIGURES['fig_temoins']`, contrôlé par
+    `BookFiguresTest`), puis « Dans KIINI SAWA » et « Avec le feedback nourricier » (textes `feedback.temoins.*`) ;
+    « quand ils concordent / se contredisent » ; image d'origine du livre toujours consultable (repliée).
+  - `feedback/index.html.twig` : tous les blocs à la largeur de la page ; nouvelles sections « Pourquoi demander le regard
+    des autres ? », « Bien choisir les personnes », « Ce que vos proches verront », « Ce que vous recevrez », « Relire avec
+    bienveillance », « Pour aller plus loin » (encart du chapitre 8 conservé + chapitres 12 et 23). Première demande :
+    explications puis « Comment ça marche » + bouton ; ensuite : lien et résultats d'abord. Rien de l'ancienne page retiré
+    (étapes, formulaire, partage, prolonger, fermer, demandes précédentes). Textes en `t()` (Admin › Textes du site).
+  - Formulaire des proches (`form.html.twig`) : qualités ajoutées avec ses propres mots (3 au plus, comptées dans les 5,
+    une qualité de la liste tapée à la main coche celle de la liste) ; deux questions facultatives « en un mot » (rangées en
+    JSON dans la colonne **existante et inutilisée** `community_feedback.answers` : **pas de migration**) ; schéma des trois
+    témoins replié en haut (« votre regard ») ; présentation repliée « KIINI SAWA, qu'est-ce que c'est ? » en bas
+    (réponse au fondateur : oui, mais brièvement et après le formulaire, pour ne pas détourner la personne de sa réponse).
+  - Synthèse : « En un mot, vous êtes… » et « En un mot, vous n'êtes pas… », mots regroupés sans tenir compte des
+    majuscules ni des accents ; API mobile : `summary.words` et `summary.notWords` (ajout, `docs/api-mobile.md` §16) —
+    **l'écran mobile ne les affiche pas encore**.
+- **Tests** : `FeedbackTest::testMemberPageExplainsTheThreeWitnesses` (onglets, cercles, texte du livre, sections, une
+  seule action principale, plus de cadre à 680 px) et `testOwnQualitiesAndOneWordAnswers` (qualités ajoutées, doublons,
+  plafond de 3, regroupement des mots, affichage). Suite complète **565 / 565**.
+- **Vérifié en local** (ordinateur 1200 px et téléphone 375 px) : largeurs identiques (780 px / 335 px), pas de
+  défilement horizontal, cercles et onglets, clavier, ajout d'une qualité, envoi complet (réponse enregistrée avec la
+  qualité ajoutée et les deux mots), aucune erreur dans la console. Données de test locales supprimées ensuite.
+- **Reste** : afficher les mots dans l'écran mobile `app/feedback` ; vrai téléphone non essayé (émulation seulement).
+
 ## 24/11/2026 — Date de naissance : âge minimum et message d'anniversaire
 
 - **Demande du fondateur** (validée pendant le chantier du feedback nourricier) : date de naissance pour l'âge minimum

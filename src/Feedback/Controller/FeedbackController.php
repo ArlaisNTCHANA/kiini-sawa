@@ -152,7 +152,7 @@ class FeedbackController extends AbstractController
             return $this->render('feedback/closed.html.twig', ['firstName' => $owner->getDisplayName(), 'expired' => $feedbackRequest->isActive()], new Response(status: 410));
         }
         $errors = [];
-        $data = ['relationship' => '', 'qualities' => [], 'strengths' => '', 'improvements' => '', 'name' => ''];
+        $data = ['relationship' => '', 'qualities' => [], 'otherQualities' => [], 'word' => '', 'notWord' => '', 'strengths' => '', 'improvements' => '', 'name' => ''];
 
         if ($request->isMethod('POST')) {
             $p = $request->request;
@@ -161,7 +161,9 @@ class FeedbackController extends AbstractController
 
                 return $this->redirectToRoute('app_feedback_thanks', ['token' => $token]);
             }
-            $data = ['relationship' => $p->getString('relationship'), 'qualities' => $p->all('qualities'), 'strengths' => $p->getString('strengths'),
+            $data = ['relationship' => $p->getString('relationship'), 'qualities' => $p->all('qualities'),
+                'otherQualities' => array_values(array_filter(array_map(FeedbackService::cleanWord(...), array_filter($p->all('otherQualities'), 'is_string')), fn ($q) => '' !== $q)),
+                'word' => $p->getString('word'), 'notWord' => $p->getString('notWord'), 'strengths' => $p->getString('strengths'),
                 'improvements' => $p->getString('improvements'), 'name' => $p->getString('name')];
             if (!$this->isCsrfTokenValid('feedback_form', $p->getString('_csrf_token'))) {
                 $errors[] = 'La page a expiré, merci de réessayer.';
@@ -178,7 +180,7 @@ class FeedbackController extends AbstractController
 
         return $this->render('feedback/form.html.twig', [
             'firstName' => $owner->getDisplayName(), 'request' => $feedbackRequest, 'data' => $data, 'errors' => $errors,
-            'qualities' => FeedbackService::QUALITIES, 'relationships' => FeedbackService::RELATIONSHIPS, 'maxQualities' => FeedbackService::MAX_QUALITIES,
+            'qualities' => FeedbackService::QUALITIES, 'relationships' => FeedbackService::RELATIONSHIPS, 'maxQualities' => FeedbackService::MAX_QUALITIES, 'maxOwn' => FeedbackService::MAX_OWN_QUALITIES, 'wordLength' => FeedbackService::WORD_LENGTH,
             'expiresLabel' => FeedbackService::frenchDate($feedbackRequest->getExpiresAt()), 'hasExpiry' => null !== $feedbackRequest->getExpiresAt(),
         ], new Response(status: [] === $errors ? 200 : 422));
     }

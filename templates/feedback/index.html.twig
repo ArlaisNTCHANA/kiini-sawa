@@ -4,14 +4,13 @@
 
 {% block body %}
 {% include 'feedback/_styles.html.twig' %}
-<div class="ks-page ks-page--narrow">
+<div class="ks-page ks-page--narrow fb-member">
     {% include 'shared/_page_header.html.twig' with {
         eyebrow: 'Mes tests · le regard des autres', icon: 'users',
         title: 'Feedback nourricier',
         lead: t('feedback.membre.intro', 'Les tests disent comment vous vous voyez ; vos proches voient parfois ce que vous ne voyez pas. Demandez-leur, en toute bienveillance.'),
         back: {url: path('app_personality_index'), label: 'Mes tests'},
     } %}
-    <div style="max-width: 680px; margin-bottom: 1rem;">{{ book_panel('personnalite') }}{% include 'methode/_figure.html.twig' with {name: 'fig_temoins', alt: 'Les trois témoins : preuve personnelle, résultat d\'un outil, témoignage extérieur', caption: 'les trois témoins', collapsed: true, max: '560px'} only %}</div>
 
     {% set createForm %}
         <form method="post" action="{{ path('app_feedback_open') }}">
@@ -28,19 +27,86 @@
         </form>
     {% endset %}
 
+    {# Les explications : les trois témoins du livre, puis le mode d'emploi. Placées avant le bouton pour une première demande, après les résultats ensuite. #}
+    {% set explain %}
+        <section class="ks-card fb-section" id="trois-temoins">
+            <p class="ks-eyebrow">{{ t('feedback.membre.temoins_surtitre', 'Le livre, chapitre 12 · Confirmations') }}</p>
+            <h2 class="ks-section-title">{{ t('feedback.membre.temoins_titre', 'Pourquoi demander le regard des autres ?') }}</h2>
+            <p class="fb-text">{{ t('feedback.membre.temoins_intro', 'Nous avons tous tendance à nous voir plus grands, ou plus petits, que nous ne le sommes. Le livre s\'appuie sur un principe biblique : « Toute affaire se réglera sur la déclaration de deux ou de trois témoins » (2 Corinthiens 13:1). Ce que vous croyez de vous-même devient une certitude quand **trois témoins** vont dans le même sens. Le feedback nourricier est le troisième : touchez chaque cercle pour voir ce qu\'il apporte.', 'inline') }}</p>
+            {% include 'feedback/_temoins.html.twig' with {mode: 'membre'} only %}
+        </section>
+
+        <section class="ks-card fb-section">
+            <h2 class="ks-section-title"><i data-lucide="user-check" aria-hidden="true"></i> {{ t('feedback.membre.choisir_titre', 'Bien choisir les personnes') }}</h2>
+            <blockquote class="fb-quote">{{ t('feedback.membre.choisir_citation', '« Choisis des personnes qui t\'aiment assez pour te dire la vérité, et qui t\'ont vu agir. »') }}<cite>{{ t('feedback.membre.choisir_source', 'Le livre, chapitre 12') }}</cite></blockquote>
+            <ul class="fb-tips">
+                <li><i data-lucide="eye" aria-hidden="true"></i><div><strong>{{ t('feedback.membre.choisir_1_titre', 'Qui vous ont vu agir') }}</strong><p>{{ t('feedback.membre.choisir_1', 'Plutôt quelqu\'un qui vous côtoie vraiment qu\'une connaissance flatteuse. Un regard juste vaut mieux qu\'un compliment poli.') }}</p></div></li>
+                <li><i data-lucide="layers" aria-hidden="true"></i><div><strong>{{ t('feedback.membre.choisir_2_titre', 'Dans des cercles différents') }}</strong><p>{{ t('feedback.membre.choisir_2', 'Famille, couple, amitié, travail, Église : chacun vous voit sous un autre jour. Les qualités citées partout sont souvent les plus sûres.') }}</p></div></li>
+                <li><i data-lucide="users" aria-hidden="true"></i><div><strong>{{ t('feedback.membre.choisir_3_titre', '5 à 10 personnes') }}</strong><p>{{ t('feedback.membre.choisir_3', 'La synthèse s\'ouvre dès {min} réponses, pour protéger l\'anonymat. Toutes ne répondront pas : invitez-en un peu plus.', 'text', {min: min}) }}</p></div></li>
+                <li><i data-lucide="message-circle" aria-hidden="true"></i><div><strong>{{ t('feedback.membre.choisir_4_titre', 'Une invitation personnelle') }}</strong><p>{{ t('feedback.membre.choisir_4', 'Envoyez le message à chaque personne séparément, et dites-lui pourquoi son regard compte pour vous.') }}</p></div></li>
+            </ul>
+        </section>
+
+        <div class="fb-duo">
+            <section class="ks-card fb-section">
+                <h2 class="ks-section-title"><i data-lucide="smartphone" aria-hidden="true"></i> {{ t('feedback.membre.verront_titre', 'Ce que vos proches verront') }}</h2>
+                <ul class="fb-list">
+                    <li>{{ t('feedback.membre.verront_1', 'Votre prénom et une courte présentation : vous bâtissez votre Plan de Vie avec KIINI SAWA, et le schéma des trois témoins.') }}</li>
+                    <li>{{ t('feedback.membre.verront_2', 'La question du lien qui vous unit : famille, couple, amitié, travail, Église…') }}</li>
+                    <li>{{ t('feedback.membre.verront_3', 'Jusqu\'à 5 qualités à choisir dans une liste, ou à ajouter avec leurs propres mots.') }}</li>
+                    <li>{{ t('feedback.membre.verront_4', 'Deux questions en un mot : comment vous décrire, et ce que vous n\'êtes pas.') }}</li>
+                    <li>{{ t('feedback.membre.verront_5', 'Ce que vous faites de mieux, et, s\'ils le veulent, un point où vous gagneriez à grandir.') }}</li>
+                </ul>
+                <p class="fb-note"><i data-lucide="lock" aria-hidden="true"></i> {{ t('feedback.membre.verront_prive', 'Environ 3 minutes. Ils ne voient ni vos tests, ni votre Plan de Vie, ni les réponses des autres.') }}</p>
+            </section>
+            <section class="ks-card fb-section">
+                <h2 class="ks-section-title"><i data-lucide="gift" aria-hidden="true"></i> {{ t('feedback.membre.recevrez_titre', 'Ce que vous recevrez') }}</h2>
+                <ul class="fb-list">
+                    <li>{{ t('feedback.membre.recevrez_1', 'Une notification à chaque réponse.') }}</li>
+                    <li>{{ t('feedback.membre.recevrez_2', 'Dès {min} réponses, la synthèse : les qualités les plus citées, les mots qui reviennent, ce que vous faites de mieux et les pistes pour grandir.', 'text', {min: min}) }}</li>
+                    <li>{{ t('feedback.membre.recevrez_3', 'Des réponses mélangées : sans prénom, impossible de savoir qui a écrit quoi.') }}</li>
+                    <li>{{ t('feedback.membre.recevrez_4', 'Vos résultats restent ici, même quand le lien est terminé.') }}</li>
+                </ul>
+            </section>
+        </div>
+
+        <section class="ks-card fb-section">
+            <h2 class="ks-section-title"><i data-lucide="sprout" aria-hidden="true"></i> {{ t('feedback.membre.relire_titre', 'Relire avec bienveillance') }}</h2>
+            <p class="fb-text">{{ t('feedback.membre.relire_intro', 'Le livre appelle ce retour un **feedback nourricier** : une ressource gratuite que les autres vous offrent pour voir vos angles morts. « Les blessures d\'un ami prouvent sa fidélité » (Proverbes 27:6).', 'inline') }}</p>
+            <ol class="fb-steps">
+                <li><strong>{{ t('feedback.membre.relire_1_titre', 'Recevoir') }}</strong><p>{{ t('feedback.membre.relire_1', 'Ne vous justifiez pas. Dites simplement merci, même pour ce qui pique.') }}</p></li>
+                <li><strong>{{ t('feedback.membre.relire_2_titre', 'Filtrer') }}</strong><p>{{ t('feedback.membre.relire_2', 'Retenez ce qui nourrit votre but, laissez tomber le reste. Ce qui revient plusieurs fois mérite plus d\'attention qu\'une remarque isolée.') }}</p></li>
+                <li><strong>{{ t('feedback.membre.relire_3_titre', 'Croiser') }}</strong><p>{{ t('feedback.membre.relire_3', 'Rapprochez ce regard de vos actes et de vos résultats de tests. Accord : une confirmation. Écart : un angle mort à explorer, sans vous condamner.') }}</p></li>
+                <li><strong>{{ t('feedback.membre.relire_4_titre', 'Agir') }}</strong><p>{{ t('feedback.membre.relire_4', 'Reportez vos dons confirmés dans votre Plan de Vie, et choisissez un seul point de croissance pour votre Plan de Croissance.') }}</p></li>
+            </ol>
+            <p class="fb-note"><i data-lucide="book-open" aria-hidden="true"></i> {{ t('feedback.membre.relire_banque', 'Gardez une trace de ce que vous découvrez, et relisez-le lors de votre revue annuelle : le livre parle de votre « banque de découvertes ».') }}</p>
+        </section>
+
+        <section class="fb-more">
+            <h2 class="ks-eyebrow">{{ t('feedback.membre.plus_loin', 'Pour aller plus loin dans le livre') }}</h2>
+            {{ book_panel('personnalite') }}
+            <div class="fb-more__links">
+                <a href="{{ path('app_methode_chapter', {slug: 'confirmations'}) }}" class="ks-btn ks-btn--ghost ks-btn--sm"><i data-lucide="book-open"></i> {{ t('feedback.membre.lien_chap12', 'Chapitre 12 : Confirmations') }}</a>
+                <a href="{{ path('app_methode_chapter', {slug: 'revues-feedback-et-defis'}) }}" class="ks-btn ks-btn--ghost ks-btn--sm"><i data-lucide="book-open"></i> {{ t('feedback.membre.lien_chap23', 'Chapitre 23 : Revues, Feedback & Défis') }}</a>
+            </div>
+        </section>
+    {% endset %}
+
     {% if not request %}
-        <div class="ks-card">
-            <h2 class="ks-section-title" style="margin-top: 0;">Comment ça marche</h2>
-            <ol style="list-style: decimal; padding-left: 1.3rem; line-height: 1.9; color: var(--fg-light); margin-bottom: 1rem;">
-                <li>Vous créez votre lien personnel, valable une semaine.</li>
-                <li>Vous l'envoyez à 5 à 10 personnes qui vous connaissent bien : famille, amis, collègues, membres de votre Église.</li>
-                <li>Chacune choisit les qualités qu'elle voit chez vous, dit ce que vous faites de mieux, et un point où vous gagneriez à grandir.</li>
-                <li>Dès {{ min }} réponses, vous découvrez la synthèse.</li>
+        <p style="margin: -.5rem 0 1rem;"><a href="#creer" class="ks-btn ks-btn--ghost ks-btn--sm" style="padding-left: 0;"><i data-lucide="arrow-down"></i> {{ t('feedback.membre.raccourci', 'Aller directement à la création de mon lien') }}</a></p>
+        {{ explain }}
+        <div class="ks-card fb-section fb-start" id="creer">
+            <h2 class="ks-section-title">{{ t('feedback.membre.comment_titre', 'Comment ça marche') }}</h2>
+            <ol class="fb-howto">
+                <li>{{ t('feedback.membre.comment_1', 'Vous créez votre lien personnel, valable une semaine.') }}</li>
+                <li>{{ t('feedback.membre.comment_2', 'Vous l\'envoyez à 5 à 10 personnes qui vous connaissent bien : famille, amis, collègues, membres de votre Église.') }}</li>
+                <li>{{ t('feedback.membre.comment_3', 'Chacune choisit les qualités qu\'elle voit chez vous, vous décrit en un mot, dit ce que vous faites de mieux, et un point où vous gagneriez à grandir.') }}</li>
+                <li>{{ t('feedback.membre.comment_4', 'Dès {min} réponses, vous découvrez la synthèse.', 'text', {min: min}) }}</li>
             </ol>
             {{ createForm }}
         </div>
     {% elseif open %}
-        <div class="ks-card" style="margin-bottom: 1rem;"
+        <div class="ks-card fb-section"
              x-data="{ tone: 'tu', messages: {{ messages|json_encode|e('html_attr') }}, msg: '', copied: '', canShare: !!navigator.share,
                        init() { this.msg = this.messages.tu },
                        setTone(t) { this.tone = t; this.msg = this.messages[t] },
@@ -73,7 +139,7 @@
             </div>
         </div>
     {% else %}
-        <div class="ks-card" style="margin-bottom: 1rem;">
+        <div class="ks-card fb-section">
             <p class="ks-eyebrow" style="margin-bottom: .35rem;">{{ request.isActive ? 'Lien arrivé à son terme' : 'Demande fermée' }}</p>
             <p style="color: var(--fg-light); margin: 0 0 1rem;">
                 {% if request.isActive %}{{ t('feedback.membre.termine', 'Votre lien n\'accepte plus de réponses depuis le {date}. Vos résultats restent ci-dessous.', 'text', {date: expiresLabel}) }}
@@ -91,14 +157,14 @@
     {% endif %}
 
     {% if open %}
-        <form method="post" action="{{ path('app_feedback_close') }}">
+        <form method="post" action="{{ path('app_feedback_close') }}" style="margin-bottom: 1rem;">
             <input type="hidden" name="_csrf_token" value="{{ csrf_token('feedback') }}">
             <button type="submit" class="ks-btn ks-btn--ghost" style="padding-left: 0;" onclick="return confirm('Fermer cette demande ? Le lien ne fonctionnera plus ; vos résultats resteront visibles.')">Fermer cette demande</button>
         </form>
     {% endif %}
 
     {% if past is not empty %}
-        <div class="ks-card" style="margin-top: 1rem;">
+        <div class="ks-card fb-section">
             <h2 class="ks-section-title" style="margin-top: 0;">{{ t('feedback.membre.passees', 'Mes demandes précédentes') }}</h2>
             <ul class="fb-past">
                 {% for p in past %}
@@ -107,6 +173,10 @@
                 {% endfor %}
             </ul>
         </div>
+    {% endif %}
+
+    {% if request %}
+        {{ explain }}
     {% endif %}
 </div>
 {% endblock %}

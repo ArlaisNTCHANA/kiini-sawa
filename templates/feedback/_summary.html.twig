@@ -16,6 +16,14 @@
                 <span class="ks-badge" style="font-size: {{ n > 1 ? (0.8 + n * 0.08)|round(2) : 0.8 }}rem; padding: .3rem .75rem;">{{ q }} · {{ n }}</span>
             {% endfor %}
         </div>
+        {% if summary.words|default([])|length or summary.notWords|default([])|length %}
+            <div class="fb-words" style="margin-bottom: 1.25rem;">
+                {% if summary.words|length %}<div><p class="ks-eyebrow" style="margin-bottom: .5rem;">{{ t('feedback.membre.mots', 'En un mot, vous êtes…') }}</p>
+                    <div style="display: flex; flex-wrap: wrap; gap: .4rem;">{% for w, n in summary.words %}<span class="ks-badge" style="padding: .3rem .75rem;">{{ w }}{{ n > 1 ? ' · ' ~ n }}</span>{% endfor %}</div></div>{% endif %}
+                {% if summary.notWords|length %}<div><p class="ks-eyebrow" style="margin-bottom: .5rem;">{{ t('feedback.membre.pas_mots', 'En un mot, vous n\'êtes pas…') }}</p>
+                    <div style="display: flex; flex-wrap: wrap; gap: .4rem;">{% for w, n in summary.notWords %}<span class="ks-badge" style="padding: .3rem .75rem; background: var(--bg-alt); color: var(--fg-light);">{{ w }}{{ n > 1 ? ' · ' ~ n }}</span>{% endfor %}</div></div>{% endif %}
+            </div>
+        {% endif %}
         <p class="ks-eyebrow" style="margin-bottom: .5rem;">{{ t('feedback.membre.forces', 'Ce que vous faites de mieux') }}</p>
         {% for s in summary.strengths %}
             <blockquote style="border-left: 3px solid var(--primary); padding: .4rem .9rem; margin: 0 0 .6rem; color: var(--fg-light);">« {{ s.text }} »{% if s.from %}<span style="display: block; font-size: .8rem; color: var(--fg-muted); margin-top: .2rem;">— {{ s.from }}</span>{% endif %}</blockquote>

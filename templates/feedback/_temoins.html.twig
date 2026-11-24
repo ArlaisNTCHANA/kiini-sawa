@@ -1,0 +1,136 @@
+{#
+    Les trois témoins (livre, chapitre 12 « Confirmations »), en schéma interactif : trois cercles qui se recoupent, avec la
+    certitude au centre, comme la figure du livre. Toucher un cercle (ou un onglet, au clavier : flèches gauche et droite)
+    affiche ce qu'apporte ce témoin. La définition et l'exemple sont ceux du livre, mot pour mot (BookFigures::FIGURES['fig_temoins'],
+    vérifié par tests/Methode/BookFiguresTest.php) ; le lien avec KIINI SAWA et le feedback nourricier est modifiable dans Admin › Textes du site.
+    Paramètres : mode ('membre' par défaut, ou 'public' pour la page des proches), firstName (mode public).
+#}
+{% set fig = book_figure_data('fig_temoins') %}
+{% set public = (mode|default('membre')) == 'public' %}
+{% if public %}
+    {% set extra = {
+        PREUVE: [[t('feedback.temoins.public.preuve_titre', 'Pour {prenom}', 'text', {prenom: firstName}), t('feedback.temoins.public.preuve', 'Ce que {prenom} a fait concrètement, jour après jour.', 'text', {prenom: firstName})]],
+        OUTIL: [[t('feedback.temoins.public.outil_titre', 'Pour {prenom}', 'text', {prenom: firstName}), t('feedback.temoins.public.outil', 'Les tests de personnalité et de dons que {prenom} a passés dans KIINI SAWA.', 'text', {prenom: firstName})]],
+        TEMOIGNAGE: [[t('feedback.temoins.public.temoignage_titre', 'C\'est votre part', 'text'), t('feedback.temoins.public.temoignage', 'Ce que vous avez vu de {prenom} vient confirmer, ou nuancer, les deux autres témoins. Personne ne peut le voir à votre place.', 'text', {prenom: firstName})]],
+    } %}
+{% else %}
+    {% set extra = {
+        PREUVE: [
+            [t('feedback.temoins.dans_kiini', 'Dans KIINI SAWA'), t('feedback.temoins.preuve.kiini', 'Vos propres actes : ce que vous notez dans votre journal, les rituels que vous tenez, ce que vous relevez dans vos revues de la semaine.')],
+            [t('feedback.temoins.avec_feedback', 'Avec le feedback nourricier'), t('feedback.temoins.preuve.feedback', 'Quand un proche cite un moment précis, cherchez dans vos souvenirs des faits qui vont dans le même sens. Si vous n\'en trouvez aucun, le livre y voit un objectif de croissance.')],
+        ],
+        OUTIL: [
+            [t('feedback.temoins.dans_kiini', 'Dans KIINI SAWA'), t('feedback.temoins.outil.kiini', 'Vos résultats dans Mes tests : personnalité, dons, Boussole 360, Roue de la vie.')],
+            [t('feedback.temoins.avec_feedback', 'Avec le feedback nourricier'), t('feedback.temoins.outil.feedback', 'Comparez les qualités citées par vos proches avec vos résultats. Quand ils se rejoignent, c\'est une confirmation ; quand ils divergent, c\'est un angle mort à explorer.')],
+        ],
+        TEMOIGNAGE: [
+            [t('feedback.temoins.dans_kiini', 'Dans KIINI SAWA'), t('feedback.temoins.temoignage.kiini', 'C\'est exactement le rôle du feedback nourricier : recueillir le regard de 5 à 10 personnes qui vous ont vu agir.')],
+            [t('feedback.temoins.exemple_livre', 'Un exemple du livre'), t('feedback.temoins.temoignage.barnabas', 'Barnabas ne s\'est pas proclamé encourageur : ce sont les apôtres qui lui ont donné ce surnom, « fils d\'encouragement », après l\'avoir vu à l\'œuvre (Actes 4:36).')],
+        ],
+    } %}
+{% endif %}
+{% set short = {PREUVE: ['La preuve', 'un acte posé'], OUTIL: ['L\'outil', 'un test, une mesure'], TEMOIGNAGE: ['Le témoignage', 'ce que les autres voient']} %}
+{% set keys = fig.items|map(i => i.key) %}
+<section class="tm" data-temoins aria-label="{{ fig.title }}"
+         x-data="{ cur: 'TEMOIGNAGE', keys: {{ keys|json_encode|e('html_attr') }},
+                   go(k) { this.cur = k },
+                   move(d) { const i = (this.keys.indexOf(this.cur) + d + this.keys.length) % this.keys.length; this.cur = this.keys[i]; this.$nextTick(() => this.$refs['tab' + this.cur].focus()) } }">
+    <style>
+        .tm__layout { display: grid; gap: 1.25rem; align-items: center; }
+        @media (min-width: 720px) { .tm__layout { grid-template-columns: minmax(0, 5fr) minmax(0, 6fr); } }
+        .tm__venn { width: 100%; max-width: 340px; height: auto; margin: 0 auto; display: block; }
+        .tm__circle { cursor: pointer; }
+        .tm__circle circle { fill: var(--sage); fill-opacity: .3; stroke: transparent; stroke-width: 2.5; transition: fill-opacity .2s, stroke .2s; }
+        .tm__circle:hover circle { fill-opacity: .42; }
+        .tm__circle.is-on circle { fill-opacity: .5; stroke: var(--primary-dark); }
+        .tm__legend text { fill: var(--primary-dark); font-family: var(--font-sans); pointer-events: none; }
+        .tm__legend .tm__label { font-size: 13px; font-weight: 700; }
+        .tm__legend .tm__sub { font-size: 9.5px; font-style: italic; fill: var(--fg-light); }
+        .tm__legend.is-on .tm__label { text-decoration: underline; text-decoration-color: var(--gold); text-decoration-thickness: 2px; }
+        .tm__core { pointer-events: none; }
+        .tm__core circle { fill: var(--gold); }
+        .tm__core text { fill: var(--card-bg); font-size: 11px; font-weight: 700; font-family: var(--font-sans); }
+        .tm__here { fill: var(--accent); font-size: 10px; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; font-family: var(--font-sans); }
+        .tm__tabs { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: .4rem; margin-bottom: .75rem; }
+        .tm__tab { display: flex; flex-direction: column; align-items: center; gap: .3rem; padding: .55rem .25rem; border: 2px solid var(--border); border-radius: 12px; background: var(--card-bg); color: var(--fg); font: inherit; font-size: .8rem; font-weight: 700; line-height: 1.15; text-align: center; cursor: pointer; transition: border-color .2s, background .2s; }
+        .tm__tab:hover { border-color: var(--border-strong); }
+        .tm__tab[aria-selected="true"] { border-color: var(--primary); background: var(--primary-soft); color: var(--primary-dark); }
+        .tm__tab:focus-visible { outline: 3px solid var(--gold); outline-offset: 2px; }
+        .tm__ico { width: 2rem; height: 2rem; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: var(--card-bg); }
+        .tm__ico svg { width: 17px; height: 17px; }
+        .tm__panel { border-radius: 14px; padding: 1rem 1.1rem; background: var(--bg-alt); border-left: 4px solid var(--primary); }
+        .tm__panel h3 { margin: 0 0 .2rem; font-family: var(--font-serif); font-size: 1.15rem; color: var(--fg); }
+        .tm__def { margin: 0 0 .75rem; color: var(--fg-light); font-size: .95rem; }
+        .tm__book { margin: 0 0 .8rem; padding: .55rem .8rem; background: var(--card-bg); border-radius: 10px; font-size: .9rem; color: var(--fg-light); }
+        .tm__book strong, .tm__line strong { display: block; font-size: .7rem; letter-spacing: .08em; text-transform: uppercase; color: var(--fg-muted); margin-bottom: .15rem; }
+        .tm__book em { font-family: var(--font-serif); }
+        .tm__line { margin-top: .6rem; font-size: .92rem; line-height: 1.55; color: var(--fg-light); }
+        .tm__line p { margin: 0; }
+        .tm__verdict { display: grid; gap: .6rem; margin-top: 1.1rem; }
+        @media (min-width: 640px) { .tm__verdict { grid-template-columns: 1fr 1fr; } }
+        .tm__verdict div { display: flex; gap: .6rem; align-items: flex-start; padding: .7rem .85rem; border-radius: 12px; border: 1px solid var(--border); font-size: .88rem; line-height: 1.5; color: var(--fg-light); }
+        .tm__verdict svg { flex: none; width: 18px; height: 18px; margin-top: .15rem; }
+        .tm__fig { margin-top: 1rem; font-size: .88rem; }
+        .tm__fig summary { cursor: pointer; font-weight: 600; color: var(--primary-dark); display: inline-flex; align-items: center; gap: .4rem; }
+        .tm__fig img { display: block; width: 100%; max-width: 560px; height: auto; margin: .7rem auto 0; border-radius: 12px; background: var(--card-bg); }
+    </style>
+
+    <div class="tm__layout">
+        {# Le schéma du livre, redessiné : les cercles se touchent du doigt ou de la souris ; le clavier passe par les onglets à côté. #}
+        <svg class="tm__venn" viewBox="-4 0 308 290" aria-hidden="true" focusable="false">
+            {% set pos = {PREUVE: [108, 104, 72, 82], OUTIL: [192, 104, 228, 82], TEMOIGNAGE: [150, 178, 150, 216]} %}
+            {% for it in fig.items %}
+                {% set p = pos[it.key] %}
+                <g class="tm__circle" data-temoin-cercle="{{ it.key }}" :class="cur === '{{ it.key }}' && 'is-on'" @click="go('{{ it.key }}')"><circle cx="{{ p[0] }}" cy="{{ p[1] }}" r="80"></circle></g>
+            {% endfor %}
+            {# Légendes au-dessus des trois cercles, pour que le cercle choisi ne cache pas les autres #}
+            {% for it in fig.items %}
+                {% set p = pos[it.key] %}
+                <g class="tm__legend" :class="cur === '{{ it.key }}' && 'is-on'">
+                    <text class="tm__label" x="{{ p[2] }}" y="{{ p[3] }}" text-anchor="middle">{{ short[it.key][0] }}</text>
+                    <text class="tm__sub" x="{{ p[2] }}" y="{{ p[3] + 15 }}" text-anchor="middle">{{ short[it.key][1] }}</text>
+                </g>
+            {% endfor %}
+            <g class="tm__core"><circle cx="150" cy="130" r="27"></circle><text x="150" y="134" text-anchor="middle">Certitude</text></g>
+            {% if public %}<text class="tm__here" x="150" y="270" text-anchor="middle">{{ t('feedback.temoins.public.ici', 'Votre regard') }}</text>{% endif %}
+        </svg>
+
+        <div>
+            <div class="tm__tabs" role="tablist" aria-label="{{ fig.title }}" @keydown.right.prevent="move(1)" @keydown.left.prevent="move(-1)">
+                {% for it in fig.items %}
+                    <button type="button" role="tab" class="tm__tab" id="tm-tab-{{ public ? 'p' : 'm' }}-{{ it.key }}" x-ref="tab{{ it.key }}" data-temoin="{{ it.key }}"
+                            aria-controls="tm-panel-{{ public ? 'p' : 'm' }}-{{ it.key }}" aria-selected="{{ it.key == 'TEMOIGNAGE' ? 'true' : 'false' }}" tabindex="{{ it.key == 'TEMOIGNAGE' ? '0' : '-1' }}"
+                            :aria-selected="cur === '{{ it.key }}' ? 'true' : 'false'" :tabindex="cur === '{{ it.key }}' ? 0 : -1" @click="go('{{ it.key }}')">
+                        <span class="tm__ico" style="background: {{ it.color }};"><i data-lucide="{{ it.icon }}" aria-hidden="true"></i></span>
+                        <span>{{ it.label }}</span>
+                    </button>
+                {% endfor %}
+            </div>
+            {% for it in fig.items %}
+                <div class="tm__panel" role="tabpanel" id="tm-panel-{{ public ? 'p' : 'm' }}-{{ it.key }}" aria-labelledby="tm-tab-{{ public ? 'p' : 'm' }}-{{ it.key }}" tabindex="0"
+                     style="border-left-color: {{ it.color }};" x-show="cur === '{{ it.key }}'" {{ it.key == 'TEMOIGNAGE' ? '' : 'x-cloak' }}>
+                    <h3>{{ it.label }}</h3>
+                    <p class="tm__def">{{ it.summary }}.</p>
+                    {% for l in it.lines %}
+                        <p class="tm__book"><strong>{{ l[0] }}</strong><em>« {{ l[1] }} »</em></p>
+                    {% endfor %}
+                    {% for l in extra[it.key] %}
+                        <div class="tm__line"><strong>{{ l[0] }}</strong><p>{{ l[1] }}</p></div>
+                    {% endfor %}
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <div class="tm__verdict">
+        <div><i data-lucide="badge-check" style="color: var(--success);" aria-hidden="true"></i><span>{{ t('feedback.temoins.concordent', '**Quand les trois témoins concordent**, une conviction devient une certitude.', 'inline') }}</span></div>
+        <div><i data-lucide="eye" style="color: var(--accent);" aria-hidden="true"></i><span>{{ t('feedback.temoins.contredisent', '**Quand ils se contredisent**, vous avez découvert quelque chose de précieux : un angle mort.', 'inline') }}</span></div>
+    </div>
+
+    {% if not public %}
+        <details class="tm__fig" data-book-figure="fig_temoins">
+            <summary><i data-lucide="image" style="width: 14px; height: 14px; color: var(--gold);" aria-hidden="true"></i> {{ t('feedback.temoins.voir_figure', 'Voir le schéma tel qu\'il figure dans le livre') }}</summary>
+            <img src="{{ asset('images/livre/fig_temoins.png') }}" alt="Les trois témoins : la preuve personnelle (un acte posé), l'outil (un test, une mesure) et le témoignage (ce que les autres voient) se recoupent ; au centre, la certitude." loading="lazy">
+        </details>
+    {% endif %}
+</section>

@@ -19,8 +19,21 @@
         {% if hasExpiry %}<li><i data-lucide="calendar"></i>{{ t('feedback.public.jusqua', 'Jusqu\'au {date}', 'text', {date: expiresLabel}) }}</li>{% endif %}
     </ul>
 
+    <details class="ks-card fb-intro" data-temoins-public>
+        <summary><i data-lucide="sparkles" aria-hidden="true"></i> {{ t('feedback.public.temoins_resume', 'Pourquoi votre regard compte : il est l\'un des trois témoins') }}</summary>
+        <p style="color: var(--fg-light); line-height: 1.6; margin: 0 0 1rem;">{{ t('feedback.public.temoins_intro', 'La méthode KIINI SAWA reprend un principe biblique : « Toute affaire se réglera sur la déclaration de deux ou de trois témoins » (2 Corinthiens 13:1). Ce que {prenom} croit de soi devient une certitude quand trois témoins vont dans le même sens. Vous êtes le troisième.', 'text', {prenom: firstName}) }}</p>
+        {% include 'feedback/_temoins.html.twig' with {mode: 'public', firstName: firstName} only %}
+    </details>
+
     {% for e in errors %}<p class="ks-alert ks-alert--danger" style="margin-bottom: .6rem;" role="alert">{{ e }}</p>{% endfor %}
-    <form method="post" class="ks-card" x-data="{ picked: {{ data.qualities|length }}, max: {{ maxQualities }} }">
+    <form method="post" class="ks-card" x-data="{ picked: {{ data.qualities|length }}, max: {{ maxQualities }}, maxOwn: {{ maxOwn }}, own: {{ data.otherQualities|json_encode|e('html_attr') }}, draft: '',
+        get total() { return this.picked + this.own.length },
+        add() { const q = this.draft.trim().replace(/\s+/g, ' ').slice(0, {{ wordLength }}); if (!q) return;
+            const fold = v => v.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+            const listed = [...this.$root.querySelectorAll('input[name=\'qualities[]\']')].find(c => fold(c.value) === fold(q));
+            if (listed) { if (!listed.checked && this.total < this.max) { listed.checked = true; this.picked++ } this.draft = ''; return; }
+            if (this.total >= this.max || this.own.length >= this.maxOwn || this.own.some(o => fold(o) === fold(q))) { this.draft = ''; return; }
+            this.own.push(q.charAt(0).toUpperCase() + q.slice(1)); this.draft = ''; this.$nextTick(() => window.lucide && window.lucide.createIcons()) } }">
         <input type="hidden" name="_csrf_token" value="{{ csrf_token('feedback_form') }}">
         <div style="position: absolute; left: -9999px;" aria-hidden="true"><input name="website" tabindex="-1" autocomplete="off"></div>
 
@@ -31,17 +44,37 @@
 
         <fieldset class="fb-field" style="border: 0; padding: 0; margin-left: 0; margin-right: 0;">
             <legend class="ks-label" style="margin-bottom: .25rem;">{{ t('feedback.public.qualites', 'Les qualités que vous voyez chez {prenom}', 'text', {prenom: firstName}) }}</legend>
-            <p class="fb-hint">{{ t('feedback.public.qualites_aide', 'Choisissez de 1 à {max} qualités.', 'text', {max: maxQualities}) }} <span x-text="picked + ' / ' + max" aria-live="polite"></span></p>
+            <p class="fb-hint">{{ t('feedback.public.qualites_aide', 'Choisissez de 1 à {max} qualités.', 'text', {max: maxQualities}) }} <span x-text="total + ' / ' + max" aria-live="polite"></span></p>
             <div class="fb-chips">
                 {% for q in qualities %}
                     <label class="fb-chip">
                         <input type="checkbox" name="qualities[]" value="{{ q }}" {{ q in data.qualities ? 'checked' }}
-                               @change="if ($event.target.checked && picked >= max) { $event.target.checked = false; return; } picked += $event.target.checked ? 1 : -1">
+                               @change="if ($event.target.checked && total >= max) { $event.target.checked = false; return; } picked += $event.target.checked ? 1 : -1">
                         <span>{{ q }}</span>
                     </label>
                 {% endfor %}
+                <template x-for="(q, i) in own" :key="q">
+                    <span class="fb-chip fb-chip--mine"><input type="hidden" name="otherQualities[]" :value="q"><span><em style="font-style: normal;" x-text="q"></em><button type="button" @click="own.splice(i, 1)" :aria-label="'Retirer ' + q"><i data-lucide="x" aria-hidden="true"></i></button></span></span>
+                </template>
+            </div>
+            <div class="fb-add">
+                <label class="ks-label" for="otherQuality" style="flex-basis: 100%; margin: 0; font-size: .88rem; font-weight: 600;">{{ t('feedback.public.autre_qualite', 'Une qualité manque ? Ajoutez-la avec vos mots (facultatif)') }}</label>
+                <input class="ks-input" id="otherQuality" name="otherQualities[]" x-model="draft" maxlength="{{ wordLength }}" autocomplete="off" @keydown.enter.prevent="add()"
+                       placeholder="{{ t('feedback.public.autre_qualite_exemple', 'Par exemple : Sens de l\'accueil') }}" :disabled="total >= max && !draft">
+                <button type="button" class="ks-btn ks-btn--secondary ks-btn--sm" @click="add()" :disabled="!draft.trim() || total >= max || own.length >= maxOwn"><i data-lucide="plus"></i> {{ t('feedback.public.ajouter', 'Ajouter') }}</button>
             </div>
         </fieldset>
+
+        <div class="fb-words">
+            <div class="ks-field fb-field">
+                <label class="ks-label" for="word">{{ t('feedback.public.un_mot', 'Si vous deviez décrire {prenom} en un mot, que diriez-vous ?', 'text', {prenom: firstName}) }}</label>
+                <input class="ks-input" id="word" name="word" value="{{ data.word }}" maxlength="{{ wordLength }}" autocomplete="off" placeholder="{{ t('feedback.public.un_mot_aide', 'Un mot (facultatif)') }}">
+            </div>
+            <div class="ks-field fb-field">
+                <label class="ks-label" for="notWord">{{ t('feedback.public.pas_mot', 'Et en un mot, ce que {prenom} n\'est pas ?', 'text', {prenom: firstName}) }}</label>
+                <input class="ks-input" id="notWord" name="notWord" value="{{ data.notWord }}" maxlength="{{ wordLength }}" autocomplete="off" placeholder="{{ t('feedback.public.pas_mot_aide', 'Un mot (facultatif)') }}">
+            </div>
+        </div>
 
         <div class="ks-field fb-field">
             <label class="ks-label" for="strengths">{{ t('feedback.public.forces', 'Ce que {prenom} fait de mieux', 'text', {prenom: firstName}) }}</label>
@@ -57,6 +90,11 @@
         </div>
         <button type="submit" class="ks-btn ks-btn--primary fb-submit"><i data-lucide="send"></i> {{ t('feedback.public.envoyer', 'Envoyer mon regard') }}</button>
     </form>
+
+    <details class="ks-card ks-card--flat fb-intro fb-about">
+        <summary><i data-lucide="compass" aria-hidden="true"></i> {{ t('feedback.public.kiini_titre', 'KIINI SAWA, qu\'est-ce que c\'est ?') }}</summary>
+        <p>{{ t('feedback.public.kiini_texte', 'Une application chrétienne de planification de vie, née d\'un livre. On y découvre sa raison d\'être, ses valeurs et ses dons, puis on bâtit son Plan de Vie pas à pas : croissance, développement, hygiène de vie, intendance, transmission. Le feedback nourricier fait partie de cette démarche : nos proches nous aident à voir ce que nous ne voyons pas.') }}</p>
+    </details>
 
     <p class="fb-footnote">{{ t('feedback.public.mention', 'KIINI SAWA est une application chrétienne de planification de vie. Vos réponses ne servent qu\'à {prenom} et ne sont jamais publiées. [Confidentialité](/confidentialite)', 'inline', {prenom: firstName}) }}</p>
 </div>

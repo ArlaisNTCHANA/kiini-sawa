@@ -232,6 +232,68 @@ class FeedbackTest extends WebTestCase
         $this->assertSame(1, $notifications->count(['user' => $quiet->getUser(), 'metadata' => 'feedback-relance-'.$quiet->getId()]), 'pas de doublon');
     }
 
+    /** La page du membre explique les trois témoins du livre (schéma interactif, texte du livre) et le mode d'emploi, à la largeur de la page. */
+    public function testMemberPageExplainsTheThreeWitnesses(): void
+    {
+        $client = static::createClient();
+        $client->loginUser($this->ownerNamed('Esther'));
+        $crawler = $client->request('GET', '/mes-tests/feedback');
+        $this->assertResponseIsSuccessful();
+
+        $this->assertCount(3, $crawler->filter('[data-temoins] [role="tab"][data-temoin]'), 'un onglet par témoin, utilisable au clavier');
+        $this->assertCount(3, $crawler->filter('[data-temoins] [role="tabpanel"]'));
+        $this->assertCount(3, $crawler->filter('[data-temoin-cercle]'), 'les trois cercles du schéma');
+        $this->assertSame('true', $crawler->filter('[data-temoin="TEMOIGNAGE"]')->attr('aria-selected'), 'le témoignage (le feedback nourricier) est montré d\'abord');
+        $text = $crawler->filter('main')->text();
+        foreach (['Un acte concret que tu as posé', 'Une donnée issue d\'un test ou d\'une mesure sérieuse', 'Ce que les autres ont vu et confirmé',
+            'Deux collègues m\'ont dit qu\'ils se sentaient écoutés en réunion', 'Pourquoi demander le regard des autres', 'Bien choisir les personnes',
+            'Ce que vos proches verront', 'Ce que vous recevrez', 'Relire avec bienveillance', 'Comment ça marche'] as $expected) {
+            $this->assertStringContainsString($expected, $text);
+        }
+        $this->assertCount(1, $crawler->filter('img[src*="fig_temoins"]'), 'le schéma du livre reste consultable');
+        $this->assertCount(1, $crawler->filter('a[href="/methode/confirmations"]'));
+        $this->assertCount(1, $crawler->filter('main .ks-btn--primary'), 'une seule action principale');
+        $this->assertCount(0, $crawler->filter('main [style*="max-width: 680px"]'), 'plus de cadre plus étroit que le reste de la page');
+    }
+
+    /** Les proches peuvent ajouter leurs propres qualités et répondre « en un mot » ; la synthèse regroupe les mêmes mots. */
+    public function testOwnQualitiesAndOneWordAnswers(): void
+    {
+        $client = static::createClient();
+        $owner = $this->ownerNamed('Ruth');
+        $service = $this->service();
+        $request = $service->open($owner, false);
+
+        $crawler = $client->request('GET', '/avis/'.$request->getToken());
+        $this->assertCount(1, $crawler->filter('[data-temoins-public] [data-temoins]'), 'le schéma des trois témoins, côté proches');
+        $this->assertSelectorTextContains('main', 'Si vous deviez décrire Ruth en un mot');
+        $this->assertSelectorTextContains('main', 'ce que Ruth n\'est pas');
+        $this->assertSelectorTextContains('main', 'KIINI SAWA, qu\'est-ce que c\'est');
+        $form = $crawler->selectButton('Envoyer mon regard')->form();
+        $form['otherQualities'][0]->setValue('  sens de l\'accueil ');
+        $client->submit($form, ['strengths' => 'Accueillir', 'word' => 'lumineuse', 'notWord' => 'rancunière']);
+        $this->assertResponseRedirects('/avis/'.$request->getToken().'/merci', null, 'une qualité ajoutée suffit');
+        $service = $this->service(); // nouveau noyau après la requête : on relit la demande
+        $request = $service->findByToken($request->getToken());
+
+        $this->assertSame([], $service->submit($request, ['qualities' => ['Patience'], 'otherQualities' => ['patience', 'SENS DE L\'ACCUEIL', 'Sens de l\'accueil'], 'strengths' => 'x', 'word' => 'Lumineuse.', 'notWord' => '']));
+        $this->assertSame([], $service->submit($request, ['qualities' => [], 'otherQualities' => ['écoute'], 'strengths' => 'x', 'word' => '<b>LUMINEUSE</b>']));
+        $this->assertNotEmpty($service->submit($request, ['qualities' => [], 'otherQualities' => ['Un', 'Deux', 'Trois', 'Quatre'], 'strengths' => 'x']), 'au plus 3 qualités ajoutées');
+
+        $summary = $service->summary($request);
+        $this->assertSame(1, $summary['qualities']['Patience'], 'une qualité de la liste écrite autrement n\'est pas comptée deux fois');
+        $this->assertSame(1, $summary['qualities']['Écoute'], 'reprend le nom de la liste');
+        $this->assertSame(2, $summary['qualities']['Sens de l\'accueil']);
+        $this->assertSame(['Lumineuse' => 3], $summary['words'], 'même mot, majuscules et ponctuation différentes : regroupé');
+        $this->assertSame(['Rancunière' => 1], $summary['notWords']);
+
+        $client->loginUser(static::getContainer()->get(UserRepository::class)->find($owner->getId()));
+        $client->request('GET', '/mes-tests/feedback');
+        $this->assertSelectorTextContains('main', 'En un mot, vous êtes…');
+        $this->assertSelectorTextContains('main', 'Lumineuse · 3');
+        $this->assertSelectorTextContains('main', 'Rancunière');
+    }
+
     private function service(): FeedbackService
     {
         return static::getContainer()->get(FeedbackService::class);

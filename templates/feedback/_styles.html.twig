@@ -29,4 +29,52 @@
     .fb-past { list-style: none; padding: 0; margin: 0; }
     .fb-past li { display: flex; justify-content: space-between; align-items: center; gap: 1rem; padding: .7rem 0; border-top: 1px solid var(--border); }
     .fb-past li:first-child { border-top: 0; }
+    /* Page du membre : toutes les cartes ont la largeur de la page */
+    .fb-section { margin-bottom: 1rem; }
+    .fb-section .ks-section-title { margin-top: 0; display: flex; align-items: center; gap: .5rem; }
+    .fb-section .ks-section-title svg { width: 20px; height: 20px; color: var(--gold); flex: none; }
+    .fb-section .ks-eyebrow { margin-bottom: .3rem; }
+    .fb-text { color: var(--fg-light); line-height: 1.65; margin: 0 0 1.1rem; }
+    .fb-quote { margin: 0 0 1.1rem; padding: .7rem 1rem; border-left: 3px solid var(--gold); background: var(--primary-soft); border-radius: 0 12px 12px 0; font-family: var(--font-serif); font-style: italic; color: var(--fg-light); line-height: 1.55; }
+    .fb-quote cite { display: block; margin-top: .3rem; font-family: var(--font-sans); font-style: normal; font-size: .78rem; color: var(--fg-muted); }
+    .fb-tips { list-style: none; padding: 0; margin: 0; display: grid; gap: .9rem; }
+    @media (min-width: 640px) { .fb-tips { grid-template-columns: 1fr 1fr; } }
+    .fb-tips li { display: flex; gap: .7rem; align-items: flex-start; }
+    .fb-tips li > svg { flex: none; width: 2.1rem; height: 2.1rem; padding: .5rem; border-radius: 50%; background: var(--primary-soft); color: var(--primary); }
+    .fb-tips strong { display: block; color: var(--fg); margin-bottom: .15rem; }
+    .fb-tips p { margin: 0; font-size: .9rem; color: var(--fg-light); line-height: 1.55; }
+    .fb-duo { display: grid; gap: 0 1rem; }
+    @media (min-width: 720px) { .fb-duo { grid-template-columns: 1fr 1fr; } .fb-duo .fb-section { display: flex; flex-direction: column; } .fb-duo .fb-note { margin-top: auto; } }
+    .fb-list { list-style: none; padding: 0; margin: 0 0 .9rem; }
+    .fb-list li { position: relative; padding: 0 0 .55rem 1.3rem; color: var(--fg-light); font-size: .92rem; line-height: 1.55; }
+    .fb-list li::before { content: ''; position: absolute; left: .2rem; top: .55rem; width: .45rem; height: .45rem; border-radius: 50%; background: var(--sage); }
+    .fb-note { display: flex; gap: .5rem; align-items: flex-start; margin: 0; padding-top: .8rem; border-top: 1px solid var(--border); font-size: .85rem; color: var(--fg-muted); line-height: 1.5; }
+    .fb-note svg { flex: none; width: 16px; height: 16px; margin-top: .15rem; color: var(--primary); }
+    .fb-steps { list-style: none; padding: 0; margin: 0 0 1rem; counter-reset: fbstep; display: grid; gap: .75rem; }
+    @media (min-width: 640px) { .fb-steps { grid-template-columns: 1fr 1fr; } }
+    .fb-steps li { counter-increment: fbstep; position: relative; padding: .8rem .9rem .8rem 3rem; background: var(--bg-alt); border-radius: 12px; }
+    .fb-steps li::before { content: counter(fbstep); position: absolute; left: .85rem; top: .8rem; width: 1.6rem; height: 1.6rem; border-radius: 50%; background: var(--primary); color: var(--card-bg); font-weight: 700; font-size: .85rem; display: flex; align-items: center; justify-content: center; }
+    .fb-steps strong { display: block; color: var(--fg); }
+    .fb-steps p { margin: .15rem 0 0; font-size: .9rem; color: var(--fg-light); line-height: 1.5; }
+    .fb-howto { list-style: decimal; padding-left: 1.3rem; line-height: 1.8; color: var(--fg-light); margin: 0 0 1rem; }
+    .fb-start { border-top: 3px solid var(--gold); }
+    .fb-more { margin: 1.5rem 0 1rem; }
+    .fb-more .ks-eyebrow { margin: 0 0 .6rem; }
+    .fb-more__links { display: flex; flex-wrap: wrap; gap: .5rem; margin-top: -.5rem; }
+    /* Formulaire des proches : qualités ajoutées, questions en un mot, présentation de KIINI SAWA */
+    .fb-chip--mine > span { background: var(--gold-soft); color: var(--fg); border-color: var(--gold); }
+    .fb-chip--mine button { border: 0; background: transparent; color: inherit; padding: 0 0 0 .2rem; cursor: pointer; display: inline-flex; }
+    .fb-chip--mine button svg { width: 14px; height: 14px; }
+    .fb-add { display: flex; gap: .5rem; margin-top: .75rem; flex-wrap: wrap; }
+    .fb-add .ks-input { flex: 1; min-width: 180px; }
+    .fb-words { display: grid; gap: 0 1rem; }
+    @media (min-width: 640px) { .fb-words { grid-template-columns: 1fr 1fr; } }
+    .fb-intro { margin-bottom: 1rem; }
+    .fb-intro summary { cursor: pointer; font-weight: 700; color: var(--primary-dark); display: flex; align-items: center; gap: .5rem; list-style: none; }
+    .fb-intro summary::-webkit-details-marker { display: none; }
+    .fb-intro summary svg { width: 18px; height: 18px; color: var(--gold); flex: none; }
+    .fb-intro[open] summary { margin-bottom: .9rem; }
+    .fb-about { margin-top: 1rem; }
+    .fb-about h2 { font-family: var(--font-serif); font-size: 1.1rem; margin: 0 0 .4rem; }
+    .fb-about p { color: var(--fg-light); font-size: .92rem; line-height: 1.6; margin: 0; }
 </style>

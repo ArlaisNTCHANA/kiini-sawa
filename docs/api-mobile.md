@@ -217,6 +217,6 @@ Même lien que sur le site (7 jours, prolongeable) ; les proches répondent touj
 | `POST /feedback/fermer` | `{}` | `200` | Le lien ne fonctionne plus ; les résultats restent. |
 | `GET /feedback/demandes/{id}` | — | `200 { createdAt, summary }` ou `404` | Résultats d'une demande passée (celle d'un autre compte : `404`). |
 
-`summary` : `{ count, detail, qualities: [{ label, count }], strengths: [{ text, from }], improvements: [{ text, from }] }` ; le
+`summary` : `{ count, detail, qualities: [{ label, count }], words: [{ label, count }], notWords: [{ label, count }], strengths: [{ text, from }], improvements: [{ text, from }] }` ; le
 détail n'apparaît qu'à partir de `minForDetail` réponses (anonymat), sauf si le prénom était demandé. Les notifications
 `/mes-tests/feedback` ouvrent l'écran natif `app/feedback`.

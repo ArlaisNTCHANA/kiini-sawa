@@ -135,6 +135,8 @@ final class MobileFeedbackController extends AbstractController
             'count' => $s['count'],
             'detail' => $s['detail'],
             'qualities' => array_map(static fn (string $q, int $n) => ['label' => $q, 'count' => $n], array_keys($s['qualities']), array_values($s['qualities'])),
+            'words' => array_map(static fn (string $w, int $n) => ['label' => $w, 'count' => $n], array_keys($s['words']), array_values($s['words'])),
+            'notWords' => array_map(static fn (string $w, int $n) => ['label' => $w, 'count' => $n], array_keys($s['notWords']), array_values($s['notWords'])),
             'strengths' => $s['strengths'],
             'improvements' => $s['improvements'],
         ];

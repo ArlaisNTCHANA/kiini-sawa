@@ -11,7 +11,7 @@ use App\Contenu\Service\SiteTexts;
 use Doctrine\ORM\EntityManagerInterface;
 
 /**
- * « Feedback nourricier » (chapitre 14 du livre) : le regard des proches. Le membre partage un lien ; chacun choisit
+ * « Feedback nourricier » (livre, chapitres 12 et 23) : le regard des proches, troisième des « trois témoins ». Le membre partage un lien ; chacun choisit
  * les qualités qu'il voit chez cette personne, ce qu'elle fait de mieux et un point où elle gagnerait à grandir.
  * Anonyme par défaut ; le détail n'apparaît qu'à partir de 3 réponses pour protéger l'anonymat.
  */
@@ -20,6 +20,10 @@ final class FeedbackService
     public const MIN_FOR_DETAIL = 3;
     public const MAX_RESPONSES = 50;
     public const MAX_QUALITIES = 5;
+    /** Qualités ajoutées par la personne qui répond (en plus de la liste), comptées dans MAX_QUALITIES. */
+    public const MAX_OWN_QUALITIES = 3;
+    /** Longueur d'une qualité ajoutée ou d'une réponse « en un mot ». */
+    public const WORD_LENGTH = 40;
     /** Durée d'un lien, puis d'une prolongation (jours) ; un lien ne court jamais plus de 3 semaines devant lui. */
     public const DURATION_DAYS = 7;
     public const MAX_AHEAD_DAYS = 21;
@@ -209,21 +213,42 @@ final class FeedbackService
     }
 
     /**
-     * @param array{relationship?: string, qualities?: list<string>, strengths?: string, improvements?: string, name?: string} $data
+     * @param array{relationship?: string, qualities?: list<string>, otherQualities?: list<string>|string, word?: string, notWord?: string, strengths?: string, improvements?: string, name?: string} $data
      *
      * @return list<string> erreurs (vide = enregistré)
      */
     public function submit(FeedbackRequest $request, array $data): array
     {
         $qualities = array_values(array_intersect(self::QUALITIES, (array) ($data['qualities'] ?? [])));
+        // Qualités ajoutées avec ses propres mots : une qualité de la liste écrite autrement reprend son nom de la liste
+        $own = [];
+        foreach ((array) ($data['otherQualities'] ?? []) as $raw) {
+            $q = self::cleanWord((string) $raw);
+            if ('' === $q) {
+                continue;
+            }
+            foreach ([...self::QUALITIES, ...$qualities, ...$own] as $known) {
+                if (self::fold($known) === self::fold($q)) {
+                    $q = \in_array($known, self::QUALITIES, true) && !\in_array($known, $qualities, true) ? $known : null;
+                    break;
+                }
+            }
+            if (null === $q) {
+                continue;
+            }
+            \in_array($q, self::QUALITIES, true) ? $qualities[] = $q : $own[] = $q;
+        }
+        $word = self::cleanWord((string) ($data['word'] ?? ''));
+        $notWord = self::cleanWord((string) ($data['notWord'] ?? ''));
         $strengths = mb_substr(trim((string) ($data['strengths'] ?? '')), 0, 2000);
         $improvements = mb_substr(trim((string) ($data['improvements'] ?? '')), 0, 2000);
         $name = mb_substr(trim((string) ($data['name'] ?? '')), 0, 100);
         $relationship = isset(self::RELATIONSHIPS[$data['relationship'] ?? '']) ? $data['relationship'] : 'autre';
 
         $errors = [];
-        if ([] === $qualities) { $errors[] = 'Choisissez au moins une qualité.'; }
-        if (\count($qualities) > self::MAX_QUALITIES) { $errors[] = 'Choisissez au plus '.self::MAX_QUALITIES.' qualités.'; }
+        if ([] === $qualities && [] === $own) { $errors[] = 'Choisissez au moins une qualité.'; }
+        if (\count($qualities) + \count($own) > self::MAX_QUALITIES) { $errors[] = 'Choisissez au plus '.self::MAX_QUALITIES.' qualités.'; }
+        if (\count($own) > self::MAX_OWN_QUALITIES) { $errors[] = 'Ajoutez au plus '.self::MAX_OWN_QUALITIES.' qualités avec vos propres mots.'; }
         if ('' === $strengths) { $errors[] = 'Dites ce que cette personne fait de mieux.'; }
         if (!$request->isOpen()) { $errors[] = 'Ce lien n\'accepte plus de réponses.'; }
         if ($request->isForceRealName() && '' === $name) { $errors[] = 'Indiquez votre prénom.'; }
@@ -233,7 +258,8 @@ final class FeedbackService
         }
 
         $feedback = (new CommunityFeedback())->setUser($request->getUser())->setFeedbackRequest($request)
-            ->setRelationship($relationship)->setQualities(json_encode($qualities, \JSON_UNESCAPED_UNICODE))
+            ->setRelationship($relationship)->setQualities(json_encode([...$qualities, ...$own], \JSON_UNESCAPED_UNICODE))
+            ->setAnswers('' !== $word || '' !== $notWord ? json_encode(['mot' => $word, 'pas' => $notWord], \JSON_UNESCAPED_UNICODE) : null)
             ->setStrengths($strengths)->setImprovements('' !== $improvements ? $improvements : null)
             ->setIsAnonymous('' === $name)->setRespondentName('' !== $name ? $name : null);
         $this->em->persist($feedback);
@@ -251,17 +277,24 @@ final class FeedbackService
     /**
      * Synthèse : qualités les plus citées, forces, pistes de croissance, répartition des liens.
      *
-     * @return array{count: int, detail: bool, qualities: array<string, int>, strengths: list<array{text: string, from: ?string}>, improvements: list<array{text: string, from: ?string}>, relationships: array<string, int>}
+     * Les réponses « en un mot » (comment décrire la personne, ce qu'elle n'est pas) sont comptées comme les qualités.
+     *
+     * @return array{count: int, detail: bool, qualities: array<string, int>, words: array<string, int>, notWords: array<string, int>, strengths: list<array{text: string, from: ?string}>, improvements: list<array{text: string, from: ?string}>, relationships: array<string, int>}
      */
     public function summary(FeedbackRequest $request): array
     {
         $rows = $this->em->getRepository(CommunityFeedback::class)->findBy(['feedbackRequest' => $request], ['createdAt' => 'ASC']);
-        $qualities = $relationships = [];
+        $qualities = $relationships = $words = $notWords = [];
         $strengths = $improvements = [];
         foreach ($rows as $f) {
             foreach ((array) json_decode((string) $f->getQualities(), true) as $q) {
-                $q = self::LEGACY_QUALITIES[$q] ?? $q;
-                $qualities[$q] = ($qualities[$q] ?? 0) + 1;
+                // Qualités ajoutées par les proches : même qualité écrite autrement regroupée
+                $qualities = self::countWord($qualities, self::LEGACY_QUALITIES[$q] ?? $q);
+            }
+            $oneWord = json_decode((string) $f->getAnswers(), true);
+            if (\is_array($oneWord)) {
+                $words = self::countWord($words, $oneWord['mot'] ?? null);
+                $notWords = self::countWord($notWords, $oneWord['pas'] ?? null);
             }
             $rel = self::RELATIONSHIPS[$f->getRelationship()] ?? 'Autre';
             $relationships[$rel] = ($relationships[$rel] ?? 0) + 1;
@@ -270,12 +303,59 @@ final class FeedbackService
             if ($f->getImprovements()) { $improvements[] = ['text' => $f->getImprovements(), 'from' => $from]; }
         }
         arsort($qualities);
+        arsort($words);
+        arsort($notWords);
         // Ordre mélangé pour ne pas pouvoir relier une réponse à son auteur par l'heure d'arrivée
         shuffle($strengths);
         shuffle($improvements);
         $detail = \count($rows) >= self::MIN_FOR_DETAIL || $request->isForceRealName();
 
         return ['count' => \count($rows), 'detail' => $detail, 'qualities' => $detail ? $qualities : [],
+            'words' => $detail ? $words : [], 'notWords' => $detail ? $notWords : [],
             'strengths' => $detail ? $strengths : [], 'improvements' => $detail ? $improvements : [], 'relationships' => $relationships];
+    }
+
+    /** Un mot ou une courte expression : sans balise ni retour à la ligne, majuscule initiale, WORD_LENGTH caractères au plus. */
+    public static function cleanWord(string $raw): string
+    {
+        $w = trim(preg_replace('/\s+/u', ' ', strip_tags($raw)) ?? '', " \t\n\r\0\x0B.,;:!?«»\"'");
+        $w = mb_substr($w, 0, self::WORD_LENGTH);
+        if (mb_strlen($w) > 3 && $w === mb_strtoupper($w)) { // ÉCRIT EN CAPITALES : remis en minuscules
+            $w = mb_strtolower($w);
+        }
+
+        return '' === $w ? '' : mb_strtoupper(mb_substr($w, 0, 1)).mb_substr($w, 1);
+    }
+
+    /**
+     * Ajoute un mot au décompte ; le même mot écrit autrement (majuscules, accents) est regroupé sous la première forme reçue.
+     *
+     * @param array<string, int> $counts
+     *
+     * @return array<string, int>
+     */
+    private static function countWord(array $counts, mixed $raw): array
+    {
+        $w = \is_string($raw) ? self::cleanWord($raw) : '';
+        if ('' === $w) {
+            return $counts;
+        }
+        foreach (array_keys($counts) as $k) {
+            if (self::fold((string) $k) === self::fold($w)) {
+                $w = (string) $k;
+                break;
+            }
+        }
+        $counts[$w] = ($counts[$w] ?? 0) + 1;
+
+        return $counts;
+    }
+
+    /** Pour comparer deux mots sans tenir compte des majuscules ni des accents. */
+    private static function fold(string $s): string
+    {
+        $t = \Transliterator::create('NFD; [:Nonspacing Mark:] Remove; NFC; Lower()');
+
+        return $t ? (string) $t->transliterate($s) : mb_strtolower($s);
     }
 }
