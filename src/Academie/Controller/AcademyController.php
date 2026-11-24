@@ -189,6 +189,30 @@ final class AcademyController extends AbstractController
         return $this->redirect($this->generateUrl('app_academie_lesson', ['slug' => $slug, 'lessonSlug' => $lessonSlug]).'#notes');
     }
 
+    #[Route('/{slug}/rythme', name: '_pace', requirements: ['slug' => '[a-z0-9-]+'], methods: ['POST'])]
+    public function pace(Request $request, string $slug): Response
+    {
+        $this->checkCsrf($request);
+        $user = $this->user();
+        $course = $this->visibleCourse($slug);
+        if ($this->catalog->isLocked($user, $course)) {
+            throw new ProRequiredException('academie', 'Le parcours « '.$course->getTitle().' » fait partie de KIINI SAWA PRO.');
+        }
+        $mode = $request->request->getString('rythme');
+        if (!\in_array($mode, CourseEnrollment::PACES, true)) {
+            throw new AccessDeniedHttpException('Rythme inconnu.');
+        }
+        $this->catalog->enroll($user, $course)->setPace($mode);
+        $this->em->flush();
+        $this->addFlash('success', match ($mode) {
+            CourseEnrollment::PACE_DAILY => 'C\'est noté : vous recevrez une leçon chaque matin par e-mail.',
+            CourseEnrollment::PACE_THREE_PER_WEEK => 'C\'est noté : vous recevrez une leçon le lundi, le mercredi et le vendredi.',
+            default => 'C\'est noté : vous avancez à votre rythme, sans e-mail.',
+        });
+
+        return $this->redirect($this->generateUrl('app_academie_course', ['slug' => $slug]).'#rythme');
+    }
+
     #[Route('/notes/{id}/supprimer', name: '_note_delete', requirements: ['id' => '\d+'], methods: ['POST'])]
     public function deleteNote(Request $request, int $id): Response
     {

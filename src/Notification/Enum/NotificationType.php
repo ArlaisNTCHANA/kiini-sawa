@@ -35,6 +35,8 @@ enum NotificationType: string
     case COUPLE_SANCTUARY = 'COUPLE_SANCTUARY';
     // Engagement de redevabilité : accord ou réponse du partenaire
     case ACCOUNTABILITY = 'ACCOUNTABILITY';
+    // Académie : leçon du jour selon le rythme choisi par le membre (et message de pause automatique)
+    case ACADEMY_LESSON = 'ACADEMY_LESSON';
 
     /** Icône Lucide affichée dans le centre de notifications. */
     public function icon(): string
@@ -55,6 +57,7 @@ enum NotificationType: string
             self::DAILY_RITUALS => 'sun',
             self::COUPLE_SANCTUARY => 'heart',
             self::ACCOUNTABILITY => 'shield-check',
+            self::ACADEMY_LESSON => 'graduation-cap',
         };
     }
 

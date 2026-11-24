@@ -1,0 +1,18 @@
+{% extends 'compte/email/_layout.html.twig' %}
+{# Leçon du jour (rythme de l'Académie). Variables : name, course, lesson, progress, pace, actionUrl, unsubscribeUrl. #}
+{% block content %}
+  <p>Bonjour {{ name }},</p>
+  <p style="font-size:13px;color:#64748b;margin:18px 0 4px;text-transform:uppercase;letter-spacing:.06em;">{{ course.title }}</p>
+  <p style="font-family:Georgia,serif;font-size:20px;font-weight:bold;color:#2E6B53;margin:0 0 8px;">{{ lesson.title }}</p>
+  <p style="margin:0 0 16px;color:#475569;">{{ t('academie.email.duree', 'Environ {minutes} minutes. Leçon {position} sur {total}.', 'text', {minutes: lesson.durationMinutes, position: progress.done + 1, total: progress.total}) }}</p>
+  <p>{{ t('academie.email.texte', 'Prenez ce moment pour vous : une leçon courte, puis une décision à inscrire, si vous le voulez, dans vos plans.') }}</p>
+  {% if actionUrl %}
+    <p style="text-align:center;margin:28px 0;"><a href="{{ actionUrl }}" style="background:#2E6B53;color:#ffffff;text-decoration:none;padding:14px 28px;border-radius:10px;font-weight:bold;display:inline-block;">{{ t('academie.email.bouton', 'Lire la leçon') }}</a></p>
+  {% endif %}
+  <p style="margin-top:24px;">{{ t('academie.email.signature', 'Avec vous sur le chemin,') }}<br><strong>L'équipe KIINI SAWA</strong></p>
+{% endblock %}
+{% block footer %}
+  {{ pace == 'DAILY' ? t('academie.email.pied_quotidien', 'Vous recevez cet e-mail parce que vous avez choisi de suivre ce parcours au rythme d\'une leçon par jour.') : t('academie.email.pied_semaine', 'Vous recevez cet e-mail parce que vous avez choisi de suivre ce parcours au rythme de trois leçons par semaine.') }}
+  {{ t('academie.email.pied_libre', 'Vous pouvez changer de rythme sur la page du parcours.') }}
+  <a href="{{ unsubscribeUrl }}" style="color:#64748b;">{{ t('academie.email.pause_lien', 'Mettre en pause les e-mails de l\'Académie') }}</a>.
+{% endblock %}

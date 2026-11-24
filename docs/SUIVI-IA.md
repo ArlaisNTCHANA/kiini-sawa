@@ -9,6 +9,27 @@ teste (`php bin/phpunit`), commit, déploie (`bin/ops/envoyer-hostinger.sh`), v�
 journal `var/log/prod-AAAA-MM-JJ.log` sans erreur) ; **le fondateur fait lui-même `git push`** (refusé à l'IA).
 Ne jamais afficher ni demander de mot de passe ; ne pas publier son nom (mentions légales en attente).
 
+## 24/11/2026 — L'Académie, Lot 3 : rythme par e-mail
+
+- **Demande du fondateur** : « Oui, Lot 3 ». Détail : `docs/modules/academie.md` (section Rythme par e-mail).
+- **Fait** :
+  - carte « Mon rythme » sur la page d'un parcours : à mon rythme (sans e-mail), une leçon par jour, trois par semaine
+    (lundi, mercredi, vendredi) ; bouton « Reprendre mon rythme » quand il est en pause ;
+  - `AcademyPaceMailer`, appelé chaque matin par `app:reminders:send` : e-mail de la prochaine leçon, jamais deux fois
+    le même jour ; après 3 e-mails sans leçon terminée, message de pause bienveillant puis plus rien jusqu'à la reprise ;
+  - nouveau type de notification `ACADEMY_LESSON` (e-mail seulement) ; le lien « Mettre en pause les e-mails de
+    l'Académie » (désinscription signée) met les rythmes du membre en pause ;
+  - migration `Version20261124052107` (4 colonnes sur `academy_enrollment`) ; gabarits `templates/academie/email/`.
+- **Fichiers hors du module touchés** : `Notification/Enum/NotificationType.php`, `Notification/Service/Notifier.php`
+  (e-mail sans entrée dans le centre de notifications), `Notification/Command/SendRemindersCommand.php`,
+  `Notification/Controller/NotificationController.php` (désinscription).
+- **Tests** : `tests/Academie/AcademyPaceTest.php` (envoi quotidien, pas de doublon le même jour, pause après 3 e-mails,
+  remise à zéro en terminant une leçon, 3 par semaine, rythme libre, parcours PRO, envoi du matin, choix du rythme,
+  pause depuis l'e-mail, reprise en un clic, rythme inconnu refusé). Suite complète **543 / 543**.
+- **Vérifié en local** : choix du rythme dans le navigateur ; rendu des deux e-mails (leçon du jour, pause).
+- **Reste** : le cahier des charges demande un essai avec un vrai e-mail en production : à faire après le déploiement,
+  avec l'accord du fondateur. Lot 4 (mobile). Rien n'est poussé ni déployé.
+
 ## 24/11/2026 — L'Académie, Lot 2 : pages des membres
 
 - **Demande du fondateur** : « Oui, Lot 2 » (après validation du Lot 1). Détail : `docs/modules/academie.md`.

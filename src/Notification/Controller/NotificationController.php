@@ -88,7 +88,7 @@ class NotificationController extends AbstractController
 
     /** Lien signé reçu par email : désactive ce type de rappel, sans avoir à se connecter. */
     #[Route('/notifications/desabonnement/{user}/{type}', name: 'app_notification_unsubscribe', requirements: ['user' => '\d+'], methods: ['GET', 'POST'])]
-    public function unsubscribe(int $user, string $type, Request $request, UriSigner $signer, EntityManagerInterface $em, Notifier $notifier): Response
+    public function unsubscribe(int $user, string $type, Request $request, UriSigner $signer, EntityManagerInterface $em, Notifier $notifier, \App\Academie\Service\AcademyPaceMailer $academy): Response
     {
         $account = $em->find(User::class, $user);
         $notificationType = NotificationType::tryFrom($type);
@@ -107,6 +107,8 @@ class NotificationController extends AbstractController
                 NotificationType::PARTNER_INACTIVE => $prefs->setNotifyPartnerInactive(false),
                 NotificationType::ONBOARDING => $prefs->setNotifyOnboarding(false),
                 NotificationType::CHALLENGE_DAY => $prefs->setNotifyChallenge(false),
+                // Académie : les rythmes par e-mail du membre passent en pause (reprise en un clic sur la page du parcours)
+                NotificationType::ACADEMY_LESSON => $academy->pauseAll($account),
                 default => $prefs->setEnableEmailInstant(false),
             };
             $em->flush();

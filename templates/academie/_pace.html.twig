@@ -1,0 +1,29 @@
+{#
+    Rythme de suivi d'un parcours : libre, une leçon par jour, ou trois par semaine (e-mail du matin).
+    Paramètres : course, enrollment (ou null). Le membre n'est jamais bloqué : il peut lire les leçons suivantes en avance.
+#}
+{% set current = enrollment ? enrollment.paceMode : 'FREE' %}
+<section class="ks-card ks-card--flat" id="rythme" style="margin-top: 1.2rem;" aria-labelledby="rythme-title">
+    <h2 class="ks-card__title" id="rythme-title"><i data-lucide="calendar-clock"></i> {{ t('academie.rythme.titre', 'Mon rythme') }}</h2>
+    {% if enrollment and enrollment.pacePaused and current != 'FREE' %}
+        <div class="ks-alert ks-alert--info" style="margin-bottom: .8rem;">
+            <p style="margin: 0 0 .6rem;">{{ t('academie.rythme.pause', 'Vos e-mails sont en pause. Votre progression est gardée : reprenez quand vous le voulez.') }}</p>
+            <form method="post" action="{{ path('app_academie_pace', {slug: course.slug}) }}">
+                <input type="hidden" name="_csrf_token" value="{{ csrf_token('academie') }}">
+                <button type="submit" name="rythme" value="{{ current }}" class="ks-btn ks-btn--secondary ks-btn--sm"><i data-lucide="play"></i> {{ t('academie.rythme.reprendre', 'Reprendre mon rythme') }}</button>
+            </form>
+        </div>
+    {% endif %}
+    <p class="ks-small" style="margin-bottom: .7rem;">{{ t('academie.rythme.aide', 'Recevez la leçon suivante par e-mail le matin, ou avancez librement. Vous pouvez toujours lire les leçons suivantes en avance.') }}</p>
+    <form method="post" action="{{ path('app_academie_pace', {slug: course.slug}) }}" class="academie-pace">
+        <input type="hidden" name="_csrf_token" value="{{ csrf_token('academie') }}">
+        {% for value, label in {
+            'FREE': t('academie.rythme.libre', 'À mon rythme, sans e-mail'),
+            'DAILY': t('academie.rythme.quotidien', 'Une leçon par jour'),
+            'THREE_PER_WEEK': t('academie.rythme.semaine', 'Trois leçons par semaine (lundi, mercredi, vendredi)'),
+        } %}
+            <label class="academie-choice"><input type="radio" name="rythme" value="{{ value }}" {{ current == value ? 'checked' }}> <span>{{ label }}</span></label>
+        {% endfor %}
+        <button type="submit" class="ks-btn ks-btn--ghost ks-btn--sm" style="margin-top: .6rem;">{{ t('academie.rythme.enregistrer', 'Enregistrer mon rythme') }}</button>
+    </form>
+</section>

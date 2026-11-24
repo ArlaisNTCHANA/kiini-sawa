@@ -15,7 +15,7 @@ use Symfony\Component\Console\Style\SymfonyStyle;
  *   0 8 * * * cd /chemin/vers/web && php bin/console app:reminders:send
  * Relancer la commande le même jour n'envoie pas de doublon.
  */
-#[AsCommand(name: 'app:reminders:send', description: 'Envoie les rappels du jour (revues, rituels, échéances, partenaires)')]
+#[AsCommand(name: 'app:reminders:send', description: 'Envoie les rappels du jour (revues, rituels, échéances, partenaires, leçons de l\'Académie)')]
 class SendRemindersCommand extends Command
 {
     public function __construct(
@@ -24,6 +24,7 @@ class SendRemindersCommand extends Command
         private readonly \App\Rapide\Repository\SyncOperationRepository $syncOperations,
         private readonly \App\Mobile\Repository\MobileTokenRepository $mobileTokens,
         private readonly \App\Social\Service\AccountabilityService $accountability,
+        private readonly \App\Academie\Service\AcademyPaceMailer $academy,
     )
     {
         parent::__construct();
@@ -48,6 +49,10 @@ class SendRemindersCommand extends Command
         // Redevabilité : alertes automatiques au partenaire (avec copie à la personne) et reprises à 72 heures
         $accountability = $this->accountability->runDailyChecks($date);
         $sent['redevabilité (alertes)'] = $accountability['alertes'];
+        // Académie : leçon du jour selon le rythme choisi, pause automatique après 3 e-mails sans avancer
+        $academy = $this->academy->sendAll($date);
+        $sent['académie (leçons)'] = $academy['lecons'];
+        $sent['académie (pauses)'] = $academy['pauses'];
         // Ménage quotidien : les identifiants de synchronisation du mode rapide de plus de 60 jours ne servent plus
         $this->syncOperations->purgeOlderThan($date->modify('-60 days'));
         $this->mobileTokens->purgeExpired($date->modify('-60 days'));

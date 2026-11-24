@@ -47,6 +47,10 @@
         {% endif %}
     </div>
 
+    {% if not locked and not (enrollment and enrollment.completed) and lessons|length %}
+        {% include 'academie/_pace.html.twig' %}
+    {% endif %}
+
     {% if course.description %}<div class="academie-texte" style="margin-top: 1.6rem;">{{ course.description|lecon_markdown }}</div>{% endif %}
 
     {% for m in course.modules %}
@@ -60,7 +64,7 @@
                         <div class="ks-row-link" style="cursor: default;"><span>{{ l.title }}</span><span class="ks-row-link__meta">{{ l.durationMinutes }} min</span></div>
                     {% else %}
                         <a class="ks-row-link" href="{{ path('app_academie_lesson', {slug: course.slug, lessonSlug: l.slug}) }}">
-                            <span>{% if done %}<i data-lucide="check-circle-2" style="width: 15px; height: 15px; color: var(--primary);" aria-label="{{ t('academie.lecon.faite', 'Terminée') }}"></i> {% endif %}{{ l.title }}</span>
+                            <span style="display: inline-flex; align-items: center; gap: .4rem;">{% if done %}<i data-lucide="check-circle-2" style="width: 15px; height: 15px; flex: none; color: var(--primary);" aria-label="{{ t('academie.lecon.faite', 'Terminée') }}"></i> {% endif %}{{ l.title }}</span>
                             <span class="ks-row-link__meta">{{ l.durationMinutes }} min{% if l.hasVideo %} · {{ t('academie.lecon.video', 'vidéo') }}{% endif %}</span>
                         </a>
                     {% endif %}

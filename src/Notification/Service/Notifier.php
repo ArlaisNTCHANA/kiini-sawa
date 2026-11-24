@@ -56,8 +56,8 @@ final class Notifier
             }
             $inApp = $prefs->isEnableInApp();
             $byEmail = \in_array($type, self::REMINDERS, true) ? $prefs->isEnableEmailDigest() : $prefs->isEnableEmailInstant();
-            // Accueil : un email (réglé par sa propre préférence), sans encombrer le centre de notifications
-            if (\in_array($type, [NotificationType::ONBOARDING, NotificationType::CHALLENGE_DAY], true)) {
+            // Accueil, défis, leçon de l'Académie (rythme choisi par le membre) : un email, sans encombrer le centre de notifications
+            if (\in_array($type, [NotificationType::ONBOARDING, NotificationType::CHALLENGE_DAY, NotificationType::ACADEMY_LESSON], true)) {
                 $inApp = false;
                 $byEmail = true;
             }

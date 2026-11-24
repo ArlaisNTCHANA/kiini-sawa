@@ -1,6 +1,6 @@
 # Module Academie
 
-**Statut** : Lot 1 (studio auteur) et Lot 2 (pages des membres) livrés le 24/11/2026. Lots 3 et 4 à venir. Cahier des charges :
+**Statut** : Lot 1 (studio auteur), Lot 2 (pages des membres) et Lot 3 (rythme par e-mail) livrés le 24/11/2026. Lot 4 (mobile) à venir. Cahier des charges :
 `docs/roadmap/CDC-academie-pratique.md` (décisions du fondateur du 24/11/2026 ci-dessous, elles priment sur le cahier).
 
 ## Rôle
@@ -40,7 +40,7 @@ les vrais plans de la personne. Pas de certificat, pas de note.
 | `Lesson` | `academy_lesson` | adresse (unique dans le parcours), titre, ordre, `visible`, texte Markdown, vidéo (`mediaProvider` `NONE`/`YOUTUBE`/`VIMEO` + identifiant seulement), durée, exercice (`targetPlan`, `targetAction`, consigne) |
 | `LessonQuestion` | `academy_question` | question, réponses `[{id, label}]` (a, b, c…), bonnes réponses, explication. 5 questions et 5 réponses au plus |
 
-| `CourseEnrollment` | `academy_enrollment` | inscription d'un membre à un parcours (unique membre + parcours), créée à la première leçon ouverte ; début, dernière activité, fin |
+| `CourseEnrollment` | `academy_enrollment` | inscription d'un membre à un parcours (unique membre + parcours), créée à la première leçon ouverte ou au choix du rythme ; début, dernière activité, fin ; rythme (`paceMode` FREE/DAILY/THREE_PER_WEEK, `pacePaused`, `emailsWithoutProgress`, `lastEmailSentOn`) |
 | `LessonCompletion` | `academy_completion` | leçon terminée (unique inscription + leçon) ; réponse à « Mettre en pratique » (JSON) et élément créé dans un plan (`createdEntityType` + `createdEntityId`) |
 | `LessonNote` | `academy_lesson_note` | lien entre une note du Journal (`ReflectionNote`, supprimée avec elle) et sa leçon (mise à NULL si la leçon disparaît), avec le plan concerné |
 
@@ -130,7 +130,25 @@ Garde-fous :
   (`AcademyPlanBridge::FREE_DESTINATIONS` : un objectif de chacun des 6 plans, ou un rituel). Le « Point à développer » du
   cahier des charges est ainsi fondu dans « Mettre en pratique ».
 
+## Rythme par e-mail (Lot 3, `AcademyPaceMailer`)
+
+- **Choix** : carte « Mon rythme » sur la page du parcours (`POST /academie/{slug}/rythme`) : à mon rythme sans e-mail
+  (par défaut), une leçon par jour, ou trois par semaine (lundi, mercredi, vendredi). Choisir un rythme inscrit au
+  parcours ; rechoisir relance un rythme en pause.
+- **Envoi** : chaque matin par `app:reminders:send` (`SendRemindersCommand` appelle `AcademyPaceMailer::sendAll`) : la
+  prochaine leçon non terminée, sa durée, un lien direct (gabarit `templates/academie/email/lecon.html.twig`, textes
+  `t('academie.email.…')`). Type de notification `ACADEMY_LESSON` : e-mail seulement (pas dans le centre de
+  notifications), comme l'accueil. Rien pour un parcours terminé, un rythme libre ou en pause, un parcours PRO quand le
+  membre ne l'est plus.
+- **Pas de doublon** : date du dernier envoi (`lastEmailSentOn`) + clé de notification `academie-{inscription}-{date}`.
+- **Pause automatique** : après 3 e-mails sans leçon terminée (`emailsWithoutProgress`, remis à zéro à chaque leçon
+  terminée), le 4e jour part un message bienveillant (`email/pause.html.twig`) et le rythme passe en pause. Reprise en un
+  clic : bouton « Reprendre mon rythme » sur la page du parcours (le lien de l'e-mail y mène).
+- **Mettre en pause depuis l'e-mail** : le lien de désinscription signé (et l'en-tête `List-Unsubscribe`) du type
+  `ACADEMY_LESSON` met en pause tous les rythmes du membre (`AcademyPaceMailer::pauseAll`, appelé par
+  `NotificationController::unsubscribe`).
+- Le membre n'est jamais bloqué : il peut lire les leçons suivantes en avance.
+
 ## Reste à faire (lots suivants)
 
-- **Lot 3** : rythme par e-mail (`SendRemindersCommand`, `Notifier`, pause après 3 e-mails sans avancer).
 - **Lot 4** : API `/api/mobile/v1/academie/...` et écrans `mobile-v1/app/academie/`.

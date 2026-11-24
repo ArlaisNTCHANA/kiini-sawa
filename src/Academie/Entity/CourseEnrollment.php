@@ -18,6 +18,15 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\UniqueConstraint(name: 'uniq_academy_enrollment', columns: ['user_id', 'course_id'])]
 class CourseEnrollment
 {
+    /** Rythme de suivi : libre (aucun e-mail), une leçon par jour, ou trois par semaine (lundi, mercredi, vendredi). */
+    public const PACE_FREE = 'FREE';
+    public const PACE_DAILY = 'DAILY';
+    public const PACE_THREE_PER_WEEK = 'THREE_PER_WEEK';
+    public const PACES = [self::PACE_FREE, self::PACE_DAILY, self::PACE_THREE_PER_WEEK];
+
+    /** Après 3 e-mails sans avancer, le rythme se met en pause (règle contre le harcèlement). */
+    public const MAX_EMAILS_WITHOUT_PROGRESS = 3;
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
@@ -40,6 +49,19 @@ class CourseEnrollment
     #[ORM\Column(type: Types::DATETIME_IMMUTABLE, nullable: true)]
     private ?\DateTimeImmutable $completedAt = null;
 
+    #[ORM\Column(length: 20, options: ['default' => self::PACE_FREE])]
+    private string $paceMode = self::PACE_FREE;
+
+    #[ORM\Column(options: ['default' => false])]
+    private bool $pacePaused = false;
+
+    /** E-mails de leçon envoyés depuis la dernière leçon terminée. */
+    #[ORM\Column(options: ['default' => 0])]
+    private int $emailsWithoutProgress = 0;
+
+    #[ORM\Column(type: Types::DATE_IMMUTABLE, nullable: true)]
+    private ?\DateTimeImmutable $lastEmailSentOn = null;
+
     /** @var Collection<int, LessonCompletion> */
     #[ORM\OneToMany(targetEntity: LessonCompletion::class, mappedBy: 'enrollment', cascade: ['persist', 'remove'], orphanRemoval: true)]
     private Collection $completions;
@@ -61,6 +83,55 @@ class CourseEnrollment
     public function touch(): static { $this->lastActivityAt = new \DateTimeImmutable(); return $this; }
     public function getCompletedAt(): ?\DateTimeImmutable { return $this->completedAt; }
     public function isCompleted(): bool { return null !== $this->completedAt; }
+
+    public function getPaceMode(): string { return $this->paceMode; }
+    public function isPacePaused(): bool { return $this->pacePaused; }
+    public function getEmailsWithoutProgress(): int { return $this->emailsWithoutProgress; }
+    public function getLastEmailSentOn(): ?\DateTimeImmutable { return $this->lastEmailSentOn; }
+    /** Le membre reçoit ses leçons par e-mail en ce moment. */
+    public function isPaced(): bool { return self::PACE_FREE !== $this->paceMode && !$this->pacePaused && !$this->isCompleted(); }
+
+    /** Choisir (ou rechoisir) son rythme relance aussi un rythme en pause. */
+    public function setPace(string $mode): static
+    {
+        $this->paceMode = \in_array($mode, self::PACES, true) ? $mode : self::PACE_FREE;
+        $this->resumePace();
+
+        return $this;
+    }
+
+    public function pausePace(): static { $this->pacePaused = true; return $this; }
+
+    public function resumePace(): static
+    {
+        $this->pacePaused = false;
+        $this->emailsWithoutProgress = 0;
+
+        return $this;
+    }
+
+    /** Le rythme prévoit-il un e-mail ce jour-là ? */
+    public function isPaceDay(\DateTimeImmutable $day): bool
+    {
+        return match ($this->paceMode) {
+            self::PACE_DAILY => true,
+            self::PACE_THREE_PER_WEEK => \in_array((int) $day->format('N'), [1, 3, 5], true),
+            default => false,
+        };
+    }
+
+    public function recordEmail(\DateTimeImmutable $day): static
+    {
+        ++$this->emailsWithoutProgress;
+        $this->lastEmailSentOn = $day->setTime(0, 0);
+
+        return $this;
+    }
+
+    public function wasEmailedOn(\DateTimeImmutable $day): bool
+    {
+        return null !== $this->lastEmailSentOn && $this->lastEmailSentOn->format('Y-m-d') === $day->format('Y-m-d');
+    }
 
     /** @return Collection<int, LessonCompletion> */
     public function getCompletions(): Collection { return $this->completions; }
@@ -90,6 +161,7 @@ class CourseEnrollment
             $this->completions->add($completion);
         }
         $this->touch();
+        $this->emailsWithoutProgress = 0;
         if (null === $this->completedAt && null === $this->nextLesson()) {
             $this->completedAt = new \DateTimeImmutable();
         }
