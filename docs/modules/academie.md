@@ -130,6 +130,18 @@ Garde-fous :
   (`AcademyPlanBridge::FREE_DESTINATIONS` : un objectif de chacun des 6 plans, ou un rituel). Le « Point à développer » du
   cahier des charges est ainsi fondu dans « Mettre en pratique ».
 
+## Lien avec la redevabilité (Partenaire de Redevabilité)
+
+- Quand « Mettre en pratique » vient de créer **un rituel** ou **un objectif du Plan de Vie** (les deux choses que la
+  redevabilité sait suivre), le membre reste sur la leçon (`#redevabilite`) et voit : « Voulez-vous qu'un Partenaire de
+  Redevabilité veille sur ce rituel ? » avec « Choisir mon Partenaire de Redevabilité » ou « Plus tard, leçon suivante ».
+- Le bouton ouvre le formulaire habituel `/social/redevabilite/nouveau?cible=HABIT:{id}` (ou `GOAL:{id}`) avec l'élément
+  déjà choisi (seulement s'il appartient au membre) ; toutes les étapes restent (choix, aperçu, accord).
+- Proposé seulement si le membre peut ouvrir un engagement (`AccountabilityService::canCreate` : un en gratuit) et
+  qu'aucun engagement ouvert ne suit déjà cet élément (`AccountabilityService::isFollowed`).
+- L'Académie reste privée : la progression dans les parcours n'est jamais montrée au Partenaire de Redevabilité, et le
+  rythme par e-mail ne le prévient jamais.
+
 ## Rythme par e-mail (Lot 3, `AcademyPaceMailer`)
 
 - **Choix** : carte « Mon rythme » sur la page du parcours (`POST /academie/{slug}/rythme`) : à mon rythme sans e-mail

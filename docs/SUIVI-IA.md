@@ -9,6 +9,21 @@ teste (`php bin/phpunit`), commit, déploie (`bin/ops/envoyer-hostinger.sh`), v�
 journal `var/log/prod-AAAA-MM-JJ.log` sans erreur) ; **le fondateur fait lui-même `git push`** (refusé à l'IA).
 Ne jamais afficher ni demander de mot de passe ; ne pas publier son nom (mentions légales en attente).
 
+## 24/11/2026 — L'Académie : lien vers le Partenaire de Redevabilité
+
+- **Demande du fondateur** : après une leçon, proposer qu'un Partenaire de Redevabilité veille sur la décision prise
+  (prévu par le cahier des charges, oublié au Lot 2). Consigne : toujours écrire « Partenaire de Redevabilité » en entier.
+- **Fait** : après un exercice qui a créé un rituel ou un objectif du Plan de Vie, la leçon propose « Choisir mon
+  Partenaire de Redevabilité » ; le formulaire de redevabilité accepte `?cible=HABIT:{id}` / `GOAL:{id}` (présélection
+  vérifiée) ; `AccountabilityService::isFollowed` évite de proposer un élément déjà suivi. Détail :
+  `docs/modules/academie.md` (Lien avec la redevabilité).
+- **Fichiers hors du module touchés** : `Social/Controller/AccountabilityController.php` (`new`),
+  `Social/Service/AccountabilityService.php` (`isFollowed`).
+- **Question ouverte au fondateur** : aujourd'hui, la redevabilité ne prévient pas la personne *avant* d'alerter son
+  Partenaire de Redevabilité (elle reçoit une copie au même moment). Proposition faite : un e-mail de dernier rappel la
+  veille. Pas codé tant qu'il n'a pas décidé.
+- **Tests** : `AcademyMemberTest::testARitualFromALessonCanBeFollowedByAPartenaireDeRedevabilite`. Suite complète **544 / 544**.
+
 ## 24/11/2026 — L'Académie, Lot 3 : rythme par e-mail
 
 - **Demande du fondateur** : « Oui, Lot 3 ». Détail : `docs/modules/academie.md` (section Rythme par e-mail).

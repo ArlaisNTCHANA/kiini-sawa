@@ -50,6 +50,18 @@ final class AccountabilityService
         return $this->em->getRepository(AccountabilityCommitment::class)->findBy(['partnerUser' => $user, 'status' => AccountabilityCommitment::STATUS_ACTIVE], ['createdAt' => 'DESC']);
     }
 
+    /** Un engagement ouvert (en attente, actif ou en pause) suit-il déjà ce rituel ou cet objectif ? */
+    public function isFollowed(User $owner, string $targetType, int $targetId): bool
+    {
+        foreach ($this->em->getRepository(AccountabilityCommitment::class)->findBy(['owner' => $owner, 'targetType' => $targetType, 'targetId' => $targetId]) as $c) {
+            if ($c->isOpen()) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     public function canCreate(User $owner): bool
     {
         if ($this->entitlements->isPro($owner)) {

@@ -43,7 +43,7 @@ class AccountabilityController extends AbstractController
     }
 
     #[Route('/social/redevabilite/nouveau', name: 'app_accountability_new', methods: ['GET'])]
-    public function new(): Response
+    public function new(Request $request): Response
     {
         $user = $this->user();
         if (!$this->service->canCreate($user)) {
@@ -52,10 +52,19 @@ class AccountabilityController extends AbstractController
             return $this->redirectToRoute('app_accountability');
         }
 
+        $targets = $this->service->targetsFor($user);
+        // Arrivée depuis une leçon de l'Académie (?cible=HABIT:12 ou GOAL:7) : le rituel ou l'objectif est déjà choisi,
+        // seulement s'il appartient bien à la personne
+        $data = [];
+        if (preg_match('/^(HABIT|GOAL):(\d+)$/', $request->query->getString('cible'), $m)
+            && \in_array((int) $m[2], array_column($targets['HABIT' === $m[1] ? 'habits' : 'goals'], 'id'), true)) {
+            $data['target'] = $m[0];
+        }
+
         return $this->render('social/accountability/new.html.twig', [
-            'targets' => $this->service->targetsFor($user),
+            'targets' => $targets,
             'partners' => $this->service->partnersOf($user),
-            'data' => [],
+            'data' => $data,
         ]);
     }
 

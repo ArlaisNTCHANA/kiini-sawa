@@ -16,6 +16,7 @@ use App\Academie\Service\AcademyPlaces;
 use App\Academie\Service\AcademyPlanBridge;
 use App\Academie\Service\PracticeCatalog;
 use App\Compte\Entity\User;
+use App\Social\Service\AccountabilityService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -40,6 +41,7 @@ final class AcademyController extends AbstractController
         private readonly AcademyJournal $journal,
         private readonly Entitlements $entitlements,
         private readonly EntityManagerInterface $em,
+        private readonly AccountabilityService $accountability,
     ) {
     }
 
@@ -120,6 +122,7 @@ final class AcademyController extends AbstractController
             'position' => $position,
             'total' => $total,
             'can_journal' => $this->entitlements->can($user, 'journal'),
+            'accountability' => $this->accountabilityOffer($user, $completion),
         ]);
     }
 
@@ -160,6 +163,11 @@ final class AcademyController extends AbstractController
                 $saved['id'],
             );
             $this->addFlash('success', 'Votre réponse est enregistrée dans : '.PracticeCatalog::TARGETS[$target]['label'].'.');
+            $this->em->flush();
+            // Un rituel ou un objectif du Plan de Vie : on reste sur la leçon pour proposer un Partenaire de Redevabilité
+            if (null !== $this->accountabilityOffer($user, $enrollment->completionFor($lesson))) {
+                return $this->redirect($this->generateUrl('app_academie_lesson', ['slug' => $slug, 'lessonSlug' => $lessonSlug]).'#redevabilite');
+            }
         } else {
             $enrollment->complete($lesson);
         }
@@ -260,6 +268,28 @@ final class AcademyController extends AbstractController
         }
 
         return [$course, $lesson, $this->catalog->enroll($user, $course)];
+    }
+
+    /**
+     * Après une leçon qui a créé un rituel ou un objectif du Plan de Vie (ce que la redevabilité sait suivre), proposer
+     * qu'un Partenaire de Redevabilité veille dessus : seulement si la personne peut ouvrir un engagement et qu'aucun ne
+     * le suit déjà. La progression dans l'Académie, elle, n'est jamais montrée au partenaire.
+     *
+     * @return array{target: string, label: string}|null
+     */
+    private function accountabilityOffer(User $user, ?\App\Academie\Entity\LessonCompletion $completion): ?array
+    {
+        $type = match ($completion?->getCreatedEntityType()) {
+            'Habit' => 'HABIT',
+            'LifeGoal' => 'GOAL',
+            default => null,
+        };
+        if (null === $type || !$this->bridge->find($user, $completion->getCreatedEntityType(), (int) $completion->getCreatedEntityId())
+            || !$this->accountability->canCreate($user) || $this->accountability->isFollowed($user, $type, (int) $completion->getCreatedEntityId())) {
+            return null;
+        }
+
+        return ['target' => $type.':'.$completion->getCreatedEntityId(), 'label' => 'HABIT' === $type ? 'ce rituel' : 'cet objectif'];
     }
 
     private function defaultDestination(Course $course): string

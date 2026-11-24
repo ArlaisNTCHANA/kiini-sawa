@@ -55,7 +55,17 @@
             {% set can_save = true %}
         {% endif %}
 
-        {% if saved %}<p class="ks-small" style="margin-top: .7rem;"><i data-lucide="check" style="width: 13px; height: 13px;"></i> {{ t('academie.pratique.deja', 'Déjà enregistré dans vos plans : le modifier ici met à jour le même élément, sans en créer un second.') }}</p>{% endif %}
+        {% if accountability|default(null) %}
+            <div class="academie-redevabilite" id="redevabilite">
+                <p class="academie-iconline" style="margin: 0 0 .5rem;"><i data-lucide="shield-check" style="width: 16px; height: 16px; color: var(--primary);"></i> <strong>{{ t('academie.redevabilite.titre', 'Voulez-vous qu\'un Partenaire de Redevabilité veille sur {element} ?', 'text', {element: accountability.label}) }}</strong></p>
+                <p class="ks-small" style="margin: 0 0 .7rem;">{{ t('academie.redevabilite.aide', 'Vous choisissez la personne et vous voyez exactement ce qui lui sera envoyé avant d\'accepter. Votre progression dans l\'Académie ne lui est jamais montrée.') }}</p>
+                <div class="ks-toolbar">
+                    <a href="{{ path('app_accountability_new', {cible: accountability.target}) }}" class="ks-btn ks-btn--secondary ks-btn--sm">{{ t('academie.redevabilite.bouton', 'Choisir mon Partenaire de Redevabilité') }}</a>
+                    {% if next %}<a href="{{ path('app_academie_lesson', {slug: course.slug, lessonSlug: next.slug}) }}" class="ks-btn ks-btn--ghost ks-btn--sm">{{ t('academie.redevabilite.suite', 'Plus tard, leçon suivante') }} <i data-lucide="arrow-right"></i></a>{% else %}<a href="{{ path('app_academie_course', {slug: course.slug}) }}" class="ks-btn ks-btn--ghost ks-btn--sm">{{ t('academie.redevabilite.parcours', 'Plus tard, retour au parcours') }}</a>{% endif %}
+                </div>
+            </div>
+        {% endif %}
+        {% if saved %}<p class="ks-small academie-iconline" style="margin-top: .7rem;"><i data-lucide="check" style="width: 13px; height: 13px;"></i> {{ t('academie.pratique.deja', 'Déjà enregistré dans vos plans : le modifier ici met à jour le même élément, sans en créer un second.') }}</p>{% endif %}
         <div class="ks-toolbar" style="margin-top: .9rem;">
             {% if can_save %}<button type="submit" name="mode" value="plan" class="ks-btn ks-btn--primary">{{ button }}</button>{% endif %}
             <button type="submit" name="mode" value="sans" class="ks-btn ks-btn--ghost" formnovalidate>{{ completion ? t('academie.pratique.suite', 'Continuer sans modifier mes plans') : t('academie.pratique.sans', 'Terminer la leçon sans modifier mon plan') }}</button>

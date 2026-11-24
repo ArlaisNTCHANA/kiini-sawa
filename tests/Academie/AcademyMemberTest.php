@@ -165,6 +165,32 @@ class AcademyMemberTest extends WebTestCase
         $this->assertSelectorTextContains('.ks-alert, [role="alert"], body', 'Choisissez où enregistrer');
     }
 
+    public function testARitualFromALessonCanBeFollowedByAPartenaireDeRedevabilite(): void
+    {
+        $client = static::createClient();
+        $user = $this->member($client, pro: true);
+        $course = $this->makeCourse('VIE', lessons: [['Un rituel', 'RITUEL', 'add_habit'], ['Suite', null, null]]);
+
+        $this->submitPractice($client, $course, ['title' => 'Prier dix minutes le matin', 'choice' => 'DAILY']);
+        $this->assertResponseRedirects($this->lessonUrl($course, 1).'#redevabilite', null, 'On reste sur la leçon pour proposer la redevabilité.');
+        $crawler = $client->followRedirect();
+        $this->assertSelectorTextContains('#redevabilite', 'Voulez-vous qu\'un Partenaire de Redevabilité veille sur ce rituel ?');
+        $this->assertSelectorTextContains('#redevabilite', 'Plus tard, leçon suivante');
+        $href = $crawler->filter('#redevabilite a')->first()->attr('href');
+        $this->em()->clear();
+        $habit = $this->em()->getRepository(\App\Rituels\Entity\Habit::class)->findOneBy(['user' => $user, 'title' => 'Prier dix minutes le matin']);
+        $this->assertSame('/social/redevabilite/nouveau?cible=HABIT:'.$habit->getId(), $href);
+
+        // Le formulaire de redevabilité s'ouvre avec ce rituel déjà choisi
+        $crawler = $client->request('GET', $href);
+        $this->assertResponseIsSuccessful();
+        $this->assertSame('HABIT:'.$habit->getId(), $crawler->filter('select[name="target"] option[selected]')->attr('value'));
+
+        // Un rituel qui n'est pas à elle n'est jamais présélectionné
+        $crawler = $client->request('GET', '/social/redevabilite/nouveau?cible=HABIT:999999999');
+        $this->assertCount(0, $crawler->filter('select[name="target"] option[selected][value^="HABIT"]'));
+    }
+
     public function testProCourseIsReservedToProMembers(): void
     {
         $client = static::createClient();
