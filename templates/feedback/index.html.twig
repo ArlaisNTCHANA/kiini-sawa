@@ -45,8 +45,8 @@
                        init() { this.msg = this.messages.tu },
                        setTone(t) { this.tone = t; this.msg = this.messages[t] },
                        copy(text, what) { const done = () => { this.copied = what; setTimeout(() => this.copied = '', 2500) };
-                           if (navigator.clipboard && window.isSecureContext) { navigator.clipboard.writeText(text).then(done) }
-                           else { const a = document.createElement('textarea'); a.value = text; document.body.appendChild(a); a.select(); document.execCommand('copy'); a.remove(); done() } } }">
+                           const fallback = () => { const a = document.createElement('textarea'); a.value = text; a.setAttribute('readonly', ''); a.style.position = 'fixed'; a.style.opacity = '0'; document.body.appendChild(a); a.select(); try { document.execCommand('copy') } catch (e) {} a.remove(); done() };
+                           if (navigator.clipboard && window.isSecureContext) { navigator.clipboard.writeText(text).then(done, fallback) } else { fallback() } } }">
             <p class="ks-eyebrow" style="margin-bottom: .35rem;">Votre lien · {{ request.forceRealName ? 'avec prénom' : 'réponses anonymes' }}</p>
             <p style="color: var(--fg-light); margin: 0 0 1rem; display: flex; flex-wrap: wrap; align-items: center; gap: .4rem;">{% if request.expiresAt %}<i data-lucide="calendar" style="width: 16px; height: 16px; flex: none;"></i> {{ t('feedback.membre.ouvert_jusqua', 'Ouvert jusqu\'au {date}.', 'text', {date: expiresLabel}) }}{% endif %}
                 {% if canExtend and request.expiresAt and request.expiresAt|date('U') < 'now'|date_modify('+3 days')|date('U') %}<form method="post" action="{{ path('app_feedback_extend') }}" style="display: inline;"><input type="hidden" name="_csrf_token" value="{{ csrf_token('feedback') }}"><button type="submit" class="ks-btn ks-btn--ghost ks-btn--sm" style="padding: .1rem .4rem;">{{ t('feedback.membre.prolonger', 'Prolonger d\'une semaine') }}</button></form>{% endif %}

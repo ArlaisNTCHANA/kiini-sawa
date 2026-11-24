@@ -1,4 +1,4 @@
-{# Invitation discrète à découvrir KIINI SAWA, après une réponse ou sur un lien terminé. Provenance suivie : « feedback ». #}
+{# Invitation discrète à découvrir KIINI SAWA, après une réponse ou sur un lien terminé. Provenance suivie : « feedback » par défaut (paramètres source et campaign). #}
 {% if app.user %}
     <div class="ks-card fb-discover">
         <h2 class="ks-section-title" style="margin-top: 0;">{{ t('feedback.decouvrir.membre_titre', 'Et vous, que verraient vos proches chez vous ?') }}</h2>
@@ -10,8 +10,8 @@
         <h2 class="ks-section-title" style="margin-top: 0;">{{ t('feedback.decouvrir.titre', 'Et vous, que verraient vos proches chez vous ?') }}</h2>
         <p style="color: var(--fg-muted); margin: 0;">{{ t('feedback.decouvrir.texte', 'KIINI SAWA vous aide à découvrir votre raison d\'être, vos dons et votre personnalité, puis à bâtir votre Plan de Vie pas à pas, avec la foi au cœur. Gratuit, en quelques minutes par jour.') }}</p>
         <div class="fb-discover__actions">
-            <a href="{{ path('app_home', {utm_source: 'feedback', utm_medium: 'formulaire', utm_campaign: 'feedback-nourricier', utm_content: content|default('merci')}) }}" class="ks-btn ks-btn--primary">{{ t('feedback.decouvrir.bouton', 'Découvrir KIINI SAWA') }}</a>
-            <a href="{{ path('app_register', {utm_source: 'feedback', utm_medium: 'formulaire', utm_campaign: 'feedback-nourricier', utm_content: content|default('merci')}) }}" class="ks-btn ks-btn--ghost">{{ t('feedback.decouvrir.inscription', 'Créer mon compte gratuit') }}</a>
+            <a href="{{ path('app_home', {utm_source: source|default('feedback'), utm_medium: 'formulaire', utm_campaign: campaign|default('feedback-nourricier'), utm_content: content|default('merci')}) }}" class="ks-btn ks-btn--primary">{{ t('feedback.decouvrir.bouton', 'Découvrir KIINI SAWA') }}</a>
+            <a href="{{ path('app_register', {utm_source: source|default('feedback'), utm_medium: 'formulaire', utm_campaign: campaign|default('feedback-nourricier'), utm_content: content|default('merci')}) }}" class="ks-btn ks-btn--ghost">{{ t('feedback.decouvrir.inscription', 'Créer mon compte gratuit') }}</a>
         </div>
     </div>
 {% endif %}

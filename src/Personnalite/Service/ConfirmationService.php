@@ -55,9 +55,14 @@ final class ConfirmationService
         $this->em->flush();
     }
 
+    public function findByToken(string $token): ?ConfirmationRequest
+    {
+        return $this->em->getRepository(ConfirmationRequest::class)->findOneBy(['token' => $token]);
+    }
+
     public function findOpen(string $token): ?ConfirmationRequest
     {
-        $r = $this->em->getRepository(ConfirmationRequest::class)->findOneBy(['token' => $token]);
+        $r = $this->findByToken($token);
 
         return $r && $r->isOpen() ? $r : null;
     }

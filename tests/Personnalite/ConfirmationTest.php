@@ -49,8 +49,18 @@ class ConfirmationTest extends WebTestCase
             $client->getCookieJar()->clear();
             $crawler = $client->request('GET', '/confirmer/'.$token);
             $client->submit($crawler->selectButton('Envoyer mon regard')->form(), ['most' => $primary, 'least' => 'I' === $primary ? 'C' : 'I', 'relationship' => 'ami']);
+            // Redirection après l'envoi : sans elle, Turbo laissait le formulaire affiché (la personne croyait que rien n'était parti)
+            $this->assertResponseRedirects('/confirmer/'.$token.'/merci');
+            $client->followRedirect();
             $this->assertSelectorTextContains('h1', 'Merci');
+            $this->assertSelectorTextContains('main', 'Découvrir KIINI SAWA');
         }
+        // Revenir sur le lien après avoir répondu mène au remerciement ; sans réponse, le remerciement renvoie au formulaire
+        $client->request('GET', '/confirmer/'.$token);
+        $this->assertResponseRedirects('/confirmer/'.$token.'/merci');
+        $client->getCookieJar()->clear();
+        $client->request('GET', '/confirmer/'.$token.'/merci');
+        $this->assertResponseRedirects('/confirmer/'.$token);
 
         $client->loginUser(static::getContainer()->get(\App\Compte\Repository\UserRepository::class)->find($user->getId()));
         $client->request('GET', '/mes-tests/rapport/'.$a->getId());
@@ -84,6 +94,7 @@ class ConfirmationTest extends WebTestCase
             }
         }
         $client->submit($form);
+        $client->followRedirect();
         $this->assertSelectorTextContains('h1', 'Merci');
 
         $client->loginUser($user);

@@ -45,6 +45,9 @@ final class ConfirmationController extends AbstractController
         }
         $session = $request->getSession();
         $doneKey = 'confirmation_done_'.$token;
+        if (!$request->isMethod('POST') && $session->get($doneKey)) {
+            return $this->redirectToRoute('app_confirmation_thanks', ['token' => $token]);
+        }
         $errors = [];
         $data = ['relationship' => '', 'most' => '', 'least' => '', 'gifts' => [], 'name' => ''];
         if ($request->isMethod('POST')) {
@@ -53,8 +56,10 @@ final class ConfirmationController extends AbstractController
             $this->limits->require('public_form', $ip.'|'.$token);
             $this->limits->require('public_form_ip', $ip);
             $p = $request->request;
-            if ('' !== $p->getString('website')) {
-                return $this->render('personnalite/confirmation/thanks.html.twig', ['firstName' => $owner->getDisplayName()]);
+            if ('' !== $p->getString('website')) { // champ piège : on fait comme si tout allait bien
+                $session->set($doneKey, true);
+
+                return $this->redirectToRoute('app_confirmation_thanks', ['token' => $token]);
             }
             $data = ['relationship' => $p->getString('relationship'), 'most' => $p->getString('most'), 'least' => $p->getString('least'),
                 'gifts' => $p->all('gifts'), 'name' => $p->getString('name')];
@@ -68,7 +73,8 @@ final class ConfirmationController extends AbstractController
             if (!$errors) {
                 $session->set($doneKey, true);
 
-                return $this->render('personnalite/confirmation/thanks.html.twig', ['firstName' => $owner->getDisplayName()]);
+                // Redirection après l'envoi : sans elle, Turbo laisse le formulaire affiché et la personne croit que rien n'est parti
+                return $this->redirectToRoute('app_confirmation_thanks', ['token' => $token]);
             }
         }
 
@@ -77,5 +83,17 @@ final class ConfirmationController extends AbstractController
             'relationships' => FeedbackService::RELATIONSHIPS, 'choices' => ConfirmationService::discChoices($token),
             'gifts' => Content::get('gifts.gifts'), 'maxGifts' => ConfirmationService::MAX_GIFTS,
         ], new Response(status: $errors ? 422 : 200));
+    }
+
+    /** Remerciement (et invitation discrète à découvrir KIINI SAWA), seulement après une réponse depuis ce navigateur. */
+    #[Route('/confirmer/{token}/merci', name: 'app_confirmation_thanks', requirements: ['token' => '[a-f0-9]{24}'], methods: ['GET'])]
+    public function thanks(string $token, Request $request): Response
+    {
+        $req = $this->confirmations->findByToken($token);
+        if (null === $req || !$request->getSession()->get('confirmation_done_'.$token)) {
+            return $this->redirectToRoute('app_confirmation_form', ['token' => $token]);
+        }
+
+        return $this->render('personnalite/confirmation/thanks.html.twig', ['firstName' => $req->getUser()->getDisplayName()]);
     }
 }

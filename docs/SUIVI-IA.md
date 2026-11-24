@@ -18,8 +18,11 @@ Ne jamais afficher ni demander de mot de passe ; ne pas publier son nom (mention
   sexe** (tournures neutres), **date de naissance = chantier séparé à venir** (âge minimum des CGU + message d'anniversaire).
 - **Bug grave corrigé** : après « Envoyer mon regard », la page ne changeait pas (Turbo refuse une réponse 200 à un POST :
   « Form responses must redirect »). La réponse était enregistrée, mais la personne ne voyait ni le merci ni l'invitation à
-  découvrir KIINI SAWA. Désormais redirection vers `/avis/{jeton}/merci`. **Même schéma probable dans
-  `personnalite/confirmation`** (`ConfirmationController` rend `thanks` en 200 après POST) : non corrigé ici.
+  découvrir KIINI SAWA. Désormais redirection vers `/avis/{jeton}/merci`. **Même bug dans la confirmation de
+  personnalité par les proches** (`/confirmer/{jeton}`), corrigé à la demande du fondateur : redirection vers
+  `/confirmer/{jeton}/merci`, merci refait avec la même invitation (`_discover.html.twig`, provenance `confirmation`).
+  Repéré aussi : le bouton « Copier » ne faisait rien quand le navigateur refuse l'accès au presse-papiers (méthode de
+  secours ajoutée).
 - **Fait** (détail : `docs/modules/feedback.md`) :
   - lien valable 7 jours (`FeedbackRequest::expiresAt`, migration `Version20261124061530` : les liens ouverts reçoivent
     7 jours à partir de la mise à jour), prolongation d'une semaine (plafond 21 jours devant soi), lien terminé rouvrable,
@@ -44,8 +47,8 @@ Ne jamais afficher ni demander de mot de passe ; ne pas publier son nom (mention
   Mobile : `tsc` OK, Vitest 40/40 (`__tests__/feedbackShare.test.ts`, routage des notifications).
 - **Vérifié en local** dans un navigateur au format téléphone (375 px) : page invitée, qualités cochées, envoi → merci,
   lien expiré, page du membre (message, WhatsApp). Captures : `../captures-feedback/` (avant) et `../captures-feedback/apres/`.
-- **Reste** : rien n'est poussé ni déployé (la migration partira avec le prochain déploiement) ; la confirmation de
-  personnalité par les proches a sans doute le même bug d'envoi ; chantier « date de naissance » à lancer.
+- **Reste** : rien n'est poussé ni déployé (la migration partira avec le prochain déploiement) ; écran mobile à regarder
+  sur un vrai téléphone ; chantier « date de naissance » lancé dans une session séparée.
 
 ## 24/11/2026 — L'Académie, Lot 4 : application mobile
 
