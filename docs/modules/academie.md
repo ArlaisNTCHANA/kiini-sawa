@@ -1,6 +1,6 @@
 # Module Academie
 
-**Statut** : Lot 1 (studio auteur), Lot 2 (pages des membres) et Lot 3 (rythme par e-mail) livrés le 24/11/2026. Lot 4 (mobile) à venir. Cahier des charges :
+**Statut** : les 4 lots sont livrés le 24/11/2026 : studio auteur, pages des membres, rythme par e-mail, application mobile. Cahier des charges :
 `docs/roadmap/CDC-academie-pratique.md` (décisions du fondateur du 24/11/2026 ci-dessous, elles priment sur le cahier).
 
 ## Rôle
@@ -161,6 +161,20 @@ Garde-fous :
   `NotificationController::unsubscribe`).
 - Le membre n'est jamais bloqué : il peut lire les leçons suivantes en avance.
 
-## Reste à faire (lots suivants)
+## Application mobile (Lot 4)
 
-- **Lot 4** : API `/api/mobile/v1/academie/...` et écrans `mobile-v1/app/academie/`.
+- API `/api/mobile/v1/academie/...` (`Mobile/Controller/MobileAcademyController`, contrat dans `docs/api-mobile.md` § 15).
+  La logique d'une leçon (« Mettre en pratique », proposition d'un Partenaire de Redevabilité) est dans
+  `AcademyLearning`, partagé par le site et l'application : une seule règle pour les deux.
+- Écrans `mobile-v1/app/academie/` : catalogue (`index.tsx`), parcours (`[slug]/index.tsx`, rythme compris), leçon
+  (`[slug]/[lecon].tsx`). Texte rendu bloc par bloc (`src/academie/lecture.ts`, aucun HTML interprété), vidéo ouverte dans
+  le navigateur, questions corrigées sur le téléphone, notes et exercice envoyés au serveur. Lecture hors connexion :
+  catalogue, parcours et leçons ouverts sont gardés dans le stockage local (`academie_…`). Entrée « L'Académie » dans le
+  menu, rubrique « La Méthode ». Aucun prix.
+- Créer un engagement de redevabilité reste sur le site (comme ailleurs dans l'application) : le bouton ouvre le
+  formulaire du site avec l'élément déjà choisi.
+
+## Reste à faire
+
+- Essai d'un vrai e-mail de leçon en production (après déploiement, avec l'accord du fondateur).
+- Affichage des écrans mobiles dans un simulateur ou sur un téléphone (pas fait : il faut un compte connecté).

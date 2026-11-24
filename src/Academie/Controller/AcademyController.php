@@ -12,11 +12,9 @@ use App\Academie\Repository\CourseRepository;
 use App\Academie\Repository\LessonNoteRepository;
 use App\Academie\Service\AcademyCatalog;
 use App\Academie\Service\AcademyJournal;
+use App\Academie\Service\AcademyLearning;
 use App\Academie\Service\AcademyPlaces;
-use App\Academie\Service\AcademyPlanBridge;
-use App\Academie\Service\PracticeCatalog;
 use App\Compte\Entity\User;
-use App\Social\Service\AccountabilityService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -37,11 +35,10 @@ final class AcademyController extends AbstractController
         private readonly AcademyCatalog $catalog,
         private readonly CourseRepository $courses,
         private readonly LessonNoteRepository $notes,
-        private readonly AcademyPlanBridge $bridge,
         private readonly AcademyJournal $journal,
         private readonly Entitlements $entitlements,
         private readonly EntityManagerInterface $em,
-        private readonly AccountabilityService $accountability,
+        private readonly AcademyLearning $learning,
     ) {
     }
 
@@ -93,22 +90,7 @@ final class AcademyController extends AbstractController
         [$previous, $next, $position, $total] = AcademyCatalog::neighbours($course, $lesson);
         $completion = $enrollment->completionFor($lesson);
 
-        if ($lesson->hasPractice()) {
-            $practice = [
-                'fixed' => true,
-                'target' => $lesson->getTargetPlan(),
-                'action' => $lesson->getTargetAction(),
-                'form' => $this->bridge->form($user, $lesson->getTargetAction()),
-                'blocker' => $this->bridge->blocker($user, $lesson->getTargetPlan(), $lesson->getTargetAction(), !$completion?->hasCreatedEntity()),
-            ];
-        } else {
-            $destinations = [];
-            foreach (AcademyPlanBridge::FREE_DESTINATIONS as $value) {
-                [$target, $action] = explode('|', $value);
-                $destinations[$value] = ['label' => PracticeCatalog::label($target, $action), 'blocker' => $this->bridge->blocker($user, $target, $action)];
-            }
-            $practice = ['fixed' => false, 'destinations' => $destinations, 'default' => $this->defaultDestination($course)];
-        }
+        $practice = $this->learning->practice($user, $course, $lesson, $completion);
 
         return $this->render('academie/lesson.html.twig', [
             'course' => $course,
@@ -122,7 +104,7 @@ final class AcademyController extends AbstractController
             'position' => $position,
             'total' => $total,
             'can_journal' => $this->entitlements->can($user, 'journal'),
-            'accountability' => $this->accountabilityOffer($user, $completion),
+            'accountability' => $this->learning->accountabilityOffer($user, $completion),
         ]);
     }
 
@@ -133,45 +115,23 @@ final class AcademyController extends AbstractController
         $user = $this->user();
         [$course, $lesson, $enrollment] = $this->open($slug, $lessonSlug);
         $p = $request->request;
-        $back = $this->generateUrl('app_academie_lesson', ['slug' => $slug, 'lessonSlug' => $lessonSlug]).'#pratique';
+        $toPlan = 'plan' === $p->getString('mode');
+        try {
+            $result = $this->learning->complete($user, $lesson, $enrollment, $toPlan, [
+                'title' => $p->getString('title'), 'detail' => $p->getString('detail'), 'choice' => $p->getString('choice'), 'destination' => $p->getString('destination'),
+            ]);
+        } catch (PracticeRefused $e) {
+            $this->addFlash('error', $e->getMessage());
 
-        if ('plan' === $p->getString('mode')) {
-            if ($lesson->hasPractice()) {
-                [$target, $action] = [$lesson->getTargetPlan(), $lesson->getTargetAction()];
-            } else {
-                $destination = $p->getString('destination');
-                if (!\in_array($destination, AcademyPlanBridge::FREE_DESTINATIONS, true)) {
-                    $this->addFlash('error', 'Choisissez où enregistrer votre point à travailler.');
-
-                    return $this->redirect($back);
-                }
-                [$target, $action] = explode('|', $destination);
-            }
-            $title = mb_substr($p->getString('title'), 0, 'add_note' === $action ? AcademyJournal::MAX_LENGTH : 2000);
-            $detail = mb_substr($p->getString('detail'), 0, 2000);
-            $choice = $p->getString('choice');
-            try {
-                $saved = $this->bridge->save($user, $lesson, $target, $action, $title, $detail, $choice, $enrollment->completionFor($lesson));
-            } catch (PracticeRefused $e) {
-                $this->addFlash('error', $e->getMessage());
-
-                return $this->redirect($back);
-            }
-            $enrollment->complete($lesson)->recordPractice(
-                ['target' => $target, 'action' => $action, 'title' => trim($title), 'detail' => trim($detail) ?: null, 'choice' => $choice ?: null],
-                $saved['type'],
-                $saved['id'],
-            );
-            $this->addFlash('success', 'Votre réponse est enregistrée dans : '.PracticeCatalog::TARGETS[$target]['label'].'.');
-            $this->em->flush();
+            return $this->redirect($this->generateUrl('app_academie_lesson', ['slug' => $slug, 'lessonSlug' => $lessonSlug]).'#pratique');
+        }
+        if ($toPlan) {
+            $this->addFlash('success', 'Votre réponse est enregistrée dans : '.$result['label'].'.');
             // Un rituel ou un objectif du Plan de Vie : on reste sur la leçon pour proposer un Partenaire de Redevabilité
-            if (null !== $this->accountabilityOffer($user, $enrollment->completionFor($lesson))) {
+            if (null !== $this->learning->accountabilityOffer($user, $enrollment->completionFor($lesson))) {
                 return $this->redirect($this->generateUrl('app_academie_lesson', ['slug' => $slug, 'lessonSlug' => $lessonSlug]).'#redevabilite');
             }
-        } else {
-            $enrollment->complete($lesson);
         }
-        $this->em->flush();
 
         [, $next] = AcademyCatalog::neighbours($course, $lesson);
         $upcoming = $enrollment->nextLesson() ?? $next;
@@ -268,39 +228,6 @@ final class AcademyController extends AbstractController
         }
 
         return [$course, $lesson, $this->catalog->enroll($user, $course)];
-    }
-
-    /**
-     * Après une leçon qui a créé un rituel ou un objectif du Plan de Vie (ce que la redevabilité sait suivre), proposer
-     * qu'un Partenaire de Redevabilité veille dessus : seulement si la personne peut ouvrir un engagement et qu'aucun ne
-     * le suit déjà. La progression dans l'Académie, elle, n'est jamais montrée au partenaire.
-     *
-     * @return array{target: string, label: string}|null
-     */
-    private function accountabilityOffer(User $user, ?\App\Academie\Entity\LessonCompletion $completion): ?array
-    {
-        $type = match ($completion?->getCreatedEntityType()) {
-            'Habit' => 'HABIT',
-            'LifeGoal' => 'GOAL',
-            default => null,
-        };
-        if (null === $type || !$this->bridge->find($user, $completion->getCreatedEntityType(), (int) $completion->getCreatedEntityId())
-            || !$this->accountability->canCreate($user) || $this->accountability->isFollowed($user, $type, (int) $completion->getCreatedEntityId())) {
-            return null;
-        }
-
-        return ['target' => $type.':'.$completion->getCreatedEntityId(), 'label' => 'HABIT' === $type ? 'ce rituel' : 'cet objectif'];
-    }
-
-    private function defaultDestination(Course $course): string
-    {
-        foreach (AcademyPlanBridge::FREE_DESTINATIONS as $value) {
-            if (str_starts_with($value, ($course->getPrimaryPlan() ?? 'VIE').'|')) {
-                return $value;
-            }
-        }
-
-        return AcademyPlanBridge::FREE_DESTINATIONS[0];
     }
 
     private function checkCsrf(Request $request): void

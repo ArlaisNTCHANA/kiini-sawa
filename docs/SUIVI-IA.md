@@ -9,6 +9,24 @@ teste (`php bin/phpunit`), commit, déploie (`bin/ops/envoyer-hostinger.sh`), v�
 journal `var/log/prod-AAAA-MM-JJ.log` sans erreur) ; **le fondateur fait lui-même `git push`** (refusé à l'IA).
 Ne jamais afficher ni demander de mot de passe ; ne pas publier son nom (mentions légales en attente).
 
+## 24/11/2026 — L'Académie, Lot 4 : application mobile
+
+- **Demande du fondateur** : « Non, passer au Lot 4 » (le dernier rappel de redevabilité la veille n'est pas retenu).
+- **Fait côté site** : `AcademyLearning` regroupe la logique d'une leçon (« Mettre en pratique », proposition d'un
+  Partenaire de Redevabilité), partagée par le site et l'API ; `Mobile/Controller/MobileAcademyController` :
+  7 adresses `/api/mobile/v1/academie/...` (catalogue, parcours, rythme, leçon, terminer, notes), clés en français,
+  no-store, aucun prix ; contrat dans `docs/api-mobile.md` § 15.
+- **Fait côté application** (`mobile-v1`, commit séparé) : écrans `app/academie/` (catalogue avec filtres et Sanctuaire
+  du Couple à part, recommandation Boussole 360 ; parcours avec rythme ; leçon avec vidéo dans le navigateur, texte bloc
+  par bloc, questions, « Mettre en pratique », notes, proposition d'un Partenaire de Redevabilité), entrée de menu dans
+  « La Méthode », lecture hors connexion (stockage local `academie_…`). `tsc` sans erreur, Vitest 38/38.
+- **Tests** : `tests/Mobile/MobileAcademyTest.php` (français et sans prix, PRO, exercice sans doublon, notes, point à
+  travailler refusé si destination inconnue, rythme, isolement, Partenaire de Redevabilité) ; `mobile-v1/__tests__/academie.test.ts`.
+  Suite complète **547 / 547**.
+- **Non vérifié** : affichage dans un simulateur (il faut un compte connecté ; aucun mot de passe n'est saisi par l'IA).
+  `npx expo lint` n'est pas configuré dans `mobile-v1` (il tente d'installer ESLint : annulé, `package.json` inchangé).
+- **Reste** : essai d'un vrai e-mail en production après déploiement. Rien n'est poussé ni déployé.
+
 ## 24/11/2026 — L'Académie : lien vers le Partenaire de Redevabilité
 
 - **Demande du fondateur** : après une leçon, proposer qu'un Partenaire de Redevabilité veille sur la décision prise

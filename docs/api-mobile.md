@@ -183,3 +183,22 @@ Toutes ces routes demandent un couple actif et utilisable (les deux conjoints PR
 
 Les alertes automatiques partent du serveur chaque matin, sans action de l'application. `GET /revues/hebdo` contient aussi `accountability` (résumé des 7 derniers jours, ou `null`).
 
+
+## 15. L'Académie (`/api/mobile/v1/academie`)
+
+Mêmes règles que le site (`docs/modules/academie.md`) : catalogue, accès gratuit ou PRO, pont vers les plans sans doublon,
+notes dans le Journal, rythme par e-mail. Clés en français, `no-store`, **aucun prix** (un parcours PRO est seulement
+signalé `reservePro: true` ; l'ouvrir renvoie `403 { code: "pro_required" }`).
+
+| Route | Corps | Réponse | Rôle |
+|---|---|---|---|
+| `GET /academie` | — | `200 { parcours: [{ adresse, titre, accroche, lieu, libelleLieu, icone, gratuit, reservePro, enRevision, nombreLecons, minutes, progression: { faites, total, pourcentage } \| null, termine }], enCours: [adresse], recommande: { parcours, plan, libellePlan } \| null, plans: [{ cle, libelle }], couple: { cle, libelle } }` | Catalogue : parcours publiés et ceux déjà commencés ; recommandation de la dernière Boussole 360 ; le Sanctuaire du Couple à part des 6 plans. |
+| `GET /academie/{adresse}` | — | `200 { parcours: { …résumé, presentationHtml, modules: [{ titre, lecons: [{ adresse, titre, minutes, video, faite }] }], prochaineLecon, rythme: { mode, enPause }, proposerBoussole } }` ou `404` | Un parcours. |
+| `POST /academie/{adresse}/rythme` | `{ rythme: "FREE" \| "DAILY" \| "THREE_PER_WEEK" }` | `200 { rythme }` ou `400` | Choisir ou reprendre son rythme (inscrit au parcours). |
+| `GET /academie/{adresse}/{lecon}` | — | `200 { lecon: { adresse, titre, parcours, module, position, total, minutes, faite, progression, texteHtml, video: { fournisseur, lien } \| null, questions: [{ id, question, plusieurs, reponses: [{ id, libelle }], bonnes, explication }], pratique, notes, plans, precedente, suivante } }` | Une leçon (inscrit au parcours à la première ouverture). `pratique.type` vaut `exercice` (consigne, cible, bouton, libellés, `choix`, `blocage`) ou `point` (destinations au choix) ; `dejaEnregistre` et `reponse` pour refaire l'exercice. La vidéo s'ouvre dans le navigateur (`lien`). |
+| `POST /academie/{adresse}/{lecon}/terminer` | `{ mode: "plan" \| "sans", texte?, precisions?, choix?, destination? }` | `200 { enregistreDans, leconSuivante, parcoursTermine, progression, redevabilite: { cible, question } \| null }` ou `422 { code: "PRACTICE_REFUSED", error }` | Terminer la leçon ; en mode `plan`, avec l'accord du membre, enregistrer la réponse dans le plan (mise à jour si déjà faite). `redevabilite` : proposer un Partenaire de Redevabilité (formulaire du site `/social/redevabilite/nouveau?cible=…`). |
+| `POST /academie/{adresse}/{lecon}/notes` | `{ contenu, plan? }` | `201 { note: { id, contenu, plan, libellePlan, creeeLe } }` ou `422` | Note de leçon, enregistrée dans le Journal (carnet « Académie »). |
+| `DELETE /academie/notes/{id}` | — | `200 { supprime: true }` ou `404` | Supprimer sa note (celle d'un autre compte : `404`). |
+
+L'application garde le catalogue, les parcours et les leçons ouverts (clés `academie_…` du stockage local) pour les relire
+hors connexion ; terminer une leçon et écrire une note demandent le réseau.
