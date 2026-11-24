@@ -104,12 +104,18 @@
     .sch-carte .sch-icone { background: var(--card-bg); }
     /* Cinq principes : une ligne par principe sur téléphone, cinq colonnes sur grand écran */
     @media (max-width: 639px) {
-        .sch-grille--5 .sch-carte { display: grid; grid-template-columns: auto auto 1fr; grid-template-rows: auto auto; column-gap: .7rem; align-items: center; }
-        .sch-grille--5 .sch-num { grid-row: 1 / span 2; }
-        .sch-grille--5 .sch-icone { grid-row: 1 / span 2; }
-        .sch-grille--5 strong { grid-column: 3; }
-        .sch-grille--5 small { grid-column: 3; }
+        .sch-grille--5 .sch-carte, .sch-cycle .sch-carte { display: grid; grid-template-columns: auto auto 1fr; column-gap: .7rem; align-items: center; }
+        .sch-grille--5 .sch-num, .sch-cycle .sch-num { grid-row: 1 / span 3; }
+        .sch-grille--5 .sch-icone, .sch-cycle .sch-icone { grid-row: 1 / span 3; }
+        .sch-grille--5 strong, .sch-grille--5 small, .sch-cycle strong, .sch-cycle small { grid-column: 3; }
     }
+    .sch-carte--alerte { background: var(--danger-soft); }
+    .sch-etapes { list-style: none; padding: 0 !important; margin: 0 !important; display: grid; gap: .6rem; }
+    .sch-etapes li { display: flex; gap: .75rem; align-items: flex-start; background: var(--bg-alt); border-radius: var(--r-lg); padding: .75rem .9rem; margin: 0 !important; }
+    .sch-etapes li::marker { content: none; }
+    .sch-etapes strong { display: block; color: var(--fg); }
+    .sch-etapes small { display: block; color: var(--fg-muted); font-size: .85rem; }
+    .sch-cycle .sch-carte { position: relative; }
     .sch-ligne small { display: block; margin-top: .25rem; color: var(--fg-muted); }
     .sch-num { display: inline-flex; align-items: center; justify-content: center; width: 1.6rem; height: 1.6rem; border-radius: 50%; background: var(--primary); color: var(--card-bg); font-size: .8rem; font-weight: 800; }
     .sch-fraction { display: grid; justify-items: center; gap: .3rem; max-width: 26rem; margin: 0 auto; }

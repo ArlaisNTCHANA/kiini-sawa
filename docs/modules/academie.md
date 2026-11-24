@@ -88,6 +88,24 @@ sans HTML brut, proposés en un clic dans l'éditeur de leçon (panneau « Rendr
   (leçons retrouvées par leur adresse : mêmes identifiants, progression et notes des membres intactes). Refusé si une
   leçon manque ou a été modifiée dans le studio après le chargement.
 
+## Atelier de schémas (24/11/2026)
+
+Demande du fondateur : « que le studio fasse ce que le code fait, mais en visuel ». Studio › L'Académie › **Atelier de
+schémas** (`/admin/academie/schemas`, `AcademyDiagramAdminController`) : créer un schéma sans code à partir d'un
+modèle, avec un **aperçu en direct** (largeur ordinateur ou téléphone), puis le placer dans une leçon par
+`[[schema:<code>]]` (panneau « Rendre la leçon plus visuelle »).
+
+- Modèles (`DiagramModels::MODELS`) : cartes (2 à 6), comparaison (2 colonnes), étapes (2 à 8), « si… alors… » (2 à 8),
+  fraction (2 termes + début d'équation), cycle (3 à 6). Chaque élément : titre, texte, précision, icône (liste fermée
+  `DiagramModels::ICONS`, Lucide) et couleur (liste fermée `DiagramModels::TONES`, variables de la palette).
+- Entité `LessonDiagram` (table `academy_diagram`, migration `Version20261124182237`) : code (fixé à la création,
+  jamais celui d'un schéma du code), titre, modèle, contenu JSON normalisé (`DiagramModels::normalize` : balises
+  retirées, longueurs bornées, éléments vides ignorés, nombre d'éléments vérifié).
+- Affichage : `templates/academie/schemas/_custom.html.twig` (mêmes classes `sch-*` que les schémas du code), via
+  `LessonRenderer` (cherche d'abord les 11 schémas du code, puis l'atelier). Modifier un schéma le met à jour dans toutes
+  les leçons ; suppression refusée tant qu'une leçon le place.
+- Les dessins libres (arbre et racines, courbes) restent des schémas du code ou des images envoyées.
+
 ## Charger un parcours écrit dans un fichier (24/11/2026)
 
 `php bin/console app:academie:import content/academie/<parcours>.yaml` (`src/Academie/Command/ImportCourseCommand.php`)

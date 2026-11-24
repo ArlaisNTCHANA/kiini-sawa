@@ -1,0 +1,47 @@
+{% extends 'admin/layout.html.twig' %}
+{% block title %}Atelier de schémas{% endblock %}
+{% block stylesheets %}{% include 'academie/admin/_styles.html.twig' %}{% endblock %}
+{% block page_title %}Atelier de schémas{% endblock %}
+{% block page_lead %}Créez vos schémas sans code, à partir d'un modèle, aux couleurs du site. Un schéma se place ensuite dans n'importe quelle leçon, depuis le panneau « Rendre la leçon plus visuelle ».{% endblock %}
+{% block crumbs %}<span aria-hidden="true">›</span><span aria-current="page">Atelier de schémas</span>{% endblock %}
+{% block content %}
+<div class="ks-stack" style="max-width: 980px;">
+    <section class="ks-card ks-stack">
+        <h2 class="ks-card__title"><i data-lucide="plus"></i> Nouveau schéma : choisissez un modèle</h2>
+        <div class="ac-models">
+            {% for code, m in models %}
+                <a class="ac-model" href="{{ path('admin_academie_diagram_new', {model: code}) }}">
+                    <i data-lucide="{{ {cards: 'layout-grid', compare: 'columns-2', steps: 'list-ordered', rows: 'arrow-right-left', fraction: 'divide', cycle: 'refresh-cw'}[code] }}"></i>
+                    <strong>{{ m.name }}</strong>
+                    <small>{{ m.help }}</small>
+                </a>
+            {% endfor %}
+        </div>
+    </section>
+
+    <section class="ks-card ks-stack">
+        <h2 class="ks-card__title"><i data-lucide="shapes"></i> Vos schémas</h2>
+        {% if diagrams is empty %}
+            <p class="ks-muted">Aucun schéma créé dans l'atelier pour l'instant.</p>
+        {% else %}
+            <ul class="ac-diagram-list">
+                {% for d in diagrams %}
+                    <li>
+                        <a href="{{ path('admin_academie_diagram_edit', {id: d.id}) }}"><strong>{{ d.title }}</strong></a>
+                        <span class="ks-badge ks-badge--muted">{{ models[d.model].name ?? d.model }}</span>
+                        <code>{{ d.token }}</code>
+                    </li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+    </section>
+
+    <section class="ks-card ks-stack">
+        <h2 class="ks-card__title"><i data-lucide="pen-tool"></i> Schémas dessinés sur mesure</h2>
+        <p class="ks-help">Ces schémas ont été dessinés dans le code (dessins libres : arbre et racines, courbes…). Ils se placent comme les vôtres, mais se modifient en demandant un changement de code.</p>
+        <ul class="ac-diagram-list">
+            {% for code, label in builtins %}<li><strong>{{ label }}</strong> <code>[[schema:{{ code }}]]</code></li>{% endfor %}
+        </ul>
+    </section>
+</div>
+{% endblock %}

@@ -3,7 +3,7 @@
 {% block stylesheets %}{% include 'academie/admin/_styles.html.twig' %}{% endblock %}
 {% block page_title %}L'Académie{% endblock %}
 {% block page_lead %}Vos parcours pratiques : des leçons courtes qui débouchent sur une décision inscrite dans les plans de chacun. Un parcours reste en brouillon, invisible des membres, tant que vous ne le publiez pas.{% endblock %}
-{% block page_actions %}<a href="{{ path('admin_academie_new') }}" class="ks-btn ks-btn--primary"><i data-lucide="plus"></i> Nouveau parcours</a>{% endblock %}
+{% block page_actions %}<a href="{{ path('admin_academie_diagrams') }}" class="ks-btn ks-btn--secondary"><i data-lucide="shapes"></i> Atelier de schémas</a> <a href="{{ path('admin_academie_new') }}" class="ks-btn ks-btn--primary"><i data-lucide="plus"></i> Nouveau parcours</a>{% endblock %}
 {% block content %}
 {% if courses is empty %}
     <div class="ks-card ks-empty">

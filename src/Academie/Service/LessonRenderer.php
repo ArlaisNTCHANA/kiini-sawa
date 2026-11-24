@@ -26,9 +26,13 @@ final class LessonRenderer
         'carte-navigation' => 'La carte de navigation (quand je me sens… je reviens à…)',
     ];
 
+    /** @var array<string, ?string> schémas de l'atelier déjà rendus pendant cette requête */
+    private array $custom = [];
+
     public function __construct(
         private readonly Environment $twig,
         private readonly UrlGeneratorInterface $urls,
+        private readonly \App\Academie\Repository\LessonDiagramRepository $diagrams,
     ) {
     }
 
@@ -42,9 +46,22 @@ final class LessonRenderer
     public function diagram(string $code): ?string
     {
         if (!isset(self::DIAGRAMS[$code])) {
-            return null;
+            // Schéma créé dans l'atelier du studio
+            if (!\array_key_exists($code, $this->custom)) {
+                $diagram = $this->diagrams->findOneBy(['code' => $code]);
+                $this->custom[$code] = $diagram ? $this->renderCustom($diagram->getTitle(), $diagram->getModel(), $diagram->getData(), $code) : null;
+            }
+
+            return $this->custom[$code];
         }
 
         return '<figure class="academie-schema academie-schema--'.$code.'">'.$this->twig->render('academie/schemas/'.$code.'.html.twig').'</figure>';
+    }
+
+    /** Rend un schéma de l'atelier (aussi pour l'aperçu en direct, avant enregistrement). */
+    public function renderCustom(string $title, string $model, array $data, string $code = 'apercu'): string
+    {
+        return '<figure class="academie-schema academie-schema--perso" data-schema="'.htmlspecialchars($code, \ENT_QUOTES).'">'
+            .$this->twig->render('academie/schemas/_custom.html.twig', ['title' => $title, 'model' => $model, 'data' => $data]).'</figure>';
     }
 }

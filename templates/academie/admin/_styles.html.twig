@@ -39,4 +39,31 @@
     .ac-images li { display: flex; flex-direction: column; gap: .4rem; border: 1px solid var(--border); border-radius: var(--r-md); padding: .5rem; }
     .ac-images img { width: 100%; aspect-ratio: 3 / 2; object-fit: cover; border-radius: 6px; background: var(--bg-alt); }
     .ac-images code { font-size: .72rem; word-break: break-all; color: var(--fg-muted); user-select: all; }
+    /* Atelier de schémas */
+    .ac-models { display: grid; gap: .7rem; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); }
+    .ac-model { display: flex; flex-direction: column; gap: .3rem; padding: .9rem; border: 1px solid var(--border); border-radius: var(--r-md); text-decoration: none; color: var(--fg-light); background: var(--card-bg); }
+    .ac-model:hover, .ac-model:focus-visible { border-color: var(--primary); box-shadow: var(--card-shadow); }
+    .ac-model svg { width: 22px; height: 22px; color: var(--primary); }
+    .ac-model strong { color: var(--fg); }
+    .ac-model small { font-size: .82rem; color: var(--fg-muted); line-height: 1.4; }
+    .ac-diagram-list { list-style: none; padding: 0; margin: 0; }
+    .ac-diagram-list li { display: flex; flex-wrap: wrap; align-items: center; gap: .5rem .8rem; padding: .6rem 0; border-top: 1px solid var(--border); }
+    .ac-diagram-list li:first-child { border-top: 0; }
+    .ac-diagram-list code, .ac-token { font-size: .78rem; color: var(--fg-muted); user-select: all; }
+    .ac-workshop { display: grid; gap: 1.25rem; align-items: start; }
+    @media (min-width: 1100px) { .ac-workshop { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); } }
+    .ac-workshop__sticky { position: sticky; top: 1rem; }
+    .ac-workshop__bar { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: .5rem; margin-bottom: .6rem; }
+    .ac-toggle { display: inline-flex; background: var(--bg-alt); border-radius: var(--r-full); padding: .2rem; }
+    .ac-toggle button { display: inline-flex; align-items: center; gap: .35rem; border: 0; background: transparent; font: inherit; font-size: .85rem; font-weight: 600; color: var(--fg-muted); padding: .35rem .9rem; border-radius: var(--r-full); cursor: pointer; }
+    .ac-toggle button[aria-pressed="true"] { background: var(--card-bg); color: var(--primary-dark); box-shadow: var(--card-shadow); }
+    .ac-toggle svg { width: 15px; height: 15px; }
+    .ac-workshop__frame { background: var(--bg); border: 1px dashed var(--border-strong); border-radius: var(--r-lg); padding: .8rem; margin: 0 auto; transition: max-width .2s; }
+    .ac-workshop__frame.is-phone { max-width: 375px; }
+    .ac-workshop__frame .academie-schema { margin: 0; }
+    .ac-item { border: 1px solid var(--border); border-radius: var(--r-md); padding: .8rem; display: grid; gap: .6rem; }
+    .ac-item__head { display: flex; justify-content: space-between; align-items: center; }
+    .ac-item__grid { display: grid; gap: .6rem; }
+    @media (min-width: 640px) { .ac-item__grid { grid-template-columns: 2fr 1fr 1fr; } }
+    .ac-item .ks-field { margin: 0; }
 </style>

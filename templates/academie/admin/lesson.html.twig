@@ -43,7 +43,18 @@
                         <button type="button" class="ks-btn ks-btn--ghost ks-btn--sm" @click="insert(':::{{ code }}\nVotre texte\n:::')"><i data-lucide="{{ c[0] }}"></i> {{ c[1] }}</button>
                     {% endfor %}
                 </div>
-                <p class="ac-insert__label">Schémas dessinés</p>
+                <p class="ac-insert__label">Vos schémas (atelier)</p>
+                {% if customDiagrams %}
+                    <div class="ac-insert__row">
+                        {% for d in customDiagrams %}
+                            <button type="button" class="ks-btn ks-btn--ghost ks-btn--sm" @click="insert('{{ d.token }}')"><i data-lucide="shapes"></i> {{ d.title }}</button>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <p class="ks-help">Aucun pour l'instant.</p>
+                {% endif %}
+                <p class="ks-help"><a href="{{ path('admin_academie_diagrams') }}" target="_blank" rel="noopener">Créer un schéma dans l'atelier</a> (s'ouvre dans un nouvel onglet ; rechargez cette page ensuite).</p>
+                <p class="ac-insert__label">Schémas dessinés sur mesure</p>
                 <div class="ac-insert__row">
                     {% for code, label in diagrams %}
                         <button type="button" class="ks-btn ks-btn--ghost ks-btn--sm" @click="insert('[[schema:{{ code }}]]')">{{ label }}</button>

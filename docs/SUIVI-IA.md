@@ -9,6 +9,18 @@ teste (`php bin/phpunit`), commit, déploie (`bin/ops/envoyer-hostinger.sh`), v�
 journal `var/log/prod-AAAA-MM-JJ.log` sans erreur) ; **le fondateur fait lui-même `git push`** (refusé à l'IA).
 Ne jamais afficher ni demander de mot de passe ; ne pas publier son nom (mentions légales en attente).
 
+## 24/11/2026 — Académie : atelier de schémas dans le studio
+
+- **Demande du fondateur** : « que le studio fasse ce que le code fait, mais en visuel ». Proposition : un atelier de
+  schémas à modèles d'abord, un éditeur de leçon par blocs ensuite ; réponse « l'atelier d'abord ».
+- **Fait** (détail : `docs/modules/academie.md`, « Atelier de schémas ») : 6 modèles, aperçu en direct (ordinateur /
+  téléphone), schémas proposés dans le panneau de la leçon, bouton « Atelier de schémas » sur la page de l'Académie du
+  studio. Tests : `tests/Academie/AcademyDiagramWorkshopTest.php`.
+- **Vérification** : rendu des 6 modèles vu chez un membre en local (téléphone et ordinateur) ; éditeur vérifié sur une
+  copie de la page générée comme administrateur (frappe → aperçu relancé, ajout d'élément). Connexion administrateur
+  locale non utilisée (mot de passe de test non lu).
+- **Reste ouvert** : éditeur de leçon visuel par blocs (deuxième chantier proposé, pas commencé).
+
 ## 24/11/2026 — Académie : leçons plus visuelles (encadrés, schémas, images)
 
 - **Demande du fondateur** : « je ne vois pas les images ; c'est très plat ». Réponse : le studio n'acceptait pas

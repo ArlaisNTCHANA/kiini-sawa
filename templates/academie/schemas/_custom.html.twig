@@ -1,0 +1,63 @@
+{#
+    Schéma créé dans l'atelier du studio (DiagramModels). Paramètres : title, model, data {label, note, items[{icon, title, text, detail, tone}]}.
+    Tout le texte est échappé ; icônes et teintes viennent de listes fermées.
+#}
+{% set items = data.items|default([]) %}
+{% set toneClass = {neutre: '', vivant: 'sch-carte--vivant', froid: 'sch-carte--froid', or: 'sch-carte--or', alerte: 'sch-carte--alerte'} %}
+{% if title %}<p class="sch-titre">{{ title }}</p>{% endif %}
+
+{% if model == 'fraction' %}
+    {% if data.label %}<p class="sch-egal">{{ data.label }}</p>{% endif %}
+    <div class="sch-fraction">
+        {% for item in items|slice(0, 2) %}
+            {% if loop.index == 2 %}<div class="sch-fraction__barre" aria-hidden="true"></div>{% endif %}
+            <div class="{{ loop.first ? 'sch-fraction__haut' : 'sch-fraction__bas' }}"><strong>{{ item.title }}</strong>{% if item.text %}<small>{{ item.text }}</small>{% endif %}</div>
+        {% endfor %}
+    </div>
+
+{% elseif model == 'compare' %}
+    <div class="sch-grille sch-grille--2">
+        {% for item in items %}
+            <div class="sch-carte {{ toneClass[item.tone] ?? '' }}">
+                {% if item.icon %}<span class="sch-icone"><i data-lucide="{{ item.icon }}"></i></span>{% endif %}
+                <strong>{{ item.title }}</strong>
+                {% for line in item.text|split("\n") %}{% if line|trim %}<small>{{ line|trim }}</small>{% endif %}{% endfor %}
+                {% if item.detail %}<span class="sch-pilule" style="background: var(--card-bg);">{{ item.detail }}</span>{% endif %}
+            </div>
+        {% endfor %}
+    </div>
+
+{% elseif model == 'steps' %}
+    <ol class="sch-etapes">
+        {% for item in items %}
+            <li><span class="sch-num">{{ loop.index }}</span><div><strong>{{ item.title }}</strong>{% if item.text %}<small>{{ item.text|nl2br }}</small>{% endif %}{% if item.detail %}<small><em>{{ item.detail }}</em></small>{% endif %}</div></li>
+        {% endfor %}
+    </ol>
+
+{% elseif model == 'rows' %}
+    {% for item in items %}
+        <div class="sch-ligne">
+            <span>{{ item.title }}</span>
+            <span class="sch-fleche"><i data-lucide="arrow-right"></i></span>
+            <span><span class="sch-pilule">{% if item.icon %}<i data-lucide="{{ item.icon }}" style="width: 14px; height: 14px; vertical-align: -2px;"></i> {% endif %}{{ item.text }}</span>{% if item.detail %} <small>{{ item.detail }}</small>{% endif %}</span>
+        </div>
+    {% endfor %}
+
+{% else %}
+    {# Cartes et cycle : une grille ; le cycle numérote les temps et rappelle que tout recommence #}
+    {% set n = items|length %}
+    <div class="sch-grille sch-grille--{{ n > 5 ? 3 : n }} {{ model == 'cycle' ? 'sch-cycle' }}">
+        {% for item in items %}
+            <div class="sch-carte {{ toneClass[item.tone] ?? '' }}">
+                {% if model == 'cycle' %}<span class="sch-num">{{ loop.index }}</span>{% endif %}
+                {% if item.icon %}<span class="sch-icone"><i data-lucide="{{ item.icon }}"></i></span>{% endif %}
+                <strong>{{ item.title }}</strong>
+                {% if item.text %}<small>{{ item.text|nl2br }}</small>{% endif %}
+                {% if item.detail %}<small><em>{{ item.detail }}</em></small>{% endif %}
+            </div>
+        {% endfor %}
+    </div>
+    {% if model == 'cycle' %}<p class="sch-note">Puis tout recommence.</p>{% endif %}
+{% endif %}
+
+{% if data.note %}<p class="sch-note">{{ data.note }}</p>{% endif %}

@@ -1,0 +1,130 @@
+{% extends 'admin/layout.html.twig' %}
+{% set name = diagram ? diagram.title : 'Nouveau schéma : ' ~ def.name %}
+{% set token = csrf_token('admin_academie') %}
+{% block title %}{{ name }}{% endblock %}
+{% block stylesheets %}{% include 'academie/admin/_styles.html.twig' %}{% include 'academie/_styles.html.twig' %}{% endblock %}
+{% block page_title %}{{ name }}{% endblock %}
+{% block page_lead %}Modèle « {{ def.name }} » : {{ def.help }}{% endblock %}
+{% block crumbs %}<span aria-hidden="true">›</span><a href="{{ path('admin_academie_diagrams') }}">Atelier de schémas</a><span aria-hidden="true">›</span><span aria-current="page">{{ name }}</span>{% endblock %}
+{% block content %}
+<script>
+document.addEventListener('alpine:init', () => {
+    Alpine.data('diagramEditor', (init) => { let timer = null; return {
+        title: init.title, model: init.model, label: init.data.label || '', note: init.data.note || '',
+        items: (init.data.items || []).map((it) => Object.assign({ icon: '', title: '', text: '', detail: '', tone: 'neutre' }, it)),
+        min: init.min, max: init.max, html: '', phone: false,
+        payload() { return JSON.stringify({ title: this.title, model: this.model, data: { label: this.label, note: this.note, items: this.items } }); },
+        // Appelé par x-effect à chaque changement du contenu (titre, éléments, note) : aperçu rafraîchi après une courte pause
+        schedule() { clearTimeout(timer); timer = setTimeout(() => this.refresh(), 350); },
+        async refresh() {
+            const body = new FormData(); body.append('_csrf_token', init.token); body.append('payload', this.payload());
+            const r = await fetch(init.previewUrl, { method: 'POST', body, credentials: 'same-origin' });
+            this.html = r.ok ? await r.text() : '<p>Aperçu indisponible : rechargez la page.</p>';
+            this.$nextTick(() => window.lucide && window.lucide.createIcons());
+        },
+        add() { if (this.items.length < this.max) this.items.push({ icon: '', title: '', text: '', detail: '', tone: 'neutre' }); },
+        remove(i) { if (this.items.length > this.min) this.items.splice(i, 1); },
+        move(i, d) { const j = i + d; if (j < 0 || j >= this.items.length) return; const it = this.items.splice(i, 1)[0]; this.items.splice(j, 0, it); },
+    }; });
+});
+</script>
+{% set init = {
+    title: state.title, model: state.model, data: state.data, min: def.min, max: def.max,
+    token: token, previewUrl: path('admin_academie_diagram_preview'),
+} %}
+<div class="ac-workshop" x-data="diagramEditor({{ init|json_encode|e('html_attr') }})" x-effect="payload(); schedule()">
+    <form method="post" class="ks-stack" @submit="$refs.payload.value = payload()">
+        {% if error %}<div class="ks-alert ks-alert--danger" role="alert">{{ error }}</div>{% endif %}
+        <input type="hidden" name="_csrf_token" value="{{ token }}">
+        <input type="hidden" name="payload" x-ref="payload">
+
+        <section class="ks-card ks-stack">
+            <div class="ks-field">
+                <label class="ks-label" for="d-title">Titre du schéma (affiché au-dessus)</label>
+                <input class="ks-input" id="d-title" maxlength="120" x-model="title" placeholder="Ex. : Les cinq principes de la fécondité">
+            </div>
+            {% if def.label %}
+                <div class="ks-field">
+                    <label class="ks-label" for="d-label">{{ def.label }}</label>
+                    <input class="ks-input" id="d-label" maxlength="80" x-model="label">
+                </div>
+            {% endif %}
+        </section>
+
+        <section class="ks-card ks-stack">
+            <h2 class="ks-card__title"><i data-lucide="layers"></i> Éléments <span class="ks-small" x-text="'(' + items.length + ' sur ' + max + ' au plus)'"></span></h2>
+            <template x-for="(item, i) in items" :key="i">
+                <div class="ac-item">
+                    <div class="ac-item__head">
+                        <span class="sch-num" x-text="i + 1"></span>
+                        <div class="ks-toolbar">
+                            <button type="button" class="ks-btn ks-btn--ghost ks-btn--sm" @click="move(i, -1)" :disabled="i === 0" aria-label="Monter"><i data-lucide="arrow-up"></i></button>
+                            <button type="button" class="ks-btn ks-btn--ghost ks-btn--sm" @click="move(i, 1)" :disabled="i === items.length - 1" aria-label="Descendre"><i data-lucide="arrow-down"></i></button>
+                            <button type="button" class="ks-btn ks-btn--ghost ks-btn--sm" @click="remove(i)" :disabled="items.length <= min" aria-label="Retirer"><i data-lucide="trash-2"></i></button>
+                        </div>
+                    </div>
+                    <div class="ac-item__grid">
+                        <label class="ks-field"><span class="ks-label">{{ def.fields.title }}</span><input class="ks-input" maxlength="80" x-model="item.title"></label>
+                        {% if def.icon %}
+                            <label class="ks-field"><span class="ks-label">Icône</span>
+                                <select class="ks-input" x-model="item.icon">
+                                    <option value="">Sans icône</option>
+                                    {% for code, label in icons %}<option value="{{ code }}">{{ label }}</option>{% endfor %}
+                                </select>
+                            </label>
+                        {% endif %}
+                        {% if def.tone %}
+                            <label class="ks-field"><span class="ks-label">Couleur</span>
+                                <select class="ks-input" x-model="item.tone">
+                                    {% for code, label in tones %}<option value="{{ code }}">{{ label }}</option>{% endfor %}
+                                </select>
+                            </label>
+                        {% endif %}
+                    </div>
+                    <label class="ks-field"><span class="ks-label">{{ def.fields.text }}</span><textarea class="ks-input" rows="2" maxlength="300" x-model="item.text"></textarea></label>
+                    {% if state.model != 'fraction' %}
+                        <label class="ks-field"><span class="ks-label">{{ def.fields.detail }}</span><input class="ks-input" maxlength="120" x-model="item.detail"></label>
+                    {% endif %}
+                </div>
+            </template>
+            <div><button type="button" class="ks-btn ks-btn--secondary ks-btn--sm" @click="add()" :disabled="items.length >= max"><i data-lucide="plus"></i> Ajouter un élément</button></div>
+            <div class="ks-field">
+                <label class="ks-label" for="d-note">Phrase sous le schéma (facultatif)</label>
+                <input class="ks-input" id="d-note" maxlength="200" x-model="note" placeholder="Ex. : La question n'est pas de savoir si cela fonctionne, mais par où commencer.">
+            </div>
+        </section>
+
+        <div class="ks-toolbar">
+            <button type="submit" class="ks-btn ks-btn--primary"><i data-lucide="save"></i> {{ diagram ? 'Enregistrer le schéma' : 'Créer le schéma' }}</button>
+            <a href="{{ path('admin_academie_diagrams') }}" class="ks-btn ks-btn--ghost">Retour à l'atelier</a>
+        </div>
+    </form>
+
+    <aside class="ac-workshop__preview">
+        <div class="ac-workshop__sticky">
+            <div class="ac-workshop__bar">
+                <strong>Aperçu en direct</strong>
+                <div class="ac-toggle" role="group" aria-label="Largeur de l'aperçu">
+                    <button type="button" :aria-pressed="(!phone).toString()" @click="phone = false"><i data-lucide="monitor"></i> Ordinateur</button>
+                    <button type="button" :aria-pressed="phone.toString()" @click="phone = true"><i data-lucide="smartphone"></i> Téléphone</button>
+                </div>
+            </div>
+            <div class="ac-workshop__frame academie-texte" :class="phone && 'is-phone'" x-html="html" aria-live="polite"></div>
+            {% if diagram %}
+                <div class="ks-card ks-stack" style="margin-top: 1rem;">
+                    <p class="ks-small" style="margin: 0;">Pour le placer dans une leçon : panneau « Rendre la leçon plus visuelle », ou cette ligne à coller dans le texte :</p>
+                    <code class="ac-token">{{ diagram.token }}</code>
+                    {% if usedIn %}
+                        <p class="ks-small" style="margin: 0;">Placé dans : {% for l in usedIn %}<a href="{{ path('admin_academie_lesson', {id: l.id}) }}">{{ l.title }}</a>{{ not loop.last ? ', ' }}{% endfor %}. Le modifier ici le met à jour partout.</p>
+                    {% else %}
+                        <form method="post" action="{{ path('admin_academie_diagram_delete', {id: diagram.id}) }}" onsubmit="return confirm('Supprimer ce schéma ?');">
+                            <input type="hidden" name="_csrf_token" value="{{ token }}">
+                            <button type="submit" class="ks-btn ks-btn--danger ks-btn--sm"><i data-lucide="trash-2"></i> Supprimer ce schéma</button>
+                        </form>
+                    {% endif %}
+                </div>
+            {% endif %}
+        </div>
+    </aside>
+</div>
+{% endblock %}

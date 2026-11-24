@@ -319,6 +319,7 @@ class AcademyAdminController extends AbstractController
             'canDelete' => $lesson && AcademyStudio::canDelete($course),
             'images' => $this->images->list($course->getId()), 'diagrams' => \App\Academie\Service\LessonRenderer::DIAGRAMS,
             'callouts' => \App\Academie\Service\LessonMarkdown::CALLOUTS,
+            'customDiagrams' => $this->em->getRepository(\App\Academie\Entity\LessonDiagram::class)->findBy([], ['title' => 'ASC']),
         ]);
     }
 
