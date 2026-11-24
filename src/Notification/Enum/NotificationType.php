@@ -37,6 +37,8 @@ enum NotificationType: string
     case ACCOUNTABILITY = 'ACCOUNTABILITY';
     // Académie : leçon du jour selon le rythme choisi par le membre (et message de pause automatique)
     case ACADEMY_LESSON = 'ACADEMY_LESSON';
+    // Anniversaire : une nouvelle année de vie, invitation à relire son Plan de Vie (désactivable)
+    case BIRTHDAY = 'BIRTHDAY';
 
     /** Icône Lucide affichée dans le centre de notifications. */
     public function icon(): string
@@ -58,6 +60,7 @@ enum NotificationType: string
             self::COUPLE_SANCTUARY => 'heart',
             self::ACCOUNTABILITY => 'shield-check',
             self::ACADEMY_LESSON => 'graduation-cap',
+            self::BIRTHDAY => 'cake',
         };
     }
 
@@ -66,7 +69,7 @@ enum NotificationType: string
     {
         return \in_array($this, [self::WEEKLY_REVIEW_REMINDER, self::MONTHLY_REVIEW_REMINDER, self::HABIT_REMINDER, self::GOAL_DEADLINE,
             self::CHALLENGE_DAY, self::DAILY_RITUALS, self::REFERRAL_REWARD, self::FEEDBACK_RECEIVED, self::CONNECTION_REQUEST,
-            self::CONNECTION_ACCEPTED, self::TRIAL_ENDING, self::SUBSCRIPTION_ENDING, self::PAYMENT_VALIDATED, self::COUPLE_SANCTUARY, self::ACCOUNTABILITY], true);
+            self::CONNECTION_ACCEPTED, self::TRIAL_ENDING, self::SUBSCRIPTION_ENDING, self::PAYMENT_VALIDATED, self::COUPLE_SANCTUARY, self::ACCOUNTABILITY, self::BIRTHDAY], true);
     }
 
     /** Messages de service (paiement, fin d'essai) : envoyés quelles que soient les préférences. */

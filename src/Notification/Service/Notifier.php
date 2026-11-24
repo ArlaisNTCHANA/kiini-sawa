@@ -61,6 +61,10 @@ final class Notifier
                 $inApp = false;
                 $byEmail = true;
             }
+            // Anniversaire : un e-mail une fois par an (le fondateur l'a voulu), coupé seulement par son interrupteur
+            if (NotificationType::BIRTHDAY === $type) {
+                $byEmail = true;
+            }
             // Rituels du matin : seulement sur le téléphone
             if (NotificationType::DAILY_RITUALS === $type) {
                 $inApp = false;
@@ -116,6 +120,7 @@ final class Notifier
             NotificationType::PARTNER_INACTIVE => $p->isNotifyPartnerInactive(),
             NotificationType::ONBOARDING => $p->isNotifyOnboarding(),
             NotificationType::DAILY_RITUALS => $p->isNotifyHabitReminder(),
+            NotificationType::BIRTHDAY => $p->isNotifyBirthday(),
             default => true,
         };
     }

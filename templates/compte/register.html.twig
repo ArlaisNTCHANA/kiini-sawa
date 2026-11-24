@@ -26,6 +26,22 @@
             {% if errors.password is defined %}<span class="form-error">{{ errors.password }}</span>{% else %}<span class="form-hint">10 caractères minimum. Une phrase courte est idéale.</span>{% endif %}
         </div>
 
+        <div class="form-group">
+            <label for="dateOfBirth">{{ t('inscription.naissance.libelle', 'Date de naissance') }}</label>
+            <input type="date" name="dateOfBirth" id="dateOfBirth" value="{{ data.dateOfBirth ?? '' }}" autocomplete="bday" required max="{{ 'now'|date('Y-m-d') }}" min="{{ 'now'|date_modify('-120 years')|date('Y-m-d') }}" aria-describedby="dateOfBirthHint">
+            {% if errors.dateOfBirth is defined %}<span class="form-error" id="dateOfBirthHint">{{ errors.dateOfBirth }}</span>{% else %}<span class="form-hint" id="dateOfBirthHint">{{ t('inscription.naissance.aide', 'Pour vérifier l\'âge requis.') }}</span>{% endif %}
+        </div>
+
+        {% if data.askParentalConsent ?? false %}
+            <div class="checkbox-container" style="align-items: flex-start;">
+                <input type="checkbox" name="parentalConsent" id="parentalConsent" value="1" {{ (data.parentalConsent ?? false) ? 'checked' }} required style="margin-top: .2rem;">
+                <label for="parentalConsent" style="cursor: pointer; text-transform: none; letter-spacing: 0; font-weight: 400; font-size: .85rem;">
+                    {{ t('inscription.naissance.accord_parents', 'J\'ai moins de 18 ans et mes parents sont d\'accord pour que j\'utilise KIINI SAWA.') }}
+                </label>
+            </div>
+            {% if errors.parentalConsent is defined %}<span class="form-error">{{ errors.parentalConsent }}</span>{% endif %}
+        {% endif %}
+
         {# Champ piège pour les robots : invisible pour les humains #}
         <div class="hp-field" aria-hidden="true">
             <label for="website">Ne pas remplir</label>

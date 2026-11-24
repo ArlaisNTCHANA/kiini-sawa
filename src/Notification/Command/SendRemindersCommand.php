@@ -15,7 +15,7 @@ use Symfony\Component\Console\Style\SymfonyStyle;
  *   0 8 * * * cd /chemin/vers/web && php bin/console app:reminders:send
  * Relancer la commande le même jour n'envoie pas de doublon.
  */
-#[AsCommand(name: 'app:reminders:send', description: 'Envoie les rappels du jour (revues, rituels, échéances, partenaires, leçons de l\'Académie, feedback nourricier)')]
+#[AsCommand(name: 'app:reminders:send', description: 'Envoie les rappels du jour (revues, rituels, échéances, partenaires, leçons de l\'Académie, feedback nourricier, anniversaires)')]
 class SendRemindersCommand extends Command
 {
     public function __construct(
@@ -26,6 +26,7 @@ class SendRemindersCommand extends Command
         private readonly \App\Social\Service\AccountabilityService $accountability,
         private readonly \App\Academie\Service\AcademyPaceMailer $academy,
         private readonly \App\Feedback\Service\FeedbackService $feedback,
+        private readonly \App\Notification\Service\BirthdayGreeter $birthdays,
     )
     {
         parent::__construct();
@@ -58,6 +59,8 @@ class SendRemindersCommand extends Command
         $feedback = $this->feedback->runDailyChecks($date);
         $sent['feedback (fin du lien)'] = $feedback['fin'];
         $sent['feedback (relances)'] = $feedback['relance'];
+        // Anniversaire : une nouvelle année de vie, invitation à relire son Plan de Vie (une fois par an)
+        $sent['anniversaires'] = $this->birthdays->sendAll($date);
         // Ménage quotidien : les identifiants de synchronisation du mode rapide de plus de 60 jours ne servent plus
         $this->syncOperations->purgeOlderThan($date->modify('-60 days'));
         $this->mobileTokens->purgeExpired($date->modify('-60 days'));

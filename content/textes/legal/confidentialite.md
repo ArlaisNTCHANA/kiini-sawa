@@ -9,12 +9,19 @@ KIINI SAWA vous aide à formuler votre raison d'être, vos valeurs, vos plans et
 | Données | Finalité | Base légale |
 |---|---|---|
 | Email, mot de passe (chiffré), prénom | Créer et sécuriser votre compte | Exécution du contrat |
+| Date de naissance | Vérifier l'âge requis pour utiliser KIINI SAWA (voir les conditions d'utilisation) et vous souhaiter votre anniversaire | Exécution du contrat |
 | Profil (nom, ville, profession…), facultatif | Personnaliser votre espace | Exécution du contrat |
 | Plans, objectifs, rituels, planner, journal, résultats de tests de personnalité | Fournir le service d'accompagnement | Exécution du contrat |
 | Réflexions pouvant révéler vos convictions religieuses ou spirituelles | Fournir le service, dont l'approche est d'inspiration chrétienne | Votre consentement explicite, donné à l'inscription (art. 9.2.a du RGPD), retirable à tout moment en supprimant votre compte |
 | Données partagées avec un partenaire que vous choisissez | Redevabilité et encouragement mutuel | Votre action volontaire de partage |
 | Données de facturation (offre payante) | Encaisser l'abonnement, obligations comptables | Exécution du contrat, obligation légale |
 | Journaux techniques (adresse IP, date de connexion) | Sécurité, prévention des abus | Intérêt légitime |
+
+## Votre date de naissance
+
+Nous vous la demandons à l'inscription pour vérifier l'âge requis : KIINI SAWA est ouvert aux personnes majeures, et aux personnes de 15 ans et plus avec l'accord de leurs parents. Elle nous permet aussi, le jour de votre anniversaire, de vous envoyer un message (e-mail et notification) qui vous invite à relire votre Plan de Vie. Vous pouvez couper ce message dans les préférences de notification de votre profil, ou par le lien de désabonnement de l'e-mail.
+
+Votre date de naissance n'est **jamais montrée** à quelqu'un d'autre : ni aux autres membres, ni à votre conjoint dans l'espace couple, ni à vos Partenaires de Redevabilité, ni aux responsables d'une organisation que vous rejoignez. Elle n'apparaît pas dans les messages d'anniversaire. Vous pouvez la modifier ou l'effacer à tout moment dans votre profil ; elle est supprimée avec votre compte.
 
 ## Si vous créez un espace couple
 

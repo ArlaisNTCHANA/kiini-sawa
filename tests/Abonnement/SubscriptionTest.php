@@ -75,7 +75,7 @@ class SubscriptionTest extends WebTestCase
         $email = $this->uniqueEmail('essai');
         $form = $crawler->selectButton('Créer mon compte')->form();
         $form['acceptTerms']->tick();
-        $this->client->submit($form, ['firstName' => 'Ruth', 'email' => $email, 'password' => 'une phrase assez longue']);
+        $this->client->submit($form, ['firstName' => 'Ruth', 'email' => $email, 'password' => 'une phrase assez longue', 'dateOfBirth' => '1990-05-12']);
 
         $user = $this->findUser($email);
         $this->assertTrue($this->entitlements()->isTrialing($user));

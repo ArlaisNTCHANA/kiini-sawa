@@ -5,6 +5,9 @@ namespace App\Mobile\Controller;
 use App\Compte\Entity\UserProfile;
 use App\Compte\Service\AccountDeleter;
 use App\Compte\Service\AccountMailer;
+use App\Compte\Service\BirthDate;
+use App\Compte\Service\BirthdayTexts;
+use App\Contenu\Service\SiteTexts;
 use App\Mobile\Service\MobileUserSerializer;
 use App\Shared\Security\RateLimits;
 use Doctrine\ORM\EntityManagerInterface;
@@ -46,6 +49,7 @@ class MobileAccountController extends AbstractController
         Request $request,
         EntityManagerInterface $em,
         MobileUserSerializer $serializer,
+        SiteTexts $texts,
     ): JsonResponse {
         $data = $this->decodeJson($request);
         if (null === $data) {
@@ -68,6 +72,25 @@ class MobileAccountController extends AbstractController
                 return $this->jsonError('Un des champs dépasse la longueur autorisée.', Response::HTTP_BAD_REQUEST);
             }
             $profile->{'set'.ucfirst($field)}('' === $value ? null : $value);
+        }
+
+        // Date de naissance « AAAA-MM-JJ » (null ou vide : effacée) ; mêmes règles que le site (15 ans minimum)
+        if (\array_key_exists('dateOfBirth', $data)) {
+            $raw = $data['dateOfBirth'];
+            if (null !== $raw && !\is_string($raw)) {
+                return $this->jsonError('Format de champ invalide.', Response::HTTP_BAD_REQUEST);
+            }
+            if (null === $raw || '' === trim($raw)) {
+                $profile->setDateOfBirth(null);
+            } elseif ($problem = BirthDate::checkInput($raw, new \DateTimeImmutable('today'))) {
+                return $this->jsonError(BirthdayTexts::text($texts, $problem), Response::HTTP_UNPROCESSABLE_ENTITY);
+            } else {
+                $profile->setDateOfBirth(\DateTime::createFromImmutable(BirthDate::parse($raw)));
+            }
+        }
+        // « Plus tard » sur l'invitation de l'accueil : elle ne revient plus
+        if (true === ($data['birthDatePromptDismissed'] ?? null)) {
+            $profile->setBirthDatePromptDismissedAt(new \DateTimeImmutable());
         }
 
         if (null === $user->getUserProfile()) {

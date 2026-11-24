@@ -104,7 +104,7 @@ final class BoussoleWebTest extends WebTestCase
         $email = $this->uniqueEmail('boussole');
         $form = $client->request('GET', '/inscription')->selectButton('Créer mon compte')->form();
         $form['acceptTerms']->tick();
-        $client->submit($form, ['firstName' => 'Esther', 'email' => $email, 'password' => 'une phrase assez longue']);
+        $client->submit($form, ['firstName' => 'Esther', 'email' => $email, 'password' => 'une phrase assez longue', 'dateOfBirth' => '1990-05-12']);
         $code = $this->codeFrom($this->lastEmail());
         $client->followRedirect();
         $this->assertCount(0, $this->resultsOf($this->findUser($email)), 'Rien avant la vérification de l\'email');

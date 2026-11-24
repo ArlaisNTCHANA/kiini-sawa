@@ -18,7 +18,7 @@ class OnboardingAlpineTest extends WebTestCase
         $crawler = $client->request('GET', '/inscription');
         $form = $crawler->selectButton('Créer mon compte')->form();
         $form['acceptTerms']->tick();
-        $client->submit($form, ['firstName' => 'Marie "Jo" d\'Arc', 'email' => $this->uniqueEmail('onboarding-alpine'), 'password' => 'une phrase assez longue']);
+        $client->submit($form, ['firstName' => 'Marie "Jo" d\'Arc', 'email' => $this->uniqueEmail('onboarding-alpine'), 'password' => 'une phrase assez longue', 'dateOfBirth' => '1990-05-12']);
         $code = $this->codeFrom($this->lastEmail());
         $crawler = $client->request('GET', '/verification-email');
         $client->submit($crawler->selectButton('Valider')->form(), ['code' => $code]);

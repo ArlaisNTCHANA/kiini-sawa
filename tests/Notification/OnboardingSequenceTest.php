@@ -30,7 +30,7 @@ class OnboardingSequenceTest extends WebTestCase
         $client = static::createClient();
         $form = $client->request('GET', '/inscription')->selectButton('Créer mon compte')->form();
         $form['acceptTerms']->tick();
-        $client->submit($form, ['firstName' => 'Lydie', 'email' => $this->uniqueEmail('accueil'), 'password' => 'une phrase assez longue']);
+        $client->submit($form, ['firstName' => 'Lydie', 'email' => $this->uniqueEmail('accueil'), 'password' => 'une phrase assez longue', 'dateOfBirth' => '1990-05-12']);
         $code = $this->codeFrom($this->lastEmail());
         $client->followRedirect();
         $client->submitForm('Valider', ['code' => $code]);

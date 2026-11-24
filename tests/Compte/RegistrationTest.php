@@ -28,6 +28,7 @@ class RegistrationTest extends WebTestCase
             'firstName' => 'Esther',
             'email' => $this->uniqueEmail('inscription'),
             'password' => 'une phrase assez longue',
+            'dateOfBirth' => '1990-05-12',
             'acceptTerms' => true,
         ], $override);
         if (!$values['acceptTerms']) {

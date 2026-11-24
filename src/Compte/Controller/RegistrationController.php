@@ -11,6 +11,8 @@ use App\Compte\Repository\UserRepository;
 use App\Compte\Security\LoginAuthenticator;
 use App\Compte\Service\AccountMailer;
 use App\Compte\Service\AccountTokenService;
+use App\Compte\Service\BirthDate;
+use App\Compte\Service\BirthdayTexts;
 use App\Compte\Service\PasswordPolicy;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -56,6 +58,7 @@ class RegistrationController extends AbstractController
         #[Autowire(service: 'limiter.registration')] RateLimiterFactoryInterface $registrationLimiter,
         \App\Media\Service\OriginTracker $origins,
         \App\Media\Service\ReferralService $referrals,
+        \App\Contenu\Service\SiteTexts $texts,
     ): Response {
         if ($this->getUser()) {
             return $this->redirectToRoute('app_dashboard');
@@ -70,6 +73,8 @@ class RegistrationController extends AbstractController
                 'firstName' => trim($payload->getString('firstName')),
                 'email' => mb_strtolower(trim($payload->getString('email'))),
                 'acceptTerms' => $payload->getBoolean('acceptTerms'),
+                'dateOfBirth' => trim($payload->getString('dateOfBirth')),
+                'parentalConsent' => $payload->getBoolean('parentalConsent'),
             ];
             $password = $payload->getString('password');
 
@@ -93,6 +98,17 @@ class RegistrationController extends AbstractController
             if ($message = $passwordPolicy->validate($password, $data['email'])) {
                 $errors['password'] = $message;
             }
+            // Date de naissance : âge minimum des CGU (15 ans), accord des parents demandé entre 15 et 17 ans
+            $today = new \DateTimeImmutable('today');
+            $birth = BirthDate::parse($data['dateOfBirth']);
+            if ($problem = BirthDate::checkInput($data['dateOfBirth'], $today)) {
+                $errors['dateOfBirth'] = BirthdayTexts::text($texts, $problem);
+            } elseif (BirthDate::needsParentalConsent($birth, $today)) {
+                $data['askParentalConsent'] = true;
+                if (!$data['parentalConsent']) {
+                    $errors['parentalConsent'] = BirthdayTexts::text($texts, 'naissance.erreur.accord_parents');
+                }
+            }
             if (!$data['acceptTerms']) {
                 $errors['acceptTerms'] = 'Vous devez accepter les conditions pour créer un compte.';
             }
@@ -114,7 +130,7 @@ class RegistrationController extends AbstractController
                     ->setRoles([])
                     ->setTermsAcceptedAt(new \DateTimeImmutable());
                 $user->setPassword($hasher->hashPassword($user, $password));
-                $user->setUserProfile((new UserProfile())->setFirstName($data['firstName']));
+                $user->setUserProfile((new UserProfile())->setFirstName($data['firstName'])->setDateOfBirth(\DateTime::createFromImmutable($birth)));
                 $em->persist($user);
                 $em->persist($origins->originFor($user, $request));
                 $entitlements->startTrial($user);

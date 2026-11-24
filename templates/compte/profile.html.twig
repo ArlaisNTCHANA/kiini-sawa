@@ -54,6 +54,18 @@
             <input type="hidden" name="_csrf_token" value="{{ csrf_token('profile_info') }}">
             <div class="p-actions"><button type="submit" class="p-btn">Enregistrer</button></div>
         </form>
+
+        <div class="p-sep"></div>
+
+        <form method="post" action="{{ path('app_profile_birth_date') }}" id="date-de-naissance">
+            <div class="p-field" style="max-width: 260px;">
+                <label for="dateOfBirth">{{ t('profil.naissance.libelle', 'Date de naissance') }}</label>
+                <input type="date" id="dateOfBirth" name="dateOfBirth" value="{{ profile and profile.dateOfBirth ? profile.dateOfBirth|date('Y-m-d') : '' }}" autocomplete="bday" max="{{ 'now'|date('Y-m-d') }}">
+                <span class="p-hint">{{ t('profil.naissance.aide', 'Pour vérifier l\'âge requis. Laissez vide pour l\'effacer.') }}</span>
+            </div>
+            <input type="hidden" name="_csrf_token" value="{{ csrf_token('profile_birth_date') }}">
+            <div class="p-actions"><button type="submit" class="p-btn secondary">{{ t('profil.naissance.enregistrer', 'Enregistrer la date') }}</button></div>
+        </form>
     </section>
 
     {# ── Sécurité : email et mot de passe ───────────────────── #}
@@ -133,6 +145,7 @@
                 ['notifyConnection', prefs.notifyConnection, 'Les demandes de partenariat'],
                 ['notifyOnboarding', prefs.notifyOnboarding, 'Les conseils de démarrage (deux premières semaines)'],
                 ['notifyChallenge', prefs.notifyChallenge, 'L\'action du jour des défis auxquels je participe'],
+                ['notifyBirthday', prefs.notifyBirthday, t('profil.notifications.anniversaire', 'Mon anniversaire : un message pour relire mon Plan de Vie')],
             ] %}
             {% for r in reminders %}
                 <label style="display:flex;align-items:center;gap:.6rem;padding:.35rem 0;cursor:pointer;">

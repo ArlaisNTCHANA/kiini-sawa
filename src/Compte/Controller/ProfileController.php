@@ -10,6 +10,8 @@ use App\Compte\Security\LoginAuthenticator;
 use App\Compte\Service\AccountDeleter;
 use App\Compte\Service\AccountMailer;
 use App\Compte\Service\AccountTokenService;
+use App\Compte\Service\BirthDate;
+use App\Compte\Service\BirthdayTexts;
 use App\Compte\Service\PasswordPolicy;
 use App\Compte\Service\UserDataExporter;
 use App\Notification\Service\Notifier;
@@ -64,6 +66,7 @@ class ProfileController extends AbstractController
         'notifyConnection' => 'setNotifyConnection',
         'notifyOnboarding' => 'setNotifyOnboarding',
         'notifyChallenge' => 'setNotifyChallenge',
+        'notifyBirthday' => 'setNotifyBirthday',
     ];
 
     #[Route('', name: '', methods: ['GET'])]
@@ -106,6 +109,68 @@ class ProfileController extends AbstractController
         $this->addFlash('success', 'Vos informations ont été enregistrées.');
 
         return $this->redirectToRoute('app_profile');
+    }
+
+    /**
+     * Date de naissance (privée : jamais montrée à quelqu'un d'autre). Envoyée depuis « Mon profil » ou depuis l'invitation
+     * de l'accueil (`retour=accueil`). Vide depuis le profil : la date est effacée.
+     */
+    #[Route('/date-de-naissance', name: '_birth_date', methods: ['POST'])]
+    public function updateBirthDate(Request $request, \App\Contenu\Service\SiteTexts $texts): Response
+    {
+        $payload = $request->getPayload();
+        $fromHome = 'accueil' === $payload->getString('retour');
+        $back = $fromHome ? $this->redirectToRoute('app_dashboard') : $this->redirectToRoute('app_profile', ['_fragment' => 'informations']);
+        if (!$this->isCsrfTokenValid('profile_birth_date', $payload->getString('_csrf_token'))) {
+            return $this->expired();
+        }
+
+        $user = $this->currentUser();
+        $profile = $user->getUserProfile();
+        if (null === $profile) {
+            $profile = new UserProfile();
+            $user->setUserProfile($profile);
+            $this->em->persist($profile);
+        }
+
+        $value = trim($payload->getString('dateOfBirth'));
+        if ('' === $value && !$fromHome) {
+            $profile->setDateOfBirth(null);
+            $this->em->flush();
+            $this->addFlash('success', BirthdayTexts::text($texts, 'naissance.effacee'));
+
+            return $back;
+        }
+        if ($problem = BirthDate::checkInput($value, new \DateTimeImmutable('today'))) {
+            $this->addFlash('error', BirthdayTexts::text($texts, $problem));
+
+            return $back;
+        }
+        $profile->setDateOfBirth(\DateTime::createFromImmutable(BirthDate::parse($value)));
+        $this->em->flush();
+        $this->addFlash('success', BirthdayTexts::text($texts, 'naissance.enregistree'));
+
+        return $back;
+    }
+
+    /** « Plus tard » sur l'invitation de l'accueil : elle ne revient plus (la date reste modifiable dans « Mon profil »). */
+    #[Route('/date-de-naissance/plus-tard', name: '_birth_date_dismiss', methods: ['POST'])]
+    public function dismissBirthDate(Request $request): Response
+    {
+        if (!$this->isCsrfTokenValid('profile_birth_date_dismiss', $request->getPayload()->getString('_csrf_token'))) {
+            return $this->expired();
+        }
+        $user = $this->currentUser();
+        $profile = $user->getUserProfile();
+        if (null === $profile) {
+            $profile = new UserProfile();
+            $user->setUserProfile($profile);
+            $this->em->persist($profile);
+        }
+        $profile->setBirthDatePromptDismissedAt(new \DateTimeImmutable());
+        $this->em->flush();
+
+        return $this->redirectToRoute('app_dashboard');
     }
 
     #[Route('/notifications', name: '_notifications', methods: ['POST'])]

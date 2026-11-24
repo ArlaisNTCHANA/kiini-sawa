@@ -31,7 +31,7 @@ En cas d'erreur, l'API renvoie `{ "error": "Message en français", "code"?: "...
 | Méthode & URL | Corps / Query | Réponse | Notes |
 |---|---|---|---|
 | `GET /api/mobile/v1/moi` | — | `200 { user }` | Inclut `account` (HMAC opaque), `profile`, `entitlements` (`isPro`, `source`, `features`, `limits`, `freeTests`), `plansCatalog` (6 plans du livre). |
-| `PATCH /api/mobile/v1/moi` | `{ firstName?, lastName?, city?, country?, profession?, bio? }` | `200 { user }` | Mise à jour partielle du profil. |
+| `PATCH /api/mobile/v1/moi` | `{ firstName?, lastName?, city?, country?, profession?, bio?, dateOfBirth?, birthDatePromptDismissed? }` | `200 { user }` | Mise à jour partielle du profil. `dateOfBirth` « AAAA-MM-JJ » (`null` ou vide : effacée) ; moins de 15 ans ou date impossible → `422` avec un message en français. `birthDatePromptDismissed: true` écarte l'invitation de l'accueil. `user.profile` renvoie `dateOfBirth` (à la personne seule) et `askBirthDate`. |
 | `DELETE /api/mobile/v1/compte` | `{ confirmation: "SUPPRIMER", currentPassword }` | `200 { ok: true }` | Exigence App Store / RGPD. Supprime toutes les données en cascade (`mobile_token` compris) et envoie l'e-mail de confirmation. |
 
 ---
@@ -79,7 +79,7 @@ En cas d'erreur, l'API renvoie `{ "error": "Message en français", "code"?: "...
 | `POST /api/mobile/v1/notifications/appareil` | `{ expoToken, platform, appareil? }` | `200 { ok: true, hasDevice: true }` | Enregistre un appareil physique pour les push Expo. Max 10 appareils par compte (les plus anciens sont élagués). |
 | `DELETE /api/mobile/v1/notifications/appareil` | `{ expoToken }` | `200 { ok: true, hasDevice: boolean }` | Révoque l'appareil lors de la déconnexion ou de la désactivation. |
 | `GET /api/mobile/v1/notifications/preferences` | — | `200 { preferences, hasPushDevice }` | Lit les préférences de notification et l'état de l'appareil. |
-| `PATCH /api/mobile/v1/notifications/preferences` | Objet partiel de préférences | `200 { preferences, hasPushDevice }` | Met à jour l'heure préférée, le jour de revue hebdo et les types de rappels. |
+| `PATCH /api/mobile/v1/notifications/preferences` | Objet partiel de préférences | `200 { preferences, hasPushDevice }` | Met à jour l'heure préférée, le jour de revue hebdo et les types de rappels (dont `notifyBirthday`, message d'anniversaire). |
 | `POST /api/mobile/v1/notifications/essai` | — | `200 { ok: true, message: "..." }` | Déclenche un envoi push d'essai immédiat (limité à 3 essais par heure). |
 | `GET /api/mobile/v1/notifications` | — | `200 { notifications, unreadCount }` | Liste in-app des notifications récentes reçues par le compte. |
 | `POST /api/mobile/v1/notifications/{id}/lu` | — | `200 { ok: true }` | Marque une notification in-app comme lue. |

@@ -76,6 +76,7 @@ class DashboardController extends AbstractController
             ], $challenges->activeParticipations($user, new \DateTimeImmutable('today'))),
             'growthGoal' => $user->getPlanDeCroissance(),
             'planDeVie' => $user->getPlanDeVie(),
+            'askBirthDate' => null === $user->getUserProfile() || $user->getUserProfile()->shouldAskBirthDate(),
         ]);
     }
 }

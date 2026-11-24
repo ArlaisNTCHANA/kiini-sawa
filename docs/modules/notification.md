@@ -25,6 +25,7 @@ Chaque email contient un lien signé de désabonnement en un clic (sans connexio
 | Rituels oubliés | Aucun rituel quotidien coché depuis 3 jours (au plus une fois par semaine) | Oui |
 | Échéances | 7 jours avant l'échéance d'un objectif, axe ou projet | Oui |
 | Partenaire inactif | Partenaire sans activité depuis 7 jours (une fois par semaine et par partenaire) | Oui |
+| Anniversaire (`BIRTHDAY`, `BirthdayGreeter`) | Le jour de l'anniversaire (29 février fêté le 28 les années non bissextiles) : e-mail + notification + téléphone « Une nouvelle année de vie commence… », lien vers le Plan de Vie ; clé `anniversaire AAAA` | Oui (`notifyBirthday`, lien de désabonnement) |
 
 ## Mise en production
 

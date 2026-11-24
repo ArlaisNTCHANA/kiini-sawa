@@ -31,6 +31,10 @@ class UserProfile
     #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $dateOfBirth = null;
 
+    /** L'invitation à indiquer sa date de naissance (comptes créés avant qu'elle soit demandée) a été écartée : elle ne revient plus. */
+    #[ORM\Column(nullable: true)]
+    private ?\DateTimeImmutable $birthDatePromptDismissedAt = null;
+
     #[ORM\Column(length: 20, nullable: true)]
     private ?string $gender = null;
 
@@ -155,6 +159,24 @@ class UserProfile
         $this->bio = $bio;
 
         return $this;
+    }
+
+    public function getBirthDatePromptDismissedAt(): ?\DateTimeImmutable
+    {
+        return $this->birthDatePromptDismissedAt;
+    }
+
+    public function setBirthDatePromptDismissedAt(?\DateTimeImmutable $at): static
+    {
+        $this->birthDatePromptDismissedAt = $at;
+
+        return $this;
+    }
+
+    /** L'accueil propose d'indiquer sa date de naissance, une seule fois. */
+    public function shouldAskBirthDate(): bool
+    {
+        return null === $this->dateOfBirth && null === $this->birthDatePromptDismissedAt;
     }
 
     public function getDateOfBirth(): ?\DateTimeInterface

@@ -71,6 +71,10 @@ class NotificationPreference
     #[ORM\Column(options: ['default' => true])]
     private bool $notifyOnboarding = true;
 
+    /** Message d'anniversaire (e-mail et notification qui invitent à relire son Plan de Vie). */
+    #[ORM\Column(options: ['default' => true])]
+    private bool $notifyBirthday = true;
+
     #[ORM\Column(length: 50)]
     private string $digestFrequency = 'WEEKLY';
 
@@ -283,6 +287,18 @@ class NotificationPreference
     public function setNotifyOnboarding(bool $notifyOnboarding): static
     {
         $this->notifyOnboarding = $notifyOnboarding;
+
+        return $this;
+    }
+
+    public function isNotifyBirthday(): bool
+    {
+        return $this->notifyBirthday;
+    }
+
+    public function setNotifyBirthday(bool $notifyBirthday): static
+    {
+        $this->notifyBirthday = $notifyBirthday;
 
         return $this;
     }

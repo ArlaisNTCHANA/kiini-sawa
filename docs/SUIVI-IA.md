@@ -9,6 +9,39 @@ teste (`php bin/phpunit`), commit, déploie (`bin/ops/envoyer-hostinger.sh`), v�
 journal `var/log/prod-AAAA-MM-JJ.log` sans erreur) ; **le fondateur fait lui-même `git push`** (refusé à l'IA).
 Ne jamais afficher ni demander de mot de passe ; ne pas publier son nom (mentions légales en attente).
 
+## 24/11/2026 — Date de naissance : âge minimum et message d'anniversaire
+
+- **Demande du fondateur** (validée pendant le chantier du feedback nourricier) : date de naissance pour l'âge minimum
+  des CGU et un message d'anniversaire qui ramène au Plan de Vie ; **pas de question sur le sexe**. Plan présenté avant
+  de coder, accord « oui ». Texte d'aide choisi par le fondateur : **« Pour vérifier l'âge requis. »** seulement (il a
+  refusé « Elle reste privée », qui inquiète ; l'anniversaire et la confidentialité sont expliqués dans la politique).
+- **Fait côté site** (détail : `docs/modules/compte.md` § Date de naissance, `docs/modules/notification.md`) :
+  - inscription : champ date obligatoire ; moins de 15 ans → refus doux, aucun compte ; 15-17 ans → case « mes parents
+    sont d'accord » (apparaît après le premier envoi, non conservée) ; règles dans `Compte/Service/BirthDate` ;
+  - comptes existants : encadré sur l'accueil, une seule fois (« Plus tard » → `UserProfile.birthDatePromptDismissedAt`) ;
+  - « Mon profil » : date modifiable ou effaçable (`/profil/date-de-naissance`), interrupteur « Mon anniversaire » ;
+  - anniversaire : `Notification/Service/BirthdayGreeter` appelé par `app:reminders:send`, type `BIRTHDAY` (e-mail
+    toujours envoyé sauf interrupteur coupé, notification, téléphone), clé `anniversaire AAAA`, gabarit
+    `notification/email/birthday.html.twig`, 29 février fêté le 28 ; lien de désabonnement qui coupe `notifyBirthday` ;
+  - textes PHP modifiables : `Compte/Service/BirthdayTexts` ; textes Twig via `t()` ;
+  - confidentialité : nouvelle ligne du tableau + section « Votre date de naissance » dans
+    `content/textes/legal/confidentialite.md` (jamais montrée aux membres, au conjoint, aux Partenaires de Redevabilité,
+    à l'organisation) ; garde-fou `BirthDateTest::testTheDateIsReadOnlyWhereItBelongs` ;
+  - migration `Version20261124073448` (`notification_preference.notify_birthday`, `user_profile.birth_date_prompt_dismissed_at`).
+- **Fait côté mobile** (`mobile-v1`, commit séparé) : `PATCH /moi` accepte `dateOfBirth` et `birthDatePromptDismissed`
+  (`docs/api-mobile.md`), champ « Date de naissance » (JJ/MM/AAAA, sans nouvelle dépendance) dans « Mes informations »,
+  invitation sur l'accueil (`src/components/compte/BirthDatePrompt.tsx`), interrupteur dans Notifications.
+- **Tests** : `tests/Compte/BirthDateTest.php` (règles, inscription, accord des parents, accueil, profil, anniversaire
+  sans doublon et désactivable, confidentialité), `tests/Mobile/MobileBirthDateTest.php` ; 11 tests d'inscription
+  existants reçoivent une date. Suite complète **563 / 563**. Mobile : `tsc` OK, Vitest 43/43 (`__tests__/birthDate.test.ts`).
+- **Piège** : la base de test avait accumulé ~3 000 comptes laissés par des tests interrompus (toutes sessions) ;
+  `DosProtectionTest` (rappels à tous les comptes) manquait alors de mémoire. Comptes `@exemple.org` de plus d'une heure
+  supprimés de la base **de test** seulement. Si ce test refait « Allowed memory size », c'est la même cause.
+- **Vérifié en local** : « Mon profil » au format téléphone (375 px), champ date et aide affichés. **Non vérifié** :
+  page d'inscription et encadré de l'accueil dans un navigateur (le navigateur était connecté ; couverts par les tests),
+  écrans mobiles dans un simulateur ; vrai e-mail
+  d'anniversaire en production. **Reste** : rien n'est poussé ni déployé (la migration partira avec le prochain déploiement).
+
 ## 24/11/2026 — Feedback nourricier soigné : une porte d'entrée vers KIINI SAWA
 
 - **Demande du fondateur** : soigner le feedback nourricier, car celles et ceux qui reçoivent le lien découvrent KIINI SAWA

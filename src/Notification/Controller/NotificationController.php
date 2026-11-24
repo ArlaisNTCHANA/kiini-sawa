@@ -107,6 +107,7 @@ class NotificationController extends AbstractController
                 NotificationType::PARTNER_INACTIVE => $prefs->setNotifyPartnerInactive(false),
                 NotificationType::ONBOARDING => $prefs->setNotifyOnboarding(false),
                 NotificationType::CHALLENGE_DAY => $prefs->setNotifyChallenge(false),
+                NotificationType::BIRTHDAY => $prefs->setNotifyBirthday(false),
                 // Académie : les rythmes par e-mail du membre passent en pause (reprise en un clic sur la page du parcours)
                 NotificationType::ACADEMY_LESSON => $academy->pauseAll($account),
                 default => $prefs->setEnableEmailInstant(false),

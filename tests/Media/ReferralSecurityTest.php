@@ -51,7 +51,7 @@ class ReferralSecurityTest extends WebTestCase
         $client->request('GET', '/i/'.$service->codeFor($referrer), server: ['REMOTE_ADDR' => $ip]);
         $form = $client->request('GET', '/inscription', server: ['REMOTE_ADDR' => $ip])->selectButton('Créer mon compte')->form();
         $form['acceptTerms']->tick();
-        $client->submit($form, ['firstName' => 'Filleul', 'email' => $email, 'password' => 'une phrase assez longue'], ['REMOTE_ADDR' => $ip]);
+        $client->submit($form, ['firstName' => 'Filleul', 'email' => $email, 'password' => 'une phrase assez longue', 'dateOfBirth' => '1990-05-12'], ['REMOTE_ADDR' => $ip]);
 
         return static::getContainer()->get(UserRepository::class)->findOneBy(['email' => $email]);
     }

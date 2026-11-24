@@ -17,11 +17,29 @@ profil, droits RGPD (export, suppression), consentement, onboarding court et pag
 
 ## Parcours
 
-1. **Inscription** (`/inscription`) : prénom, email, mot de passe (10 caractères min.), acceptation des CGU et de la politique de confidentialité (horodatée dans `User.termsAcceptedAt`). Champ piège anti-robots et limite de 5 inscriptions par heure et par IP. Si l'adresse a déjà un compte, rien n'est révélé : son propriétaire reçoit un email.
+1. **Inscription** (`/inscription`) : prénom, email, mot de passe (10 caractères min.), **date de naissance** (un seul champ, aide « Pour vérifier l'âge requis. », voir ci-dessous), acceptation des CGU et de la politique de confidentialité (horodatée dans `User.termsAcceptedAt`). Champ piège anti-robots et limite de 5 inscriptions par heure et par IP. Si l'adresse a déjà un compte, rien n'est révélé : son propriétaire reçoit un email.
 2. **Vérification de l'email** (`/verification-email`) : code à 6 chiffres, valable 15 minutes, 5 essais, renvoi au plus une fois par minute. Tant que `User.isVerified` est faux, `VerifiedUserSubscriber` bloque tout le reste de l'application (redirection, ou 403 JSON pour l'API).
 3. **Onboarding** (`/onboarding`) : prénom, raison d'être, 3 valeurs, un premier objectif. Crée un Plan de Vie minimal puis ouvre l'analyse de cohérence (`/life-plan?onglet=analysis`). « Plus tard » est possible.
 4. **Mot de passe oublié** (`/mot-de-passe/oublie`) : même réponse que l'adresse existe ou non ; lien valable 1 heure, à usage unique, retiré de l'URL dès la première visite. Limite de 5 demandes par heure et par IP.
 5. **Profil** (`/profil`) : informations, changement de mot de passe (mot de passe actuel exigé), changement d'email (code envoyé à la nouvelle adresse), export JSON de toutes les données, suppression définitive du compte (taper SUPPRIMER + mot de passe).
+
+## Date de naissance (24/11/2026)
+
+- **Pourquoi** : âge minimum des CGU (majeur, ou 15 ans et plus avec l'accord des parents) et message d'anniversaire.
+  Décision du fondateur : **pas de question sur le sexe** ; l'aide affichée dit seulement « Pour vérifier l'âge requis. »
+  (le fondateur trouvait qu'écrire « reste privée » inquiétait : le détail est dans la politique de confidentialité).
+- **Règles** (`Compte/Service/BirthDate`) : moins de 15 ans → inscription refusée avec un message doux, aucun compte créé ;
+  15-17 ans → une case « mes parents sont d'accord » apparaît après le premier envoi (non conservée en base) ; date
+  future ou plus de 120 ans refusée. Mêmes règles dans le profil et dans `PATCH /api/mobile/v1/moi` (pas de blocage
+  des comptes existants : une date de moins de 15 ans est seulement refusée à l'enregistrement).
+- **Comptes existants** : encadré sur l'accueil (`data-birth-date-prompt`) tant que la date est vide et que la personne
+  n'a pas cliqué « Plus tard » (`UserProfile.birthDatePromptDismissedAt`). Modifiable ou effaçable dans « Mon profil »
+  (`/profil/date-de-naissance`) et sur mobile.
+- **Textes** : `BirthdayTexts` (messages d'erreur, message d'anniversaire), modifiables dans Admin › Textes du site.
+- **Confidentialité** : la date n'est lue que par le profil, l'inscription, l'API mobile « moi » et `BirthdayGreeter`.
+  `BirthDateTest::testTheDateIsReadOnlyWhereItBelongs` échoue si un autre fichier y touche (couple, organisation,
+  partenaires…) : ne l'élargir qu'avec une bonne raison.
+- **Anniversaire** : voir `docs/modules/notification.md`.
 
 ## Règles à respecter
 

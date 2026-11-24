@@ -82,6 +82,9 @@ final class MobileUserSerializer
                 'country' => $profile?->getCountry(),
                 'profession' => $profile?->getProfession(),
                 'bio' => $profile?->getBio(),
+                // Privée : renvoyée seulement à la personne elle-même (cet objet ne sert qu'à /moi, /connexion et /jeton)
+                'dateOfBirth' => $profile?->getDateOfBirth()?->format('Y-m-d'),
+                'askBirthDate' => null === $profile || $profile->shouldAskBirthDate(),
             ],
             'entitlements' => [
                 'isPro' => $isPro,

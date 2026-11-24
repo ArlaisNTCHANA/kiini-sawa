@@ -265,6 +265,28 @@
     {# Proposition d'activer les notifications (application installée uniquement) #}
     {% include 'shared/_push_toggle.html.twig' with {compact: true} %}
 
+    {# Comptes créés avant que la date de naissance soit demandée : invitation proposée une seule fois #}
+    {% if askBirthDate|default(false) %}
+        <section class="ks-card ks-card--flat" data-birth-date-prompt style="max-width: 1100px; margin: 1.25rem auto 0;">
+            <form method="post" action="{{ path('app_profile_birth_date') }}" style="display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: .8rem;">
+                <div style="flex: 1 1 260px;">
+                    <label for="homeDateOfBirth" style="display: block; font-weight: 700;">{{ t('accueil.naissance.titre', 'Votre date de naissance') }}</label>
+                    <p style="margin: .15rem 0 .5rem; color: var(--fg-muted); font-size: .9rem;">{{ t('accueil.naissance.aide', 'Pour vérifier l\'âge requis.') }}</p>
+                    <input type="date" id="homeDateOfBirth" name="dateOfBirth" required autocomplete="bday" max="{{ 'now'|date('Y-m-d') }}" class="ks-input" style="max-width: 220px;">
+                </div>
+                <input type="hidden" name="retour" value="accueil">
+                <input type="hidden" name="_csrf_token" value="{{ csrf_token('profile_birth_date') }}">
+                <div style="display: flex; gap: .5rem; flex-wrap: wrap;">
+                    <button type="submit" class="ks-btn ks-btn--secondary ks-btn--sm">{{ t('accueil.naissance.enregistrer', 'Enregistrer') }}</button>
+                    <button type="submit" form="birthDateLater" class="ks-btn ks-btn--ghost ks-btn--sm">{{ t('accueil.naissance.plus_tard', 'Plus tard') }}</button>
+                </div>
+            </form>
+            <form method="post" action="{{ path('app_profile_birth_date_dismiss') }}" id="birthDateLater">
+                <input type="hidden" name="_csrf_token" value="{{ csrf_token('profile_birth_date_dismiss') }}">
+            </form>
+        </section>
+    {% endif %}
+
     {# Parcours de 90 jours (livre, annexe A) #}
     {% if nextStep|default(null) %}
         {# le parcours est présenté dans « Ma prochaine étape » (action principale ou « ensuite ») #}

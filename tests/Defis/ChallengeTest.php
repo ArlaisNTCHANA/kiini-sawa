@@ -60,7 +60,7 @@ class ChallengeTest extends WebTestCase
 
         $form = $client->request('GET', '/inscription')->selectButton('Créer mon compte')->form();
         $form['acceptTerms']->tick();
-        $client->submit($form, ['firstName' => 'Marthe', 'email' => $this->uniqueEmail('defi'), 'password' => 'une phrase assez longue']);
+        $client->submit($form, ['firstName' => 'Marthe', 'email' => $this->uniqueEmail('defi'), 'password' => 'une phrase assez longue', 'dateOfBirth' => '1990-05-12']);
         $code = $this->codeFrom($this->lastEmail());
         $client->followRedirect();
         $client->submitForm('Valider', ['code' => $code]);

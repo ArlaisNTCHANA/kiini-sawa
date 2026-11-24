@@ -42,7 +42,7 @@ class ReferralTest extends WebTestCase
         $email = $this->uniqueEmail('filleul');
         $form = $client->request('GET', '/inscription')->selectButton('Créer mon compte')->form();
         $form['acceptTerms']->tick();
-        $client->submit($form, ['firstName' => 'Timothée', 'email' => $email, 'password' => 'une phrase assez longue']);
+        $client->submit($form, ['firstName' => 'Timothée', 'email' => $email, 'password' => 'une phrase assez longue', 'dateOfBirth' => '1990-05-12']);
         $referred = static::getContainer()->get(UserRepository::class)->findOneBy(['email' => $email]);
         $referral = $this->em()->getRepository(Referral::class)->findOneBy(['referred' => $referred]);
         $this->assertNotNull($referral);
