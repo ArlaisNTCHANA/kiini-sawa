@@ -1,0 +1,15 @@
+{# Schéma : la carte de navigation (quand je me sens… je reviens à…). #}
+<p class="sch-titre">Votre carte de navigation</p>
+{% for row in [
+    ['perdu', 'compass', 'la Graine', 'Quel fruit ?'],
+    ['épuisé', 'droplets', 'la Sève', 'Qui suis-je ?'],
+    ['débordé', 'trees', 'la Forêt', 'Quel soutien ?'],
+    ['frustré', 'sun', 'la Saison', 'Quel moment ?'],
+    ['dispersé', 'scissors', 'la Taille', 'Quel sacrifice ?'],
+] %}
+    <div class="sch-ligne">
+        <span>Je me sens <strong>{{ row[0] }}</strong></span>
+        <span class="sch-fleche"><i data-lucide="arrow-right"></i></span>
+        <span><span class="sch-pilule"><i data-lucide="{{ row[1] }}" style="width: 14px; height: 14px; vertical-align: -2px;"></i> {{ row[2] }}</span> <small>{{ row[3] }}</small></span>
+    </div>
+{% endfor %}

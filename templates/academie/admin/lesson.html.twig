@@ -27,13 +27,40 @@
             <label style="display: flex; gap: .6rem; align-items: center; font-size: .92rem;"><input type="checkbox" name="visible" value="1" {{ data.visible ? 'checked' }}> Visible des apprenants (une fois le parcours publié)</label>
         </section>
 
-        <section class="ks-card ks-stack" x-data="{ html: '', loading: false, async show() { this.loading = true; const body = new FormData(); body.append('_csrf_token', '{{ token }}'); body.append('content', this.$refs.content.value); const r = await fetch('{{ path('admin_academie_markdown') }}', { method: 'POST', body, credentials: 'same-origin' }); this.html = r.ok ? await r.text() : '<p>Aperçu indisponible : rechargez la page.</p>'; this.loading = false; } }">
+        <section class="ks-card ks-stack" x-data="{ html: '', loading: false, async show() { this.loading = true; const body = new FormData(); body.append('_csrf_token', '{{ token }}'); body.append('content', this.$refs.content.value); const r = await fetch('{{ path('admin_academie_markdown') }}', { method: 'POST', body, credentials: 'same-origin' }); this.html = r.ok ? await r.text() : '<p>Aperçu indisponible : rechargez la page.</p>'; this.loading = false; this.$nextTick(() => window.lucide && window.lucide.createIcons()); }, insert(text) { const t = this.$refs.content; const at = t.selectionStart ?? t.value.length; const before = t.value.slice(0, at); const sep = before === '' || before.endsWith('\n\n') ? '' : (before.endsWith('\n') ? '\n' : '\n\n'); t.value = before + sep + text + '\n\n' + t.value.slice(at); t.focus(); const pos = (before + sep + text).length; t.setSelectionRange(pos, pos); } }">
             <h2 class="ks-card__title"><i data-lucide="pen-line"></i> Le texte</h2>
             <div class="ks-field">
                 <label class="ks-label" for="content">Texte de la leçon</label>
                 <textarea class="ks-input" id="content" name="content" rows="18" x-ref="content" placeholder="## Un titre de partie&#10;&#10;Un paragraphe. **Un mot important.** *Une nuance.*&#10;&#10;> Une citation ou un verset.&#10;&#10;- un point&#10;- un autre point">{{ data.content }}</textarea>
-                <p class="ks-help">Mise en forme : « ## » pour un titre de partie, **gras**, *italique*, « &gt; » pour une citation, « - » pour une liste, une ligne vide entre deux paragraphes.</p>
+                <p class="ks-help">Mise en forme : « ## » pour un titre de partie, **gras**, *italique*, « &gt; » pour une citation, « - » pour une liste, une ligne vide entre deux paragraphes. Un retour à la ligne dans un paragraphe reste un retour à la ligne à l'écran.</p>
             </div>
+            <details class="ac-insert">
+                <summary><i data-lucide="layout-template"></i> Rendre la leçon plus visuelle : encadré, schéma, image</summary>
+                <p class="ks-help">Placez le curseur dans le texte, puis cliquez : l'élément est inséré à cet endroit.</p>
+                <p class="ac-insert__label">Encadrés</p>
+                <div class="ac-insert__row">
+                    {% for code, c in callouts %}
+                        <button type="button" class="ks-btn ks-btn--ghost ks-btn--sm" @click="insert(':::{{ code }}\nVotre texte\n:::')"><i data-lucide="{{ c[0] }}"></i> {{ c[1] }}</button>
+                    {% endfor %}
+                </div>
+                <p class="ac-insert__label">Schémas dessinés</p>
+                <div class="ac-insert__row">
+                    {% for code, label in diagrams %}
+                        <button type="button" class="ks-btn ks-btn--ghost ks-btn--sm" @click="insert('[[schema:{{ code }}]]')">{{ label }}</button>
+                    {% endfor %}
+                </div>
+                <p class="ac-insert__label">Images du parcours</p>
+                {% if images %}
+                    <div class="ac-insert__images">
+                        {% for image in images %}
+                            <button type="button" class="ac-insert__image" @click="insert('![Décrivez l\'image en quelques mots]({{ image.path }})')" title="Insérer cette image"><img src="{{ image.path }}" alt="" loading="lazy"></button>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <p class="ks-help">Aucune image pour l'instant. Ajoutez-en depuis la page du parcours, rubrique « Images du parcours ».</p>
+                {% endif %}
+                <p class="ks-help"><a href="{{ path('admin_academie_course', {id: course.id}) }}#images">Gérer les images du parcours</a></p>
+            </details>
             <div><button type="button" class="ks-btn ks-btn--ghost ks-btn--sm" @click="show()"><i data-lucide="eye"></i> <span x-text="loading ? 'Mise en forme…' : 'Prévisualiser le texte'">Prévisualiser le texte</span></button></div>
             <div class="ac-preview academie-texte" x-show="html" x-cloak x-html="html" aria-live="polite"></div>
         </section>

@@ -79,7 +79,16 @@ class AcademyImportTest extends KernelTestCase
             $this->assertSame(1, $tester->execute(['fichier' => self::FILE]), 'Pas de doublon sans --remplacer');
             $this->assertSame(0, $tester->execute(['fichier' => self::FILE, '--remplacer' => true]), 'Un brouillon jamais publié peut être remplacé');
 
+            // Brouillon retouché dans le studio après son chargement : jamais remplacé (le travail serait perdu)
+            $this->em()->createQuery('UPDATE '.Course::class.' c SET c.createdAt = :d WHERE c.slug = :s')
+                ->setParameters(['d' => new \DateTimeImmutable('-1 hour'), 's' => 'de-la-productivite-a-la-fecondite'])->execute();
+            $this->em()->clear();
             $course = $this->em()->getRepository(Course::class)->findOneBy(['slug' => 'de-la-productivite-a-la-fecondite']);
+            $course->getLessons()[0]->setTitle('Titre retouché dans le studio');
+            $this->em()->flush();
+            $this->assertSame(1, $tester->execute(['fichier' => self::FILE, '--remplacer' => true]));
+            $this->assertStringContainsString('modifié dans le studio', $tester->getDisplay());
+
             $course->publish();
             $this->em()->flush();
             $this->assertSame(1, $tester->execute(['fichier' => self::FILE, '--remplacer' => true]), 'Un parcours publié n\'est jamais remplacé');

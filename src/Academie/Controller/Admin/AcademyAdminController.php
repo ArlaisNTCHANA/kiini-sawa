@@ -7,9 +7,9 @@ use App\Academie\Entity\CourseModule;
 use App\Academie\Entity\Lesson;
 use App\Academie\Entity\LessonQuestion;
 use App\Academie\Repository\CourseRepository;
+use App\Academie\Service\AcademyImages;
 use App\Academie\Service\AcademyPlaces;
 use App\Academie\Service\AcademyStudio;
-use App\Academie\Service\LessonMarkdown;
 use App\Academie\Service\PracticeCatalog;
 use App\Academie\Service\VideoEmbed;
 use Doctrine\ORM\EntityManagerInterface;
@@ -31,7 +31,7 @@ class AcademyAdminController extends AbstractController
 {
     private const CSRF = 'admin_academie';
 
-    public function __construct(private readonly EntityManagerInterface $em, private readonly CourseRepository $courses)
+    public function __construct(private readonly EntityManagerInterface $em, private readonly CourseRepository $courses, private readonly AcademyImages $images)
     {
     }
 
@@ -45,7 +45,7 @@ class AcademyAdminController extends AbstractController
 
     #[Route('/nouveau', name: '_new', methods: ['GET', 'POST'])]
     #[Route('/{id}', name: '_course', requirements: ['id' => '\d+'], methods: ['GET', 'POST'])]
-    public function course(Request $request, ?int $id = null): Response
+    public function course(Request $request, AcademyImages $images, ?int $id = null): Response
     {
         $course = $id ? $this->find(Course::class, $id) : null;
         $errors = [];
@@ -94,6 +94,7 @@ class AcademyAdminController extends AbstractController
             'plans' => AcademyPlaces::plans(), 'accessLevels' => Course::ACCESS_LEVELS,
             'problems' => $course ? AcademyStudio::publishProblems($course) : [],
             'canDelete' => $course && AcademyStudio::canDelete($course),
+            'images' => $course ? $images->list($course->getId()) : [],
         ]);
     }
 
@@ -122,8 +123,47 @@ class AcademyAdminController extends AbstractController
         return $this->redirectToRoute('admin_academie_course', ['id' => $id]);
     }
 
+    /** Image envoyée pour les leçons du parcours (réenregistrée en WebP, voir AcademyImages). */
+    #[Route('/{id}/images', name: '_image_upload', requirements: ['id' => '\d+'], methods: ['POST'])]
+    public function uploadImage(Request $request, AcademyImages $images, int $id): Response
+    {
+        $this->checkCsrf($request);
+        $course = $this->find(Course::class, $id);
+        $file = $request->files->get('image');
+        if (!$file instanceof \Symfony\Component\HttpFoundation\File\UploadedFile) {
+            $this->addFlash('error', 'Choisissez une image à envoyer.');
+        } else {
+            try {
+                $name = $images->store($course->getId(), $file);
+                $this->addFlash('success', 'Image ajoutée. Copiez sa ligne et collez-la dans le texte d\'une leçon, à l\'endroit voulu.');
+
+                return $this->redirect($this->generateUrl('admin_academie_course', ['id' => $id]).'#image-'.$name);
+            } catch (\InvalidArgumentException $e) {
+                $this->addFlash('error', $e->getMessage());
+            }
+        }
+
+        return $this->redirect($this->generateUrl('admin_academie_course', ['id' => $id]).'#images');
+    }
+
+    #[Route('/{id}/images/{name}/supprimer', name: '_image_delete', requirements: ['id' => '\d+', 'name' => '[a-f0-9]{16}'], methods: ['POST'])]
+    public function deleteImage(Request $request, AcademyImages $images, int $id, string $name): Response
+    {
+        $this->checkCsrf($request);
+        $course = $this->find(Course::class, $id);
+        $path = AcademyImages::publicPath($course->getId(), $name);
+        $used = array_filter($course->getLessons(), fn (Lesson $l) => str_contains($l->getContentMarkdown(), $path));
+        if ([] !== $used) {
+            $this->addFlash('error', 'Cette image est encore utilisée dans : '.implode(', ', array_map(fn (Lesson $l) => '« '.$l->getTitle().' »', $used)).'. Retirez-la d\'abord du texte.');
+        } elseif ($images->delete($course->getId(), $name)) {
+            $this->addFlash('success', 'Image supprimée.');
+        }
+
+        return $this->redirect($this->generateUrl('admin_academie_course', ['id' => $id]).'#images');
+    }
+
     #[Route('/{id}/supprimer', name: '_course_delete', requirements: ['id' => '\d+'], methods: ['POST'])]
-    public function deleteCourse(Request $request, int $id): Response
+    public function deleteCourse(Request $request, AcademyImages $images, int $id): Response
     {
         $this->checkCsrf($request);
         $course = $this->find(Course::class, $id);
@@ -134,6 +174,7 @@ class AcademyAdminController extends AbstractController
         }
         $this->em->remove($course);
         $this->em->flush();
+        $images->deleteAll($id);
         $this->addFlash('success', 'Parcours supprimé.');
 
         return $this->redirectToRoute('admin_academie');
@@ -276,6 +317,8 @@ class AcademyAdminController extends AbstractController
             'course' => $course, 'module' => $module, 'lesson' => $lesson, 'data' => $data, 'errors' => $errors,
             'practices' => PracticeCatalog::choices(), 'maxQuestions' => LessonQuestion::MAX_PER_LESSON,
             'canDelete' => $lesson && AcademyStudio::canDelete($course),
+            'images' => $this->images->list($course->getId()), 'diagrams' => \App\Academie\Service\LessonRenderer::DIAGRAMS,
+            'callouts' => \App\Academie\Service\LessonMarkdown::CALLOUTS,
         ]);
     }
 
@@ -324,11 +367,11 @@ class AcademyAdminController extends AbstractController
 
     /** Aperçu du texte pendant la rédaction (bouton « Prévisualiser le texte ») : même rendu sûr que pour l'apprenant. */
     #[Route('/apercu-texte', name: '_markdown', methods: ['POST'])]
-    public function markdownPreview(Request $request): Response
+    public function markdownPreview(Request $request, \App\Academie\Service\LessonRenderer $renderer): Response
     {
         $this->checkCsrf($request);
 
-        return new Response(LessonMarkdown::toHtml(mb_substr($request->request->getString('content'), 0, 100000)), 200, ['Content-Type' => 'text/html; charset=UTF-8']);
+        return new Response($renderer->toHtml(mb_substr($request->request->getString('content'), 0, 100000)), 200, ['Content-Type' => 'text/html; charset=UTF-8']);
     }
 
     // ── Questions de discernement ─────────────────────────────────────────

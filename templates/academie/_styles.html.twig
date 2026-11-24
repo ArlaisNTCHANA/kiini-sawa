@@ -71,4 +71,63 @@
         .academie-reader { grid-template-columns: minmax(0, 1fr) 300px; align-items: start; }
         .academie-reader__side { position: sticky; top: 5.5rem; }
     }
+
+    /* ── Leçons plus visuelles : encadrés, images, schémas dessinés (LessonMarkdown, LessonRenderer) ── */
+    .academie-encadre { border-radius: var(--r-lg); padding: 1rem 1.15rem .3rem; margin: 1.4rem 0; background: var(--primary-soft); border: 1px solid var(--primary-tint); }
+    .academie-encadre__titre { display: flex; align-items: center; gap: .5rem; font-family: var(--font-sans); font-size: .78rem; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; color: var(--primary-dark); margin: 0 0 .5rem !important; }
+    .academie-encadre__titre svg { width: 18px; height: 18px; flex: none; }
+    .academie-encadre p, .academie-encadre ul, .academie-encadre ol { margin-bottom: .7rem; }
+    .academie-encadre--retenir { background: var(--gold-soft); border-color: var(--gold-light); }
+    .academie-encadre--retenir .academie-encadre__titre { color: var(--accent); }
+    .academie-encadre--exemple { background: var(--bg-alt); border-color: var(--border); }
+    .academie-encadre--exemple .academie-encadre__titre { color: var(--fg-light); }
+    .academie-encadre--avous { background: var(--card-bg); border: 2px dashed var(--primary-light); }
+    .academie-encadre--attention { background: var(--warning-soft); border-color: var(--warning); }
+    .academie-encadre--attention .academie-encadre__titre { color: var(--fg); }
+    .academie-image { display: block; width: 100%; height: auto; border-radius: var(--r-lg); margin: 1.4rem 0 .4rem; box-shadow: var(--card-shadow); }
+    .academie-image + em { display: block; font-size: .85rem; color: var(--fg-muted); text-align: center; }
+
+    .academie-schema { margin: 1.6rem 0; padding: 1.2rem; border-radius: var(--r-xl); background: var(--card-bg); border: 1px solid var(--border); box-shadow: var(--card-shadow); font-family: var(--font-sans); line-height: 1.45; color: var(--fg-light); }
+    .academie-schema p { margin: 0; }
+    .sch-titre { font-family: var(--font-serif) !important; font-size: 1.05rem; color: var(--fg); text-align: center; margin: 0 0 1rem !important; }
+    .sch-note { font-size: .85rem; color: var(--fg-muted); text-align: center; margin-top: .9rem !important; }
+    .sch-icone { display: inline-flex; align-items: center; justify-content: center; width: 2.6rem; height: 2.6rem; border-radius: 50%; background: var(--primary-soft); color: var(--primary); flex: none; }
+    .sch-icone svg { width: 1.3rem; height: 1.3rem; }
+    .sch-grille { display: grid; gap: .8rem; }
+    @media (min-width: 640px) { .sch-grille--2 { grid-template-columns: 1fr 1fr; } .sch-grille--3 { grid-template-columns: repeat(3, 1fr); } .sch-grille--4 { grid-template-columns: repeat(4, 1fr); } .sch-grille--5 { grid-template-columns: repeat(5, 1fr); } }
+    .sch-carte { border-radius: var(--r-lg); padding: .9rem; background: var(--bg-alt); display: flex; flex-direction: column; gap: .35rem; }
+    .sch-carte strong { color: var(--fg); font-size: .98rem; }
+    .sch-carte small { font-size: .82rem; color: var(--fg-muted); }
+    .sch-carte--froid { background: var(--info-soft); }
+    .sch-carte--vivant { background: var(--primary-tint); }
+    .sch-carte--or { background: var(--gold-soft); }
+    .sch-carte .sch-icone { background: var(--card-bg); }
+    /* Cinq principes : une ligne par principe sur téléphone, cinq colonnes sur grand écran */
+    @media (max-width: 639px) {
+        .sch-grille--5 .sch-carte { display: grid; grid-template-columns: auto auto 1fr; grid-template-rows: auto auto; column-gap: .7rem; align-items: center; }
+        .sch-grille--5 .sch-num { grid-row: 1 / span 2; }
+        .sch-grille--5 .sch-icone { grid-row: 1 / span 2; }
+        .sch-grille--5 strong { grid-column: 3; }
+        .sch-grille--5 small { grid-column: 3; }
+    }
+    .sch-ligne small { display: block; margin-top: .25rem; color: var(--fg-muted); }
+    .sch-num { display: inline-flex; align-items: center; justify-content: center; width: 1.6rem; height: 1.6rem; border-radius: 50%; background: var(--primary); color: var(--card-bg); font-size: .8rem; font-weight: 800; }
+    .sch-fraction { display: grid; justify-items: center; gap: .3rem; max-width: 26rem; margin: 0 auto; }
+    .sch-fraction__haut, .sch-fraction__bas { width: 100%; border-radius: var(--r-md); padding: .7rem .9rem; text-align: center; }
+    .sch-fraction__haut { background: var(--primary-tint); }
+    .sch-fraction__bas { background: var(--info-soft); }
+    .sch-fraction__barre { width: 100%; height: 3px; border-radius: 2px; background: var(--fg); }
+    .sch-fraction strong { display: block; color: var(--fg); }
+    .sch-egal { font-family: var(--font-serif); font-size: 1.15rem; color: var(--primary-dark); text-align: center; margin-bottom: .6rem !important; }
+    .sch-svg { display: block; width: 100%; height: auto; max-width: 520px; margin: 0 auto; overflow: visible; }
+    .sch-svg text { font-family: var(--font-sans); }
+    .sch-legende { display: flex; flex-wrap: wrap; justify-content: center; gap: .4rem 1.2rem; font-size: .85rem; margin-top: .6rem; }
+    .sch-legende span { display: inline-flex; align-items: center; gap: .4rem; }
+    .sch-legende i.sch-pastille { display: inline-block; width: .8rem; height: .8rem; border-radius: 50%; }
+    .sch-ligne { display: grid; grid-template-columns: 1fr auto 1fr; gap: .6rem; align-items: center; padding: .55rem 0; border-top: 1px solid var(--border); }
+    .sch-ligne:first-of-type { border-top: 0; }
+    .sch-ligne > :first-child { text-align: right; }
+    .sch-fleche { color: var(--primary); display: inline-flex; }
+    .sch-fleche svg { width: 1.1rem; height: 1.1rem; }
+    .sch-pilule { display: inline-block; border-radius: var(--r-full); padding: .25rem .7rem; background: var(--primary-soft); color: var(--primary-dark); font-weight: 700; font-size: .88rem; }
 </style>

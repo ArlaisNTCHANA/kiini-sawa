@@ -77,6 +77,7 @@ security:
         - { path: ^/i/, roles: PUBLIC_ACCESS }
         - { path: ^/resultat/, roles: PUBLIC_ACCESS }
         - { path: ^/avis/, roles: PUBLIC_ACCESS }
+        - { path: ^/academie/images/, roles: PUBLIC_ACCESS } # illustrations des leçons (nom aléatoire), aussi pour l'application mobile
         - { path: ^/confirmer/, roles: PUBLIC_ACCESS }
         - { path: ^/redevabilite/, roles: PUBLIC_ACCESS }
         - { path: ^/admin, roles: ROLE_ADMIN }

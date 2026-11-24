@@ -9,6 +9,20 @@ teste (`php bin/phpunit`), commit, déploie (`bin/ops/envoyer-hostinger.sh`), v�
 journal `var/log/prod-AAAA-MM-JJ.log` sans erreur) ; **le fondateur fait lui-même `git push`** (refusé à l'IA).
 Ne jamais afficher ni demander de mot de passe ; ne pas publier son nom (mentions légales en attente).
 
+## 24/11/2026 — Académie : leçons plus visuelles (encadrés, schémas, images)
+
+- **Demande du fondateur** : « je ne vois pas les images ; c'est très plat ». Réponse : le studio n'acceptait pas
+  d'image (sa décision du matin). Proposition : schémas et encadrés, et autoriser les images ; réponse « Les deux ».
+- **Fait** (détail : `docs/modules/academie.md`, « Leçons plus visuelles ») : encadrés `:::…`, schémas `[[schema:…]]`
+  (11 gabarits dans `templates/academie/schemas/`), envoi d'images dans le studio (`AcademyImages`, route publique
+  `/academie/images/…`), panneau d'insertion dans l'éditeur de leçon, images dans la sauvegarde nocturne. Parcours
+  « De la productivité à la fécondité » enrichi (11 schémas, 17 encadrés) et rechargé en brouillon. Tests :
+  `tests/Academie/AcademyVisualTest.php`, `AcademyImportTest` (brouillon retouché jamais remplacé).
+- **Images de la présentation** : non reprises d'office. Plusieurs portent la marque d'un générateur d'images, et
+  celle des saisons (diapo 28) le filigrane d'une banque d'images payante : à ne pas publier. Le fondateur les envoie
+  lui-même dans le studio après avoir vérifié qu'il a le droit de les publier.
+- **Reste ouvert** : styles des encadrés et schémas dans l'application mobile (le HTML arrive sans les styles du site).
+
 ## 24/11/2026 — Académie : parcours « De la productivité à la fécondité » (brouillon)
 
 - **Demande du fondateur** : structurer un exemple de cours à partir de sa présentation « Maximiser sa productivité »

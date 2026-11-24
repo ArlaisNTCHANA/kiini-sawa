@@ -37,3 +37,11 @@ fi
 chmod 600 "$file"
 find "$DEST" -name 'kiini-sawa-*.sql.gz' -mtime +30 -delete
 echo "Sauvegarde : $file"
+
+# Images des parcours de l'Académie (envoyées dans le studio, rangées hors de la base) : une archive, 30 jours gardés
+images="$(dirname "$0")/../../var/academie-images"
+if [ -d "$images" ] && [ -n "$(ls -A "$images" 2>/dev/null)" ]; then
+  archive="$DEST/kiini-sawa-images-academie-$(date +%Y-%m-%d_%H%M).tar.gz"
+  tar -czf "$archive" -C "$(dirname "$images")" academie-images && chmod 600 "$archive" && echo "Images de l'Académie : $archive"
+  find "$DEST" -name 'kiini-sawa-images-academie-*.tar.gz' -mtime +30 -delete
+fi

@@ -15,6 +15,7 @@ les vrais plans de la personne. Pas de certificat, pas de note.
 - Nom : **L'Académie**. Contenu : on repart de zéro (anciens cours de `../formation/` non importés).
 - Un parcours repassé en brouillon quitte le catalogue ; ceux qui l'ont commencé y gardent accès, avec leur progression.
 - Pas d'image envoyée : l'illustration d'un parcours est l'icône et la couleur de son plan (`AcademyPlaces::look`).
+  **Modifié le 24/11/2026 (soir)** : le fondateur accepte des **images dans les leçons** (envoyées dans le studio, voir « Leçons plus visuelles »). La couverture du parcours reste l'icône et la couleur du plan.
 - Notes de leçon : directement dans le **Journal** (`ReflectionNote`, carnet « Académie », reliées à la leçon et au plan),
   pas de carnet séparé. Les comptes gratuits peuvent écrire ces notes même si le Journal est réservé à PRO. (Lot 2)
 - Vidéos : YouTube et Vimeo seulement, chargées au clic ; politique de confidentialité complétée (section Cookies).
@@ -60,6 +61,29 @@ La durée d'un parcours est calculée (somme des leçons visibles), elle n'est p
   « Aperçu administrateur », exercice inactif). Bouton « Prévisualiser le texte » pendant la rédaction
   (`POST /admin/academie/apercu-texte`).
 - Toutes les modifications : POST + jeton CSRF `admin_academie` (403 sinon).
+
+## Leçons plus visuelles (24/11/2026)
+
+Demande du fondateur : les leçons étaient « très plates ». Trois ajouts au texte Markdown (`LessonMarkdown`), toujours
+sans HTML brut, proposés en un clic dans l'éditeur de leçon (panneau « Rendre la leçon plus visuelle ») :
+
+- **Encadrés** : `:::retenir` (ou `:::exemple`, `:::avous`, `:::attention`), un titre facultatif sur la même ligne, le
+  texte, puis `:::`. Un type inconnu ou un encadré non fermé reste du texte.
+- **Schémas dessinés** : `[[schema:code]]`, liste fermée dans `LessonRenderer::DIAGRAMS`, gabarits
+  `templates/academie/schemas/<code>.html.twig` (HTML et SVG aux couleurs du site, lisibles sur téléphone). Un code
+  inconnu disparaît. Onze schémas, faits pour le parcours « De la productivité à la fécondité ».
+- **Images** : rubrique « Images du parcours » sur la page du parcours dans le studio (JPEG, PNG, WebP, 10 Mo au plus).
+  `AcademyImages` réenregistre chaque image en WebP, 1600 pixels de large au plus (métadonnées et contenu caché
+  supprimés), sous un nom aléatoire, dans `var/academie-images/<parcours>/` (hors de `public/`, que le déploiement
+  remplace ; comprise dans la sauvegarde nocturne `bin/ops/sauvegarde.sh`). Servies sans connexion par
+  `/academie/images/<parcours>/<nom>.webp` (`AcademyImageController`, route publique dans `security.yaml`, pour
+  l'application mobile aussi). Dans le texte : `![description](/academie/images/…)` ; toute autre image est retirée.
+  Suppression refusée tant qu'une leçon l'utilise ; images supprimées avec le parcours.
+- `LessonRenderer` rend le tout (filtre Twig `lecon_markdown`, aperçu du studio, API mobile avec adresses d'images
+  absolues). Dans l'application mobile, encadrés et schémas arrivent en HTML sans les styles du site : **à styler
+  côté application** (classes `academie-encadre`, `academie-schema`, `sch-*`).
+- `app:academie:import --remplacer` refuse désormais un brouillon retouché dans le studio (leçon modifiée après le
+  chargement, ou images envoyées).
 
 ## Charger un parcours écrit dans un fichier (24/11/2026)
 

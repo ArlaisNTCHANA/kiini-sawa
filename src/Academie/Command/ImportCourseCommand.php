@@ -33,6 +33,7 @@ class ImportCourseCommand extends Command
     public function __construct(
         private readonly EntityManagerInterface $em,
         private readonly CourseRepository $courses,
+        private readonly \App\Academie\Service\AcademyImages $images,
     ) {
         parent::__construct();
     }
@@ -79,6 +80,11 @@ class ImportCourseCommand extends Command
 
                 return Command::FAILURE;
             }
+            if ($problem = $this->editedInStudio($existing)) {
+                $io->error($problem.' Il n\'est pas remplacé, pour ne pas perdre ce travail.');
+
+                return Command::FAILURE;
+            }
             $this->em->remove($existing);
             $this->em->flush();
         }
@@ -88,6 +94,22 @@ class ImportCourseCommand extends Command
         $io->success('Parcours chargé en brouillon. '.$summary.' À relire et publier dans Admin › Académie.');
 
         return Command::SUCCESS;
+    }
+
+    /** Le brouillon a-t-il été retouché dans le studio depuis son chargement (leçon modifiée, image ajoutée) ? */
+    private function editedInStudio(Course $course): ?string
+    {
+        if ([] !== $this->images->list((int) $course->getId())) {
+            return 'Ce brouillon a des images envoyées dans le studio.';
+        }
+        $limit = $course->getCreatedAt()->modify('+2 minutes');
+        foreach ($course->getLessons() as $lesson) {
+            if ($lesson->getUpdatedAt() > $limit || $course->getUpdatedAt() > $limit) {
+                return 'Ce brouillon a été modifié dans le studio après son chargement.';
+            }
+        }
+
+        return null;
     }
 
     /** Construit le parcours (non enregistré) à partir du fichier, en refusant toute valeur que le studio refuserait. */

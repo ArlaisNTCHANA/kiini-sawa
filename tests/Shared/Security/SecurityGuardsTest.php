@@ -32,6 +32,7 @@ class SecurityGuardsTest extends WebTestCase
         'app_referral_link', // lien de parrainage partagé
         'app_shared_result', // résultat de test partagé par son auteur
         'app_feedback_form', // formulaire de feedback envoyé aux proches
+        'app_academie_image', // illustrations des leçons de l'Académie (nom aléatoire), affichées aussi dans l'application mobile
         'app_feedback_thanks', // remerciement après la réponse d'un proche
         'app_confirmation_form', // confirmation d'un résultat de test par les proches
         'app_confirmation_thanks', // remerciement après la confirmation d'un proche

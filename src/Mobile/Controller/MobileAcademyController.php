@@ -14,7 +14,6 @@ use App\Academie\Service\AcademyCatalog;
 use App\Academie\Service\AcademyJournal;
 use App\Academie\Service\AcademyLearning;
 use App\Academie\Service\AcademyPlaces;
-use App\Academie\Service\LessonMarkdown;
 use App\Academie\Service\PracticeCatalog;
 use App\Academie\Service\VideoEmbed;
 use App\Compte\Entity\User;
@@ -44,6 +43,7 @@ final class MobileAcademyController extends AbstractController
         private readonly CourseRepository $courses,
         private readonly LessonNoteRepository $notes,
         private readonly EntityManagerInterface $em,
+        private readonly \App\Academie\Service\LessonRenderer $renderer,
     ) {
     }
 
@@ -105,7 +105,7 @@ final class MobileAcademyController extends AbstractController
 
         return $this->jsonNoStore([
             'parcours' => $this->courseSummary($user, $course, $enrollment) + [
-                'presentationHtml' => $course->getDescription() ? LessonMarkdown::toHtml($course->getDescription()) : null,
+                'presentationHtml' => $course->getDescription() ? $this->renderer->toHtml($course->getDescription(), true) : null,
                 'modules' => $modules,
                 'prochaineLecon' => ($enrollment ? $enrollment->nextLesson() : $first)?->getSlug(),
                 'rythme' => ['mode' => $enrollment?->getPaceMode() ?? CourseEnrollment::PACE_FREE, 'enPause' => (bool) $enrollment?->isPacePaused()],
@@ -154,7 +154,7 @@ final class MobileAcademyController extends AbstractController
             'minutes' => $lesson->getDurationMinutes(),
             'faite' => null !== $completion,
             'progression' => $this->progress($enrollment),
-            'texteHtml' => '' !== trim($lesson->getContentMarkdown()) ? LessonMarkdown::toHtml($lesson->getContentMarkdown()) : null,
+            'texteHtml' => '' !== trim($lesson->getContentMarkdown()) ? $this->renderer->toHtml($lesson->getContentMarkdown(), true) : null,
             'video' => $lesson->hasVideo() ? [
                 'fournisseur' => VideoEmbed::providerLabel($lesson->getMediaProvider()),
                 'lien' => VideoEmbed::watchUrl($lesson->getMediaProvider(), (string) $lesson->getMediaRef()),

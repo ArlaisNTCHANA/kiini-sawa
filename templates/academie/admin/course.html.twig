@@ -122,6 +122,31 @@
             </form>
         </section>
 
+        <section class="ks-card ks-stack" id="images">
+            <h2 class="ks-card__title"><i data-lucide="image"></i> Images du parcours</h2>
+            <p class="ks-help">Photos ou illustrations pour les leçons : JPEG, PNG ou WebP, 10 Mo au plus. Chaque image est allégée automatiquement. N'envoyez que des images que vous avez le droit de publier. Pour en placer une dans une leçon, ouvrez la leçon : le panneau « Rendre la leçon plus visuelle » les propose.</p>
+            <form method="post" action="{{ path('admin_academie_image_upload', {id: course.id}) }}" enctype="multipart/form-data" class="ks-toolbar" style="flex-wrap: wrap;">
+                <input type="hidden" name="_csrf_token" value="{{ token }}">
+                <label class="sr-only" for="image">Image à envoyer</label>
+                <input class="ks-input" type="file" id="image" name="image" accept="image/jpeg,image/png,image/webp" required style="flex: 1 1 240px;">
+                <button type="submit" class="ks-btn ks-btn--secondary ks-btn--sm"><i data-lucide="upload"></i> Envoyer l'image</button>
+            </form>
+            {% if images %}
+                <ul class="ac-images">
+                    {% for image in images %}
+                        <li id="image-{{ image.name }}">
+                            <img src="{{ image.path }}" alt="" loading="lazy">
+                            <code>![Description]({{ image.path }})</code>
+                            <form method="post" action="{{ path('admin_academie_image_delete', {id: course.id, name: image.name}) }}" onsubmit="return confirm('Supprimer cette image ?');">
+                                <input type="hidden" name="_csrf_token" value="{{ token }}">
+                                <button type="submit" class="ks-btn ks-btn--ghost ks-btn--sm"><i data-lucide="trash-2"></i> Supprimer</button>
+                            </form>
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        </section>
+
         <section class="ks-card ac-danger-zone">
             {% if canDelete %}
                 <form method="post" action="{{ path('admin_academie_course_delete', {id: course.id}) }}" onsubmit="return confirm('Supprimer définitivement ce parcours, ses modules, ses leçons et ses questions ?');">

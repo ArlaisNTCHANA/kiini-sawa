@@ -47,6 +47,10 @@ modules:
           - **Désapprendre pour réapprendre.** Si vous superposez ces idées à vos anciennes habitudes sans les remettre en question, cela fera court-circuit. Laissez-vous la liberté d'explorer une autre manière de voir.
           - **L'honnêteté envers vous-même.** Dans les exercices, notez ce que vous êtes aujourd'hui, pas ce que vous aimeriez être. On ne soigne bien que ce qu'on a bien diagnostiqué.
           - **Participer.** Ce n'est pas un cours magistral, c'est un atelier : écrivez, essayez, revenez sur vos notes.
+
+          :::retenir
+          Le but n'est pas de courir plus vite, mais d'accomplir plus **sans vous épuiser**.
+          :::
         practice:
           target: JOURNAL
           action: add_note
@@ -58,10 +62,7 @@ modules:
         content: |
           Qu'est-ce que la productivité ? Ouvrez un manuel d'économie : vous y trouverez une équation simple.
 
-          > **Productivité = ce que l'on livre (la sortie) ÷ ce que l'on utilise (l'entrée)**
-
-          - **Ce qui sort** : des chiffres, des dossiers clôturés, des projets aboutis.
-          - **Ce qui entre** : votre temps, votre budget, votre énergie, votre attention.
+          [[schema:equation-usine]]
 
           La règle du jeu est toujours la même : augmenter le haut de la fraction en réduisant le bas. Livrer plus de projets en y passant moins d'heures et avec moins d'argent. C'est le principe même de l'optimisation.
 
@@ -106,9 +107,13 @@ modules:
 
           Dès qu'un chiffre devient l'objectif principal, il cesse d'être une bonne mesure.
 
+          :::exemple Deux exemples
           Un service informatique doit « fermer plus de tickets par jour ». Le technicien ferme le ticket en 5 minutes sans traiter la cause. La statistique est excellente, mais le problème revient le lendemain.
 
-          Un cuisinier doit servir 100 plats à l'heure. Il arrête de laver les légumes. Sur le papier, il a réussi. Mais les clients ne reviendront pas. **En forçant le chiffre, on a tué la qualité.**
+          Un cuisinier doit servir 100 plats à l'heure. Il arrête de laver les légumes. Sur le papier, il a réussi. Mais les clients ne reviendront pas.
+          :::
+
+          **En forçant le chiffre, on a tué la qualité.**
 
           ## 2. La dette technique
 
@@ -155,21 +160,17 @@ modules:
         content: |
           Assez de théorie : parlons de vous. Prenez dix minutes pour faire l'audit de votre propre « ratio » de cette semaine. Rappel : notez ce qui est, pas ce que vous aimeriez qui soit.
 
-          ## 1. Vos résultats
-
-          Notez les **3 choses principales** que vous avez accomplies ou livrées cette semaine. Ce sont vos résultats visibles.
-
-          ## 2. Ce que cela vous a coûté
-
-          À côté de chaque résultat, soyez honnête : sur une échelle de **1 à 10**, quel effort mental et physique cela vous a-t-il demandé ? Était-ce fluide, ou avez-vous dû forcer comme un moteur qui surchauffe ?
-
-          ## 3. Le coût caché
-
-          Regardez maintenant votre niveau de fatigue, de stress, ou le manque de temps pour vos proches en ce moment. Notez-le aussi sur **10**.
+          :::avous Votre audit en dix minutes
+          1. **Vos résultats.** Notez les 3 choses principales que vous avez accomplies ou livrées cette semaine.
+          2. **Ce que cela vous a coûté.** À côté de chaque résultat, notez de 1 à 10 l'effort mental et physique demandé. Était-ce fluide, ou avez-vous dû forcer comme un moteur qui surchauffe ?
+          3. **Le coût caché.** Notez de 1 à 10 votre niveau de fatigue, de stress, ou le manque de temps pour vos proches en ce moment.
+          :::
 
           ## Comment lire votre audit
 
+          :::attention
           Si vos résultats sont à 9 mais que votre épuisement est aussi à 9, vous n'êtes pas « productif » : vous videz votre réservoir plus vite que vous ne le remplissez. À ce rythme, la panne n'est pas une question de « si », mais de « quand ».
+          :::
 
           Et si votre coût caché est élevé, rassurez-vous sur un point : **ce n'est pas parce que vous êtes faible ou mal organisé.** C'est que vous essayez de faire fonctionner un organisme vivant, vous-même, avec le mode d'emploi d'une machine. C'est ce que nous allons regarder dans le module suivant.
         practice:
@@ -186,14 +187,7 @@ modules:
       - title: "L'être humain n'est pas une machine"
         duration: 7
         content: |
-          Regardez ce tableau.
-
-          | | La machine | L'être humain |
-          | --- | --- | --- |
-          | Fonctionnement | Linéaire | Cyclique |
-          | Objectif | Production continue | Porter du fruit, en saisons |
-          | Mesure | Le temps de la montre (Chronos) | Le moment juste (Kairos) |
-          | Usure | La casse matérielle | L'épuisement |
+          [[schema:machine-vivant]]
 
           Une machine produit la même quantité, de la même manière, à 8 heures du matin ou à 3 heures de la nuit. Un être humain, comme la nature, est **cyclique** : il a des saisons pour semer, des saisons pour récolter, et des saisons pour que la terre se repose. Quand on force le vivant à obéir à la mécanique, le système finit toujours par céder.
 
@@ -201,7 +195,7 @@ modules:
 
           Pourquoi est-il si difficile d'en sortir ? Parce qu'il y a une intention cachée derrière le mot « productivité ». Ce qu'on attend de vous, au fond, c'est de la **production**. Retournez l'équation :
 
-          > **Production = Productivité × Ressources**
+          [[schema:production-ressources]]
 
           Or votre productivité pure (réfléchir, créer, décider) a un plafond biologique : on ne peut pas décider de réfléchir deux fois plus vite. Alors, pour « produire plus », il ne reste qu'un levier : **augmenter les ressources**. Et c'est là qu'on commence à piller son propre capital : on prend du temps à sa famille, de l'énergie à son corps, du repos à son esprit.
 
@@ -230,6 +224,8 @@ modules:
 
           Il existe une autre dimension du temps que nous avons oubliée : le **Kairos**. Ce n'est pas la quantité de temps, c'est la qualité du moment. Le moment opportun. La saison juste.
 
+          [[schema:chronos-kairos]]
+
           ## Vous l'avez déjà vécu
 
           Vous bloquez trois heures sur un dossier complexe, l'esprit saturé, et rien de bon ne sort. Le lendemain, après une bonne marche, vous réglez le même problème en vingt minutes, avec une clarté totale. **Ces vingt minutes, c'est le Kairos.**
@@ -238,7 +234,9 @@ modules:
 
           ## Ce que dit La Méthode
 
-          Le chapitre 11 décrit les quatre saisons d'une vie (semis, croissance, récolte, hiver), chacune avec son travail et son piège. Le piège de l'hiver : « confondre repos et échec ».
+          Le chapitre 11 décrit les quatre saisons d'une vie, chacune avec son travail et son piège.
+
+          [[schema:saisons]]
 
           > « Tu ne peux pas récolter en saison de semis. Mais tu ne récolteras jamais si tu ne sèmes pas. »
           > La Méthode, chapitre 11
@@ -262,13 +260,21 @@ modules:
 
           Pensez à quelqu'un qui sacrifie une partie de ses nuits pendant un an pour apprendre une nouvelle compétence ou lancer une activité. Au début, l'illusion fonctionne. Puis la biologie reprend ses droits : sans sommeil complet, la mémoire ne se consolide plus, la concentration s'effondre. On relit trois fois la même page, on fait des erreurs qui coûteront des heures le lendemain.
 
-          On n'a pas gagné du temps : on a contracté une dette, à un taux que le corps finira par réclamer. **Le sommeil n'est pas un luxe à optimiser, c'est l'entretien vital de votre organisme.**
+          On n'a pas gagné du temps : on a contracté une dette, à un taux que le corps finira par réclamer.
+
+          :::retenir
+          Le sommeil n'est pas un luxe à optimiser : c'est l'entretien vital de votre organisme.
+          :::
 
           ## Dérive 2 : la culpabilité du vide
 
           Celle-ci est plus sournoise, car elle s'attaque à notre psychologie. Une machine à l'arrêt, dans une usine, c'est de l'argent perdu. Notre cerveau a appliqué cette logique à nous-mêmes.
 
-          Faites le test : un samedi après-midi, asseyez-vous et ne faites rien pendant une heure. Très vite, une petite voix s'allume : « Tu perds ton temps. Tu devrais au moins écouter quelque chose d'utile. » Cette maladie de l'optimisation infecte même nos moments d'intimité : jouer avec ses enfants juste pour rire, sans but « éducatif », semble improductif.
+          :::avous Faites le test
+          Un samedi après-midi, asseyez-vous et ne faites rien pendant une heure. Écoutez la petite voix qui s'allume.
+          :::
+
+          Très vite, une petite voix s'allume : « Tu perds ton temps. Tu devrais au moins écouter quelque chose d'utile. » Cette maladie de l'optimisation infecte même nos moments d'intimité : jouer avec ses enfants juste pour rire, sans but « éducatif », semble improductif.
 
           C'est une erreur. En agriculture, il existe un principe très ancien : **la jachère**. On laisse un champ vide pendant une saison. Ce champ ne « perd » pas son temps : il reconstitue ses nutriments pour que la prochaine récolte soit abondante. Le repos, le jeu sans but, l'ennui même, sont la jachère de votre esprit.
 
@@ -305,6 +311,8 @@ modules:
           C'est l'idée qu'il faut être « au top » en permanence : toujours motivé, toujours à 100 %, du lundi matin au dimanche soir. Mais qui peut tourner à 100 % jour et nuit ? Un serveur informatique. Pas un être vivant.
 
           Regardez un sprinteur : il donne une intensité absolue pendant quelques secondes, puis il s'arrête, marche, récupère, dort. **Son excellence vient de sa capacité à alterner un effort intense et un repos profond.**
+
+          [[schema:oscillation]]
 
           Si vous lissez votre énergie pour produire en continu, sans vraies pauses, vous ne serez pas à 100 % tout le temps : vous finirez bloqué bien en dessous, dans une fatigue chronique. Présent physiquement, éteint intérieurement.
 
@@ -343,12 +351,11 @@ modules:
 
           ## Votre point de rupture
 
-          Parmi les quatre dérives, laquelle vous coûte le plus cher en ce moment ?
+          [[schema:quatre-derives]]
 
-          1. Le sommeil sacrifié.
-          2. La culpabilité du vide.
-          3. Les relations optimisées.
-          4. L'illusion du 24/7.
+          :::avous
+          Parmi ces quatre dérives, laquelle vous coûte le plus cher en ce moment ?
+          :::
 
           Nommez-la. Prendre conscience, c'est déjà commencer à rompre avec le modèle de l'usine.
 
@@ -370,11 +377,7 @@ modules:
         content: |
           Nous passons maintenant de la déconstruction à la reconstruction. Il ne s'agit pas de devenir une machine plus rapide, mais un **être fécond**. Le but : que vos actions quotidiennes ne soient plus un combat contre vous-même, mais le fruit naturel de qui vous êtes.
 
-          | | Productivité (modèle industriel) | Fécondité (modèle du vivant) |
-          | --- | --- | --- |
-          | Logique | La machine : linéaire et constante | Le vivant : cyclique et saisonnier |
-          | Objectif | Maximiser la sortie par rapport à l'entrée | Porter du fruit au moment juste |
-          | Ce qu'on récolte | L'épuisement, la perte de créativité | Une croissance durable, le renouvellement |
+          [[schema:usine-foret]]
 
           Un pommier ne produit pas des pommes jour et nuit, toute l'année. Il respecte des cycles. Et une forêt ne fait pas d'épuisement, alors que ce qu'elle produit dépasse tout ce que nos usines savent faire. Pourquoi ? Parce que la nature ne connaît pas la productivité : **elle connaît la fécondité.**
 
@@ -402,8 +405,7 @@ modules:
         content: |
           Pourquoi commencer par parler de qui vous êtes ? Parce que c'est **la loi de la racine** : ce qui est invisible nourrit ce qui est visible.
 
-          - **L'invisible, votre identité** : vos racines, qui vous êtes, vos talents, vos valeurs.
-          - **Le visible, votre performance** : vos fruits, vos résultats, vos projets, votre impact.
+          [[schema:racine]]
 
           On ne peut pas avoir de bons fruits sur une racine qu'on ignore ou qu'on assèche. Notre société demande souvent des fruits sans jamais s'occuper des racines : on demande à un pommier de faire des oranges parce que c'est la mode, puis on s'étonne qu'il s'épuise.
 
@@ -441,9 +443,11 @@ modules:
 
           Quand vous travaillez dans ce qui vous passionne, vous ne dépensez pas seulement de l'énergie : vous en recevez. C'est ce moment où le temps semble s'arrêter, parce que votre action est devenue le prolongement naturel de qui vous êtes.
 
-          ## Le test
+          :::avous Le test
+          **Quels sont les moments où vous oubliez la montre ?**
+          :::
 
-          **Quels sont les moments où vous oubliez la montre ?** Ces moments où le Chronos disparaît et où vous entrez dans un état de fluidité : c'est là que se cache votre graine. Tout votre écosystème va grandir à partir d'elle.
+          Ces moments où le Chronos disparaît et où vous entrez dans un état de fluidité : c'est là que se cache votre graine. Tout votre écosystème va grandir à partir d'elle.
 
           ## Pour aller plus loin
 
@@ -487,7 +491,11 @@ modules:
           - **Les objectifs** : des jalons concrets, ajustables, et alignés sur votre identité.
           - **L'arbitrage** : vos tâches de chaque jour nourrissent-elles votre vision, ou ne font-elles que remplir vos heures ?
 
-          Dans le modèle mécanique, l'objectif est souvent de « faire plus » pour remplir le temps. Dans le modèle du vivant, on cherche l'alignement. **Un objectif n'est fécond que s'il est une étape vers votre vision.** Sans ce cap, on peut être extrêmement « productif » tout en étant complètement perdu.
+          Dans le modèle mécanique, l'objectif est souvent de « faire plus » pour remplir le temps. Dans le modèle du vivant, on cherche l'alignement. Sans ce cap, on peut être extrêmement « productif » tout en étant complètement perdu.
+
+          :::retenir
+          Un objectif n'est fécond que s'il est une étape vers votre vision.
+          :::
 
           [Lire le chapitre « La Vision »](/methode/vision)
         practice:
@@ -501,15 +509,17 @@ modules:
       - title: "Principe 1 : la Finalité (la graine)"
         duration: 6
         content: |
+          [[schema:cinq-principes]]
+
           Dans la nature, rien ne pousse au hasard. Une graine de pommier ne s'agite pas pour devenir un chêne : elle porte en elle le code précis du fruit qu'elle doit donner.
 
           Combien de fois avez-vous terminé une journée épuisante en vous demandant : « Qu'est-ce que j'ai vraiment accompli ? » C'est le piège de la productivité industrielle : elle nous fait produire **des feuilles** (du volume, de l'activité, du bruit) au lieu de donner **des fruits**.
 
-          ## Le principe
-
+          :::retenir Le principe
           - **L'intention** : définir le fruit avant de mobiliser vos ressources.
           - **La graine** : l'agitation sans but est une perte de sève.
           - **L'impact** : ne produisez pas du volume, produisez un résultat réel.
+          :::
 
           Avant chaque projet, chaque réunion, chaque heure de travail, posez-vous une question simple : **« Quel est le fruit que je veux donner ici ? »** Si vous ne voyez pas le fruit, ne plantez pas la graine. Sans finalité, il n'y a pas de direction, seulement de l'agitation.
         practice:
@@ -525,11 +535,11 @@ modules:
 
           L'Alignement propose une autre source d'énergie : **votre identité.** La sève ne force pas pour monter dans l'arbre : elle circule parce que l'arbre est ce qu'il est. Une branche qui n'est plus nourrie par la sève finit par sécher et tomber.
 
-          ## Le principe
-
+          :::retenir Le principe
           - **L'autre chemin** : passer de la volonté qui force à l'identité qui nourrit.
           - **L'authenticité** : arrêter de porter un masque et mettre vos talents et votre sensibilité dans votre travail.
           - **La fluidité** : travailler avec vous-même plutôt que contre vous-même.
+          :::
 
           Quand vous êtes aligné, vous ne forcez plus pour travailler : votre nature s'exprime à travers vos tâches. La fatigue diminue quand l'action devient l'expression de qui vous êtes plutôt qu'une obligation extérieure.
 
@@ -555,9 +565,9 @@ modules:
 
           Le tuteur, c'est une structure souple qui guide votre énergie vers le fruit sans étouffer votre créativité : vos outils, ce que vous pouvez automatiser, votre manière de vous organiser. Ce n'est pas une cage, c'est un soutien.
 
-          ## Le principe
-
+          :::retenir Le principe
           Arrêtez d'être le héros solitaire qui porte tout sur ses épaules. **Devenez le jardinier de votre forêt.** Le but est de créer un environnement où la réussite devient le chemin le plus facile, plutôt qu'un combat permanent contre les éléments.
+          :::
 
           Dans KIINI SAWA, votre Partenaire de Redevabilité, vos rituels et votre agenda font partie de cette forêt.
         practice:
@@ -573,11 +583,11 @@ modules:
 
           Le modèle industriel ne connaît qu'une vitesse : toujours plus, tout le temps. Le Kairos rappelle que **l'efficacité est une question de rythme, pas de vitesse.**
 
-          ## Le principe
-
+          :::retenir Le principe
           - **Le temps du vivant** : rien ne fleurit toute l'année ; la performance est une oscillation, pas une ligne droite.
           - **La jachère** : le repos n'est pas une perte de temps, c'est la condition de la prochaine récolte.
           - **Le discernement** : agir au moment opportun, en respectant ses cycles d'énergie.
+          :::
 
           ## Vos deux cycles
 
@@ -600,11 +610,11 @@ modules:
 
           Un arbre qui n'est jamais taillé finit par s'étouffer sous son propre poids. Sa sève s'éparpille dans mille petites branches, et il ne donne plus que des fruits petits et acides.
 
-          ## Le principe
-
+          :::retenir Le principe
           - **La concentration** : supprimer le superflu pour envoyer toute la sève vers le fruit.
           - **Le danger** : un arbre qui veut tout nourrir s'épuise.
           - **Le « non »** : la fécondité n'est pas une accumulation de tâches, c'est un choix de missions.
+          :::
 
           Élaguer, c'est avoir le courage de dire **non**. Tailler n'est pas un acte cruel, c'est un acte d'amour pour le fruit : si vous ne coupez pas le superflu, vous sacrifiez l'essentiel.
 
@@ -620,13 +630,7 @@ modules:
         content: |
           Voici votre nouvelle carte. Chaque principe répond à une question, et à un moment où vous vous sentez mal.
 
-          | Quand vous vous sentez… | Revenez à… | La question |
-          | --- | --- | --- |
-          | perdu | **la Graine** (Finalité) | Quel fruit ? |
-          | épuisé | **la Sève** (Alignement) | Qui suis-je ? |
-          | débordé | **la Forêt** (Écosystème) | Quel soutien ? |
-          | frustré | **la Saison** (Kairos) | Quel moment ? |
-          | dispersé | **la Taille** (Élagage) | Quel sacrifice ? |
+          [[schema:carte-navigation]]
 
           La fécondité n'est pas un miracle, c'est une discipline du vivant. En respectant ces cinq lois, vous cessez d'être une machine qui s'épuise pour devenir un organisme qui porte du fruit dans la durée.
 
@@ -666,12 +670,16 @@ modules:
         content: |
           Prenons un cas concret.
 
+          :::exemple La situation
           - **Le poste** : vous êtes analyste de données. Vous traitez des chiffres, vous préparez des rapports, et vous le faites bien. C'est un talent que vous avez travaillé.
           - **Le quotidien** : extraire, traiter, rapporter, huit heures par jour seul devant un écran. Résultat : une fatigue chronique.
           - **Votre talent naturel** : relier les gens, voir les liens invisibles entre les situations.
           - **Ce que vous ressentez** : « Je fais mon travail, mais je ne me sens pas à ma place. »
+          :::
 
-          Prenez un instant pour répondre : **quel est le conflit ? quel est le risque ? comment transformer cette corvée en occasion de porter du fruit ?**
+          :::avous Prenez un instant
+          Quel est le conflit ? Quel est le risque ? Comment transformer cette corvée en occasion de porter du fruit ?
+          :::
 
           ## Le conflit : une friction d'énergie
 
@@ -731,9 +739,11 @@ modules:
 
           La connaissance sans action n'est que du bruit. Pour que la graine plantée ne sèche pas, arrosez-la dès demain. Choisissez **une seule** action :
 
+          :::avous Une seule action
           - identifiez une branche morte et coupez-la aujourd'hui (Élagage) ;
           - greffez un talent naturel sur une tâche ingrate (Alignement) ;
           - automatisez une petite tâche qui vous pèse (Écosystème).
+          :::
 
           Faites ce premier geste et observez comment votre énergie réagit. Le vivant répond toujours quand on respecte ses lois.
 
