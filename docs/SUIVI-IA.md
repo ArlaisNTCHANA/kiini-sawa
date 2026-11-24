@@ -9,6 +9,26 @@ teste (`php bin/phpunit`), commit, déploie (`bin/ops/envoyer-hostinger.sh`), v�
 journal `var/log/prod-AAAA-MM-JJ.log` sans erreur) ; **le fondateur fait lui-même `git push`** (refusé à l'IA).
 Ne jamais afficher ni demander de mot de passe ; ne pas publier son nom (mentions légales en attente).
 
+## 24/11/2026 — Onboarding : code Alpine brut à la place du formulaire
+
+- **Symptôme** : sur `/onboarding`, le formulaire était remplacé par du code (`step: 1, firstName: …`) ; console :
+  « Unexpected token '}' » puis « step is not defined », « firstName is not defined »… Repéré pendant la refonte de
+  l'administration, sans lien avec elle. Touchait tout compte qui arrive sur l'onboarding (en production aussi).
+- **Cause** : `|json_safe` échappe les guillemets *à l'intérieur* d'un texte, mais les guillemets qui encadrent chaque
+  texte JSON (`"Esther"`, `""`) restent des guillemets doubles. Le gabarit écrivait `x-data="{ … firstName: "Esther" … }"` :
+  le premier `"` fermait l'attribut, Alpine recevait un objet coupé. Même défaut sur les boutons de suggestions de
+  valeurs (`@click="addValue("Foi")"`).
+- **Correctif** : `templates/compte/onboarding.html.twig`, `x-data` et `@click` des suggestions entre **apostrophes**
+  (aucun champ ni texte retiré). Le commentaire de `src/Shared/Twig/JsonSafeExtension.php` disait à tort que les
+  guillemets doubles convenaient : corrigé.
+- **Test** : `tests/Compte/OnboardingAlpineTest.php` (prénom avec guillemets et apostrophe ; l'attribut `x-data` contient
+  tout l'objet ; les boutons de suggestions gardent leur appel). Vérifié dans le navigateur à 800×600 et au format
+  téléphone (formulaire affiché, suggestions qui remplissent les valeurs). `php bin/phpunit` : 510 tests OK.
+- **Piège** : le lecteur HTML de DomCrawler ignore les attributs `@click` : les contrôler dans le HTML brut.
+- **Reste à faire** : `templates/rituels/index.html.twig` (vers la ligne 529) a le même défaut :
+  `<button @click="selectHabit({{ {…}|json_safe }})">` ; le clic sur une habitude dans Rituels est donc probablement
+  cassé. À corriger de la même façon (attribut entre apostrophes) dans un chantier séparé.
+
 ## 23/11/2026 — Refonte de l'interface d'administration
 
 - **Demande du fondateur** : l'administration était « complètement pas OK ». Constat présenté avec captures et maquette,

@@ -9,8 +9,10 @@ use Twig\TwigFilter;
 /**
  * Filtre `|json_safe` : à utiliser À LA PLACE de `|json_encode|raw` pour passer des données à du JavaScript ou à un attribut.
  * Les caractères qui permettraient de sortir d'une balise `<script>`, d'un attribut ou d'un commentaire HTML (`<`, `>`, `&`, `'`, `"`)
- * sont écrits en séquences \uXXXX : le résultat reste du JSON valide, mais inoffensif quel que soit l'endroit où on l'insère
- * (corps d'un script, attribut entre guillemets simples ou doubles, directive Alpine).
+ * sont écrits en séquences \uXXXX à l'intérieur des valeurs : le résultat reste du JSON valide et inoffensif dans le corps
+ * d'un script ou dans un attribut entre APOSTROPHES (x-data='{ nom: {{ x|json_safe }} }').
+ * Attention : les guillemets qui encadrent un texte JSON ("Esther") restent des guillemets doubles. Dans un attribut entre
+ * guillemets doubles, ils fermeraient l'attribut et Alpine afficherait son code brut : écrire l'attribut entre apostrophes.
  * Un texte en UTF-8 invalide est nettoyé (caractère de remplacement) au lieu de faire échouer la page.
  */
 final class JsonSafeExtension extends AbstractExtension

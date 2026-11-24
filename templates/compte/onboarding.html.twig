@@ -42,10 +42,11 @@
 {# Si le serveur renvoie une erreur, on rouvre l'étape concernée #}
 {% set firstErrorStep = errors.firstName is defined ? 1 : (errors.purpose is defined ? 2 : (errors.values is defined ? 3 : (errors|length > 0 ? 4 : 1))) %}
 
+{# x-data et @click entre apostrophes : |json_safe produit des guillemets doubles ("Esther") qui fermeraient un attribut entre guillemets doubles #}
 <div class="ob-body">
     <div class="ob-glow"></div>
     <form method="post" class="ob-card"
-          x-data="{
+          x-data='{
               step: {{ firstErrorStep }},
               firstName: {{ data.firstName|json_safe }},
               purpose: {{ data.purpose|json_safe }},
@@ -58,7 +59,7 @@
                   if (this.step === 3) { const v = this.values.map(x => x.trim().toLowerCase()).filter(Boolean); return v.length === 3 && new Set(v).size === 3; }
                   return this.goalTitle.trim().length >= 3;
               }
-          }"
+          }'
           @keydown.enter="if ($event.target.tagName !== 'TEXTAREA' && step < 4) { $event.preventDefault(); if (valid()) step++; }">
 
         <div class="ob-progress" aria-hidden="true">
@@ -96,7 +97,7 @@
             </div>
             <div class="ob-chips">
                 {% for s in suggestions %}
-                    <button type="button" class="ob-chip" @click="addValue({{ s|json_safe }})">{{ s }}</button>
+                    <button type="button" class="ob-chip" @click='addValue({{ s|json_safe }})'>{{ s }}</button>
                 {% endfor %}
             </div>
             {% if errors.values is defined %}<p class="ob-error">{{ errors.values }}</p>{% endif %}
