@@ -42,7 +42,8 @@ class ImportCourseCommand extends Command
     {
         $this->addArgument('fichier', InputArgument::REQUIRED, 'Chemin du fichier YAML du parcours')
             ->addOption('remplacer', null, InputOption::VALUE_NONE, 'Remplace un brouillon de même adresse jamais publié')
-            ->addOption('verifier', null, InputOption::VALUE_NONE, 'Vérifie le fichier sans rien enregistrer');
+            ->addOption('verifier', null, InputOption::VALUE_NONE, 'Vérifie le fichier sans rien enregistrer')
+            ->addOption('textes', null, InputOption::VALUE_NONE, 'Met à jour le texte des leçons d\'un parcours déjà chargé (même publié), sans toucher à la progression des membres');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
@@ -72,6 +73,9 @@ class ImportCourseCommand extends Command
         }
 
         $existing = $this->courses->findOneBy(['slug' => $course->getSlug()]);
+        if ($input->getOption('textes')) {
+            return $this->updateTexts($io, $course, $existing);
+        }
         if ($existing) {
             if (!$input->getOption('remplacer') || !AcademyStudio::canDelete($existing)) {
                 $io->error($existing->wasEverPublished()
@@ -92,6 +96,49 @@ class ImportCourseCommand extends Command
         $this->em->persist($course);
         $this->em->flush();
         $io->success('Parcours chargé en brouillon. '.$summary.' À relire et publier dans Admin › Académie.');
+
+        return Command::SUCCESS;
+    }
+
+    /**
+     * Remplace seulement le texte des leçons (retrouvées par leur adresse) : mêmes leçons, mêmes identifiants, donc
+     * progression, notes et exercices des membres intacts. Refusé si une leçon manque ou a été retouchée dans le studio
+     * après le chargement : on ne perd jamais un travail fait à la main.
+     */
+    private function updateTexts(SymfonyStyle $io, Course $fromFile, ?Course $existing): int
+    {
+        if (null === $existing) {
+            $io->error('Aucun parcours ne porte cette adresse : chargez-le d\'abord (sans --textes).');
+
+            return Command::FAILURE;
+        }
+        $bySlug = [];
+        foreach ($existing->getLessons() as $lesson) {
+            $bySlug[$lesson->getSlug()] = $lesson;
+        }
+        $limit = $existing->getCreatedAt()->modify('+2 minutes');
+        $changes = [];
+        foreach ($fromFile->getLessons() as $new) {
+            $current = $bySlug[$new->getSlug()] ?? null;
+            if (null === $current) {
+                $io->error('Leçon introuvable dans le parcours en ligne : « '.$new->getTitle().' ». Rien n\'a été modifié.');
+
+                return Command::FAILURE;
+            }
+            if ($current->getUpdatedAt() > $limit) {
+                $io->error('La leçon « '.$current->getTitle().' » a été modifiée dans le studio après le chargement. Rien n\'a été modifié, pour ne pas perdre ce travail.');
+
+                return Command::FAILURE;
+            }
+            if ($current->getContentMarkdown() !== $new->getContentMarkdown()) {
+                $changes[] = [$current, $new->getContentMarkdown()];
+            }
+        }
+        foreach ($changes as [$lesson, $text]) {
+            $lesson->setContentMarkdown($text);
+        }
+        $this->em->flush();
+        $io->success(\count($changes).' leçon(s) mise(s) à jour. Progression, notes et exercices des membres sont intacts.');
 
         return Command::SUCCESS;
     }

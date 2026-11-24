@@ -89,6 +89,23 @@ class AcademyImportTest extends KernelTestCase
             $this->assertSame(1, $tester->execute(['fichier' => self::FILE, '--remplacer' => true]));
             $this->assertStringContainsString('modifié dans le studio', $tester->getDisplay());
 
+            // --textes : met à jour le texte des leçons d'un parcours (même publié) sans le recréer
+            $this->removeCourse('de-la-productivite-a-la-fecondite');
+            $this->assertSame(0, $tester->execute(['fichier' => self::FILE]));
+            $course = $this->em()->getRepository(Course::class)->findOneBy(['slug' => 'de-la-productivite-a-la-fecondite']);
+            $course->publish();
+            $first = $course->getLessons()[0];
+            $firstId = $first->getId();
+            $this->em()->getConnection()->executeStatement('UPDATE academy_lesson SET content_markdown = ? WHERE id = ?', ['Ancien texte', $firstId]);
+            $this->em()->flush();
+            $this->em()->clear();
+            $this->assertSame(0, $tester->execute(['fichier' => self::FILE, '--textes' => true]));
+            $this->em()->clear();
+            $updated = $this->em()->find(\App\Academie\Entity\Lesson::class, $firstId);
+            $this->assertNotSame('Ancien texte', $updated->getContentMarkdown(), 'Même leçon (même identifiant), texte mis à jour');
+            $this->assertTrue($updated->getCourse()->isPublished());
+
+            $course = $this->em()->getRepository(Course::class)->findOneBy(['slug' => 'de-la-productivite-a-la-fecondite']);
             $course->publish();
             $this->em()->flush();
             $this->assertSame(1, $tester->execute(['fichier' => self::FILE, '--remplacer' => true]), 'Un parcours publié n\'est jamais remplacé');

@@ -84,6 +84,9 @@ sans HTML brut, proposés en un clic dans l'éditeur de leçon (panneau « Rendr
   côté application** (classes `academie-encadre`, `academie-schema`, `sch-*`).
 - `app:academie:import --remplacer` refuse désormais un brouillon retouché dans le studio (leçon modifiée après le
   chargement, ou images envoyées).
+- `app:academie:import --textes` met à jour **seulement le texte des leçons** d'un parcours déjà chargé, même publié
+  (leçons retrouvées par leur adresse : mêmes identifiants, progression et notes des membres intactes). Refusé si une
+  leçon manque ou a été modifiée dans le studio après le chargement.
 
 ## Charger un parcours écrit dans un fichier (24/11/2026)
 

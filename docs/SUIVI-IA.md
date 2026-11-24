@@ -16,7 +16,9 @@ Ne jamais afficher ni demander de mot de passe ; ne pas publier son nom (mention
 - **Fait** (détail : `docs/modules/academie.md`, « Leçons plus visuelles ») : encadrés `:::…`, schémas `[[schema:…]]`
   (11 gabarits dans `templates/academie/schemas/`), envoi d'images dans le studio (`AcademyImages`, route publique
   `/academie/images/…`), panneau d'insertion dans l'éditeur de leçon, images dans la sauvegarde nocturne. Parcours
-  « De la productivité à la fécondité » enrichi (11 schémas, 17 encadrés) et rechargé en brouillon. Tests :
+  « De la productivité à la fécondité » enrichi (11 schémas, 17 encadrés). Le fondateur l'avait **publié** entre-temps :
+  pas de rechargement ; textes des 22 leçons mis à jour en place par `app:academie:import --textes` (leçons en ligne
+  vérifiées identiques à la version chargée le matin, une inscription conservée). Tests :
   `tests/Academie/AcademyVisualTest.php`, `AcademyImportTest` (brouillon retouché jamais remplacé).
 - **Images de la présentation** : non reprises d'office. Plusieurs portent la marque d'un générateur d'images, et
   celle des saisons (diapo 28) le filigrane d'une banque d'images payante : à ne pas publier. Le fondateur les envoie
