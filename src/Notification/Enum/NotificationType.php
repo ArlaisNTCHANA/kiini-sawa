@@ -39,6 +39,8 @@ enum NotificationType: string
     case ACADEMY_LESSON = 'ACADEMY_LESSON';
     // Anniversaire : une nouvelle année de vie, invitation à relire son Plan de Vie (désactivable)
     case BIRTHDAY = 'BIRTHDAY';
+    // « Saviez-vous que… » : une fonction pas encore utilisée, par e-mail, au plus toutes les deux semaines (désactivable)
+    case TIP = 'TIP';
 
     /** Icône Lucide affichée dans le centre de notifications. */
     public function icon(): string
@@ -61,6 +63,7 @@ enum NotificationType: string
             self::ACCOUNTABILITY => 'shield-check',
             self::ACADEMY_LESSON => 'graduation-cap',
             self::BIRTHDAY => 'cake',
+            self::TIP => 'lightbulb',
         };
     }
 

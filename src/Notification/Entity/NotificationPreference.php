@@ -75,6 +75,10 @@ class NotificationPreference
     #[ORM\Column(options: ['default' => true])]
     private bool $notifyBirthday = true;
 
+    /** Messages « Saviez-vous que… » (une fonction pas encore utilisée, au plus toutes les deux semaines). */
+    #[ORM\Column(options: ['default' => true])]
+    private bool $notifyTips = true;
+
     #[ORM\Column(length: 50)]
     private string $digestFrequency = 'WEEKLY';
 
@@ -299,6 +303,18 @@ class NotificationPreference
     public function setNotifyBirthday(bool $notifyBirthday): static
     {
         $this->notifyBirthday = $notifyBirthday;
+
+        return $this;
+    }
+
+    public function isNotifyTips(): bool
+    {
+        return $this->notifyTips;
+    }
+
+    public function setNotifyTips(bool $notifyTips): static
+    {
+        $this->notifyTips = $notifyTips;
 
         return $this;
     }

@@ -84,6 +84,9 @@ class AppConfigType extends AbstractType
         }
         $builder->add('freeTests', ChoiceType::class, ['label' => 'Tests de personnalité gratuits', 'choices' => $choices, 'multiple' => true, 'expanded' => true, 'required' => false,
             'help' => 'Les autres tests sont réservés à PRO. Les résultats déjà obtenus restent consultables par ceux qui les ont passés.']);
+        // Messages « Saviez-vous que… » (cochés = envoyés aux membres qui n'ont pas encore utilisé la fonction)
+        $builder->add('enabledTips', ChoiceType::class, ['label' => 'Messages « Saviez-vous que… »', 'choices' => \App\Notification\Service\TipCatalog::choices(), 'multiple' => true, 'expanded' => true, 'required' => false,
+            'help' => 'Cochés : envoyés, un à la fois et au plus toutes les deux semaines, aux membres qui n\'ont pas encore utilisé la fonction. Les textes se modifient dans Textes du site (codes « astuce. »).']);
     }
 
     public function configureOptions(OptionsResolver $resolver): void

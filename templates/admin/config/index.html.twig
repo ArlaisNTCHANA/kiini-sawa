@@ -64,6 +64,16 @@
     </section>
 
     <section class="ks-card">
+        <h2 class="ks-card__title"><i data-lucide="lightbulb"></i> Messages « Saviez-vous que… »</h2>
+        <p class="ks-muted">{{ form_help(form.enabledTips) }}</p>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: .6rem 1.25rem; margin-top: .9rem;">
+            {% for choice in form.enabledTips %}
+                <label style="display: flex; gap: .55rem; align-items: center; font-size: .92rem;">{{ form_widget(choice) }} {{ choice.vars.label }}</label>
+            {% endfor %}
+        </div>
+    </section>
+
+    <section class="ks-card">
         <h2 class="ks-card__title"><i data-lucide="compass"></i> Texte proposé aux nouveaux membres</h2>
         <div style="margin-top: .9rem;">{{ m.field(form.defaultPurposeStatement, true) }}</div>
     </section>

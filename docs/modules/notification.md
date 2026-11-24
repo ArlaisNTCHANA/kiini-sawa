@@ -63,6 +63,26 @@ Type `NotificationType::ONBOARDING` : email seulement (pas dans le centre de not
 Gabarits : `templates/notification/email/onboarding/`. Envoi quotidien via `app:reminders:send` (tâche planifiée).
 
 
+## Messages « Saviez-vous que… » (24/11/2026)
+
+`Service/TipSender` (envoi) et `Service/TipCatalog` (liste, textes modifiables dans Admin › Textes du site, codes
+`astuce.*`). Une fonction que le membre **n'a jamais utilisée**, dans un e-mail court avec un seul bouton. Ordre :
+revue de la semaine, tests, Boussole 360, feedback nourricier, Partenaire de Redevabilité, journal, Académie (s'il y a
+un parcours publié), défis (s'il y a un défi publié et pas terminé).
+
+- À partir du 15e jour après l'inscription (après les e-mails d'accueil), puis au plus un message tous les 14 jours ;
+  jamais deux fois le même (clé « astuce <code> »).
+- Jamais du 1er au 3 du mois, ni dans les 7 jours d'un anniversaire ou d'un rappel de revue mensuelle, ni dans les
+  2 jours d'un e-mail d'accueil, d'un rappel de revue de la semaine ou d'une fin d'essai ou d'abonnement. Envoyé en
+  dernier par `app:reminders:send` pour voir les e-mails du jour.
+- Plus rien après 60 jours sans connexion (`lastActiveAt`, sinon date d'inscription). Pas pour les administrateurs.
+- Membre gratuit : au plus un message sur trois pour une fonction PRO, qui le dit (« Cette fonction fait partie de la
+  formule PRO. ») ; s'il ne reste rien de gratuit à présenter, un message PRO reste possible, jamais deux de suite.
+- Type `NotificationType::TIP` : e-mail seulement ; préférence « Saviez-vous que… » (`notify_tips`, profil et API
+  mobile `notifyTips`) ; lien de désabonnement en un clic.
+- Admin › Configuration : une case par message (`app_config.disabled_tips`, codes décochés séparés par des virgules).
+- Gabarit : `templates/notification/email/tip.html.twig`. Tests : `tests/Notification/TipSenderTest.php`.
+
 ## Notifications sur le téléphone (17/11/2026)
 
 Web Push (`minishlink/web-push`), clés VAPID dans `.env.prod.local` (`VAPID_PUBLIC_KEY`, `VAPID_PRIVATE_KEY`, `VAPID_SUBJECT`).

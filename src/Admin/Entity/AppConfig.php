@@ -86,6 +86,10 @@ class AppConfig
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $freeTests = null;
 
+    /** Messages « Saviez-vous que… » désactivés (codes de TipCatalog séparés par des virgules ; null ou vide = tous actifs). */
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $disabledTips = null;
+
     #[ORM\Column(options: ['default' => false])]
     private bool $enableJournalFree = true;
 
@@ -451,6 +455,32 @@ class AppConfig
     }
 
     /** @return list<string> */
+    /** @return list<string> */
+    public function getDisabledTips(): array
+    {
+        return array_values(array_filter(explode(',', (string) $this->disabledTips)));
+    }
+
+    /** @param list<string> $codes */
+    public function setDisabledTips(array $codes): static
+    {
+        $this->disabledTips = [] === $codes ? null : implode(',', $codes);
+
+        return $this;
+    }
+
+    /** @return list<string> messages actifs (cases cochées dans l'administration) */
+    public function getEnabledTips(): array
+    {
+        return array_values(array_diff(array_keys(\App\Notification\Service\TipCatalog::TIPS), $this->getDisabledTips()));
+    }
+
+    /** @param list<string> $codes */
+    public function setEnabledTips(array $codes): static
+    {
+        return $this->setDisabledTips(array_values(array_diff(array_keys(\App\Notification\Service\TipCatalog::TIPS), $codes)));
+    }
+
     public function getFreeTests(): array
     {
         return null === $this->freeTests ? self::DEFAULT_FREE_TESTS : array_values(array_filter(explode(',', $this->freeTests)));

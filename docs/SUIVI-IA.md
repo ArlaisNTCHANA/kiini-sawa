@@ -9,6 +9,24 @@ teste (`php bin/phpunit`), commit, déploie (`bin/ops/envoyer-hostinger.sh`), v�
 journal `var/log/prod-AAAA-MM-JJ.log` sans erreur) ; **le fondateur fait lui-même `git push`** (refusé à l'IA).
 Ne jamais afficher ni demander de mot de passe ; ne pas publier son nom (mentions légales en attente).
 
+## 24/11/2026 — Messages « Saviez-vous que… » pour les fonctions pas encore utilisées
+
+- **Demande du fondateur** : envoyer de temps en temps un e-mail « Saviez-vous que vous pouvez demander un feedback /
+  faire ce test… » pour les fonctions non utilisées. Proposition validée (« On y va ») : un seul sujet par e-mail,
+  seulement ce que le membre n'a jamais utilisé, au plus toutes les deux semaines après l'accueil, ordre de la méthode,
+  désactivable, arrêt après deux mois sans connexion, au plus un message PRO sur trois pour un membre gratuit.
+- **Fait** (détail : `docs/modules/notification.md`, section « Saviez-vous que… ») : `TipCatalog` (8 messages, textes
+  `astuce.*` dans Admin › Textes du site), `TipSender` (règles d'envoi), type `TIP`, préférence `notify_tips` (profil,
+  API mobile `notifyTips`, désabonnement en un clic), cases par message dans Admin › Configuration
+  (`app_config.disabled_tips`), branché en dernier dans `app:reminders:send`. Migration `Version20261124145228`.
+  Tests : `tests/Notification/TipSenderTest.php`.
+- **Pièges** : les notifications sont datées de l'instant réel (`createdAt`), pas de la date simulée de la commande :
+  les tests recalent les dates en base. Pas de message « couple » (on ne sait pas si la personne est mariée) ni
+  « application mobile » (pas encore dans les magasins) : à ajouter quand ce sera pertinent, dans `TipCatalog::TIPS`
+  et `TipSender::hasUsed()`.
+- **Reste ouvert** : l'écran des préférences de l'application mobile n'a pas encore l'interrupteur `notifyTips`
+  (l'API l'accepte déjà).
+
 ## 24/11/2026 — Feedback nourricier : page du membre refaite, schéma des trois témoins, questions « en un mot »
 
 - **Demande du fondateur** (accord donné pour commiter et mettre en ligne) : revoir le design de `/mes-tests/feedback`

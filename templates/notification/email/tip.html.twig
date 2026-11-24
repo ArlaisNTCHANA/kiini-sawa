@@ -1,0 +1,20 @@
+{% extends 'compte/email/_layout.html.twig' %}
+{# « Saviez-vous que… » (TipSender) : une fonction pas encore utilisée, un seul bouton. Textes : TipCatalog (Admin › Textes du site). #}
+{% block content %}
+  <p>Bonjour {{ name }},</p>
+  <p style="font-size:18px;font-weight:bold;color:#2E6B53;margin:18px 0 10px;">{{ title }}</p>
+  {% for paragraph in paragraphs %}
+    <p>{{ paragraph }}</p>
+  {% endfor %}
+  {% if proNote %}
+    <p style="font-size:14px;color:#475569;background:#FEF3C7;border-radius:8px;padding:10px 12px;">{{ proNote }}</p>
+  {% endif %}
+  {% if actionUrl %}
+    <p style="text-align:center;margin:28px 0;"><a href="{{ actionUrl }}" style="background:#2E6B53;color:#ffffff;text-decoration:none;padding:14px 28px;border-radius:10px;font-weight:bold;display:inline-block;">{{ actionLabel }}</a></p>
+  {% endif %}
+  <p style="margin-top:24px;">Avec vous sur le chemin,<br><strong>L'équipe KIINI SAWA</strong></p>
+{% endblock %}
+{% block footer %}
+  {{ footerText }}
+  <a href="{{ unsubscribeUrl }}" style="color:#64748b;">{{ unsubscribeLabel }}</a>.
+{% endblock %}

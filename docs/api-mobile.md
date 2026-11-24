@@ -79,7 +79,7 @@ En cas d'erreur, l'API renvoie `{ "error": "Message en français", "code"?: "...
 | `POST /api/mobile/v1/notifications/appareil` | `{ expoToken, platform, appareil? }` | `200 { ok: true, hasDevice: true }` | Enregistre un appareil physique pour les push Expo. Max 10 appareils par compte (les plus anciens sont élagués). |
 | `DELETE /api/mobile/v1/notifications/appareil` | `{ expoToken }` | `200 { ok: true, hasDevice: boolean }` | Révoque l'appareil lors de la déconnexion ou de la désactivation. |
 | `GET /api/mobile/v1/notifications/preferences` | — | `200 { preferences, hasPushDevice }` | Lit les préférences de notification et l'état de l'appareil. |
-| `PATCH /api/mobile/v1/notifications/preferences` | Objet partiel de préférences | `200 { preferences, hasPushDevice }` | Met à jour l'heure préférée, le jour de revue hebdo et les types de rappels (dont `notifyBirthday`, message d'anniversaire). |
+| `PATCH /api/mobile/v1/notifications/preferences` | Objet partiel de préférences | `200 { preferences, hasPushDevice }` | Met à jour l'heure préférée, le jour de revue hebdo et les types de rappels (dont `notifyBirthday`, message d'anniversaire, et `notifyTips`, messages « Saviez-vous que… »). |
 | `POST /api/mobile/v1/notifications/essai` | — | `200 { ok: true, message: "..." }` | Déclenche un envoi push d'essai immédiat (limité à 3 essais par heure). |
 | `GET /api/mobile/v1/notifications` | — | `200 { notifications, unreadCount }` | Liste in-app des notifications récentes reçues par le compte. |
 | `POST /api/mobile/v1/notifications/{id}/lu` | — | `200 { ok: true }` | Marque une notification in-app comme lue. |
