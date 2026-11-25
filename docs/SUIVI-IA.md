@@ -9,6 +9,21 @@ teste (`php bin/phpunit`), commit, déploie (`bin/ops/envoyer-hostinger.sh`), v�
 journal `var/log/prod-AAAA-MM-JJ.log` sans erreur) ; **le fondateur fait lui-même `git push`** (refusé à l'IA).
 Ne jamais afficher ni demander de mot de passe ; ne pas publier son nom (mentions légales en attente).
 
+## 25/11/2026 — Suite du contre-audit visuel : vérification par une autre IA
+
+- **Trois points signalés, confirmés et corrigés** :
+  - appli mobile : la leçon n'affichait ni images, ni encadrés, ni schémas. `mobile-v1/src/academie/lecture.ts`
+    (`htmlEnBlocs` lit `aside.academie-encadre`, `img` du studio, `figure.academie-schema` → cartes) et
+    `src/components/academie/BlocsLecon.tsx` (affichage aux couleurs du site) ; test dans `__tests__/academie.test.ts` ;
+  - site : classes Tailwind `slate-*` et `gray-*` redéfinies sur les neutres du livre (`assets/styles/app.css`, `@theme`) ;
+    gris bleutés codés en dur retirés des 5 vues `visualize.html.twig` ;
+  - mobile : trois couleurs du couple écrites en `color="#…"` (ma recherche ne visait que les apostrophes).
+- **En plus** : Bilan, le bouton flottant « Bilan Hebdomadaire » recouvrait le contenu et doublait l'action principale ;
+  il devient un bouton secondaire en fin de page (même fonction `openWizard()`).
+- **Déployé le 25/11/2026** : pages publiques en 200, feuille de styles en ligne à jour, journal sans erreur.
+- **Reste** : 21 gabarits contiennent encore des gris bleutés codés en dur (`#64748b`, `#e2e8f0`…), mineur ; leçons
+  mobiles à voir sur un vrai téléphone.
+
 ## 25/11/2026 — Contre-audit visuel puis corrections (lots 1 à 8)
 
 - **Demande du fondateur** : contre-audit visuel de toute l'application (cohérence, beauté, parcours). Rapport :
