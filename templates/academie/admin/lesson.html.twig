@@ -4,14 +4,18 @@
 {% block title %}{{ name }}{% endblock %}
 {% block stylesheets %}{% include 'academie/admin/_styles.html.twig' %}{% include 'academie/_styles.html.twig' %}{% endblock %}
 {% block page_title %}{{ name }}{% endblock %}
-{% block page_lead %}Parcours « {{ course.title }} »{% endblock %}
+{% block page_lead %}Parcours « {{ course.title }} »{% if position %} · Leçon {{ position }} sur {{ total }}{% endif %}{% endblock %}
 {% block crumbs %}<span aria-hidden="true">›</span><a href="{{ path('admin_academie_course', {id: course.id}) }}">{{ course.title }}</a><span aria-hidden="true">›</span><span aria-current="page">{{ name }}</span>{% endblock %}
-{% block page_actions %}{% if lesson %}<a href="{{ path('admin_academie_lesson_preview', {id: lesson.id}) }}" class="ks-btn ks-btn--secondary"><i data-lucide="eye"></i> Prévisualiser comme un apprenant</a>{% endif %}{% endblock %}
+{% block page_actions %}
+    {% if previous %}<a href="{{ path('admin_academie_lesson', {id: previous.id}) }}" class="ks-btn ks-btn--ghost ks-btn--sm" title="{{ previous.title }}"><i data-lucide="arrow-left"></i> Précédente</a>{% endif %}
+    {% if next %}<a href="{{ path('admin_academie_lesson', {id: next.id}) }}" class="ks-btn ks-btn--ghost ks-btn--sm" title="{{ next.title }}">Suivante <i data-lucide="arrow-right"></i></a>{% endif %}
+    {% if lesson %}<a href="{{ path('admin_academie_lesson_preview', {id: lesson.id}) }}" class="ks-btn ks-btn--secondary"><i data-lucide="eye"></i> Prévisualiser comme un apprenant</a>{% endif %}
+{% endblock %}
 {% block content %}
 <div class="ks-stack" style="max-width: 1240px;">
     {% for e in errors %}<div class="ks-alert ks-alert--danger" role="alert">{{ e }}</div>{% endfor %}
 
-    <form method="post" action="{{ lesson ? path('admin_academie_lesson', {id: lesson.id}) : path('admin_academie_lesson_new', {id: module.id}) }}" class="ks-stack">
+    <form method="post" id="lesson-form" action="{{ lesson ? path('admin_academie_lesson', {id: lesson.id}) : path('admin_academie_lesson_new', {id: module.id}) }}" class="ks-stack">
         <input type="hidden" name="_csrf_token" value="{{ token }}">
 
         <section class="ks-card ks-stack">
@@ -27,23 +31,47 @@
             <label style="display: flex; gap: .6rem; align-items: center; font-size: .92rem;"><input type="checkbox" name="visible" value="1" {{ data.visible ? 'checked' }}> Visible des apprenants (une fois le parcours publié)</label>
         </section>
 
-        {% set editorInit = editor|merge({token: token, previewUrl: path('admin_academie_markdown'), convertUrl: path('admin_academie_blocks')}) %}
+        {% set editorInit = editor|merge({token: token, previewUrl: path('admin_academie_markdown'), convertUrl: path('admin_academie_blocks'), uploadUrl: path('admin_academie_image_upload', {id: course.id}), diagramsUrl: path('admin_academie_diagrams_json')}) %}
         <script>
         document.addEventListener('alpine:init', () => {
             const empty = { paragraphe: { text: '' }, titre: { level: 2, text: '' }, liste: { ordered: false, items: '' }, citation: { text: '' },
                 encadre: { kind: 'retenir', title: '', text: '' }, schema: { code: '' }, image: { src: '', alt: '' }, avance: { text: '' } };
             Alpine.data('lessonEditor', (init) => { let timer = null; let uid = 0; return {
-                mode: 'blocs', blocks: init.blocks.map((b) => ({ ...b, _id: ++uid })), html: '', menuAt: null, dragFrom: null, busy: false,
+                mode: 'blocs', blocks: init.blocks.map((b) => ({ ...b, _id: ++uid })), html: '', menuAt: null, dragFrom: null, busy: false, phone: false, uploading: false, uploadError: '', reloadingDiagrams: false,
                 callouts: init.callouts, diagrams: init.diagrams, images: init.images,
                 json() { return JSON.stringify(this.blocks.map(({ _id, ...b }) => b)); },
+                estMinutes() {
+                    const txt = this.blocks.map((b) => [b.text, b.items, b.title].filter(Boolean).join(' ')).join(' ').trim();
+                    const words = txt ? txt.split(/\s+/).length : 0;
+                    return Math.max(1, Math.min(60, Math.round(words / 160) || 1));
+                },
+                applyDuration() { const el = document.getElementById('duration'); if (el) { el.value = this.estMinutes(); el.dispatchEvent(new Event('input', { bubbles: true })); } },
                 schedule() { clearTimeout(timer); timer = setTimeout(() => this.refresh(), 400); },
                 async post(url, field, value) { const body = new FormData(); body.append('_csrf_token', init.token); body.append(field, value); const r = await fetch(url, { method: 'POST', body, credentials: 'same-origin' }); if (!r.ok) throw new Error(); return r; },
+                async uploadImage(ev, block) {
+                    const file = ev.target.files && ev.target.files[0];
+                    if (!file) return;
+                    this.uploading = true; this.uploadError = '';
+                    try {
+                        const body = new FormData(); body.append('_csrf_token', init.token); body.append('image', file);
+                        const r = await fetch(init.uploadUrl, { method: 'POST', body, headers: { Accept: 'application/json' }, credentials: 'same-origin' });
+                        const data = await r.json();
+                        if (!r.ok || !data.path) { this.uploadError = data.error || 'Envoi impossible.'; }
+                        else { if (!this.images.includes(data.path)) this.images.unshift(data.path); block.src = data.path; window.__ksLessonDirty = true; }
+                    } catch (e) { this.uploadError = 'Envoi impossible : vérifiez votre connexion.'; }
+                    this.uploading = false; ev.target.value = '';
+                },
+                async reloadDiagrams() {
+                    this.reloadingDiagrams = true;
+                    try { const r = await fetch(init.diagramsUrl, { credentials: 'same-origin' }); if (r.ok) { const d = await r.json(); if (Array.isArray(d.diagrams)) this.diagrams = d.diagrams; } } catch (e) {}
+                    this.reloadingDiagrams = false;
+                },
                 async refresh() { if (this.mode !== 'blocs') return; try { this.html = await (await this.post(init.previewUrl, 'blocks', this.json())).text(); } catch (e) { this.html = '<p>Aperçu indisponible : rechargez la page.</p>'; } this.icons(); },
                 icons() { this.$nextTick(() => window.lucide && window.lucide.createIcons()); },
-                add(type, at) { const i = at ?? this.blocks.length; this.blocks.splice(i, 0, { type, ...JSON.parse(JSON.stringify(empty[type])), _id: ++uid }); this.menuAt = null; this.icons(); this.$nextTick(() => { const el = document.querySelector('[data-bloc="' + i + '"] textarea, [data-bloc="' + i + '"] input'); el && el.focus(); }); },
-                remove(i) { if (confirm('Retirer ce bloc ?')) { this.blocks.splice(i, 1); this.icons(); } },
-                move(i, d) { const j = i + d; if (j < 0 || j >= this.blocks.length) return; const b = this.blocks.splice(i, 1)[0]; this.blocks.splice(j, 0, b); this.icons(); },
-                drop(i) { if (this.dragFrom === null || this.dragFrom === i) { this.dragFrom = null; return; } const b = this.blocks.splice(this.dragFrom, 1)[0]; this.blocks.splice(i, 0, b); this.dragFrom = null; this.icons(); },
+                add(type, at) { const i = at ?? this.blocks.length; this.blocks.splice(i, 0, { type, ...JSON.parse(JSON.stringify(empty[type])), _id: ++uid }); this.menuAt = null; window.__ksLessonDirty = true; this.icons(); this.$nextTick(() => { const el = document.querySelector('[data-bloc="' + i + '"] textarea, [data-bloc="' + i + '"] input'); el && el.focus(); }); },
+                remove(i) { if (confirm('Retirer ce bloc ?')) { this.blocks.splice(i, 1); window.__ksLessonDirty = true; this.icons(); } },
+                move(i, d) { const j = i + d; if (j < 0 || j >= this.blocks.length) return; const b = this.blocks.splice(i, 1)[0]; this.blocks.splice(j, 0, b); window.__ksLessonDirty = true; this.icons(); },
+                drop(i) { if (this.dragFrom === null || this.dragFrom === i) { this.dragFrom = null; return; } const b = this.blocks.splice(this.dragFrom, 1)[0]; this.blocks.splice(i, 0, b); this.dragFrom = null; window.__ksLessonDirty = true; this.icons(); },
                 wrap(ev, before, after) { const t = ev.target.closest('.ac-bloc').querySelector('textarea'); const a = t.selectionStart, z = t.selectionEnd; const sel = t.value.slice(a, z) || 'texte'; t.setRangeText(before + sel + after, a, z, 'select'); t.dispatchEvent(new Event('input')); t.focus(); },
                 link(ev) { const url = prompt('Adresse du lien (https://… ou /methode/…)'); if (url) this.wrap(ev, '[', '](' + url + ')'); },
                 async toTexte() { this.busy = true; try { const r = await this.post(init.convertUrl, 'blocks', this.json()); document.getElementById('content').value = (await r.json()).content; this.mode = 'texte'; } catch (e) { alert('Passage au mode avancé impossible : rechargez la page.'); } this.busy = false; this.icons(); },
@@ -127,12 +155,24 @@
                                             <option value="">Choisissez un schéma…</option>
                                             <template x-for="d in diagrams" :key="d.code"><option :value="d.code" x-text="(d.perso ? 'Atelier : ' : '') + d.label" :selected="d.code === b.code"></option></template>
                                         </select>
-                                        <p class="ks-help"><a href="{{ path('admin_academie_diagrams') }}" target="_blank" rel="noopener">Créer un schéma dans l'atelier</a> (nouvel onglet ; enregistrez la leçon puis rechargez-la pour le voir ici).</p>
+                                        <div class="ks-toolbar">
+                                            <a href="{{ path('admin_academie_diagrams') }}" target="_blank" rel="noopener" class="ks-btn ks-btn--ghost ks-btn--sm"><i data-lucide="external-link"></i> Ouvrir l'atelier</a>
+                                            <button type="button" class="ks-btn ks-btn--ghost ks-btn--sm" @click="reloadDiagrams()" :disabled="reloadingDiagrams"><i data-lucide="refresh-cw"></i> <span x-text="reloadingDiagrams ? 'Actualisation…' : 'Actualiser la liste'"></span></button>
+                                        </div>
                                     </div>
                                 </template>
                                 <template x-if="b.type === 'image'">
                                     <div class="ks-stack">
-                                        <template x-if="images.length === 0"><p class="ks-help">Aucune image dans ce parcours : <a href="{{ path('admin_academie_course', {id: course.id}) }}#images" target="_blank" rel="noopener">ajoutez-en depuis la page du parcours</a>.</p></template>
+                                        <div class="ks-toolbar">
+                                            <label class="ks-btn ks-btn--secondary ks-btn--sm ac-upload-inline">
+                                                <i data-lucide="upload"></i>
+                                                <span x-text="uploading ? 'Envoi en cours…' : 'Envoyer une image ici'"></span>
+                                                <input type="file" accept="image/jpeg,image/png,image/webp" @change="uploadImage($event, b)" :disabled="uploading">
+                                            </label>
+                                            <span class="ks-small">JPEG, PNG ou WebP · 10 Mo max</span>
+                                        </div>
+                                        <template x-if="uploadError"><p class="ks-small" style="color: var(--danger);" x-text="uploadError"></p></template>
+                                        <template x-if="images.length === 0"><p class="ks-help">Aucune image dans ce parcours pour l'instant.</p></template>
                                         <div class="ac-insert__images">
                                             <template x-for="src in images" :key="src"><button type="button" class="ac-insert__image" :class="b.src === src && 'is-chosen'" @click="b.src = src" :aria-pressed="(b.src === src).toString()"><img :src="src" alt="" loading="lazy"></button></template>
                                         </div>
@@ -164,8 +204,17 @@
                 </section>
                 <aside class="ac-blocs-preview">
                     <div class="ac-workshop__sticky">
-                        <p class="ac-insert__label" style="margin-top: 0;">Aperçu en direct</p>
-                        <div class="ac-workshop__frame academie-texte" x-html="html" aria-live="polite"></div>
+                        <div class="ac-workshop__bar">
+                            <div>
+                                <strong>Aperçu en direct</strong>
+                                <button type="button" class="ks-btn ks-btn--ghost ks-btn--sm" @click="applyDuration()" title="Appliquer cette durée estimée à la leçon" style="margin-left: .4rem;"><i data-lucide="clock"></i> <span x-text="'~ ' + estMinutes() + ' min'"></span></button>
+                            </div>
+                            <div class="ac-toggle" role="group" aria-label="Largeur de l'aperçu">
+                                <button type="button" :aria-pressed="(!phone).toString()" @click="phone = false"><i data-lucide="monitor"></i> Ordinateur</button>
+                                <button type="button" :aria-pressed="phone.toString()" @click="phone = true"><i data-lucide="smartphone"></i> Téléphone</button>
+                            </div>
+                        </div>
+                        <div class="ac-workshop__frame academie-texte" :class="phone && 'is-phone'" x-html="html" aria-live="polite"></div>
                     </div>
                 </aside>
             </div>
@@ -248,6 +297,8 @@
         <div class="ks-sticky-actions">
             <button type="submit" class="ks-btn ks-btn--primary"><i data-lucide="check"></i> {{ lesson ? 'Enregistrer la leçon' : 'Créer la leçon' }}</button>
             <a href="{{ path('admin_academie_course', {id: course.id, _fragment: 'structure'}) }}" class="ks-btn ks-btn--ghost">Retour au parcours</a>
+            {% if previous %}<a href="{{ path('admin_academie_lesson', {id: previous.id}) }}" class="ks-btn ks-btn--ghost ks-btn--sm"><i data-lucide="arrow-left"></i> Précédente</a>{% endif %}
+            {% if next %}<a href="{{ path('admin_academie_lesson', {id: next.id}) }}" class="ks-btn ks-btn--ghost ks-btn--sm">Suivante <i data-lucide="arrow-right"></i></a>{% endif %}
         </div>
     </form>
 
@@ -260,6 +311,8 @@
                     <div class="ac-lesson__title">
                         <a href="{{ path('admin_academie_question', {id: q.id}) }}">{{ q.question|length > 140 ? q.question|slice(0, 140) ~ '…' : q.question }}</a>
                         <div class="ac-meta"><span class="ks-small">{{ q.options|length }} réponses · {{ q.multiple ? 'plusieurs bonnes réponses' : 'une bonne réponse' }}</span></div>
+                        {% set good = q.options|filter(o => o.id in q.correctOptionIds) %}
+                        {% if good is not empty %}<div class="ac-q-answer">Bonne{{ good|length > 1 ? 's' }} réponse{{ good|length > 1 ? 's' }} : {{ good|map(o => o.label)|join(' ; ') }}</div>{% endif %}
                     </div>
                     <div class="ac-tools">
                         {% for sens, icon in {monter: 'arrow-up', descendre: 'arrow-down'} %}
@@ -288,4 +341,19 @@
         </section>
     {% endif %}
 </div>
+<script>
+(() => {
+    const form = document.getElementById('lesson-form');
+    if (!form) return;
+    let submitting = false;
+    window.__ksLessonDirty = false;
+    form.addEventListener('input', () => { window.__ksLessonDirty = true; });
+    form.addEventListener('change', () => { window.__ksLessonDirty = true; });
+    form.addEventListener('submit', () => { submitting = true; window.__ksLessonDirty = false; });
+    window.addEventListener('beforeunload', (e) => { if (window.__ksLessonDirty && !submitting) { e.preventDefault(); e.returnValue = ''; } });
+    window.addEventListener('keydown', (e) => {
+        if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 's') { e.preventDefault(); submitting = true; window.__ksLessonDirty = false; form.requestSubmit(); }
+    });
+})();
+</script>
 {% endblock %}

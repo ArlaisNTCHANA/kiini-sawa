@@ -17,14 +17,20 @@
         {% for c in courses %}
             {% set lessons = c.lessons %}
             {% set visible = c.lessons(true) %}
+            {% set cover_url = academie_vignette(c) %}
+            {% set st = stats[c.id] ?? {enrolled: 0, completed: 0} %}
             <div class="ac-course" data-course="{{ c.id }}">
-                {% include 'academie/admin/_cover.html.twig' with {place: c.place} %}
+                {% if cover_url %}
+                    <img class="ac-thumb" src="{{ cover_url }}" alt="" loading="lazy">
+                {% else %}
+                    {% include 'academie/admin/_cover.html.twig' with {place: c.place} %}
+                {% endif %}
                 <div>
                     <a href="{{ path('admin_academie_course', {id: c.id}) }}" style="color: var(--fg); font-weight: 700; text-decoration: none;">{{ c.title }}</a>
                     <div class="ac-meta">
                         <span class="ks-badge {{ c.published ? 'ks-badge--success' : 'ks-badge--warning' }}">{{ c.published ? 'Publié' : 'Brouillon' }}</span>
                         <span class="ks-badge ks-badge--muted">{{ c.free ? 'Gratuit' : 'PRO' }}</span>
-                        <span class="ks-small">{{ academie_lieu(c.place) }} · {{ visible|length }} leçon{{ visible|length > 1 ? 's' }} visible{{ visible|length > 1 ? 's' }}{% if lessons|length > visible|length %} ({{ lessons|length - visible|length }} masquée{{ lessons|length - visible|length > 1 ? 's' }}){% endif %} · {{ c.estimatedMinutes }} min</span>
+                        <span class="ks-small">{{ academie_lieu(c.place) }} · {{ visible|length }} leçon{{ visible|length > 1 ? 's' }} visible{{ visible|length > 1 ? 's' }}{% if lessons|length > visible|length %} ({{ lessons|length - visible|length }} masquée{{ lessons|length - visible|length > 1 ? 's' }}){% endif %} · {{ c.estimatedMinutes }} min{% if st.enrolled > 0 %} · {{ st.enrolled }} inscrit{{ st.enrolled > 1 ? 's' }}{% if st.completed > 0 %} ({{ st.completed }} terminé{{ st.completed > 1 ? 's' }}){% endif %}{% endif %}</span>
                     </div>
                 </div>
                 <div class="ks-toolbar">

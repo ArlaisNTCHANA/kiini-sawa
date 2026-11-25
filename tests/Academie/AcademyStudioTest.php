@@ -257,4 +257,49 @@ class AcademyStudioTest extends WebTestCase
         $this->assertStringContainsString("frame-src https://www.youtube-nocookie.com https://player.vimeo.com", $csp);
         $this->assertStringNotContainsString('https://www.youtube.com', $csp);
     }
+
+    public function testStudioComfortFeaturesWork(): void
+    {
+        $client = $this->admin();
+        $course = $this->createCourse($client, 'Parcours confort', 'VIE');
+        $moduleId = $course->getModules()->first()->getId();
+
+        // Créer deux leçons pour vérifier la navigation Précédente / Suivante
+        foreach (['Première leçon', 'Deuxième leçon'] as $title) {
+            $client->request('GET', '/admin/academie/module/'.$moduleId.'/lecon');
+            $token = $client->getCrawler()->filter('input[name="_csrf_token"]')->attr('value');
+            $client->request('POST', '/admin/academie/module/'.$moduleId.'/lecon', [
+                '_csrf_token' => $token, 'title' => $title, 'module' => $moduleId, 'duration' => 6,
+                'editor' => 'texte', 'content' => 'Contenu de '.$title, 'visible' => '1',
+            ]);
+            $this->assertResponseRedirects();
+        }
+        $lessons = $this->course($course->getSlug())->getLessons();
+        $this->assertCount(2, $lessons);
+
+        $client->request('GET', '/admin/academie/lecon/'.$lessons[0]->getId());
+        $this->assertResponseIsSuccessful();
+        $html1 = (string) $client->getResponse()->getContent();
+        $this->assertStringContainsString('Leçon 1 sur 2', $html1);
+        $this->assertStringContainsString('/admin/academie/lecon/'.$lessons[1]->getId(), $html1);
+
+        // Liste JSON des schémas pour actualisation sans recharger
+        $client->request('GET', '/admin/academie/schemas-liste');
+        $this->assertResponseIsSuccessful();
+        $json = json_decode((string) $client->getResponse()->getContent(), true);
+        $this->assertIsArray($json['diagrams'] ?? null);
+
+        // Envoi d'image en JSON directement depuis une leçon (sans fichier -> 422 JSON)
+        $token = $client->getCrawler()->filter('input[name="_csrf_token"]')->count()
+            ? $client->getCrawler()->filter('input[name="_csrf_token"]')->attr('value')
+            : null;
+        if (null === $token) {
+            $client->request('GET', '/admin/academie/'.$course->getId());
+            $token = $client->getCrawler()->filter('input[name="_csrf_token"]')->attr('value');
+        }
+        $client->request('POST', '/admin/academie/'.$course->getId().'/images', ['_csrf_token' => $token], [], ['HTTP_ACCEPT' => 'application/json']);
+        $this->assertResponseStatusCodeSame(422);
+        $err = json_decode((string) $client->getResponse()->getContent(), true);
+        $this->assertArrayHasKey('error', $err);
+    }
 }

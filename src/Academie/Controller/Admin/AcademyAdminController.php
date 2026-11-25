@@ -14,6 +14,7 @@ use App\Academie\Service\PracticeCatalog;
 use App\Academie\Service\VideoEmbed;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
@@ -38,7 +39,17 @@ class AcademyAdminController extends AbstractController
     #[Route('', name: '', methods: ['GET'])]
     public function index(): Response
     {
-        return $this->render('academie/admin/index.html.twig', ['courses' => $this->courses->allOrdered()]);
+        $rows = $this->em->createQueryBuilder()
+            ->select('IDENTITY(e.course) AS cid, COUNT(e.id) AS enrolled, SUM(CASE WHEN e.completedAt IS NOT NULL THEN 1 ELSE 0 END) AS completed')
+            ->from(\App\Academie\Entity\CourseEnrollment::class, 'e')
+            ->groupBy('e.course')
+            ->getQuery()->getArrayResult();
+        $stats = [];
+        foreach ($rows as $r) {
+            $stats[(int) $r['cid']] = ['enrolled' => (int) $r['enrolled'], 'completed' => (int) $r['completed']];
+        }
+
+        return $this->render('academie/admin/index.html.twig', ['courses' => $this->courses->allOrdered(), 'stats' => $stats]);
     }
 
     // ── Parcours ──────────────────────────────────────────────────────────
@@ -167,16 +178,26 @@ class AcademyAdminController extends AbstractController
     {
         $this->checkCsrf($request);
         $course = $this->find(Course::class, $id);
+        $wantsJson = str_contains((string) $request->headers->get('Accept', ''), 'application/json');
         $file = $request->files->get('image');
         if (!$file instanceof \Symfony\Component\HttpFoundation\File\UploadedFile) {
+            if ($wantsJson) {
+                return new JsonResponse(['error' => 'Choisissez une image à envoyer.'], Response::HTTP_UNPROCESSABLE_ENTITY);
+            }
             $this->addFlash('error', 'Choisissez une image à envoyer.');
         } else {
             try {
                 $name = $images->store($course->getId(), $file);
+                if ($wantsJson) {
+                    return new JsonResponse(['name' => $name, 'path' => AcademyImages::publicPath($course->getId(), $name)]);
+                }
                 $this->addFlash('success', 'Image ajoutée. Copiez sa ligne et collez-la dans le texte d\'une leçon, à l\'endroit voulu.');
 
                 return $this->redirect($this->generateUrl('admin_academie_course', ['id' => $id]).'#image-'.$name);
             } catch (\InvalidArgumentException $e) {
+                if ($wantsJson) {
+                    return new JsonResponse(['error' => $e->getMessage()], Response::HTTP_UNPROCESSABLE_ENTITY);
+                }
                 $this->addFlash('error', $e->getMessage());
             }
         }
@@ -357,8 +378,15 @@ class AcademyAdminController extends AbstractController
             }
         }
 
+        $lessons = $course->getLessons();
+        $index = $lesson ? array_search($lesson, $lessons, true) : false;
+
         return $this->render('academie/admin/lesson.html.twig', [
             'course' => $course, 'module' => $module, 'lesson' => $lesson, 'data' => $data, 'errors' => $errors,
+            'previous' => false !== $index ? ($lessons[$index - 1] ?? null) : null,
+            'next' => false !== $index ? ($lessons[$index + 1] ?? null) : null,
+            'position' => false !== $index ? $index + 1 : null,
+            'total' => \count($lessons),
             'practices' => PracticeCatalog::choices(), 'maxQuestions' => LessonQuestion::MAX_PER_LESSON,
             'canDelete' => $lesson && AcademyStudio::canDelete($course),
             'images' => $this->images->list($course->getId()), 'diagrams' => \App\Academie\Service\LessonRenderer::DIAGRAMS,
@@ -567,8 +595,15 @@ class AcademyAdminController extends AbstractController
      *
      * @return T
      */
-    /** Données de l'éditeur par blocs : les blocs de la leçon et ce qu'on peut y placer (encadrés, schémas, images). */
-    private function blockEditor(Course $course, string $content): array
+    /** Liste JSON des schémas (atelier + code) pour actualiser le sélecteur dans une leçon sans recharger la page. */
+    #[Route('/schemas-liste', name: '_diagrams_json', methods: ['GET'])]
+    public function diagramsJson(): JsonResponse
+    {
+        return new JsonResponse(['diagrams' => $this->diagramOptions()]);
+    }
+
+    /** @return list<array{code: string, label: string, perso: bool}> */
+    private function diagramOptions(): array
     {
         $diagrams = [];
         foreach ($this->em->getRepository(\App\Academie\Entity\LessonDiagram::class)->findBy([], ['title' => 'ASC']) as $d) {
@@ -578,10 +613,16 @@ class AcademyAdminController extends AbstractController
             $diagrams[] = ['code' => $code, 'label' => $label, 'perso' => false];
         }
 
+        return $diagrams;
+    }
+
+    /** Données de l'éditeur par blocs : les blocs de la leçon et ce qu'on peut y placer (encadrés, schémas, images). */
+    private function blockEditor(Course $course, string $content): array
+    {
         return [
             'blocks' => \App\Academie\Service\LessonBlocks::fromMarkdown($content),
             'callouts' => array_map(fn (string $code, array $c) => ['code' => $code, 'icon' => $c[0], 'label' => $c[1]], array_keys(\App\Academie\Service\LessonMarkdown::CALLOUTS), \App\Academie\Service\LessonMarkdown::CALLOUTS),
-            'diagrams' => $diagrams,
+            'diagrams' => $this->diagramOptions(),
             'images' => array_column($this->images->list($course->getId()), 'path'),
         ];
     }

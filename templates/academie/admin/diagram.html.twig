@@ -33,7 +33,7 @@ document.addEventListener('alpine:init', () => {
     token: token, previewUrl: path('admin_academie_diagram_preview'),
 } %}
 <div class="ac-workshop" x-data="diagramEditor({{ init|json_encode|e('html_attr') }})" x-effect="payload(); schedule()">
-    <form method="post" class="ks-stack" @submit="$refs.payload.value = payload()">
+    <form method="post" id="diagram-form" class="ks-stack" @submit="window.__ksDiagramClean = true; $refs.payload.value = payload()">
         {% if error %}<div class="ks-alert ks-alert--danger" role="alert">{{ error }}</div>{% endif %}
         <input type="hidden" name="_csrf_token" value="{{ token }}">
         <input type="hidden" name="payload" x-ref="payload">
@@ -127,4 +127,17 @@ document.addEventListener('alpine:init', () => {
         </div>
     </aside>
 </div>
+<script>
+(() => {
+    const form = document.getElementById('diagram-form');
+    if (!form) return;
+    let dirty = false;
+    form.addEventListener('input', () => { dirty = true; });
+    form.addEventListener('change', () => { dirty = true; });
+    window.addEventListener('beforeunload', (e) => { if (dirty && !window.__ksDiagramClean) { e.preventDefault(); e.returnValue = ''; } });
+    window.addEventListener('keydown', (e) => {
+        if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 's') { e.preventDefault(); window.__ksDiagramClean = true; form.requestSubmit(); }
+    });
+})();
+</script>
 {% endblock %}
