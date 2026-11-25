@@ -9,6 +9,15 @@ teste (`php bin/phpunit`), commit, déploie (`bin/ops/envoyer-hostinger.sh`), v�
 journal `var/log/prod-AAAA-MM-JJ.log` sans erreur) ; **le fondateur fait lui-même `git push`** (refusé à l'IA).
 Ne jamais afficher ni demander de mot de passe ; ne pas publier son nom (mentions légales en attente).
 
+## 25/11/2026 — Application mobile : deux raccords de l'audit global (C1, T1) avant Google Play
+
+- **C1** : réglage « Saviez-vous que… » (`notifyTips`) dans `mobile-v1/app/notifications.tsx` (type `NotificationPreferences`,
+  libellé `fr.notifications.notifyTips` repris du profil web). L'API l'exposait déjà (`MobileNotificationController`).
+- **T1** : `mobile-v1/src/notifications/routing.ts` ouvre `/boussole` et `/academie` (catalogue, `/academie/{parcours}`,
+  `/academie/{parcours}/{leçon}`) dans les écrans natifs ; tout autre chemin sous `/academie` (images, actions POST) → catalogue.
+- Tests : `__tests__/notifications.test.ts` (44 tests mobile, `tsc` 0 erreur). Rien à déployer côté serveur.
+- **Reste** : voir les écrans récents sur un vrai téléphone, puis `EXPO_PUBLIC_API_URL=https://kiinisawa.com` et premier build Play Store.
+
 ## 24/11/2026 — Feedback nourricier : la page de la personne invitée devient une vraie porte d'entrée
 
 - **Demande du fondateur** : « que le professionnalisme de la page vende ; c'est quoi KIINI SAWA, pourquoi le feedback,
