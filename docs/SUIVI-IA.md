@@ -9,6 +9,17 @@ teste (`php bin/phpunit`), commit, déploie (`bin/ops/envoyer-hostinger.sh`), v�
 journal `var/log/prod-AAAA-MM-JJ.log` sans erreur) ; **le fondateur fait lui-même `git push`** (refusé à l'IA).
 Ne jamais afficher ni demander de mot de passe ; ne pas publier son nom (mentions légales en attente).
 
+## 25/11/2026 — Page de connexion : panneau du livre, œil du mot de passe, champs préremplis
+
+- **Remarque du fondateur** (capture de la connexion sur ordinateur) : champs bleu pâle, grand vide en bas.
+- **Fait** (`templates/compte/_auth_layout.html.twig`, toutes les pages d'entrée) : sur ordinateur (≥ 1024 px), couverture
+  du livre, Jérémie 29:11 et une phrase sur la méthode à côté du formulaire (codes `connexion.verset`,
+  `connexion.verset_ref`, `connexion.aside`) ; bouton œil pour afficher ou masquer le mot de passe (petit script sans
+  dépendance) ; champs préremplis par le navigateur en vert très pâle (`:-webkit-autofill`, aussi dans `app.css`) ;
+  « Adresse e-mail ».
+- **Déployé le 25/11/2026** : panneau, œil et libellé vérifiés en ligne, console et journal sans erreur.
+- **Reste** : la couleur des champs préremplis n'a pas pu être vue (le navigateur de test ne les remplit pas).
+
 ## 25/11/2026 — Suite du contre-audit visuel : vérification par une autre IA
 
 - **Trois points signalés, confirmés et corrigés** :
