@@ -318,8 +318,8 @@
         
         <!-- Empty State -->
         <div x-show="filteredGoals().length === 0" class="bilan-section" style="text-align: center; padding: 3rem 2rem; display: flex; flex-direction: column; align-items: center; gap: 1.5rem; border-style: dashed;">
-            <div style="padding: 1rem; background: var(--bg-alt); border-radius: 9999px; color: var(--fg-muted);">
-                <i data-lucide="target" class="w-10 h-10"></i>
+            <div style="width: 4.5rem; height: 4.5rem; flex-shrink: 0; display: flex; align-items: center; justify-content: center; background: var(--primary-soft); border-radius: 9999px; color: var(--primary);">
+                <i data-lucide="target" style="width: 32px; height: 32px;"></i>
             </div>
             <div>
                 <p style="color: var(--fg-light); font-weight: 600; margin-bottom: 0.25rem;">Aucun objectif actif dans cette catégorie.</p>
@@ -559,17 +559,11 @@
         </div>
     </div>
 
-    <!-- Sticky Bottom Weekly Bilan Launch Button -->
-    <div class="fixed bottom-8 left-0 right-0 flex justify-center z-40 pointer-events-none px-4">
-        <button @click="openWizard()"
-                class="pointer-events-auto bg-white/90 backdrop-blur-md text-slate-700 border border-teal-100 py-3 px-8 rounded-full font-semibold text-sm cursor-pointer flex items-center gap-3 shadow-lg hover:text-teal-700 hover:border-teal-200 hover:shadow-xl transition-all active:scale-95">
-            <span class="bg-teal-50 p-1.5 rounded-full text-teal-600"><i data-lucide="check-circle" class="w-5 h-5"></i></span>
-            <span>Bilan Hebdomadaire</span>
-            <i data-lucide="arrow-right" class="w-4 h-4 text-slate-400"></i>
-        </button>
+    {# Ancien bouton flottant : il recouvrait le contenu et doublait l'action principale. Il reste, en fin de page,
+       pour ouvrir le bilan hebdomadaire rapide (vérification du 25/11/2026). #}
+    <div style="display: flex; justify-content: center; margin: 2.5rem 0 1rem;">
+        <button type="button" @click="openWizard()" class="ks-btn ks-btn--secondary"><i data-lucide="check-circle"></i> Bilan hebdomadaire rapide</button>
     </div>
-    
-    <div class="h-32"></div>
 
     <!-- 3. Weekly Review Wizard Modal -->
     <div class="fixed inset-0 bg-slate-900/40 backdrop-blur-md flex items-start justify-center p-4 lg:p-12 z-50 overflow-y-auto"

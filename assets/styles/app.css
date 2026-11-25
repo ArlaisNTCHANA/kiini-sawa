@@ -16,6 +16,9 @@
     --color-teal-800: #1F4D3A;
     --color-teal-900: #173D2E;
     --color-teal-950: #0F2A1F;
+    /* Gris froids (slate, gray) → neutres du livre, légèrement verts (vérification du 25/11/2026) */
+    --color-slate-50: #F7F8F5; --color-slate-100: #EEF1EC; --color-slate-200: #E1E6DF; --color-slate-300: #C9D2C8; --color-slate-400: #9AA39C; --color-slate-500: #66706A; --color-slate-600: #4F5A53; --color-slate-700: #374238; --color-slate-800: #262E28; --color-slate-900: #1B1B1B; --color-slate-950: #111511;
+    --color-gray-50: #F7F8F5; --color-gray-100: #EEF1EC; --color-gray-200: #E1E6DF; --color-gray-300: #C9D2C8; --color-gray-400: #9AA39C; --color-gray-500: #66706A; --color-gray-600: #4F5A53; --color-gray-700: #374238; --color-gray-800: #262E28; --color-gray-900: #1B1B1B; --color-gray-950: #111511;
     /* Contre-audit visuel du 25/11/2026 : les couleurs vives de Tailwind suivent la palette du livre.
        bleu → information (bleu-gris) ; vert → vert du livre ; ambre, jaune, violet → or ; orange, rose → terre cuite. */
     --color-blue-50: #EBF2F6; --color-blue-100: #D6E4EE; --color-blue-200: #B5CEDE; --color-blue-300: #8CB1C9; --color-blue-400: #5F8FAD; --color-blue-500: #3B6E8F; --color-blue-600: #335F7B; --color-blue-700: #2A4F67; --color-blue-800: #213F52; --color-blue-900: #18303E; --color-blue-950: #101F29;
