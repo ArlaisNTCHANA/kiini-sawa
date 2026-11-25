@@ -33,7 +33,9 @@ Ne jamais afficher ni demander de mot de passe ; ne pas publier son nom (mention
   apostrophes ou passer une chaîne JS) ; dans les captures pleine page de Playwright, les éléments fixés (toast, barre
   du bas) apparaissent au milieu : ce ne sont pas des défauts ; un élément `position: absolute` (ex. `.sr-only`) dans
   un cadre `overflow-x: auto` non positionné fait déborder la page.
-- **Reste** : non déployé ; voir la fin de la section 6 du rapport (mobile sur vrai téléphone, Boussole connecté hors
+- **Déployé le 25/11/2026** (`bin/ops/envoyer-hostinger.sh`) : pages publiques en 200, page introuvable en 404, nouveau
+  logo et pages claires visibles en ligne, journal du serveur sans erreur, console du navigateur propre.
+- **Reste** : voir la fin de la section 6 du rapport (mobile sur vrai téléphone, Boussole connecté hors
   menu, vitrine longue, doublon « prochaine étape »).
 
 ## 25/11/2026 — Académie : parcours en cartes à vignette et page de présentation visuelle

@@ -322,4 +322,4 @@ est indiqué à la fin. 599 tests passent ; appli mobile : `tsc` sans erreur, 46
   mais le bonjour passe désormais en premier ;
 - couleurs propres aux rapports de tests (centres de l'ennéagramme, icônes du DISC) : gardées, elles servent à
   distinguer des données ;
-- rien n'est encore en ligne : il faut déployer.
+- mis en ligne le 25/11/2026 (vérifié : pages publiques, logo, pages claires, journal du serveur sans erreur).
