@@ -1,0 +1,361 @@
+# Parcours de l'Académie, tiré de la présentation « Choix et engagement » (diapositives et notes du fondateur).
+# Chargé en brouillon par : php bin/console app:academie:import content/academie/choix-et-engagement.yaml
+# Ensuite, tout se relit et se modifie dans le studio (Admin › Académie) ; ce fichier ne sert qu'au premier chargement.
+# Exercices : cibles et actions de App\Academie\Service\PracticeCatalog::TARGETS.
+
+slug: choix-et-engagement
+title: Choix et engagement
+subtitle: Du pouvoir de décider à la force d'aller jusqu'au bout
+place: CROISSANCE
+access: PRO
+description: |
+  Choisir, c'est ouvrir une porte ; s'engager, c'est franchir le seuil et marcher jusqu'à la destination. Ce parcours explore ces deux forces inséparables à la lumière de la sagesse biblique et de l'expérience concrète.
+
+  En deux temps : d'abord retrouver la pleine puissance de vos choix quotidiens — même lorsque vos débuts ne dépendaient pas de vous —, puis bâtir un engagement solide capable de traverser la friction, les émotions et le temps jusqu'à l'accomplissement. Chaque leçon débouche sur une décision concrète inscrite dans vos plans.
+
+modules:
+  - title: "Le pouvoir de choisir"
+    lessons:
+      - title: La vie commence sans avoir le choix
+        duration: 6
+        content: |
+          Prenez un instant pour vous replonger dans votre enfance. Imaginez-vous devant plusieurs plats appétissants, attendant votre tour pour choisir. Vos parents, dans leur sagesse, vous demandaient de choisir à tour de rôle, souvent en fonction de l'âge. Vous souvenez-vous de ce moment d'hésitation, où vous deviez décider si vous alliez prendre la plus grande part ou laisser une meilleure option pour les autres ? Ce qui semblait être un simple partage de nourriture était en réalité une leçon précieuse : **le choix est un cadeau**.
+
+          Chaque choix que nous faisons — petit ou grand — façonne notre vie. À travers ces décisions, nous apprenons la responsabilité, le courage et même l'altruisme. Pourtant, il faut commencer par regarder une réalité en face : notre histoire ne débute pas par un choix.
+
+          ## Ce que nous ne choisissons pas au départ
+
+          Quand nous ouvrons les yeux pour la première fois dans ce monde, nous n'avons pas notre mot à dire sur la manière dont la vie commence. Nous ne choisissons pas notre famille, notre pays, notre époque, notre tempérament de départ ni les opportunités initiales qui s'offrent à nous. Certains naissent entourés de stabilité, d'amour et de moyens ; d'autres arrivent dans des contextes de lutte, de manque ou de conflit.
+
+          Face à cette inégalité de départ, deux pièges nous guettent. Le premier est le **fatalisme** : se dire que puisque les cartes de départ étaient mauvaises, la partie est jouée d'avance. Le second est l'**amertume** : passer des années à comparer son point de départ à celui des autres au lieu de travailler ce que l'on a entre les mains.
+
+          Or cette absence de choix initial, aussi difficile soit-elle, porte une vérité libératrice : **vos débuts ne déterminent pas votre fin**.
+
+          :::exemple Joseph : des circonstances subies, une destinée accomplie
+          Joseph n'a pas choisi d'être le préféré de son père, ni d'être vendu comme esclave par ses propres frères. Il n'a pas choisi la prison après avoir été faussement accusé chez Potiphar. Pourtant, dans chaque lieu qu'il n'avait pas choisi — la maison de l'esclave comme la cellule —, il a choisi sa posture : la fidélité, l'intégrité et le service. Des années plus tard, dans Genèse 50:20, il dit à ses frères : « Vous aviez médité de me faire du mal : Dieu l'a changé en bien, pour accomplir ce qui arrive aujourd'hui, pour sauver la vie à un peuple nombreux. »
+          :::
+
+          ## Passer du « pourquoi moi ? » au « que puis-je bâtir à partir d'ici ? »
+
+          Les circonstances de départ peuvent être injustes ou lourdes, mais elles ne sont jamais définitives. Elles sont un **point de départ**, pas une condamnation. Ce qui transforme une histoire, ce n'est pas l'absence d'épreuves : c'est la manière dont vous répondez à ce qui vous arrive, avec l'aide de Dieu.
+
+          :::retenir
+          Vous ne choisissez pas toujours votre point de départ, mais vous pouvez choisir votre posture et votre direction à partir d'aujourd'hui.
+          :::
+        questions:
+          - question: Que nous enseigne l'histoire de Joseph face aux circonstances que nous n'avons pas choisies ?
+            answers:
+              - Que les circonstances de départ finissent toujours par nous enfermer
+              - Que nos débuts sont un point de départ et non une condamnation, car notre posture peut les transformer avec l'aide de Dieu
+              - Qu'il faut attendre que les circonstances deviennent idéales avant d'agir
+            correct: [1]
+            explanation: Joseph n'a choisi ni la vente en esclavage ni la prison, mais sa fidélité dans ce qu'il subissait a préparé la mission que Dieu avait pour lui.
+        practice:
+          target: JOURNAL
+          action: add_note
+          prompt: |
+            Quelles circonstances de votre vie n'avez-vous pas choisies ? En quelques lignes honnêtes, notez comment elles vous ont façonné, et comment vous pouvez les transformer en point d'appui plutôt qu'en excuse.
+
+      - title: Pourquoi le choix est un cadeau puissant
+        duration: 7
+        content: |
+          « Un des plus beaux cadeaux que tu puisses recevoir est d'avoir la possibilité de faire des choix. » Cette parole de John C. Maxwell résume une réalité fondamentale : si la vie commence sans choix, Dieu ne nous laisse pas dans cet état. Très tôt, Il place entre nos mains la responsabilité de décider.
+
+          Dans Deutéronome 30:19, Dieu déclare : « Je mets aujourd'hui devant toi la vie et la mort, la bénédiction et la malédiction. Choisis la vie, afin que toi et ta descendance viviez. » Deux vérités ressortent immédiatement : nous ne sommes pas condamnés à subir nos circonstances, et nos décisions portent des conséquences bien au-delà de nous-mêmes.
+
+          ## Les trois puissances du choix
+
+          [[schema:choix-trois-puissances]]
+
+          1. **Le choix donne du sens.** Lorsque vous choisissez volontairement, vous affirmez que vous n'êtes pas un spectateur passif de votre existence, mais un participant actif dans le plan de Dieu. Un même effort paraît épuisant quand il est subi, et fécond quand il est choisi.
+          2. **Le choix transforme les circonstances.** Vous ne pouvez peut-être pas choisir où vous commencez, mais vous pouvez choisir où vous allez. Comme Josué qui affirme devant tout un peuple hésitant : « Moi et ma maison, nous servirons l'Éternel » (Josué 24:15), une décision claire trace un cap même au milieu des pressions contraires.
+          3. **Le choix libère le potentiel.** Choisir d'étudier la Parole de Dieu, d'apprendre une compétence, de pardonner ou de servir active une force intérieure qui ouvre la porte à une sagesse nouvelle. Les choix donnent à chacun la possibilité de rattraper son retard, quel que soit son passé.
+
+          :::attention Ne pas choisir est déjà un choix
+          Lorsque vous repoussez une décision importante par peur de vous tromper, vous avez l'impression de rester neutre. En réalité, **choisir de ne pas choisir, c'est laisser quelqu'un d'autre — ou les circonstances — décider à votre place**. L'inaction n'est jamais neutre : elle consomme votre temps et finit toujours par trancher sans vous.
+          :::
+
+          ## Un pouvoir universel, jusque dans l'épreuve
+
+          Même Jésus, le Fils de Dieu, a exercé ce pouvoir de choisir. Dans le jardin de Gethsémané, face à l'épreuve la plus lourde de l'histoire humaine, il a prié : « Non pas ma volonté, mais la tienne » (Luc 22:42). Ce n'était pas de la résignation passive, mais un acte d'obéissance librement consenti. Ce choix a changé l'histoire.
+
+          :::retenir
+          Choisir, c'est sortir du rôle de spectateur pour devenir acteur de sa vie. Ne rien décider, c'est confier son avenir au hasard ou aux priorités des autres.
+          :::
+        questions:
+          - question: Que se passe-t-il réellement lorsque l'on repousse une décision et que l'on choisit de ne rien faire ?
+            answers:
+              - La situation reste figée en attendant qu'on soit prêt
+              - On laisse quelqu'un d'autre ou les circonstances décider à sa place
+              - On évite toute conséquence négative
+            correct: [1]
+            explanation: Ne faire aucun choix est déjà un choix. L'inaction remet votre direction entre les mains des circonstances ou de l'entourage.
+          - question: Selon Deutéronome 30:19, qui est touché par les choix que nous faisons ?
+            answers:
+              - Uniquement nous-mêmes, sur le moment
+              - Nous-mêmes et ceux qui nous entourent, jusque dans notre descendance
+              - Seulement les grandes décisions professionnelles
+            correct: [1]
+            explanation: "« Choisis la vie, afin que toi et ta descendance viviez » : nos décisions portent du fruit pour nous, mais aussi pour notre foyer et notre entourage."
+        practice:
+          target: CROISSANCE
+          action: add_principle
+          prompt: |
+            Formulez un principe de décision clair que vous voulez garder comme repère lorsque vous hésitez (par exemple : « Je choisis selon ma conviction, pas selon la peur ni la pression du moment »).
+
+      - title: Vos choix d'aujourd'hui écrivent votre avenir
+        duration: 8
+        content: |
+          Il y a une vérité simple et profonde à garder devant les yeux : **vos choix d'aujourd'hui écrivent les chapitres de votre avenir**. Ce n'est pas votre passé qui définit demain, mais la décision que vous prenez aujourd'hui.
+
+          ## Les petits choix ont de grandes conséquences
+
+          Nous imaginons souvent que notre destinée se joue uniquement lors de deux ou trois grands carrefours spectaculaires. En réalité, chaque décision — même la plus discrète — agit comme **une pierre jetée dans un lac** : les ondulations s'étendent bien au-delà du point d'impact. Lorsque vous choisissez de lire la Bible dix minutes aujourd'hui, d'écouter votre conjoint avec patience ou de tenir votre parole sur un détail, vous semez une graine de sagesse et de solidité. Répétée jour après jour, cette graine produit une récolte abondante.
+
+          :::exemple Ruth : une seule décision courageuse
+          Après la mort de son mari, Ruth aurait pu retourner chez elle, comme sa belle-sœur Orpa — personne ne le lui aurait reproché. Elle fait un choix audacieux : suivre Naomi et s'attacher au Dieu d'Israël. « Où tu iras, j'irai ; où tu demeureras, je demeurerai ; ton peuple sera mon peuple, et ton Dieu sera mon Dieu » (Ruth 1:16). Cette femme étrangère devient l'arrière-grand-mère du roi David et une ancêtre directe de Jésus-Christ. Toute une lignée a basculé sur une seule décision courageuse.
+          :::
+
+          ## Comment vos choix vous sculptent, étape par étape
+
+          Dans Proverbes 4:23, il est écrit : « Garde ton cœur plus que tout autre chose, car de lui viennent les sources de la vie. » Vos choix révèlent ce qui habite votre cœur, et en retour ils vous façonnent durablement :
+
+          [[schema:choix-graine-recolte]]
+
+          1. **Ils forgent votre caractère.** Chaque fois que vous choisissez d'agir avec intégrité lorsque personne ne regarde, vous renforcez votre identité.
+          2. **Ils bâtissent vos rituels.** Ce que vous choisissez régulièrement devient votre rythme quotidien et votre fondation dans les moments de tempête.
+          3. **Ils construisent votre futur.** Paul le rappelle dans Galates 6:7 : « On récolte ce que l'on sème. » Votre avenir n'est pas une loterie, c'est la moisson de vos choix répétés.
+
+          ## Les mauvais choix… et la grâce des secondes chances
+
+          Tout comme de bons choix ouvrent des portes, de mauvais choix laissent des traces lourdes. **Saül**, premier roi d'Israël, avait été choisi par Dieu, mais ses décisions impulsives et désobéissantes l'ont conduit à perdre son royaume. Nos décisions spirituelles, personnelles et professionnelles comptent réellement : on ne peut pas traiter nos choix à la légère.
+
+          Pourtant, une erreur passée n'est jamais le dernier mot. **Pierre**, l'un des disciples les plus proches de Jésus, a renié son Maître trois fois par peur. Mais au lieu de s'enfermer dans la honte, il a choisi de se repentir et de revenir. Ce choix a fait de lui un pilier de l'Église. **Dieu est le Maître des secondes chances.** Aujourd'hui encore, vous avez l'opportunité de réécrire la suite de votre histoire.
+
+          :::avous Un défi pour aujourd'hui
+          Prenez deux minutes de silence et répondez honnêtement à ces deux questions : quel choix pouvez-vous faire aujourd'hui qui changera positivement votre vie demain ? Et qu'est-ce que Dieu vous appelle à commencer, à abandonner ou à poursuivre avec plus d'intensité ?
+          :::
+        questions:
+          - question: Quelle leçon principale ressort du contraste entre Saül et Pierre ?
+            answers:
+              - Les mauvais choix n'ont finalement pas de conséquences graves
+              - Nos choix comptent vraiment, mais un choix de repentance ouvre toujours une seconde chance
+              - Seuls les leaders peuvent se relever d'une erreur
+            correct: [1]
+            explanation: Saül montre que les décisions impulsives ont un coût réel ; Pierre montre qu'un mauvais choix passé n'empêche jamais de réécrire son avenir lorsqu'on choisit de se relever.
+          - question: Pourquoi comparer un petit choix quotidien à une pierre jetée dans un lac ?
+            answers:
+              - Parce qu'il disparaît vite sous la surface
+              - Parce que ses effets se propagent bien au-delà de l'instant présent
+              - Parce qu'il faut beaucoup de force pour faire un petit choix
+            correct: [1]
+            explanation: Les ondulations d'un geste répété façonnent progressivement votre caractère, vos rituels et votre avenir.
+        practice:
+          target: VIE
+          action: add_life_goal
+          prompt: |
+            Choisissez une chose concrète que vous décidez aujourd'hui de commencer, d'abandonner ou de poursuivre avec plus d'intensité, et inscrivez-la comme objectif dans votre Plan de Vie.
+
+  - title: "La force de l'engagement"
+    lessons:
+      - title: Choisir ouvre la porte, s'engager mène au bout
+        duration: 7
+        content: |
+          Un choix seul ne suffit pas. Choisir, c'est ouvrir une porte ; **s'engager, c'est franchir le seuil et marcher jusqu'à la destination**. Beaucoup de personnes ont une vie remplie de bonnes décisions prises dans l'émotion d'un dimanche, d'une conférence ou d'un début d'année — et jamais tenues au-delà de la troisième semaine. Comme le rappelle John C. Maxwell : « La victoire est donnée à celui qui finit, pas à celui qui a commencé. »
+
+          :::exemple Le souvenir du « B + A = BA »
+          Rappelez-vous quand vous appreniez à lire. Tout commençait par des syllabes simples : B + A = BA, BABA. C'était lent, répétitif, parfois frustrant. Imaginez si vous aviez abandonné au bout de quelques jours en disant : « Ce n'est pas fait pour moi. » Vous ne pourriez pas lire ces lignes aujourd'hui. Ce n'est pas le premier jour qui a tout changé, mais l'engagement à répéter, à persévérer et à continuer d'apprendre. C'est cette fidélité dans la durée qui a transformé un simple « BA » en la capacité de lire des livres entiers et de comprendre le monde.
+          :::
+
+          ## L'engagement est un choix qui dépasse la motivation
+
+          L'erreur la plus fréquente est de confondre l'enthousiasme du départ avec l'engagement. La motivation est une étincelle précieuse pour décoller, mais c'est une émotion : elle dépend de votre sommeil, de vos nouvelles du jour, de la météo ou de l'humeur du moment. L'engagement, lui, n'est pas un sentiment ; c'est une **décision prise à l'avance** qui prend le relais quand l'envie disparaît.
+
+          [[schema:motivation-vs-engagement]]
+
+          Pensez à un couple, à un entrepreneur ou à un musicien. Aucun mariage solide, aucune œuvre durable et aucune maîtrise réelle ne reposent sur l'envie du matin. Ils reposent sur une parole donnée que l'on honore aussi les jours ordinaires — et surtout les jours difficiles.
+
+          ## Pourquoi nous abandonnons si vite
+
+          Nous abandonnons rarement parce que le but n'en vaut plus la peine. Nous abandonnons parce que nous avons misé sur la motivation au lieu de construire un engagement. Tant que vous attendez de « vous sentir prêt » pour agir, votre vie reste pilotée par vos variations d'humeur. Le jour où vous choisissez l'engagement, vous reprenez le gouvernail.
+
+          :::retenir
+          C'est la motivation qui vous permet de commencer. C'est l'engagement qui vous permet de continuer d'avancer quand l'enthousiasme retombe.
+          :::
+        questions:
+          - question: Quelle est la différence essentielle entre la motivation et l'engagement ?
+            answers:
+              - La motivation est réservée aux grands projets, l'engagement aux petits
+              - La motivation aide à démarrer, l'engagement permet de tenir quand l'envie retombe
+              - "Il n'y a pas de différence : il faut rester motivé pour rester engagé"
+            correct: [1]
+            explanation: Attendre d'être motivé pour agir conduit à abandonner dès la première baisse d'énergie. L'engagement est un choix qui prend le relais de l'émotion.
+          - question: Que montre l'exemple de l'apprentissage de la lecture (« B + A = BA ») ?
+            answers:
+              - Que le talent inné fait toute la différence
+              - Que c'est la répétition engagée dans la durée qui transforme un début modeste en vraie maîtrise
+              - Que le premier jour est toujours le plus décisif
+            correct: [1]
+            explanation: Un bon départ ne produit rien sans persévérance. La transformation naît de la fidélité dans la répétition.
+        practice:
+          target: CROISSANCE
+          action: add_growth_goal
+          prompt: |
+            Identifiez un domaine de votre vie où vous avez souvent commencé avec enthousiasme sans aller jusqu'au bout, et formulez l'engagement concret que vous décidez de tenir désormais.
+
+      - title: "Sentimental ou finisseur : les épreuves de l'engagement"
+        duration: 8
+        content: |
+          Commencer est facile ; finir ne l'est pas. Tout le monde reçoit des occasions dans sa vie, mais tout le monde ne les saisit pas — et moins nombreux encore sont ceux qui vont au bout de ce qu'ils ont saisi. **Pour un finisseur, la vie est une montée** : il sait à l'avance que tout ce qui a de la valeur demande de grimper, et l'effort ne le surprend pas.
+
+          ## Le premier test de l'engagement : passer à l'action
+
+          Tant qu'un engagement reste une belle intention dans votre carnet ou dans vos prières, il ne coûte rien. Il commence réellement à exister au moment précis où vous posez le premier acte concret. Et dès que vous vous mettez en mouvement, une loi physique et spirituelle se déclenche : **le mouvement cause de la friction**.
+
+          La friction n'est pas un accident de parcours. Dès qu'une roue tourne, elle frotte contre la route ; dès qu'un bateau avance, il fend la vague. Dans votre vie, la friction prend des visages très concrets : un imprévu professionnel qui bouleverse votre soirée, une fatigue tenace, une remarque décourageante d'un proche, un doute soudain sur vos capacités ou simplement l'ennui de la répétition.
+
+          **L'engagement ne se prouve jamais dans le confort ; il s'éprouve dans les obstacles.**
+
+          ## Deux postures face à la friction : sentimental ou finisseur ?
+
+          Lorsque la friction apparaît, chaque personne révèle sa posture intérieure :
+
+          [[schema:sentimental-vs-finisseur]]
+
+          Le **sentimental** n'est pas quelqu'un qui manque de cœur — au contraire, il a souvent de très beaux élans. Son problème est qu'il laisse ses sentiments du moment décider s'il continue ou s'il s'arrête : il prie quand il se sent inspiré, il travaille son projet quand il a de l'énergie, il tient sa parole quand cela reste confortable.
+
+          Le **finisseur**, lui, ressent exactement les mêmes émotions — fatigue, doute, peur, lassitude —, mais il refuse de leur céder le volant. Il reconnaît ce qu'il ressent, il ajuste sa méthode si nécessaire, mais il honore ce qu'il a décidé.
+
+          :::exemple Dans la vie de tous les jours
+          Vous vous êtes engagé à mettre de l'ordre dans vos finances en faisant un point chaque samedi matin pendant 20 minutes. Le troisième samedi, vous êtes fatigué et la semaine a été tendue. Le sentimental se dit : « Je ferai ça le mois prochain quand je serai plus calme » — et abandonne. Le finisseur se dit : « Je n'ai aucune envie ce matin, mais j'ai donné ma parole ; je fais juste 10 minutes avec un café, et je tiens le rythme. »
+          :::
+
+          ## Regarder en face pourquoi vous n'avez pas fini
+
+          Avant de prendre un nouvel engagement, ayez le courage de revenir sur un ou deux projets que vous n'avez pas terminés par le passé. Demandez-vous sans vous juger : quelle a été la vraie raison ? Était-ce un changement de direction lucide, ou avez-vous laissé l'inconfort, la peur de l'échec ou l'émotion du moment éteindre votre engagement ? Mettre un nom précis sur votre point de rupture vous arme pour la prochaine montée.
+
+          :::retenir
+          Le mouvement cause toujours de la friction. L'obstacle n'est pas le signal d'abandonner : c'est le test qui distingue celui qui ressent de celui qui finit.
+          :::
+        questions:
+          - question: Vous avez décidé de consacrer 30 minutes par semaine à un projet important. Après deux semaines, la fatigue et un imprévu arrivent. Quelle réaction reflète celle d'un « finisseur » ?
+            answers:
+              - Attendre que la motivation revienne naturellement le mois prochain
+              - Reconnaître la friction comme normale et maintenir un créneau concret, même ajusté, pour ne pas rompre l'engagement
+              - Abandonner en se disant que ce n'était sans doute pas le bon moment
+            correct: [1]
+            explanation: La friction est inhérente au mouvement. Le finisseur adapte sa méthode si besoin, mais ne laisse pas ses sentiments du jour annuler sa décision.
+          - question: Quel est le tout premier test d'un engagement véritable ?
+            answers:
+              - L'enthousiasme ressenti en prenant la décision
+              - Le passage concret à l'action
+              - L'approbation immédiate de tout son entourage
+            correct: [1]
+            explanation: Un engagement qui ne se traduit par aucun acte reste un vœu. L'action est son premier révélateur.
+        practice:
+          target: JOURNAL
+          action: add_note
+          prompt: |
+            Pensez à un moment où vous n'avez pas fini ce que vous aviez commencé. Quelle en a été la vraie raison ? Notez ce que vous ferez concrètement la prochaine fois que la friction apparaîtra.
+
+      - title: Le cycle de l'engagement et les trois clés pour finir
+        duration: 8
+        content: |
+          Si le premier test de l'engagement est l'action, **le test final de l'engagement est l'accomplissement**. Et même une fois un palier atteint, la vie vous testera constamment sur votre prochain niveau d'engagement : chaque victoire prépare une responsabilité plus grande.
+
+          La question centrale devient alors très pratique : **comment courir jusqu'à la fin sans s'effondrer en route ?**
+
+          ## Entrer dans le cycle de l'engagement
+
+          L'une des plus grandes causes d'abandon est le perfectionnisme : on essaie une fois, on échoue ou on trébuche, et on conclut qu'on n'y arrivera pas. En réalité, ceux qui finissent ne sont pas ceux qui réussissent du premier coup ; ce sont ceux qui acceptent d'entrer dans un cycle qui ne s'arrête jamais :
+
+          [[schema:cycle-engagement]]
+
+          Chaque passage dans ce cycle vous rend plus lucide et plus solide. L'échec n'est plus un verdict sur votre valeur : il devient une information précieuse pour ajuster votre manière de faire et repartir mieux équipé.
+
+          ## Trois clés concrètes pour courir jusqu'à la fin
+
+          [[schema:trois-cles-finisseur]]
+
+          1. **Connaître clairement ce que vous voulez accomplir.** La vision est annoncée avant d'être réalisée, exactement comme la prophétie est annoncée avant qu'elle ne s'accomplisse. Si votre cible reste floue (« je veux faire mieux »), votre engagement s'évapore dès la première distraction. Plus votre objectif est nommé clairement, plus votre persévérance a un point d'ancrage.
+          2. **Anticiper l'attraction.** Lorsque vous savez avec clarté ce que vous voulez accomplir, tout votre être finit par converger : vos yeux repèrent les bonnes ressources, votre esprit cherche des solutions au lieu d'excuses, votre cœur garde le feu, vos paroles deviennent cohérentes et vos actes s'alignent. Vous cessez de vous disperser dans dix directions à la fois.
+          3. **Faire en sorte qu'aujourd'hui compte.** Nous avons tendance à repousser nos engagements vers un « demain » idéal qui n'arrive jamais. Pourtant, tout ce que nous possédons réellement, c'est cette journée. Comme le disait Abraham Lincoln : **« L'engagement est ce qui transforme une promesse en réalité. »** Le secret de votre succès ne se joue pas dans trois ans : il se joue dans votre engagement d'aujourd'hui.
+
+          :::avous La règle du pas d'aujourd'hui
+          Ne vous demandez pas comment tenir pendant un an. Demandez-vous : quel est le geste fidèle de 10 ou 15 minutes que je peux poser **aujourd'hui** pour honorer ma parole ?
+          :::
+
+          :::retenir
+          Le cycle de l'engagement — Test, Échec, Apprentissage, Amélioration, Reprise — ne s'arrête jamais. Et c'est votre fidélité d'aujourd'hui qui transforme une promesse en réalité.
+          :::
+        questions:
+          - question: Dans le cycle de l'engagement, quel rôle joue l'échec ?
+            answers:
+              - Il prouve qu'il vaut mieux changer complètement d'objectif
+              - Il sert de matière première à l'apprentissage et à l'amélioration avant la reprise
+              - Il signifie que l'engagement n'était pas sincère
+            correct: [1]
+            explanation: "L'échec n'est pas la fin du parcours : intégré dans le cycle (Test, Échec, Apprentissage, Amélioration, Reprise), il devient un levier de solidité."
+          - question: Que signifie « faire en sorte qu'aujourd'hui compte » ?
+            answers:
+              - Vouloir tout accomplir en une seule journée
+              - Poser aujourd'hui l'acte fidèle qui fait avancer son engagement, car c'est le seul jour dont nous disposons réellement
+              - Remettre son engagement au lundi suivant pour mieux se préparer
+            correct: [1]
+            explanation: On ne bâtit pas sa vie sur des promesses futures, mais sur la fidélité concrète du jour présent.
+        practice:
+          target: RITUEL
+          action: add_habit
+          prompt: |
+            Pour faire en sorte qu'aujourd'hui compte, créez un petit rituel simple (quotidien ou hebdomadaire) directement lié à l'engagement que vous voulez tenir jusqu'au bout.
+
+      - title: Partager son engagement et en récolter les fruits
+        duration: 6
+        content: |
+          Un engagement gardé uniquement dans le secret de sa tête est fragile. Tant que personne ne connaît la parole que vous vous êtes donnée, il est très facile de négocier en silence avec soi-même dès que la fatigue ou le doute survient : on repousse d'un jour, puis d'une semaine, puis on oublie.
+
+          **Partager son engagement avec une personne de confiance change radicalement la donne.**
+
+          ## Pourquoi ne pas marcher seul
+
+          Partager son engagement ne consiste pas à l'annoncer bruyamment sur les réseaux sociaux pour recevoir des applaudissements faciles. Il s'agit de choisir **une personne fiable** — un conjoint, un ami mature, un mentor ou un partenaire de redevabilité — et de lui dire simplement : « Voici l'engagement que je prends pour les prochaines semaines. Est-ce que tu acceptes de me demander où j'en suis ? »
+
+          Ce simple acte produit deux effets immédiats : il clarifie votre engagement (ce qui se dit clairement est mieux pensé) et il crée un filet de sécurité bienveillant pour les jours où votre élan retombe.
+
+          :::avous Utilisez votre espace de redevabilité dans KIINI SAWA
+          Une fois votre objectif ou votre rituel enregistré, vous pouvez le relier directement à un **partenaire de redevabilité** (dans Ensemble › Ma redevabilité) : si vous décrochez, votre partenaire est prévenu avec votre accord pour vous tendre la main.
+          :::
+
+          ## Les bénéfices durables d'une vie engagée
+
+          Tenir ses engagements coûte de l'effort à court terme, mais les fruits récoltés transforment toute votre vie :
+
+          - **La confiance en votre propre parole** : chaque promesse tenue envers vous-même répare l'estime de soi que les abandons répétés avaient abîmée.
+          - **La crédibilité auprès des autres** : dans votre famille, votre église et votre travail, vous devenez quelqu'un sur qui l'on peut réellement s'appuyer.
+          - **La paix intérieure** : l'énergie gaspillée dans la culpabilité, la dispersion et les projets inachevés laisse place à une clarté apaisée.
+          - **Un impact qui vous dépasse** : votre constance inspire silencieusement vos enfants, votre conjoint et vos amis. Elle leur montre qu'une vie alignée est possible.
+
+          ## Réfléchissons avant de passer à l'action
+
+          Pour clore ce parcours et passer du savoir à la vie concrète, prenez quelques minutes pour répondre à ces trois questions :
+
+          1. Quelle est la leçon la plus importante que vous retenez de la valeur du choix et de l'engagement ?
+          2. Comment pouvez-vous appliquer cette leçon concrètement auprès de votre famille et de vos amis ?
+          3. **Défi final** : quel engagement précis allez-vous prendre dès aujourd'hui qui aura un impact positif sur les autres ?
+
+          :::retenir
+          Choisir ouvre la porte. S'engager jusqu'au bout — et ne pas marcher seul — transforme une promesse en réalité, pour vous et pour ceux que vous aimez.
+          :::
+        questions:
+          - question: Quelle est la meilleure façon de partager un engagement pour augmenter vos chances de le tenir ?
+            answers:
+              - Le garder totalement secret pour éviter toute pression
+              - Le confier à une personne de confiance qui peut vous demander régulièrement où vous en êtes
+              - L'annoncer au plus grand nombre pour chercher des compliments immédiats
+            correct: [1]
+            explanation: Une personne de confiance (partenaire de redevabilité, mentor, conjoint) offre un cadre sobre et bienveillant qui vous aide à tenir lorsque la friction apparaît.
+        practice:
+          target: VIE
+          action: add_life_goal
+          prompt: |
+            Défi final : quel engagement précis prenez-vous aujourd'hui qui aura un impact positif sur votre famille, vos amis ou votre entourage ? Inscrivez-le dans votre Plan de Vie, puis partagez-le avec une personne de confiance.
