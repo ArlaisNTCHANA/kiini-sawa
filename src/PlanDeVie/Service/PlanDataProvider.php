@@ -95,13 +95,13 @@ final class PlanDataProvider
         // Build latest tests dashboard array for all 8 test types
         $latestTests = [];
         $testTypesMeta = [
-            'MBTI'          => ['name' => 'Type de fonctionnement', 'icon' => 'brain', 'color' => '#6366f1', 'bg' => '#eef2ff', 'url_key' => 'mbti'],
-            'DISC'          => ['name' => 'Profil DISC', 'icon' => 'zap', 'color' => '#f43f5e', 'bg' => '#fff1f2', 'url_key' => 'disc'],
-            'ENNEAGRAM'     => ['name' => 'Ennéagramme', 'icon' => 'target', 'color' => '#f59e0b', 'bg' => '#fffbeb', 'url_key' => 'enneagramme'],
-            'BIG5'          => ['name' => 'Big Five', 'icon' => 'sparkles', 'color' => '#10b981', 'bg' => '#ecfdf5', 'url_key' => 'big5'],
-            'DONS'          => ['name' => 'Dons spirituels', 'icon' => 'flame', 'color' => '#B45309', 'bg' => '#FFF7ED', 'url_key' => 'dons'],
-            'EQUILIBRE'     => ['name' => 'Équilibre de Vie', 'icon' => 'activity', 'color' => '#3b82f6', 'bg' => '#eff6ff', 'url_key' => 'equilibre'],
-            'HYGIENE'       => ['name' => 'Hygiène de Vie', 'icon' => 'heart', 'color' => '#ec4899', 'bg' => '#fdf2f8', 'url_key' => 'hygiene'],
+            'MBTI'          => ['name' => 'Type de fonctionnement', 'icon' => 'brain', 'color' => '#5D7368', 'bg' => '#ECEFED', 'url_key' => 'mbti'],
+            'DISC'          => ['name' => 'Profil DISC', 'icon' => 'zap', 'color' => '#2E6B53', 'bg' => '#EEF3EF', 'url_key' => 'disc'],
+            'ENNEAGRAM'     => ['name' => 'Ennéagramme', 'icon' => 'target', 'color' => '#8A6418', 'bg' => '#FAF4E6', 'url_key' => 'enneagramme'],
+            'BIG5'          => ['name' => 'Big Five', 'icon' => 'sparkles', 'color' => '#4F7355', 'bg' => '#EEF4EF', 'url_key' => 'big5'],
+            'DONS'          => ['name' => 'Dons spirituels', 'icon' => 'flame', 'color' => '#9A6B12', 'bg' => '#FAF4E6', 'url_key' => 'dons'],
+            'EQUILIBRE'     => ['name' => 'Équilibre de Vie', 'icon' => 'activity', 'color' => '#3B6E8F', 'bg' => '#EBF2F6', 'url_key' => 'equilibre'],
+            'HYGIENE'       => ['name' => 'Hygiène de Vie', 'icon' => 'heart', 'color' => '#5D7368', 'bg' => '#ECEFED', 'url_key' => 'hygiene'],
         ];
 
         foreach ($testTypesMeta as $key => $meta) {

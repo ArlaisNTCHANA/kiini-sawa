@@ -5,7 +5,7 @@
 {% block body %}
 <style>
     .planner-wrap {
-        max-width: 1100px;
+        max-width: var(--page-wide);
         margin: 0 auto;
         padding: 2.5rem 1.5rem 8rem;
         display: flex;
@@ -53,10 +53,10 @@
         background: white;
         color: var(--fg-muted);
     }
-    .filter-pill.active-task { background: var(--info-soft) !important; color: #1e40af !important; border-color: #bfdbfe !important; }
-    .filter-pill.active-habit { background: var(--success-soft) !important; color: #065f46 !important; border-color: #a7f3d0 !important; }
-    .filter-pill.active-milestone { background: #f3e8ff !important; color: #6b21a8 !important; border-color: #e9d5ff !important; }
-    .filter-pill.active-challenge { background: #fff7ed !important; color: #9a3412 !important; border-color: #ffedd5 !important; }
+    .filter-pill.active-task { background: var(--info-soft) !important; color: var(--info) !important; border-color: #C9DCE8 !important; }
+    .filter-pill.active-habit { background: var(--primary-soft) !important; color: var(--primary-dark) !important; border-color: var(--primary-tint) !important; }
+    .filter-pill.active-milestone { background: var(--gold-soft) !important; color: var(--accent) !important; border-color: #EAD9AE !important; }
+    .filter-pill.active-challenge { background: var(--couple-soft) !important; color: var(--couple) !important; border-color: #E5B9A4 !important; }
 
     .shadow-sm\/5 {
         box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
@@ -84,20 +84,21 @@
         transform: translateY(-0.5px);
         box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
     }
+    /* Couleurs du livre (contre-audit visuel du 25/11/2026) : tâches bleu-gris, rituels vert, jalons or, défis terre cuite */
     .event-bar.task-bar {
         background: var(--info-soft);
-        color: #1e40af;
+        color: var(--info);
         border-left-color: var(--info);
     }
     .event-bar.milestone-bar {
-        background: #f3e8ff;
-        color: #6b21a8;
-        border-left-color: #a855f7;
+        background: var(--gold-soft);
+        color: var(--accent);
+        border-left-color: var(--gold);
     }
     .event-bar.challenge-bar {
-        background: #fff7ed;
-        color: #c2410c;
-        border-left-color: #C8962E;
+        background: var(--couple-soft);
+        color: var(--couple);
+        border-left-color: var(--couple);
     }
     .event-bar.completed {
         opacity: 0.5;
@@ -150,16 +151,16 @@
         <div class="flex flex-wrap gap-2.5 items-center">
             <span class="planner-label" style="margin-right: 0.5rem;">Filtres :</span>
             <button class="filter-pill" :class="filters.task ? 'active-task' : ''" @click="filters.task = !filters.task; fetchEvents();">
-                <span class="w-2 h-2 rounded-full bg-blue-500" x-show="!filters.task"></span> Tâches
+                <span class="w-2 h-2 rounded-full" style="background: var(--info);" x-show="!filters.task"></span> Tâches
             </button>
             <button class="filter-pill" :class="filters.habit ? 'active-habit' : ''" @click="filters.habit = !filters.habit; fetchEvents();">
-                <span class="w-2 h-2 rounded-full bg-emerald-500" x-show="!filters.habit"></span> Rituels
+                <span class="w-2 h-2 rounded-full" style="background: var(--primary);" x-show="!filters.habit"></span> Rituels
             </button>
             <button class="filter-pill" :class="filters.milestone ? 'active-milestone' : ''" @click="filters.milestone = !filters.milestone; fetchEvents();">
-                <span class="w-2 h-2 rounded-full bg-purple-500" x-show="!filters.milestone"></span> Jalons
+                <span class="w-2 h-2 rounded-full" style="background: var(--gold);" x-show="!filters.milestone"></span> Jalons
             </button>
             <button class="filter-pill" :class="filters.challenge ? 'active-challenge' : ''" @click="filters.challenge = !filters.challenge; fetchEvents();">
-                <span class="w-2 h-2 rounded-full bg-orange-500" x-show="!filters.challenge"></span> Défis
+                <span class="w-2 h-2 rounded-full" style="background: var(--couple);" x-show="!filters.challenge"></span> Défis
             </button>
         </div>
 

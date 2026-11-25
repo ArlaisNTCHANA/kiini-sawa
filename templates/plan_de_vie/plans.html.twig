@@ -5,7 +5,7 @@
 {% block body %}
 <style>
     .strat-wrap {
-        max-width: 1080px;
+        max-width: var(--page-wide);
         margin: 0 auto;
         padding: 2.5rem 1.5rem 8rem;
     }
@@ -17,7 +17,7 @@
 
     /* Page Header for Hub */
     .strat-header {
-        margin-bottom: 3rem;
+        margin-bottom: 2rem;
     }
     .strat-header-icon {
         width: 3rem; height: 3rem;
@@ -31,15 +31,16 @@
     }
     .strat-title {
         font-family: var(--font-serif);
-        font-size: clamp(2rem, 4vw, 2.75rem);
+        font-size: clamp(1.75rem, 4vw, 2.25rem);
         color: var(--primary);
-        font-weight: 500;
+        font-weight: 600;
+        line-height: 1.2;
         margin-bottom: 0.5rem;
     }
     .strat-desc {
         color: var(--fg-muted);
-        font-size: 1.05rem;
-        max-width: 650px;
+        font-size: 1rem;
+        max-width: 680px;
         line-height: 1.6;
     }
 
@@ -170,70 +171,15 @@
        ────────────────────────────────────────────────────────────────────── */
 
     /* Choice / Welcome Hero Header */
-    .hero-choice {
-        background: rgba(255, 255, 255, 0.85);
-        backdrop-filter: blur(20px);
-        border: 1px solid rgba(46, 107, 83, 0.08);
-        border-radius: 2.5rem;
-        padding: 2.5rem;
-        box-shadow: var(--card-shadow);
-        margin-bottom: 3rem;
-        position: relative;
-        overflow: hidden;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        text-align: center;
-        gap: 1.5rem;
-    }
-    .hero-choice::before {
-        content: '';
-        position: absolute;
-        top: -10%; left: -10%;
-        width: 30%; height: 50%;
-        background: radial-gradient(circle, rgba(61, 122, 95, 0.08) 0%, transparent 70%);
-        pointer-events: none;
-    }
-    .hero-choice::after {
-        content: '';
-        position: absolute;
-        bottom: -10%; right: -10%;
-        width: 40%; height: 60%;
-        background: radial-gradient(circle, rgba(180, 83, 9, 0.05) 0%, transparent 70%);
-        pointer-events: none;
-    }
-    .hero-badge {
-        background: var(--primary-glow);
-        color: var(--primary);
-        font-size: 0.725rem;
-        font-weight: 850;
-        text-transform: uppercase;
-        letter-spacing: 0.12em;
-        padding: 0.5rem 1.25rem;
-        border-radius: 9999px;
-        border: 1px solid rgba(46, 107, 83, 0.12);
-        display: inline-flex;
-        align-items: center;
-        gap: 0.375rem;
-    }
-    .hero-title {
-        font-family: var(--font-serif);
-        font-size: clamp(1.85rem, 4.5vw, 2.85rem);
-        color: var(--primary);
-        font-weight: 500;
-        line-height: 1.2;
-        max-width: 600px;
-    }
-    .hero-desc {
-        color: var(--fg-muted);
-        font-size: 1.05rem;
-        max-width: 580px;
-        line-height: 1.6;
-    }
+    /* En-tête d'un plan : modèle commun (ks-header), aligné à gauche, sans carte (contre-audit visuel du 25/11/2026) */
+    .hero-choice { display: flex; flex-direction: column; align-items: flex-start; text-align: left; gap: .5rem; margin-bottom: 2rem; }
+    .hero-badge { display: inline-flex; align-items: center; gap: .4rem; font-size: .72rem; font-weight: 800; letter-spacing: .14em; text-transform: uppercase; padding: .35rem .8rem; border-radius: 999px; border: 1px solid transparent; }
+    .hero-title { font-family: var(--font-serif); font-weight: 600; color: var(--primary); font-size: clamp(1.75rem, 4vw, 2.25rem); line-height: 1.2; }
+    .hero-desc { color: var(--fg-muted); font-size: 1rem; line-height: 1.6; max-width: 680px; }
     .hero-actions {
         display: flex;
         flex-wrap: wrap;
-        justify-content: center;
+        justify-content: flex-start;
         gap: 1rem;
         margin-top: 0.5rem;
         position: relative;
@@ -696,7 +642,7 @@
         }
     });
     const params = new URLSearchParams(window.location.search);
-    const p = params.get('plan') || params.get('activePlan') || {{ (initialPlan ?? null)|json_safe }};
+    const p = params.get('plan') || params.get('activePlan') || {{ (initialPlan ?? null) ? "'" ~ initialPlan|e('js') ~ "'" : 'null' }}; {# attribut entre guillemets doubles : pas de |json_safe ici (ses guillemets fermeraient l'attribut) #}
     const t = params.get('tab') || params.get('activeTab');
     if (p && ['CROISSANCE', 'DEVELOPPEMENT', 'TRANSMISSION', 'HYGIENE'].includes(p)) {
         activePlan = p;
@@ -717,17 +663,15 @@
     {# ──────────────────────────────────────────────────────────────────────
        HUB VIEW (Active Plan is Null)
        ────────────────────────────────────────────────────────────────────── #}
-    {{ book_panel('strategies') }}
     <div x-show="activePlan === null" x-transition:enter="transition ease-out duration-300">
         <header class="strat-header">
-            <div class="strat-header-icon">
-                <i data-lucide="sparkles" style="width: 24px; height: 24px;"></i>
-            </div>
+            <span class="ks-header__eyebrow"><i data-lucide="compass" style="width: 14px; height: 14px;"></i>Vos plans</span>
             <h1 class="strat-title">Mes plans</h1>
             <p class="strat-desc">
                 Vos cinq plans, au service de votre Plan de Vie : Croissance, Développement personnel, Hygiène de vie, Intendance et Transmission. C'est ici que vos objectifs de vie deviennent des actions concrètes.
             </p>
         </header>
+        {{ book_panel('strategies') }}
         {% include 'plan_de_vie/_plans_circle.html.twig' %}
 
         <div class="plans-grid">

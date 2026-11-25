@@ -3,6 +3,8 @@
 {% block title %}KIINI SAWA — Connexion{% endblock %}
 
 {% block content %}
+    <h1 class="auth-title">{{ t('connexion.titre', 'Heureux de vous revoir') }}</h1>
+    <p class="auth-text">{{ t('connexion.intro', 'Connectez-vous pour retrouver votre Plan de Vie.') }}</p>
     <form method="post">
         {% if error %}
             <div class="alert">{{ error.messageKey|trans(error.messageData, 'security') }}</div>

@@ -5,7 +5,7 @@
 {% block body %}
 <style>
     .dash-wrap {
-        max-width: 1000px;
+        max-width: var(--page-standard);
         margin: 0 auto;
         padding: 2rem 1.5rem 8rem;
         display: flex;
@@ -56,7 +56,7 @@
         transform: translateY(-1px);
     }
     
-    .type-pill.active-idea { background: #EAB308 !important; color: white !important; box-shadow: 0 4px 14px rgba(234, 179, 8, 0.3) !important; border-color: #EAB308 !important; }
+    .type-pill.active-idea { background: #C8962E !important; color: white !important; box-shadow: 0 4px 14px rgba(200, 150, 46, 0.3) !important; border-color: #C8962E !important; }
     .type-pill.active-reflection { background: var(--success) !important; color: white !important; box-shadow: 0 4px 14px rgba(16, 185, 129, 0.3) !important; border-color: var(--success) !important; }
     .type-pill.active-resolution { background: #5E8463 !important; color: white !important; box-shadow: 0 4px 14px rgba(94, 148, 121, 0.3) !important; border-color: #5E8463 !important; }
     .type-pill.active-milestone { background: #B3402A !important; color: white !important; box-shadow: 0 4px 14px rgba(244, 63, 94, 0.3) !important; border-color: #B3402A !important; }
@@ -471,8 +471,8 @@
                 <button @click="type = '{{ t.value }}'"
                         class="type-pill"
                         :class="type === '{{ t.value }}' ? 'active-{{ t.value|lower }}' : ''"
-                        style="--t-color: {% if t.value == 'IDEA' %}#EAB308{% elseif t.value == 'REFLECTION' %}var(--success){% elseif t.value == 'RESOLUTION' %}#5E8463{% elseif t.value == 'MILESTONE' %}#B3402A{% elseif t.value == 'TEMOIGNAGE' %}#3D7A5F{% else %}var(--primary-light){% endif %};
-                               --t-glow: {% if t.value == 'IDEA' %}rgba(234, 179, 8, 0.25){% elseif t.value == 'REFLECTION' %}rgba(16, 185, 129, 0.25){% elseif t.value == 'RESOLUTION' %}rgba(94, 148, 121, 0.25){% elseif t.value == 'MILESTONE' %}rgba(244, 63, 94, 0.25){% elseif t.value == 'TEMOIGNAGE' %}rgba(6, 182, 212, 0.25){% else %}rgba(61, 122, 95, 0.25){% endif %};">
+                        style="--t-color: {% if t.value == 'IDEA' %}#C8962E{% elseif t.value == 'REFLECTION' %}var(--success){% elseif t.value == 'RESOLUTION' %}#5E8463{% elseif t.value == 'MILESTONE' %}#B3402A{% elseif t.value == 'TEMOIGNAGE' %}#3D7A5F{% else %}var(--primary-light){% endif %};
+                               --t-glow: {% if t.value == 'IDEA' %}rgba(200, 150, 46, 0.25){% elseif t.value == 'REFLECTION' %}rgba(16, 185, 129, 0.25){% elseif t.value == 'RESOLUTION' %}rgba(94, 148, 121, 0.25){% elseif t.value == 'MILESTONE' %}rgba(244, 63, 94, 0.25){% elseif t.value == 'TEMOIGNAGE' %}rgba(6, 182, 212, 0.25){% else %}rgba(61, 122, 95, 0.25){% endif %};">
                     <i data-lucide="{{ t.icon }}" style="width: 13px; height: 13px;"></i>
                     <span>{{ t.label }}</span>
                 </button>
@@ -545,7 +545,7 @@
                     {# Energy Slider #}
                     <div x-show="showExtras" x-cloak style="display: flex; align-items: center; gap: 0.625rem;">
                         <i data-lucide="zap" style="width: 15px; height: 15px; flex-shrink: 0; transition: color 0.2s;"
-                           :style="energy >= 7 ? 'color: #EAB308; fill: #EAB308' : 'color: #cbd5e1'"></i>
+                           :style="energy >= 7 ? 'color: #C8962E; fill: #C8962E' : 'color: #cbd5e1'"></i>
                         <input type="range" min="1" max="10" x-model.number="energy"
                                style="width: 6rem; accent-color: var(--primary); height: 4px; cursor: pointer;">
                         <span style="font-size: 0.875rem; font-weight: 800; color: var(--fg); min-width: 1.25rem;"
@@ -555,12 +555,7 @@
                     {# Send button #}
                     <button :disabled="!content.trim()"
                             @click="submitCapture()"
-                            :style="content.trim()
-                                ? 'background: var(--primary); box-shadow: 0 4px 14px rgba(46, 107, 83, 0.35); cursor: pointer;'
-                                : 'background: rgba(46, 107, 83, 0.25); cursor: not-allowed;'"
-                            style="display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.7rem 1.5rem; white-space: nowrap; margin-left: auto;
-                                   border-radius: 0.875rem; font-size: 0.825rem; font-weight: 700; color: white;
-                                   transition: all 0.25s var(--ease); border: none; font-family: var(--font-sans);">
+                            class="ks-btn ks-btn--primary" style="margin-left: auto; white-space: nowrap;">
                         <i data-lucide="send" style="width: 14px; height: 14px;"></i>
                         <span>Enregistrer</span>
                     </button>
@@ -599,10 +594,10 @@
             {# Pillar Filters #}
             {% set pillars = [
                 { id: 'ALL',          label: 'Tout',          color: '#2E6B53', glow: 'rgba(46, 107, 83, 0.15)' },
-                { id: 'CROISSANCE',   label: 'Croissance',    color: '#D97706', glow: 'rgba(217, 119, 6, 0.15)' },
-                { id: 'DEVELOPPEMENT',label: 'Développement', color: '#059669', glow: 'rgba(5, 150, 105, 0.15)' },
-                { id: 'TRANSMISSION', label: 'Transmission',  color: '#DB2777', glow: 'rgba(219, 39, 119, 0.15)' },
-                { id: 'HYGIENE',      label: 'Hygiène',       color: '#2E6B53', glow: 'rgba(79, 70, 229, 0.15)' },
+                { id: 'CROISSANCE',   label: 'Croissance',    color: '#1F4D3A', glow: 'rgba(31, 77, 58, 0.15)' },
+                { id: 'DEVELOPPEMENT',label: 'Développement', color: '#2E6B53', glow: 'rgba(46, 107, 83, 0.15)' },
+                { id: 'TRANSMISSION', label: 'Transmission',  color: '#A87A1F', glow: 'rgba(168, 122, 31, 0.15)' },
+                { id: 'HYGIENE',      label: 'Hygiène',       color: '#5D7368', glow: 'rgba(93, 115, 104, 0.15)' },
             ] %}
             <div style="display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 2.25rem; justify-content: center;">
                 {% for p in pillars %}
@@ -628,9 +623,9 @@
 
             {# Pillar Config & Colors Metadata mapping #}
             {% set pillarMeta = {
-                'CROISSANCE':   { color: '#D97706', glow: 'rgba(217, 119, 6, 0.08)', bg: '#FEF3C7', border: '#FCD34D' },
-                'DEVELOPPEMENT':{ color: '#059669', glow: 'rgba(5, 150, 105, 0.08)', bg: '#D1FAE5', border: '#6EE7B7' },
-                'TRANSMISSION': { color: '#DB2777', glow: 'rgba(219, 39, 119, 0.08)', bg: '#FCE7F3', border: '#FBCFE8' },
+                'CROISSANCE':   { color: '#1F4D3A', glow: 'rgba(31, 77, 58, 0.08)', bg: '#E4ECE7', border: '#C8D6CD' },
+                'DEVELOPPEMENT':{ color: '#2E6B53', glow: 'rgba(46, 107, 83, 0.08)', bg: '#E9F1EC', border: '#C8D6CD' },
+                'TRANSMISSION': { color: '#A87A1F', glow: 'rgba(168, 122, 31, 0.08)', bg: '#FAF4E6', border: '#EAD49A' },
                 'HYGIENE':      { color: '#2E6B53', glow: 'rgba(79, 70, 229, 0.08)', bg: '#E0E7FF', border: '#C7D2FE' },
                 'ALL':          { color: '#2E6B53', glow: 'rgba(46, 107, 83, 0.08)', bg: '#E6F4F1', border: '#B2DFDB' }
             } %}

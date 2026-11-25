@@ -1,8 +1,12 @@
 {# Encart « Comprendre cette étape » (fonction Twig book_panel), dans le style des encadrés du livre : vert pâle, filet d'or #}
 <details class="book-panel" {{ open ? 'open' }} style="margin: 0 0 1.25rem; background: var(--primary-soft); border-left: 3px solid var(--gold); border-radius: 0 12px 12px 0; padding: .85rem 1.1rem; font-size: .9rem; color: var(--fg-light);">
-    <summary style="cursor: pointer; font-weight: 700; display: flex; align-items: center; gap: .5rem; list-style: none; color: var(--primary-dark);">
-        <i data-lucide="book-open" style="width: 16px; height: 16px; color: var(--gold);" aria-hidden="true"></i> Comprendre cette étape
-        <span style="font-weight: 500; font-family: var(--font-serif); font-style: italic; color: var(--fg-muted);">· {{ chapter.title }}</span>
+    <summary class="book-panel__summary">
+        <i data-lucide="book-open" class="book-panel__icon" aria-hidden="true"></i>
+        <span class="book-panel__labels">
+            <span class="book-panel__label">Comprendre cette étape</span>
+            <span class="book-panel__chapter">{{ chapter.title }}</span>
+        </span>
+        <i data-lucide="chevron-down" class="book-panel__chevron" aria-hidden="true"></i>
     </summary>
     <p style="margin: .6rem 0 .5rem; line-height: 1.6;">{{ chapter.excerpt }}</p>
     {% if chapter.sanctuary %}

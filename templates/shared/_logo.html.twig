@@ -1,0 +1,26 @@
+{# Logo unique de KIINI SAWA (contre-audit visuel du 25/11/2026) : le monogramme « KS » de l'icône de l'application
+   (filet d'or) + le nom, sur une ligne. Paramètres : tone 'light' (fond clair, par défaut) ou 'dark' (fond vert) ;
+   sub : accroche facultative sous le nom (« Plan de Vie », « Administration ») ; size 'md' (défaut) ou 'lg'. #}
+{% set tone = tone|default('light') %}
+<span class="ks-logo ks-logo--{{ tone }} ks-logo--{{ size|default('md') }}">
+    <span class="ks-logo__mark" aria-hidden="true">KS</span>
+    <span class="ks-logo__text">
+        <span class="ks-logo__name">KIINI SAWA</span>
+        {% if sub|default(false) %}<span class="ks-logo__sub">{{ sub }}</span>{% endif %}
+    </span>
+</span>
+<style>
+    .ks-logo { display: inline-flex; align-items: center; gap: .65rem; white-space: nowrap; flex-shrink: 0; text-decoration: none; }
+    .ks-logo__mark { position: relative; display: inline-flex; align-items: center; justify-content: center; width: 2.25rem; height: 2.25rem; border-radius: .7rem;
+        background: var(--primary, #2E6B53); color: #fff; font-family: var(--font-serif, 'Playfair Display', Georgia, serif); font-weight: 700; font-size: 1rem; letter-spacing: .02em; padding-bottom: .2rem; }
+    .ks-logo__mark::after { content: ""; position: absolute; left: 32%; right: 32%; bottom: .42rem; height: 2px; border-radius: 2px; background: var(--gold, #C8962E); }
+    .ks-logo__text { display: flex; flex-direction: column; line-height: 1.1; }
+    .ks-logo__name { font-family: var(--font-serif, 'Playfair Display', Georgia, serif); font-weight: 700; font-size: 1.15rem; letter-spacing: -.005em; color: var(--primary-dark, #1F4D3A); }
+    .ks-logo__sub { font-family: var(--font-sans, Inter, sans-serif); font-size: .6rem; font-weight: 700; letter-spacing: .18em; text-transform: uppercase; color: var(--fg-muted, #66706A); margin-top: .15rem; }
+    .ks-logo--dark .ks-logo__mark { background: #fff; color: var(--primary-dark, #1F4D3A); }
+    .ks-logo--dark .ks-logo__name { color: #fff; }
+    .ks-logo--dark .ks-logo__sub { color: rgba(255,255,255,.72); }
+    .ks-logo--lg .ks-logo__mark { width: 3rem; height: 3rem; border-radius: .9rem; font-size: 1.3rem; }
+    .ks-logo--lg .ks-logo__mark::after { bottom: .55rem; }
+    .ks-logo--lg .ks-logo__name { font-size: 1.6rem; }
+</style>

@@ -4,7 +4,7 @@
 
 {% block body %}
 {% if not app.user %}{% include 'shared/_public_header.html.twig' %}{% endif %}
-<div style="max-width: 820px; margin: 0 auto; padding: 2.5rem 1.25rem 8rem;">
+<div style="max-width: var(--page-standard); margin: 0 auto; padding: 2.5rem 1.25rem 8rem;">
     <h1 class="ks-header__title">La méthode KIINI SAWA</h1>
     <p class="ks-header__lead" style="margin-bottom: 2rem;">Les chapitres du livre, pour comprendre le sens de chaque étape de vos plans.{% if not app.user %} Les {{ publicCount }} premiers sont en libre lecture ; tous les autres s'ouvrent avec un compte gratuit.{% endif %}</p>
     {% if app.user %}

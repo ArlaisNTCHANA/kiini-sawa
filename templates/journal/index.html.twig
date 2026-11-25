@@ -5,7 +5,7 @@
 {% block body %}
 <style>
     .journal-wrap {
-        max-width: 850px;
+        max-width: var(--page-standard);
         margin: 0 auto;
         padding: 2.5rem 1.5rem 8rem;
     }
@@ -55,7 +55,7 @@
         border-color: rgba(46, 107, 83, 0.15);
         transform: translateY(-1px);
     }
-    .type-pill.active-idea { background: #EAB308 !important; color: white !important; box-shadow: 0 4px 14px rgba(234, 179, 8, 0.3) !important; border-color: #EAB308 !important; }
+    .type-pill.active-idea { background: #C8962E !important; color: white !important; box-shadow: 0 4px 14px rgba(200, 150, 46, 0.3) !important; border-color: #C8962E !important; }
     .type-pill.active-reflection { background: var(--success) !important; color: white !important; box-shadow: 0 4px 14px rgba(16, 185, 129, 0.3) !important; border-color: var(--success) !important; }
     .type-pill.active-resolution { background: #5E8463 !important; color: white !important; box-shadow: 0 4px 14px rgba(94, 148, 121, 0.3) !important; border-color: #5E8463 !important; }
     .type-pill.active-milestone { background: #B3402A !important; color: white !important; box-shadow: 0 4px 14px rgba(244, 63, 94, 0.3) !important; border-color: #B3402A !important; }
@@ -117,9 +117,9 @@
         box-shadow: 0 2px 6px rgba(0, 0, 0, 0.02);
     }
     .collection-btn.active {
-        background: var(--fg);
+        background: var(--primary);
         color: white;
-        box-shadow: 0 4px 12px rgba(15, 23, 42, 0.15);
+        box-shadow: 0 4px 12px rgba(46, 107, 83, 0.2);
         border-color: var(--fg);
     }
 
@@ -201,6 +201,13 @@
         <span x-text="toast.message"></span>
     </div>
 
+    {# Header Description #}
+    <header class="ks-header">
+        <span class="ks-header__eyebrow"><i data-lucide="book-open" style="width: 14px; height: 14px;"></i>Mon journal</span>
+        <h1 class="ks-header__title" x-text="activeCollectionName()"></h1>
+        <p class="ks-header__lead">Notez vos pensées, vos prières et vos victoires pour les retrouver quand vous en aurez besoin.</p>
+    </header>
+
     {# ══════════════════════════════════════════════════════
        SECTION 1 — TOPBAR / COLLECTIONS
     ══════════════════════════════════════════════════════ #}
@@ -240,12 +247,6 @@
         </div>
     </section>
 
-    {# Header Description #}
-    <header class="ks-header">
-        <span class="ks-header__eyebrow"><i data-lucide="book-open" style="width: 14px; height: 14px;"></i>Mon journal</span>
-        <h1 class="ks-header__title" x-text="activeCollectionName()"></h1>
-        <p class="ks-header__lead">Notez vos pensées, vos prières et vos victoires pour les retrouver quand vous en aurez besoin.</p>
-    </header>
 
     <div style="display: flex; flex-direction: column; gap: 3rem;">
         {# ══════════════════════════════════════════════════════
@@ -268,7 +269,7 @@
                 <button @click="capture.type = '{{ t.value }}'"
                         class="type-pill"
                         :class="capture.type === '{{ t.value }}' ? 'active-{{ t.value|lower }}' : ''"
-                        style="--t-color: {% if t.value == 'IDEA' %}#EAB308{% elseif t.value == 'REFLECTION' %}var(--success){% elseif t.value == 'RESOLUTION' %}#5E8463{% elseif t.value == 'MILESTONE' %}#B3402A{% elseif t.value == 'TEMOIGNAGE' %}#3D7A5F{% else %}var(--primary-light){% endif %};">
+                        style="--t-color: {% if t.value == 'IDEA' %}#C8962E{% elseif t.value == 'REFLECTION' %}var(--success){% elseif t.value == 'RESOLUTION' %}#5E8463{% elseif t.value == 'MILESTONE' %}#B3402A{% elseif t.value == 'TEMOIGNAGE' %}#3D7A5F{% else %}var(--primary-light){% endif %};">
                     <i data-lucide="{{ t.icon }}" style="width: 13px; height: 13px;"></i>
                     <span>{{ t.label }}</span>
                 </button>
@@ -348,7 +349,7 @@
                     {# Energy Slider #}
                     <div style="display: flex; align-items: center; gap: 0.625rem;">
                         <i data-lucide="zap" style="width: 15px; height: 15px; flex-shrink: 0; transition: color 0.2s;"
-                           :style="capture.energy >= 7 ? 'color: #EAB308; fill: #EAB308' : 'color: #cbd5e1'"></i>
+                           :style="capture.energy >= 7 ? 'color: #C8962E; fill: #C8962E' : 'color: #cbd5e1'"></i>
                         <input type="range" min="1" max="10" x-model.number="capture.energy"
                                style="width: 6rem; accent-color: var(--primary); height: 4px; cursor: pointer;">
                         <span style="font-size: 0.875rem; font-weight: 800; color: var(--fg); min-width: 1.25rem;"
@@ -358,12 +359,7 @@
                     {# Send button #}
                     <button :disabled="isSubmitting || !capture.content.trim()"
                             @click="submitCapture()"
-                            :style="capture.content.trim()
-                                ? 'background: var(--primary); box-shadow: 0 4px 14px rgba(46, 107, 83, 0.35); cursor: pointer;'
-                                : 'background: rgba(46, 107, 83, 0.25); cursor: not-allowed;'"
-                            style="display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.7rem 1.5rem; white-space: nowrap; margin-left: auto;
-                                   border-radius: var(--r-md); font-size: 0.825rem; font-weight: 700; color: white;
-                                   transition: all 0.25s var(--ease); border: none; font-family: var(--font-sans); height: 2.75rem;">
+                            class="ks-btn ks-btn--primary" style="margin-left: auto; white-space: nowrap;">
                         <i data-lucide="send" style="width: 14px; height: 14px;"></i>
                         <span x-text="isSubmitting ? 'Envoi…' : 'Enregistrer'"></span>
                     </button>
@@ -477,7 +473,7 @@
                                 <template x-if="entry.energy !== null">
                                     <div style="display: flex; align-items: center; gap: 0.5rem; margin-top: 0.5rem; border-top: 1px solid rgba(0,0,0,0.03); padding-top: 0.75rem;">
                                         <div style="display: flex; align-items: center; gap: 0.25rem; font-size: 0.7rem; font-weight: 700; color: var(--fg-muted); text-transform: uppercase;">
-                                            <i data-lucide="zap" style="width: 12px; height: 12px; color: #EAB308; fill: #EAB308;"></i>
+                                            <i data-lucide="zap" style="width: 12px; height: 12px; color: #C8962E; fill: #C8962E;"></i>
                                             <span>Énergie</span>
                                         </div>
                                         <div style="height: 4px; background: var(--border); border-radius: 999px; flex: 1; max-width: 80px; overflow: hidden;">

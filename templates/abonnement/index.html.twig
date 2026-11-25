@@ -6,7 +6,7 @@
 {% set freeTestNames = [] %}{% for slug in free_tests() %}{% set freeTestNames = freeTestNames|merge([constant('App\\Personnalite\\Psychometrie\\Instruments::CATALOG')[slug].name]) %}{% endfor %}
 {% set freeTestsLabel = freeTestNames ? (freeTestNames|length > 1 ? 'Tests de personnalité : ' : 'Test de personnalité : ') ~ freeTestNames|join(', ') ~ ', avec leur rapport complet' : 'Tests de personnalité' %}
 <style>
-    .ab-wrap { max-width: 900px; margin: 0 auto; padding: 2.5rem 1.25rem 8rem; }
+    .ab-wrap { max-width: var(--page-standard); margin: 0 auto; padding: 2.5rem 1.25rem 8rem; }
     .ab-card { background: var(--card-bg); border-radius: var(--r-lg); box-shadow: var(--card-shadow); padding: 1.5rem; margin-bottom: 1.25rem; }
     .ab-card h2 { font-family: var(--font-serif); font-size: 1.3rem; margin-bottom: .75rem; }
     .ab-status { display: flex; align-items: center; gap: .75rem; flex-wrap: wrap; }

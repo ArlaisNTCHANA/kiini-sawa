@@ -190,7 +190,7 @@
 
 {% block body %}
 <div style="min-height: 100vh; background: var(--page-bg, #f8f7f4);">
-<div style="max-width: 960px; margin: 0 auto; padding: 0 1.5rem 4rem;">
+<div style="max-width: var(--page-standard); margin: 0 auto; padding: 0 1.5rem 4rem;">
 
     {# ── Hero ── #}
     <div class="tests-hero">
@@ -211,7 +211,7 @@
     </div>
 
     {# ── Synthèse croisée ── #}
-    <a href="{{ path('app_synthesis') }}" style="display:flex;align-items:center;gap:1rem;background:#0F172A;color:#fff;border-radius:18px;padding:1.1rem 1.25rem;margin-bottom:1.25rem;text-decoration:none;">
+    <a href="{{ path('app_synthesis') }}" style="display:flex;align-items:center;gap:1rem;background:linear-gradient(135deg, var(--primary-dark), var(--primary));color:#fff;border-radius:18px;padding:1.1rem 1.25rem;margin-bottom:1.25rem;text-decoration:none;">
         <span style="flex:none;width:44px;height:44px;border-radius:12px;background:#2E6B53;display:flex;align-items:center;justify-content:center;"><i data-lucide="sparkles" style="width:22px;height:22px;color:#fff;"></i></span>
         <span style="flex:1;">
             <span style="display:block;font-family:var(--font-serif);font-size:1.15rem;font-weight:700;">Mon profil KIINI SAWA</span>

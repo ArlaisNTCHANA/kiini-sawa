@@ -4,8 +4,12 @@
 
 {% block body %}
 <style>
+    .bilan-more { display: flex; flex-wrap: wrap; gap: .4rem 1.25rem; margin-top: .9rem; font-size: .9rem; }
+    .bilan-more a { display: inline-flex; align-items: center; gap: .35rem; color: var(--primary); font-weight: 600; text-decoration: none; }
+    .bilan-more a:hover { text-decoration: underline; }
+    .bilan-more svg { width: 15px; height: 15px; }
     .bilan-wrap {
-        max-width: 900px;
+        max-width: var(--page-standard);
         margin: 0 auto;
         padding: 2.5rem 1.5rem 8rem;
     }
@@ -236,24 +240,16 @@
     <header class="ks-header">
         <h1 class="ks-header__title">Mon bilan</h1>
         <p class="ks-header__lead">Évaluez vos progrès, suivez votre discipline et observez votre évolution.</p>
-        <a href="{{ path('app_rhythms') }}" class="bilan-btn" style="margin-top: 1.25rem; display: inline-flex; align-items: center; gap: .5rem; text-decoration: none;">
-            <i data-lucide="repeat" class="w-4 h-4"></i> Mes rythmes
-        </a>
-        <a href="{{ path('app_weekly_review') }}" class="bilan-btn" style="margin-top: 1.25rem; margin-left: .5rem; display: inline-flex; align-items: center; gap: .5rem; text-decoration: none;">
-            <i data-lucide="calendar-check" class="w-4 h-4"></i> Faire ma revue de la semaine
-        </a>
-        <a href="{{ path('app_monthly_review') }}" class="bilan-btn" style="margin-top: 1.25rem; margin-left: .5rem; display: inline-flex; align-items: center; gap: .5rem; text-decoration: none; background: var(--bg-alt); color: var(--fg);">
-            <i data-lucide="calendar-range" class="w-4 h-4"></i> Revue du mois
-        </a>
-        <a href="{{ path('app_daily_review') }}" class="bilan-btn" style="margin-top: 1.25rem; margin-left: .5rem; display: inline-flex; align-items: center; gap: .5rem; text-decoration: none; background: var(--bg-alt); color: var(--fg);">
-            <i data-lucide="moon" class="w-4 h-4"></i> Bilan du jour
-        </a>
-        <a href="{{ path('app_season') }}" class="bilan-btn" style="margin-top: 1.25rem; margin-left: .5rem; display: inline-flex; align-items: center; gap: .5rem; text-decoration: none; background: var(--bg-alt); color: var(--fg);">
-            <i data-lucide="sprout" class="w-4 h-4"></i> Ma saison
-        </a>
+        {# Une seule action principale (contre-audit visuel du 25/11/2026) ; les autres revues en liens secondaires #}
+        <div class="ks-header__actions">
+            <a href="{{ path('app_weekly_review') }}" class="ks-btn ks-btn--primary"><i data-lucide="calendar-check"></i> Faire ma revue de la semaine</a>
+            <a href="{{ path('app_daily_review') }}" class="ks-btn ks-btn--secondary"><i data-lucide="moon"></i> Bilan du jour</a>
+            <a href="{{ path('app_monthly_review') }}" class="ks-btn ks-btn--secondary"><i data-lucide="calendar-range"></i> Revue du mois</a>
+        </div>
+        <p class="bilan-more"><a href="{{ path('app_rhythms') }}"><i data-lucide="repeat"></i> Mes rythmes</a><a href="{{ path('app_season') }}"><i data-lucide="sprout"></i> Ma saison</a></p>
     </header>
-    <div style="max-width: 760px; margin: 0 auto 1.5rem;">{{ book_panel('bilan') }}</div>
-    <div style="max-width: 760px; margin: 0 auto;">{% include 'methode/_figure.html.twig' with {name: 'fig_revues', alt: 'Les revues : hebdomadaire, mensuelle, de saison, annuelle', caption: 'mes rythmes de revue', collapsed: true, max: '600px'} only %}</div>
+    <div style="margin: 0 0 1.5rem;">{{ book_panel('bilan') }}</div>
+    <div>{% include 'methode/_figure.html.twig' with {name: 'fig_revues', alt: 'Les revues : hebdomadaire, mensuelle, de saison, annuelle', caption: 'mes rythmes de revue', collapsed: true, max: '600px'} only %}</div>
 
     <!-- Tabs Navigation -->
     <nav style="display: flex; gap: 0.5rem; justify-content: center; flex-wrap: wrap; margin-bottom: 2.5rem;">

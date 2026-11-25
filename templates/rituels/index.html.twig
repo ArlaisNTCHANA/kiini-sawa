@@ -5,7 +5,7 @@
 {% block body %}
 <style>
     .rituals-wrap {
-        max-width: 1000px;
+        max-width: var(--page-standard);
         margin: 0 auto;
         padding: 2.5rem 1.5rem 8rem;
     }
@@ -324,10 +324,10 @@
         {# Pillar Filters #}
         {% set pillars = [
             { id: 'ALL',          label: 'Tout',          color: '#2E6B53', glow: 'rgba(46, 107, 83, 0.15)' },
-            { id: 'CROISSANCE',   label: 'Croissance',    color: '#D97706', glow: 'rgba(217, 119, 6, 0.15)' },
-            { id: 'DEVELOPPEMENT',label: 'Développement', color: '#059669', glow: 'rgba(5, 150, 105, 0.15)' },
-            { id: 'TRANSMISSION', label: 'Transmission',  color: '#DB2777', glow: 'rgba(219, 39, 119, 0.15)' },
-            { id: 'HYGIENE',      label: 'Hygiène',       color: '#2E6B53', glow: 'rgba(79, 70, 229, 0.15)' },
+            { id: 'CROISSANCE',   label: 'Croissance',    color: '#1F4D3A', glow: 'rgba(31, 77, 58, 0.15)' },
+            { id: 'DEVELOPPEMENT',label: 'Développement', color: '#2E6B53', glow: 'rgba(46, 107, 83, 0.15)' },
+            { id: 'TRANSMISSION', label: 'Transmission',  color: '#A87A1F', glow: 'rgba(168, 122, 31, 0.15)' },
+            { id: 'HYGIENE',      label: 'Hygiène',       color: '#5D7368', glow: 'rgba(93, 115, 104, 0.15)' },
         ] %}
         <div style="display: flex; flex-wrap: wrap; gap: 0.5rem; justify-content: center; margin-bottom: 0.5rem;">
             {% for p in pillars %}
@@ -383,17 +383,17 @@
                                         {% set pText = 'Général' %}
                                         {% if habit.growthGoal is not null %}
                                             {% set hPillar = 'CROISSANCE' %}
-                                            {% set pColor = '#D97706' %}
+                                            {% set pColor = '#1F4D3A' %}
                                             {% set pGlow = 'rgba(217, 119, 6, 0.08)' %}
                                             {% set pText = 'Croissance' %}
                                         {% elseif habit.skillGoal is not null %}
                                             {% set hPillar = 'DEVELOPPEMENT' %}
-                                            {% set pColor = '#059669' %}
+                                            {% set pColor = '#2E6B53' %}
                                             {% set pGlow = 'rgba(5, 150, 105, 0.08)' %}
                                             {% set pText = 'Développement' %}
                                         {% elseif habit.legacyGoal is not null %}
                                             {% set hPillar = 'TRANSMISSION' %}
-                                            {% set pColor = '#DB2777' %}
+                                            {% set pColor = '#A87A1F' %}
                                             {% set pGlow = 'rgba(219, 39, 119, 0.08)' %}
                                             {% set pText = 'Transmission' %}
                                         {% elseif habit.hygieneDomain is not null %}
@@ -505,17 +505,17 @@
                 {% set pText = 'Général' %}
                 {% if habit.growthGoal is not null %}
                     {% set hPillar = 'CROISSANCE' %}
-                    {% set pColor = '#D97706' %}
+                    {% set pColor = '#1F4D3A' %}
                     {% set pGlow = 'rgba(217, 119, 6, 0.08)' %}
                     {% set pText = 'Croissance' %}
                 {% elseif habit.skillGoal is not null %}
                     {% set hPillar = 'DEVELOPPEMENT' %}
-                    {% set pColor = '#059669' %}
+                    {% set pColor = '#2E6B53' %}
                     {% set pGlow = 'rgba(5, 150, 105, 0.08)' %}
                     {% set pText = 'Développement' %}
                 {% elseif habit.legacyGoal is not null %}
                     {% set hPillar = 'TRANSMISSION' %}
-                    {% set pColor = '#DB2777' %}
+                    {% set pColor = '#A87A1F' %}
                     {% set pGlow = 'rgba(219, 39, 119, 0.08)' %}
                     {% set pText = 'Transmission' %}
                 {% elseif habit.hygieneDomain is not null %}
@@ -629,9 +629,9 @@
                             </span>
                             <p style="font-family: var(--font-serif); font-size: 1.15rem; line-height: 1.6; color: var(--fg); margin: 0;">
                                 Quand je <span style="border-bottom: 2px dashed var(--primary-light); padding: 0 4px; font-weight: 600;" :style="rooting.rootingAnchor ? 'color: #3D7A5F; border-bottom-style: solid;' : 'color: #94A3B8;'" x-text="rooting.rootingAnchor || '... routine ancre ...'"></span>, 
-                                je vais <span style="border-bottom: 2px dashed var(--warning); padding: 0 4px; font-weight: 600;" :style="rooting.rootingAction ? 'color: #D97706; border-bottom-style: solid;' : 'color: #94A3B8;'" x-text="rooting.rootingAction || '... action minimale ...'"></span> 
+                                je vais <span style="border-bottom: 2px dashed var(--warning); padding: 0 4px; font-weight: 600;" :style="rooting.rootingAction ? 'color: var(--accent); border-bottom-style: solid;' : 'color: #94A3B8;'" x-text="rooting.rootingAction || '... action minimale ...'"></span> 
                                 à/en <span style="border-bottom: 2px dashed #2E6B53; padding: 0 4px; font-weight: 600;" :style="rooting.rootingMoment ? 'color: #2E6B53; border-bottom-style: solid;' : 'color: #94A3B8;'" x-text="rooting.rootingMoment || '... moment ...'"></span> 
-                                pour obtenir <span style="border-bottom: 2px dashed var(--couple); padding: 0 4px; font-weight: 600;" :style="rooting.rootingBenefit ? 'color: #DB2777; border-bottom-style: solid;' : 'color: #94A3B8;'" x-text="rooting.rootingBenefit || '... récompense ...'"></span>.
+                                pour obtenir <span style="border-bottom: 2px dashed var(--couple); padding: 0 4px; font-weight: 600;" :style="rooting.rootingBenefit ? 'color: var(--couple); border-bottom-style: solid;' : 'color: #94A3B8;'" x-text="rooting.rootingBenefit || '... récompense ...'"></span>.
                             </p>
                         </div>
                     </div>
@@ -816,17 +816,17 @@
                     {% set pText = 'Général' %}
                     {% if habit.growthGoal is not null %}
                         {% set hPillar = 'CROISSANCE' %}
-                        {% set pColor = '#D97706' %}
+                        {% set pColor = '#1F4D3A' %}
                         {% set pGlow = 'rgba(217, 119, 6, 0.08)' %}
                         {% set pText = 'Croissance' %}
                     {% elseif habit.skillGoal is not null %}
                         {% set hPillar = 'DEVELOPPEMENT' %}
-                        {% set pColor = '#059669' %}
+                        {% set pColor = '#2E6B53' %}
                         {% set pGlow = 'rgba(5, 150, 105, 0.08)' %}
                         {% set pText = 'Développement' %}
                     {% elseif habit.legacyGoal is not null %}
                         {% set hPillar = 'TRANSMISSION' %}
-                        {% set pColor = '#DB2777' %}
+                        {% set pColor = '#A87A1F' %}
                         {% set pGlow = 'rgba(219, 39, 119, 0.08)' %}
                         {% set pText = 'Transmission' %}
                     {% elseif habit.hygieneDomain is not null %}

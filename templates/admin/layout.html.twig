@@ -54,8 +54,7 @@
 
 <aside class="ks-admin-side" :class="{ 'is-open': menu }" aria-label="Menu de l'administration" id="admin-menu">
     <a class="ks-admin-brand" href="{{ path('admin_dashboard') }}">
-        <img src="{{ asset('icons/icon-192.png') }}" alt="" width="36" height="36">
-        <span><span class="ks-admin-brand__name">KIINI SAWA</span><span class="ks-admin-brand__sub">Administration</span></span>
+        {% include 'shared/_logo.html.twig' with {sub: 'Administration'} only %}
     </a>
     <nav class="ks-admin-nav">
         {% for key, group in nav %}

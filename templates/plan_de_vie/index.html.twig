@@ -5,7 +5,7 @@
 {% block body %}
 <style>
     .life-wrap {
-        max-width: 1080px;
+        max-width: var(--page-wide);
         margin: 0 auto;
         padding: 2.5rem 1.5rem 8rem;
     }
@@ -15,82 +15,18 @@
         }
     }
 
-    /* Choice / Welcome Hero Header */
-    .hero-choice {
-        background: rgba(255, 255, 255, 0.85);
-        backdrop-filter: blur(20px);
-        border: 1px solid rgba(46, 107, 83, 0.08);
-        border-radius: 2.5rem;
-        padding: 2.5rem;
-        box-shadow: var(--card-shadow);
-        margin-bottom: 3rem;
-        position: relative;
-        overflow: hidden;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        text-align: center;
-        gap: 1.5rem;
-    }
-    .hero-choice::before {
-        content: '';
-        position: absolute;
-        top: -10%; left: -10%;
-        width: 30%; height: 50%;
-        background: radial-gradient(circle, rgba(61, 122, 95, 0.08) 0%, transparent 70%);
-        pointer-events: none;
-    }
-    .hero-choice::after {
-        content: '';
-        position: absolute;
-        bottom: -10%; right: -10%;
-        width: 40%; height: 60%;
-        background: radial-gradient(circle, rgba(180, 83, 9, 0.05) 0%, transparent 70%);
-        pointer-events: none;
-    }
-    .hero-badge {
-        background: var(--primary-glow);
-        color: var(--primary);
-        font-size: 0.725rem;
-        font-weight: 850;
-        text-transform: uppercase;
-        letter-spacing: 0.12em;
-        padding: 0.5rem 1.25rem;
-        border-radius: 9999px;
-        border: 1px solid rgba(46, 107, 83, 0.12);
-        display: inline-flex;
-        align-items: center;
-        gap: 0.375rem;
-    }
-    .hero-title {
-        font-family: var(--font-serif);
-        font-size: clamp(1.85rem, 4.5vw, 2.85rem);
-        color: var(--primary);
-        font-weight: 500;
-        line-height: 1.2;
-        max-width: 600px;
-    }
-    .hero-desc {
-        color: var(--fg-muted);
-        font-size: 1.05rem;
-        max-width: 580px;
-        line-height: 1.6;
-    }
-    .hero-actions {
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: center;
-        gap: 1rem;
-        margin-top: 0.5rem;
-        position: relative;
-        z-index: 5;
-    }
+    /* En-tête : même modèle que toutes les pages (ks-header), aligné à gauche, sans carte (contre-audit visuel du 25/11/2026) */
+    .hero-choice { display: flex; flex-direction: column; align-items: flex-start; text-align: left; gap: .5rem; margin-bottom: 2rem; }
+    .hero-badge { display: inline-flex; align-items: center; gap: .4rem; font-size: .72rem; font-weight: 800; letter-spacing: .14em; text-transform: uppercase; color: var(--primary); }
+    .hero-title { font-family: var(--font-serif); font-weight: 600; color: var(--primary); font-size: clamp(1.75rem, 4vw, 2.25rem); line-height: 1.2; }
+    .hero-desc { color: var(--fg-muted); font-size: 1rem; line-height: 1.6; max-width: 680px; }
+    .hero-actions { display: flex; flex-wrap: wrap; gap: .6rem; margin-top: .75rem; position: relative; z-index: 5; }
     .btn-hero-primary {
         display: inline-flex;
         align-items: center;
         gap: 0.5rem;
-        padding: 0.95rem 1.85rem;
-        background: linear-gradient(135deg, var(--primary-light) 0%, var(--primary) 100%);
+        padding: 0.8rem 1.4rem;
+        background: var(--primary);
         color: white;
         font-weight: 750;
         font-size: 0.95rem;
@@ -107,7 +43,7 @@
         display: inline-flex;
         align-items: center;
         gap: 0.5rem;
-        padding: 0.95rem 1.85rem;
+        padding: 0.8rem 1.4rem;
         background: white;
         color: var(--fg-light);
         font-weight: 750;
@@ -932,7 +868,7 @@
             Espace Plan de Vie
         </div>
         <h1 class="hero-title">Mon Plan de Vie</h1>
-        <p style="font-family: var(--font-serif); font-style: italic; font-size: 1.25rem; color: var(--fg); margin: -.25rem 0 .5rem;">{{ constant('App\\PlanDeVie\\Service\\PlanCatalog::PLANS').VIE.question }}</p>
+        <p style="font-family: var(--font-serif); font-style: italic; font-size: 1.15rem; color: var(--fg-light); margin: 0;">{{ constant('App\\PlanDeVie\\Service\\PlanCatalog::PLANS').VIE.question }}</p>
         <p class="hero-desc">
             Construisez un plan d'alignement personnel complet. Choisissez l'assistant pas à pas pour être guidé à chaque étape, ou modifiez librement chaque rubrique ci-dessous.
         </p>

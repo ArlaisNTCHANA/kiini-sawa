@@ -16,7 +16,7 @@
     .book-body th, .book-body td { border: 1px solid var(--border); padding: .45rem .6rem; text-align: left; }
 </style>
 {% if not app.user %}{% include 'shared/_public_header.html.twig' %}{% endif %}
-<article style="max-width: 720px; margin: 0 auto; padding: 2.5rem 1.25rem 8rem;">
+<article style="max-width: var(--page-reading); margin: 0 auto; padding: 2.5rem 1.25rem 8rem;">
     <a href="{{ path('app_methode_index') }}" class="ks-header__back">← La méthode</a>
     {% set partCovers = {'plan-et-providence': 1, 'but-de-dieu': 2, 'puissance-sans-plan': 3, 'competence-et-connaissance': 4, 'hygiene-de-vie': 5, 'intendance': 6, 'perspective-de-l-eternite': 7, 'carte-strategique': 8} %}
     {% if partCovers[chapter.slug] is defined %}

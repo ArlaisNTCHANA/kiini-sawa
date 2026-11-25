@@ -141,7 +141,7 @@ class SiteTextsTest extends WebTestCase
     {
         $client = static::createClient();
         $client->request('GET', '/mentions-legales');
-        $this->assertStringContainsString('Version de travail', $client->getResponse()->getContent());
+        $this->assertStringContainsString('est en cours', $client->getResponse()->getContent());
 
         $this->admin($client);
         $crawler = $client->request('GET', '/admin/textes/modifier?code=legal.mentions_legales');
@@ -153,7 +153,7 @@ class SiteTextsTest extends WebTestCase
         $anon->request('GET', '/mentions-legales');
         $html = $anon->getResponse()->getContent();
         $this->assertStringContainsString('KIINI SAWA SAS, 1 rue Exemple.', $html);
-        $this->assertStringNotContainsString('Version de travail', $html, 'plus de passage à compléter : l\'avertissement disparaît');
+        $this->assertStringNotContainsString('est en cours', $html, 'plus de passage à compléter : l\'avertissement disparaît');
     }
 
     public function testAdminAccessRulesAndUnknownCodes(): void

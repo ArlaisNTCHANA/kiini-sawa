@@ -3,7 +3,7 @@
 {% block title %}Revue du mois{% endblock %}
 
 {% block body %}
-<div style="max-width: 820px; margin: 0 auto; padding: 2.5rem 1.25rem 8rem;">
+<div style="max-width: var(--page-standard); margin: 0 auto; padding: 2.5rem 1.25rem 8rem;">
     <a href="{{ path('app_bilan') }}" class="ks-header__back">← Bilan</a>
     <h1 class="ks-header__title">Revue de {{ monthLabel }}</h1>
     <p style="color: var(--fg-muted); margin: .35rem 0 1.5rem;">Prendre de la hauteur une fois par mois : regarder le chemin parcouru et décider de la suite.{% if review %}<br><strong>Revue déjà faite</strong> : vous pouvez la compléter.{% endif %}</p>

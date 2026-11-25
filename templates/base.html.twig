@@ -76,7 +76,10 @@
             align-items: center;
             gap: 0.75rem;
             text-decoration: none;
+            margin-right: .75rem;
+            flex-shrink: 0;
         }
+        @media (max-width: 1380px) { .topnav-logo .ks-logo__sub { display: none; } #ks-top-nav { padding: 0 1.25rem !important; } .topnav-user-name { display: none; } }
         .topnav-logo-icon {
             width: 2.25rem;
             height: 2.25rem;
@@ -354,18 +357,8 @@
             @click.outside.window="userOpen = false">
 
         {# Logo #}
-        <a href="{{ path('app_dashboard') }}" class="topnav-logo">
-            <div class="topnav-logo-icon">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5">
-                    <path d="M12 2L2 7l10 5 10-5-10-5z"/>
-                    <path d="M2 17l10 5 10-5"/>
-                    <path d="M2 12l10 5 10-5"/>
-                </svg>
-            </div>
-            <div>
-                <div class="topnav-logo-text">KIINI SAWA</div>
-                <div class="topnav-logo-sub">Plan de Vie</div>
-            </div>
+        <a href="{{ path('app_dashboard') }}" class="topnav-logo" aria-label="KIINI SAWA, Aujourd'hui">
+            {% include 'shared/_logo.html.twig' with {sub: 'Plan de Vie'} only %}
         </a>
 
         {# Navigation : six rubriques (une seule définition : App\Shared\Twig\NavigationExtension) #}

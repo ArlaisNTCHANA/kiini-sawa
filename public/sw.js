@@ -4,7 +4,7 @@
  *   lit la copie gardée sur le téléphone) pour les écrans du quotidien, sinon la page « hors ligne ».
  * - Fichiers compilés (/assets/…, noms versionnés) et icônes : mis en cache pour un chargement rapide.
  */
-const VERSION = 'ks-v3';
+const VERSION = 'ks-v4'; // v4 : icônes au vert du livre (25/11/2026)
 const OFFLINE_URL = '/hors-ligne';
 // « Aujourd'hui en un geste » : la coquille (sans donnée personnelle) est gardée pour fonctionner sans réseau
 const QUICK_URL = '/rapide';
