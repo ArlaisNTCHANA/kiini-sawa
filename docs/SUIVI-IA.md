@@ -9,6 +9,19 @@ teste (`php bin/phpunit`), commit, déploie (`bin/ops/envoyer-hostinger.sh`), v�
 journal `var/log/prod-AAAA-MM-JJ.log` sans erreur) ; **le fondateur fait lui-même `git push`** (refusé à l'IA).
 Ne jamais afficher ni demander de mot de passe ; ne pas publier son nom (mentions légales en attente).
 
+## 25/11/2026 — Parcours « nouvel utilisateur » en production (test à l'écran, utilisateur assidu)
+
+- **Demande du fondateur** : se comporter comme un nouvel inscrit sur kiinisawa.com, à l'écran (téléphone puis
+  ordinateur), et remplir les 6 plans comme un utilisateur très assidu. Compte réel créé (prénom « Testeur ») ; le
+  fondateur a tapé lui-même le mot de passe et le code.
+- **Rapport** : `docs/parcours-nouvel-utilisateur-2026-11-25.md` (carnet étape par étape, top 10) + captures
+  `docs/parcours-nouvel-utilisateur-2026-11-25/`. Aucun code modifié.
+- **Bugs graves trouvés** : (1) Plan de Transmission, `POST /plan-de-vie/assistant?step=11&single=0&plan=TRANSMISSION`
+  → 500 à chaque essai, rien enregistré, aucun message (voir `var/log/prod-2026-11-25.log`) ; erreur JS
+  « allLifeGoals has already been declared » en navigation Turbo entre assistants. (2) Test Équilibre de Vie :
+  rapport à 0,0/10 partout malgré des réponses 4 à 8 (« consulter un médecin »).
+- **Reste** : corriger le top 10 du rapport selon le choix du fondateur ; e-mails reçus par le compte à confirmer.
+
 ## 25/11/2026 — Page de connexion : panneau du livre, œil du mot de passe, champs préremplis
 
 - **Remarque du fondateur** (capture de la connexion sur ordinateur) : champs bleu pâle, grand vide en bas.
