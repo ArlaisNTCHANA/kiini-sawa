@@ -1,0 +1,24 @@
+{#
+    Vignette d'un parcours : l'image envoyée dans le studio, sinon une composition dessinée aux couleurs du plan
+    principal, avec son icône et le mot choisi par l'auteur. Aucune image externe.
+    Paramètres : course, access (bool, affiche Gratuit / PRO), image (adresse forcée, pour l'aperçu du studio, facultatif).
+#}
+{% set look = academie_apparence(course.place) %}
+{% set src = image|default(academie_vignette(course)) %}
+<div class="academie-vignette" style="--c: {{ look.color }};">
+    {% if src %}
+        <img src="{{ src }}" alt="" loading="lazy" decoding="async">
+    {% else %}
+        <div class="academie-vignette__dessin" aria-hidden="true">
+            <span class="academie-vignette__icone"><i data-lucide="{{ look.icon }}"></i></span>
+            {% if course.coverWord %}<span class="academie-vignette__mot">{{ course.coverWord }}</span>{% endif %}
+        </div>
+    {% endif %}
+    {% if access|default(false) %}
+        {% if course.free %}
+            <span class="academie-vignette__acces academie-vignette__acces--libre">{{ t('academie.carte.gratuit', 'Gratuit') }}</span>
+        {% else %}
+            <span class="academie-vignette__acces"><i data-lucide="sparkles"></i> {{ t('academie.carte.pro_court', 'PRO') }}</span>
+        {% endif %}
+    {% endif %}
+</div>

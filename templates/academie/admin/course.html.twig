@@ -2,7 +2,7 @@
 {% set name = course ? course.title : 'Nouveau parcours' %}
 {% set token = csrf_token('admin_academie') %}
 {% block title %}{{ name }}{% endblock %}
-{% block stylesheets %}{% include 'academie/admin/_styles.html.twig' %}{% endblock %}
+{% block stylesheets %}{% include 'academie/_styles.html.twig' %}{% include 'academie/admin/_styles.html.twig' %}{% endblock %}
 {% block page_title %}{{ name }}{% endblock %}
 {% block crumbs %}<span aria-hidden="true">›</span><span aria-current="page">{{ name }}</span>{% endblock %}
 {% block page_actions %}{% if course %}<a href="{{ path('admin_academie_preview', {id: course.id}) }}" class="ks-btn ks-btn--secondary"><i data-lucide="eye"></i> Prévisualiser comme un apprenant</a>{% endif %}{% endblock %}
@@ -70,6 +70,83 @@
     </form>
 
     {% if course %}
+        {% set six = academie_six_plans(course) %}
+        {% set cover_url = academie_vignette(course) %}
+        <section class="ks-card" id="vignette" x-data="{ image: {{ (cover_url ?? '')|json_encode|e('html_attr') }}, word: {{ (course.coverWord ?? '')|json_encode|e('html_attr') }}, pick(e) { const f = e.target.files[0]; if (f) { this.image = URL.createObjectURL(f); } } }">
+            <h2 class="ks-card__title"><i data-lucide="image"></i> Vignette et plans couverts</h2>
+            <p class="ks-help">La vignette apparaît sur la carte du parcours dans l'Académie et en grand en haut de sa page. Sans image, une vignette est dessinée aux couleurs du plan principal, avec son icône et le mot de votre choix.</p>
+            <div class="ac-cover-grid">
+                <form method="post" action="{{ path('admin_academie_cover', {id: course.id}) }}" enctype="multipart/form-data" class="ks-stack">
+                    <input type="hidden" name="_csrf_token" value="{{ token }}">
+                    <div class="ks-field">
+                        <label class="ks-label" for="cover">Envoyer une image</label>
+                        <input class="ks-input" type="file" id="cover" name="cover" accept="image/jpeg,image/png,image/webp" x-on:change="pick($event)">
+                        <p class="ks-help">JPEG, PNG ou WebP, 10 Mo au plus, de préférence en largeur (format 16/9, 1600 × 900 pixels par exemple). L'image est allégée automatiquement. N'envoyez que des images que vous avez le droit de publier.</p>
+                    </div>
+                    {% if images %}
+                        <fieldset class="ks-field">
+                            <legend class="ks-label">Ou choisir une image du parcours</legend>
+                            <div class="ac-cover-choices">
+                                <label class="ac-cover-choice"><input type="radio" name="image" value="" {{ course.coverImage is null ? 'checked' }} x-on:change="image = ''"><span class="ac-cover-choice__none"><i data-lucide="sparkles"></i> Vignette dessinée</span></label>
+                                {% for image in images %}
+                                    <label class="ac-cover-choice"><input type="radio" name="image" value="{{ image.name }}" {{ course.coverImage == image.name ? 'checked' }} x-on:change="image = {{ image.path|json_encode|e('html_attr') }}"><img src="{{ image.path }}" alt="" loading="lazy"></label>
+                                {% endfor %}
+                            </div>
+                        </fieldset>
+                    {% else %}
+                        <input type="hidden" name="image" value="">
+                    {% endif %}
+                    <div class="ks-field">
+                        <label class="ks-label" for="coverWord">Mot sur la vignette dessinée</label>
+                        <input class="ks-input" id="coverWord" name="coverWord" value="{{ course.coverWord }}" maxlength="40" placeholder="Fécondité" x-model="word">
+                        <p class="ks-help">Un ou deux mots, écrits en italique sur la vignette quand il n'y a pas d'image.</p>
+                    </div>
+                    <fieldset class="ks-field">
+                        <legend class="ks-label">Plans couverts</legend>
+                        <p class="ks-help" style="margin-bottom: .5rem;">Le plan principal et les plans où écrivent les exercices des leçons sont repérés automatiquement. Cochez-en d'autres si le parcours les aborde sans exercice. Le Sanctuaire du Couple s'affiche toujours à part.</p>
+                        <div class="ac-plan-checks">
+                            {% for p in six %}
+                                {% set auto = p.main or p.exercises > 0 %}
+                                <label class="ac-plan-check {{ auto ? 'is-auto' }}" style="--c: {{ p.color }};">
+                                    <input type="checkbox" name="plans[]" value="{{ p.key }}" {{ p.key in course.extraPlans or auto ? 'checked' }} {{ auto ? 'disabled' }}>
+                                    <i data-lucide="{{ p.icon }}"></i>
+                                    <span>{{ p.label }}{% if p.main %}<small>plan principal</small>{% elseif p.exercises %}<small>{{ p.exercises }} exercice{{ p.exercises > 1 ? 's' }}</small>{% elseif p.key in course.extraPlans %}<small>ajouté à la main</small>{% endif %}</span>
+                                </label>
+                            {% endfor %}
+                        </div>
+                    </fieldset>
+                    <div><button type="submit" class="ks-btn ks-btn--secondary"><i data-lucide="check"></i> Enregistrer la vignette et les plans</button></div>
+                </form>
+                <div>
+                    <p class="ks-label">Aperçu de la carte</p>
+                    <div class="ac-cover-preview" data-cover-preview>
+                        {% set look = academie_apparence(course.place) %}
+                        <div class="academie-card" style="pointer-events: none;">
+                            <div class="academie-vignette" style="--c: {{ look.color }};">
+                                <img x-show="image" x-bind:src="image" src="{{ cover_url }}" alt="" {% if not cover_url %}style="display: none;"{% endif %}>
+                                <div class="academie-vignette__dessin" x-show="!image" {% if cover_url %}style="display: none;"{% endif %} aria-hidden="true">
+                                    <span class="academie-vignette__icone"><i data-lucide="{{ look.icon }}"></i></span>
+                                    <span class="academie-vignette__mot" x-text="word">{{ course.coverWord }}</span>
+                                </div>
+                                <span class="academie-vignette__acces {{ course.free ? 'academie-vignette__acces--libre' }}">{% if course.free %}Gratuit{% else %}<i data-lucide="sparkles"></i> PRO{% endif %}</span>
+                            </div>
+                            <div class="academie-card__body">
+                                <span class="academie-eyebrow" style="--c: {{ look.color }};"><i data-lucide="{{ look.icon }}"></i> {{ academie_lieu(course.place) }}</span>
+                                <h3 class="academie-card__title">{{ course.title }}</h3>
+                                {% if course.subtitle %}<p class="academie-card__lead">{{ course.subtitle }}</p>{% endif %}
+                                <p class="academie-card__meta"><span><i data-lucide="clock"></i> {{ academie_duree(course.estimatedMinutes) }}</span><span><i data-lucide="list-checks"></i> {{ course.lessons(true)|length }} leçon{{ course.lessons(true)|length > 1 ? 's' }}</span></p>
+                                <span class="academie-card__plans">
+                                    {% if course.couple %}<span class="academie-pastille academie-pastille--main" style="--c: var(--couple); --cs: var(--couple-soft);"><i data-lucide="heart-handshake"></i>Sanctuaire du Couple</span>{% endif %}
+                                    {% for p in academie_plans_couverts(course) %}<span class="academie-pastille {{ p.main ? 'academie-pastille--main' }}" style="--c: {{ p.color }}; --cs: {{ p.soft }};"><i data-lucide="{{ p.icon }}"></i>{{ p.short }}</span>{% endfor %}
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <p class="ks-help" style="margin-top: .6rem;">Les plans de l'aperçu sont ceux enregistrés. <a href="{{ path('admin_academie_preview', {id: course.id}) }}">Voir la page du parcours</a></p>
+                </div>
+            </div>
+        </section>
+
         <section class="ks-card" id="structure">
             <h2 class="ks-card__title"><i data-lucide="list-tree"></i> Modules et leçons</h2>
             <p class="ks-muted" style="margin-bottom: 1rem;">{{ course.lessons(true)|length }} leçon{{ course.lessons(true)|length > 1 ? 's' }} visible{{ course.lessons(true)|length > 1 ? 's' }} · environ {{ course.estimatedMinutes }} minutes au total.</p>

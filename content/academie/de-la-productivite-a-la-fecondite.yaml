@@ -2,12 +2,16 @@
 # Chargé en brouillon par : php bin/console app:academie:import content/academie/de-la-productivite-a-la-fecondite.yaml
 # Ensuite, tout se relit et se modifie dans le studio (Admin › Académie) ; ce fichier ne sert qu'au premier chargement.
 # Exercices : cibles et actions de App\Academie\Service\PracticeCatalog::TARGETS.
+# Vignette (facultatif) : cover: mon-image.jpg (fichier JPEG, PNG ou WebP posé à côté de ce fichier, jamais une adresse
+# internet) ; sinon cover_word donne le mot écrit sur la vignette dessinée. plans: [VIE, ...] ajoute des plans couverts
+# en plus du plan principal et des plans des exercices.
 
 slug: de-la-productivite-a-la-fecondite
 title: De la productivité à la fécondité
 subtitle: Accomplir plus, sans vous épuiser
 place: HYGIENE
 access: PRO
+cover_word: Fécondité
 description: |
   On vous a appris à être productif comme on fait tourner une usine : plus vite, plus longtemps, avec moins. Ce parcours regarde en face ce que ce modèle coûte à votre sommeil, à votre repos et à vos relations, puis vous propose un autre chemin, celui du vivant : la fécondité.
 

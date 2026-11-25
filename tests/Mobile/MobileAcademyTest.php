@@ -69,8 +69,16 @@ final class MobileAcademyTest extends WebTestCase
         $this->assertSame('Sanctuaire du Couple', $res['json']['couple']['libelle']);
         $this->assertDoesNotMatchRegularExpression('/\b(prix|price|eur|euros|fcfa|tarif)\b/i', $res['raw'], 'Aucun prix dans l\'application.');
 
+        $this->assertNull($bySlug[$course->getSlug()]['vignette'], 'Pas d\'image : l\'application dessine la vignette.');
+        $this->assertSame(['VIE'], array_column($bySlug[$course->getSlug()]['plansCouverts'], 'cle'));
+        $this->assertTrue($bySlug[$course->getSlug()]['plansCouverts'][0]['principal']);
+
         $res = $this->api('GET', '/api/mobile/v1/academie/'.$course->getSlug(), bearer: $token);
         $this->assertSame('lecon-1', $res['json']['parcours']['prochaineLecon']);
+        $this->assertCount(6, $res['json']['parcours']['sixPlans']);
+        $this->assertSame(2, $res['json']['parcours']['chiffres']['lecons']);
+        $this->assertSame(['cible' => 'VIE', 'libelle' => 'Plan de Vie', 'sorte' => 'plan'], $res['json']['parcours']['modules'][0]['lecons'][0]['exercice']);
+        $this->assertNull($res['json']['parcours']['modules'][0]['lecons'][1]['exercice']);
         $this->assertSame('FREE', $res['json']['parcours']['rythme']['mode']);
 
         $res = $this->api('GET', '/api/mobile/v1/academie/'.$course->getSlug().'/lecon-1', bearer: $token);

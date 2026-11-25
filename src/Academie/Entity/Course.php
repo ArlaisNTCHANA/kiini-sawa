@@ -52,6 +52,22 @@ class Course
     #[ORM\Column(length: 10)]
     private string $accessLevel = self::ACCESS_PRO;
 
+    /** Vignette : nom (16 caractères) d'une image du studio de ce parcours (AcademyImages), ou null (vignette dessinée). */
+    #[ORM\Column(length: 16, nullable: true)]
+    private ?string $coverImage = null;
+
+    /** Mot écrit sur la vignette dessinée quand il n'y a pas d'image (ex. « Fécondité »). */
+    #[ORM\Column(length: 40, nullable: true)]
+    private ?string $coverWord = null;
+
+    /**
+     * Plans ajoutés à la main par l'auteur, en plus du plan principal et des plans des exercices (AcademyOverview).
+     *
+     * @var list<string>|null
+     */
+    #[ORM\Column(type: Types::JSON, nullable: true)]
+    private ?array $extraPlans = null;
+
     #[ORM\Column(length: 10)]
     private string $status = self::STATUS_DRAFT;
 
@@ -110,6 +126,30 @@ class Course
     public function getAccessLevel(): string { return $this->accessLevel; }
     public function setAccessLevel(string $accessLevel): static { $this->accessLevel = $accessLevel; return $this; }
     public function isFree(): bool { return self::ACCESS_FREE === $this->accessLevel; }
+    public function getCoverImage(): ?string { return $this->coverImage; }
+
+    public function setCoverImage(?string $name): static
+    {
+        $this->coverImage = null !== $name && 1 === preg_match('/^[a-f0-9]{16}$/', $name) ? $name : null;
+
+        return $this;
+    }
+
+    public function getCoverWord(): ?string { return $this->coverWord; }
+    public function setCoverWord(?string $word): static { $word = trim((string) $word); $this->coverWord = '' === $word ? null : mb_substr($word, 0, 40); return $this; }
+
+    /** @return list<string> */
+    public function getExtraPlans(): array { return $this->extraPlans ?? []; }
+
+    /** @param list<string> $plans clés de PlanCatalog ; toute autre valeur est ignorée */
+    public function setExtraPlans(array $plans): static
+    {
+        $plans = array_values(array_intersect(array_keys(\App\PlanDeVie\Service\PlanCatalog::PLANS), $plans));
+        $this->extraPlans = [] === $plans ? null : $plans;
+
+        return $this;
+    }
+
     public function getStatus(): string { return $this->status; }
     public function isPublished(): bool { return self::STATUS_PUBLISHED === $this->status; }
 

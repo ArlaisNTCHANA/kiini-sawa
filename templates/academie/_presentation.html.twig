@@ -1,0 +1,186 @@
+{#
+    Page de présentation d'un parcours (membres et aperçu du studio) : bandeau, une seule action principale, description
+    et chiffres, plans travaillés (AcademyOverview), programme détaillé, rythme et notes.
+    Paramètres : course, enrollment (ou null), locked, preview (studio), notes, boussole_due, can_journal.
+#}
+{% set preview = preview|default(false) %}
+{% set look = academie_apparence(course.place) %}
+{% set lessons = course.lessons(true) %}
+{% set stats = academie_chiffres(course) %}
+{% set next = enrollment ? enrollment.nextLesson : null %}
+
+<header class="academie-hero">
+    {% include 'academie/_vignette.html.twig' with {course: course} only %}
+    <div class="academie-hero__voile" aria-hidden="true"></div>
+    <div class="academie-hero__in">
+        <span class="academie-eyebrow"><i data-lucide="{{ look.icon }}"></i> {{ academie_lieu(course.place) }}</span>
+        <h1>{{ course.title }}</h1>
+        {% if course.subtitle %}<p>{{ course.subtitle }}</p>{% endif %}
+        <div class="academie-chips">
+            <span class="academie-chip"><i data-lucide="clock"></i> {{ t('academie.parcours.duree_totale', '{duree} en tout', 'text', {duree: academie_duree(stats.minutes)}) }}</span>
+            <span class="academie-chip"><i data-lucide="layers"></i> {{ stats.modules }} {{ stats.modules > 1 ? t('academie.parcours.etapes', 'étapes') : t('academie.parcours.etape', 'étape') }} · {{ stats.lessons }} {{ stats.lessons > 1 ? t('academie.carte.lecons', 'leçons') : t('academie.carte.lecon', 'leçon') }}</span>
+            {% if stats.lessons %}<span class="academie-chip"><i data-lucide="timer"></i> {{ stats.min_lesson == stats.max_lesson ? t('academie.parcours.par_lecon_fixe', '{min} min par leçon', 'text', {min: stats.min_lesson}) : t('academie.parcours.par_lecon', '{min} à {max} min par leçon', 'text', {min: stats.min_lesson, max: stats.max_lesson}) }}</span>{% endif %}
+            <span class="academie-chip">{% if course.free %}<i data-lucide="gift"></i> {{ t('academie.carte.gratuit', 'Gratuit') }}{% elseif is_pro|default(false) %}<i data-lucide="sparkles"></i> {{ t('academie.carte.pro_inclus', 'Inclus dans votre offre PRO') }}{% else %}<i data-lucide="lock"></i> {{ t('academie.carte.pro', 'KIINI SAWA PRO') }}{% endif %}</span>
+        </div>
+    </div>
+</header>
+
+{% if not preview and not course.published %}
+    <div class="ks-alert ks-alert--info" style="margin-top: 1rem;">{{ t('academie.parcours.retire', 'Ce parcours est en cours de révision. Vous le retrouvez ici parce que vous l\'avez commencé, avec votre progression.') }}</div>
+{% endif %}
+
+<div class="academie-layout">
+    <aside class="academie-side">
+        {# Une seule action principale #}
+        <div class="academie-cta">
+            {% if preview %}
+                {% if lessons|length %}<a href="{{ (preview ? path('admin_academie_lesson_preview', {id: (lessons|first).id}) : path('app_academie_lesson', {slug: course.slug, lessonSlug: (lessons|first).slug})) }}" class="ks-btn ks-btn--primary">{{ t('academie.parcours.commencer', 'Commencer le parcours') }} <i data-lucide="arrow-right"></i></a>{% endif %}
+            {% elseif locked %}
+                <p>{{ t('academie.parcours.pro', 'Ce parcours fait partie de KIINI SAWA PRO.') }}</p>
+                <a href="{{ path('app_subscription') }}" class="ks-btn ks-btn--primary"><i data-lucide="lock-open"></i> {{ t('academie.parcours.pro_bouton', 'Découvrir KIINI SAWA PRO') }}</a>
+            {% elseif enrollment and enrollment.completed %}
+                <p class="academie-iconline"><i data-lucide="check-circle-2" style="width: 16px; height: 16px; color: var(--primary);"></i> {{ t('academie.parcours.termine', 'Vous avez terminé ce parcours. Vous pouvez relire chaque leçon quand vous le voulez.') }}</p>
+                {% if boussole_due %}
+                    <a href="{{ path('app_public_boussole') }}" class="ks-btn ks-btn--primary"><i data-lucide="compass"></i> {{ t('academie.parcours.boussole', 'Refaire ma Boussole 360') }}</a>
+                {% else %}
+                    <a href="{{ path('app_academie') }}" class="ks-btn ks-btn--primary">{{ t('academie.parcours.autres', 'Voir les autres parcours') }}</a>
+                {% endif %}
+            {% elseif next %}
+                {% set progress = enrollment.progress %}
+                {% if progress.done %}
+                    <div class="academie-progline">
+                        <div class="academie-progress" role="progressbar" aria-valuenow="{{ progress.percent }}" aria-valuemin="0" aria-valuemax="100" aria-label="{{ t('academie.carte.progression', 'Progression') }}"><span style="width: {{ progress.percent }}%;"></span></div>
+                        {{ progress.done }} / {{ progress.total }}
+                    </div>
+                    <p class="ks-small">{{ t('academie.parcours.prochaine', 'Prochaine leçon') }} : <strong>{{ next.title }}</strong> · {{ next.durationMinutes }} min</p>
+                {% endif %}
+                <a href="{{ (preview ? path('admin_academie_lesson_preview', {id: (next).id}) : path('app_academie_lesson', {slug: course.slug, lessonSlug: (next).slug})) }}" class="ks-btn ks-btn--primary">
+                    {{ progress.done ? t('academie.parcours.reprendre_court', 'Reprendre le parcours') : t('academie.parcours.commencer', 'Commencer le parcours') }} <i data-lucide="arrow-right"></i>
+                </a>
+            {% elseif lessons|length %}
+                <p class="ks-small">{{ t('academie.parcours.premiere', 'Première leçon') }} : <strong>{{ (lessons|first).title }}</strong> · {{ (lessons|first).durationMinutes }} min</p>
+                <a href="{{ (preview ? path('admin_academie_lesson_preview', {id: (lessons|first).id}) : path('app_academie_lesson', {slug: course.slug, lessonSlug: (lessons|first).slug})) }}" class="ks-btn ks-btn--primary">{{ t('academie.parcours.commencer', 'Commencer le parcours') }} <i data-lucide="arrow-right"></i></a>
+            {% endif %}
+        </div>
+        {% if not preview and not locked and not (enrollment and enrollment.completed) and lessons|length %}
+            {% include 'academie/_pace.html.twig' %}
+        {% endif %}
+    </aside>
+
+    <div>
+        <section class="academie-sec" aria-labelledby="mots-title">
+            <h2 class="academie-sec__title" id="mots-title"><i data-lucide="book-open"></i> {{ t('academie.parcours.en_quelques_mots', 'En quelques mots') }}</h2>
+            {% if course.description %}<div class="academie-texte">{{ course.description|lecon_markdown }}</div>{% endif %}
+            <div class="academie-stats">
+                <div class="academie-stat"><i data-lucide="list-checks"></i><strong>{{ stats.lessons }}</strong><small>{{ t('academie.parcours.chiffre_lecons', 'leçons courtes') }}</small></div>
+                <div class="academie-stat"><i data-lucide="circle-help"></i><strong>{{ stats.questions }}</strong><small>{{ t('academie.parcours.chiffre_questions', 'questions pour vérifier') }}</small></div>
+                <div class="academie-stat"><i data-lucide="target"></i><strong>{{ stats.exercises }}</strong><small>{{ t('academie.parcours.chiffre_exercices', 'exercices concrets') }}</small></div>
+                {% if stats.videos %}
+                    <div class="academie-stat"><i data-lucide="play-circle"></i><strong>{{ stats.videos }}</strong><small>{{ stats.videos > 1 ? t('academie.parcours.chiffre_videos', 'vidéos') : t('academie.parcours.chiffre_video', 'vidéo') }}</small></div>
+                {% else %}
+                    <div class="academie-stat"><i data-lucide="clock"></i><strong>{{ academie_duree(stats.minutes) }}</strong><small>{{ t('academie.parcours.chiffre_duree', 'en tout') }}</small></div>
+                {% endif %}
+            </div>
+        </section>
+
+        {% set six = academie_six_plans(course) %}
+        {% set daily = academie_quotidien(course) %}
+        <section class="academie-sec" aria-labelledby="plans-title" data-plans>
+            <h2 class="academie-sec__title" id="plans-title"><i data-lucide="layout-grid"></i> {{ t('academie.parcours.plans_titre', 'Les plans que ce parcours fait avancer') }}</h2>
+            {% if course.couple %}
+                <div class="academie-mainplan" style="--c: var(--couple); --cs: var(--couple-soft);">
+                    <span class="academie-mainplan__icon"><i data-lucide="heart-handshake"></i></span>
+                    <span><small>{{ t('academie.parcours.a_deux', 'À vivre à deux') }}</small><strong>Sanctuaire du Couple</strong><em>{{ t('academie.parcours.couple_texte', 'L\'espace commun des conjoints') }}</em></span>
+                </div>
+            {% else %}
+                {% for p in six|filter(p => p.main) %}
+                    <div class="academie-mainplan" style="--c: {{ p.color }}; --cs: {{ p.soft }};">
+                        <span class="academie-mainplan__icon"><i data-lucide="{{ p.icon }}"></i></span>
+                        <span><small>{{ t('academie.parcours.plan_principal', 'Plan principal') }}</small><strong>{{ p.label }}</strong><em>{{ p.question }}</em></span>
+                    </div>
+                {% endfor %}
+            {% endif %}
+            <ul class="academie-six">
+                {% for p in six %}
+                    <li class="{{ p.main ? 'is-main' : (p.covered ? '' : 'is-off') }}" style="--c: {{ p.color }}; --cs: {{ p.soft }};">
+                        <span class="academie-six__icon"><i data-lucide="{{ p.icon }}"></i></span>
+                        <b>{{ p.short }}</b>
+                        {% if p.main %}{{ t('academie.parcours.plan_principal', 'Plan principal') }}{% elseif p.exercises %}{{ p.exercises }} {{ p.exercises > 1 ? t('academie.parcours.exercices', 'exercices') : t('academie.parcours.exercice', 'exercice') }}{% elseif p.covered %}{{ t('academie.parcours.aborde', 'Abordé') }}{% else %}{{ t('academie.parcours.non_aborde', 'Non abordé') }}{% endif %}
+                    </li>
+                {% endfor %}
+            </ul>
+            {% if daily.rituels or daily.journal %}
+                <p class="academie-also">
+                    <span>{{ t('academie.parcours.quotidien', 'Et dans votre quotidien :') }}</span>
+                    {% if daily.rituels %}<span class="academie-pastille"><i data-lucide="repeat"></i>{{ t('academie.parcours.rituels', 'Rituels') }} · {{ daily.rituels }} {{ daily.rituels > 1 ? t('academie.parcours.exercices', 'exercices') : t('academie.parcours.exercice', 'exercice') }}</span>{% endif %}
+                    {% if daily.journal %}<span class="academie-pastille"><i data-lucide="notebook-pen"></i>{{ t('academie.parcours.journal', 'Journal') }} · {{ daily.journal }} {{ daily.journal > 1 ? t('academie.parcours.notes', 'notes') : t('academie.parcours.note', 'note') }}</span>{% endif %}
+                </p>
+            {% endif %}
+            {% if daily.couple and not course.couple %}
+                <p class="academie-also academie-couple"><span class="academie-pastille academie-pastille--main" style="--c: var(--couple); --cs: var(--couple-soft);"><i data-lucide="heart-handshake"></i>Sanctuaire du Couple · {{ daily.couple }} {{ daily.couple > 1 ? t('academie.parcours.exercices', 'exercices') : t('academie.parcours.exercice', 'exercice') }}</span></p>
+            {% endif %}
+        </section>
+
+        <section class="academie-sec" aria-labelledby="programme-title" data-programme>
+            <h2 class="academie-sec__title" id="programme-title"><i data-lucide="map"></i> {{ t('academie.parcours.programme', 'Le programme') }}</h2>
+            <p class="academie-legend"><span><i data-lucide="play-circle"></i> {{ t('academie.lecon.video', 'vidéo') }}</span><span><i data-lucide="circle-help"></i> {{ t('academie.parcours.legende_questions', 'questions de discernement') }}</span><span><i data-lucide="target"></i> {{ t('academie.parcours.legende_exercice', 'exercice inscrit dans un plan') }}</span></p>
+            {% for m in academie_programme(course) %}
+                {% set done_count = enrollment ? (m.lessons|filter(x => enrollment.hasCompleted(x.lesson))|length) : 0 %}
+                {% set all_done = done_count == m.lessons|length %}
+                <div class="academie-module">
+                    <span class="academie-module__num {{ all_done ? 'is-done' }}">{% if all_done %}<i data-lucide="check" aria-label="{{ t('academie.parcours.etape_faite', 'Étape terminée') }}"></i>{% else %}{{ m.step }}{% endif %}</span>
+                    <div class="academie-module__head">
+                        <h3>{{ m.title }}</h3>
+                        <small>{{ m.lessons|length }} {{ m.lessons|length > 1 ? t('academie.carte.lecons', 'leçons') : t('academie.carte.lecon', 'leçon') }} · {{ m.minutes }} min{% if done_count and not all_done %} · {{ t('academie.parcours.faites', '{faites}/{total} faites', 'text', {faites: done_count, total: m.lessons|length}) }}{% endif %}</small>
+                    </div>
+                    <ol class="academie-lessons">
+                        {% for item in m.lessons %}
+                            {% set l = item.lesson %}
+                            {% set done = enrollment and enrollment.hasCompleted(l) %}
+                            {% set is_next = next and next.id == l.id and enrollment.progress.done %}
+                            {% set a = academie_activites(l) %}
+                            {% set tag = (locked and not preview) ? 'div' : 'a' %}
+                            <li>
+                                <{{ tag }} class="academie-lesson"{% if tag == 'a' %} href="{{ preview ? path('admin_academie_lesson_preview', {id: l.id}) : path('app_academie_lesson', {slug: course.slug, lessonSlug: l.slug}) }}"{% endif %}>
+                                    <span class="academie-lesson__n {{ done ? 'is-done' }} {{ is_next ? 'is-next' }}">{% if done %}<i data-lucide="check" aria-label="{{ t('academie.lecon.faite', 'Terminée') }}"></i>{% else %}{{ item.n }}{% endif %}</span>
+                                    <span>
+                                        <span class="academie-lesson__t">{{ l.title }}</span>
+                                        {% if a.video or a.questions or a.target %}
+                                            <span class="academie-lesson__what">
+                                                {% if a.video %}<span><i data-lucide="play-circle"></i> {{ t('academie.parcours.video', 'Vidéo') }}</span>{% endif %}
+                                                {% if a.questions %}<span><i data-lucide="circle-help"></i> {{ a.questions }} {{ a.questions > 1 ? t('academie.parcours.questions', 'questions') : t('academie.parcours.question', 'question') }}</span>{% endif %}
+                                                {% if a.target_kind == 'plan' %}
+                                                    <span class="academie-to" style="--c: {{ academie_apparence(a.target).color }};"><i data-lucide="target"></i> {{ t('academie.parcours.exercice_vers', 'Exercice · {plan}', 'text', {plan: a.target_label}) }}</span>
+                                                {% elseif a.target_kind == 'couple' %}
+                                                    <span class="academie-to" style="--c: var(--couple);"><i data-lucide="heart-handshake"></i> Sanctuaire du Couple</span>
+                                                {% elseif a.target == 'RITUEL' %}
+                                                    <span><i data-lucide="repeat"></i> {{ t('academie.parcours.rituel', 'Un rituel') }}</span>
+                                                {% elseif a.target == 'JOURNAL' %}
+                                                    <span><i data-lucide="notebook-pen"></i> {{ t('academie.parcours.journal_note', 'Une note au Journal') }}</span>
+                                                {% endif %}
+                                            </span>
+                                        {% endif %}
+                                    </span>
+                                    <span class="academie-lesson__d">{{ l.durationMinutes }} min</span>
+                                </{{ tag }}>
+                            </li>
+                        {% endfor %}
+                    </ol>
+                </div>
+            {% endfor %}
+        </section>
+
+        {% if notes|default([])|length %}
+            <section class="ks-card ks-card--flat academie-sec" aria-labelledby="notes-title">
+                <h2 class="ks-card__title" id="notes-title"><i data-lucide="notebook-pen"></i> {{ t('academie.notes.parcours', 'Mes notes de ce parcours') }}</h2>
+                {% for n in notes %}
+                    <div class="academie-note">
+                        <p class="ks-small">{{ n.lesson.title }}{% if n.planKey %} · {{ academie_lieu(n.planKey) }}{% endif %}</p>
+                        <p>{{ n.note.content|nl2br }}</p>
+                    </div>
+                {% endfor %}
+                {% if can_journal %}<a href="{{ path('app_journal') }}" class="ks-btn ks-btn--ghost ks-btn--sm" style="margin-top: .6rem;">{{ t('academie.notes.journal', 'Ouvrir mon Journal') }}</a>{% endif %}
+            </section>
+        {% endif %}
+    </div>
+</div>

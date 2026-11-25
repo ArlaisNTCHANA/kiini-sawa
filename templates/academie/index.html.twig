@@ -13,7 +13,7 @@
     {% if recommended %}
         <section class="academie-reco" aria-labelledby="reco-title">
             <p class="ks-eyebrow" id="reco-title"><i data-lucide="compass" style="width: 14px; height: 14px;"></i> {{ t('academie.catalogue.reco', 'Recommandé d\'après votre Boussole 360 : priorité {plan}', 'text', {plan: academie_lieu(recommended.plan)}) }}</p>
-            <div class="ks-grid academie-grid" style="margin-top: .6rem;">
+            <div class="academie-grid" style="margin-top: .6rem;">
                 {% include 'academie/_course_card.html.twig' with {course: recommended.course, enrollment: enrollments[recommended.course.id] ?? null} %}
             </div>
         </section>
@@ -22,7 +22,7 @@
     {% if in_progress|length and place is null %}
         <section style="margin-top: 2rem;" aria-labelledby="progress-title">
             <h2 class="ks-section-title" id="progress-title">{{ t('academie.catalogue.en_cours', 'Mes parcours en cours') }}</h2>
-            <div class="ks-grid academie-grid">
+            <div class="academie-grid">
                 {% for e in in_progress %}
                     {% include 'academie/_course_card.html.twig' with {course: e.course, enrollment: e} %}
                 {% endfor %}
@@ -45,7 +45,7 @@
 
     <section style="margin-top: 1.4rem;" aria-label="{{ t('academie.catalogue.parcours', 'Parcours') }}">
         {% if courses|length %}
-            <div class="ks-grid academie-grid">
+            <div class="academie-grid">
                 {% for c in courses %}
                     {% include 'academie/_course_card.html.twig' with {course: c, enrollment: enrollments[c.id] ?? null} %}
                 {% endfor %}

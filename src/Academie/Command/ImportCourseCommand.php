@@ -18,6 +18,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Yaml\Yaml;
 
 /**
@@ -57,7 +58,9 @@ class ImportCourseCommand extends Command
         }
         try {
             $data = Yaml::parseFile($path);
-            $course = self::build(\is_array($data) ? $data : []);
+            $data = \is_array($data) ? $data : [];
+            $course = self::build($data);
+            $coverFile = self::coverFile($data, \dirname($path));
         } catch (\Throwable $e) {
             $io->error($e->getMessage());
 
@@ -95,6 +98,14 @@ class ImportCourseCommand extends Command
         $course->setSortOrder(\count($this->courses->findAll()) + 1);
         $this->em->persist($course);
         $this->em->flush();
+        if (null !== $coverFile) {
+            try {
+                $course->setCoverImage($this->images->store((int) $course->getId(), new UploadedFile($coverFile, basename($coverFile), null, null, true)));
+                $this->em->flush();
+            } catch (\InvalidArgumentException $e) {
+                $io->warning('Vignette non chargée : '.$e->getMessage().' Le parcours est chargé ; ajoutez la vignette dans le studio.');
+            }
+        }
         $io->success('Parcours chargé en brouillon. '.$summary.' À relire et publier dans Admin › Académie.');
 
         return Command::SUCCESS;
@@ -159,6 +170,33 @@ class ImportCourseCommand extends Command
         return null;
     }
 
+    /**
+     * Vignette indiquée par `cover:` : un fichier image **local**, à côté du fichier YAML (jamais une adresse internet).
+     * Vérifiée ici ; elle est réenregistrée en WebP par AcademyImages au chargement.
+     */
+    public static function coverFile(array $d, string $dir): ?string
+    {
+        $cover = trim((string) ($d['cover'] ?? ''));
+        if ('' === $cover) {
+            return null;
+        }
+        if (str_contains($cover, '://') || str_starts_with($cover, '//') || str_starts_with($cover, '/') || str_contains($cover, '..')) {
+            throw new \InvalidArgumentException('Vignette (cover) : indiquez un fichier image placé à côté du fichier du parcours, jamais une adresse internet.');
+        }
+        if (!preg_match('/\.(jpe?g|png|webp)$/i', $cover)) {
+            throw new \InvalidArgumentException('Vignette (cover) : image JPEG, PNG ou WebP seulement.');
+        }
+        $file = $dir.'/'.$cover;
+        if (!is_file($file)) {
+            throw new \InvalidArgumentException('Vignette (cover) introuvable : '.$cover);
+        }
+        if (filesize($file) > \App\Academie\Service\AcademyImages::MAX_BYTES) {
+            throw new \InvalidArgumentException('Vignette (cover) trop lourde : 10 Mo au plus.');
+        }
+
+        return $file;
+    }
+
     /** Construit le parcours (non enregistré) à partir du fichier, en refusant toute valeur que le studio refuserait. */
     public static function build(array $d): Course
     {
@@ -176,7 +214,12 @@ class ImportCourseCommand extends Command
         }
         $course = (new Course())->setTitle(mb_substr($title, 0, 160))->setSlug(AcademyStudio::slugify((string) ($d['slug'] ?? $title)))
             ->setSubtitle(isset($d['subtitle']) ? trim((string) $d['subtitle']) : null)->setDescription(isset($d['description']) ? trim((string) $d['description']) : null)
-            ->setPlace($place)->setAccessLevel($access);
+            ->setPlace($place)->setAccessLevel($access)->setCoverWord(isset($d['cover_word']) ? (string) $d['cover_word'] : null);
+        $plans = $d['plans'] ?? [];
+        if (!\is_array($plans) || [] !== array_diff($plans, array_keys(PlanCatalog::PLANS))) {
+            throw new \InvalidArgumentException('Plans couverts inconnus (plans) : utilisez les clés VIE, CROISSANCE, DEVELOPPEMENT, HYGIENE, INTENDANCE, TRANSMISSION.');
+        }
+        $course->setExtraPlans(array_values($plans));
 
         foreach ($d['modules'] ?? [] as $m => $moduleData) {
             $module = (new CourseModule())->setTitle(trim((string) ($moduleData['title'] ?? 'Module '.($m + 1))));

@@ -123,6 +123,44 @@ class AcademyAdminController extends AbstractController
         return $this->redirectToRoute('admin_academie_course', ['id' => $id]);
     }
 
+    /**
+     * Vignette du parcours (image envoyée ici ou déjà dans le studio, sinon vignette dessinée avec un mot) et plans
+     * ajoutés à la main. L'image passe par AcademyImages : types et taille contrôlés, réenregistrée en WebP.
+     */
+    #[Route('/{id}/vignette', name: '_cover', requirements: ['id' => '\d+'], methods: ['POST'])]
+    public function cover(Request $request, AcademyImages $images, int $id): Response
+    {
+        $this->checkCsrf($request);
+        $course = $this->find(Course::class, $id);
+        $p = $request->request;
+        $file = $request->files->get('cover');
+        $message = 'Vignette et plans enregistrés.';
+        if ($file instanceof \Symfony\Component\HttpFoundation\File\UploadedFile) {
+            try {
+                $course->setCoverImage($images->store($course->getId(), $file));
+                $message = 'Nouvelle vignette enregistrée.';
+            } catch (\InvalidArgumentException $e) {
+                $this->addFlash('error', $e->getMessage());
+
+                return $this->redirect($this->generateUrl('admin_academie_course', ['id' => $id]).'#vignette');
+            }
+        } else {
+            $choice = $p->getString('image');
+            if ('' === $choice) {
+                $course->setCoverImage(null);
+            } elseif (null !== $images->file($course->getId(), $choice)) {
+                $course->setCoverImage($choice);
+            }
+        }
+        $course->setCoverWord($p->getString('coverWord'));
+        $plans = $p->all('plans');
+        $course->setExtraPlans(array_values(array_filter($plans, 'is_string')));
+        $this->em->flush();
+        $this->addFlash('success', $message);
+
+        return $this->redirect($this->generateUrl('admin_academie_course', ['id' => $id]).'#vignette');
+    }
+
     /** Image envoyée pour les leçons du parcours (réenregistrée en WebP, voir AcademyImages). */
     #[Route('/{id}/images', name: '_image_upload', requirements: ['id' => '\d+'], methods: ['POST'])]
     public function uploadImage(Request $request, AcademyImages $images, int $id): Response
@@ -153,7 +191,9 @@ class AcademyAdminController extends AbstractController
         $course = $this->find(Course::class, $id);
         $path = AcademyImages::publicPath($course->getId(), $name);
         $used = array_filter($course->getLessons(), fn (Lesson $l) => str_contains($l->getContentMarkdown(), $path));
-        if ([] !== $used) {
+        if ($course->getCoverImage() === $name) {
+            $this->addFlash('error', 'Cette image sert de vignette au parcours. Choisissez d\'abord une autre vignette.');
+        } elseif ([] !== $used) {
             $this->addFlash('error', 'Cette image est encore utilisée dans : '.implode(', ', array_map(fn (Lesson $l) => '« '.$l->getTitle().' »', $used)).'. Retirez-la d\'abord du texte.');
         } elseif ($images->delete($course->getId(), $name)) {
             $this->addFlash('success', 'Image supprimée.');

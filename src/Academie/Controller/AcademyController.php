@@ -79,6 +79,7 @@ final class AcademyController extends AbstractController
             'notes' => null !== $enrollment ? $this->notes->forCourse($user, $course) : [],
             'boussole_due' => null !== $enrollment && $enrollment->isCompleted() && $this->catalog->boussoleIsDue($user),
             'can_journal' => $this->entitlements->can($user, 'journal'),
+            'is_pro' => $this->entitlements->isPro($user),
         ]);
     }
 

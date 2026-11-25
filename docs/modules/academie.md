@@ -249,6 +249,39 @@ Garde-fous :
 - Créer un engagement de redevabilité reste sur le site (comme ailleurs dans l'application) : le bouton ouvre le
   formulaire du site avec l'élément déjà choisi.
 
+## Vignettes et page de présentation des parcours (25/11/2026)
+
+Demande du fondateur : « que les parcours s'affichent avec une image vignette ; quand on clique, une description, les
+plans couverts et le programme ; le plus visuel possible ». Maquette validée (captures `../captures-academie-vignettes/`).
+
+- **Données** (`Course`) : `coverImage` (nom d'une image du studio du parcours, `AcademyImages`, WebP), `coverWord`
+  (mot écrit sur la vignette dessinée), `extraPlans` (plans ajoutés à la main, clés de `PlanCatalog` seulement).
+  Migration `Version20261125061749`.
+- **Vignette** : `templates/academie/_vignette.html.twig`. Image du studio si elle existe encore
+  (`AcademyImages::coverUrl`), sinon composition CSS aux couleurs du plan principal, avec son icône Lucide et le mot :
+  aucune image externe. Étiquette Gratuit / PRO.
+- **Plans couverts** (`AcademyOverview`) : plan principal + plans des exercices des leçons visibles + plans ajoutés,
+  dans l'ordre du livre. Rituels et Journal comptés à part (« dans votre quotidien »). Le Sanctuaire du Couple est
+  toujours à part, avec son nom complet (parcours du couple ou exercice vers le Sanctuaire du Couple). Aussi : chiffres
+  (leçons, minutes, questions, exercices, vidéos), programme numéroté (`programme()`), activités d'une leçon.
+- **Catalogue** : cartes `_course_card.html.twig` (vignette, plan, titre, accroche, durée, leçons, accès, progression,
+  pastilles des plans). Grille `academie-grid` (une colonne sur téléphone).
+- **Page d'un parcours** : `_presentation.html.twig`, partagée par la page des membres et l'aperçu du studio
+  (`preview: true`). Bandeau, une seule action principale (Commencer / Reprendre / PRO / terminé) avec progression et
+  prochaine leçon, rythme, « En quelques mots » + chiffres, « Les plans que ce parcours fait avancer » (plan principal
+  mis en avant, les 6 plans dont les non abordés estompés), programme (étapes numérotées, leçons avec vidéo, questions,
+  exercice et sa destination, faites cochées, prochaine entourée d'or), notes.
+- **Studio** : encadré « Vignette et plans couverts » de la fiche du parcours (route `admin_academie_cover`, CSRF) :
+  envoyer une image (mêmes contrôles que les images des leçons), ou en choisir une du parcours, ou revenir à la vignette
+  dessinée ; mot ; plans à ajouter (les plans automatiques sont cochés et grisés) ; aperçu de la carte en direct. Une
+  image qui sert de vignette ne peut pas être supprimée.
+- **Fichier YAML** : `cover: fichier.jpg` (image locale à côté du fichier, jamais une adresse internet, 10 Mo au plus),
+  `cover_word: …`, `plans: [VIE, …]`. Vérifié par `--verifier`.
+- **Mobile** : `vignette`, `motVignette`, `plansCouverts` dans le résumé ; `sixPlans`, `quotidien`, `chiffres`, et pour
+  chaque leçon `questions` et `exercice` (voir `docs/api-mobile.md`). Écrans `mobile-v1/app/academie/` (vignette dessinée
+  en SVG, `adresseVignette` n'accepte que les images du studio).
+- Tests : `tests/Academie/AcademyCoverTest.php`, `tests/Mobile/MobileAcademyTest.php`, `mobile-v1/__tests__/academie.test.ts`.
+
 ## Reste à faire
 
 - Essai d'un vrai e-mail de leçon en production (après déploiement, avec l'accord du fondateur).

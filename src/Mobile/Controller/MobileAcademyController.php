@@ -13,6 +13,7 @@ use App\Academie\Repository\LessonNoteRepository;
 use App\Academie\Service\AcademyCatalog;
 use App\Academie\Service\AcademyJournal;
 use App\Academie\Service\AcademyLearning;
+use App\Academie\Service\AcademyOverview;
 use App\Academie\Service\AcademyPlaces;
 use App\Academie\Service\PracticeCatalog;
 use App\Academie\Service\VideoEmbed;
@@ -44,6 +45,7 @@ final class MobileAcademyController extends AbstractController
         private readonly LessonNoteRepository $notes,
         private readonly EntityManagerInterface $em,
         private readonly \App\Academie\Service\LessonRenderer $renderer,
+        private readonly \App\Academie\Service\AcademyImages $images,
     ) {
     }
 
@@ -93,8 +95,12 @@ final class MobileAcademyController extends AbstractController
             $lessons = [];
             foreach ($module->getLessons() as $lesson) {
                 if ($lesson->isVisible()) {
+                    $a = AcademyOverview::lessonActivities($lesson);
                     $lessons[] = ['adresse' => $lesson->getSlug(), 'titre' => $lesson->getTitle(), 'minutes' => $lesson->getDurationMinutes(),
-                        'video' => $lesson->hasVideo(), 'faite' => (bool) $enrollment?->hasCompleted($lesson)];
+                        'video' => $lesson->hasVideo(), 'faite' => (bool) $enrollment?->hasCompleted($lesson),
+                        'questions' => $a['questions'],
+                        'exercice' => null === $a['target'] ? null : ['cible' => $a['target'], 'libelle' => $a['target_label'], 'sorte' => match ($a['target_kind']) { 'plan' => 'plan', 'couple' => 'couple', default => 'quotidien' }],
+                    ];
                 }
             }
             if ($lessons) {
@@ -107,6 +113,10 @@ final class MobileAcademyController extends AbstractController
             'parcours' => $this->courseSummary($user, $course, $enrollment) + [
                 'presentationHtml' => $course->getDescription() ? $this->renderer->toHtml($course->getDescription(), true) : null,
                 'modules' => $modules,
+                'sixPlans' => array_map(fn (array $p) => $this->plan($p), AcademyOverview::plans($course)),
+                'quotidien' => AcademyOverview::daily($course),
+                'chiffres' => (function (array $s) { return ['etapes' => $s['modules'], 'lecons' => $s['lessons'], 'minutes' => $s['minutes'], 'questions' => $s['questions'],
+                    'exercices' => $s['exercises'], 'videos' => $s['videos'], 'minutesLeconMin' => $s['min_lesson'], 'minutesLeconMax' => $s['max_lesson']]; })(AcademyOverview::stats($course)),
                 'prochaineLecon' => ($enrollment ? $enrollment->nextLesson() : $first)?->getSlug(),
                 'rythme' => ['mode' => $enrollment?->getPaceMode() ?? CourseEnrollment::PACE_FREE, 'enPause' => (bool) $enrollment?->isPacePaused()],
                 'proposerBoussole' => null !== $enrollment && $enrollment->isCompleted() && $this->catalog->boussoleIsDue($user),
@@ -246,7 +256,17 @@ final class MobileAcademyController extends AbstractController
             'minutes' => $course->getEstimatedMinutes(),
             'progression' => null !== $enrollment ? $this->progress($enrollment) : null,
             'termine' => (bool) $enrollment?->isCompleted(),
+            'vignette' => $this->images->coverUrl($course),
+            'motVignette' => $course->getCoverWord(),
+            'plansCouverts' => array_map(fn (array $p) => $this->plan($p), AcademyOverview::coveredPlans($course)),
         ];
+    }
+
+    /** Un des 6 plans tel que l'affichent la carte et la page d'un parcours (AcademyOverview). */
+    private function plan(array $p): array
+    {
+        return ['cle' => $p['key'], 'libelle' => $p['label'], 'court' => $p['short'], 'formule' => $p['question'], 'icone' => $p['icon'],
+            'principal' => $p['main'], 'couvert' => $p['covered'], 'exercices' => $p['exercises']];
     }
 
     /** @return array{faites: int, total: int, pourcentage: int} */

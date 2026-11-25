@@ -109,6 +109,17 @@ final class AcademyImages
         return is_file($path) ? $path : null;
     }
 
+    /** Adresse de la vignette d'un parcours si son image existe encore, sinon null (vignette dessinée). */
+    public function coverUrl(\App\Academie\Entity\Course $course): ?string
+    {
+        $name = $course->getCoverImage();
+        if (null === $name || null === $course->getId() || null === $this->file($course->getId(), $name)) {
+            return null;
+        }
+
+        return self::publicPath($course->getId(), $name);
+    }
+
     public function delete(int $courseId, string $name): bool
     {
         $path = $this->file($courseId, $name);

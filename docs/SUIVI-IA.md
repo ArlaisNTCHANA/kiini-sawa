@@ -9,6 +9,26 @@ teste (`php bin/phpunit`), commit, déploie (`bin/ops/envoyer-hostinger.sh`), v�
 journal `var/log/prod-AAAA-MM-JJ.log` sans erreur) ; **le fondateur fait lui-même `git push`** (refusé à l'IA).
 Ne jamais afficher ni demander de mot de passe ; ne pas publier son nom (mentions légales en attente).
 
+## 25/11/2026 — Académie : parcours en cartes à vignette et page de présentation visuelle
+
+- **Demande du fondateur** : « que les parcours s'affichent avec une image vignette… et quand on clique, une description
+  et les plans que cela couvrirait, ainsi que le programme du parcours. Au max visuel. » Maquette (captures
+  `../captures-academie-vignettes/avant/` et `maquette/`), accord « Oui, construis-la ».
+- **Fait** (détail : `docs/modules/academie.md`, « Vignettes et page de présentation ») : catalogue en cartes à vignette
+  (image du studio ou vignette dessinée aux couleurs du plan avec son icône et un mot), pastilles des plans ; page d'un
+  parcours avec bandeau, une seule action principale, chiffres, plans travaillés (plan principal + plans déduits des
+  exercices + plans ajoutés dans le studio ; Rituels et Journal à part ; Sanctuaire du Couple toujours à part), programme
+  détaillé avec progression. L'aperçu du studio montre la même page. Studio : encadré « Vignette et plans couverts »
+  avec aperçu de la carte. YAML : `cover`, `cover_word`, `plans`. Mobile : API et écrans alignés.
+- **Rien retiré** : rythme, notes, accès PRO, parcours retiré, Boussole 360 après la fin, filtres, recommandation.
+- **Migration** : `Version20261125061749` (3 colonnes facultatives sur `academy_course`).
+- **Tests** : `AcademyCoverTest` (6 tests), `MobileAcademyTest` complété ; mobile : `tsc` 0 erreur, Vitest 46 tests.
+- **Vérifié en local** (ordinateur 1280 px, téléphone 375 px) : catalogue, page d'un parcours, aperçu du studio, envoi
+  du mot et des plans dans le studio, pas de défilement horizontal, console sans erreur.
+- **Reste** : les parcours en ligne n'ont pas encore de vignette ni de mot (à renseigner dans le studio : « De la
+  productivité à la fécondité » → mot « Fécondité » proposé) ; écrans mobiles non vus sur un vrai téléphone ; le
+  champ fichier du navigateur affiche son texte d'origine (« Choose File » selon la langue du navigateur).
+
 ## 25/11/2026 — Application mobile : deux raccords de l'audit global (C1, T1) avant Google Play
 
 - **C1** : réglage « Saviez-vous que… » (`notifyTips`) dans `mobile-v1/app/notifications.tsx` (type `NotificationPreferences`,
