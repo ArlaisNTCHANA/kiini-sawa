@@ -23,7 +23,7 @@
 
     <form method="post" action="{{ path('app_couple_create') }}" style="background: var(--card-bg); box-shadow: var(--card-shadow); border-radius: var(--r-lg); padding: 1.5rem; margin-bottom: 1.25rem;">
         <h2 style="font-family: var(--font-serif); font-size: 1.3rem; margin-bottom: .75rem;">Inviter mon conjoint</h2>
-        <input type="email" name="email" placeholder="Adresse email de votre conjoint (facultatif)" aria-label="Email du conjoint" style="width: 100%; padding: .75rem .9rem; border: 1.5px solid var(--border); border-radius: var(--r-md); font: inherit; margin-bottom: .6rem;">
+        <input type="email" name="email" placeholder="Adresse e-mail de votre conjoint (facultatif)" aria-label="Email du conjoint" style="width: 100%; padding: .75rem .9rem; border: 1.5px solid var(--border); border-radius: var(--r-md); font: inherit; margin-bottom: .6rem;">
         <p style="color: var(--fg-muted); font-size: .85rem; margin-bottom: 1rem;">Sans email, vous obtiendrez un lien à lui envoyer (WhatsApp, SMS…).</p>
         <input type="hidden" name="_csrf_token" value="{{ csrf_token('couple') }}">
         <button type="submit" style="padding: .85rem 1.5rem; border: none; border-radius: var(--r-md); background: var(--primary); color: #fff; font: inherit; font-weight: 700; cursor: pointer;">Créer notre espace couple</button>

@@ -313,3 +313,8 @@ textarea.ks-input { line-height: 1.55; resize: vertical; }
     /* Tableaux du livre et des pages longues : défilement dans leur cadre, jamais de la page */
     .ks-page table, .methode-body table, article table { display: block; max-width: 100%; overflow-x: auto; }
 }
+
+/* Champs préremplis par le navigateur : couleurs du livre plutôt que le bleu pâle imposé (25/11/2026) */
+input:-webkit-autofill, input:-webkit-autofill:hover, input:-webkit-autofill:focus, textarea:-webkit-autofill, select:-webkit-autofill {
+    -webkit-box-shadow: 0 0 0 40px var(--primary-soft) inset; box-shadow: 0 0 0 40px var(--primary-soft) inset;
+    -webkit-text-fill-color: var(--fg); caret-color: var(--fg); transition: background-color 9999s ease-out; }

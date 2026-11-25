@@ -55,6 +55,30 @@
         .legal-footer a { color: var(--fg-muted); text-decoration: none; margin: 0 .5rem; }
         .legal-footer a:hover { color: var(--primary); text-decoration: underline; }
         .auth-logo { display: flex; justify-content: center; margin-bottom: .75rem; }
+        /* Champs préremplis par le navigateur : on garde les couleurs du livre au lieu du bleu pâle imposé */
+        input:-webkit-autofill, input:-webkit-autofill:hover, input:-webkit-autofill:focus {
+            -webkit-box-shadow: 0 0 0 40px var(--primary-soft) inset; box-shadow: 0 0 0 40px var(--primary-soft) inset;
+            -webkit-text-fill-color: var(--fg); caret-color: var(--fg); transition: background-color 9999s ease-out; }
+        input:autofill { background: var(--primary-soft); }
+        /* Afficher / masquer le mot de passe */
+        .pw-wrap { position: relative; }
+        .pw-wrap input { padding-right: 3.25rem; }
+        .pw-toggle { position: absolute; right: .35rem; top: 50%; transform: translateY(-50%); width: 2.6rem; height: 2.6rem; min-height: 0; padding: 0;
+            display: flex; align-items: center; justify-content: center; background: transparent; box-shadow: none; color: var(--fg-muted); border-radius: 10px; }
+        .pw-toggle:hover { background: var(--primary-soft); color: var(--primary); transform: translateY(-50%); }
+        .pw-toggle svg { width: 20px; height: 20px; }
+        /* Ordinateur : la couverture du livre et un verset à côté du formulaire */
+        .auth-grid { display: flex; justify-content: center; align-items: flex-start; gap: 4rem; width: 100%; max-width: 1040px; }
+        .auth-aside { display: none; }
+        @media (min-width: 1024px) {
+            .auth-aside { display: flex; flex-direction: column; align-items: flex-start; gap: 1.5rem; width: 380px; padding-top: .5rem; }
+            .auth-aside img { width: 170px; height: auto; border-radius: 6px; box-shadow: 0 24px 50px -16px rgba(15, 42, 31, .45); }
+            .auth-aside__verse { font-family: var(--font-serif); font-style: italic; font-size: 1.35rem; line-height: 1.5; color: var(--primary-dark); border-left: 3px solid var(--gold); padding-left: 1.1rem; }
+            .auth-aside__verse small { display: block; margin-top: .6rem; font-family: var(--font-sans); font-style: normal; font-size: .75rem; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--accent); }
+            .auth-aside__text { font-size: .95rem; line-height: 1.6; color: var(--fg-muted); max-width: 34ch; }
+            .auth-wrapper { margin-top: -5.5rem; }
+            .auth-band { height: 10.5rem; }
+        }
         @media (max-width: 480px) { .login-container { padding: 1.75rem 1.25rem; } .auth-band { height: 8rem; } }
     </style>
 </head>
@@ -67,6 +91,12 @@
     </div>
 
     <div class="auth-wrapper">
+        <div class="auth-grid">
+        <aside class="auth-aside" aria-hidden="true">
+            <img src="{{ asset('images/livre/couverture.png') }}" alt="" width="170">
+            <p class="auth-aside__verse">{{ t('connexion.verset', '« Car je connais les projets que j\'ai formés sur vous, dit l\'Éternel, projets de paix et non de malheur, afin de vous donner un avenir et de l\'espérance. »') }}<small>{{ t('connexion.verset_ref', 'Jérémie 29:11') }}</small></p>
+            <p class="auth-aside__text">{{ t('connexion.aside', 'KIINI SAWA met en pratique le livre KIINI : partir de qui vous êtes pour bâtir six plans et les vivre au quotidien.') }}</p>
+        </aside>
         <div class="login-container">
             {% for type in ['success', 'info', 'error', 'dev'] %}
                 {% for message in app.flashes(type) %}
@@ -76,7 +106,35 @@
 
             {% block content %}{% endblock %}
         </div>
+        </div>
         {% include 'legal/_footer_links.html.twig' %}
     </div>
+    <script>
+        // Bouton « Afficher le mot de passe » sur chaque champ de mot de passe (sans dépendance)
+        (function () {
+            var oeil = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg>';
+            var barre = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9.9 4.2A10.4 10.4 0 0 1 12 4c6.5 0 10 8 10 8a17.6 17.6 0 0 1-2.2 3.2M6.6 6.6C3.8 8.4 2 12 2 12s3.5 7 10 7a9.7 9.7 0 0 0 5.4-1.6"/><path d="M14.1 14.1a3 3 0 1 1-4.2-4.2"/><path d="M2 2l20 20"/></svg>';
+            document.querySelectorAll('.login-container input[type="password"]').forEach(function (input) {
+                var wrap = document.createElement('div');
+                wrap.className = 'pw-wrap';
+                input.parentNode.insertBefore(wrap, input);
+                wrap.appendChild(input);
+                var btn = document.createElement('button');
+                btn.type = 'button';
+                btn.className = 'pw-toggle';
+                btn.innerHTML = oeil;
+                btn.setAttribute('aria-label', 'Afficher le mot de passe');
+                btn.setAttribute('aria-pressed', 'false');
+                btn.addEventListener('click', function () {
+                    var visible = input.type === 'password';
+                    input.type = visible ? 'text' : 'password';
+                    btn.innerHTML = visible ? barre : oeil;
+                    btn.setAttribute('aria-label', visible ? 'Masquer le mot de passe' : 'Afficher le mot de passe');
+                    btn.setAttribute('aria-pressed', visible ? 'true' : 'false');
+                });
+                wrap.appendChild(btn);
+            });
+        })();
+    </script>
 </body>
 </html>

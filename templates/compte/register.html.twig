@@ -16,7 +16,7 @@
         </div>
 
         <div class="form-group">
-            <label for="email">Adresse email</label>
+            <label for="email">Adresse e-mail</label>
             <input type="email" name="email" id="email" value="{{ data.email ?? '' }}" autocomplete="email" required maxlength="180" placeholder="vous@exemple.com">
             {% if errors.email is defined %}<span class="form-error">{{ errors.email }}</span>{% endif %}
         </div>
