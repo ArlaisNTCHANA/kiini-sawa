@@ -10,6 +10,15 @@
 
     {{ book_panel('bilan') }}
 
+    {# État vide encourageant plutôt que quatre chiffres vides (contre-audit visuel du 25/11/2026) #}
+    {% if weekly|length == 0 and averageProgress is null and goalsCount == 0 %}
+        <div class="ks-empty" style="background: var(--card-bg); box-shadow: var(--card-shadow); border-radius: var(--r-lg); margin-bottom: 1.5rem;">
+            <div class="ks-empty__icon"><i data-lucide="calendar-range"></i></div>
+            <p class="ks-empty__title">{{ t('bilan.mois.vide_titre', 'Votre premier mois commence') }}</p>
+            <p class="ks-empty__text">{{ t('bilan.mois.vide_texte', 'La revue du mois rassemble vos revues de la semaine et l\'avancement de vos objectifs. Faites votre première revue de la semaine : elle apparaîtra ici.') }}</p>
+            <a href="{{ path('app_weekly_review') }}" class="ks-btn ks-btn--primary">{{ t('bilan.mois.vide_action', 'Faire ma revue de la semaine') }}</a>
+        </div>
+    {% else %}
     <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: .75rem; margin-bottom: 1.5rem;">
         {% for stat in [
             [weekly|length, 'revue' ~ (weekly|length > 1 ? 's' : '') ~ ' hebdomadaire' ~ (weekly|length > 1 ? 's' : '')],
@@ -23,6 +32,7 @@
             </div>
         {% endfor %}
     </div>
+    {% endif %}
 
     {% if weekly|length %}
         <div style="background: var(--card-bg); box-shadow: var(--card-shadow); border-radius: var(--r-lg); padding: 1.1rem 1.3rem; margin-bottom: 1.5rem; font-size: .9rem;">

@@ -76,6 +76,13 @@
     .dr-scale { border: 0; padding: 0; margin: 0; }
     .dr-scale__row { display: flex; align-items: center; gap: .45rem; flex-wrap: wrap; margin-top: .35rem; }
     .dr-scale__end { font-size: .8rem; color: var(--fg-muted); }
+    /* Téléphone : les cinq pastilles sur une ligne, les deux repères dessous, aux extrémités (contre-audit visuel du 25/11/2026) */
+    @media (max-width: 480px) {
+        .dr-scale__row { display: grid; grid-template-columns: repeat(5, auto); justify-content: space-between; row-gap: .3rem; }
+        .dr-scale__end { grid-row: 2; }
+        .dr-scale__end:first-child { grid-column: 1 / 3; }
+        .dr-scale__end:last-child { grid-column: 4 / 6; text-align: right; }
+    }
     .dr-dot input, .dr-pill input { position: absolute; opacity: 0; }
     .dr-dot span, .dr-pill span { display: inline-flex; align-items: center; justify-content: center; min-width: 2.4rem; height: 2.4rem; padding: 0 .7rem; border-radius: 999px; border: 1.5px solid var(--border); cursor: pointer; font-weight: 600; }
     .dr-dot input:checked + span, .dr-pill input:checked + span { background: var(--primary); border-color: var(--primary); color: #fff; }

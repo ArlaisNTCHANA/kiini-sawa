@@ -9,6 +9,33 @@ teste (`php bin/phpunit`), commit, déploie (`bin/ops/envoyer-hostinger.sh`), v�
 journal `var/log/prod-AAAA-MM-JJ.log` sans erreur) ; **le fondateur fait lui-même `git push`** (refusé à l'IA).
 Ne jamais afficher ni demander de mot de passe ; ne pas publier son nom (mentions légales en attente).
 
+## 25/11/2026 — Contre-audit visuel puis corrections (lots 1 à 8)
+
+- **Demande du fondateur** : contre-audit visuel de toute l'application (cohérence, beauté, parcours). Rapport :
+  `docs/audit-visuel-2026-11-25.md` (captures dans `docs/audit-visuel-2026-11-25/`). Puis « Lots 1, 2 et 3 » et
+  « après tu lances les autres lots, n'attends pas ma validation ».
+- **Fait** (détail et captures avant/après : section 6 du rapport) :
+  - plans : `plans.html.twig` passait le plan initial avec `|json_safe` dans un attribut `x-init` entre guillemets
+    doubles → code brut affiché et page bloquée sur le hub. Test `PlanPagesOpenOnTheirPlanTest`.
+  - logo unique `shared/_logo.html.twig` ; icônes PNG recolorées (`#0F766E` → `#2E6B53`), manifeste, cache du service
+    worker `ks-v4` ;
+  - `_auth_layout`, `onboarding`, `wizard`, `legal/_layout`, page d'erreur : fond clair + bandeau vert ;
+  - largeurs `--page-reading/standard/wide` (`_design_tokens`) ; couleurs vives de Tailwind redéfinies dans `@theme` ;
+  - Bilan : une action principale ; Journal : en-tête d'abord ; Plan de Vie et plans : en-tête commun ;
+  - onboarding → `/dashboard` avec une carte « Bravo » (flash `welcome` : raison d'être, valeurs, objectif) ; l'analyse
+    de cohérence devient des « pistes » dorées (`RegistrationTest` mis à jour) ;
+  - `.ks-scroll-row`, `.ks-label` en minuscules, encart `methode/_panel` en deux lignes ;
+  - Revue du mois vide : `MonthlyReviewEmptyStateTest` ; point d'or « Journée tenue », paliers de série ;
+  - e-mails : palette du livre, logo, « e-mail » ;
+  - mobile (dépôt `mobile-v1`, commit séparé) : `type.eyebrow` / `type.screenTitle` dans `src/theme/tokens.ts`.
+- **Tests** : 599 (web), mobile `tsc` 0 erreur et 46 tests.
+- **Pièges** : `|json_safe` dans un attribut entre guillemets doubles casse l'attribut (écrire l'attribut entre
+  apostrophes ou passer une chaîne JS) ; dans les captures pleine page de Playwright, les éléments fixés (toast, barre
+  du bas) apparaissent au milieu : ce ne sont pas des défauts ; un élément `position: absolute` (ex. `.sr-only`) dans
+  un cadre `overflow-x: auto` non positionné fait déborder la page.
+- **Reste** : non déployé ; voir la fin de la section 6 du rapport (mobile sur vrai téléphone, Boussole connecté hors
+  menu, vitrine longue, doublon « prochaine étape »).
+
 ## 25/11/2026 — Académie : parcours en cartes à vignette et page de présentation visuelle
 
 - **Demande du fondateur** : « que les parcours s'affichent avec une image vignette… et quand on clique, une description

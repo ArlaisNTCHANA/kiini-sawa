@@ -744,11 +744,17 @@
         flex-wrap: wrap;
         gap: 1rem;
     }
-    .analysis-score-badge {
-        padding: 0.75rem 1.5rem;
-        border-radius: 9999px;
-        font-weight: 800;
-        font-size: 1.1rem;
+    .analysis-score-badge { display: flex; flex-direction: column; gap: .4rem; min-width: 240px; padding: .9rem 1.2rem; border-radius: 16px;
+        background: var(--gold-soft); color: var(--accent); font-weight: 700; font-size: 1rem; border: 1px solid #EAD49A; }
+    .analysis-score-badge.is-good { background: var(--primary-soft); color: var(--primary-dark); border-color: var(--primary-tint); }
+    .analysis-score-bar { display: block; height: 6px; border-radius: 6px; background: rgba(255,255,255,.8); overflow: hidden; }
+    .analysis-score-bar span { display: block; height: 100%; background: var(--gold); border-radius: 6px; }
+    .analysis-score-badge.is-good .analysis-score-bar span { background: var(--primary); }
+    .analysis-score-hint { font-size: .82rem; font-weight: 500; color: var(--fg-light); }
+    @media (max-width: 640px) {
+        .analysis-issue-row { flex-direction: column; align-items: stretch !important; gap: .75rem; }
+        .analysis-issue-row .btn-analysis-fix { align-self: flex-start; }
+        .analysis-score-badge { min-width: 0; width: 100%; }
     }
     .analysis-perfect-state {
         text-align: center;
@@ -2293,10 +2299,11 @@ graph TD
                     <h2 style="font-family: var(--font-serif); font-size: 1.5rem; color: var(--primary); margin: 0;"><i data-lucide="search" class="ks-ico" aria-hidden="true"></i> Analyse de cohérence</h2>
                     <p style="color: var(--fg-muted); font-size: 0.875rem; margin: 0.25rem 0 0 0;">Évaluation automatique de la clarté et de l'alignement de votre plan de vie.</p>
                 </div>
-                {% set scoreColor = healthScore > 80 ? '#3F5249' : (healthScore > 50 ? '#854d0e' : '#991b1b') %}
-                {% set scoreBg = healthScore > 80 ? '#dcfce7' : (healthScore > 50 ? '#fef9c3' : '#fee2e2') %}
-                <div class="analysis-score-badge" style="background: {{ scoreBg }}; color: {{ scoreColor }};">
-                    Score de cohérence : {{ healthScore }}/100
+                {# Un chemin plutôt qu'une note rouge (contre-audit visuel du 25/11/2026) : or tant qu'il reste des pistes, vert au-delà de 80 #}
+                <div class="analysis-score-badge{{ healthScore > 80 ? ' is-good' }}">
+                    <span>Score de cohérence : {{ healthScore }}/100</span>
+                    <span class="analysis-score-bar" aria-hidden="true"><span style="width: {{ healthScore }}%;"></span></span>
+                    {% if issues|length > 0 %}<span class="analysis-score-hint">{{ issues|length }} {{ issues|length > 1 ? 'pistes' : 'piste' }} pour l'enrichir</span>{% endif %}
                 </div>
             </div>
 
@@ -2309,8 +2316,8 @@ graph TD
             {% else %}
                 <div style="display: flex; flex-direction: column; gap: 0.75rem;">
                     {% for issue in issues %}
-                        {% set rowBg = issue.type == 'CRITICAL' ? '#fef2f2' : (issue.type == 'WARNING' ? '#E4ECE7' : '#f8fafc') %}
-                        {% set rowBorder = issue.type == 'CRITICAL' ? '#ef4444' : (issue.type == 'WARNING' ? '#2E5B47' : '#94a3b8') %}
+                        {% set rowBg = issue.type == 'CRITICAL' ? 'var(--gold-soft)' : (issue.type == 'WARNING' ? 'var(--primary-soft)' : 'var(--bg-alt)') %}
+                        {% set rowBorder = issue.type == 'CRITICAL' ? 'var(--accent)' : (issue.type == 'WARNING' ? 'var(--primary)' : 'var(--fg-muted)') %}
                         {% set iconColor = rowBorder %}
                         <div class="analysis-issue-row" style="background: {{ rowBg }}; border-left: 4px solid {{ rowBorder }};">
                             <div class="analysis-issue-content">
@@ -2320,7 +2327,7 @@ graph TD
                                 <div class="analysis-issue-text">{{ issue.message }}</div>
                             </div>
                             <a href="{{ issue.link }}" class="btn-analysis-fix" style="border-color: {{ rowBorder }}; color: {{ rowBorder }};">
-                                Corriger
+                                Compléter
                             </a>
                         </div>
                     {% endfor %}

@@ -1,9 +1,9 @@
 {% extends 'compte/email/_layout.html.twig' %}
 {% block content %}
   <p>Bonjour {{ name }},</p>
-  <p style="font-size:13px;font-weight:bold;letter-spacing:1px;text-transform:uppercase;color:#64748b;margin:18px 0 4px;">{{ challenge.title }} · jour {{ day }} sur {{ challenge.durationDays }}</p>
+  <p style="font-size:13px;font-weight:bold;letter-spacing:1px;text-transform:uppercase;color:#66706A;margin:18px 0 4px;">{{ challenge.title }} · jour {{ day }} sur {{ challenge.durationDays }}</p>
   <p style="font-family:Georgia,serif;font-size:20px;color:#0f172a;margin:4px 0 16px;">{{ action }}</p>
   <p>Vous avez déjà validé <strong>{{ progress }} jour{{ progress > 1 ? 's' }}</strong>{% if progress > 0 %}, continuez{% endif %}. Une fois l'action faite, validez votre journée sur la page du défi.</p>
   {% if actionUrl %}<p style="text-align:center;margin:28px 0;"><a href="{{ actionUrl }}" style="background:#2E6B53;color:#ffffff;text-decoration:none;padding:14px 28px;border-radius:10px;font-weight:bold;display:inline-block;">Valider ma journée</a></p>{% endif %}
 {% endblock %}
-{% block footer %}Vous recevez cet email car vous participez au défi « {{ challenge.title }} ». <a href="{{ unsubscribeUrl }}" style="color:#64748b;">Ne plus recevoir les emails des défis</a>.{% endblock %}
+{% block footer %}Vous recevez cet e-mail car vous participez au défi « {{ challenge.title }} ». <a href="{{ unsubscribeUrl }}" style="color:#66706A;">Ne plus recevoir les e-mails des défis</a>.{% endblock %}

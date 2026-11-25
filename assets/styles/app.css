@@ -148,7 +148,7 @@
 
 /* Formulaires */
 .ks-field { display: flex; flex-direction: column; gap: .35rem; }
-.ks-label { font-size: .75rem; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; color: var(--fg-muted); }
+.ks-label { font-size: .85rem; font-weight: 600; color: var(--fg); } /* libellés en minuscules, comme la connexion (contre-audit visuel du 25/11/2026) */
 .ks-input { width: 100%; padding: .7rem .9rem; border: 1.5px solid var(--border); border-radius: var(--r-md); background: #fff; font: inherit; font-size: .95rem; color: var(--fg); }
 .ks-input:focus { outline: none; border-color: var(--primary-light); box-shadow: 0 0 0 3px var(--primary-glow); }
 
@@ -296,3 +296,17 @@ textarea.ks-input { line-height: 1.55; resize: vertical; }
 .book-panel__chapter { font-family: var(--font-serif); font-size: .98rem; color: var(--primary-dark); line-height: 1.35; }
 .book-panel__chevron { width: 16px; height: 16px; color: var(--fg-muted); flex-shrink: 0; transition: transform .2s var(--ease); }
 .book-panel[open] > .book-panel__summary .book-panel__chevron { transform: rotate(180deg); }
+
+/* Contre-audit visuel du 25/11/2026 (lot 5) : rangées d'onglets ou de filtres sur une ligne, qui défilent au doigt,
+   avec un fondu à droite pour montrer qu'il y a une suite ; même règle pour les onglets des plans. */
+.ks-scroll-row { display: flex; gap: .5rem; flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; -webkit-overflow-scrolling: touch; padding: 2px 2px .25rem; }
+.ks-scroll-row::-webkit-scrollbar { display: none; }
+.ks-scroll-row > * { flex-shrink: 0; }
+@media (max-width: 720px) {
+    .ks-scroll-row, .tabs-nav { -webkit-mask-image: linear-gradient(90deg, #000 85%, transparent); mask-image: linear-gradient(90deg, #000 85%, transparent); padding-right: 2rem; }
+    .ks-tabs { flex-wrap: nowrap; overflow-x: auto; max-width: 100%; scrollbar-width: none; }
+    .ks-tabs::-webkit-scrollbar { display: none; }
+    .ks-tabs > * { flex-shrink: 0; }
+    /* Tableaux du livre et des pages longues : défilement dans leur cadre, jamais de la page */
+    .ks-page table, .methode-body table, article table { display: block; max-width: 100%; overflow-x: auto; }
+}

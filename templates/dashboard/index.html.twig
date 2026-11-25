@@ -20,9 +20,12 @@
         .dash-hero-quote p { font-size: 1rem !important; line-height: 1.55 !important; }
         .dash-wrap { gap: 1.5rem; padding-top: 1rem; }
         .dash-step-cta { display: none; }
-        /* L'action du moment d'abord, sur téléphone */
-        .next-step { order: -1; margin: 0 !important; }
+        /* Le bonjour d'abord, puis l'action du moment (contre-audit visuel du 25/11/2026) */
+        .next-step { margin: 0 !important; }
     }
+    .dash-done { display: flex; align-items: center; gap: .6rem; align-self: center; color: var(--gold-light); font-family: var(--font-serif); font-size: 1.1rem; font-style: italic; }
+    .dash-done__dot { width: 12px; height: 12px; border-radius: 50%; background: var(--gold); box-shadow: 0 0 0 5px rgba(200, 150, 46, .25); }
+    .dash-streak { margin-top: .35rem; font-size: .78rem; color: var(--gold-light); font-weight: 600; }
     @media (min-width: 1024px) {
         .dash-wrap {
             padding: 3.5rem 2rem 5rem;
@@ -143,6 +146,36 @@
 <div class="dash-wrap">
     {% if app.user %}
 
+    {# Carte « Bravo » juste après l'accueil des nouveaux inscrits (contre-audit visuel du 25/11/2026) #}
+    {% set welcome = app.flashes('welcome')|first %}
+    {% if welcome %}
+    <section class="welcome-card" role="status">
+        <span class="welcome-card__dot" aria-hidden="true"></span>
+        <p class="ks-eyebrow" style="margin: 0;">{{ t('accueil.bravo.surtitre', 'Bravo') }}</p>
+        <h2 class="welcome-card__title">{{ t('accueil.bravo.titre', 'Vos fondations sont posées') }}</h2>
+        {% if welcome.purpose %}<blockquote class="welcome-card__purpose">« {{ welcome.purpose }} »</blockquote>{% endif %}
+        {% if welcome.values|length %}
+            <ul class="welcome-card__values">{% for v in welcome.values %}<li>{{ v }}</li>{% endfor %}</ul>
+        {% endif %}
+        <p class="welcome-card__text">{{ t('accueil.bravo.texte', 'C\'est le cœur de votre Plan de Vie. Prenez le temps de le relire : la suite, vos plans et vos rituels, en découle.') }}</p>
+        <div class="welcome-card__actions">
+            <a href="{{ path('app_plan_de_vie') }}" class="ks-btn ks-btn--primary">{{ t('accueil.bravo.action', 'Voir mon Plan de Vie') }}</a>
+            <a href="{{ path('app_plan_de_vie', {onglet: 'analysis'}) }}" class="welcome-card__link">{{ t('accueil.bravo.analyse', 'Comment l\'enrichir') }}</a>
+        </div>
+    </section>
+    <style>
+        .welcome-card { position: relative; background: var(--card-bg); border: 1px solid var(--border); border-top: 3px solid var(--gold); border-radius: var(--r-lg, 16px); padding: 1.75rem 1.5rem; box-shadow: var(--card-shadow); }
+        .welcome-card__dot { position: absolute; top: 1.5rem; right: 1.5rem; width: 12px; height: 12px; border-radius: 50%; background: var(--gold); box-shadow: 0 0 0 6px var(--gold-soft); }
+        .welcome-card__title { font-family: var(--font-serif); font-weight: 600; color: var(--primary-dark); font-size: 1.6rem; margin: .35rem 0 .75rem; }
+        .welcome-card__purpose { font-family: var(--font-serif); font-style: italic; font-size: 1.15rem; line-height: 1.5; color: var(--fg); border-left: 3px solid var(--gold); padding-left: 1rem; margin: 0 0 1rem; }
+        .welcome-card__values { display: flex; flex-wrap: wrap; gap: .4rem; list-style: none; padding: 0; margin: 0 0 1rem; }
+        .welcome-card__values li { background: var(--primary-soft); color: var(--primary-dark); border-radius: 999px; padding: .35rem .85rem; font-size: .88rem; font-weight: 600; }
+        .welcome-card__text { color: var(--fg-muted); margin: 0 0 1.25rem; line-height: 1.6; }
+        .welcome-card__actions { display: flex; flex-wrap: wrap; align-items: center; gap: .75rem 1.25rem; }
+        .welcome-card__link { color: var(--primary); font-weight: 600; text-decoration: underline; text-underline-offset: 2px; }
+    </style>
+    {% endif %}
+
     {# ══════════════════════════════════════════════════════
        SECTION 1 — HERO (DashboardSummary)
        Atmospheric Gradient with mesh glow effects
@@ -221,6 +254,13 @@
                     </p>
                     <p style="font-size: 0.65rem; color: rgba(255,255,255,0.5); text-transform: uppercase; letter-spacing: 0.15em; font-weight: 700; margin-top: 2px;">Rituels du jour</p>
                 </div>
+                {# Récompense sobre : le point d'or quand la journée est tenue (contre-audit visuel du 25/11/2026) #}
+                {% if stats.habitsToday.total > 0 and stats.habitsToday.done >= stats.habitsToday.total %}
+                <div class="dash-done" role="status">
+                    <span class="dash-done__dot" aria-hidden="true"></span>
+                    <span>{{ t('accueil.journee_tenue', 'Journée tenue. Bravo !') }}</span>
+                </div>
+                {% endif %}
                 {% endif %}
                 {% if stats.streak is defined %}
                 <div>
@@ -228,6 +268,7 @@
                         {{ stats.streak }}j
                     </p>
                     <p style="font-size: 0.65rem; color: rgba(255,255,255,0.5); text-transform: uppercase; letter-spacing: 0.15em; font-weight: 700; margin-top: 2px;">Série actuelle</p>
+                    {% if stats.streak >= 7 %}<p class="dash-streak">{{ stats.streak >= 30 ? t('accueil.serie_mois', 'Un mois de fidélité') : (stats.streak >= 21 ? t('accueil.serie_trois', 'Trois semaines de suite') : t('accueil.serie_semaine', 'Une semaine de suite')) }}</p>{% endif %}
                 </div>
                 {% endif %}
             </div>
@@ -466,7 +507,7 @@
                 { value: 'INSIGHT',    label: 'Déclic',     icon: 'eye' },
             ] %}
             {# Simple par défaut : le type, l'humeur, l'énergie et le lieu sont des options (bouton +) #}
-            <div x-show="showExtras" x-cloak style="display: flex; gap: 0.5rem; padding: 1.25rem 1.25rem 0.25rem; overflow-x: auto; scrollbar-width: none;">
+            <div x-show="showExtras" x-cloak class="ks-scroll-row" style="padding: 1.25rem 1.25rem 0.25rem;">
                 {% for t in captureTypes %}
                 <button @click="type = '{{ t.value }}'"
                         class="type-pill"
@@ -599,7 +640,7 @@
                 { id: 'TRANSMISSION', label: 'Transmission',  color: '#A87A1F', glow: 'rgba(168, 122, 31, 0.15)' },
                 { id: 'HYGIENE',      label: 'Hygiène',       color: '#5D7368', glow: 'rgba(93, 115, 104, 0.15)' },
             ] %}
-            <div style="display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 2.25rem; justify-content: center;">
+            <div class="ks-scroll-row" style="margin-bottom: 0.5rem;">
                 {% for p in pillars %}
                 <button @click="pillar = '{{ p.id }}'"
                         class="btn-pillar"

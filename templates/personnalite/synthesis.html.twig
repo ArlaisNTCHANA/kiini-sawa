@@ -19,7 +19,7 @@
                 <small style="color: var(--fg-muted);">24 affirmations, 3 minutes. Le résultat sera enregistré ici.</small>
             {% endif %}
         </span>
-        <span style="font-family: var(--font-serif); font-weight: 700; font-size: 1.4rem; color: var(--primary);">{{ boussole ? boussole.coherence ~ ' %' : '→' }}</span>
+        <span style="font-family: var(--font-serif); font-weight: 700; font-size: 1.4rem; color: var(--primary); white-space: nowrap;">{{ boussole ? boussole.coherence ~ ' %' : '→' }}</span>
     </a>
     {% if enough %}
         <div style="display: flex; gap: .6rem; flex-wrap: wrap; margin-bottom: 1.25rem;">

@@ -7,10 +7,10 @@
     <p style="text-align:center;margin:28px 0;"><a href="{{ actionUrl }}" style="background:#2E6B53;color:#ffffff;text-decoration:none;padding:14px 28px;border-radius:10px;font-weight:bold;display:inline-block;">{% block cta %}Ouvrir KIINI SAWA{% endblock %}</a></p>
   {% endif %}
   {% set verse = block('verse') %}
-  {% if verse|trim %}<p style="font-family:Georgia,serif;font-style:italic;color:#1F4D3A;border-left:3px solid #f59e0b;padding-left:12px;margin:24px 0 8px;">{{ block('verse')|raw }}</p>{% endif %}
+  {% if verse|trim %}<p style="font-family:Georgia,serif;font-style:italic;color:#1F4D3A;border-left:3px solid #C8962E;padding-left:12px;margin:24px 0 8px;">{{ block('verse')|raw }}</p>{% endif %}
   <p style="margin-top:24px;">Avec vous sur le chemin,<br><strong>L'équipe KIINI SAWA</strong></p>
 {% endblock %}
 {% block footer %}
-  Vous recevez cet email parce que vous avez créé votre compte KIINI SAWA récemment : quelques conseils pendant vos deux premières semaines.
-  <a href="{{ unsubscribeUrl }}" style="color:#64748b;">Ne plus recevoir ces conseils</a>.
+  Vous recevez cet e-mail parce que vous avez créé votre compte KIINI SAWA récemment : quelques conseils pendant vos deux premières semaines.
+  <a href="{{ unsubscribeUrl }}" style="color:#66706A;">Ne plus recevoir ces conseils</a>.
 {% endblock %}

@@ -23,7 +23,10 @@ Le livre et l'application doivent sembler sortir du même atelier.
 vert forêt, Développement (Faire) vert, Intendance (Avoir) sauge, Transmission (Donner) or ; Hygiène (le socle)
 vert gris ; Plan de Vie, le point d'or. Plus de couleur arc-en-ciel par plan.
 
-Les classes Tailwind `teal-*` sont redéfinies sur les verts du livre (`assets/styles/app.css`, `@theme`).
+Les classes Tailwind `teal-*` sont redéfinies sur les verts du livre (`assets/styles/app.css`, `@theme`). Depuis le
+25/11/2026, les autres couleurs vives le sont aussi : `blue`, `sky`, `cyan` → information (bleu-gris) ; `emerald`,
+`green`, `lime` → verts du livre ; `amber`, `yellow`, `purple`, `indigo`, `violet`, `fuchsia` → or ; `orange`, `rose`,
+`pink` → terre cuite. `red` reste le rouge d'alerte.
 
 **Schémas du livre** : `assets/images/livre/` (copiés de `livre-et-ressources/illustrations`), insérés avec
 `{% include 'methode/_figure.html.twig' with {name, alt, caption, collapsed, max} only %}`. Ne pas utiliser
@@ -31,6 +34,22 @@ Les classes Tailwind `teal-*` sont redéfinies sur les verts du livre (`assets/s
 
 Règle : pas de nouvelle couleur en dur dans un gabarit de l'application. Exceptions : PDF et emails (les variables CSS
 n'y fonctionnent pas), graphiques et cartes (JavaScript).
+
+## Logo (25/11/2026)
+
+Un seul logo : `{% include 'shared/_logo.html.twig' with {tone, sub, size} only %}` (monogramme « KS » au filet d'or,
+comme l'icône de l'application, + « KIINI SAWA » sur une ligne). `tone: 'dark'` sur un fond vert. Icônes de
+l'application (`public/icons/`) au vert `#2E6B53`. Les e-mails reprennent le même logo en tableau HTML.
+
+## Largeurs de page (25/11/2026)
+
+Trois seulement, en variables : `--page-reading` 720 px (chapitre du livre, questionnaire), `--page-standard` 820 px
+(la plupart des pages), `--page-wide` 1100 px (Agenda, Plans, Intendance, Académie, Couple). Toujours centrées.
+
+## Pages d'entrée (25/11/2026)
+
+Connexion, inscription, vérification, accueil des nouveaux inscrits, assistant du Plan de Vie : fond clair `--bg`,
+bandeau vert en haut, carte blanche. Plus de fond vert sombre « en verre ».
 
 ## Typographie
 
@@ -48,7 +67,8 @@ n'y fonctionnent pas), graphiques et cartes (JavaScript).
 | Onglets | `.ks-tabs` > `.ks-tab.is-active` |
 | État vide | `.ks-empty` (`__icon`, `__title`, `__text`) + un bouton principal |
 | Messages | `.ks-alert--info / success / warning / danger`, pastille `.ks-badge` |
-| Formulaires | `.ks-field` > `.ks-label` + `.ks-input` |
+| Formulaires | `.ks-field` > `.ks-label` (minuscules, depuis le 25/11/2026) + `.ks-input` |
+| Rangée d'onglets ou de filtres qui défile | `.ks-scroll-row` (une ligne, fondu à droite sur téléphone) |
 
 ## Navigation (17/11/2026)
 

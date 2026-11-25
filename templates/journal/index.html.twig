@@ -264,7 +264,7 @@
                 { value: 'TEMOIGNAGE', label: 'Témoignage', icon: 'quote' },
                 { value: 'INSIGHT',    label: 'Déclic',     icon: 'eye' },
             ] %}
-            <div style="display: flex; gap: 0.5rem; padding: 1.25rem 1.25rem 0.25rem; overflow-x: auto; scrollbar-width: none;">
+            <div class="ks-scroll-row" style="padding: 1.25rem 1.25rem 0.25rem;">
                 {% for t in captureTypes %}
                 <button @click="capture.type = '{{ t.value }}'"
                         class="type-pill"

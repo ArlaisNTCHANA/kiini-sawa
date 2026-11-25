@@ -1,16 +1,22 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"></head>
-<body style="margin:0;padding:0;background:#f1f5f4;font-family:-apple-system,'Segoe UI',Arial,sans-serif;color:#1e293b;">
-  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#f1f5f4;padding:32px 16px;">
+<body style="margin:0;padding:0;background:#F7F8F5;font-family:-apple-system,'Segoe UI',Arial,sans-serif;color:#1B1B1B;">
+  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#F7F8F5;padding:32px 16px;">
     <tr><td align="center">
-      <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:520px;background:#ffffff;border-radius:16px;overflow:hidden;">
-        <tr><td style="background:#2E6B53;padding:20px 32px;color:#ffffff;font-family:Georgia,serif;font-size:22px;font-weight:bold;">KIINI SAWA</td></tr>
+      <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:520px;background:#ffffff;border-radius:16px;overflow:hidden;border:1px solid #E1E6DF;">
+        <tr><td style="background:#2E6B53;padding:18px 32px;">
+          {# Logo unique (monogramme KS au filet d'or + nom), comme sur le site — contre-audit visuel du 25/11/2026 #}
+          <table role="presentation" cellpadding="0" cellspacing="0"><tr>
+            <td style="width:36px;height:36px;background:#ffffff;border-radius:9px;text-align:center;vertical-align:middle;font-family:Georgia,serif;font-weight:bold;font-size:15px;color:#1F4D3A;line-height:1;">KS<div style="width:12px;height:2px;background:#C8962E;margin:3px auto 0;border-radius:2px;"></div></td>
+            <td style="padding-left:12px;color:#ffffff;font-family:Georgia,serif;font-size:21px;font-weight:bold;">KIINI SAWA</td>
+          </tr></table>
+        </td></tr>
         <tr><td style="padding:32px;font-size:15px;line-height:1.6;">
           {% block content %}{% endblock %}
         </td></tr>
-        <tr><td style="padding:16px 32px 28px;font-size:12px;color:#64748b;border-top:1px solid #e2e8f0;">
-          {% block footer %}Vous recevez cet email parce qu'une action a été demandée sur un compte KIINI SAWA associé à cette adresse.{% endblock %}
+        <tr><td style="padding:16px 32px 28px;font-size:12px;color:#66706A;border-top:1px solid #E1E6DF;">
+          {% block footer %}Vous recevez cet e-mail parce qu'une action a été demandée sur un compte KIINI SAWA associé à cette adresse.{% endblock %}
         </td></tr>
       </table>
     </td></tr>

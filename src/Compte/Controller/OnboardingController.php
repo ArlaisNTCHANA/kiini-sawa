@@ -79,9 +79,14 @@ class OnboardingController extends AbstractController
 
             if ([] === $errors) {
                 $this->save($user, $data, $em);
-                $this->addFlash('success', 'Votre premier Plan de Vie est posé. Voici son analyse de cohérence : chaque point vous indique comment l\'enrichir.');
+                // Contre-audit visuel du 25/11/2026 : on félicite d'abord (carte « Bravo » sur Aujourd'hui), l'analyse vient ensuite
+                $this->addFlash('welcome', [
+                    'purpose' => $data['purpose'],
+                    'values' => array_values(array_filter($data['values'])),
+                    'goal' => $data['goalTitle'],
+                ]);
 
-                return $this->redirectToRoute('app_plan_de_vie', ['onglet' => 'analysis']);
+                return $this->redirectToRoute('app_dashboard');
             }
         }
 

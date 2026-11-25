@@ -100,8 +100,8 @@
         {% if priorities is empty %}
             <p class="ks-empty">Faites l'inventaire ci-dessous, donnez à chaque élément son état, puis choisissez trois à cinq éléments : pour chacun, une décision et une action pour les 30 prochains jours.</p>
         {% else %}
-            <div class="ks-scroll">
-                <table class="stw-table">
+            <div class="ks-scroll" style="position: relative; overflow-x: auto; max-width: calc(100vw - 2.5rem);">
+                <table class="stw-table" style="min-width: 560px;">
                     <thead><tr><th>Ce qui m'est confié</th><th>État</th><th>Décision</th><th>Action des 30 prochains jours</th><th><span class="sr-only">Fait</span></th></tr></thead>
                     <tbody>
                     {% for it in priorities %}

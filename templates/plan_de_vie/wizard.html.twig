@@ -22,9 +22,13 @@
             justify-content: flex-start;
             min-height: calc(100vh - 72px);
             position: relative;
-            background: linear-gradient(135deg, #022c22 0%, var(--primary) 50%, #014751 100%);
+            overflow: hidden; /* les halos décoratifs ne font plus défiler la page de côté */
+            background: var(--bg);
             padding: 2.5rem 1.5rem;
         }
+        /* Même cadre que l'accueil des nouveaux inscrits : bandeau vert en haut, fond clair (contre-audit visuel du 25/11/2026) */
+        .wizard-body::before { content: ""; position: absolute; inset: 0 0 auto; height: 12rem; background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 100%); pointer-events: none; }
+        .wizard-body > .glow-1, .wizard-body > .glow-2, .wizard-body > .dots { display: none; }
 
         /* Ambient glows for onboarding/wizard vibe */
         .glow-1 {

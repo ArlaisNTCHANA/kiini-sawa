@@ -78,8 +78,9 @@ l'Académie.
 
 ![Largeurs](audit-visuel-2026-11-25/03-largeurs-ordinateur.jpg)
 
-- **Ce qui ne va pas** : Journal, Notifications, Mon profil KIINI SAWA : colonne étroite centrée ; Agenda, Académie,
-  Partenaires : alignés à gauche, larges ; Aujourd'hui : une carte de 470 px perdue au milieu de l'écran.
+- **Ce qui ne va pas** : dix largeurs différentes d'une page à l'autre (720, 760, 820, 850, 860, 900, 960, 1000, 1080,
+  1100 px) : Journal, Notifications, Mon profil KIINI SAWA en colonne étroite ; Agenda, Académie, Plans en pleine
+  largeur, avec un contenu calé à gauche qui paraît décentré.
 - **Pourquoi** : en passant d'une rubrique à l'autre, le contenu « saute ». C'est le signe le plus net du travail à
   plusieurs mains.
 - **Correction** : trois largeurs seulement (lecture 720 px, standard 1040 px, large pour Agenda et Plans), toujours
@@ -276,3 +277,49 @@ Jugé d'après le code (`mobile-v1/`), non vu à l'écran.
 
 Ordre conseillé : **1 puis 2 et 3** (ils se nourrissent), **4** avant toute campagne d'inscriptions, **7** avant Google
 Play.
+
+---
+
+## 6. Corrections faites le 25/11/2026 (lots 1 à 8)
+
+Le fondateur a choisi les lots 1, 2 et 3, puis demandé d'enchaîner les autres sans attendre. Tout est fait, sauf ce qui
+est indiqué à la fin. 599 tests passent ; appli mobile : `tsc` sans erreur, 46 tests.
+
+![Plans avant/après](audit-visuel-2026-11-25/20-avant-apres-plans.jpg)
+![Connexion avant/après](audit-visuel-2026-11-25/21-avant-apres-connexion.jpg)
+![Première visite avant/après](audit-visuel-2026-11-25/22-avant-apres-premiere-visite.jpg)
+![Bilan avant/après](audit-visuel-2026-11-25/23-avant-apres-bilan.jpg)
+
+- **Lot 1** : le code ne s'affiche plus sur les 4 plans, et chacun s'ouvre sur son plan ; bouton « Enregistrer » du
+  Journal et de la note rapide ; encadré « Comprendre cette étape » sur deux lignes lisibles ; mentions légales : phrase
+  neutre « en cours d'immatriculation » à la place de l'encadré jaune, « à compléter » en italique discret.
+- **Lot 2** : un seul logo (monogramme « KS » au filet d'or + nom) dans la barre de l'application, l'administration, la
+  vitrine, la Boussole, les pages légales, la page d'erreur, les e-mails ; icônes de l'application recolorées au vert du
+  livre ; connexion, inscription, vérification, accueil des nouveaux inscrits et assistant du Plan de Vie sur fond clair
+  avec un bandeau vert ; pages légales et page d'erreur avec les polices de l'application ; contrastes suffisants
+  (boutons verts pleins, bouton or sur les bandeaux verts, liens soulignés).
+- **Lot 3** : trois largeurs de page (720, 820, 1100 px) ; en-têtes du Plan de Vie, de Mes plans, des plans, du Journal
+  et des tests au modèle commun ; Bilan : une seule action principale ; couleurs hors palette remplacées (tests, Agenda,
+  Journal, Rituels, Mes tests) et couleurs vives de Tailwind (bleu, violet, orange, rose…) redéfinies sur la palette.
+- **Lot 4** : carte « Bravo, vos fondations sont posées » sur Aujourd'hui juste après l'accueil (raison d'être et valeurs
+  reprises) ; analyse de cohérence en « pistes pour l'enrichir », en or, barre de progression, cartes lisibles sur
+  téléphone ; le bonjour d'abord ; barre du bas masquée pendant l'accueil.
+- **Lot 5** : onglets et filtres sur une ligne qui défilent, avec fondu ; « 40 % » insécable ; tableau d'Intendance
+  contenu ; échelle du Bilan du jour ; réponses de la Boussole alignées ; tableaux du livre défilants.
+- **Lot 6** : point d'or « Journée tenue » quand tous les rituels du jour sont cochés ; paliers de série (une semaine,
+  trois semaines, un mois) ; Revue du mois vide encourageante ; fin de parcours de l'Académie et des 13 semaines marquée.
+- **Lot 7** (appli mobile) : surtitre et titre d'écran communs, surtitre vert comme sur le site, couleurs du couple en
+  terre cuite, aucun texte sous 11 px.
+- **Lot 8** : e-mails sur la palette du livre avec le logo, « e-mail » partout ; libellés de formulaires en minuscules
+  dans toute l'application et l'administration.
+
+**Reste à faire** (non traité, par prudence ou faute de pouvoir le vérifier) :
+- appli mobile : la voir sur un vrai téléphone ; les écrans d'inscription, de profil et d'abonnement s'ouvrent toujours
+  dans le navigateur (désormais sur le fond clair) ; l'icône de l'appli dans les stores n'a pas été changée ;
+- Boussole 360 connecté : toujours sans le menu de l'application ;
+- vitrine : pas raccourcie (choix de contenu qui revient au fondateur) ;
+- doublon « Ma prochaine étape » / « Vos premiers pas » sur Aujourd'hui : gardé (choix antérieur protégé par un test),
+  mais le bonjour passe désormais en premier ;
+- couleurs propres aux rapports de tests (centres de l'ennéagramme, icônes du DISC) : gardées, elles servent à
+  distinguer des données ;
+- rien n'est encore en ligne : il faut déployer.

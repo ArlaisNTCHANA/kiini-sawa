@@ -329,7 +329,7 @@
             { id: 'TRANSMISSION', label: 'Transmission',  color: '#A87A1F', glow: 'rgba(168, 122, 31, 0.15)' },
             { id: 'HYGIENE',      label: 'Hygiène',       color: '#5D7368', glow: 'rgba(93, 115, 104, 0.15)' },
         ] %}
-        <div style="display: flex; flex-wrap: wrap; gap: 0.5rem; justify-content: center; margin-bottom: 0.5rem;">
+        <div class="ks-scroll-row" style="margin-bottom: 0.5rem;">
             {% for p in pillars %}
             <button @click="selectedPillar = '{{ p.id }}'"
                     class="pill-btn-filter"
@@ -473,7 +473,7 @@
     ══════════════════════════════════════════════════════ #}
     <div x-show="tab === 'ROOTING'" x-cloak style="display: flex; flex-direction: column; gap: 2rem;">
         {# Pillar Filters (same as Tracker view) #}
-        <div style="display: flex; flex-wrap: wrap; gap: 0.5rem; justify-content: center; margin-bottom: 0.5rem;">
+        <div class="ks-scroll-row" style="margin-bottom: 0.5rem;">
             {% for p in pillars %}
             <button @click="selectedPillar = '{{ p.id }}'"
                     class="pill-btn-filter"

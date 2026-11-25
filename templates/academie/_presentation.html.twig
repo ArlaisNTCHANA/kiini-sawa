@@ -39,7 +39,18 @@
                 <p>{{ t('academie.parcours.pro', 'Ce parcours fait partie de KIINI SAWA PRO.') }}</p>
                 <a href="{{ path('app_subscription') }}" class="ks-btn ks-btn--primary"><i data-lucide="lock-open"></i> {{ t('academie.parcours.pro_bouton', 'Découvrir KIINI SAWA PRO') }}</a>
             {% elseif enrollment and enrollment.completed %}
-                <p class="academie-iconline"><i data-lucide="check-circle-2" style="width: 16px; height: 16px; color: var(--primary);"></i> {{ t('academie.parcours.termine', 'Vous avez terminé ce parcours. Vous pouvez relire chaque leçon quand vous le voulez.') }}</p>
+                {# Fin de parcours marquée, sobrement (contre-audit visuel du 25/11/2026) #}
+                <div class="academie-done" role="status">
+                    <span class="academie-done__dot" aria-hidden="true"></span>
+                    <p class="academie-done__title">{{ t('academie.parcours.termine_titre', 'Parcours terminé') }}</p>
+                    <p class="academie-done__text">{{ t('academie.parcours.termine', 'Vous avez terminé ce parcours. Vous pouvez relire chaque leçon quand vous le voulez.') }}</p>
+                </div>
+                <style>
+                    .academie-done { position: relative; background: var(--gold-soft); border: 1px solid #EAD49A; border-radius: 14px; padding: 1rem 1.1rem 1rem 2.6rem; margin-bottom: .9rem; }
+                    .academie-done__dot { position: absolute; left: 1.1rem; top: 1.3rem; width: 10px; height: 10px; border-radius: 50%; background: var(--gold); box-shadow: 0 0 0 4px rgba(200, 150, 46, .2); }
+                    .academie-done__title { font-family: var(--font-serif); font-weight: 600; font-size: 1.15rem; color: var(--primary-dark); margin: 0 0 .2rem; }
+                    .academie-done__text { margin: 0; font-size: .9rem; color: var(--fg-light); }
+                </style>
                 {% if boussole_due %}
                     <a href="{{ path('app_public_boussole') }}" class="ks-btn ks-btn--primary"><i data-lucide="compass"></i> {{ t('academie.parcours.boussole', 'Refaire ma Boussole 360') }}</a>
                 {% else %}

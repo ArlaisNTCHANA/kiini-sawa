@@ -85,7 +85,7 @@ class RegistrationTest extends WebTestCase
             'goalDeadline' => (new \DateTimeImmutable('+2 years'))->format('Y-m-d'),
             '_csrf_token' => $form->get('_csrf_token')->getValue(),
         ]);
-        $this->assertResponseRedirects('/plan-de-vie?onglet=analysis');
+        $this->assertResponseRedirects('/dashboard');
 
         $user = $this->findUser($email);
         $plan = $user->getPlanDeVie();
@@ -95,9 +95,14 @@ class RegistrationTest extends WebTestCase
         $this->assertCount(1, $plan->getLifeGoals());
         $this->assertSame('GIVE', $plan->getLifeGoals()->first()->getCategory());
 
-        // Le premier moment de valeur : l'analyse de cohérence avec un score
+        // Le premier moment de valeur : une carte « Bravo » qui reprend ce que la personne vient d'écrire (contre-audit visuel 25/11/2026)
         $this->client->followRedirect();
         $this->assertResponseIsSuccessful();
+        $this->assertSelectorTextContains('.welcome-card', 'Vos fondations sont posées');
+        $this->assertSelectorTextContains('.welcome-card', 'Servir ma génération avec sagesse et courage.');
+        $this->assertSelectorTextContains('.welcome-card', 'Famille');
+        // L'analyse de cohérence reste à un clic
+        $this->client->request('GET', '/plan-de-vie?onglet=analysis');
         $this->assertSelectorTextContains('#tab-analysis .analysis-score-badge', 'Score de cohérence');
     }
 
