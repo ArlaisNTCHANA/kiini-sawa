@@ -206,7 +206,7 @@ hors connexion ; terminer une leçon et écrire une note demandent le réseau.
 ---
 
 **Parcours de plan (26/11/2026)** : dans une séance d'un parcours de plan, `pratique.type` vaut `seance` et porte
-`rubrique` (`genre` : `texte`, `liste` ou `objectifs` ; `libelle`, `texte`, `horizon`, `elements` [{id, text}],
+`rubrique` (`genre` : `texte`, `liste` ou `objectifs` ; `libelle`, `exemple`, `texte`, `horizon`, `elements` [{id, text}],
 `objectifs` {BE|DO|HAVE|GIVE: {libelle, elements}}). Pour terminer : `mode: plan` avec `texte` (+ `horizon`), ou
 `elements` (nouvelles lignes), ou `objectifs` ({BE: [...], ...}). Les éléments déjà présents ne sont jamais retirés.
 

@@ -302,6 +302,7 @@ final class MobileAcademyController extends AbstractController
                 'rubrique' => [
                     'genre' => ['text' => 'texte', 'list' => 'liste', 'goals' => 'objectifs'][$r['kind']],
                     'libelle' => $r['label'],
+                    'exemple' => $r['example'] ?? null,
                     'texte' => $r['text'] ?? null,
                     'horizon' => $r['horizon'] ?? null,
                     'elements' => $r['items'] ?? null,
