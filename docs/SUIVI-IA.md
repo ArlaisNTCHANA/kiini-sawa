@@ -41,7 +41,15 @@ Ne jamais afficher ni demander de mot de passe ; ne pas publier son nom (mention
   répond par une page (200) doit porter `data-turbo="false"`.
 - **Tests** : `tests/Social/PartnersPageTest.php` (7) ; `AccountabilityTest` adapté. Vu à l'écran en local (bureau et
   375 px) : invitation → engagement prérempli → aperçu → fiche « Samuel · Par e-mail ».
-- **Reste** : l'application mobile garde son écran « Ma redevabilité » (dépôt `kiini-mobile`) ; à aligner.
+- **Application mobile alignée (même jour, dépôt `mobile-v1`)** : l'onglet « Partenaires de Redevabilité » de l'écran
+  Ensemble (`app/partenaires/index.tsx`) montre une fiche par personne (`src/partenaires/people.ts`, regroupement par
+  `partnerKey`) avec ses engagements (`src/partenaires/CommitmentCard.tsx`, ex-écran « Ma redevabilité ») ; un seul
+  bouton « Inviter un Partenaire de Redevabilité » ouvre `/social/inviter` sur le site (l'ancien champ e-mail de
+  l'appli est remplacé, l'API d'invitation reste) ; « Lui confier un engagement » ouvre le formulaire prérempli ;
+  `/redevabilite` renvoie vers `/partenaires` (anciennes notifications aussi) ; menu à une entrée. API : `partnerKey`
+  sur les partages et les engagements, `inviteUrl` dans `/api/mobile/v1/redevabilite` (l'appli tolère leur absence).
+  Vérifié : `tsc`, 50 tests vitest. **Non vu à l'écran** (pas de build lancé) ; `expo lint` n'est pas configuré
+  dans le dépôt.
 - **Déployé le 26/11/2026** (pas de migration) : accueil et connexion en 200, `/social`, `/social/inviter` et
   `/social/redevabilite` en 302 vers la connexion, page inconnue en 404, aucune erreur au journal, correctif Turbo
   présent sur le serveur.

@@ -51,6 +51,7 @@ final class MobileCommunityController extends AbstractController
                 $partner = $conn->getReceiver();
                 $active[] = [
                     'id' => $conn->getId(),
+                    'partnerKey' => 'u'.$partner->getId(),
                     'partnerName' => $partner->getDisplayName(),
                     'partnerEmail' => $partner->getEmail(),
                     'type' => $conn->getType(),
@@ -73,6 +74,7 @@ final class MobileCommunityController extends AbstractController
                 $partner = $conn->getRequester();
                 $active[] = [
                     'id' => $conn->getId(),
+                    'partnerKey' => 'u'.$partner->getId(),
                     'partnerName' => $partner->getDisplayName(),
                     'partnerEmail' => $partner->getEmail(),
                     'type' => $conn->getType(),

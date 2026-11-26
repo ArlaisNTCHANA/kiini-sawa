@@ -332,6 +332,8 @@ class AccountabilityTest extends WebTestCase
         $this->assertSame('Lire la Bible chaque matin', $list['json']['commitments'][0]['targetLabel']);
         $this->assertSame(3, $list['json']['commitments'][0]['alerts']['habitDays']);
         $this->assertStringContainsString('/social/redevabilite/nouveau', $list['json']['createUrl']);
+        $this->assertStringContainsString('/social/inviter', $list['json']['inviteUrl']);
+        $this->assertSame('e'.mb_strtolower($c->getPartnerEmail()), $list['json']['commitments'][0]['partnerKey']);
 
         $help = $this->api('POST', '/api/mobile/v1/redevabilite/'.$c->getId().'/coup-de-main', ['message' => 'Dur cette semaine'], $token);
         $this->assertSame(200, $help['status']);

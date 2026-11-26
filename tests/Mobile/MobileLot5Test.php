@@ -217,6 +217,7 @@ class MobileLot5Test extends WebTestCase
         // 5. Both have 1 active partner now
         $listA2 = $this->api('GET', '/api/mobile/v1/partenaires', bearer: $tokenA);
         $this->assertSame(1, $listA2['json']['totalActive']);
+        $this->assertSame('u'.$userB->getId(), $listA2['json']['active'][0]['partnerKey']);
 
         $listB2 = $this->api('GET', '/api/mobile/v1/partenaires', bearer: $tokenB);
         $this->assertSame(1, $listB2['json']['totalActive']);

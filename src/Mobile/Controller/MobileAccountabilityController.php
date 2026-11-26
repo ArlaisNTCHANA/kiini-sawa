@@ -42,6 +42,8 @@ final class MobileAccountabilityController extends AbstractController
             ], $this->service->commitmentsAsPartner($user)),
             'canCreate' => $this->service->canCreate($user),
             'createUrl' => $this->generateUrl('app_accountability_new', [], UrlGeneratorInterface::ABSOLUTE_URL),
+            // Point 6 : invitation unique d'un Partenaire de Redevabilité (sur le site, avec l'aperçu et le consentement)
+            'inviteUrl' => $this->generateUrl('app_partner_invite', [], UrlGeneratorInterface::ABSOLUTE_URL),
         ]);
     }
 
@@ -93,6 +95,8 @@ final class MobileAccountabilityController extends AbstractController
             'targetLabel' => $c->getTargetLabel(),
             'targetType' => $c->getTargetType(),
             'partnerName' => $c->getPartnerName(),
+            // Même clé que PartnerDirectory::people (u<id> pour un membre, e<e-mail> sinon) : l'appli regroupe par personne
+            'partnerKey' => null !== $c->getPartnerUser() ? 'u'.$c->getPartnerUser()->getId() : 'e'.mb_strtolower($c->getPartnerEmail()),
             'status' => $c->getStatus(),
             'createdAt' => $c->getCreatedAt()->format('Y-m-d'),
             'alerts' => [
