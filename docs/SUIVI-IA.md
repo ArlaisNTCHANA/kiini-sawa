@@ -9,6 +9,14 @@ teste (`php bin/phpunit`), commit, déploie (`bin/ops/envoyer-hostinger.sh`), v�
 journal `var/log/prod-AAAA-MM-JJ.log` sans erreur) ; **le fondateur fait lui-même `git push`** (refusé à l'IA).
 Ne jamais afficher ni demander de mot de passe ; ne pas publier son nom (mentions légales en attente).
 
+## 26/11/2026 — Proposition : remplir ses plans par parcours guidés
+
+- **Ressenti du fondateur** après avoir essayé : découragé, enchaînement qui n'aide pas, aucune vue d'ensemble du
+  remplissage. **Proposition** : `docs/PROPOSITION-parcours-guides.md` (6 parcours de plan + parcours de 90 jours ;
+  séance en 5 temps ; ligne de métro ; rendez-vous par e-mail ; réutilise l'Académie, `Journey` et
+  `LifePlanWizardSaver`). **Non validée** : 6 questions au fondateur (§ 9). Ajoutée en « Priorité 0 » de
+  `docs/A-FAIRE-parcours-nouvel-utilisateur.md`.
+
 ## 26/11/2026 — Passation : feuille de route des corrections du parcours « nouvel utilisateur »
 
 - **À lire en premier par l'IA suivante** : `docs/A-FAIRE-parcours-nouvel-utilisateur.md` (déjà fait, reste à vérifier,

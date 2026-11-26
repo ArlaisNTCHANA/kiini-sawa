@@ -37,6 +37,17 @@ complet `docs/parcours-nouvel-utilisateur-2026-11-25.md` (carnet étape par éta
   propre (IIFE, ou `window.allLifeGoals = …`), ou désactiver Turbo sur ces liens (`data-turbo="false"`).
   À vérifier : l'enregistrement automatique et les boutons « Ajouter » marchent encore après une navigation Turbo.
 
+## Priorité 0 : les parcours guidés (avant les chantiers ci-dessous)
+
+Le fondateur a essayé de remplir ses plans et s'est **vite découragé** : il faut de la discipline, l'enchaînement
+n'aide pas et l'on ne voit pas le chemin. Réponse proposée : remplir les plans **par parcours guidés** (six parcours
+courts, un par plan, plus le parcours de 90 jours qui les enchaîne). Chaque séance suit cinq temps : comprendre,
+méditer, réfléchir, écrire dans le plan, célébrer. Une **ligne de métro** montre où l'on en est, et des rendez-vous
+par e-mail aident à continuer.
+**Document** : `docs/PROPOSITION-parcours-guides.md`. **À faire valider par le fondateur** (questions du § 9) avant tout
+code ; lot 1 = parcours Plan de Vie. Plusieurs chantiers ci-dessous (1, 3, 4, 8) en seront en partie résolus :
+les traiter en cohérence avec ce projet.
+
 ## À faire, par ordre d'importance
 
 ### 1. Assistants des plans sur téléphone (gênant fort)
