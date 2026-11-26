@@ -7,13 +7,13 @@
 <section class="cyc" aria-label="{{ title }}" data-cycle x-data="{ cur: {{ (start ?: (items|first).key)|json_encode|e('html_attr') }} }">
     <style>
         .cyc { background: #fff; border-radius: 16px; padding: 1rem; box-shadow: var(--card-shadow); margin: 0 0 1.5rem; }
-        .cyc__row { display: grid; grid-template-columns: repeat({{ items|length }}, 1fr); gap: .5rem; }
-        .cyc__node { display: flex; flex-direction: column; align-items: center; gap: .35rem; padding: .7rem .3rem; border: 2px solid var(--border); border-radius: 14px; background: #fff; cursor: pointer; font: inherit; color: var(--fg); transition: border-color .2s, background .2s, transform .2s; }
+        .cyc__row { display: grid; grid-template-columns: repeat({{ items|length }}, minmax(0, 1fr)); gap: .5rem; }
+        .cyc__node { min-width: 0; display: flex; flex-direction: column; align-items: center; gap: .35rem; padding: .7rem .3rem; border: 2px solid var(--border); border-radius: 14px; background: #fff; cursor: pointer; font: inherit; color: var(--fg); transition: border-color .2s, background .2s, transform .2s; }
         .cyc__node:hover { transform: translateY(-2px); }
         .cyc__node:focus-visible { outline: 3px solid var(--gold); outline-offset: 2px; }
         .cyc__ico { width: 2.4rem; height: 2.4rem; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #fff; }
         .cyc__ico svg { width: 20px; height: 20px; }
-        .cyc__name { font-weight: 700; font-size: .85rem; text-align: center; line-height: 1.15; }
+        .cyc__name { font-weight: 700; font-size: .85rem; text-align: center; line-height: 1.15; max-width: 100%; overflow-wrap: anywhere; hyphens: auto; }
         .cyc__here { font-size: .65rem; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; color: var(--accent); }
         .cyc__detail { margin-top: .9rem; border-radius: 14px; padding: 1rem 1.1rem; background: var(--bg-alt); border-left: 5px solid var(--primary); }
         .cyc__detail h3 { margin: 0 0 .25rem; font-family: var(--font-serif); font-size: 1.15rem; }

@@ -15,6 +15,21 @@
         .custom-scrollbar::-webkit-scrollbar-thumb { background: var(--border-strong); border-radius: 10px; }
         .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: var(--fg-subtle); }
         
+        /* Téléphone (parcours « nouvel utilisateur » du 25/11/2026, chantier 1) : la carte suit la page au lieu de défiler
+           dans une petite fenêtre ; plus de défilements imbriqués ; rien ne déborde sur le côté. */
+        @media (max-width: 640px) {
+            .wizard-body { padding: 1rem .6rem 2rem !important; min-height: 0 !important; }
+            .wizard-card { min-height: 0 !important; border-radius: 1.25rem !important; }
+            .wizard-form { padding: 1.25rem 1rem 1.5rem !important; }
+            .wizard-scroll { max-height: none !important; overflow: visible !important; padding-right: 0 !important; }
+            .checkbox-list-container { max-height: none !important; overflow: visible !important; }
+            .wizard-card, .wizard-form, .wizard-scroll, .wizard-scroll * { min-width: 0; }
+            .wizard-scroll { overflow-x: hidden; }
+            .wizard-scroll h2 { font-size: 1.4rem !important; }
+            .wizard-scroll [style*="grid-template-columns"] { grid-template-columns: 1fr !important; }
+            .dynamic-row { flex-wrap: wrap; }
+            .dynamic-row > input, .dynamic-row > .wiz-input { flex: 1 1 100%; }
+        }
         .wizard-body {
             display: flex;
             flex-direction: column;
@@ -221,7 +236,7 @@
     </div>
 
     <!-- Main Wizard Card -->
-    <div style="width: 100%; max-width: 900px; background: rgba(255, 255, 255, 0.98); border-radius: 2rem; 
+    <div class="wizard-card" style="width: 100%; max-width: 900px; background: rgba(255, 255, 255, 0.98); border-radius: 2rem; 
                 box-shadow: 0 30px 70px rgba(0, 0, 0, 0.2); border: 1px solid rgba(46, 107, 83, 0.06);
                 display: flex; flex-direction: column; overflow: hidden; position: relative; z-index: 10; min-height: 520px;"
           data-controller="wizard" 
@@ -244,10 +259,10 @@
         </div>
 
         <!-- Form content -->
-        <form action="{{ path('app_plan_wizard', { step: step, single: 0, plan: plan }) }}" method="POST" style="flex: 1; display: flex; flex-direction: column; padding: 2rem 2.5rem 2.5rem; width: 100%;">
+        <form action="{{ path('app_plan_wizard', { step: step, single: 0, plan: plan }) }}" method="POST" class="wizard-form" style="flex: 1; display: flex; flex-direction: column; padding: 2rem 2.5rem 2.5rem; width: 100%;">
 <input type="hidden" name="_csrf_token" value="{{ csrf_token('plan_wizard') }}">
             <input type="hidden" name="plan" value="{{ plan }}">
-            <div style="flex: 1; overflow-y: auto; max-height: 420px; padding-right: 0.5rem;" class="custom-scrollbar">
+            <div style="flex: 1; overflow-y: auto; max-height: 420px; padding-right: 0.5rem;" class="custom-scrollbar wizard-scroll">
 {% endif %}
                 
                 {# ETAPE 1: BOUSSOLE (PURPOSE) #}

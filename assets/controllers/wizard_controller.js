@@ -96,6 +96,14 @@ export default class extends Controller {
     }
 
     showCurrentStep() {
+        // Chaque étape s'ouvre en haut (sur téléphone, elle s'ouvrait défilée au milieu : parcours du 25/11/2026)
+        const scroller = this.element.querySelector('.wizard-scroll');
+        if (scroller) scroller.scrollTop = 0;
+        if (this._shown) {
+            this.element.scrollIntoView({ block: 'start' });
+        }
+        this._shown = true;
+
         // Mettre à jour l'affichage des étapes
         this.stepTargets.forEach((element, index) => {
             if (index + 1 === this.currentStepValue) {

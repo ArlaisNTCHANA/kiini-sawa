@@ -50,7 +50,7 @@ les traiter en cohérence avec ce projet.
 
 ## À faire, par ordre d'importance
 
-### 1. Assistants des plans sur téléphone (gênant fort)
+### 1. Assistants des plans sur téléphone (gênant fort) — **corrigé le 26/11/2026** (voir `docs/SUIVI-IA.md`)
 **Symptôme** : sur un écran de 375 px, la carte de l'assistant est une petite fenêtre d'environ 200 px de contenu utile.
 Elle défile à l'intérieur de l'écran, il y a 2 à 3 défilements imbriqués (page, carte, liste des objectifs) et le
 contenu glisse vers la gauche après « Ajouter » (libellés coupés). Captures 16 et 23. Chaque étape s'ouvre déjà

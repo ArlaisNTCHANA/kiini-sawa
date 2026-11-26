@@ -9,6 +9,19 @@ teste (`php bin/phpunit`), commit, déploie (`bin/ops/envoyer-hostinger.sh`), v�
 journal `var/log/prod-AAAA-MM-JJ.log` sans erreur) ; **le fondateur fait lui-même `git push`** (refusé à l'IA).
 Ne jamais afficher ni demander de mot de passe ; ne pas publier son nom (mentions légales en attente).
 
+## 26/11/2026 — Assistants des plans lisibles sur téléphone (chantier 1)
+
+- **Demande du fondateur** : « commence par le point 1 » (`docs/A-FAIRE-parcours-nouvel-utilisateur.md`).
+- **Fait** : `templates/plan_de_vie/wizard.html.twig` (classes `wizard-card`, `wizard-form`, `wizard-scroll` et règles
+  sous 640 px : la carte suit la page, plus de hauteur fixe ni de défilement intérieur, listes d'objectifs dépliées,
+  grilles en une colonne, marges réduites) ; `assets/controllers/wizard_controller.js` (chaque étape s'ouvre en haut,
+  la page remonte au changement d'étape) ; `templates/shared/_cycle_figure.html.twig` (le schéma interactif des
+  convictions débordait : colonnes `minmax(0, 1fr)`, mot long coupé). Test : `tests/PlanDeVie/WizardMobileLayoutTest.php`.
+- **Vérifié à 375 px** sur les 13 étapes des 5 assistants : largeur de page 375, aucun élément qui dépasse, aucun
+  défilement intérieur ; après « Ajouter » (Croissance), rien ne glisse ; « Suivant » ramène en haut et l'enregistrement
+  automatique marche. Ordinateur inchangé (règles limitées au téléphone). 622 tests verts.
+- **Non déployé.**
+
 ## 26/11/2026 — Parcours guidés, lot 4 et « un seul message par jour »
 
 - **Demande du fondateur** : « suite ? » (après le chargement des 5 parcours en brouillon en production).
