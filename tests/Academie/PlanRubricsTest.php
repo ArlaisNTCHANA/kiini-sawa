@@ -217,4 +217,67 @@ final class PlanRubricsTest extends WebTestCase
         $this->assertSelectorTextContains('[data-next-step="plan-journey"]', 'station 2 sur 2');
         $this->assertSelectorTextNotContains('[data-next-step="plan-journey"]', 'Commencer mon parcours', 'Pas d\'invitation au parcours de 90 jours en même temps.');
     }
+
+    public function testDailyEmailAnnouncesTheSessionWithWhatWasPosedAndItsVerse(): void
+    {
+        static::createClient();
+        $user = $this->createUser();
+        $course = $this->makeCourse('VIE', true, true, [['Vos passions', 'VIE', 'list_passions'], ['Votre vision', 'VIE', 'write_vision']]);
+        $course->setKind(Course::KIND_PLAN);
+        $course->getLessons()[1]->setContentMarkdown("Texte.\n\n:::mediter\n> « Écris la prophétie. » Habacuc 2:2\n\nUne prière.\n:::");
+        $enrollment = new \App\Academie\Entity\CourseEnrollment($user, $course);
+        $this->em()->persist($enrollment);
+        $enrollment->complete($course->getLessons()[0])->recordPractice(['target' => 'VIE', 'action' => 'list_passions', 'title' => 'Chanter, Enseigner'], null, null);
+        $this->em()->flush();
+
+        $mailer = static::getContainer()->get(\App\Academie\Service\AcademyPaceMailer::class);
+        $this->assertSame('lecons', $mailer->sendFor($enrollment, new \DateTimeImmutable('2026-11-23')));
+        $email = $this->getMailerMessage();
+        $this->assertEmailHeaderSame($email, 'Subject', 'Aujourd\'hui : votre vision');
+        $this->assertEmailHtmlBodyContains($email, 'station 2 sur 2');
+        $this->assertEmailHtmlBodyContains($email, 'Chanter, Enseigner');
+        $this->assertEmailHtmlBodyContains($email, 'Habacuc 2:2');
+        $this->assertEmailHtmlBodyContains($email, 'Commencer la séance');
+        $this->assertEmailHtmlBodyContains($email, 'une séance par jour');
+    }
+
+    public function testDraftIsKeptThenResumedThenClearedWhenTheSessionEnds(): void
+    {
+        $client = static::createClient();
+        $user = $this->createUser();
+        $client->loginUser($user);
+        $course = $this->planCourse('list_passions');
+        $url = '/academie/'.$course->getSlug().'/lecon-1';
+
+        $crawler = $client->request('GET', $url);
+        $this->assertSelectorExists('#pratique form[data-brouillon]');
+        $token = $crawler->filter('#pratique input[name="_csrf_token"]')->attr('value');
+        $client->request('POST', $url.'/brouillon', ['_csrf_token' => $token, 'items' => ['Chanter', '', 'Enseigner']]);
+        $this->assertResponseIsSuccessful();
+        $this->assertNull($this->reload($user)->getPlanDeVie()?->getPassions()->count() ?: null, 'Un brouillon n\'écrit rien dans le plan.');
+
+        $crawler = $client->request('GET', $url);
+        $this->assertSelectorExists('.academie-brouillon');
+        $this->assertSame('Chanter', $crawler->filter('#pratique input[name="items[]"]')->eq(0)->attr('value'));
+        $this->assertSame('Enseigner', $crawler->filter('#pratique input[name="items[]"]')->eq(2)->attr('value'));
+
+        $client->request('POST', $url.'/brouillon', ['_csrf_token' => 'faux', 'items' => ['X']]);
+        $this->assertResponseStatusCodeSame(403);
+
+        $client->request('POST', $url.'/terminer', ['_csrf_token' => $token, 'mode' => 'plan', 'items' => ['Chanter', 'Enseigner']]);
+        $enrollment = static::getContainer()->get(\App\Academie\Repository\CourseEnrollmentRepository::class)->findFor($this->reload($user), $this->em()->find(Course::class, $course->getId()));
+        $this->assertNull($enrollment->draftFor($enrollment->getCourse()->getLessons()[0]), 'Brouillon effacé à la fin de la séance.');
+    }
+
+    public function testBoussoleResultOffersThePlanJourneyOnlyOncePublished(): void
+    {
+        $client = static::createClient();
+        $client->request('GET', '/boussole');
+        $this->assertStringNotContainsString('Laissez-vous guider', (string) $client->getResponse()->getContent());
+
+        $course = $this->planCourse('list_passions');
+        $client->request('GET', '/boussole');
+        $this->assertSelectorTextContains('.next-list', 'Laissez-vous guider');
+        $this->assertSelectorTextContains('.next-list', $course->getTitle());
+    }
 }

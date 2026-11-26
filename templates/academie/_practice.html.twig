@@ -5,11 +5,13 @@
     Rien n'est écrit dans un plan sans un clic sur le bouton d'accord ; l'autre bouton termine la leçon sans rien modifier.
 #}
 {% set answer = completion ? completion.response : null %}
+{% set draft = draft|default(null) %}
 {% set saved = completion and completion.hasCreatedEntity %}
 <section class="ks-card ks-card--accent" id="pratique" style="margin-top: 2rem;" aria-labelledby="pratique-title">
     {% set seance = practice.rubric is defined or course.planJourney %}
     <h2 class="ks-card__title" id="pratique-title"><i data-lucide="{{ seance ? 'pencil-line' : 'target' }}"></i> {{ seance ? t('academie.seance.ecrire', 'Écrire dans mon plan') : t('academie.pratique.titre', 'Mettre en pratique') }}</h2>
-    <form method="post" action="{{ path('app_academie_complete', {slug: course.slug, lessonSlug: lesson.slug}) }}">
+    <form method="post" action="{{ path('app_academie_complete', {slug: course.slug, lessonSlug: lesson.slug}) }}"{% if seance and not preview|default(false) %} data-brouillon="{{ path('app_academie_draft', {slug: course.slug, lessonSlug: lesson.slug}) }}"{% endif %}>
+        {% if draft %}<p class="ks-small academie-iconline academie-brouillon" style="margin: 0 0 .7rem;"><i data-lucide="history" style="width: 13px; height: 13px;"></i> {{ t('academie.brouillon.repris', 'Vous aviez commencé : votre brouillon est repris là où vous vous étiez arrêté.') }}</p>{% endif %}
         <input type="hidden" name="_csrf_token" value="{{ csrf_token('academie') }}">
         {% if practice.rubric is defined %}
             {# Séance d'un parcours de plan : la rubrique entière du plan ; ce qui y est déjà reste tel quel #}
@@ -19,11 +21,11 @@
                 <div class="ks-alert ks-alert--info" style="margin-bottom: .8rem;">{{ practice.blocker }}</div>
             {% elseif r.kind == 'text' %}
                 <label class="ks-label" for="seance-texte">{{ r.label }}</label>
-                <textarea class="ks-input" id="seance-texte" name="text" rows="4" maxlength="{{ practice.action == 'write_vision' ? 5000 : 2000 }}" required placeholder="{{ r.example }}">{{ r.text }}</textarea>
+                <textarea class="ks-input" id="seance-texte" name="text" rows="4" maxlength="{{ practice.action == 'write_vision' ? 5000 : 2000 }}" required placeholder="{{ r.example }}">{{ draft.text ?? r.text }}</textarea>
                 {% if r.text %}<p class="ks-small" style="margin-top: .4rem;">{{ t('academie.seance.texte_existant', 'C\'est le texte déjà écrit dans votre plan : vous pouvez le reprendre ici.') }}</p>{% endif %}
                 {% if practice.action == 'write_vision' %}
                     <label class="ks-label" for="seance-horizon" style="margin-top: .7rem;">{{ t('academie.seance.horizon', 'À quel horizon ?') }}</label>
-                    <input class="ks-input" id="seance-horizon" name="horizon" maxlength="50" value="{{ r.horizon }}" placeholder="5 ans">
+                    <input class="ks-input" id="seance-horizon" name="horizon" maxlength="50" value="{{ draft.horizon ?? r.horizon }}" placeholder="5 ans">
                 {% endif %}
             {% elseif r.kind == 'list' %}
                 <p class="ks-label">{{ r.label }}</p>
@@ -31,8 +33,9 @@
                     <p class="ks-small" style="margin: 0 0 .4rem;">{{ t('academie.seance.deja', 'Déjà dans votre plan :') }}</p>
                     <ul class="academie-seance-deja">{% for item in r.items %}<li>{{ item.text }}</li>{% endfor %}</ul>
                 {% endif %}
-                {% for i in 1..3 %}
-                    <input class="ks-input academie-seance-ligne" name="items[]" maxlength="255" aria-label="{{ r.label }} ({{ i }})" {{ i == 1 and r.items is empty ? 'required' }} placeholder="{{ i == 1 ? r.example : '' }}">
+                {% set draft_items = draft.items ?? [] %}
+                {% for i in 1..max(3, draft_items|length) %}
+                    <input class="ks-input academie-seance-ligne" name="items[]" maxlength="255" aria-label="{{ r.label }} ({{ i }})" {{ i == 1 and r.items is empty ? 'required' }} placeholder="{{ i == 1 ? r.example : '' }}" value="{{ draft_items[i - 1] ?? '' }}">
                 {% endfor %}
                 <p class="ks-small" style="margin-top: .4rem;">{{ t('academie.seance.lignes', 'Une réponse par ligne. Les lignes vides sont ignorées.') }}</p>
             {% elseif r.kind == 'goals' %}
@@ -40,7 +43,8 @@
                     <fieldset class="academie-seance-dimension">
                         <legend class="ks-label">{{ g.label }}</legend>
                         {% if g.items is not empty %}<ul class="academie-seance-deja">{% for item in g.items %}<li>{{ item.text }}</li>{% endfor %}</ul>{% endif %}
-                        {% for i in 1..2 %}<input class="ks-input academie-seance-ligne" name="goals[{{ cat }}][]" maxlength="255" aria-label="{{ g.label }} ({{ i }})">{% endfor %}
+                        {% set draft_goals = draft.goals[cat] ?? [] %}
+                        {% for i in 1..max(2, draft_goals|length) %}<input class="ks-input academie-seance-ligne" name="goals[{{ cat }}][]" maxlength="255" aria-label="{{ g.label }} ({{ i }})" value="{{ draft_goals[i - 1] ?? '' }}">{% endfor %}
                     </fieldset>
                 {% endfor %}
                 <p class="ks-small" style="margin-top: .4rem;">{{ r.example }}. {{ t('academie.seance.objectifs_aide', 'Les échéances se posent ensuite dans votre Plan de Vie.') }}</p>
@@ -109,3 +113,26 @@
         </div>
     </form>
 </section>
+<p class="ks-small" id="brouillon-etat" aria-live="polite" style="min-height: 1.2em; margin-top: .4rem; color: var(--fg-muted);"></p>
+<script>
+// Brouillon d'une séance : enregistré pendant la frappe (1,5 s après la dernière touche), repris à la prochaine ouverture.
+// var et fonction anonyme : Turbo rejoue ce script à chaque visite (voir InlineScriptTurboTest).
+(function () {
+    var form = document.querySelector('#pratique form[data-brouillon]');
+    var etat = document.getElementById('brouillon-etat');
+    if (!form || !window.fetch) return;
+    var timer = null;
+    var envoyer = function () {
+        var data = new FormData(form);
+        data.delete('mode');
+        fetch(form.dataset.brouillon, { method: 'POST', body: data, credentials: 'same-origin', headers: { 'X-Requested-With': 'fetch' } })
+            .then(function (r) { if (etat && r.ok) etat.textContent = {{ t('academie.brouillon.enregistre', 'Brouillon enregistré.')|json_safe }}; })
+            .catch(function () {});
+    };
+    form.addEventListener('input', function () {
+        if (etat) etat.textContent = '';
+        clearTimeout(timer);
+        timer = setTimeout(envoyer, 1500);
+    });
+})();
+</script>

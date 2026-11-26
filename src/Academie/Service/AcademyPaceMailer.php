@@ -77,17 +77,59 @@ final class AcademyPaceMailer
             return 'pauses';
         }
 
-        $title = 'Votre leçon du jour : '.$lesson->getTitle();
-        $ok = $this->notifier->notify($user, NotificationType::ACADEMY_LESSON, $title,
-            $course->getTitle().' · environ '.$lesson->getDurationMinutes().' min',
-            $this->urls->generate('app_academie_lesson', ['slug' => $course->getSlug(), 'lessonSlug' => $lesson->getSlug()]), $key,
-            ['template' => 'academie/email/lecon.html.twig', 'context' => ['course' => $course, 'lesson' => $lesson, 'progress' => $enrollment->progress(), 'pace' => $enrollment->getPaceMode()]]);
+        $url = $this->urls->generate('app_academie_lesson', ['slug' => $course->getSlug(), 'lessonSlug' => $lesson->getSlug()]);
+        if ($course->isPlanJourney()) {
+            // Parcours de plan (parcours guidés, 26/11/2026) : la séance du jour, ce qui a été posé la dernière fois, son verset
+            $ok = $this->notifier->notify($user, NotificationType::ACADEMY_LESSON, 'Aujourd\'hui : '.mb_lcfirst($lesson->getTitle()),
+                $course->getTitle().' · station '.($enrollment->progress()['done'] + 1).' sur '.$enrollment->progress()['total'].' · '.$lesson->getDurationMinutes().' min',
+                $url, $key,
+                ['template' => 'academie/email/seance.html.twig', 'context' => [
+                    'course' => $course, 'lesson' => $lesson, 'progress' => $enrollment->progress(), 'pace' => $enrollment->getPaceMode(),
+                    'last' => self::lastPosed($enrollment), 'verse' => self::verse((string) $lesson->getContentMarkdown()),
+                ]]);
+        } else {
+            $ok = $this->notifier->notify($user, NotificationType::ACADEMY_LESSON, 'Votre leçon du jour : '.$lesson->getTitle(),
+                $course->getTitle().' · environ '.$lesson->getDurationMinutes().' min', $url, $key,
+                ['template' => 'academie/email/lecon.html.twig', 'context' => ['course' => $course, 'lesson' => $lesson, 'progress' => $enrollment->progress(), 'pace' => $enrollment->getPaceMode()]]);
+        }
         if ($ok) {
             $enrollment->recordEmail($today);
             $this->em->flush();
         }
 
         return $ok ? 'lecons' : null;
+    }
+
+    /**
+     * Ce que la personne a posé dans son plan à sa dernière séance terminée (« La dernière fois, vous avez posé… »).
+     *
+     * @return array{lesson: string, text: string}|null
+     */
+    public static function lastPosed(CourseEnrollment $enrollment): ?array
+    {
+        $last = null;
+        foreach ($enrollment->getCompletions() as $c) {
+            if ('' !== trim((string) ($c->getResponse()['title'] ?? '')) && (null === $last || $c->getUpdatedAt() > $last->getUpdatedAt())) {
+                $last = $c;
+            }
+        }
+
+        return null === $last ? null : ['lesson' => $last->getLesson()->getTitle(), 'text' => mb_strimwidth(trim((string) $last->getResponse()['title']), 0, 220, '…')];
+    }
+
+    /** Le verset du temps « Méditer » de la séance (première citation de l'encadré :::mediter), ou null. */
+    public static function verse(string $markdown): ?string
+    {
+        if (!preg_match('/^:::mediter[^\n]*\n(.*?)^:::\s*$/msu', $markdown, $m)) {
+            return null;
+        }
+        foreach (explode("\n", $m[1]) as $line) {
+            if (str_starts_with(ltrim($line), '>')) {
+                return trim(ltrim(trim($line), '> '));
+            }
+        }
+
+        return null;
     }
 
     /** Lien de désinscription des e-mails de l'Académie : met en pause tous les rythmes du membre. */

@@ -18,6 +18,7 @@ use App\Academie\Service\AcademyPlanBridge;
 use App\Compte\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
@@ -124,6 +125,7 @@ final class AcademyController extends AbstractController
             'enrollment' => $enrollment,
             'completion' => $completion,
             'practice' => $practice,
+            'draft' => $completion ? null : $enrollment->draftFor($lesson),
             'notes' => $this->notes->forLesson($user, $lesson),
             'previous' => $previous,
             'next' => $next,
@@ -199,6 +201,37 @@ final class AcademyController extends AbstractController
         return null !== $upcoming
             ? $this->redirectToRoute('app_academie_lesson', ['slug' => $course->getSlug(), 'lessonSlug' => $upcoming->getSlug()])
             : $this->redirectToRoute('app_academie_course', ['slug' => $course->getSlug()]);
+    }
+
+    /**
+     * Brouillon d'une séance commencée (parcours guidés, 26/11/2026) : enregistré pendant la frappe, repris à la
+     * prochaine ouverture, même sur un autre appareil ; effacé quand la séance est terminée. Rien n'entre dans un plan.
+     */
+    #[Route('/{slug}/{lessonSlug}/brouillon', name: '_draft', requirements: ['slug' => '[a-z0-9-]+', 'lessonSlug' => '[a-z0-9-]+'], methods: ['POST'])]
+    public function draft(Request $request, string $slug, string $lessonSlug): JsonResponse
+    {
+        $this->checkCsrf($request);
+        [, $lesson, $enrollment] = $this->open($slug, $lessonSlug);
+        $p = $request->request;
+        $text = fn (string $key, int $max) => mb_substr(trim($p->getString($key)), 0, $max);
+        $lines = fn (mixed $raw) => array_slice(array_map(fn ($l) => mb_substr(trim(\is_string($l) ? $l : ''), 0, 255), \is_array($raw) ? array_values($raw) : []), 0, \App\Academie\Service\PlanRubrics::MAX_NEW);
+        $goals = [];
+        foreach (array_keys(\App\Academie\Service\PlanRubrics::GOAL_CATEGORIES) as $cat) {
+            $goals[$cat] = $lines($p->all('goals')[$cat] ?? []);
+        }
+        $draft = array_filter([
+            'text' => $text('text', 5000), 'horizon' => $text('horizon', 50), 'title' => $text('title', 5000), 'detail' => $text('detail', 2000),
+            'items' => array_filter($lines($p->all('items')), fn ($l) => '' !== $l) ? $lines($p->all('items')) : null,
+            'goals' => array_filter($goals, fn (array $g) => [] !== array_filter($g, fn ($l) => '' !== $l)) ?: null,
+        ], fn ($v) => null !== $v && '' !== $v);
+        if ([] === $draft) {
+            $enrollment->clearDraft($lesson);
+        } else {
+            $enrollment->saveDraft($lesson, $draft);
+        }
+        $this->em->flush();
+
+        return new JsonResponse(['ok' => true], 200, ['Cache-Control' => 'no-store']);
     }
 
     #[Route('/{slug}/{lessonSlug}/notes', name: '_note_add', requirements: ['slug' => '[a-z0-9-]+', 'lessonSlug' => '[a-z0-9-]+'], methods: ['POST'])]

@@ -316,6 +316,11 @@ rattaché à l'un des 6 plans. Choisi dans le studio (« Genre de parcours ») o
 - **Mobile** : la pratique d'une séance arrive en `type: seance` (`rubrique` : genre, libellé, texte, éléments,
   objectifs) ; l'envoi accepte `texte`, `horizon`, `elements`, `objectifs`. Les écrans de l'application ne l'affichent pas
   encore.
+- **Lot 2 (26/11/2026)** : e-mail du rythme propre aux parcours de plan (`email/seance.html.twig`, objet
+  « Aujourd'hui : … », station, ce qui a été posé la dernière fois, verset tiré de l'encadré `:::mediter`,
+  « Commencer la séance ») ; **brouillon** d'une séance enregistré pendant la frappe (`POST …/brouillon`, colonne
+  `academy_enrollment.drafts`, migration `Version20261126081226`), repris à l'ouverture même sur un autre appareil,
+  effacé à la fin de la séance, jamais écrit dans le plan ; le résultat de la Boussole propose le parcours de plan publié.
 - Tests : `tests/Academie/PlanRubricsTest.php`.
 
 ## Reste à faire

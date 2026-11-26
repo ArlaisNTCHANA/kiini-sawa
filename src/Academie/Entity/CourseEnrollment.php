@@ -62,6 +62,15 @@ class CourseEnrollment
     #[ORM\Column(type: Types::DATE_IMMUTABLE, nullable: true)]
     private ?\DateTimeImmutable $lastEmailSentOn = null;
 
+    /**
+     * Brouillons des séances commencées et pas encore terminées (parcours guidés, 26/11/2026) : identifiant de la
+     * leçon => réponses en cours. Gardés sur le serveur pour reprendre sur un autre appareil ; effacés à la fin de la séance.
+     *
+     * @var array<string, array<string, mixed>>|null
+     */
+    #[ORM\Column(type: Types::JSON, nullable: true)]
+    private ?array $drafts = null;
+
     /** @var Collection<int, LessonCompletion> */
     #[ORM\OneToMany(targetEntity: LessonCompletion::class, mappedBy: 'enrollment', cascade: ['persist', 'remove'], orphanRemoval: true)]
     private Collection $completions;
@@ -156,9 +165,38 @@ class CourseEnrollment
         return null !== $this->completionFor($lesson);
     }
 
+    /** @return array<string, mixed>|null réponses en cours de cette séance */
+    public function draftFor(Lesson $lesson): ?array
+    {
+        return $this->drafts[(string) $lesson->getId()] ?? null;
+    }
+
+    /** @param array<string, mixed> $draft */
+    public function saveDraft(Lesson $lesson, array $draft): static
+    {
+        $drafts = $this->drafts ?? [];
+        $drafts[(string) $lesson->getId()] = $draft + ['savedAt' => (new \DateTimeImmutable())->format(\DATE_ATOM)];
+        $this->drafts = $drafts;
+        $this->touch();
+
+        return $this;
+    }
+
+    public function clearDraft(Lesson $lesson): static
+    {
+        if (isset($this->drafts[(string) $lesson->getId()])) {
+            $drafts = $this->drafts;
+            unset($drafts[(string) $lesson->getId()]);
+            $this->drafts = [] === $drafts ? null : $drafts;
+        }
+
+        return $this;
+    }
+
     /** Termine une leçon (une seule ligne par leçon) ; le parcours est terminé quand toutes ses leçons visibles le sont. */
     public function complete(Lesson $lesson): LessonCompletion
     {
+        $this->clearDraft($lesson);
         $completion = $this->completionFor($lesson);
         if (null === $completion) {
             $completion = new LessonCompletion($this, $lesson);

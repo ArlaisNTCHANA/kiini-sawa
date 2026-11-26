@@ -9,6 +9,20 @@ teste (`php bin/phpunit`), commit, déploie (`bin/ops/envoyer-hostinger.sh`), v�
 journal `var/log/prod-AAAA-MM-JJ.log` sans erreur) ; **le fondateur fait lui-même `git push`** (refusé à l'IA).
 Ne jamais afficher ni demander de mot de passe ; ne pas publier son nom (mentions légales en attente).
 
+## 26/11/2026 — Parcours guidés, lot 2 : rendez-vous, brouillon, Boussole
+
+- **Demande du fondateur** : « Tu peux attaquer ? » (après le chargement en brouillon de « Mon Plan de Vie » en
+  production par le fondateur lui-même).
+- **Fait** (détail : `docs/modules/academie.md`, « Parcours de plan ») : e-mail quotidien au vocabulaire « séance »
+  (`AcademyPaceMailer`, `templates/academie/email/seance.html.twig`) ; brouillon serveur des séances
+  (`CourseEnrollment::drafts`, route `app_academie_draft`, script dans `_practice.html.twig`) ; proposition du parcours
+  dans « Et maintenant ? » du résultat de la Boussole (`BoussoleController`, code `boussole.suite.parcours`).
+- **Tests** : `PlanRubricsTest` (10 tests) ; 616 tests verts. Vu à l'écran en local (375 px) : brouillon enregistré
+  pendant la frappe puis repris après rechargement, console propre.
+- **Piège** : `XssHardeningTest` refuse `|json_encode|raw` dans un gabarit : utiliser `|json_safe`.
+- **Reste** : « un seul message par jour toutes sources confondues » (proposition § 5) non fait ; lots 3 (cinq autres
+  parcours de plan et leurs rubriques) et 4 (parcours de 90 jours).
+
 ## 26/11/2026 — Parcours guidés, lot 1 : « Mon Plan de Vie » séance après séance
 
 - **Demande du fondateur** : après l'étape 1, « passe à la suite, n'attends pas » (lot 1 de

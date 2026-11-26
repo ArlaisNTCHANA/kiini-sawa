@@ -1,0 +1,24 @@
+{% extends 'compte/email/_layout.html.twig' %}
+{# Séance du jour d'un parcours de plan (parcours guidés, 26/11/2026). Variables : name, course, lesson, progress, pace,
+   last (ce qui a été posé la dernière fois, ou null), verse (verset du temps « Méditer », ou null), actionUrl, unsubscribeUrl. #}
+{% block content %}
+  <p>Bonjour {{ name }},</p>
+  <p style="font-size:13px;color:#66706A;margin:18px 0 4px;text-transform:uppercase;letter-spacing:.06em;">{{ course.title }} · {{ t('academie.email_seance.station', 'station {position} sur {total}', 'text', {position: progress.done + 1, total: progress.total}) }}</p>
+  <p style="font-family:Georgia,serif;font-size:20px;font-weight:bold;color:#2E6B53;margin:0 0 12px;">{{ t('academie.email_seance.titre', 'Aujourd\'hui : {seance}', 'text', {seance: lesson.title}) }}</p>
+  {% if last %}
+    <p style="margin:0 0 12px;color:#374238;">{{ t('academie.email_seance.derniere', 'La dernière fois (« {seance} »), vous avez posé dans votre plan :', 'text', {seance: last.lesson}) }}<br><em>{{ last.text }}</em></p>
+  {% endif %}
+  <p>{{ t('academie.email_seance.texte', 'Aujourd\'hui, une séance de {minutes} minutes : un enseignement tiré du livre, un temps avec Dieu, quelques questions, puis vous écrivez directement dans votre plan.', 'text', {minutes: lesson.durationMinutes}) }}</p>
+  {% if verse %}
+    <p style="font-family:Georgia,serif;font-style:italic;color:#1F4D3A;border-left:3px solid #C8962E;padding-left:12px;margin:20px 0;">{{ verse }}</p>
+  {% endif %}
+  {% if actionUrl %}
+    <p style="text-align:center;margin:28px 0;"><a href="{{ actionUrl }}" style="background:#2E6B53;color:#ffffff;text-decoration:none;padding:14px 28px;border-radius:10px;font-weight:bold;display:inline-block;">{{ t('academie.email_seance.bouton', 'Commencer la séance, {minutes} min', 'text', {minutes: lesson.durationMinutes}) }}</a></p>
+  {% endif %}
+  <p style="margin-top:24px;">{{ t('academie.email.signature', 'Avec vous sur le chemin,') }}<br><strong>L'équipe KIINI SAWA</strong></p>
+{% endblock %}
+{% block footer %}
+  {{ pace == 'DAILY' ? t('academie.email_seance.pied_quotidien', 'Vous recevez cet e-mail parce que vous suivez ce parcours au rythme d\'une séance par jour.') : t('academie.email_seance.pied_semaine', 'Vous recevez cet e-mail parce que vous suivez ce parcours au rythme de trois séances par semaine.') }}
+  {{ t('academie.email.pied_libre', 'Vous pouvez changer de rythme sur la page du parcours.') }}
+  <a href="{{ unsubscribeUrl }}" style="color:#66706A;">{{ t('academie.email.pause_lien', 'Mettre en pause les e-mails de l\'Académie') }}</a>.
+{% endblock %}

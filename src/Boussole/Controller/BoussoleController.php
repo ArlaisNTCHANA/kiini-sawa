@@ -27,6 +27,7 @@ final class BoussoleController extends AbstractController
         private readonly BoussoleResultRepository $results,
         private readonly \App\Shared\Security\RateLimits $limits,
         private readonly \App\Abonnement\Service\Entitlements $entitlements,
+        private readonly \App\Academie\Service\AcademyCatalog $academy,
     ) {
     }
 
@@ -40,6 +41,8 @@ final class BoussoleController extends AbstractController
             'derniere' => $user instanceof User ? $this->results->latestFor($user) : null,
             // Ce que l'offre gratuite donne vraiment (réglages de l'administration), pour ne rien promettre de plus
             'essaiJours' => max(0, $this->entitlements->config()->getTrialDurationDays()),
+            // Parcours guidés (26/11/2026) : le premier parcours de plan publié, proposé après le résultat
+            'parcoursPlan' => $this->academy->planJourneys()[0] ?? null,
             'testsGratuits' => array_values(array_map(
                 fn (string $slug) => \App\Personnalite\Psychometrie\Instruments::CATALOG[$slug]['name'] ?? $slug,
                 $this->entitlements->freeTests(),
