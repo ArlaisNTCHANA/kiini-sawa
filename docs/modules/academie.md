@@ -282,6 +282,42 @@ plans couverts et le programme ; le plus visuel possible ». Maquette validée (
   en SVG, `adresseVignette` n'accepte que les images du studio).
 - Tests : `tests/Academie/AcademyCoverTest.php`, `tests/Mobile/MobileAcademyTest.php`, `mobile-v1/__tests__/academie.test.ts`.
 
+## Parcours de plan : remplir ses plans séance après séance (26/11/2026, lot 1)
+
+Décisions du fondateur : `docs/PROPOSITION-parcours-guides.md` § 9. Un **parcours de plan** est un parcours de
+l'Académie d'un genre particulier (`Course::kind` = `PLAN`, `THEME` par défaut ; migration `Version20261126070037`),
+rattaché à l'un des 6 plans. Choisi dans le studio (« Genre de parcours ») ou par `kind: PLAN` dans un fichier YAML.
+
+- **Séances qui écrivent une rubrique entière** : actions `write_purpose`, `list_convictions`, `list_values`,
+  `list_passions`, `list_talents`, `write_vision`, `list_life_goals` (cible `VIE` de `PracticeCatalog`), traitées par
+  `PlanRubrics` et non par `AcademyPlanBridge`. L'enregistrement passe par `LifePlanWizardSaver` (mêmes champs que
+  l'assistant). Comme l'assistant supprime ce qui n'est plus envoyé, la séance renvoie toujours les éléments existants
+  (identifiant + texte, échéances des objectifs comprises) : elle **ajoute** sans rien retirer ni modifier. Raison d'être
+  et Vision (un seul texte) sont montrées préremplies : la personne les reprend elle-même. **À confirmer avec le
+  fondateur** : la règle « l'Académie ne remplace jamais raison d'être ni Vision » est ainsi assouplie pour les seuls
+  parcours de plan, la modification étant faite par la personne, texte sous les yeux.
+- **Méditer** : encadré `:::mediter` (`LessonMarkdown::CALLOUTS`) avec une case « J'ai pris ce temps » (aucune mesure,
+  rien d'enregistré, pas de minuteur).
+- **Ligne de métro** : `templates/academie/_metro.html.twig`, en tête des séances (à la place de la barre de progression)
+  et sur la page du parcours : stations faites, du jour, à venir, temps restant.
+- **Célébration** : après une séance, message « Posé dans votre Plan de Vie : … » et « Station N sur M franchie,
+  prochaine séance… » ; à la fin du parcours, redirection vers la page du plan (`AcademyController::celebrate`).
+- **Rythme** : une séance par jour par défaut à l'inscription (`CourseEnrollment::__construct`), modifiable.
+- **Où on les propose** : section « Remplir mes plans, séance après séance » en tête de `/academie` ; page
+  `/academie/par-ou-commencer` (parcours de plan, parcours de 90 jours, « Je remplis seul ») ; « Ma prochaine étape »
+  (`NextStep`, règle 0 : « Par où commencer ? » tant qu'aucun parcours de plan n'a été commencé et que le Plan de Vie
+  n'est pas complet, puis « Reprendre » ; pas d'invitation au parcours de 90 jours pendant un parcours de plan) ; carte
+  « Bravo » de fin d'accueil (bouton « Choisir mon parcours guidé »). **Rien de tout cela n'apparaît tant qu'aucun
+  parcours de plan n'est publié.**
+- **Contenu** : `content/academie/parcours-plan-de-vie.yaml` (« Mon Plan de Vie », 8 séances, gratuit), premier jet de
+  l'IA : extraits du livre recopiés mot pour mot (chapitres 4 à 10, vérifiés par programme), prières d'une ligne à relire.
+  Charger : `php bin/console app:academie:import content/academie/parcours-plan-de-vie.yaml`, puis relire et publier
+  dans le studio. Les adresses des séances viennent des titres (une clé `slug` par leçon n'est pas lue).
+- **Mobile** : la pratique d'une séance arrive en `type: seance` (`rubrique` : genre, libellé, texte, éléments,
+  objectifs) ; l'envoi accepte `texte`, `horizon`, `elements`, `objectifs`. Les écrans de l'application ne l'affichent pas
+  encore.
+- Tests : `tests/Academie/PlanRubricsTest.php`.
+
 ## Reste à faire
 
 - Essai d'un vrai e-mail de leçon en production (après déploiement, avec l'accord du fondateur).

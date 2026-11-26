@@ -61,7 +61,7 @@ class LessonCompletion
     public function getCompletedAt(): \DateTimeImmutable { return $this->completedAt; }
     public function getUpdatedAt(): \DateTimeImmutable { return $this->updatedAt; }
 
-    public function recordPractice(array $response, string $entityType, int $entityId): static
+    public function recordPractice(array $response, ?string $entityType, ?int $entityId): static
     {
         $this->response = $response;
         $this->createdEntityType = $entityType;

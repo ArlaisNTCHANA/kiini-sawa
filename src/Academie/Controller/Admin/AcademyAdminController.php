@@ -63,8 +63,8 @@ class AcademyAdminController extends AbstractController
         $data = $course ? [
             'title' => $course->getTitle(), 'slug' => $course->getSlug(), 'subtitle' => (string) $course->getSubtitle(),
             'description' => (string) $course->getDescription(), 'place' => (string) $course->getPlace(),
-            'access' => $course->getAccessLevel(), 'sortOrder' => $course->getSortOrder(),
-        ] : ['title' => '', 'slug' => '', 'subtitle' => '', 'description' => '', 'place' => 'VIE', 'access' => Course::ACCESS_PRO, 'sortOrder' => \count($this->courses->allOrdered()) + 1];
+            'access' => $course->getAccessLevel(), 'sortOrder' => $course->getSortOrder(), 'kind' => $course->getKind(),
+        ] : ['title' => '', 'slug' => '', 'subtitle' => '', 'description' => '', 'place' => 'VIE', 'access' => Course::ACCESS_PRO, 'sortOrder' => \count($this->courses->allOrdered()) + 1, 'kind' => Course::KIND_THEME];
 
         if ($request->isMethod('POST')) {
             $this->checkCsrf($request);
@@ -73,6 +73,7 @@ class AcademyAdminController extends AbstractController
                 'title' => trim($p->getString('title')), 'slug' => trim($p->getString('slug')), 'subtitle' => trim($p->getString('subtitle')),
                 'description' => trim($p->getString('description')), 'place' => $p->getString('place'),
                 'access' => $p->getString('access'), 'sortOrder' => $p->getInt('sortOrder'),
+                'kind' => $p->getString('kind', Course::KIND_THEME),
             ];
             $slug = AcademyStudio::slugify('' !== $data['slug'] ? $data['slug'] : $data['title']);
             if ('' === $data['title'] || mb_strlen($data['title']) > 160) { $errors[] = 'Le titre est obligatoire (160 caractères au plus).'; }
@@ -80,6 +81,8 @@ class AcademyAdminController extends AbstractController
             if (mb_strlen($data['subtitle']) > 255) { $errors[] = 'L\'accroche est trop longue (255 caractères au plus).'; }
             if (!AcademyPlaces::isValid('' === $data['place'] ? null : $data['place'])) { $errors[] = 'Choisissez un plan dans la liste.'; }
             if (!isset(Course::ACCESS_LEVELS[$data['access']])) { $errors[] = 'Choisissez qui peut suivre ce parcours.'; }
+            if (!isset(Course::KINDS[$data['kind']])) { $errors[] = 'Choisissez le genre du parcours.'; }
+            if (Course::KIND_PLAN === $data['kind'] && !\in_array($data['place'], array_keys(\App\PlanDeVie\Service\PlanCatalog::PLANS), true)) { $errors[] = 'Un parcours de plan est rattaché à l\'un des 6 plans.'; }
             $other = $this->courses->findOneBy(['slug' => $slug]);
             if ($other && $other !== $course) { $errors[] = 'Cette adresse est déjà utilisée par un autre parcours.'; }
 
@@ -88,7 +91,7 @@ class AcademyAdminController extends AbstractController
                 $course ??= new Course();
                 $course->setTitle($data['title'])->setSlug($slug)->setSubtitle($data['subtitle'] ?: null)
                     ->setDescription($data['description'] ?: null)->setPlace($data['place'] ?: null)
-                    ->setAccessLevel($data['access'])->setSortOrder(max(0, $data['sortOrder']));
+                    ->setAccessLevel($data['access'])->setSortOrder(max(0, $data['sortOrder']))->setKind($data['kind']);
                 if ($isNew) {
                     $course->addModule((new CourseModule())->setTitle('Module 1'));
                 }
@@ -102,7 +105,7 @@ class AcademyAdminController extends AbstractController
 
         return $this->render('academie/admin/course.html.twig', [
             'course' => $course, 'data' => $data, 'errors' => $errors,
-            'plans' => AcademyPlaces::plans(), 'accessLevels' => Course::ACCESS_LEVELS,
+            'plans' => AcademyPlaces::plans(), 'accessLevels' => Course::ACCESS_LEVELS, 'kinds' => Course::KINDS,
             'problems' => $course ? AcademyStudio::publishProblems($course) : [],
             'canDelete' => $course && AcademyStudio::canDelete($course),
             'images' => $course ? $images->list($course->getId()) : [],

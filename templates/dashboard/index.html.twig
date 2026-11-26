@@ -159,8 +159,14 @@
         {% endif %}
         <p class="welcome-card__text">{{ t('accueil.bravo.texte', 'C\'est le cœur de votre Plan de Vie. Prenez le temps de le relire : la suite, vos plans et vos rituels, en découle.') }}</p>
         <div class="welcome-card__actions">
+            {# Parcours guidés (26/11/2026) : à la fin de l'accueil, proposer de remplir ses plans par un parcours #}
+            {% if nextStep|default(null) and nextStep.kind == 'plan-journey-start' %}
+            <a href="{{ path('app_academie_start') }}" class="ks-btn ks-btn--primary">{{ t('accueil.bravo.parcours', 'Choisir mon parcours guidé') }}</a>
+            <a href="{{ path('app_plan_de_vie') }}" class="welcome-card__link">{{ t('accueil.bravo.action', 'Voir mon Plan de Vie') }}</a>
+            {% else %}
             <a href="{{ path('app_plan_de_vie') }}" class="ks-btn ks-btn--primary">{{ t('accueil.bravo.action', 'Voir mon Plan de Vie') }}</a>
             <a href="{{ path('app_plan_de_vie', {onglet: 'analysis'}) }}" class="welcome-card__link">{{ t('accueil.bravo.analyse', 'Comment l\'enrichir') }}</a>
+            {% endif %}
         </div>
     </section>
     <style>

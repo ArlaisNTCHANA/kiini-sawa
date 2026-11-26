@@ -58,6 +58,9 @@ class AcademyRulesTest extends TestCase
             'Habit' => 'Rituels', 'ReflectionNote' => 'Journal', 'CoupleItem' => 'Couple'];
         foreach (PracticeCatalog::TARGETS as $target) {
             foreach ($target['actions'] as $action => $def) {
+                if (\App\Academie\Service\PlanRubrics::isRubric($action)) {
+                    continue; // séance d'un parcours de plan : rubrique entière, voir PlanRubricsTest
+                }
                 $this->assertArrayHasKey($def['entity'], $modules, $action);
                 $this->assertTrue(class_exists('App\\'.$modules[$def['entity']].'\\Entity\\'.$def['entity']), $action);
                 $this->assertStringNotContainsString('update', $action, 'L\'Académie ajoute, elle ne remplace jamais.');

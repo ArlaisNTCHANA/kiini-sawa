@@ -22,6 +22,7 @@ final class AcademyLearning
         private readonly AcademyPlanBridge $bridge,
         private readonly AccountabilityService $accountability,
         private readonly EntityManagerInterface $em,
+        private readonly PlanRubrics $rubrics,
     ) {
     }
 
@@ -32,6 +33,15 @@ final class AcademyLearning
      */
     public function practice(User $user, Course $course, Lesson $lesson, ?LessonCompletion $completion): array
     {
+        if ($lesson->hasPractice() && PlanRubrics::isRubric($lesson->getTargetAction())) {
+            return [
+                'fixed' => true,
+                'target' => $lesson->getTargetPlan(),
+                'action' => $lesson->getTargetAction(),
+                'rubric' => $this->rubrics->state($user, (string) $lesson->getTargetAction()),
+                'blocker' => $this->bridge->blocker($user, (string) $lesson->getTargetPlan(), (string) $lesson->getTargetAction()),
+            ];
+        }
         if ($lesson->hasPractice()) {
             return [
                 'fixed' => true,
@@ -54,7 +64,7 @@ final class AcademyLearning
      * Termine la leçon. En mode « plan », enregistre d'abord la réponse dans le plan (création ou mise à jour, sans
      * doublon) ; en mode « sans », ne modifie rien.
      *
-     * @param array{title?: string, detail?: string, choice?: string, destination?: string} $input
+     * @param array{title?: string, detail?: string, choice?: string, destination?: string, text?: string, horizon?: string, items?: array<mixed>, goals?: array<string, mixed>} $input
      *
      * @return array{target: ?string, label: ?string}
      *
@@ -67,6 +77,17 @@ final class AcademyLearning
             $this->em->flush();
 
             return ['target' => null, 'label' => null];
+        }
+        if ($lesson->hasPractice() && PlanRubrics::isRubric($lesson->getTargetAction())) {
+            [$target, $action] = [(string) $lesson->getTargetPlan(), (string) $lesson->getTargetAction()];
+            if (null !== $reason = $this->bridge->blocker($user, $target, $action)) {
+                throw new PracticeRefused($reason);
+            }
+            $saved = $this->rubrics->save($user, $action, $input);
+            $enrollment->complete($lesson)->recordPractice(['target' => $target, 'action' => $action, 'title' => mb_substr($saved['summary'], 0, 2000)], null, null);
+            $this->em->flush();
+
+            return ['target' => $target, 'label' => PracticeCatalog::TARGETS[$target]['label'], 'summary' => $saved['summary']];
         }
         if ($lesson->hasPractice()) {
             [$target, $action] = [$lesson->getTargetPlan(), $lesson->getTargetAction()];

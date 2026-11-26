@@ -1,0 +1,380 @@
+# Parcours de plan « Mon Plan de Vie » (parcours guidés, décisions du fondateur du 26/11/2026 :
+# docs/PROPOSITION-parcours-guides.md § 9). PREMIER JET écrit par l'IA, à relire et publier par le fondateur dans le studio.
+# Chargé en brouillon par : php bin/console app:academie:import content/academie/parcours-plan-de-vie.yaml
+#
+# Règles suivies :
+# - Les passages présentés comme « le livre KIINI » sont recopiés mot pour mot de content/livre/ (chapitres 4 à 10),
+#   au tutoiement du livre. Le texte autour (vouvoiement) ne fait que les introduire : il ne réécrit pas le fond.
+# - Rien de la vie privée de l'auteur (prénoms, histoires personnelles) n'est repris.
+# - Chaque séance suit les cinq temps : comprendre, méditer (:::mediter, une invitation sans minuteur), réfléchir
+#   (questions du Sanctuaire du livre), écrire (exercice de séance : une rubrique du Plan de Vie), célébrer (automatique).
+# - Les prières proposées en une ligne sont un premier jet (sauf celle de la séance 1, tirée du chapitre 4) : à relire.
+
+slug: mon-plan-de-vie
+title: Mon Plan de Vie
+subtitle: Poser qui je suis et où je vais, une séance par jour
+place: VIE
+kind: PLAN
+access: FREE
+cover_word: Fondations
+description: |
+  Huit séances courtes pour écrire votre Plan de Vie sans vous perdre dans un long formulaire. Chacune suit le même chemin : comprendre un enseignement tiré du livre KIINI, prendre un temps avec Dieu, réfléchir à quelques questions, puis écrire directement dans votre plan.
+
+  Vous voyez toujours où vous en êtes : votre But de Dieu, vos convictions, vos valeurs, vos passions, vos dons, votre personnalité, votre vision et vos objectifs. Ce que vous écrivez s'ajoute à votre plan ; rien de ce qui y est déjà n'est effacé.
+
+modules:
+  - title: Qui je suis
+    lessons:
+      - title: Votre But de Dieu
+        duration: 12
+        content: |
+          Bienvenue dans votre parcours. Aujourd'hui, une seule question, la plus importante de votre Plan de Vie : pour quoi avez-vous été créé ? Voici ce qu'en dit le livre KIINI, au chapitre 4.
+
+          ## Comprendre
+
+          > « Car nous sommes son ouvrage, ayant été créés en Jésus-Christ pour de bonnes œuvres, que Dieu a préparées d'avance, afin que nous les pratiquions. » Éphésiens 2:10
+
+          Tu n'es pas un brouillon. Tu es un ouvrage, pensé et voulu. Et les œuvres pour lesquelles tu as été conçu ont été préparées avant même ta naissance. Ton but existe déjà. Tu n'as pas à l'inventer. Tu as à le discerner.
+
+          Prends un couteau. Pour quoi est-il fait ? Pour couper.
+
+          Remarque une chose simple : le couteau ne coupe pas seulement à la fin de sa vie, comme l'aboutissement d'un grand projet. Il coupe **chaque fois qu'il rencontre une matière**. Dans une cuisine modeste ou dans un grand restaurant, sur du pain ou sur une corde, sa fonction s'exerce dès qu'il est en contact avec quelque chose à trancher.
+
+          :::retenir
+          **Ton but n'est pas un projet à accomplir. C'est une fonction que tu exerces à chaque instant.**
+          :::
+
+          Comment discerner ta fonction ? En regardant derrière toi plutôt que loin devant.
+
+          Il est temps de mettre des mots sur ta fonction. Voici la formule :
+
+          > **Je suis créé pour \[VERBE\] afin d'apporter \[IMPACT\] chez \[CIBLE\].**
+
+          - Le **verbe** décrit une action permanente : structurer, éclairer, apaiser, protéger, investir, restaurer.
+          - L'**impact** est le changement que tu produis.
+          - La **cible**, ce sont les personnes que tu sers naturellement.
+
+          :::exemple Joseph, dans le livre
+          Je suis créé pour **administrer** les ressources et optimiser les systèmes afin d'apporter **la préservation de la vie** et l'abondance chez **ceux que je sers**.
+          :::
+
+          Ces phrases sont des interprétations utiles, pas des révélations. Ton but est réel ; ta compréhension de ton but reste partielle ; ta formulation n'est qu'une approximation.
+
+          ## Méditer
+
+          :::mediter
+          « Seigneur, montre-moi ce pour quoi tu m'as créé. »
+
+          Prenez deux minutes en silence avec Dieu avant de répondre.
+          :::
+
+          ## Réfléchir
+
+          :::avous Les questions du Sanctuaire (chapitre 4)
+          1. Que disent spontanément de toi ta famille, tes amis, tes collègues ? Pour quoi viennent-ils te chercher ?
+          2. Entre 6 et 15 ans, que faisais-tu naturellement, sans y être poussé ?
+          3. Quelle injustice ou quel désordre te trouble plus que les autres ?
+          4. Quel changement observe-t-on chez les autres après ton passage ?
+          :::
+
+          Si rien de clair ne vient, le livre le dit aussi : ce n'est ni un retard, ni un échec. La clarté vient en marchant. Écrivez une première version : vous pourrez la reprendre à tout moment.
+        practice:
+          target: VIE
+          action: write_purpose
+          prompt: "Écrivez votre But de Dieu avec la formule du livre : « Je suis créé pour… afin d'apporter… chez… »."
+
+      - title: Vos convictions
+        duration: 10
+        content: |
+          Votre but est posé, même en brouillon. Aujourd'hui, nous regardons ce qui le tient droit : vos convictions. Voici ce qu'en dit le livre KIINI, au chapitre 5.
+
+          ## Comprendre
+
+          Imagine ta vie comme un navire. Tes **convictions** sont le lest qui l'empêche de chavirer. Tes **valeurs** sont le cap. Et tes **croyances limitantes** sont des ancres oubliées que tu traînes au fond de l'eau sans le savoir.
+
+          Toutes les certitudes ne se valent pas. Imagine trois cercles concentriques : plus tu vas vers le centre, plus la conviction est profonde et déterminante.
+
+          | Niveau | Ce que c'est | Exemples |
+          | --- | --- | --- |
+          | **Conviction profonde** | Le roc. Ce sur quoi tu ne transigeras jamais | La souveraineté de Dieu, la valeur sacrée de la vie, la primauté de l'amour, l'intégrité |
+          | **Conviction raisonnée** | Ce que tu tiens fermement à partir de l'expérience, de la réflexion, des faits | « L'épargne régulière protège ma famille », « On apprend mieux en enseignant » |
+          | **Conviction circonstancielle** | Ce que tu crois vrai aujourd'hui, dans ta situation actuelle | « Ce n'est pas le moment de changer de travail » |
+
+          :::retenir
+          **Connaître ses convictions profondes, c'est savoir ce pour quoi on est prêt à tout perdre, et ce que l'on ne perdra jamais.**
+          :::
+
+          ## Méditer
+
+          :::mediter
+          > « Que tout ce qui est vrai, tout ce qui est honorable, tout ce qui est juste, tout ce qui est pur, tout ce qui est aimable, tout ce qui mérite l'approbation, ce qui est vertueux et digne de louange, soit l'objet de vos pensées. » Philippiens 4:8
+
+          Relisez ce verset lentement. Demandez à Dieu de vous montrer ce sur quoi vous ne céderez jamais.
+          :::
+
+          ## Réfléchir
+
+          :::avous
+          Quelles sont les deux ou trois certitudes pour lesquelles vous seriez prêt à tout perdre ? Lesquelles avez-vous déjà défendues quand cela vous coûtait ?
+          :::
+
+          Aujourd'hui, nous n'écrivons que les convictions profondes. Les convictions raisonnées et circonstancielles, comme les croyances limitantes, se complètent ensuite dans votre Plan de Vie.
+        practice:
+          target: VIE
+          action: list_convictions
+          prompt: Écrivez vos convictions profondes, une par ligne.
+
+      - title: Vos valeurs
+        duration: 10
+        content: |
+          Après le lest, le cap : vos valeurs. Le livre KIINI, toujours au chapitre 5, propose de les regarder honnêtement.
+
+          ## Comprendre
+
+          Les valeurs sont les principes qui guident tes choix. Elles répondent à la question : *selon quels principes est-ce que je veux mener ma vie ?*
+
+          **1. La valeur vécue.** C'est celle qui se manifeste dans tes choix répétés, semaine après semaine, même quand personne ne regarde. Elle ne se proclame pas : elle s'observe dans ton agenda, tes dépenses, tes réactions sous pression.
+
+          **2. La valeur déclarée.** C'est celle que tu nommes volontiers, que tu admires chez les autres, mais qui n'a pas encore pris racine dans tes habitudes.
+
+          **3. La contre-valeur.** C'est la plus inconfortable, et la plus précieuse à identifier : ce qui guide réellement tes comportements sans que tu l'aies jamais choisi.
+
+          Un exemple simple : tu déclares « La famille est ma priorité ». Mais ton agenda montre 14 heures de travail par jour et un dimanche sur deux en réunion. Ta valeur vécue, cette saison, c'est le travail. La reconnaître n'est pas une condamnation. C'est la première étape de l'alignement.
+
+          :::retenir
+          **Ta valeur véritable ne se proclame pas. Elle se lit dans ton agenda.**
+          :::
+
+          ## Méditer
+
+          :::mediter
+          « Seigneur, montre-moi ce qui guide vraiment mes choix, et aide-moi à réduire l'écart entre ce que je dis et ce que je vis. »
+          :::
+
+          ## Réfléchir
+
+          :::avous Les questions du Sanctuaire (chapitre 5)
+          1. Écris tes cinq valeurs principales. Pour chacune, note sur 10 la manière dont tu l'as réellement vécue ces sept derniers jours.
+          2. Regarde ton agenda et tes dépenses du dernier mois. Quelles valeurs révèlent-ils ?
+          :::
+
+          Aujourd'hui, écrivez les valeurs que vous vivez vraiment. Les valeurs déclarées et les contre-valeurs se complètent ensuite dans votre Plan de Vie.
+        practice:
+          target: VIE
+          action: list_values
+          prompt: Écrivez les valeurs que vous vivez vraiment, une par ligne.
+
+      - title: Vos passions
+        duration: 10
+        content: |
+          Aujourd'hui, ce qui allume votre feu intérieur. Voici ce qu'en dit le livre KIINI, au chapitre 6.
+
+          ## Comprendre
+
+          Beaucoup de croyants se méfient de leurs passions. On leur a appris que ce qui est agréable est suspect, et que la volonté de Dieu est forcément pénible. Pourtant, le psalmiste relie le désir du cœur et la joie trouvée en Dieu. Quand Dieu est au centre, nos désirs ne sont plus des ennemis : ils deviennent des indices.
+
+          Une **passion** est une inclination profonde, presque irrépressible. C'est ce dont tu parles spontanément, ce sur quoi tu as des opinions, de l'énergie, des idées. Quand tu y es plongé, tu perds la notion du temps.
+
+          La question n'est donc pas : « Ma passion est-elle assez noble ? » La question est : **« Comment Dieu veut-il que je l'exerce au service des autres ? »**
+
+          :::retenir
+          **La joie est le signal que tu fonctionnes selon ta conception.**
+          :::
+
+          ## Méditer
+
+          :::mediter
+          > « Fais de l'Éternel tes délices, et il te donnera ce que ton cœur désire. » Psaume 37:4
+
+          Remerciez Dieu pour ce qui vous met en joie, et demandez-lui comment le mettre au service des autres.
+          :::
+
+          ## Réfléchir
+
+          :::avous Les quatre questions de la passion (chapitre 6)
+          1. **Ce dont tu parles sans t'arrêter.** Le sujet qui te fait oublier l'heure dans une conversation.
+          2. **Ce que tu fais quand personne ne te le demande.** Ce que tu lis, regardes, cherches pendant ton temps libre.
+          3. **Ce qui te met en colère ou te touche profondément.** Une passion a souvent un revers : ce qui t'indigne. Néhémie a pleuré avant de bâtir.
+          4. **Ce que tu ferais même sans être payé.** Non pas parce que l'argent n'a pas d'importance, mais parce que la joie de le faire te suffirait.
+          :::
+        practice:
+          target: VIE
+          action: list_passions
+          prompt: Écrivez vos deux ou trois passions centrales, une par ligne.
+
+      - title: Vos dons et talents
+        duration: 10
+        content: |
+          Aujourd'hui, les outils que Dieu a déposés en vous. Voici ce qu'en dit le livre KIINI, au chapitre 7.
+
+          ## Comprendre
+
+          Ce que tu as appris à faire et ce pour quoi tu es fait sont deux choses différentes. Les compétences s'acquièrent. Les dons se découvrent.
+
+          Le piège, c'est que tes dons te semblent faciles, tellement faciles que tu sous-estimes leur valeur. Tu penses : « Tout le monde peut faire ça. » Non. Ce qui est naturel pour toi est souvent une montagne pour les autres.
+
+          :::retenir
+          **Ce qui te coûte peu et rapporte beaucoup aux autres est presque toujours un don.**
+          :::
+
+          Une précision : ne cherche pas à t'étiqueter seul. Les dons spirituels se confirment dans la communauté, par le fruit qu'ils portent chez les autres.
+
+          ## Méditer
+
+          :::mediter
+          > « Comme de bons dispensateurs des diverses grâces de Dieu, que chacun de vous mette au service des autres le don qu'il a reçu. » 1 Pierre 4:10
+
+          Remerciez Dieu pour ce qu'il vous a confié, même ce qui vous semble ordinaire.
+          :::
+
+          ## Réfléchir
+
+          :::avous Les questions du Sanctuaire (chapitre 7)
+          1. Qu'est-ce que les gens te demandent le plus souvent de faire ou d'expliquer ?
+          2. Pour quoi as-tu été félicité plusieurs fois sans l'avoir cherché ?
+          3. Quelle tâche fais-tu vite et bien, alors qu'elle épuise les autres ?
+          4. Y a-t-il un talent que tu as « enterré » par peur ? Lequel ?
+          :::
+
+          Pour aller plus loin, le test des dons spirituels (rubrique Mes tests) et le Feedback nourricier vous aident à confirmer ce que vous pressentez.
+        practice:
+          target: VIE
+          action: list_talents
+          prompt: Écrivez vos dons et talents principaux, un par ligne.
+
+      - title: Votre personnalité
+        duration: 10
+        content: |
+          Aujourd'hui, l'instrument par lequel votre but s'exprime : votre personnalité. Voici ce qu'en dit le livre KIINI, au chapitre 8.
+
+          ## Comprendre
+
+          Ta personnalité, c'est la manière dont tu perçois le monde, dont tu prends tes décisions, dont tu entres en relation avec les autres et dont tu te recharges. Apprendre à la connaître relève de la sagesse, et non du narcissisme.
+
+          Imagine deux personnes avec le même but : aider les gens à se transformer. L'une est extravertie, spontanée, relationnelle : elle sera peut-être une coach énergique ou une prédicatrice enflammée. L'autre est introvertie, analytique, profonde : elle sera peut-être auteure, conseillère ou formatrice spécialisée.
+
+          Le but est le même, mais il s'exprime de manière radicalement différente selon la personnalité. Les deux expressions sont valables, et l'Église a besoin des deux.
+
+          Ta personnalité n'est pas une excuse. « Je suis comme ça » ne justifie ni la colère, ni la paresse, ni la dureté. La personnalité décrit tes tendances naturelles ; le caractère décrit ce que tu en fais.
+
+          :::retenir
+          **Dieu n'a pas besoin que tu sois quelqu'un d'autre. Il a besoin que tu sois pleinement toi-même, au service de son dessein.**
+          :::
+
+          ## Méditer
+
+          :::mediter
+          > « Je te loue de ce que je suis une créature si merveilleuse. Tes œuvres sont admirables, et mon âme le reconnaît bien. » Psaume 139:14
+
+          Remerciez Dieu pour la manière unique dont il vous a façonné.
+          :::
+
+          ## Réfléchir
+
+          :::avous Les questions du Sanctuaire (chapitre 8)
+          1. Où trouves-tu ton énergie : avec les autres, ou dans le calme ?
+          2. Dans quel contexte te sens-tu le plus toi-même ? Le moins toi-même ?
+          3. De quel type de personne as-tu besoin à tes côtés pour compléter ta personnalité, comme Aaron pour Moïse ?
+          :::
+
+          Pour aller plus loin, les tests de la rubrique Mes tests vous donnent un profil détaillé, qui rejoint ensuite votre Plan de Vie.
+        practice:
+          target: JOURNAL
+          action: add_note
+          prompt: Notez dans votre Journal ce que vous retenez de votre personnalité, vos environnements favorables et les compléments dont vous avez besoin.
+
+  - title: Où je vais
+    lessons:
+      - title: Votre vision
+        duration: 15
+        content: |
+          Vous savez mieux qui vous êtes. Aujourd'hui, nous regardons où vous allez : votre vision. Voici ce qu'en dit le livre KIINI, au chapitre 9.
+
+          ## Comprendre
+
+          Voir et avoir une vision sont deux choses distinctes. Tout le monde voit : nos yeux perçoivent le présent. Mais avoir une vision, c'est voir ce qui n'existe pas encore. C'est tenir dans son esprit une image de l'avenir assez nette pour guider les décisions d'aujourd'hui.
+
+          | Qualité | Ce que cela veut dire |
+          | --- | --- |
+          | **Personnelle** | Rédigée à la première personne, elle parle de toi, pas de ce que les autres attendent |
+          | **Positive** | Tournée vers ce que tu veux bâtir, pas vers ce que tu fuis |
+          | **Précise** | Assez concrète pour être visualisée |
+          | **Passionnante** | Elle t'émeut quand tu la lis à voix haute |
+          | **Possible avec Dieu** | Ambitieuse, mais ancrée dans la foi et non dans l'orgueil |
+
+          Remarque l'ordre : le fardeau, la prière, puis la vision. Une vision qui naît dans la prière a des racines plus profondes qu'une vision née dans la comparaison.
+
+          :::retenir
+          **Ton but ne change pas. Ta vision grandit à la mesure de ta préparation.**
+          :::
+
+          ## Méditer
+
+          :::mediter
+          > « Écris la prophétie : grave-la sur des tables, afin qu'on la lise couramment. » Habacuc 2:2
+
+          Avant d'écrire, présentez votre avenir à Dieu : « Seigneur, que veux-tu bâtir à travers ma vie ? »
+          :::
+
+          ## Réfléchir
+
+          :::avous Le Sanctuaire : voir l'avenir (chapitre 9)
+          Installe-toi au calme. Imagine-toi dans dix ans, après une décennie fidèle à ton But de Dieu.
+
+          1. Qui es-tu devenu ? Quel genre de personne ?
+          2. Que fais-tu de tes journées ?
+          3. Qui est autour de toi ? Comment est ta famille, ton foyer ?
+          4. Quelles vies ont été transformées parce que tu as vécu ta fonction ?
+          :::
+
+          À partir de vos réponses, rédigez votre vision en un paragraphe de cinq à huit lignes, à la première personne et au présent. Lisez-la à voix haute : elle doit vous faire vibrer.
+        practice:
+          target: VIE
+          action: write_vision
+          prompt: Écrivez votre vision en un paragraphe, à la première personne et au présent.
+
+      - title: Vos objectifs
+        duration: 15
+        content: |
+          Dernière station : transformer votre vision en itinéraire. Voici ce qu'en dit le livre KIINI, au chapitre 10.
+
+          ## Comprendre
+
+          Une vision sans objectifs est un beau tableau accroché dans une maison que tu n'habites jamais. Les objectifs sont les marches de l'escalier qui te conduit vers l'image que tu portes dans ton cœur.
+
+          | Dimension | La question | Exemple |
+          | --- | --- | --- |
+          | **Être** | Qui dois-je devenir ? | Un leader patient et fiable |
+          | **Faire** | Quelles actions dois-je poser ? | Animer un groupe de mentorat chaque mois |
+          | **Avoir** | De quoi ai-je besoin, ou que vais-je obtenir ? | Une certification de coach, une épargne de sécurité |
+          | **Donner** | Qu'est-ce que je vais apporter aux autres ? | Former dix jeunes leaders d'ici deux ans |
+
+          L'Être vient d'abord parce que c'est lui qui rend le reste possible. Et le Donner vient en dernier parce qu'il est l'aboutissement : une vie alignée finit toujours par se donner.
+
+          Un plan de vie équilibré ne se limite pas à la carrière. L'erreur la plus courante est de concentrer 90 % de ses objectifs sur le travail et l'argent, en laissant le reste à l'improvisation.
+
+          :::retenir
+          **N'attends pas les conditions parfaites. Formule bien la question, puis entoure-toi des bons conseillers.**
+          :::
+
+          ## Méditer
+
+          :::mediter
+          > « Les projets échouent, faute d'une assemblée qui délibère ; mais ils réussissent quand il y a de nombreux conseillers. » Proverbes 15:22
+
+          Confiez vos projets à Dieu, et pensez aux personnes qui pourraient vous conseiller.
+          :::
+
+          ## Réfléchir
+
+          :::avous Les questions du Sanctuaire (chapitre 10)
+          1. Relis ta vision. Pour chacun des sept domaines, écris un objectif pour les 12 prochains mois.
+          2. Classe-les selon les quatre dimensions : Être, Faire, Avoir, Donner. Quelle dimension est vide ?
+          3. Quel objectif attends-tu de réaliser « dans les conditions parfaites » ? Quelle est la première action, même imparfaite, que tu peux poser cette semaine ?
+          :::
+
+          Écrivez au moins un objectif. Les échéances et les détails se posent ensuite dans votre Plan de Vie.
+        practice:
+          target: VIE
+          action: list_life_goals
+          prompt: Écrivez vos objectifs pour les douze prochains mois, rangés selon les quatre dimensions.

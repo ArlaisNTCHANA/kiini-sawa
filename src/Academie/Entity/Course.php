@@ -23,6 +23,11 @@ class Course
 
     public const ACCESS_FREE = 'FREE';
     public const ACCESS_PRO = 'PRO';
+    /** Parcours thématique (par défaut) ou « parcours de plan » : séances guidées qui remplissent un plan (26/11/2026). */
+    public const KIND_THEME = 'THEME';
+    public const KIND_PLAN = 'PLAN';
+    public const KINDS = [self::KIND_THEME => 'Parcours thématique', self::KIND_PLAN => 'Parcours de plan (remplir un plan, séance après séance)'];
+
     public const ACCESS_LEVELS = [self::ACCESS_FREE => 'Gratuit, pour tous les membres', self::ACCESS_PRO => 'Réservé aux abonnés PRO (Duo compris)'];
 
     #[ORM\Id]
@@ -68,6 +73,9 @@ class Course
     #[ORM\Column(type: Types::JSON, nullable: true)]
     private ?array $extraPlans = null;
 
+    #[ORM\Column(length: 10, options: ['default' => self::KIND_THEME])]
+    private string $kind = self::KIND_THEME;
+
     #[ORM\Column(length: 10)]
     private string $status = self::STATUS_DRAFT;
 
@@ -112,6 +120,14 @@ class Course
     public function setDescription(?string $description): static { $this->description = $description; return $this; }
     public function getPrimaryPlan(): ?string { return $this->primaryPlan; }
     public function isCouple(): bool { return $this->isCouple; }
+    public function getKind(): string { return $this->kind; }
+    public function isPlanJourney(): bool { return self::KIND_PLAN === $this->kind; }
+    public function setKind(string $kind): static
+    {
+        $this->kind = isset(self::KINDS[$kind]) ? $kind : self::KIND_THEME;
+
+        return $this;
+    }
 
     /** Rattachement : un des 6 plans, 'COUPLE' (Sanctuaire du Couple) ou null. */
     public function setPlace(?string $place): static

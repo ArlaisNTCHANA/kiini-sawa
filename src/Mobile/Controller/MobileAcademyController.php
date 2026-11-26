@@ -200,6 +200,10 @@ final class MobileAcademyController extends AbstractController
             $result = $this->learning->complete($user, $lesson, $enrollment, $toPlan, [
                 'title' => (string) ($data['texte'] ?? ''), 'detail' => (string) ($data['precisions'] ?? ''),
                 'choice' => (string) ($data['choix'] ?? ''), 'destination' => (string) ($data['destination'] ?? ''),
+                // Séance d'un parcours de plan : texte (raison d'être, vision) ou nouvelles lignes d'une rubrique
+                'text' => (string) ($data['texte'] ?? ''), 'horizon' => (string) ($data['horizon'] ?? ''),
+                'items' => \is_array($data['elements'] ?? null) ? $data['elements'] : [],
+                'goals' => \is_array($data['objectifs'] ?? null) ? $data['objectifs'] : [],
             ]);
         } catch (PracticeRefused $e) {
             return $this->jsonError($e->getMessage(), Response::HTTP_UNPROCESSABLE_ENTITY, 'PRACTICE_REFUSED');
@@ -287,6 +291,25 @@ final class MobileAcademyController extends AbstractController
             'reponse' => null === $answer ? null : ['texte' => $answer['title'] ?? '', 'precisions' => $answer['detail'] ?? null, 'choix' => $answer['choice'] ?? null,
                 'destination' => isset($answer['target'], $answer['action']) ? $answer['target'].'|'.$answer['action'] : null],
         ];
+        if ($p['fixed'] && isset($p['rubric'])) {
+            $r = $p['rubric'];
+
+            return $common + [
+                'type' => 'seance',
+                'consigne' => $lesson->getPracticePrompt(),
+                'cible' => PracticeCatalog::label($p['target'], $p['action']),
+                'bouton' => PracticeCatalog::button($p['target']),
+                'rubrique' => [
+                    'genre' => ['text' => 'texte', 'list' => 'liste', 'goals' => 'objectifs'][$r['kind']],
+                    'libelle' => $r['label'],
+                    'texte' => $r['text'] ?? null,
+                    'horizon' => $r['horizon'] ?? null,
+                    'elements' => $r['items'] ?? null,
+                    'objectifs' => isset($r['goals']) ? array_map(fn (array $g) => ['libelle' => $g['label'], 'elements' => $g['items']], $r['goals']) : null,
+                ],
+                'blocage' => $p['blocker'],
+            ];
+        }
         if ($p['fixed']) {
             $form = $p['form'];
 

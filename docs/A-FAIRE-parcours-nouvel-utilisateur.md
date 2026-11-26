@@ -31,7 +31,7 @@ complet `docs/parcours-nouvel-utilisateur-2026-11-25.md` (carnet étape par éta
 - Décider avec le fondateur du sort des passations Équilibre et Hygiène déjà enregistrées : elles sont fausses, car toutes
   les réponses valaient 0. Option : les compter (`profile_test`, types `EQUILIBRE`/`HYGIENE`), puis les signaler
   ou proposer de repasser le test. Ne rien supprimer sans son accord.
-- Erreur JavaScript vue en production quand on passe d'un assistant à l'autre sans recharger la page (Turbo) :
+- ~~Erreur JavaScript vue en production quand on passe d'un assistant à l'autre sans recharger la page (Turbo)~~ **corrigée le 26/11/2026** (`var` au lieu de `const`, test `InlineScriptTurboTest`) :
   « Identifier 'allLifeGoals' has already been declared ». Elle vient de `const allLifeGoals = [...]` dans un `<script>`
   en ligne (`templates/plan_de_vie/wizard.html.twig`, vers la ligne 1777). Remède : placer le script dans une portée
   propre (IIFE, ou `window.allLifeGoals = …`), ou désactiver Turbo sur ces liens (`data-turbo="false"`).
@@ -45,7 +45,7 @@ courts, un par plan, plus le parcours de 90 jours qui les enchaîne). Chaque sé
 méditer, réfléchir, écrire dans le plan, célébrer. Une **ligne de métro** montre où l'on en est, et des rendez-vous
 par e-mail aident à continuer.
 **Document** : `docs/PROPOSITION-parcours-guides.md`. **Validé par le fondateur le 26/11/2026** (décisions au § 9 du document) ;
-prochaine étape : lot 1 = parcours Plan de Vie, dans l'Académie, proposé à la fin de l'accueil. Plusieurs chantiers ci-dessous (1, 3, 4, 8) en seront en partie résolus :
+**lot 1 construit le 26/11/2026** (non déployé, parcours « Mon Plan de Vie » en attente de relecture : voir `docs/SUIVI-IA.md`) ; prochaine étape : lot 2 (rendez-vous par e-mail au vocabulaire « séance », reprise au milieu d'une séance, proposition après la Boussole). Plusieurs chantiers ci-dessous (1, 3, 4, 8) en seront en partie résolus :
 les traiter en cohérence avec ce projet.
 
 ## À faire, par ordre d'importance
@@ -64,7 +64,7 @@ carte en haut à chaque changement d'étape ; supprimer le `max-height` + `overf
 **Test** : vérifier à l'écran en 375 × 812 (navigateur intégré, préréglage « mobile ») sur les 5 assistants, puis
 ajouter un test de gabarit si possible.
 
-### 2. Promesses du gratuit (gênant fort)
+### 2. Promesses du gratuit (gênant fort) — **texte proposé le 26/11/2026, à valider par le fondateur**
 **Symptôme** : le résultat de la Boussole dit « bâtissez vos 6 plans dans votre espace gratuit » et « votre compte
 vous ouvre vos 5 tests approfondis ». L'offre gratuite donne en réalité le Plan de Vie, plus DISC et Dons spirituels
 (tableau de `/abonnement`, `App\Abonnement\Service\Entitlements`).

@@ -6,10 +6,14 @@
 <div class="academie-reader" data-academie-lesson="{{ lesson.slug }}">
     <article class="academie-reader__main">
         <a href="{{ path('app_academie_course', {slug: course.slug}) }}" class="ks-header__back">← {{ course.title }}</a>
+        {% if course.planJourney %}
+            {% include 'academie/_metro.html.twig' with {current: lesson} %}
+        {% else %}
         <div class="academie-progress" role="progressbar" aria-valuenow="{{ progress.percent }}" aria-valuemin="0" aria-valuemax="100" aria-label="{{ t('academie.lecon.progression', 'Progression dans le parcours') }}" style="margin-top: .8rem;">
             <span style="width: {{ progress.percent }}%;"></span>
         </div>
-        <p class="ks-eyebrow" style="margin-top: 1rem;">{{ lesson.module.title }} · {{ t('academie.lecon.position', 'Leçon {position} sur {total}', 'text', {position: position, total: total}) }} · {{ lesson.durationMinutes }} min{% if completion %} · <span style="color: var(--primary);">{{ t('academie.lecon.faite', 'Terminée') }}</span>{% endif %}</p>
+        {% endif %}
+        <p class="ks-eyebrow" style="margin-top: 1rem;">{{ lesson.module.title }} · {{ course.planJourney ? t('academie.seance.position', 'Séance {position} sur {total}', 'text', {position: position, total: total}) : t('academie.lecon.position', 'Leçon {position} sur {total}', 'text', {position: position, total: total}) }} · {{ lesson.durationMinutes }} min{% if completion %} · <span style="color: var(--primary);">{{ t('academie.lecon.faite', 'Terminée') }}</span>{% endif %}</p>
         <h1 class="ks-header__title" style="margin: .3rem 0 1.4rem;">{{ lesson.title }}</h1>
         {% include 'academie/_lesson_body.html.twig' with {preview: false} %}
         {% include 'academie/_practice.html.twig' %}

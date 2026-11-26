@@ -1,0 +1,20 @@
+{#
+    « Par où commencer ? » (parcours guidés, décision du fondateur du 26/11/2026) : remplir ses plans par un parcours
+    de plan, par le parcours de 90 jours, ou seul en mode libre. Paramètres : journeys (parcours de plan publiés),
+    enrollments (par parcours), is_pro.
+#}
+<div class="academie-grid">
+    {% for c in journeys %}
+        {% include 'academie/_course_card.html.twig' with {course: c, enrollment: enrollments[c.id] ?? null, highlight: loop.first ? t('academie.commencer.conseil', 'Pour commencer') : false} %}
+    {% endfor %}
+</div>
+<div class="academie-autres-chemins">
+    <a href="{{ path('app_journey') }}" class="ks-card ks-card--flat academie-chemin">
+        <i data-lucide="route"></i>
+        <span><strong>{{ t('academie.commencer.90_titre', 'Le parcours de 90 jours') }}</strong><br>{{ t('academie.commencer.90_texte', 'Les six plans dans l\'ordre du livre, en treize semaines.') }}</span>
+    </a>
+    <a href="{{ path('app_plan_wizard') }}" class="ks-card ks-card--flat academie-chemin">
+        <i data-lucide="pencil-line"></i>
+        <span><strong>{{ t('academie.commencer.libre_titre', 'Je remplis seul') }}</strong><br>{{ t('academie.commencer.libre_texte', 'L\'assistant des plans, à votre rythme, sans séances.') }}</span>
+    </a>
+</div>

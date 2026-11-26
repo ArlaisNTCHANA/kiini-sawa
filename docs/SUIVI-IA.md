@@ -9,6 +9,31 @@ teste (`php bin/phpunit`), commit, déploie (`bin/ops/envoyer-hostinger.sh`), v�
 journal `var/log/prod-AAAA-MM-JJ.log` sans erreur) ; **le fondateur fait lui-même `git push`** (refusé à l'IA).
 Ne jamais afficher ni demander de mot de passe ; ne pas publier son nom (mentions légales en attente).
 
+## 26/11/2026 — Parcours guidés, lot 1 : « Mon Plan de Vie » séance après séance
+
+- **Demande du fondateur** : après l'étape 1, « passe à la suite, n'attends pas » (lot 1 de
+  `docs/PROPOSITION-parcours-guides.md`, décisions du § 9).
+- **Fait** (détail : `docs/modules/academie.md`, « Parcours de plan ») : genre de parcours `PLAN` (migration
+  `Version20261126070037`, studio, YAML `kind`) ; `PlanRubrics` (une séance écrit une rubrique entière du Plan de Vie via
+  `LifePlanWizardSaver`, en ajoutant sans rien retirer) ; encadré `:::mediter` ; ligne de métro `_metro.html.twig` ;
+  célébration et fin vers le plan ; rythme quotidien par défaut ; section en tête de `/academie`, page
+  `/academie/par-ou-commencer`, règle 0 de `NextStep` (« Par où commencer ? » puis « Reprendre »), bouton de la carte
+  « Bravo » ; API mobile `type: seance`. Contenu : `content/academie/parcours-plan-de-vie.yaml` (8 séances, extraits du
+  livre vérifiés mot pour mot par programme).
+- **Tests** : `tests/Academie/PlanRubricsTest.php` (7 tests) ; 613 tests verts.
+- **Vérifié à l'écran en local** (375 px) avec un compte de test local (identifiants dans `var/dev-compte-parcours.txt`,
+  non versionné) : accueil → carte « Bravo » avec « Choisir mon parcours guidé » → page « Par où commencer ? » →
+  séance 1 (texte de l'accueil prérempli, « J'ai pris ce temps ») → enregistrement → séance 2 avec la ligne avancée →
+  « Reprendre » sur Aujourd'hui. Pas de défilement horizontal.
+- **Pièges** : l'assistant (`LifePlanWizardSaver::reconcile`) supprime ce qui n'est pas renvoyé : toujours renvoyer
+  l'existant. Les tests qui publient un parcours de plan doivent le repasser en brouillon (`tearDown`), sinon
+  « Ma prochaine étape » change pour les autres tests. La route `/academie/par-ou-commencer` a `priority: 10` (sinon
+  `/academie/{slug}` la prend).
+- **Non déployé.** En production, rien ne change tant que le fondateur n'a pas chargé puis publié le parcours.
+- **Reste** : relecture du contenu par le fondateur (prières d'une ligne, découpage) ; confirmer l'assouplissement
+  « raison d'être / Vision » pour les parcours de plan ; e-mail du rythme encore au vocabulaire « leçon » ; écrans
+  mobiles ; lots 2 à 4.
+
 ## 26/11/2026 — Remises en ordre avant les parcours guidés (étape 1)
 
 - **Erreur JavaScript entre deux pages sans rechargement (Turbo)** : « Identifier 'allLifeGoals' has already been

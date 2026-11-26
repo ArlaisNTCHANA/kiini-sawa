@@ -58,6 +58,13 @@
                     {% for key, label in accessLevels %}<option value="{{ key }}" {{ data.access == key ? 'selected' }}>{{ label }}</option>{% endfor %}
                 </select>
             </div>
+            <div class="ks-field">
+                <label class="ks-label" for="kind">Genre de parcours</label>
+                <select class="ks-input" id="kind" name="kind">
+                    {% for key, label in kinds %}<option value="{{ key }}" {{ (data.kind ?? 'THEME') == key ? 'selected' }}>{{ label }}</option>{% endfor %}
+                </select>
+                <p class="ks-help">Un parcours de plan guide le membre séance après séance pour écrire son plan : il est rangé à part dans l'Académie, proposé à la fin de l'accueil, et le rythme « une séance par jour » est choisi par défaut.</p>
+            </div>
         </div>
         <div class="ks-form-grid">
             <div class="ks-field"><label class="ks-label" for="slug">Adresse (après /academie/)</label><input class="ks-input" id="slug" name="slug" value="{{ data.slug }}" placeholder="trouver-sa-raison-d-etre"><p class="ks-help">Laissez vide pour la créer à partir du titre. Évitez de la changer une fois publié : les liens partagés ne marcheraient plus.</p></div>

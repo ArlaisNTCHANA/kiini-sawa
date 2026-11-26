@@ -19,6 +19,8 @@ use Doctrine\ORM\EntityManagerInterface;
  * semaine), avancer dans le parcours de 90 jours, puis faire progresser le plan le moins avancé.
  *
  * Règles, dans l'ordre (la première qui s'applique devient « la » prochaine étape ; les suivantes alimentent « ensuite ») :
+ *  0. parcours guidés (26/11/2026) : reprendre son parcours de plan en cours ; ou, tant qu'aucun n'a été choisi et que le
+ *     Plan de Vie n'est pas complet, « Par où commencer ? » (remplace alors la règle 1) ;
  *  1. fondations : le Plan de Vie n'est pas encore commencé ;
  *  2. le soir (à partir de 18 h) : le bilan du jour n'est pas fait ;
  *  3. samedi soir et dimanche : la revue de la semaine n'est pas faite ;
@@ -36,6 +38,7 @@ final class NextStep
         private readonly Entitlements $entitlements,
         private readonly WeeklyReviewRepository $weeklyReviews,
         private readonly WeeklyReviewService $weekly,
+        private readonly \App\Academie\Service\AcademyCatalog $academy,
     ) {
     }
 
@@ -58,8 +61,23 @@ final class NextStep
         $plans = $this->progress->forUser($user);
         $locked = $this->entitlements->lockedPlans($user);
 
+        // 0. Parcours guidés : reprendre, ou choisir par où commencer
+        $chooser = false;
+        if (null !== $current = $this->academy->currentPlanJourney($user)) {
+            $course = $current->getCourse();
+            $progress = $current->progress();
+            if (null !== $lesson = $current->nextLesson()) {
+                $out[] = $this->item('plan-journey', 'map', 'Mon parcours « '.$course->getTitle().' » · station '.($progress['done'] + 1).' sur '.$progress['total'],
+                    $lesson->getTitle(), 'Une séance de '.$lesson->getDurationMinutes().' min : comprendre, méditer, réfléchir, puis écrire dans votre plan.',
+                    'Reprendre', 'app_academie_lesson', ['slug' => $course->getSlug(), 'lessonSlug' => $lesson->getSlug()]);
+            }
+        } elseif ($plans['VIE']['percent'] < 100 && !$this->academy->hasStartedPlanJourney($user) && [] !== $this->academy->planJourneys()) {
+            $chooser = true;
+            $out[] = $this->item('plan-journey-start', 'map', 'Pour commencer', 'Par où commencer ?', 'Remplissez vos plans en étant accompagné : une courte séance par jour, et vous voyez toujours où vous en êtes.', 'Choisir mon parcours', 'app_academie_start');
+        }
+
         // 1. Fondations
-        if (0 === $plans['VIE']['percent'] && $plans['VIE']['next']) {
+        if (!$chooser && 0 === $plans['VIE']['percent'] && $plans['VIE']['next']) {
             $next = $plans['VIE']['next'];
             $out[] = $this->item('foundation', 'compass', 'Pour commencer', 'Poser vos fondations', 'Votre Plan de Vie est le centre de tout : '.lcfirst($next['label']).'.', 'Commencer', $next['route'], $next['params']);
         }
@@ -82,7 +100,7 @@ final class NextStep
             if (!$journey->isWeekDone($n)) {
                 $out[] = $this->item('journey', 'route', 'Mon parcours de 90 jours · semaine '.$n.' sur 13', Journey::PLAN[$n]['produce'], 'Lire, écrire dans vos plans, puis marquer la semaine comme terminée.', 'Voir ma semaine', 'app_journey', [], 'semaine-'.$n);
             }
-        } elseif (!$journey) {
+        } elseif (!$journey && null === $current) { // pas d'invitation concurrente pendant un parcours de plan
             $out[] = $this->item('journey-start', 'route', 'Le parcours de 90 jours', 'Commencer mon parcours', 'Treize semaines, environ trois heures par semaine, pour écrire vos six plans chapitre après chapitre.', 'Découvrir le parcours', 'app_journey');
         }
 

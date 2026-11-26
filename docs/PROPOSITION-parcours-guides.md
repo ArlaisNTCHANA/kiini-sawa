@@ -1,7 +1,7 @@
 # Proposition : les parcours guidés (remplir ses plans en étant accompagné)
 
 **Statut** : proposition du 26/11/2026, **validée par le fondateur le 26/11/2026** (décisions au § 9, elles priment sur
-le reste du document). Prochaine étape : lot 1 (parcours Plan de Vie).
+le reste du document). Lot 1 construit le 26/11/2026 (non déployé, contenu à relire) ; prochaine étape : lot 2.
 Origine : le parcours « nouvel utilisateur » du 25/11 (`docs/parcours-nouvel-utilisateur-2026-11-25.md`) et le ressenti
 du fondateur, qui a essayé de remplir ses plans et s'est vite découragé.
 

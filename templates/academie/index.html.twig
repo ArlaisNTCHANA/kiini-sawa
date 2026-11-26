@@ -30,6 +30,19 @@
         </section>
     {% endif %}
 
+    {% if journeys|default([])|length %}
+        <section style="margin-top: 2rem;" id="parcours-de-plan" aria-labelledby="plan-journeys-title">
+            <h2 class="ks-section-title" id="plan-journeys-title">{{ t('academie.catalogue.parcours_plan', 'Remplir mes plans, séance après séance') }}</h2>
+            <p class="ks-small" style="margin: -.3rem 0 .9rem;">{{ t('academie.catalogue.parcours_plan_texte', 'Une courte séance par jour : comprendre, méditer, réfléchir, puis écrire directement dans votre plan.') }}</p>
+            <div class="academie-grid">
+                {% for c in journeys %}
+                    {% include 'academie/_course_card.html.twig' with {course: c, enrollment: enrollments[c.id] ?? null} %}
+                {% endfor %}
+            </div>
+        </section>
+        <h2 class="ks-section-title" style="margin-top: 2.2rem;">{{ t('academie.catalogue.parcours_theme', 'Parcours thématiques') }}</h2>
+    {% endif %}
+
     {% if all_count %}
         <nav class="academie-filters" aria-label="{{ t('academie.catalogue.filtrer', 'Filtrer par plan') }}">
             <a href="{{ path('app_academie') }}" class="ks-tab {{ place is null ? 'is-active' }}">{{ t('academie.catalogue.tous', 'Tous les parcours') }}</a>

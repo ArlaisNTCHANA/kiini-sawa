@@ -50,6 +50,9 @@ class AcademyPlanBridgeTest extends KernelTestCase
                 continue; // demande un couple relié : voir testCoupleAndJournalRules
             }
             foreach (array_keys($def['actions']) as $action) {
+                if (\App\Academie\Service\PlanRubrics::isRubric($action)) {
+                    continue; // séance d'un parcours de plan (PlanRubrics), voir PlanRubricsTest
+                }
                 $choice = 'add_transmission_action' === $action ? (string) $legacy->getId() : null;
                 $first = $this->bridge()->save($user, $lesson, $target, $action, 'Réponse '.$action, 'Détail', $choice);
                 $entity = $this->bridge()->find($user, $first['type'], $first['id']);

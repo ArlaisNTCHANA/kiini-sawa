@@ -1,0 +1,14 @@
+{% extends 'base.html.twig' %}
+{% block title %}{{ t('academie.commencer.titre', 'Par où commencer ?') }}{% endblock %}
+{% block stylesheets %}{{ parent() }}{% include 'academie/_styles.html.twig' %}{% endblock %}
+{% block body %}
+<div class="ks-page" data-par-ou-commencer>
+    {% include 'shared/_page_header.html.twig' with {
+        eyebrow: t('academie.catalogue.surtitre', 'La Méthode'),
+        icon: 'map',
+        title: t('academie.commencer.titre', 'Par où commencer ?'),
+        lead: t('academie.commencer.chapo', 'Remplissez vos plans en étant accompagné : une courte séance par jour, comprendre, méditer, réfléchir, puis écrire. Vous voyez toujours où vous en êtes.'),
+    } %}
+    {% include 'academie/_par_ou_commencer.html.twig' %}
+</div>
+{% endblock %}

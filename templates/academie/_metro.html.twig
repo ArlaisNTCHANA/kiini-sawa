@@ -1,0 +1,34 @@
+{#
+    Ligne de métro d'un parcours de plan (parcours guidés, 26/11/2026) : toutes les séances, celles faites, celle du
+    jour, celles à venir, et le temps restant. Paramètres : course, enrollment (ou null), current (leçon ouverte ou null).
+    Une station faite se touche pour la relire ou la corriger.
+#}
+{% set stations = course.lessons(true) %}
+{% set upcoming = enrollment ? enrollment.nextLesson : (stations|first ?: null) %}
+{% set here = current ?? upcoming %}
+{% set remaining = stations|filter(l => not (enrollment and enrollment.hasCompleted(l)))|reduce((sum, l) => sum + l.durationMinutes, 0) %}
+{% set position = 0 %}
+{% for l in stations %}{% if here and l.id == here.id %}{% set position = loop.index %}{% endif %}{% endfor %}
+<nav class="academie-metro" aria-label="{{ t('academie.metro.titre', 'Votre chemin dans ce parcours') }}">
+    <p class="academie-metro__resume">
+        {% if enrollment and enrollment.completed %}
+            {{ t('academie.metro.fini', 'Parcours terminé : {total} stations sur {total}.', 'text', {total: stations|length}) }}
+        {% else %}
+            {{ t('academie.metro.station', 'Station {position} sur {total}', 'text', {position: max(position, 1), total: stations|length}) }}{% if remaining > 0 %} · {{ t('academie.metro.reste', 'environ {minutes} min restantes', 'text', {minutes: remaining}) }}{% endif %}
+        {% endif %}
+    </p>
+    <ol class="academie-metro__ligne ks-scroll-row">
+        {% for l in stations %}
+            {% set done = enrollment and enrollment.hasCompleted(l) %}
+            {% set is_here = here and l.id == here.id %}
+            <li class="academie-metro__station{{ done ? ' is-done' }}{{ is_here ? ' is-here' }}">
+                {% set label %}<span class="academie-metro__point" aria-hidden="true">{% if done %}<i data-lucide="check"></i>{% endif %}</span><span class="academie-metro__nom">{{ l.title }}</span><span class="sr-only"> · {{ done ? t('academie.metro.faite', 'faite') : (is_here ? t('academie.metro.ici', 'vous êtes ici') : t('academie.metro.a_venir', 'à venir')) }}</span>{% endset %}
+                {% if done or is_here %}
+                    <a href="{{ path('app_academie_lesson', {slug: course.slug, lessonSlug: l.slug}) }}" {{ is_here ? 'aria-current="step"' }}>{{ label }}</a>
+                {% else %}
+                    <span>{{ label }}</span>
+                {% endif %}
+            </li>
+        {% endfor %}
+    </ol>
+</nav>

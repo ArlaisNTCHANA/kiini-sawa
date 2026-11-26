@@ -14,6 +14,14 @@ final class PracticeCatalog
         'VIE' => ['label' => 'Plan de Vie', 'button' => 'Enregistrer dans mon Plan de Vie', 'actions' => [
             'add_value' => ['label' => 'Ajouter une valeur', 'entity' => 'Value'],
             'add_life_goal' => ['label' => 'Ajouter un objectif', 'entity' => 'LifeGoal'],
+            // Parcours de plan : la séance écrit dans une rubrique entière (PlanRubrics), en ajoutant sans rien retirer
+            'write_purpose' => ['label' => 'Séance : écrire sa raison d\'être', 'entity' => null],
+            'list_convictions' => ['label' => 'Séance : poser ses convictions profondes', 'entity' => null],
+            'list_values' => ['label' => 'Séance : poser ses valeurs', 'entity' => null],
+            'list_passions' => ['label' => 'Séance : nommer ses passions', 'entity' => null],
+            'list_talents' => ['label' => 'Séance : nommer ses dons et talents', 'entity' => null],
+            'write_vision' => ['label' => 'Séance : écrire sa vision', 'entity' => null],
+            'list_life_goals' => ['label' => 'Séance : poser ses objectifs (Être, Faire, Avoir, Donner)', 'entity' => null],
         ]],
         'CROISSANCE' => ['label' => 'Plan de Croissance', 'button' => 'Enregistrer dans mon Plan de Croissance', 'actions' => [
             'add_growth_goal' => ['label' => 'Ajouter un objectif de croissance', 'entity' => 'GrowthGoal'],

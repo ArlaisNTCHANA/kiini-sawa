@@ -8,7 +8,7 @@ namespace App\Academie\Service;
  *
  * Trois ajouts au Markdown, sans HTML brut :
  *
- * - **Encadrés** : une ligne `:::retenir` (ou `:::exemple`, `:::avous`, `:::attention`), éventuellement suivie d'un
+ * - **Encadrés** : une ligne `:::retenir` (ou `:::exemple`, `:::avous`, `:::attention`, `:::mediter`), éventuellement suivie d'un
  *   titre, le texte de l'encadré, puis une ligne `:::` ;
  * - **Schémas dessinés** : une ligne `[[schema:code]]` (liste dans LessonDiagrams::CATALOG) ;
  * - **Images** : `![description](/academie/images/…)`, seulement les images envoyées dans le studio
@@ -22,6 +22,8 @@ final class LessonMarkdown
         'exemple' => ['sparkles', 'Exemple'],
         'avous' => ['pencil-line', 'À vous'],
         'attention' => ['triangle-alert', 'Attention'],
+        // Temps « Méditer » des parcours de plan : verset et prière proposés, sans minuteur (décision du 26/11/2026)
+        'mediter' => ['hand-heart', 'Méditer'],
     ];
 
     /**
@@ -77,7 +79,10 @@ final class LessonMarkdown
                     [$icon, $default] = self::CALLOUTS[$type];
                     $token = self::token($blocks);
                     $blocks[$token] = '<aside class="academie-encadre academie-encadre--'.$type.'"><p class="academie-encadre__titre"><i data-lucide="'.$icon.'" aria-hidden="true"></i> '
-                        .htmlspecialchars('' !== $title ? $title : $default, \ENT_QUOTES).'</p>'.self::parse(implode("\n", $buffer), $imageBase).'</aside>';
+                        .htmlspecialchars('' !== $title ? $title : $default, \ENT_QUOTES).'</p>'.self::parse(implode("\n", $buffer), $imageBase)
+                        // Une simple invitation : la case ne mesure ni n'enregistre rien
+                        .('mediter' === $type ? '<label class="academie-mediter-fait"><input type="checkbox"> <span>J\'ai pris ce temps</span><span class="academie-mediter-merci">Merci. Gardez ce qui vous a été donné pour la suite.</span></label>' : '')
+                        .'</aside>';
                     $out[] = '';
                     $out[] = $token;
                     $out[] = '';

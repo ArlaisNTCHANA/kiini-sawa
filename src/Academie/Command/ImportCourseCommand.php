@@ -215,6 +215,11 @@ class ImportCourseCommand extends Command
         $course = (new Course())->setTitle(mb_substr($title, 0, 160))->setSlug(AcademyStudio::slugify((string) ($d['slug'] ?? $title)))
             ->setSubtitle(isset($d['subtitle']) ? trim((string) $d['subtitle']) : null)->setDescription(isset($d['description']) ? trim((string) $d['description']) : null)
             ->setPlace($place)->setAccessLevel($access)->setCoverWord(isset($d['cover_word']) ? (string) $d['cover_word'] : null);
+        $kind = strtoupper((string) ($d['kind'] ?? Course::KIND_THEME));
+        if (!isset(Course::KINDS[$kind]) || (Course::KIND_PLAN === $kind && !isset(PlanCatalog::PLANS[(string) $place]))) {
+            throw new \InvalidArgumentException('Genre inconnu (kind) : THEME, ou PLAN avec un des 6 plans en place.');
+        }
+        $course->setKind($kind);
         $plans = $d['plans'] ?? [];
         if (!\is_array($plans) || [] !== array_diff($plans, array_keys(PlanCatalog::PLANS))) {
             throw new \InvalidArgumentException('Plans couverts inconnus (plans) : utilisez les clés VIE, CROISSANCE, DEVELOPPEMENT, HYGIENE, INTENDANCE, TRANSMISSION.');

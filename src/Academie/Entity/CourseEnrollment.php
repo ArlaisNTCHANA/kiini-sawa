@@ -73,6 +73,10 @@ class CourseEnrollment
         $this->startedAt = new \DateTimeImmutable();
         $this->lastActivityAt = $this->startedAt;
         $this->completions = new ArrayCollection();
+        // Parcours de plan : une séance par jour par défaut (décision du fondateur, 26/11/2026), modifiable à tout moment
+        if ($course->isPlanJourney()) {
+            $this->paceMode = self::PACE_DAILY;
+        }
     }
 
     public function getId(): ?int { return $this->id; }

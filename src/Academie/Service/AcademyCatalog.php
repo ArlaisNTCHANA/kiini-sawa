@@ -42,6 +42,41 @@ final class AcademyCatalog
         return ['courses' => $courses, 'enrollments' => $enrollments];
     }
 
+    /**
+     * Parcours de plan publiés (parcours guidés, 26/11/2026), un par plan au plus, dans l'ordre des 6 plans du livre.
+     *
+     * @return list<Course>
+     */
+    public function planJourneys(): array
+    {
+        $byPlan = [];
+        foreach ($this->courses->allOrdered() as $c) {
+            if ($c->isPlanJourney() && $c->isPublished() && !isset($byPlan[(string) $c->getPrimaryPlan()])) {
+                $byPlan[(string) $c->getPrimaryPlan()] = $c;
+            }
+        }
+
+        return array_values(array_filter(array_map(fn (string $plan) => $byPlan[$plan] ?? null, array_keys(\App\PlanDeVie\Service\PlanCatalog::PLANS))));
+    }
+
+    /** Le parcours de plan en cours le plus récent (non terminé), ou null. */
+    public function currentPlanJourney(User $user): ?CourseEnrollment
+    {
+        foreach ($this->enrollments->byCourseFor($user) as $e) {
+            if ($e->getCourse()->isPlanJourney() && !$e->isCompleted() && $this->isVisible($user, $e->getCourse())) {
+                return $e;
+            }
+        }
+
+        return null;
+    }
+
+    /** Le membre a-t-il déjà commencé un parcours de plan (terminé ou non) ? */
+    public function hasStartedPlanJourney(User $user): bool
+    {
+        return [] !== array_filter($this->enrollments->byCourseFor($user), fn (CourseEnrollment $e) => $e->getCourse()->isPlanJourney());
+    }
+
     /** Le parcours est-il visible (publié, ou déjà commencé) ? */
     public function isVisible(User $user, Course $course): bool
     {

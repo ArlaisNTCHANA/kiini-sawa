@@ -14,6 +14,7 @@ use App\Academie\Service\AcademyCatalog;
 use App\Academie\Service\AcademyJournal;
 use App\Academie\Service\AcademyLearning;
 use App\Academie\Service\AcademyPlaces;
+use App\Academie\Service\AcademyPlanBridge;
 use App\Compte\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -52,7 +53,14 @@ final class AcademyController extends AbstractController
         $shown = null === $place ? $courses : array_values(array_filter($courses, fn (Course $c) => $c->getPlace() === $place));
         $inProgress = array_values(array_filter($enrollments, fn (CourseEnrollment $e) => !$e->isCompleted()));
 
+        // Sans filtre, les parcours de plan sont rangés à part, en tête (décision du fondateur du 26/11/2026)
+        $journeys = null === $place ? array_values(array_filter($shown, fn (Course $c) => $c->isPlanJourney())) : [];
+        if ([] !== $journeys) {
+            $shown = array_values(array_filter($shown, fn (Course $c) => !$c->isPlanJourney()));
+        }
+
         return $this->render('academie/index.html.twig', [
+            'journeys' => $journeys,
             'courses' => $shown,
             'all_count' => \count($courses),
             'enrollments' => $enrollments,
@@ -61,6 +69,23 @@ final class AcademyController extends AbstractController
             'plans' => AcademyPlaces::plans(),
             'has_couple' => [] !== array_filter($courses, fn (Course $c) => $c->isCouple()),
             'recommended' => null === $place ? $this->catalog->recommended($user, $courses) : null,
+            'is_pro' => $this->entitlements->isPro($user),
+        ]);
+    }
+
+    /** « Par où commencer ? » : les parcours de plan, le parcours de 90 jours ou le mode libre (26/11/2026). */
+    #[Route('/par-ou-commencer', name: '_start', methods: ['GET'], priority: 10)]
+    public function start(): Response
+    {
+        $user = $this->user();
+        $journeys = $this->catalog->planJourneys();
+        if ([] === $journeys) {
+            return $this->redirectToRoute('app_journey');
+        }
+
+        return $this->render('academie/par_ou_commencer.html.twig', [
+            'journeys' => $journeys,
+            'enrollments' => $this->catalog->visibleFor($user)['enrollments'],
             'is_pro' => $this->entitlements->isPro($user),
         ]);
     }
@@ -120,11 +145,17 @@ final class AcademyController extends AbstractController
         try {
             $result = $this->learning->complete($user, $lesson, $enrollment, $toPlan, [
                 'title' => $p->getString('title'), 'detail' => $p->getString('detail'), 'choice' => $p->getString('choice'), 'destination' => $p->getString('destination'),
+                // Séances des parcours de plan (PlanRubrics) : texte, ou nouvelles lignes d'une rubrique
+                'text' => $p->getString('text'), 'horizon' => $p->getString('horizon'),
+                'items' => $p->all('items'), 'goals' => $p->all('goals'),
             ]);
         } catch (PracticeRefused $e) {
             $this->addFlash('error', $e->getMessage());
 
             return $this->redirect($this->generateUrl('app_academie_lesson', ['slug' => $slug, 'lessonSlug' => $lessonSlug]).'#pratique');
+        }
+        if ($course->isPlanJourney()) {
+            return $this->celebrate($course, $enrollment, $toPlan ? $result : null);
         }
         if ($toPlan) {
             $this->addFlash('success', 'Votre réponse est enregistrée dans : '.$result['label'].'.');
@@ -141,6 +172,33 @@ final class AcademyController extends AbstractController
         }
 
         return $this->redirectToRoute('app_academie_course', ['slug' => $slug]);
+    }
+
+    /**
+     * Fin d'une séance d'un parcours de plan : ce qui vient d'être posé, la station franchie et la suivante ; à la fin du
+     * parcours, le plan rempli (parcours guidés, 26/11/2026).
+     *
+     * @param array{label: ?string, summary?: string}|null $result
+     */
+    private function celebrate(Course $course, CourseEnrollment $enrollment, ?array $result): Response
+    {
+        if (null !== $result && isset($result['summary'])) {
+            $this->addFlash('success', 'Posé dans votre '.$result['label'].' : '.rtrim(mb_strimwidth($result['summary'], 0, 160, '…'), '. ').'.');
+        }
+        $progress = $enrollment->progress();
+        if ($enrollment->isCompleted()) {
+            $this->addFlash('success', 'Bravo ! Vous avez terminé le parcours « '.$course->getTitle().' » : '.$progress['total'].' stations sur '.$progress['total'].'. Voici votre plan, tel que vous l\'avez posé.');
+            $route = AcademyPlanBridge::route((string) $course->getPrimaryPlan());
+
+            return null !== $route ? $this->redirectToRoute($route) : $this->redirectToRoute('app_academie_course', ['slug' => $course->getSlug()]);
+        }
+        $upcoming = $enrollment->nextLesson();
+        $this->addFlash('info', 'Station '.$progress['done'].' sur '.$progress['total'].' franchie.'
+            .(null !== $upcoming ? ' Prochaine séance : « '.$upcoming->getTitle().' », '.$upcoming->getDurationMinutes().' min.' : ''));
+
+        return null !== $upcoming
+            ? $this->redirectToRoute('app_academie_lesson', ['slug' => $course->getSlug(), 'lessonSlug' => $upcoming->getSlug()])
+            : $this->redirectToRoute('app_academie_course', ['slug' => $course->getSlug()]);
     }
 
     #[Route('/{slug}/{lessonSlug}/notes', name: '_note_add', requirements: ['slug' => '[a-z0-9-]+', 'lessonSlug' => '[a-z0-9-]+'], methods: ['POST'])]

@@ -181,6 +181,39 @@
     .academie-encadre--avous { background: var(--card-bg); border: 2px dashed var(--primary-light); }
     .academie-encadre--attention { background: var(--warning-soft); border-color: var(--warning); }
     .academie-encadre--attention .academie-encadre__titre { color: var(--fg); }
+    .academie-encadre--mediter { background: var(--gold-soft); border-color: var(--gold-light); text-align: left; }
+    .academie-encadre--mediter .academie-encadre__titre { color: var(--accent); }
+    .academie-encadre--mediter blockquote { font-family: var(--serif); font-size: 1.1rem; }
+    .academie-mediter-fait { display: flex; flex-wrap: wrap; align-items: center; gap: .5rem; margin: .2rem 0 .9rem; font-weight: 600; cursor: pointer; }
+    .academie-mediter-fait input { width: 1.15rem; height: 1.15rem; accent-color: var(--primary); }
+    .academie-mediter-merci { display: none; flex-basis: 100%; font-weight: 400; color: var(--fg-muted); font-size: .9rem; }
+    .academie-mediter-fait input:checked ~ .academie-mediter-merci { display: block; }
+    /* Ligne de métro des parcours de plan (_metro.html.twig) */
+    .academie-metro { margin: .9rem 0 1.2rem; }
+    .academie-metro__resume { font-size: .85rem; font-weight: 700; color: var(--primary-dark); margin: 0 0 .5rem; }
+    .academie-metro__ligne { list-style: none; margin: 0; padding: 0 0 .3rem; gap: 0 !important; position: relative; }
+    .academie-metro__station { position: relative; width: 5.6rem; text-align: center; }
+    .academie-metro__station::before { content: ''; position: absolute; top: .62rem; left: -50%; width: 100%; height: 4px; background: var(--border); z-index: 0; }
+    .academie-metro__station:first-child::before { display: none; }
+    .academie-metro__station.is-done::before, .academie-metro__station.is-here::before { background: var(--primary); }
+    .academie-metro__station a, .academie-metro__station > span { position: relative; z-index: 1; display: flex; flex-direction: column; align-items: center; gap: .3rem; color: var(--fg-muted); text-decoration: none; padding: 0 .2rem; }
+    .academie-metro__point { width: 1.3rem; height: 1.3rem; border-radius: 50%; background: var(--card-bg); border: 3px solid var(--border); display: grid; place-items: center; }
+    .academie-metro__point svg { width: 12px; height: 12px; color: #fff; }
+    .is-done .academie-metro__point { background: var(--primary); border-color: var(--primary); }
+    .is-here .academie-metro__point { border-color: var(--primary); box-shadow: 0 0 0 4px var(--primary-tint); }
+    .academie-metro__nom { font-size: .72rem; line-height: 1.25; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+    .is-done .academie-metro__nom, .is-here .academie-metro__nom { color: var(--fg); }
+    .is-here .academie-metro__nom { font-weight: 700; }
+    /* « Par où commencer ? » */
+    .academie-autres-chemins { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: .8rem; margin-top: 1rem; }
+    .academie-chemin { display: flex; gap: .8rem; align-items: flex-start; text-decoration: none; color: var(--fg-muted); font-size: .9rem; line-height: 1.45; }
+    .academie-chemin strong { color: var(--fg); }
+    .academie-chemin svg { width: 22px; height: 22px; flex: none; color: var(--primary); margin-top: .1rem; }
+    /* Séances des parcours de plan (PlanRubrics) */
+    .academie-seance-deja { list-style: none; padding: 0; margin: 0 0 .7rem; display: flex; flex-wrap: wrap; gap: .4rem; }
+    .academie-seance-deja li { background: var(--primary-soft); border: 1px solid var(--primary-tint); color: var(--primary-dark); border-radius: 999px; padding: .2rem .7rem; font-size: .88rem; }
+    .academie-seance-ligne { margin-top: .45rem; }
+    .academie-seance-dimension { border: 0; padding: 0; margin: 0 0 1rem; min-width: 0; }
     .academie-image { display: block; width: 100%; height: auto; border-radius: var(--r-lg); margin: 1.4rem 0 .4rem; box-shadow: var(--card-shadow); }
     .academie-image + em { display: block; font-size: .85rem; color: var(--fg-muted); text-align: center; }
 

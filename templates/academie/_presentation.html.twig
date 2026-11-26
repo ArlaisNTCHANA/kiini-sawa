@@ -25,6 +25,10 @@
     </div>
 </header>
 
+{% if course.planJourney and lessons|length %}
+    {% include 'academie/_metro.html.twig' with {current: null, enrollment: preview ? null : enrollment} %}
+{% endif %}
+
 {% if not preview and not course.published %}
     <div class="ks-alert ks-alert--info" style="margin-top: 1rem;">{{ t('academie.parcours.retire', 'Ce parcours est en cours de révision. Vous le retrouvez ici parce que vous l\'avez commencé, avec votre progression.') }}</div>
 {% endif %}
