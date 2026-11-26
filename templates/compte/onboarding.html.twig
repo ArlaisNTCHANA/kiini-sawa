@@ -135,7 +135,7 @@
         <div class="ob-nav">
             <button type="button" class="ob-link" x-show="step > 1" @click="step--">← Retour</button>
             <button type="submit" class="ob-link" name="skip" value="1" formnovalidate x-show="step === 1">Plus tard</button>
-            <button type="button" class="ob-btn" x-show="step < 4" :disabled="!valid()" @click="step++">Continuer</button>
+            <button type="button" class="ob-btn" x-show="step < 4" :disabled="!valid()" @click="if (step < 4) step++">Continuer</button>
             <button type="submit" class="ob-btn" x-show="step === 4" x-cloak :disabled="!valid()">Enregistrer mes fondations</button>
         </div>
     </form>

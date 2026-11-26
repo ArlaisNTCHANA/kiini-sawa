@@ -9,6 +9,29 @@ teste (`php bin/phpunit`), commit, déploie (`bin/ops/envoyer-hostinger.sh`), v�
 journal `var/log/prod-AAAA-MM-JJ.log` sans erreur) ; **le fondateur fait lui-même `git push`** (refusé à l'IA).
 Ne jamais afficher ni demander de mot de passe ; ne pas publier son nom (mentions légales en attente).
 
+## 26/11/2026 — Parcours des tests jamais essayés (DISC, Type, Profil complet, Ennéagramme, Hygiène, PDF)
+
+Passés en local avec le compte de test, résultats et PDF lus page par page. Corrigé :
+- **PDF du Plan de Vie** : la rubrique « Profil » affichait le résultat brut des tests (`{"D":34,…}`, et pour l'Hygiène
+  un long bloc qui débordait de la page). `PlanDataProvider` donne maintenant un résumé lisible (les trois dimensions
+  les plus fortes) et lit les notes de l'Hygiène et de l'Équilibre sous `axes` (sur 10, ramenées en %) ; la carte de
+  l'écran en profite aussi. Mots alignés sur les rapports : Dominant/Influent/Stable/Conforme, Conscience,
+  Sensibilité émotionnelle ; « 3 w4 » devient « 3, aile 4 ». Test : `tests/PlanDeVie/PlanTestResultsReadableTest.php`.
+- **Rapports de tests (PDF)** : l'avertissement « Vous avez répondu très vite » apparaissait après la page de garde
+  (page 2 presque vide) puis une 2e fois (DISC). Il n'apparaît plus qu'une fois, en haut de « L'essentiel en une page »
+  (`report/_essentials.html.twig`) : DISC passe de 20 à 19 pages.
+- **Questionnaires** : des clics rapides sur « Suivant » pouvaient dépasser la dernière page (« Page 15 sur 10 », plus
+  de bouton pour envoyer). Garde dans `assessment/take.html.twig` (et « Continuer » de l'accueil, `onboarding`).
+- **Audit Hygiène** : le rapport annonçait « 24 habitudes » et « vingt-quatre questions » pour 30 questions ; le nombre
+  vient de la base, il n'est plus écrit en dur. La consigne « Répondez à toutes les questions » disparaît une fois tout
+  répondu (`personnalite/test.html.twig`).
+- Ennéagramme PDF : un espace avant « Pour grandir » quand le verset final s'y place.
+
+Rien à corriger : Type, Profil complet, synthèse « Mon profil KIINI SAWA », Plan de Croissance (PDF).
+À signaler au fondateur : les fiches bibliques des rapports portent « Fiche en cours de relecture. » ; l'assistant du
+Plan de Vie propose encore « Névrosisme », « Conscienciosité » dans la liste Big Five (`wizard.html.twig`, l. 665+).
+Non testé : reçus PDF (abonnement, organisation) faute de paiement sur le compte de test.
+
 ## 26/11/2026 — Intendance sans rechargement ; séances guidées dans l'appli (« Tout ce qui reste »)
 
 - **Déployé le 26/11/2026** (accord du fondateur) : pages contrôlées (accueil 200, /login 200, Intendance, Partenaires, Organisation 302 hors connexion, API 401 sans jeton), aucune erreur au journal du serveur. L'appli mobile (séances) attend une nouvelle version publiée.

@@ -132,20 +132,29 @@ final class PlanDataProvider
                             if (isset($parsed['type'])) {
                                 $displayResult = $parsed['type'];
                                 if (isset($parsed['wing'])) {
-                                    $displayResult .= ' w' . $parsed['wing'];
+                                    $displayResult .= ', aile ' . $parsed['wing'];
                                 }
                             } else {
+                                // Hygiène et Équilibre : les notes (sur 10) sont rangées sous « axes », à côté du détail
+                                $scale = 1;
+                                if (isset($parsed['axes']) && \is_array($parsed['axes'])) {
+                                    $parsed = $parsed['axes'];
+                                    $scale = 10;
+                                }
                                 foreach ($parsed as $k => $v) {
+                                    if (!is_numeric($v)) {
+                                        continue;
+                                    }
                                     $label = match ($k) {
-                                        'D' => 'Dominance (D)',
-                                        'I' => 'Influence (I)',
-                                        'S' => 'Stabilité (S)',
-                                        'C' => 'Conformité (C)',
+                                        'D' => 'Dominant (D)',
+                                        'I' => 'Influent (I)',
+                                        'S' => 'Stable (S)',
+                                        'C' => 'Conforme (C)',
                                         'O' => 'Ouverture',
-                                        'C_big5' => 'Conscienciosité',
+                                        'C_big5' => 'Conscience',
                                         'E' => 'Extraversion',
                                         'A' => 'Agréabilité',
-                                        'N' => 'Névrosisme',
+                                        'N' => 'Sensibilité émotionnelle',
                                         'linguistique' => 'Linguistique',
                                         'logique' => 'Logique',
                                         'spatiale' => 'Spatiale',
@@ -175,9 +184,13 @@ final class PlanDataProvider
                                     $chartData[] = [
                                         'key' => $k,
                                         'label' => $label,
-                                        'value' => (float)$v
+                                        'value' => (float) $v * $scale,
                                     ];
                                 }
+                                // Résumé lisible (PDF) : les trois dimensions les plus fortes, jamais le résultat brut
+                                $top = $chartData;
+                                usort($top, fn ($a, $b) => $b['value'] <=> $a['value']);
+                                $displayResult = implode(' · ', array_map(fn ($d) => $d['label'].' '.round($d['value']).' %', \array_slice($top, 0, 3)));
                             }
                         }
                     }

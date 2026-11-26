@@ -164,4 +164,4 @@ constaté à 375 px).
 ## Non testé pendant le parcours
 
 Paiement, invitations à de vraies personnes (Feedback nourricier, Partenaire de Redevabilité, conjoint, Sanctuaire du
-Couple), tests DISC, Profil complet, Type, Ennéagramme et audit Hygiène, téléchargements PDF.
+Couple). Les tests DISC, Profil complet, Type, Ennéagramme, l'audit Hygiène et les PDF ont été passés le 26/11/2026 (voir `docs/SUIVI-IA.md`) ; reste les reçus PDF.

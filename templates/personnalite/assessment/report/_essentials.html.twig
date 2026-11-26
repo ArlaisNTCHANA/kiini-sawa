@@ -4,6 +4,12 @@
   action (texte), toc (liste de titres de sections).
 #}
 <div class="dr-page">
+    {# Avertissement de qualité (réponses trop rapides…) : une seule fois, ici, pour ne pas créer de page presque vide dans le PDF #}
+    {% if quality.warnings is defined and quality.warnings|length %}
+        <div style="background: #FEF3C7; border: 1px solid #FDE68A; color: #92400E; border-radius: 12px; padding: 10px 14px; margin: {{ pdf ? '0 0 4mm' : '0 0 18px' }}; font-size: 13px;" data-quality-warning>
+            {% for w in quality.warnings %}<div>{{ report_icon('alert', '#B45309') }}{{ w }}</div>{% endfor %}
+        </div>
+    {% endif %}
     <div class="dr-kicker">L'essentiel en une page</div>
     <h2>{{ headline }}</h2>
     <p class="dr-lead">{{ tagline }}</p>

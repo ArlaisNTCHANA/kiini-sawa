@@ -28,11 +28,6 @@
 } %}
 
 
-{% if quality.warnings is defined and quality.warnings|length %}
-    <div style="background: #FEF3C7; border: 1px solid #FDE68A; color: #92400E; border-radius: 12px; padding: 10px 14px; margin: {{ pdf ? '0 0 4mm' : '0 0 18px' }}; font-size: 13px;">
-        {% for w in quality.warnings %}<div>{{ report_icon('alert', '#B45309') }}{{ w }}</div>{% endfor %}
-    </div>
-{% endif %}
 
 {# ═══ 1. Lire ce rapport ══════════════════════════════════════════════ #}
 <div class="dr-page">

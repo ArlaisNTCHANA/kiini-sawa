@@ -112,7 +112,7 @@
         <div class="as-nav">
             <button type="button" class="as-btn sec" x-show="page > 0" @click="page--; window.scrollTo(0, 0)">← Précédent</button>
             <span x-show="page === 0"></span>
-            <button type="button" class="as-btn" x-show="page < pages - 1" :disabled="!pageDone(page)" @click="page++; window.scrollTo(0, 0)">Suivant →</button>
+            <button type="button" class="as-btn" x-show="page < pages - 1" :disabled="!pageDone(page)" @click="if (page < pages - 1) page++; window.scrollTo(0, 0)">Suivant →</button>
             <button type="submit" class="as-btn" x-show="page === pages - 1" x-cloak :disabled="count() < total || !consent">Voir mes résultats</button>
         </div>
     </form>

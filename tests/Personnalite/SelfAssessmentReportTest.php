@@ -39,6 +39,9 @@ class SelfAssessmentReportTest extends WebTestCase
         foreach (['Votre roue de vitalité', 'Trois habitudes à adopter', 'Pas un avis médical'] as $t) {
             $this->assertSelectorTextContains('main', $t);
         }
+        // Le nombre de questions vient de la base (modifiable) : le rapport n'en annonce pas un en dur (il disait 24 pour 30)
+        $this->assertStringNotContainsString('vingt-quatre', $client->getResponse()->getContent());
+        $this->assertStringNotContainsString('24 habitudes', $client->getResponse()->getContent());
         $client->request('GET', '/mes-tests/hygiene/resultats/pdf');
         $this->assertResponseHeaderSame('content-type', 'application/pdf');
     }

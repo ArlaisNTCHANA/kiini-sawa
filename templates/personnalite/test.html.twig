@@ -375,7 +375,12 @@ function unlockNext(idx) {
     const nextBtn = document.getElementById('btn-next-' + idx);
     const submitBtn = document.getElementById('btn-submit-' + idx);
     if (nextBtn) nextBtn.disabled = false;
-    if (submitBtn) submitBtn.disabled = false;
+    if (submitBtn) {
+        submitBtn.disabled = false;
+        // Tout est répondu : la consigne « Répondez à toutes les questions » n'a plus lieu d'être
+        const cta = submitBtn.closest('.q-slide')?.querySelector('.test-complete-cta');
+        if (cta) cta.hidden = true;
+    }
 }
 
 function nextQuestion(currentIdx, total) {

@@ -11,7 +11,7 @@
 <div class="dr">
 {% include 'personnalite/assessment/report/_cover.html.twig' with {
     title: eq ? 'Équilibre de Vie' : 'Hygiène de Vie',
-    subtitle: eq ? 'Votre roue de la vie en 8 domaines' : 'Vos 6 axes vitaux et 24 habitudes',
+    subtitle: eq ? 'Votre roue de la vie en 8 domaines' : 'Vos 6 axes vitaux et vos habitudes',
     badges: [], headline: 'Score global : ' ~ _self.f(s.avg) ~ ' / 10',
     tagline: s.globalLevel == 'low' ? 'Des fondations à reconstruire, pas à pas' : (s.globalLevel == 'mid' ? 'Un équilibre à consolider' : 'Des fondations solides'),
     keywords: s.priorities|map(a => a.label),
@@ -30,7 +30,7 @@
 <div class="dr-page">
     <div class="dr-kicker">Avant de commencer</div>
     <h2>Comment lire ce rapport</h2>
-    <p class="dr-lead">{% if eq %}Vous avez évalué de 1 à 10 votre satisfaction dans huit domaines de votre vie.{% else %}Vous avez évalué de 1 à 10 vos habitudes dans six axes vitaux, à travers vingt-quatre questions.{% endif %} Ce n'est pas un test : c'est <strong>votre propre regard</strong> sur votre situation aujourd'hui. Il ne s'agit pas d'avoir 10 partout, mais de repérer où mettre votre énergie en priorité.</p>
+    <p class="dr-lead">{% if eq %}Vous avez évalué de 1 à 10 votre satisfaction dans huit domaines de votre vie.{% else %}Vous avez évalué de 1 à 10 vos habitudes dans six axes vitaux.{% endif %} Ce n'est pas un test : c'est <strong>votre propre regard</strong> sur votre situation aujourd'hui. Il ne s'agit pas d'avoir 10 partout, mais de repérer où mettre votre énergie en priorité.</p>
     <table class="dr-grid"><tr>
         {% for lvl, info in {low: ['Moins de 5', 'À soigner en priorité', '#FEE2E2', '#991B1B'], mid: ['De 5 à 7,4', 'À consolider', '#FEF3C7', '#854D0E'], high: ['7,5 et plus', 'Point d\'appui', '#DCFCE7', '#166534']} %}
             <td><div class="dr-tile" style="background: {{ info[2] }}; border-color: {{ info[2] }}; text-align: center;">
