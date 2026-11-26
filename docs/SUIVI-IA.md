@@ -19,6 +19,8 @@ Ne jamais afficher ni demander de mot de passe ; ne pas publier son nom (mention
 - **Tests** : `PlanRubricsTest` (13 tests) ; 619 tests verts. Vu à l'écran en local (375 px, compte de test passé en
   essai PRO dans la base locale) : « Par où commencer ? » montre les 6 parcours dans l'ordre du livre ; séance
   d'inventaire de l'Intendance enregistrée et visible dans le plan ; boutons longs repliés dans la carte.
+- **Déployé le 26/11/2026** (pas de migration) : accueil, Boussole et connexion en 200, page inconnue en 404, aucune
+  erreur au journal, les 5 fichiers de parcours présents sur le serveur (pas encore chargés).
 - **Reste** : chargement en production puis relecture et publication par le fondateur ; lot 4 (parcours de 90 jours) ;
   « un seul message par jour toutes sources confondues ».
 
