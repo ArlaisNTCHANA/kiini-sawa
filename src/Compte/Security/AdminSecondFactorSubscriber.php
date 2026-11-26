@@ -13,7 +13,7 @@ use Symfony\Component\HttpKernel\KernelEvents;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 /**
- * Connexion en deux étapes des administrateurs : après le mot de passe, un code reçu par email.
+ * Connexion en deux étapes des administrateurs : après le mot de passe, un code reçu par e-mail.
  * Exigé à chaque nouvelle session (y compris une reconnexion automatique « se souvenir de moi »).
  * Désactivable par ADMIN_SECOND_FACTOR=0 (environnement de test).
  */
@@ -32,7 +32,7 @@ final class AdminSecondFactorSubscriber implements EventSubscriberInterface
 
     public static function getSubscribedEvents(): array
     {
-        // Après le pare-feu (8) et la vérification de l'email (4)
+        // Après le pare-feu (8) et la vérification de l'e-mail (4)
         return [KernelEvents::REQUEST => ['onKernelRequest', 3]];
     }
 

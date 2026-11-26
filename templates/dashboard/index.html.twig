@@ -256,9 +256,10 @@
                 {% if stats.habitsToday is defined %}
                 <div>
                     <p style="font-size: 1.75rem; font-weight: 700; color: white; font-family: var(--font-serif); line-height: 1.2;">
-                        {{ stats.habitsToday.done }}/{{ stats.habitsToday.total }}
+                        {# Point 9 : pas de « 0/0 » quand aucun rituel n'est prévu aujourd'hui #}
+                        {{ stats.habitsToday.total > 0 ? stats.habitsToday.done ~ '/' ~ stats.habitsToday.total : '–' }}
                     </p>
-                    <p style="font-size: 0.65rem; color: rgba(255,255,255,0.5); text-transform: uppercase; letter-spacing: 0.15em; font-weight: 700; margin-top: 2px;">Rituels du jour</p>
+                    <p style="font-size: 0.65rem; color: rgba(255,255,255,0.5); text-transform: uppercase; letter-spacing: 0.15em; font-weight: 700; margin-top: 2px;">{{ stats.habitsToday.total > 0 ? 'Rituels du jour' : 'Aucun rituel aujourd\'hui' }}</p>
                 </div>
                 {# Récompense sobre : le point d'or quand la journée est tenue (contre-audit visuel du 25/11/2026) #}
                 {% if stats.habitsToday.total > 0 and stats.habitsToday.done >= stats.habitsToday.total %}
@@ -414,6 +415,8 @@
        SECTION 1 bis — MA BOUSSOLE : raison d'être et prochaines échéances
     ══════════════════════════════════════════════════════ #}
     <section style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1rem; margin-top: 1.5rem;">
+        {# Point 9 : la carte « Bravo » montre déjà la raison d'être juste écrite : pas deux fois #}
+        {% if not welcome %}
         <a href="{{ path('app_plan_de_vie') }}" style="display: block; text-decoration: none; background: var(--card-bg); border-radius: var(--r-lg); box-shadow: var(--card-shadow); padding: 1.5rem; border-left: 4px solid var(--primary);">
             <p style="font-size: 0.7rem; font-weight: 800; letter-spacing: 0.12em; text-transform: uppercase; color: var(--primary); margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.4rem;">
                 <i data-lucide="compass" style="width: 14px; height: 14px;"></i> Ma raison d'être
@@ -424,6 +427,7 @@
                 <p style="color: var(--fg-muted); font-size: 0.95rem;">Vous n'avez pas encore formulé votre raison d'être. <span style="color: var(--primary); font-weight: 600;">La rédiger →</span></p>
             {% endif %}
         </a>
+        {% endif %}
 
         <div style="background: var(--card-bg); border-radius: var(--r-lg); box-shadow: var(--card-shadow); padding: 1.5rem;">
             <p style="font-size: 0.7rem; font-weight: 800; letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent); margin-bottom: 0.75rem; display: flex; align-items: center; gap: 0.4rem;">

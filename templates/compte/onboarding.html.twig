@@ -27,6 +27,7 @@
     .ob-chips { display: flex; flex-wrap: wrap; gap: .45rem; margin-top: 1rem; }
     .ob-chip { padding: .5rem .9rem; border-radius: 999px; border: 1px solid var(--border-strong); background: var(--card-bg); color: var(--fg-light); font: inherit; font-size: .85rem; cursor: pointer; min-height: 2.25rem; }
     .ob-chip:hover { border-color: var(--primary); color: var(--primary); }
+    .ob-chip.is-on { background: var(--primary); border-color: var(--primary); color: #fff; }
     .ob-cats { display: grid; grid-template-columns: repeat(4, 1fr); gap: .5rem; margin: 1rem 0; }
     .ob-cats label { text-align: center; padding: .7rem .25rem; border-radius: 12px; border: 1.5px solid var(--border-strong); cursor: pointer; font-weight: 600; font-size: .9rem; color: var(--fg-light); background: var(--card-bg); }
     .ob-cats input { position: absolute; opacity: 0; pointer-events: none; }
@@ -45,7 +46,8 @@
 </style>
 
 {# Si le serveur renvoie une erreur, on rouvre l'étape concernée #}
-{% set firstErrorStep = errors.firstName is defined ? 1 : (errors.purpose is defined ? 2 : (errors.values is defined ? 3 : (errors|length > 0 ? 4 : 1))) %}
+{# Point 9 (26/11/2026) : le prénom est déjà donné à l'inscription : on ne le redemande pas (l'étape 1 reste accessible par « Retour ») #}
+{% set firstErrorStep = errors.firstName is defined ? 1 : (errors.purpose is defined ? 2 : (errors.values is defined ? 3 : (errors|length > 0 ? 4 : (data.firstName is not empty ? 2 : 1)))) %}
 
 {# x-data et @click entre apostrophes : |json_safe produit des guillemets doubles ("Esther") qui fermeraient un attribut entre guillemets doubles #}
 <div class="ob-body">
@@ -102,7 +104,7 @@
             </div>
             <div class="ob-chips">
                 {% for s in suggestions %}
-                    <button type="button" class="ob-chip" @click='addValue({{ s|json_safe }})'>{{ s }}</button>
+                    <button type="button" class="ob-chip" :class='values.some(x => x.trim().toLowerCase() === {{ s|lower|json_safe }}) ? "is-on" : ""' :aria-pressed='values.some(x => x.trim().toLowerCase() === {{ s|lower|json_safe }}) ? "true" : "false"' @click='addValue({{ s|json_safe }})'>{{ s }}</button>
                 {% endfor %}
             </div>
             {% if errors.values is defined %}<p class="ob-error">{{ errors.values }}</p>{% endif %}
@@ -113,7 +115,7 @@
             <p class="ob-step-label">Étape 4 sur 4 · Premier objectif</p>
             <h1>Un objectif qui découle de votre raison d'être.</h1>
             <p class="ob-text">Quelque chose de concret que vous voulez voir se réaliser.</p>
-            <input type="text" name="goalTitle" x-model="goalTitle" maxlength="255" placeholder="Ex. : Lancer un atelier d'orientation pour 20 jeunes" aria-label="Objectif">
+            <input type="text" name="goalTitle" x-model="goalTitle" maxlength="255" placeholder="Ex. : Accompagner 20 jeunes" aria-label="Objectif">
             {% if errors.goalTitle is defined %}<p class="ob-error">{{ errors.goalTitle }}</p>{% endif %}
 
             <span class="ob-field-label">C'est un objectif pour…</span>

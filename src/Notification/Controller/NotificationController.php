@@ -15,7 +15,7 @@ use Symfony\Component\HttpFoundation\UriSigner;
 use Symfony\Component\Routing\Attribute\Route;
 
 /**
- * Centre de notifications : liste, lecture, désinscription d'un rappel depuis un email.
+ * Centre de notifications : liste, lecture, désinscription d'un rappel depuis un e-mail.
  */
 class NotificationController extends AbstractController
 {
@@ -86,7 +86,7 @@ class NotificationController extends AbstractController
         return $this->redirectToRoute('app_notifications');
     }
 
-    /** Lien signé reçu par email : désactive ce type de rappel, sans avoir à se connecter. */
+    /** Lien signé reçu par e-mail : désactive ce type de rappel, sans avoir à se connecter. */
     #[Route('/notifications/desabonnement/{user}/{type}', name: 'app_notification_unsubscribe', requirements: ['user' => '\d+'], methods: ['GET', 'POST'])]
     public function unsubscribe(int $user, string $type, Request $request, UriSigner $signer, EntityManagerInterface $em, Notifier $notifier, \App\Academie\Service\AcademyPaceMailer $academy): Response
     {

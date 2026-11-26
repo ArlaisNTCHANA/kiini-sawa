@@ -14,7 +14,7 @@ use Doctrine\ORM\EntityManagerInterface;
  * et, selon ses préférences, email.
  *
  * - Événements sociaux (demande de connexion…) : email seulement si « emails immédiats » est activé.
- * - Rappels (revue, rituels, échéances, partenaire) : email si « rappels par email » est activé.
+ * - Rappels (revue, rituels, échéances, partenaire) : email si « rappels par e-mail » est activé.
  * - Chaque type peut être désactivé dans le profil ; une clé évite d'envoyer deux fois le même rappel.
  */
 final class Notifier
@@ -55,7 +55,7 @@ final class Notifier
 
     /**
      * @param string|null          $key          identifiant du rappel (ex. « 2026-W46 ») : rien n'est envoyé s'il existe déjà
-     * @param array{template?: string, context?: array<string, mixed>} $email gabarit d'email particulier (sinon le gabarit commun)
+     * @param array{template?: string, context?: array<string, mixed>} $email gabarit d'e-mail particulier (sinon le gabarit commun)
      *
      * @return bool true si l'utilisateur a été prévenu
      */
@@ -74,7 +74,7 @@ final class Notifier
             }
             $inApp = $prefs->isEnableInApp();
             $byEmail = \in_array($type, self::REMINDERS, true) ? $prefs->isEnableEmailDigest() : $prefs->isEnableEmailInstant();
-            // Accueil, défis, leçon de l'Académie, « Saviez-vous que… » (rythme choisi par le membre) : un email, sans encombrer le centre de notifications
+            // Accueil, défis, leçon de l'Académie, « Saviez-vous que… » (rythme choisi par le membre) : un e-mail, sans encombrer le centre de notifications
             if (\in_array($type, [NotificationType::ONBOARDING, NotificationType::CHALLENGE_DAY, NotificationType::ACADEMY_LESSON, NotificationType::TIP], true)) {
                 $inApp = false;
                 $byEmail = true;

@@ -5,8 +5,12 @@
     {% for type, messages in ksFlashes %}
         {% for message in messages %}
             {% set c = {success: ['#ECFDF5', '#A7F3D0', '#065F46'], info: ['#EEF3EF', '#C8D6CD', '#1F4D3A'], dev: ['#EEF3EF', '#C8D6CD', '#1F4D3A'], error: ['#FEF2F2', '#FECACA', '#991B1B']}[type] %}
-            <div role="{{ type == 'error' ? 'alert' : 'status' }}" style="background: {{ c[0] }}; border: 1px solid {{ c[1] }}; color: {{ c[2] }}; padding: .75rem 1rem; border-radius: 12px; font-size: .9rem;">
-                {% if type == 'dev' %}<strong>[dev]</strong> {% endif %}{{ message }}
+            {# Point 9 (26/11/2026) : les confirmations disparaissent seules ; chaque message peut être fermé #}
+            <div role="{{ type == 'error' ? 'alert' : 'status' }}" x-data="{ show: true }" x-show="show" x-transition.opacity
+                 {% if type in ['success', 'info'] %}x-init="setTimeout(() => show = false, 7000)"{% endif %}
+                 style="background: {{ c[0] }}; border: 1px solid {{ c[1] }}; color: {{ c[2] }}; padding: .75rem 1rem; border-radius: 12px; font-size: .9rem; display: flex; gap: .75rem; align-items: flex-start;">
+                <span style="flex: 1;">{% if type == 'dev' %}<strong>[dev]</strong> {% endif %}{{ message }}</span>
+                <button type="button" @click="show = false" aria-label="Fermer ce message" style="background: none; border: 0; color: inherit; font-size: 1.1rem; line-height: 1; cursor: pointer; padding: 0 .1rem;">×</button>
             </div>
         {% endfor %}
     {% endfor %}

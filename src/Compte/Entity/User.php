@@ -69,7 +69,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(options: ['default' => false])]
     private ?bool $isOnboardingCompleted = false;
 
-    /** L'utilisateur a prouvé qu'il possède son adresse email (code à 6 chiffres). */
+    /** L'utilisateur a prouvé qu'il possède son adresse e-mail (code à 6 chiffres). */
     #[ORM\Column(options: ['default' => false])]
     private bool $isVerified = false;
 
@@ -1486,7 +1486,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    /** Prénom affiché, ou la partie avant @ de l'email. */
+    /** Prénom affiché, ou la partie avant @ de l'e-mail. */
     /** Prénom et nom pour les documents (plans imprimés, PDF) ; à défaut, le prénom seul. */
     public function getFullName(): string
     {

@@ -18,7 +18,7 @@ use Symfony\Component\HttpFoundation\Response;
 /**
  * Parrainage : chaque membre a un lien personnel (/i/{code}).
  * - Le filleul a un essai PRO d'un mois (au lieu de 14 jours).
- * - Le parrain reçoit 1 mois PRO quand le filleul vérifie son email (12 récompenses par an au plus).
+ * - Le parrain reçoit 1 mois PRO quand le filleul vérifie son e-mail (12 récompenses par an au plus).
  *
  * Le code se calcule à partir de l'identifiant du compte et d'une signature : rien à stocker, impossible à deviner.
  */
@@ -91,7 +91,7 @@ final class ReferralService
         $response->headers->clearCookie(self::COOKIE);
     }
 
-    /** À la vérification de l'email du filleul : récompense le parrain (une fois, dans la limite annuelle). */
+    /** À la vérification de l'e-mail du filleul : récompense le parrain (une fois, dans la limite annuelle). */
     public function reward(User $referred): bool
     {
         $referral = $this->referrals->findOneBy(['referred' => $referred]);

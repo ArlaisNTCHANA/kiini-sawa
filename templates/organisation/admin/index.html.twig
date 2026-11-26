@@ -11,7 +11,7 @@
         <form method="post" action="{{ path('admin_organisations_create') }}" class="ks-form-grid" style="margin-top: .9rem;">
             <div class="ks-field"><label class="ks-label" for="org-name">Nom</label><input id="org-name" class="ks-input" name="name" required placeholder="Église de…"></div>
             <div class="ks-field"><label class="ks-label" for="org-type">Type</label><select id="org-type" class="ks-input" name="type">{% for k, l in types %}<option value="{{ k }}">{{ l }}</option>{% endfor %}</select></div>
-            <div class="ks-field"><label class="ks-label" for="org-owner">Email du responsable</label><input id="org-owner" class="ks-input" name="ownerEmail" type="email" required placeholder="responsable@exemple.com"></div>
+            <div class="ks-field"><label class="ks-label" for="org-owner">E-mail du responsable</label><input id="org-owner" class="ks-input" name="ownerEmail" type="email" required placeholder="responsable@exemple.com"></div>
             <div class="ks-field"><label class="ks-label" for="org-seats">Places</label><input id="org-seats" class="ks-input" name="seats" type="number" min="0" value="25"></div>
             <div class="ks-field"><label class="ks-label" for="org-until">Valable jusqu'au</label><input id="org-until" class="ks-input" name="validUntil" type="date" value="{{ 'now'|date_modify('+1 year')|date('Y-m-d') }}"></div>
             <input type="hidden" name="_csrf_token" value="{{ csrf_token('admin_org') }}">

@@ -11,7 +11,7 @@ use Symfony\Component\Mime\Email;
 use Twig\Environment;
 
 /**
- * Envoi d'un plan par email à son propriétaire (version « EMAIL » du gabarit de visualisation).
+ * Envoi d'un plan par e-mail à son propriétaire (version « EMAIL » du gabarit de visualisation).
  */
 final class PlanMailer
 {
@@ -24,7 +24,7 @@ final class PlanMailer
     ) {
     }
 
-    /** Renvoie true si l'email est parti. */
+    /** Renvoie true si l'e-mail est parti. */
     public function send(User $user, string $planKey): bool
     {
         try {
@@ -38,7 +38,7 @@ final class PlanMailer
 
             return true;
         } catch (\Throwable $e) {
-            $this->logger->error('Échec de l\'envoi du plan par email', ['plan' => $planKey, 'exception' => $e]);
+            $this->logger->error('Échec de l\'envoi du plan par e-mail', ['plan' => $planKey, 'exception' => $e]);
 
             return false;
         }

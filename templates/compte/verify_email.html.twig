@@ -1,9 +1,9 @@
 {% extends 'compte/_auth_layout.html.twig' %}
 
-{% block title %}KIINI SAWA — Vérifiez votre email{% endblock %}
+{% block title %}KIINI SAWA — Vérifiez votre e-mail{% endblock %}
 
 {% block content %}
-    <h1 class="auth-title">Vérifiez votre email</h1>
+    <h1 class="auth-title">Vérifiez votre e-mail</h1>
     <p class="auth-text">Un code à 6 chiffres a été envoyé à <strong>{{ email }}</strong>. Il est valable 15 minutes.</p>
 
     <form method="post" action="{{ path('app_verify_email') }}">

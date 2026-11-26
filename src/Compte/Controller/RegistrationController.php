@@ -27,10 +27,10 @@ use Symfony\Component\Validator\Constraints\Email;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 /**
- * Inscription et vérification de l'adresse email par code à 6 chiffres.
+ * Inscription et vérification de l'adresse e-mail par code à 6 chiffres.
  *
  * Après l'inscription, l'utilisateur est connecté mais ne peut rien faire
- * d'autre que saisir son code tant que son email n'est pas vérifié
+ * d'autre que saisir son code tant que son e-mail n'est pas vérifié
  * (voir VerifiedUserSubscriber).
  */
 class RegistrationController extends AbstractController
@@ -116,8 +116,8 @@ class RegistrationController extends AbstractController
             if ([] === $errors) {
                 $existing = $users->findOneBy(['email' => $data['email']]);
                 if ($existing) {
-                    // On ne révèle pas que l'adresse a déjà un compte : on prévient son propriétaire par email, et le visiteur voit
-                    // exactement le même écran qu'après une vraie inscription (même redirection, même page « Vérifiez votre email »).
+                    // On ne révèle pas que l'adresse a déjà un compte : on prévient son propriétaire par e-mail, et le visiteur voit
+                    // exactement le même écran qu'après une vraie inscription (même redirection, même page « Vérifiez votre e-mail »).
                     $this->mailer->sendAlreadyRegistered($existing);
                     $request->getSession()->set(self::DECOY_KEY, $data['email']);
                     $request->getSession()->set(self::DECOY_SENT_KEY, time()); // comme un vrai code vient d'être « envoyé » : même délai avant de le redemander
@@ -174,7 +174,7 @@ class RegistrationController extends AbstractController
                 $em->flush();
                 $onboarding->welcome($user);
                 $referrals->reward($user);
-                $this->addFlash('success', 'Votre adresse email est vérifiée. Bienvenue !');
+                $this->addFlash('success', 'Votre adresse e-mail est vérifiée. Bienvenue !');
 
                 return ($invite = PendingInvitation::redirectPath($request->getSession())) ? $this->redirect($invite) : $this->redirectToRoute('app_onboarding');
             } else {

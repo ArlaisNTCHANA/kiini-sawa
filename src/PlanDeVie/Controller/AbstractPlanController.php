@@ -17,7 +17,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Contracts\Service\Attribute\Required;
 
 /**
- * Actions communes aux pages des plans : visualisation, envoi par email,
+ * Actions communes aux pages des plans : visualisation, envoi par e-mail,
  * page du hub des stratégies ouverte sur le bon plan.
  */
 abstract class AbstractPlanController extends AbstractController

@@ -285,7 +285,7 @@ class ProfileController extends AbstractController
             $this->mobileTokens->revokeAll($user);
             // L'email est l'identifiant de connexion : on met à jour la session
             $this->security->login($user, LoginAuthenticator::class, 'main');
-            $this->addFlash('success', 'Votre adresse email est maintenant '.$user->getEmail().'.');
+            $this->addFlash('success', 'Votre adresse e-mail est maintenant '.$user->getEmail().'.');
         }
 
         return $this->redirectToRoute('app_profile', ['_fragment' => 'securite']);

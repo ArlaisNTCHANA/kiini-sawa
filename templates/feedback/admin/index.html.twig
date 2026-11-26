@@ -1,7 +1,7 @@
 {% extends 'admin/layout.html.twig' %}
 {% block title %}Avis reçus{% endblock %}
 {% block page_title %}Avis reçus{% endblock %}
-{% block page_lead %}Les messages que les membres vous envoient depuis l'application. Répondez par email, puis marquez-les comme traités.{% endblock %}
+{% block page_lead %}Les messages que les membres vous envoient depuis l'application. Répondez par e-mail, puis marquez-les comme traités.{% endblock %}
 {% block content %}
 <div class="ks-stack">
     <nav class="ks-tabs" aria-label="Filtrer les avis">
@@ -15,7 +15,7 @@
             </div>
             <p style="white-space: pre-line; line-height: 1.6;">{{ i.content }}</p>
             <div class="ks-toolbar" style="margin-top: 1rem;">
-                <a class="ks-btn ks-btn--secondary ks-btn--sm" href="mailto:{{ i.user.email }}?subject={{ 'Votre avis sur KIINI SAWA'|url_encode }}"><i data-lucide="mail"></i> Répondre par email</a>
+                <a class="ks-btn ks-btn--secondary ks-btn--sm" href="mailto:{{ i.user.email }}?subject={{ 'Votre avis sur KIINI SAWA'|url_encode }}"><i data-lucide="mail"></i> Répondre par e-mail</a>
                 <form method="post" action="{{ path('admin_app_feedback_done', {id: i.id}) }}" class="ks-inline-form">
                     <input type="hidden" name="_csrf_token" value="{{ csrf_token('admin_feedback') }}">
                     <button type="submit" class="ks-btn ks-btn--ghost ks-btn--sm"><i data-lucide="{{ i.status == 'PENDING' ? 'check' : 'rotate-ccw' }}"></i> {{ i.status == 'PENDING' ? 'Marquer traité' : 'Remettre à traiter' }}</button>

@@ -21,7 +21,7 @@ final class PasswordPolicy
         }
         $localPart = mb_strtolower(explode('@', (string) $email)[0]);
         if (mb_strlen($localPart) >= 4 && str_contains(mb_strtolower($password), $localPart)) {
-            return 'Le mot de passe ne doit pas contenir votre adresse email.';
+            return 'Le mot de passe ne doit pas contenir votre adresse e-mail.';
         }
 
         return null;

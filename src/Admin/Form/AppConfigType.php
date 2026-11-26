@@ -49,7 +49,7 @@ class AppConfigType extends AbstractType
             ->add('maxConnectionsFree', IntegerType::class, ['label' => 'Partenaires maximum en gratuit', 'required' => true])
             ->add('bankTransferInstructions', TextareaType::class, [
                 'label' => 'Coordonnées pour un virement',
-                'help' => 'Affichées au client. Ex. : titulaire, banque, IBAN / RIB, BIC, et « Indiquez votre email en libellé ». Laisser vide pour masquer ce moyen de paiement.',
+                'help' => 'Affichées au client. Ex. : titulaire, banque, IBAN / RIB, BIC, et « Indiquez votre e-mail en libellé ». Laisser vide pour masquer ce moyen de paiement.',
                 'required' => false,
                 'attr' => ['rows' => 5],
             ])

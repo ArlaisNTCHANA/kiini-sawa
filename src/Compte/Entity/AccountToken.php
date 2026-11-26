@@ -6,8 +6,8 @@ use App\Compte\Repository\AccountTokenRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Jeton à usage unique lié à un compte : code de vérification d'email,
- * changement d'email ou réinitialisation du mot de passe.
+ * Jeton à usage unique lié à un compte : code de vérification d'e-mail,
+ * changement d'e-mail ou réinitialisation du mot de passe.
  *
  * Le secret (code à 6 chiffres ou partie secrète du lien) n'est jamais
  * stocké en clair : seule son empreinte HMAC l'est (voir AccountTokenService).

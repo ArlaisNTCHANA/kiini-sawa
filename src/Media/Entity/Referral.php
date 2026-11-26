@@ -6,7 +6,7 @@ use App\Compte\Entity\User;
 use App\Media\Repository\ReferralRepository;
 use Doctrine\ORM\Mapping as ORM;
 
-/** Parrainage : qui a fait venir qui, et si la récompense a été accordée (à la vérification de l'email du filleul). */
+/** Parrainage : qui a fait venir qui, et si la récompense a été accordée (à la vérification de l'e-mail du filleul). */
 #[ORM\Entity(repositoryClass: ReferralRepository::class)]
 #[ORM\Index(name: 'idx_referral_referrer', columns: ['referrer_id'])]
 class Referral

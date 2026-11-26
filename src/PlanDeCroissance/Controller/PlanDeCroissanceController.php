@@ -9,7 +9,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
 /**
- * Plan de Croissance : page (hub des stratégies ouvert sur ce plan), visualisation et envoi par email.
+ * Plan de Croissance : page (hub des stratégies ouvert sur ce plan), visualisation et envoi par e-mail.
  */
 #[Route('/plan-de-croissance', name: 'app_plan_de_croissance')]
 class PlanDeCroissanceController extends AbstractPlanController

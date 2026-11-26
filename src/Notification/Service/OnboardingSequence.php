@@ -13,7 +13,7 @@ use Doctrine\ORM\EntityManagerInterface;
 /**
  * Emails d'accueil des deux premières semaines : une étape, une action, adaptée à ce que l'utilisateur a déjà fait.
  *
- * J0 bienvenue (dès la vérification de l'email) · J1 vision · J3 premier rituel, ou profil complet si un rituel existe
+ * J0 bienvenue (dès la vérification de l'e-mail) · J1 vision · J3 premier rituel, ou profil complet si un rituel existe
  * · J7 revue de la semaine (+ partenaire) · J9 plans stratégiques (seulement pendant l'essai PRO ; le rappel de fin
  * d'essai part à J11). Désactivable (préférence « conseils de démarrage », lien en bas de chaque email).
  */

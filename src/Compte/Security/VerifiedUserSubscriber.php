@@ -12,7 +12,7 @@ use Symfony\Component\HttpKernel\KernelEvents;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 /**
- * Tant que son adresse email n'est pas vérifiée, un utilisateur connecté
+ * Tant que son adresse e-mail n'est pas vérifiée, un utilisateur connecté
  * n'a accès qu'à la page de saisie du code, à la déconnexion et aux pages légales.
  */
 final class VerifiedUserSubscriber implements EventSubscriberInterface

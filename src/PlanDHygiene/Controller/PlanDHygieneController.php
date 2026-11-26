@@ -8,7 +8,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
 /**
- * Plan d'Hygiène de vie : page (hub des stratégies ouvert sur ce plan), visualisation et envoi par email.
+ * Plan d'Hygiène de vie : page (hub des stratégies ouvert sur ce plan), visualisation et envoi par e-mail.
  */
 #[Route('/plan-d-hygiene', name: 'app_plan_d_hygiene')]
 class PlanDHygieneController extends AbstractPlanController

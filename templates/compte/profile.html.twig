@@ -71,7 +71,7 @@
     {# ── Sécurité : email et mot de passe ───────────────────── #}
     <section class="p-card" id="securite">
         <h2><i data-lucide="shield-check" style="width:20px;height:20px;"></i> Connexion et sécurité</h2>
-        <p class="p-sub">Votre adresse email sert à vous connecter et à recevoir les codes de vérification.</p>
+        <p class="p-sub">Votre adresse e-mail sert à vous connecter et à recevoir les codes de vérification.</p>
 
         <p class="p-current">Adresse actuelle : <strong>{{ app.user.email }}</strong></p>
 
@@ -92,7 +92,7 @@
         {% endif %}
 
         <details>
-            <summary style="cursor:pointer;font-weight:600;color:var(--primary);">Changer d'adresse email</summary>
+            <summary style="cursor:pointer;font-weight:600;color:var(--primary);">Changer d'adresse e-mail</summary>
             <form method="post" action="{{ path('app_profile_email') }}" style="margin-top:1rem;">
                 <div class="p-grid">
                     <div class="p-field"><label for="newEmail">Nouvelle adresse</label><input type="email" id="newEmail" name="newEmail" maxlength="180" required autocomplete="email"></div>
@@ -121,13 +121,13 @@
     {# ── Notifications et rappels ───────────────────────────── #}
     <section class="p-card" id="notifications">
         <h2><i data-lucide="bell" style="width:20px;height:20px;"></i> Notifications et rappels</h2>
-        <p class="p-sub">Des rappels doux pour garder le cap. Chaque email contient aussi un lien de désabonnement.</p>
+        <p class="p-sub">Des rappels doux pour garder le cap. Chaque e-mail contient aussi un lien de désabonnement.</p>
         {% include 'shared/_push_toggle.html.twig' %}
         <form method="post" action="{{ path('app_profile_notifications') }}">
             {% set toggles = [
                 ['enableInApp', prefs.enableInApp, 'Afficher les notifications dans l\'application', 'La cloche en haut de l\'écran'],
-                ['enableEmailDigest', prefs.enableEmailDigest, 'Recevoir les rappels par email', 'Revues, rituels, échéances, partenaires'],
-                ['enableEmailInstant', prefs.enableEmailInstant, 'Recevoir par email les demandes de partenaires', 'Dès qu\'elles arrivent'],
+                ['enableEmailDigest', prefs.enableEmailDigest, 'Recevoir les rappels par e-mail', 'Revues, rituels, échéances, partenaires'],
+                ['enableEmailInstant', prefs.enableEmailInstant, 'Recevoir par e-mail les demandes de partenaires', 'Dès qu\'elles arrivent'],
             ] %}
             {% for t in toggles %}
                 <label style="display:flex;justify-content:space-between;align-items:center;gap:1rem;padding:.6rem 0;border-top:1px solid var(--bg-alt);cursor:pointer;">

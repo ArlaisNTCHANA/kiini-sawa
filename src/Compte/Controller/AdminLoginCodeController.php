@@ -14,7 +14,7 @@ use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 /**
- * Deuxième étape de connexion des administrateurs : saisie du code reçu par email.
+ * Deuxième étape de connexion des administrateurs : saisie du code reçu par e-mail.
  */
 #[IsGranted('ROLE_ADMIN')]
 class AdminLoginCodeController extends AbstractController

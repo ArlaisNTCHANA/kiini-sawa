@@ -11,7 +11,7 @@ use Symfony\Component\DependencyInjection\Attribute\Autowire;
 /**
  * Crée et vérifie les jetons de compte.
  *
- * - Codes à 6 chiffres (vérification et changement d'email) : 15 minutes, 5 essais.
+ * - Codes à 6 chiffres (vérification et changement d'e-mail) : 15 minutes, 5 essais.
  * - Liens de réinitialisation du mot de passe : sélecteur public + secret, 1 heure.
  *
  * Seule l'empreinte HMAC du secret est stockée, et la comparaison se fait

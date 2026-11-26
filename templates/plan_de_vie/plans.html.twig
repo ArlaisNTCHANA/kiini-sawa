@@ -844,7 +844,7 @@
                     </button>
                     <div class="hero-more-menu" x-show="more" x-cloak x-transition>
                         <a :href="{{ visualizeUrls|json_encode|e('html_attr') }}[activePlan]" target="_blank" @click="more = false"><i data-lucide="printer"></i> Visualiser et imprimer</a>
-                        <button type="button" @click="more = false; sendPlanEmail(activePlan, $event.currentTarget)"><i data-lucide="mail"></i> M'envoyer par email</button>
+                        <button type="button" @click="more = false; sendPlanEmail(activePlan, $event.currentTarget)"><i data-lucide="mail"></i> M'envoyer par e-mail</button>
                         <button type="button" @click="more = false; activeTab = 'MAP'; $nextTick(() => initMermaid(activePlan))"><i data-lucide="map"></i> Voir la carte</button>
                         <button type="button" @click="more = false; activePlan = null"><i data-lucide="layout-dashboard"></i> Tous mes plans</button>
                     </div>
@@ -2616,7 +2616,7 @@ graph TD
     </div>
 </div>
 
-<div id="toast-strategies" class="toast-notify" style="position: fixed; top: 20px; right: 20px; background: var(--warning); color: white; padding: 14px 24px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); font-size: 0.9rem; font-weight: 600; z-index: 9999; transform: translateY(-100px); transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);">Plan de Croissance envoyé avec succès à votre adresse email !</div>
+<div id="toast-strategies" class="toast-notify" style="position: fixed; top: 20px; right: 20px; background: var(--warning); color: white; padding: 14px 24px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); font-size: 0.9rem; font-weight: 600; z-index: 9999; transform: translateY(-100px); transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);">Plan de Croissance envoyé avec succès à votre adresse e-mail !</div>
 
 <!-- Load Mermaid.js CDN -->
 <script src="{{ asset('lib/mermaid-10.9.8.min.js') }}"></script>

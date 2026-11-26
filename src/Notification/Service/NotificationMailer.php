@@ -47,7 +47,7 @@ final class NotificationMailer
             $email->getHeaders()->addTextHeader('List-Unsubscribe', '<'.$unsubscribe.'>');
             $this->mailer->send($email);
         } catch (\Throwable $e) {
-            $this->logger->error('Échec de l\'envoi d\'un email de notification', ['type' => $type->value, 'exception' => $e]);
+            $this->logger->error('Échec de l\'envoi d\'un e-mail de notification', ['type' => $type->value, 'exception' => $e]);
         }
     }
 }

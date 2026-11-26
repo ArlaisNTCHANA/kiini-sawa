@@ -37,7 +37,7 @@ class OrganisationAdminController extends AbstractController
         }
         $owner = $em->getRepository(User::class)->findOneBy(['email' => mb_strtolower(trim($request->request->getString('ownerEmail')))]);
         if (!$owner) {
-            $this->addFlash('error', 'Aucun compte avec cet email : le responsable doit d\'abord créer son compte.');
+            $this->addFlash('error', 'Aucun compte avec cet e-mail : le responsable doit d\'abord créer son compte.');
 
             return $this->redirectToRoute('admin_organisations');
         }

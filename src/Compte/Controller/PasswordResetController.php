@@ -18,7 +18,7 @@ use Symfony\Component\RateLimiter\RateLimiterFactoryInterface;
 use Symfony\Component\Routing\Attribute\Route;
 
 /**
- * Mot de passe oublié : demande d'un lien par email, puis choix d'un nouveau mot de passe.
+ * Mot de passe oublié : demande d'un lien par e-mail, puis choix d'un nouveau mot de passe.
  *
  * La réponse est la même que l'adresse existe ou non (pas de fuite d'information).
  * Le jeton est retiré de l'URL dès la première visite et conservé en session,
@@ -99,7 +99,7 @@ class PasswordResetController extends AbstractController
                 // message renvoyé dans le formulaire
             } else {
                 $user->setPassword($hasher->hashPassword($user, $password));
-                // Recevoir le lien prouve la possession de l'adresse email
+                // Recevoir le lien prouve la possession de l'adresse e-mail
                 $user->setIsVerified(true);
                 $this->tokens->removeAll($user, AccountToken::RESET_PASSWORD);
                 $em->flush();

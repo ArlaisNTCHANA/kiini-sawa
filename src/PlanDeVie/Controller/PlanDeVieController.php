@@ -9,7 +9,7 @@ use Symfony\Component\Routing\Attribute\Route;
 
 /**
  * Plan de Vie : page principale (fondations, vision, objectifs, carte, analyse de cohérence),
- * visualisation imprimable et envoi par email.
+ * visualisation imprimable et envoi par e-mail.
  */
 #[Route('/plan-de-vie', name: 'app_plan_de_vie')]
 class PlanDeVieController extends AbstractPlanController

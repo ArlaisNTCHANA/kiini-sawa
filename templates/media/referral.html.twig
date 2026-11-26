@@ -11,7 +11,7 @@
     } %}
 
     <div class="ks-grid" style="margin-bottom: 1rem;">
-        <div class="ks-card"><p style="font-size: 1.8rem;"><i data-lucide="gift" class="ks-ico" aria-hidden="true"></i></p><p style="font-weight: 700; color: var(--fg); margin: .3rem 0;">Vous</p><p style="color: var(--fg-muted);"><strong>1 mois PRO offert</strong> pour chaque ami qui crée son compte et vérifie son email.</p></div>
+        <div class="ks-card"><p style="font-size: 1.8rem;"><i data-lucide="gift" class="ks-ico" aria-hidden="true"></i></p><p style="font-weight: 700; color: var(--fg); margin: .3rem 0;">Vous</p><p style="color: var(--fg-muted);"><strong>1 mois PRO offert</strong> pour chaque ami qui crée son compte et vérifie son e-mail.</p></div>
         <div class="ks-card"><p style="font-size: 1.8rem;"><i data-lucide="handshake" class="ks-ico" aria-hidden="true"></i></p><p style="font-weight: 700; color: var(--fg); margin: .3rem 0;">Votre ami</p><p style="color: var(--fg-muted);"><strong>Un mois d'essai PRO</strong> au lieu de 14 jours, pour bâtir tous ses plans.</p></div>
     </div>
 
@@ -24,7 +24,7 @@
         <div style="display: flex; gap: .6rem; flex-wrap: wrap; margin-top: 1rem;">
             <a class="ks-btn ks-btn--primary" style="background: #25D366;" target="_blank" rel="noopener" href="https://wa.me/?text={{ message|url_encode }}"><i data-lucide="message-circle"></i> Envoyer sur WhatsApp</a>
             <a class="ks-btn ks-btn--secondary" target="_blank" rel="noopener" href="https://www.facebook.com/sharer/sharer.php?u={{ url|url_encode }}"><i data-lucide="share-2"></i> Facebook</a>
-            <a class="ks-btn ks-btn--secondary" href="mailto:?subject={{ 'Je t\'invite sur KIINI SAWA'|url_encode }}&body={{ message|url_encode }}"><i data-lucide="mail"></i> Email</a>
+            <a class="ks-btn ks-btn--secondary" href="mailto:?subject={{ 'Je t\'invite sur KIINI SAWA'|url_encode }}&body={{ message|url_encode }}"><i data-lucide="mail"></i> E-mail</a>
         </div>
     </div>
 
@@ -38,7 +38,7 @@
         {% for r in referrals %}
             <div style="display: flex; justify-content: space-between; padding: .55rem 0; border-top: 1px solid var(--border); font-size: .92rem;">
                 <span>{{ r.referred.displayName }} · {{ r.createdAt|format_date(pattern: 'd MMM y', locale: 'fr') }}</span>
-                <span style="color: {{ r.rewardedAt ? 'var(--success)' : 'var(--fg-muted)' }};">{{ r.rewardedAt ? '✓ 1 mois offert' : 'En attente de vérification de son email' }}</span>
+                <span style="color: {{ r.rewardedAt ? 'var(--success)' : 'var(--fg-muted)' }};">{{ r.rewardedAt ? '✓ 1 mois offert' : 'En attente de vérification de son e-mail' }}</span>
             </div>
         {% else %}
             <p style="color: var(--fg-muted);">Personne pour l'instant. Partagez votre lien à une personne qui cherche à donner une direction à sa vie.</p>

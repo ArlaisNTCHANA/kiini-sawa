@@ -51,7 +51,7 @@ class LaunchCheckCommand extends Command
         $secret = $env('APP_SECRET');
         $check('Clé secrète APP_SECRET', \strlen($secret) >= 32 && !str_contains($secret, 'test'), 'Générer une clé : php -r "echo bin2hex(random_bytes(32));" et la mettre dans APP_SECRET.');
         $uri = $env('DEFAULT_URI');
-        $check('Adresse publique DEFAULT_URI (https)', str_starts_with($uri, 'https://') && !str_contains($uri, 'localhost'), 'Mettre l\'adresse du site, ex. DEFAULT_URI=https://kiinisawa.com (sert aux liens des emails).');
+        $check('Adresse publique DEFAULT_URI (https)', str_starts_with($uri, 'https://') && !str_contains($uri, 'localhost'), 'Mettre l\'adresse du site, ex. DEFAULT_URI=https://kiinisawa.com (sert aux liens des e-mails).');
         $check('Proxy de l\'hébergeur (TRUSTED_PROXIES)', '' !== $env('TRUSTED_PROXIES'), 'Renseigner l\'adresse du proxy de l\'hébergeur, ou REMOTE_ADDR.', false);
 
         // Base
@@ -77,10 +77,10 @@ class LaunchCheckCommand extends Command
         $mailer = $env('MAILER_DSN');
         $check('Envoi d\'emails (MAILER_DSN)', '' !== $mailer && !str_starts_with($mailer, 'null://'), 'Créer un compte chez un fournisseur d\'emails (Brevo, Mailjet, Postmark…) et renseigner MAILER_DSN. Sans cela : ni code de vérification, ni rappels.');
         $from = $env('MAILER_FROM');
-        $check('Expéditeur des emails (MAILER_FROM)', '' !== $from, 'Définir MAILER_FROM avec une adresse de votre domaine, vérifiée chez le fournisseur.', false);
+        $check('Expéditeur des e-mails (MAILER_FROM)', '' !== $from, 'Définir MAILER_FROM avec une adresse de votre domaine, vérifiée chez le fournisseur.', false);
         $transport = $env('MESSENGER_TRANSPORT_DSN');
         // sync:// (envoi immédiat) convient à un hébergement mutualisé ; doctrine:// demande un worker permanent.
-        $check('Mode d\'envoi des emails (MESSENGER_TRANSPORT_DSN)', '' !== $transport, 'sync:// sur un hébergement mutualisé, ou doctrine://default avec le worker : php bin/console messenger:consume async', false);
+        $check('Mode d\'envoi des e-mails (MESSENGER_TRANSPORT_DSN)', '' !== $transport, 'sync:// sur un hébergement mutualisé, ou doctrine://default avec le worker : php bin/console messenger:consume async', false);
 
         // Tâches planifiées
         $lastRun = $this->cacheApp->getItem('reminders_last_run')->get();
