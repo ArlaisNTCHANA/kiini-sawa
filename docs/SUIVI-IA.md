@@ -22,7 +22,9 @@ Ne jamais afficher ni demander de mot de passe ; ne pas publier son nom (mention
   Champ sorti de la boucle ; `PersonalityController::submit` ignore les réponses vides et refuse un envoi incomplet.
   Test : `tests/Personnalite/ScaleAnswersTest.php`. 604 tests verts.
 - **Reste** : les passations Équilibre/Hygiène déjà enregistrées depuis la mise en place de ce gabarit sont fausses
-  (à repasser) ; déploiement à faire.
+  (à repasser).
+- **Déployé le 26/11/2026** : correctifs présents sur le serveur, accueil en 200, aucune erreur critique au journal.
+  Vérification à l'écran (Transmission, Équilibre) en attente : la session du compte de test a expiré.
 
 ## 25/11/2026 — Parcours « nouvel utilisateur » en production (test à l'écran, utilisateur assidu)
 
