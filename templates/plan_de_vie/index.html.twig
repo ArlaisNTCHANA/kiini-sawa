@@ -2211,13 +2211,17 @@ graph TD
                 {% set supportedGoalIds = supportedGoalIds|merge([sg.id]) %}
             {% endfor %}
         {% endfor %}
+        {# Point 7 (26/11/2026) : une priorité d'Intendance reliée à un objectif le soutient aussi #}
+        {% for si in stewardshipItems|default([]) %}
+            {% if si.lifeGoal %}{% set supportedGoalIds = supportedGoalIds|merge([si.lifeGoal.id]) %}{% endif %}
+        {% endfor %}
 
         {% for g in allGoals %}
             {% set scoreTotal = scoreTotal + 5 %}
             {% if g.id not in supportedGoalIds %}
                 {% set issue = {
                     'type': 'WARNING',
-                    'message': "L'objectif spécifique '" ~ g.title ~ "' n'est soutenu par aucun moyen de croissance, de transmission ou d'hygiène.",
+                    'message': "L'objectif spécifique '" ~ g.title ~ "' n'est soutenu par aucun moyen de croissance, de transmission, d'hygiène ou d'intendance.",
                     'icon': 'target',
                     'action': 'LINK_GROWTH',
                     'itemId': g.id,

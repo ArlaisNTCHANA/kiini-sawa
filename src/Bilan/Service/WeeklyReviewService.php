@@ -10,6 +10,7 @@ use App\Journal\Enum\ReflectionType;
 use App\PlanDeCroissance\Entity\GrowthGoal;
 use App\PlanDeCroissance\Entity\GrowthGoalScore;
 use App\PlanDeTransmission\Entity\LegacyGoal;
+use App\PlanDIntendance\Entity\StewardshipItem;
 use App\PlanDHygiene\Entity\HygieneDomain;
 use App\Rituels\Enum\HabitFrequency;
 use Doctrine\ORM\EntityManagerInterface;
@@ -27,6 +28,8 @@ final class WeeklyReviewService
         'DEVELOPPEMENT' => ['label' => 'Plan de Développement personnel', 'color' => '#2E6B53', 'icon' => 'graduation-cap'],
         'TRANSMISSION' => ['label' => 'Plan de Transmission', 'color' => '#A87A1F', 'icon' => 'gift'],
         'HYGIENE' => ['label' => 'Plan d\'Hygiène de vie', 'color' => '#5D7368', 'icon' => 'shield'],
+        // Point 7 (26/11/2026) : les priorités d'Intendance passent aussi en revue
+        'INTENDANCE' => ['label' => 'Plan d\'Intendance', 'color' => '#8A6A1F', 'icon' => 'hand-coins'],
     ];
 
     public function __construct(
@@ -58,6 +61,9 @@ final class WeeklyReviewService
         }
         foreach ($user->getPlanDHygiene()?->getHygieneDomains() ?? [] as $hd) {
             $items['HYGIENE'][] = ['type' => 'HYGIENE', 'id' => $hd->getId(), 'title' => $hd->getName(), 'progress' => null, 'entity' => $hd];
+        }
+        foreach ($this->em->getRepository(StewardshipItem::class)->findBy(['user' => $user, 'priority' => true], ['position' => 'ASC']) as $si) {
+            $items['INTENDANCE'][] = ['type' => 'STEWARDSHIP', 'id' => $si->getId(), 'title' => $si->getLabel(), 'progress' => null, 'entity' => $si];
         }
 
         return $items;
@@ -157,7 +163,7 @@ final class WeeklyReviewService
             }
         } elseif ($entity instanceof LegacyGoal && null !== $progress) {
             $entity->setProgress($progress);
-        } elseif ($entity instanceof HygieneDomain) {
+        } elseif ($entity instanceof HygieneDomain || $entity instanceof StewardshipItem) {
             // Pas de progression : seule l'évaluation de la semaine est conservée dans la revue
         }
     }
