@@ -50,6 +50,7 @@ Ne jamais afficher ni demander de mot de passe ; ne pas publier son nom (mention
   sur les partages et les engagements, `inviteUrl` dans `/api/mobile/v1/redevabilite` (l'appli tolère leur absence).
   Vérifié : `tsc`, 50 tests vitest. **Non vu à l'écran** (pas de build lancé) ; `expo lint` n'est pas configuré
   dans le dépôt.
+  API déployée le 26/11/2026 : API mobile en 401 sans jeton (normal), aucune erreur au journal.
 - **Déployé le 26/11/2026** (pas de migration) : accueil et connexion en 200, `/social`, `/social/inviter` et
   `/social/redevabilite` en 302 vers la connexion, page inconnue en 404, aucune erreur au journal, correctif Turbo
   présent sur le serveur.
