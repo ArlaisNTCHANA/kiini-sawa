@@ -29,7 +29,9 @@ Ne jamais afficher ni demander de mot de passe ; ne pas publier son nom (mention
   l'existant. Les tests qui publient un parcours de plan doivent le repasser en brouillon (`tearDown`), sinon
   « Ma prochaine étape » change pour les autres tests. La route `/academie/par-ou-commencer` a `priority: 10` (sinon
   `/academie/{slug}` la prend).
-- **Non déployé.** En production, rien ne change tant que le fondateur n'a pas chargé puis publié le parcours.
+- **Déployé le 26/11/2026** (migration `Version20261126070037` appliquée) : accueil, Boussole et connexion en 200, page
+  inconnue en 404, aucune erreur au journal du jour. Le parcours n'est **ni chargé ni publié** en production : rien ne
+  change pour les membres tant que le fondateur ne l'a pas fait.
 - **Reste** : relecture du contenu par le fondateur (prières d'une ligne, découpage) ; confirmer l'assouplissement
   « raison d'être / Vision » pour les parcours de plan ; e-mail du rythme encore au vocabulaire « leçon » ; écrans
   mobiles ; lots 2 à 4.
@@ -52,8 +54,9 @@ Ne jamais afficher ni demander de mot de passe ; ne pas publier son nom (mention
   passations de ces deux tests enregistrées avant le déploiement du 26/11 sont à 0. Le comptage en production n'a pas
   pu être fait par l'IA (accès à la base refusé) : commande à lancer par le fondateur, voir le message de fin de
   chantier. Rien n'est supprimé.
-- **Non déployé** (attend le retour du fondateur, comme la vérification à l'écran avec le compte « Testeur »).
-  606 tests verts.
+- **Déployé le 26/11/2026** avec le lot 1 : nouveau texte de la Boussole vu en ligne (Plan de Vie gratuit, essai de
+  14 jours, « dont DISC et Dons spirituels gratuitement »). Texte à valider par le fondateur ; vérification à l'écran
+  avec le compte « Testeur » toujours en attente.
 
 ## 26/11/2026 — Proposition : remplir ses plans par parcours guidés
 
