@@ -17,6 +17,10 @@ use Symfony\Component\Routing\Attribute\Route;
 
 class HabitController extends AbstractController
 {
+    public function __construct(private readonly EntityManagerInterface $entityManager)
+    {
+    }
+
     #[Route('/mes-plans/rituels', name: 'app_user_habits', methods: ['GET', 'POST'])]
     public function rituels(Request $request, EntityManagerInterface $em, Entitlements $entitlements): Response
     {
@@ -37,7 +41,8 @@ class HabitController extends AbstractController
             $em->persist($habit);
             $em->flush();
 
-            return $this->redirectToRoute('app_user_habits');
+            // Point 7 (26/11/2026) : un rituel créé est libre ; on ouvre aussitôt son enracinement pour le relier à un plan
+            return $this->redirectToRoute('app_user_habits', ['relier' => $habit->getId()]);
         }
 
         // Get growth goals to let the user link their habits
@@ -54,6 +59,7 @@ class HabitController extends AbstractController
         }
 
         $habits = $em->getRepository(Habit::class)->findByWithAllRelations($user);
+        $planLinks = $this->planLinks($user);
 
         // Rattrapage bienveillant (livre, chapitre 22) : « ne manque jamais deux fois de suite »
         $yesterday = new \DateTime('yesterday');
@@ -67,6 +73,8 @@ class HabitController extends AbstractController
             'missedYesterday' => $missedYesterday,
             'habits' => $habits,
             'growthGoals' => $growthGoals,
+            'planLinks' => $planLinks,
+            'linkToOpen' => $request->query->getInt('relier'),
             'form' => $form->createView(),
         ]);
     }
@@ -158,7 +166,19 @@ class HabitController extends AbstractController
             $habit->setEndDate(null);
         }
 
-        if (isset($data['growthGoalId']) && !empty($data['growthGoalId'])) {
+        if (\array_key_exists('link', $data)) {
+            // Point 7 : un seul lien à la fois, vers un objectif de n'importe lequel des plans (ou aucun)
+            $target = $this->resolveLink($user, (string) $data['link']);
+            $habit->setLifeGoal(null)->setGrowthGoal(null)->setSkillGoal(null)->setHygieneDomain(null)->setLegacyGoal(null);
+            match (true) {
+                $target instanceof \App\PlanDeVie\Entity\LifeGoal => $habit->setLifeGoal($target),
+                $target instanceof \App\PlanDeCroissance\Entity\GrowthGoal => $habit->setGrowthGoal($target),
+                $target instanceof \App\PlanDeDeveloppement\Entity\SkillGoal => $habit->setSkillGoal($target),
+                $target instanceof \App\PlanDHygiene\Entity\HygieneDomain => $habit->setHygieneDomain($target),
+                $target instanceof \App\PlanDeTransmission\Entity\LegacyGoal => $habit->setLegacyGoal($target),
+                default => null,
+            };
+        } elseif (isset($data['growthGoalId']) && !empty($data['growthGoalId'])) {
             $gg = $em->getRepository(\App\PlanDeCroissance\Entity\GrowthGoal::class)->findOneBy([
                 'id' => (int)$data['growthGoalId'],
                 'planDeCroissance' => $user->getPlanDeCroissance()
@@ -190,5 +210,50 @@ class HabitController extends AbstractController
         $em->flush();
 
         return new JsonResponse(['success' => true]);
+    }
+
+    /** Les objectifs des plans auxquels un rituel peut être relié (point 7) : clé « TYPE:id ». */
+    private function planLinks(\App\Compte\Entity\User $user): array
+    {
+        $groups = [];
+        $add = static function (string $label, string $prefix, iterable $items, callable $title) use (&$groups): void {
+            $options = [];
+            foreach ($items as $item) {
+                if ('' !== trim((string) $title($item))) {
+                    $options[] = ['value' => $prefix.':'.$item->getId(), 'label' => (string) $title($item)];
+                }
+            }
+            if ([] !== $options) {
+                $groups[] = ['label' => $label, 'options' => $options];
+            }
+        };
+        $add('Plan de Vie', 'GOAL', $user->getPlanDeVie()?->getLifeGoals() ?? [], static fn ($g) => $g->getTitle());
+        $add('Plan de Croissance', 'GROWTH', $user->getPlanDeCroissance()?->getGrowthGoals() ?? [], static fn ($g) => $g->getTitle());
+        $add('Plan de Développement personnel', 'SKILL', $user->getPlanDeDeveloppementPersonnel()?->getSkillGoals() ?? [], static fn ($g) => $g->getTitle());
+        $add('Plan d\'Hygiène de vie', 'HYGIENE', $user->getPlanDHygiene()?->getHygieneDomains() ?? [], static fn ($d) => $d->getName());
+        $add('Plan de Transmission', 'LEGACY', $user->getPlanDeTransmission()?->getLegacyGoals() ?? [], static fn ($g) => $g->getTitle());
+
+        return $groups;
+    }
+
+    /** Retrouve l'objectif choisi, seulement s'il appartient à l'un des plans de la personne. */
+    private function resolveLink(\App\Compte\Entity\User $user, string $link): ?object
+    {
+        foreach ($this->planLinks($user) as $group) {
+            if (\in_array($link, array_column($group['options'], 'value'), true)) {
+                [$prefix, $id] = explode(':', $link);
+                $class = [
+                    'GOAL' => \App\PlanDeVie\Entity\LifeGoal::class,
+                    'GROWTH' => \App\PlanDeCroissance\Entity\GrowthGoal::class,
+                    'SKILL' => \App\PlanDeDeveloppement\Entity\SkillGoal::class,
+                    'HYGIENE' => \App\PlanDHygiene\Entity\HygieneDomain::class,
+                    'LEGACY' => \App\PlanDeTransmission\Entity\LegacyGoal::class,
+                ][$prefix];
+
+                return $this->entityManager->find($class, (int) $id);
+            }
+        }
+
+        return null;
     }
 }

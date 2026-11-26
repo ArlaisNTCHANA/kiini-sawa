@@ -48,15 +48,16 @@ class HabitControllerTest extends WebTestCase
         ]);
         $client->submit($form);
 
-        $this->assertResponseRedirects('/mes-plans/rituels');
-        $client->followRedirect();
-
         // Find the created habit
         $habit = $em->getRepository(Habit::class)->findOneBy([
             'title' => 'Habitude Test de Méditation',
             'user' => $testUser
-        ]);
+        ], ['id' => 'DESC']);
         $this->assertNotNull($habit);
+        // Point 7 : l'enracinement du nouveau rituel s'ouvre pour le relier à un plan
+        $this->assertResponseRedirects('/mes-plans/rituels?relier='.$habit->getId());
+        $client->followRedirect();
+        $this->assertStringContainsString('id="rooting-link"', (string) $client->getResponse()->getContent());
 
         // 2. Log completion for today
         $client->request('POST', '/api/habits/' . $habit->getId() . '/log', [], [], [

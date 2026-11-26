@@ -401,6 +401,8 @@
                                             {% set pColor = '#2E6B53' %}
                                             {% set pGlow = 'rgba(79, 70, 229, 0.08)' %}
                                             {% set pText = 'Hygiène' %}
+                                        {% elseif habit.lifeGoal is not null %}
+                                            {% set pText = 'Plan de Vie' %}
                                         {% endif %}
 
                                         <label class="habit-item-card"
@@ -523,6 +525,8 @@
                     {% set pColor = '#2E6B53' %}
                     {% set pGlow = 'rgba(79, 70, 229, 0.08)' %}
                     {% set pText = 'Hygiène' %}
+                {% elseif habit.lifeGoal is not null %}
+                    {% set pText = 'Plan de Vie' %}
                 {% endif %}
 
                 {% set isRooted = habit.rootingIntention is not empty or habit.rootingAnchor is not empty %}
@@ -764,15 +768,18 @@
                                       placeholder="Comment rendre l'action évidente dans votre espace de vie ? (ex: poser mon livre sur mon oreiller le matin)"></textarea>
                         </div>
 
-                        {# Growth Goal Selector #}
-                        <div style="grid-column: span 2;" class="rooting-field-card">
-                            <label>Objectif de croissance associé</label>
-                            <select x-model="rooting.growthGoalId">
-                                <option value="">Aucun objectif lié (rituel libre)</option>
-                                <template x-for="gg in growthGoals" :key="gg.id">
-                                    <option :value="gg.id" x-text="`[${gg.axisLabel || gg.axis}] ${gg.title}`" :selected="rooting.growthGoalId == gg.id"></option>
-                                </template>
+                        {# Point 7 : relié à un objectif de n'importe lequel des plans #}
+                        <div style="grid-column: span 2;" class="rooting-field-card" id="relier-rituel">
+                            <label for="rooting-link">Relié à</label>
+                            <select id="rooting-link" x-model="rooting.link">
+                                <option value="">Aucun objectif (rituel libre)</option>
+                                {% for g in planLinks %}
+                                    <optgroup label="{{ g.label }}">
+                                        {% for o in g.options %}<option value="{{ o.value }}">{{ o.label }}</option>{% endfor %}
+                                    </optgroup>
+                                {% endfor %}
                             </select>
+                            {% if planLinks is empty %}<p style="font-size: .8rem; color: var(--fg-muted); margin-top: .4rem;">Écrivez d'abord un objectif dans l'un de vos plans pour pouvoir y relier ce rituel.</p>{% endif %}
                         </div>
                     </div>
 
@@ -834,6 +841,8 @@
                         {% set pColor = '#2E6B53' %}
                         {% set pGlow = 'rgba(79, 70, 229, 0.08)' %}
                         {% set pText = 'Hygiène' %}
+                    {% elseif habit.lifeGoal is not null %}
+                        {% set pText = 'Plan de Vie' %}
                     {% endif %}
                     {{ {
                         id: habit.id,
@@ -852,6 +861,7 @@
                         rootingBenefit: habit.rootingBenefit ?: '',
                         rootingFacilitator: habit.rootingFacilitator ?: '',
                         growthGoalId: habit.growthGoal ? habit.growthGoal.id : '',
+                        link: habit.lifeGoal ? 'GOAL:' ~ habit.lifeGoal.id : (habit.growthGoal ? 'GROWTH:' ~ habit.growthGoal.id : (habit.skillGoal ? 'SKILL:' ~ habit.skillGoal.id : (habit.hygieneDomain ? 'HYGIENE:' ~ habit.hygieneDomain.id : (habit.legacyGoal ? 'LEGACY:' ~ habit.legacyGoal.id : '')))),
                         pillar: hPillar,
                         pillarText: pText,
                         pillarColor: pColor
@@ -889,10 +899,19 @@
                 rootingAnchor: '',
                 rootingBenefit: '',
                 rootingFacilitator: '',
-                growthGoalId: ''
+                growthGoalId: '',
+                link: ''
             },
 
             init() {
+                // Point 7 : rituel tout juste créé : on ouvre son enracinement pour le relier à un plan
+                const toLink = {{ linkToOpen|default(0) }};
+                const created = toLink ? this.habits.find(h => h.id === toLink) : null;
+                if (created) {
+                    this.tab = 'ROOTING';
+                    this.selectHabit(created);
+                    this.showToast('Rituel créé. Reliez-le à un objectif de vos plans, ci-dessous.', 'success', 'link');
+                }
                 if (this.tab === 'ROOTING' && this.selectedHabitId === null && this.habits.length > 0) {
                     this.selectFirstVisibleHabit();
                 }
