@@ -135,20 +135,20 @@ final class LifePlanWizardSaver
         }
 
         if (\in_array(11, $steps, true) && $input->has('eternity_phrase')) {
-            $plan = $user->getPlanDeTransmission() ?? $this->persistNew((new PlanDeTransmission())->setUser($user));
+            $plan = $this->planDeTransmission($user);
             $plan->setEternityPhrase(mb_substr($input->getString('eternity_phrase'), 0, 2000))
                 ->setTreasureShift(mb_substr($input->getString('treasure_shift'), 0, 2000));
         }
 
         if (\in_array(11, $steps, true) && $input->has('legacy_title')) {
-            $plan = $user->getPlanDeTransmission() ?? $this->persistNew((new PlanDeTransmission())->setUser($user));
+            $plan = $this->planDeTransmission($user);
             $this->saveIndexedGoals('legacy', $input, $plan->getLegacyGoals()->toArray(), $lifeGoals,
                 fn () => $this->attach(new LegacyGoal(), fn ($lg) => $plan->addLegacyGoal($lg)),
                 fn (LegacyGoal $lg, string $title) => $lg->setTitle($title), fn (LegacyGoal $lg) => $lg->getTitle());
         }
 
         if (\in_array(12, $steps, true) && $has('hygiene_name', 'hygiene_domain_name')) {
-            $plan = $user->getPlanDHygiene() ?? $this->persistNew((new PlanDHygiene())->setUser($user));
+            $plan = $this->planDHygiene($user);
             $prefix = $input->has('hygiene_name') ? 'hygiene_name' : 'hygiene_domain_name';
             $this->saveIndexedGoals('hygiene', $input, $plan->getHygieneDomains()->toArray(), $lifeGoals,
                 fn () => $this->attach(new HygieneDomain(), fn ($hd) => $plan->addHygieneDomain($hd)),
@@ -391,9 +391,34 @@ final class LifePlanWizardSaver
         return $user->getPlanDeVie();
     }
 
+    // Les plans sont créés par le côté User (setPlanDe…) pour que les deux côtés de la relation soient renseignés :
+    // sinon un second appel dans le même enregistrement ne voit pas le plan déjà créé et en persiste un doublon
+    // (refusé par la base : erreur 500 au premier enregistrement du Plan de Transmission, 25/11/2026).
     private function planDeCroissance(User $user): PlanDeCroissance
     {
-        return $user->getPlanDeCroissance() ?? $this->persistNew((new PlanDeCroissance())->setUser($user));
+        if (null === $user->getPlanDeCroissance()) {
+            $user->setPlanDeCroissance($this->persistNew(new PlanDeCroissance()));
+        }
+
+        return $user->getPlanDeCroissance();
+    }
+
+    private function planDeTransmission(User $user): PlanDeTransmission
+    {
+        if (null === $user->getPlanDeTransmission()) {
+            $user->setPlanDeTransmission($this->persistNew(new PlanDeTransmission()));
+        }
+
+        return $user->getPlanDeTransmission();
+    }
+
+    private function planDHygiene(User $user): PlanDHygiene
+    {
+        if (null === $user->getPlanDHygiene()) {
+            $user->setPlanDHygiene($this->persistNew(new PlanDHygiene()));
+        }
+
+        return $user->getPlanDHygiene();
     }
 
     private function persistNew(object $entity): object

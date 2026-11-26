@@ -167,7 +167,14 @@ class PersonalityController extends AbstractController
         }
 
         // Collect answers: key = question category/id, value = answer value
-        $rawAnswers = $request->request->all('answers');
+        // Une réponse vide n'est pas une réponse (elle valait 0 au calcul : rapport Équilibre de Vie à 0/10, 25/11/2026)
+        $rawAnswers = array_filter($request->request->all('answers'), fn ($v) => \is_scalar($v) && '' !== trim((string) $v));
+        $expected = \count(array_unique(array_map(fn ($q) => $q->getCategory(), $this->questionRepo->findBy(['testType' => $type]))));
+        if ($rawAnswers && \count($rawAnswers) < $expected) {
+            $this->addFlash('error', 'Certaines réponses ne nous sont pas parvenues. Vos réponses n\'ont pas été enregistrées : merci de recommencer.');
+
+            return $this->redirectToRoute('app_personality_take', ['type' => strtolower($type)]);
+        }
         if (empty($rawAnswers)) {
             $this->addFlash('error', 'Aucune réponse reçue. Veuillez compléter le test.');
             return $this->redirectToRoute('app_personality_take', ['type' => strtolower($type)]);

@@ -280,8 +280,9 @@
                             onclick="selectScale(this)">
                             {{ ans.text }}
                         </button>
-                        <input type="hidden" name="answers[{{ q.category }}]" id="hidden-{{ q.id }}" value="">
                         {% endfor %}
+                        {# Un seul champ caché par question (il était répété à chaque bouton : le dernier, vide, écrasait la réponse) #}
+                        <input type="hidden" name="answers[{{ q.category }}]" id="hidden-{{ q.id }}" value="">
                     </div>
                     {% else %}
                     <div class="test-answers" style="--ans-color:{{ testMeta.color }};--ans-bg:{{ testMeta.bg }};">

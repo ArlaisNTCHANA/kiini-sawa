@@ -9,6 +9,21 @@ teste (`php bin/phpunit`), commit, déploie (`bin/ops/envoyer-hostinger.sh`), v�
 journal `var/log/prod-AAAA-MM-JJ.log` sans erreur) ; **le fondateur fait lui-même `git push`** (refusé à l'IA).
 Ne jamais afficher ni demander de mot de passe ; ne pas publier son nom (mentions légales en attente).
 
+## 26/11/2026 — Correction des deux bugs graves du parcours « nouvel utilisateur »
+
+- **Plan de Transmission en erreur 500** (journal prod : `UniqueConstraintViolationException … UNIQ_DD2DC8E9A76ED395`) :
+  `LifePlanWizardSaver` créait le plan avec `(new PlanDeTransmission())->setUser($user)` sans renseigner
+  `$user->planDeTransmission` ; le 2ᵉ bloc de la même étape (projets après phrase d'éternité) ne le voyait pas et en
+  persistait un second. Même défaut latent pour Croissance (étapes 9 et 10 ensemble) et Hygiène. Corrigé : helpers
+  `planDeCroissance()`, `planDeTransmission()`, `planDHygiene()` qui passent par `User::setPlanDe…()`.
+  Test : `tests/PlanDeVie/WizardFirstSaveTest.php`.
+- **Équilibre de Vie à 0/10** (et audit Hygiène de Vie touché) : dans `templates/personnalite/test.html.twig`, le champ
+  caché `answers[catégorie]` était dans la boucle des 10 boutons ; le dernier (vide) écrasait la réponse, `(int) ''` = 0.
+  Champ sorti de la boucle ; `PersonalityController::submit` ignore les réponses vides et refuse un envoi incomplet.
+  Test : `tests/Personnalite/ScaleAnswersTest.php`. 604 tests verts.
+- **Reste** : les passations Équilibre/Hygiène déjà enregistrées depuis la mise en place de ce gabarit sont fausses
+  (à repasser) ; déploiement à faire.
+
 ## 25/11/2026 — Parcours « nouvel utilisateur » en production (test à l'écran, utilisateur assidu)
 
 - **Demande du fondateur** : se comporter comme un nouvel inscrit sur kiinisawa.com, à l'écran (téléphone puis
