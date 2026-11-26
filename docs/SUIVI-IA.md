@@ -24,7 +24,10 @@ Ne jamais afficher ni demander de mot de passe ; ne pas publier son nom (mention
   « Choisir mon parcours guidé » aussi dans ce cas.
 - **Tests** : `PlanRubricsTest` (15) ; 623 tests verts. Vu à l'écran en local (375 px) : les deux cartes concordent.
 - **Reste** : le premier pas « Partenaire de Redevabilité » mène encore à `/social` (réseau) et se coche avec une mise
-  en relation : à revoir avec le chantier 6 (deux espaces à clarifier, décision du fondateur). **Non déployé.**
+  en relation : à revoir avec le chantier 6 (deux espaces à clarifier, décision du fondateur).
+- **Déployé le 26/11/2026** avec le chantier 1 (pas de migration) : accueil, Boussole et connexion en 200, pages
+  connectées en 302 vers la connexion, page inconnue en 404, aucune erreur au journal, nouveau script des assistants
+  servi. Effet visible seulement après publication de « Mon Plan de Vie ».
 
 ## 26/11/2026 — Assistants des plans lisibles sur téléphone (chantier 1)
 
@@ -37,7 +40,7 @@ Ne jamais afficher ni demander de mot de passe ; ne pas publier son nom (mention
 - **Vérifié à 375 px** sur les 13 étapes des 5 assistants : largeur de page 375, aucun élément qui dépasse, aucun
   défilement intérieur ; après « Ajouter » (Croissance), rien ne glisse ; « Suivant » ramène en haut et l'enregistrement
   automatique marche. Ordinateur inchangé (règles limitées au téléphone). 622 tests verts.
-- **Non déployé.**
+- **Déployé le 26/11/2026** (voir l'entrée suivante, plus haut).
 
 ## 26/11/2026 — Parcours guidés, lot 4 et « un seul message par jour »
 
