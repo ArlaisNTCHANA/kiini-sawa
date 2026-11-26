@@ -1,10 +1,11 @@
-{# Boutons « Ajouter à mes rituels / à mon Plan de Croissance » (écran seulement). Variables : text, source, addedActions. #}
+{# Boutons « Ajouter à mes rituels / à mon Plan de Croissance » (écran seulement). Variables : text, source, addedActions,
+   targets (facultatif : {clé de TestAction::TARGETS: libellé du bouton}). #}
 {% set already = (addedActions|default({}))[text]|default([]) %}
 {% set back = app.request.pathInfo %}
 <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-top: 8px;">
-    {% for target, label in {habit: 'Ajouter à mes rituels', growth: 'Ajouter à mon Plan de Croissance'} %}
+    {% for target, label in targets|default({habit: 'Ajouter à mes rituels', growth: 'Ajouter à mon Plan de Croissance'}) %}
         {% if target in already %}
-            <span style="font-size: .78rem; font-weight: 600; color: #166534; background: #DCFCE7; border-radius: 99px; padding: 5px 12px;">{{ report_icon('check', '#16A34A', 12) }}{{ target == 'habit' ? 'Dans vos rituels' : 'Dans votre Plan de Croissance' }}</span>
+            <span style="font-size: .78rem; font-weight: 600; color: #166534; background: #DCFCE7; border-radius: 99px; padding: 5px 12px;">{{ report_icon('check', '#16A34A', 12) }}{{ {habit: 'Dans vos rituels', growth: 'Dans votre Plan de Croissance', talent: 'Dans votre Plan de Vie'}[target] }}</span>
         {% else %}
             <form method="post" action="{{ path('app_test_action_add') }}" style="margin: 0;">
                 <input type="hidden" name="text" value="{{ text }}">

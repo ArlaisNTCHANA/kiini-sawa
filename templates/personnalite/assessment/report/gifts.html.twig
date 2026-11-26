@@ -46,6 +46,7 @@
     <div class="dr-kicker" style="color: {{ g.family.color }};">Votre don n° {{ loop.index }} · {{ g.family.name }}</div>
     <h2>{{ g.name }}</h2>
     <p class="dr-lead">{{ g.desc }} <span class="dr-small">({{ g.ref }})</span></p>
+    {% if not pdf %}{% include 'personnalite/assessment/report/_add_action.html.twig' with {text: g.name, source: 'Dons spirituels', targets: {talent: 'Ajouter à mon Plan de Vie (dons et talents)'}} %}{% endif %}
     <table class="dr-grid"><tr>
         <td style="width: 62%;"><p style="font-size: {{ pdf ? '10.5pt' : '1.05rem' }}; margin: 0 0 6px;">{{ g.portrait }}</p><p class="dr-small" style="margin: 0; color: #334155;">{{ g.strength[1] }}</p></td>
         <td><div class="dr-tile" style="background: {{ g.family.light }}; border-color: {{ g.family.light }}; text-align: center;">

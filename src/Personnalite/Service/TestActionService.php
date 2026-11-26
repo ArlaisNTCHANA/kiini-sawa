@@ -33,6 +33,16 @@ final class TestActionService
             $habit = (new Habit())->setUser($user)->setTitle($text)->setFrequency(HabitFrequency::WEEKLY)
                 ->setEndDate(new \DateTime('+30 days'))->setRootingIntention('Action choisie dans mon rapport '.$source.'.');
             $this->em->persist($habit);
+        } elseif ('talent' === $target) {
+            // Point 7 (26/11/2026) : un don du rapport Dons spirituels rejoint « Dons et talents » du Plan de Vie
+            foreach ($user->getInternalBalances() as $ib) {
+                if ('TALENT' === $ib->getType() && 0 === strcasecmp(trim((string) $ib->getText()), $text)) {
+                    throw new \InvalidArgumentException('Ce don est déjà dans votre Plan de Vie.');
+                }
+            }
+            $talent = (new \App\PlanDeVie\Entity\InternalBalance())->setType('TALENT')->setText($text)->setUser($user);
+            $user->addInternalBalance($talent);
+            $this->em->persist($talent);
         } else {
             $this->entitlements->require($user, 'croissance');
             $plan = $user->getPlanDeCroissance();

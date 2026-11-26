@@ -16,7 +16,7 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Index(name: 'idx_test_action_user', columns: ['user_id'])]
 class TestAction
 {
-    public const TARGETS = ['habit' => 'mes rituels', 'growth' => 'mon Plan de Croissance'];
+    public const TARGETS = ['habit' => 'mes rituels', 'growth' => 'mon Plan de Croissance', 'talent' => 'mon Plan de Vie (dons et talents)'];
 
     #[ORM\Id]
     #[ORM\GeneratedValue]
