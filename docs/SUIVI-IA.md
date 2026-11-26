@@ -42,6 +42,9 @@ Ne jamais afficher ni demander de mot de passe ; ne pas publier son nom (mention
 - **Tests** : `tests/Social/PartnersPageTest.php` (7) ; `AccountabilityTest` adapté. Vu à l'écran en local (bureau et
   375 px) : invitation → engagement prérempli → aperçu → fiche « Samuel · Par e-mail ».
 - **Reste** : l'application mobile garde son écran « Ma redevabilité » (dépôt `kiini-mobile`) ; à aligner.
+- **Déployé le 26/11/2026** (pas de migration) : accueil et connexion en 200, `/social`, `/social/inviter` et
+  `/social/redevabilite` en 302 vers la connexion, page inconnue en 404, aucune erreur au journal, correctif Turbo
+  présent sur le serveur.
 
 ## 26/11/2026 — Premiers pas = parcours guidé ; une seule prochaine étape (chantier 4)
 
