@@ -31,6 +31,20 @@ class WizardFirstSaveTest extends WebTestCase
         $this->client->request('POST', '/plan-de-vie/assistant?'.$query, $data + ['_csrf_token' => \App\Tests\Support\FixedCsrfTokenManager::VALUE]);
     }
 
+    /** Point 3 (26/11/2026) : la fin de l'assistant du Plan de Vie félicite, avec le score, sur la page du plan. */
+    public function testFinishingTheLifePlanWizardCelebratesWithTheScore(): void
+    {
+        $this->post('single=0', ['purpose_content' => 'Servir les familles de mon quartier.', 'vision_content' => 'Une maison ouverte.']);
+        $this->assertResponseRedirects('/plan-de-vie?onglet=analysis');
+        $this->client->followRedirect();
+        $this->assertSelectorTextContains('[data-plan-bravo]', 'Votre Plan de Vie est posé');
+        $this->assertSelectorTextContains('[data-plan-bravo]', 'Score de cohérence');
+
+        // Une seule fois : la carte disparaît au rechargement
+        $this->client->request('GET', '/plan-de-vie');
+        $this->assertSelectorNotExists('[data-plan-bravo]');
+    }
+
     public function testFirstTransmissionSaveCreatesOnePlan(): void
     {
         $this->assertNull($this->findUser($this->user->getEmail())->getPlanDeTransmission());

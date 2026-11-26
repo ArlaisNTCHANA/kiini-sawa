@@ -2293,6 +2293,20 @@ graph TD
             {% set healthScore = 95 %}
         {% endif %}
 
+        {% if app.flashes('plan_bravo') is not empty %}
+            <div class="ks-card ks-card--accent" data-plan-bravo style="margin-bottom: 1.25rem; display: grid; gap: .6rem;">
+                <p class="ks-eyebrow" style="margin: 0;">{{ t('plan_vie.bravo.surtitre', 'Bravo') }}</p>
+                <h2 style="font-family: var(--font-serif); font-size: 1.5rem; margin: 0;">{{ t('plan_vie.bravo.titre', 'Votre Plan de Vie est posé') }}</h2>
+                <p style="margin: 0; color: var(--fg-light);">{{ t('plan_vie.bravo.texte', 'Vous avez écrit ce pour quoi vous êtes fait et où vous allez. Votre score de cohérence mesure combien les pièces de votre plan se tiennent entre elles.') }} <strong>Score de cohérence : {{ healthScore }}/100.</strong></p>
+                {% if issues|length > 0 %}
+                    <p style="margin: 0; font-weight: 600;">{{ t('plan_vie.bravo.pistes', 'Pour aller plus loin, commencez par :') }}</p>
+                    <ul style="margin: 0; padding-left: 1.2rem; display: grid; gap: .3rem;">
+                        {% for issue in issues|slice(0, 3) %}<li><a href="{{ issue.link }}" style="color: var(--primary);">{{ issue.message }}</a></li>{% endfor %}
+                    </ul>
+                {% endif %}
+            </div>
+        {% endif %}
+
         <div class="analysis-card">
             <div class="analysis-header">
                 <div>

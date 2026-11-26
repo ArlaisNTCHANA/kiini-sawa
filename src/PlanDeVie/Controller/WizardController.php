@@ -62,13 +62,22 @@ class WizardController extends AbstractPlanController
             if (!$single) {
                 $snapshots->snapshotOncePerDay($user, 'Après l\'assistant · '.PlanCatalog::label($plan ?: 'VIE'));
             }
-            $this->addFlash('success', 'Votre plan a été enregistré.');
-
             if ('' !== $plan) {
+                $this->addFlash('success', 'Votre plan a été enregistré.');
+
                 return $this->redirectToRoute(PlanCatalog::PLANS[$plan]['route']);
             }
+            if ($single) {
+                $this->addFlash('success', 'Votre plan a été enregistré.');
 
-            return $this->redirectToRoute($single ? 'app_plan_de_vie' : 'app_dashboard');
+                return $this->redirectToRoute('app_plan_de_vie');
+            }
+
+            // Point 3 (26/11/2026) : fin de l'assistant du Plan de Vie : on félicite, avec le score de cohérence et les
+            // premières pistes, sur la page du plan (onglet Analyse ouvert) plutôt qu'un simple bandeau sur Aujourd'hui
+            $this->addFlash('plan_bravo', true);
+
+            return $this->redirectToRoute('app_plan_de_vie', ['onglet' => 'analysis']);
         }
 
         if (null === $user->getPlanDeVie()) {

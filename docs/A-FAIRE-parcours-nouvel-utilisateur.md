@@ -74,6 +74,7 @@ de Vie gratuitement, et essayez les 6 plans pendant 14 jours avec PRO ». Passer
 zone est déjà modifiable (voir `docs/modules/contenu.md`).
 
 ### 3. Fin du Plan de Vie : féliciter et montrer le score (gênant)
+**Fait le 26/11/2026** : fin de l'assistant → `/plan-de-vie?onglet=analysis` avec la carte « Bravo » (score et 3 premières pistes) ; bouton de l'accueil renommé « Enregistrer mes fondations » (la carte « Bravo » d'Aujourd'hui mène déjà à `/plan-de-vie`).
 **Symptôme** : « Sauvegarder mon Plan » ramène sur Aujourd'hui avec un simple bandeau. Le score de cohérence (71, puis
 94 après les autres plans) reste caché derrière le bouton « Analyse ». Dans l'accueil, le bouton « Voir mon Plan de
 Vie » mène à Aujourd'hui.
