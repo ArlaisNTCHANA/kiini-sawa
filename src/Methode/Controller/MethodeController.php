@@ -31,8 +31,12 @@ class MethodeController extends AbstractController
     }
 
     #[Route('/{slug}', name: 'chapter', requirements: ['slug' => '[a-z0-9-]+'], methods: ['GET'])]
-    public function chapter(string $slug, BookLibrary $book, Entitlements $entitlements): Response
+    public function chapter(string $slug, BookLibrary $book, Entitlements $entitlements, \Symfony\Component\HttpFoundation\Request $request): Response
     {
+        // Point 8 : ouvert depuis un plan (encart « Comprendre cette étape »), le chapitre propose d'y revenir.
+        // Seulement une adresse du site (pas de redirection vers un autre site).
+        $retour = $request->query->getString('retour');
+        $retour = preg_match('#^/(?![/\\\\])[^\s]*$#', $retour) && !str_starts_with($retour, '/methode') ? $retour : null;
         if (isset(BookLibrary::LEGACY_SLUGS[$slug])) {
             return $this->redirectToRoute('app_methode_chapter', ['slug' => BookLibrary::LEGACY_SLUGS[$slug]], Response::HTTP_MOVED_PERMANENTLY);
         }
@@ -43,6 +47,7 @@ class MethodeController extends AbstractController
             'mode' => $this->mode($slug, $book, $entitlements),
             'previous' => $chapter['previous'] ? $book->get($chapter['previous']) : null,
             'next' => $chapter['next'] ? $book->get($chapter['next']) : null,
+            'retour' => $retour,
         ]);
     }
 

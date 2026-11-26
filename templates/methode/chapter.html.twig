@@ -49,6 +49,13 @@
             </div>
         {% endif %}
     {% endif %}
+    {% if retour %}
+        {# Point 8 : chapitre ouvert depuis un plan. Il s'ouvre dans un nouvel onglet : on le ferme si possible, sinon on y retourne #}
+        <div class="ks-card ks-card--accent" data-chapter-return style="margin-top: 2.5rem; display: flex; flex-wrap: wrap; gap: .75rem; align-items: center; justify-content: space-between;">
+            <p style="margin: 0; font-weight: 600;">{{ t('livre.retour.texte', 'Vous avez lu ce chapitre : c\'est le moment d\'écrire.') }}</p>
+            <a class="ks-btn ks-btn--primary" href="{{ retour }}" onclick="if (history.length <= 1) { window.close(); }">{{ t('livre.retour.bouton', 'Revenir à mon plan et écrire') }}</a>
+        </div>
+    {% endif %}
     <nav style="display: flex; justify-content: space-between; gap: 1rem; margin-top: 3rem; padding-top: 1.5rem; border-top: 1px solid var(--border); font-size: .9rem;">
         {% if previous %}<a href="{{ path('app_methode_chapter', {slug: previous.slug}) }}" style="color: var(--primary); text-decoration: none;">← {{ previous.title }}</a>{% else %}<span></span>{% endif %}
         {% if next %}<a href="{{ path('app_methode_chapter', {slug: next.slug}) }}" style="color: var(--primary); text-decoration: none; text-align: right;">{{ next.title }} →</a>{% endif %}

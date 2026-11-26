@@ -132,6 +132,7 @@ réconcilier avec la règle du fondateur, **lui demander**).
   dans Mon profil).
 
 ### 8. Chapitres du livre depuis l'assistant (détail)
+**Fait le 26/11/2026** : lien « Lire le chapitre » avec `?retour=` (adresse du site seulement) et bouton « Revenir à mon plan et écrire » en fin de chapitre ; l'encart de la page Plan de Vie mène au chapitre 2 « Le Plan et la Providence » (public).
 - À la fin d'un chapitre ouvert depuis l'assistant, ajouter « Revenir à mon plan / écrire maintenant » (passer
   l'adresse de retour dans le lien « Lire le chapitre »). `templates/methode/…`, `src/Methode/…`.
 - Sur la page Plan de Vie, l'encart affiche « Comment lire ce livre » : `src/Methode/Service/BookLibrary.php` ligne 81,

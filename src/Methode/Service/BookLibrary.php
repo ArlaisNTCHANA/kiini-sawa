@@ -78,7 +78,8 @@ final class BookLibrary
         'wizard.11' => 'heritage-et-transmission',
         'wizard.12' => 'hygiene-de-vie',
         'wizard.13' => 'saisons-et-echeancier',
-        'plan_de_vie' => 'comment-lire',
+        // Point 8 (26/11/2026) : la page du Plan de Vie explique ce qu'est un plan de vie (chapitre 2), plus « Comment lire »
+        'plan_de_vie' => 'plan-et-providence',
         'strategies' => 'carte-strategique',
         'intendance' => 'intendance',
         'rituels' => 'habitudes',

@@ -57,7 +57,7 @@ class MethodeControllerTest extends WebTestCase
         // Encart « Comprendre cette étape » dans l'assistant, relié au chapitre
         $crawler = $client->request('GET', '/plan-de-vie/assistant?step=1&single=1');
         $this->assertSelectorTextContains('.book-panel', 'Comprendre cette étape');
-        $this->assertSame('/methode/but-de-dieu', $crawler->filter('.book-panel a')->attr('href'));
+        $this->assertStringStartsWith('/methode/but-de-dieu?retour=', $crawler->filter('.book-panel a')->attr('href'));
     }
 
     /** Nouveau livre (6 plans) : chapitre 18 sur l'Intendance, anciennes adresses redirigées, notes de l'auteur retirées. */
@@ -83,7 +83,7 @@ class MethodeControllerTest extends WebTestCase
 
         // L'encart du Plan d'Intendance renvoie au chapitre 18
         $crawler = $client->request('GET', '/plan-d-intendance');
-        $this->assertSame('/methode/intendance', $crawler->filter('.book-panel a')->attr('href'));
+        $this->assertSame('/methode/intendance?retour=/plan-d-intendance', $crawler->filter('.book-panel a')->attr('href'));
     }
 
     /** Niveaux d'accès : visiteur (extrait), compte gratuit (l'essentiel), PRO (texte intégral). */

@@ -15,5 +15,6 @@
             <div style="margin-top: .5rem; line-height: 1.6;">{{ chapter.sanctuary.html|raw }}</div>
         </details>
     {% endif %}
-    <a href="{{ path('app_methode_chapter', {slug: chapter.slug}) }}" target="_blank" rel="noopener" style="color: var(--accent); font-weight: 700; text-decoration: none;">Lire le chapitre ({{ chapter.minutes }} min) →</a>
+    {# Point 8 (26/11/2026) : le chapitre propose ensuite de revenir à l'écran d'où il a été ouvert #}
+    <a href="{{ path('app_methode_chapter', {slug: chapter.slug, retour: app.request.requestUri}) }}" target="_blank" rel="noopener" style="color: var(--accent); font-weight: 700; text-decoration: none;">Lire le chapitre ({{ chapter.minutes }} min) →</a>
 </details>
