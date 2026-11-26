@@ -101,15 +101,15 @@
             <p class="ks-empty">Faites l'inventaire ci-dessous, donnez à chaque élément son état, puis choisissez trois à cinq éléments : pour chacun, une décision et une action pour les 30 prochains jours.</p>
         {% else %}
             <div class="ks-scroll" style="position: relative; overflow-x: auto; max-width: calc(100vw - 2.5rem);">
-                <table class="stw-table" style="min-width: 560px;">
+                <table class="stw-table stw-table--prio">
                     <thead><tr><th>Ce qui m'est confié</th><th>État</th><th>Décision</th><th>Action des 30 prochains jours</th><th><span class="sr-only">Fait</span></th></tr></thead>
                     <tbody>
                     {% for it in priorities %}
                         <tr>
-                            <td><a href="#element-{{ it.id }}">{{ it.label }}</a></td>
-                            <td>{% if it.status %}<span class="stw-pill" style="color: {{ statuses[it.status].color }}; background: {{ statuses[it.status].bg }};">{{ statuses[it.status].label }}</span>{% else %}—{% endif %}</td>
-                            <td>{{ it.decision ? decisions[it.decision].label : '—' }}</td>
-                            <td>{{ it.actionText ?: '—' }}</td>
+                            <td data-label="Ce qui m'est confié"><a href="#element-{{ it.id }}">{{ it.label }}</a></td>
+                            <td data-label="État">{% if it.status %}<span class="stw-pill" style="color: {{ statuses[it.status].color }}; background: {{ statuses[it.status].bg }};">{{ statuses[it.status].label }}</span>{% else %}—{% endif %}</td>
+                            <td data-label="Décision">{{ it.decision ? decisions[it.decision].label : '—' }}</td>
+                            <td data-label="Action des 30 prochains jours">{{ it.actionText ?: '—' }}</td>
                             <td>
                                 {% if it.actionText %}
                                 <form method="post" data-turbo="false" action="{{ path('app_plan_d_intendance_done', {id: it.id}) }}">
@@ -249,6 +249,16 @@
     .stw-table { width: 100%; border-collapse: collapse; font-size: .92rem; }
     .stw-table th, .stw-table td { text-align: left; padding: .55rem .6rem; border-bottom: 1px solid var(--border); vertical-align: top; }
     .stw-table th { font-size: .78rem; text-transform: uppercase; letter-spacing: .04em; color: var(--fg-muted); }
+    .stw-table--prio { min-width: 560px; }
+    /* Point 9 (26/11/2026) : sur téléphone, chaque priorité devient une carte lisible au lieu d'un tableau coupé */
+    @media (max-width: 640px) {
+        .stw-table--prio { min-width: 0; }
+        .stw-table--prio thead { position: absolute; left: -9999px; }
+        .stw-table--prio, .stw-table--prio tbody, .stw-table--prio tr, .stw-table--prio td { display: block; width: 100%; }
+        .stw-table--prio tr { border: 1px solid var(--border); border-radius: 12px; padding: .6rem .8rem; margin-bottom: .6rem; background: var(--card-bg); }
+        .stw-table--prio td { border: 0; padding: .25rem 0; }
+        .stw-table--prio td[data-label]::before { content: attr(data-label); display: block; font-size: .72rem; font-weight: 700; text-transform: uppercase; letter-spacing: .04em; color: var(--fg-muted); }
+    }
     .stw-rhythm { display: grid; gap: .9rem; max-width: 560px; }
     .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
 </style>

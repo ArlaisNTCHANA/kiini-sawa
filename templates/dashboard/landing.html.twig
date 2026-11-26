@@ -265,6 +265,8 @@
         <div class="duo-box">
             <p style="font-weight: 800; color: #BE185D; letter-spacing: .08em; text-transform: uppercase; font-size: .8rem;">{{ t('vitrine.s7.08', 'Offre Duo') }}</p>
             <p class="price" style="color: var(--fg);"><span class="price-EUR">{{ prices.EUR.DUO|money('EUR') }}</span><span class="price-XAF" hidden>{{ prices.XAF.DUO|money('XAF') }}</span> <small>{{ t('vitrine.s7.09', '/ an pour deux') }}</small></p>
+            {# Point 9 (26/11/2026) : le sélecteur de devise est plus bas ; ici, l'autre devise est rappelée #}
+            <p class="alt-price" style="margin-top: -.25rem;"><span class="price-EUR">soit {{ prices.XAF.DUO|money('XAF') }}</span><span class="price-XAF" hidden>soit {{ prices.EUR.DUO|money('EUR') }}</span></p>
             <p class="alt-price">{{ t('vitrine.s7.10', 'Les deux conjoints en PRO, plus l\'espace couple. Moins cher que deux abonnements.') }}</p>
             <a href="{{ path('app_register') }}" class="btn btn-primary">{{ t('vitrine.s7.11', 'Commencer à deux') }}</a>
             <p style="color: var(--muted); font-size: .8rem; margin-top: .75rem;">{{ t('vitrine.s7.12', 'Créez votre compte, puis invitez votre conjoint depuis l\'espace couple.') }}</p>
@@ -368,7 +370,10 @@
         let cur = {{ defaultCurrency|json_safe }};
         try {
             const tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
-            if (cur === 'EUR' && {{ cfaTimezones|json_safe }}.includes(tz)) { cur = 'XAF'; }
+            // Point 9 : le fuseau horaire ne compte que si la langue du navigateur ne donne pas déjà un pays hors zone CFA
+            // (certains fuseaux d'Europe et d'ailleurs se résolvent en « Africa/Abidjan »)
+            const region = ((navigator.language || '').split(/[-_]/)[1] || '').toUpperCase();
+            if (cur === 'EUR' && '' === region && {{ cfaTimezones|json_safe }}.includes(tz)) { cur = 'XAF'; }
         } catch (e) {}
         if (cur !== 'EUR') { setCur(cur); }
     })();
