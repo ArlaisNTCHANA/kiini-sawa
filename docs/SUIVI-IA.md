@@ -11,6 +11,7 @@ Ne jamais afficher ni demander de mot de passe ; ne pas publier son nom (mention
 
 ## 26/11/2026 — Intendance sans rechargement ; séances guidées dans l'appli (« Tout ce qui reste »)
 
+- **Déployé le 26/11/2026** (accord du fondateur) : pages contrôlées (accueil 200, /login 200, Intendance, Partenaires, Organisation 302 hors connexion, API 401 sans jeton), aucune erreur au journal du serveur. L'appli mobile (séances) attend une nouvelle version publiée.
 - **Plan d'Intendance** : ajouter, enregistrer, retirer un élément, marquer une action faite se font en arrière-plan
   (script de `templates/plan_d_intendance/index.html.twig`, conteneur `[data-stewardship-page]`) : la page renvoyée
   remplace le contenu, l'écran reste à sa place, l'élément ajouté vient à l'écran, ouvert. Sans script ou en cas
