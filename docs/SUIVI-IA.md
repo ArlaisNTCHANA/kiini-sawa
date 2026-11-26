@@ -20,6 +20,9 @@ Ne jamais afficher ni demander de mot de passe ; ne pas publier son nom (mention
 - **Tests** : `PlanRubricsTest` (10 tests) ; 616 tests verts. Vu à l'écran en local (375 px) : brouillon enregistré
   pendant la frappe puis repris après rechargement, console propre.
 - **Piège** : `XssHardeningTest` refuse `|json_encode|raw` dans un gabarit : utiliser `|json_safe`.
+- **Déployé le 26/11/2026** (migration `Version20261126081226` appliquée) : accueil, Boussole et connexion en 200, page
+  inconnue en 404, aucune erreur au journal. « Mon Plan de Vie » est chargé en production **en brouillon** (par le
+  fondateur) : rien de visible pour les membres tant qu'il n'est pas publié.
 - **Reste** : « un seul message par jour toutes sources confondues » (proposition § 5) non fait ; lots 3 (cinq autres
   parcours de plan et leurs rubriques) et 4 (parcours de 90 jours).
 
