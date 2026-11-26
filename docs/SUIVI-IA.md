@@ -41,10 +41,10 @@ Ne jamais afficher ni demander de mot de passe ; ne pas publier son nom (mention
   surlignage collé au toucher, progression comptée sur les réponses, bouton « Voir mon résultat » amené à l'écran ;
   vitrine : l'offre Duo rappelle l'autre devise, le fuseau horaire ne force plus les francs CFA si la langue donne un
   pays ; Intendance : priorités en cartes sur téléphone.
-- **Pas fait** : rechargement de la page Intendance à chaque ajout ; « blocs en retard » d'Aujourd'hui (non reproduit) ;
-  « un seul type surligné » du Journal (à préciser avec le fondateur).
-- **À valider par le fondateur** : la nouvelle question 5 d'Équilibre de Vie ; le chapitre 2 pour l'encart du Plan de
-  Vie ; les nouveaux exemples de l'assistant.
+- **Pas fait** : rechargement de la page Intendance à chaque ajout ; « blocs en retard » d'Aujourd'hui (non reproduit).
+- **Validé par le fondateur (26/11/2026)** : la question 5 d'Équilibre de Vie qui nomme Dieu ; le chapitre 2 pour
+  l'encart du Plan de Vie ; Journal : rien à changer (« un seul type surligné » était une remarque). Reste à relire :
+  les nouveaux exemples de l'assistant.
 - **Déployé le 26/11/2026** : migration `Version20261126150000` passée ; accueil, Boussole, chapitre 2 en 200, pages
   connectées en 302 vers la connexion, page inconnue en 404, offre Duo avec l'autre devise en ligne, aucune erreur au
   journal.
