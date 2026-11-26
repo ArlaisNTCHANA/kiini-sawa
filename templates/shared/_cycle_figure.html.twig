@@ -37,7 +37,8 @@
             <h3>{{ it.label }}</h3>
             <p>{{ it.summary }}</p>
             <div class="cyc__lines">
-                {% for l in it.lines %}<div><strong>{{ l[0] }}</strong><p>{{ l[1] }}</p></div>{% endfor %}
+                {# Dans le livre, ces textes suivent « : » et commencent par une minuscule ; affichés seuls, ils prennent une majuscule #}
+                {% for l in it.lines %}<div><strong>{{ l[0] }}</strong><p>{{ (l[1]|slice(0, 1)|upper) ~ l[1]|slice(1) }}</p></div>{% endfor %}
             </div>
         </div>
     {% endfor %}

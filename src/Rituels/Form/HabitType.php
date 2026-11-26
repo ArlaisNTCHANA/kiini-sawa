@@ -22,6 +22,7 @@ class HabitType extends AbstractType
             ->add('frequency', EnumType::class, [
                 'class' => HabitFrequency::class,
                 'label' => 'Fréquence',
+                'choice_label' => static fn (HabitFrequency $f): string => $f->label(),
             ])
         ;
     }

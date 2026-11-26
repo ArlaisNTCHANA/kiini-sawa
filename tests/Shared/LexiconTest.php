@@ -16,6 +16,28 @@ class LexiconTest extends WebTestCase
         "Score d'Alignement", 'Mes Découvertes', 'Découverte de Soi', 'Architecture Intérieure', 'second cerveau',
         'Ancrage cognitif', 'Collections', 'Habitudes', 'Mon Réseau', 'Espace de Croissance'];
 
+    /**
+     * Point 5 du parcours nouvel utilisateur (26/11/2026) : anglais et jargon retirés des gabarits, y compris des textes
+     * construits en JavaScript (que le test des pages rendues ne voit pas).
+     */
+    public function testTemplatesDoNotShowEnglishOrJargon(): void
+    {
+        $banned = ['masterminds', "Binômes d'imputabilité", 'catalyser', 'pitcher', 'levée de fonds', 'Habit-Rituels',
+            'non détecté', 'BE, DO, HAVE, GIVE', 'type <strong>GIVE', 'category.toUpperCase()', 'placeholder="Ex: ',
+            '{{ habit.frequency.value }}', '{{ h.frequency.value }}'];
+        $root = static::getContainer()->getParameter('kernel.project_dir').'/templates';
+        $offenders = [];
+        foreach (new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($root, \FilesystemIterator::SKIP_DOTS)) as $file) {
+            $text = (string) file_get_contents($file->getPathname());
+            foreach ($banned as $word) {
+                if (str_contains($text, $word)) {
+                    $offenders[] = substr($file->getPathname(), \strlen($root) + 1).' : '.$word;
+                }
+            }
+        }
+        $this->assertSame([], $offenders);
+    }
+
     public function testBookUsesTheCurrentBrandName(): void
     {
         foreach (glob(\dirname(__DIR__, 2).'/content/livre/*.md') as $file) {

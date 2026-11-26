@@ -91,6 +91,7 @@ jours pour écrire vos six plans ».
 Ne proposer le parcours de 90 jours que si les plans ne sont pas encore écrits.
 
 ### 5. Retirer l'anglais et le jargon (gênant)
+**Fait le 26/11/2026** (voir `docs/SUIVI-IA.md`) ; garde-fou : `LexiconTest::testTemplatesDoNotShowEnglishOrJargon`.
 | Texte vu | Où | Remplacer par (à valider) |
 |---|---|---|
 | `[GIVE] [DO] [BE] [HAVE]` sur les blocs ajoutés | `wizard.html.twig`, JS `getLifeGoalsCheckboxesHtml` (`lg.category.toUpperCase()`, vers la ligne 1789) | même libellé que le filtre `categorie_objectif` (Donner/Faire/Être/Avoir) : envoyer le libellé dans `allLifeGoals` |

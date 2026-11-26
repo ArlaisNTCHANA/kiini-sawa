@@ -337,7 +337,7 @@
                                     {% endfor %}
                                 {% else %}
                                     <div class="dynamic-row">
-                                        <input type="hidden" name="values_real_ids[]" value=""><input type="text" name="values_real[]" class="wiz-input" style="border:none; background:transparent; padding:0;" placeholder="Ex: Excellence" required>
+                                        <input type="hidden" name="values_real_ids[]" value=""><input type="text" name="values_real[]" class="wiz-input" style="border:none; background:transparent; padding:0;" placeholder="Ex. : Excellence" required>
                                     </div>
                                 {% endif %}
                             </div>
@@ -365,7 +365,7 @@
                                     {% endfor %}
                                 {% else %}
                                     <div class="dynamic-row">
-                                        <input type="hidden" name="values_declared_ids[]" value=""><input type="text" name="values_declared[]" class="wiz-input" style="border:none; background:transparent; padding:0;" placeholder="Ex: Impact" required>
+                                        <input type="hidden" name="values_declared_ids[]" value=""><input type="text" name="values_declared[]" class="wiz-input" style="border:none; background:transparent; padding:0;" placeholder="Ex. : Impact" required>
                                     </div>
                                 {% endif %}
                             </div>
@@ -393,7 +393,7 @@
                                     {% endfor %}
                                 {% else %}
                                     <div class="dynamic-row">
-                                        <input type="hidden" name="values_counter_ids[]" value=""><input type="text" name="values_counter[]" class="wiz-input" style="border:none; background:transparent; padding:0;" placeholder="Ex: Validation Externe" required>
+                                        <input type="hidden" name="values_counter_ids[]" value=""><input type="text" name="values_counter[]" class="wiz-input" style="border:none; background:transparent; padding:0;" placeholder="Ex. : Validation Externe" required>
                                     </div>
                                 {% endif %}
                             </div>
@@ -421,7 +421,7 @@
                                     {% endfor %}
                                 {% else %}
                                     <div class="dynamic-row">
-                                        <input type="hidden" name="convictions_deep_ids[]" value=""><input type="text" name="convictions_deep[]" class="wiz-input" style="border:none; background:transparent; padding:0;" placeholder="Ex: L'éducation doit être accessible à tous">
+                                        <input type="hidden" name="convictions_deep_ids[]" value=""><input type="text" name="convictions_deep[]" class="wiz-input" style="border:none; background:transparent; padding:0;" placeholder="Ex. : L'éducation doit être accessible à tous">
                                     </div>
                                 {% endif %}
                             </div>
@@ -449,7 +449,7 @@
                                     {% endfor %}
                                 {% else %}
                                     <div class="dynamic-row">
-                                        <input type="hidden" name="convictions_medium_ids[]" value=""><input type="text" name="convictions_medium[]" class="wiz-input" style="border:none; background:transparent; padding:0;" placeholder="Ex: La discipline bat le talent sur le long terme">
+                                        <input type="hidden" name="convictions_medium_ids[]" value=""><input type="text" name="convictions_medium[]" class="wiz-input" style="border:none; background:transparent; padding:0;" placeholder="Ex. : La discipline bat le talent sur le long terme">
                                     </div>
                                 {% endif %}
                             </div>
@@ -477,7 +477,7 @@
                                     {% endfor %}
                                 {% else %}
                                     <div class="dynamic-row">
-                                        <input type="hidden" name="convictions_light_ids[]" value=""><input type="text" name="convictions_light[]" class="wiz-input" style="border:none; background:transparent; padding:0;" placeholder="Ex: Le travail à distance est plus productif">
+                                        <input type="hidden" name="convictions_light_ids[]" value=""><input type="text" name="convictions_light[]" class="wiz-input" style="border:none; background:transparent; padding:0;" placeholder="Ex. : Le travail à distance est plus productif">
                                     </div>
                                 {% endif %}
                             </div>
@@ -505,7 +505,7 @@
                                     {% endfor %}
                                 {% else %}
                                     <div class="dynamic-row">
-                                        <input type="hidden" name="limiting_beliefs_ids[]" value=""><input type="text" name="limiting_beliefs[]" class="wiz-input" style="border:none; background:transparent; padding:0;" placeholder="Ex: Je ne suis pas assez expérimenté pour diriger">
+                                        <input type="hidden" name="limiting_beliefs_ids[]" value=""><input type="text" name="limiting_beliefs[]" class="wiz-input" style="border:none; background:transparent; padding:0;" placeholder="Ex. : Je ne suis pas assez expérimenté pour diriger">
                                     </div>
                                 {% endif %}
                             </div>
@@ -547,7 +547,7 @@
                                 {% endfor %}
                             {% else %}
                                 <div class="dynamic-row">
-                                    <input type="hidden" name="passions_ids[]" value=""><input type="text" name="passions[]" class="wiz-input" style="border:none; background:transparent; padding:0;" placeholder="Ex: Écriture & création de contenu" required>
+                                    <input type="hidden" name="passions_ids[]" value=""><input type="text" name="passions[]" class="wiz-input" style="border:none; background:transparent; padding:0;" placeholder="Ex. : Écriture & création de contenu" required>
                                 </div>
                             {% endif %}
                         </div>
@@ -589,7 +589,7 @@
                                 {% endfor %}
                             {% else %}
                                 <div class="dynamic-row">
-                                    <input type="hidden" name="talents_ids[]" value=""><input type="text" name="talents[]" class="wiz-input" style="border:none; background:transparent; padding:0;" placeholder="Ex: Vulgarisation de concepts complexes" required>
+                                    <input type="hidden" name="talents_ids[]" value=""><input type="text" name="talents[]" class="wiz-input" style="border:none; background:transparent; padding:0;" placeholder="Ex. : Vulgarisation de concepts complexes" required>
                                 </div>
                             {% endif %}
                         </div>
@@ -698,23 +698,23 @@
                     <div style="display: flex; flex-direction: column; gap: 1.25rem;">
                         <div style="display: flex; flex-direction: column; gap: 0.375rem;">
                             <label style="font-size: 0.75rem; font-weight: 700; color: var(--fg-light); letter-spacing: 0.05em; text-transform: uppercase;">Description de votre Vision</label>
-                            <textarea name="vision_content" class="wiz-textarea" rows="4" placeholder="Ex: Devenir un consultant indépendant épanoui, travaillant depuis n'importe où dans le monde, tout en maintenant une santé robuste et un équilibre familial parfait...">{% if planDeVie and planDeVie.vision %}{{ planDeVie.vision.content }}{% endif %}</textarea>
+                            <textarea name="vision_content" class="wiz-textarea" rows="4" placeholder="Ex. : Dans dix ans, je sers ma ville comme enseignant engagé, ma famille est unie autour de la foi, je suis en bonne santé et j'aide des jeunes à trouver leur voie.">{% if planDeVie and planDeVie.vision %}{{ planDeVie.vision.content }}{% endif %}</textarea>
                         </div>
 
                         <div style="display: flex; flex-direction: column; gap: 0.375rem;">
                             <label style="font-size: 0.75rem; font-weight: 700; color: var(--fg-light); letter-spacing: 0.05em; text-transform: uppercase;">Horizon temporel</label>
-                            <input type="text" name="vision_horizon" class="wiz-input" placeholder="Ex: 5 ans, 10 ans..." value="{% if planDeVie and planDeVie.vision %}{{ planDeVie.vision.horizon }}{% endif %}">
+                            <input type="text" name="vision_horizon" class="wiz-input" placeholder="Ex. : 5 ans, 10 ans..." value="{% if planDeVie and planDeVie.vision %}{{ planDeVie.vision.horizon }}{% endif %}">
                         </div>
                     </div>
                 </div>
                 {% endif %}
 
-                {# ETAPE 7: OBJECTIFS SPÉCIFIQUES (BE, DO, HAVE, GIVE) #}
+                {# ETAPE 7: OBJECTIFS SPÉCIFIQUES (Être, Faire, Avoir, Donner) #}
                 {% if (not single and 7 in allowedSteps) or (single and step == 7) %}
                 <div data-wizard-target="step" data-step-number="7" class="{% if step != 7 %}hidden{% endif %} animate-fade-in" data-step-title="Objectifs spécifiques">
                     <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.75rem; color: var(--primary);">
                         <i data-lucide="target" style="width: 24px; height: 24px;"></i>
-                        <h2 style="font-family: var(--font-serif); font-size: 1.75rem; font-weight: 500;">Objectifs spécifiques (BE, DO, HAVE, GIVE)</h2>
+                        <h2 style="font-family: var(--font-serif); font-size: 1.75rem; font-weight: 500;">Objectifs spécifiques (Être, Faire, Avoir, Donner)</h2>
                     </div>
                     <p style="color: var(--fg-muted); font-size: 0.95rem; margin-bottom: 1.75rem; line-height: 1.6;">
                         Déclinez votre vision générale en objectifs catégorisés selon 4 angles fondamentaux.
@@ -748,7 +748,7 @@
                                     {% endfor %}
                                 {% else %}
                                     <div class="dynamic-row" style="flex-wrap: wrap;">
-                                        <input type="hidden" name="life_goals_be_ids[]" value=""><input type="text" name="life_goals_be[]" class="wiz-input" style="border:none; background:transparent; padding:0; flex: 1; min-width: 200px;" placeholder="Ex: Un leader calme et à l'écoute">
+                                        <input type="hidden" name="life_goals_be_ids[]" value=""><input type="text" name="life_goals_be[]" class="wiz-input" style="border:none; background:transparent; padding:0; flex: 1; min-width: 200px;" placeholder="Ex. : Un leader calme et à l'écoute">
                                         <div style="display: flex; align-items: center; gap: 0.5rem; background: #ffffff; border: 1px solid rgba(46, 107, 83, 0.12); border-radius: 0.5rem; padding: 0.25rem 0.5rem; margin-left: auto;">
                                             <span style="font-size: 0.75rem; color: var(--fg-muted);">Échéance :</span>
                                             <input type="date" name="life_goals_be_deadlines[]" class="wiz-input" style="border:none; background:transparent; padding:0; font-size: 0.8rem; width: 125px; color: var(--fg-light); outline: none;">
@@ -784,7 +784,7 @@
                                     {% endfor %}
                                 {% else %}
                                     <div class="dynamic-row" style="flex-wrap: wrap;">
-                                        <input type="hidden" name="life_goals_do_ids[]" value=""><input type="text" name="life_goals_do[]" class="wiz-input" style="border:none; background:transparent; padding:0; flex: 1; min-width: 200px;" placeholder="Ex: Lancer ma propre structure de consulting">
+                                        <input type="hidden" name="life_goals_do_ids[]" value=""><input type="text" name="life_goals_do[]" class="wiz-input" style="border:none; background:transparent; padding:0; flex: 1; min-width: 200px;" placeholder="Ex. : Lancer ma propre structure de consulting">
                                         <div style="display: flex; align-items: center; gap: 0.5rem; background: #ffffff; border: 1px solid rgba(46, 107, 83, 0.12); border-radius: 0.5rem; padding: 0.25rem 0.5rem; margin-left: auto;">
                                             <span style="font-size: 0.75rem; color: var(--fg-muted);">Échéance :</span>
                                             <input type="date" name="life_goals_do_deadlines[]" class="wiz-input" style="border:none; background:transparent; padding:0; font-size: 0.8rem; width: 125px; color: var(--fg-light); outline: none;">
@@ -820,7 +820,7 @@
                                     {% endfor %}
                                 {% else %}
                                     <div class="dynamic-row" style="flex-wrap: wrap;">
-                                        <input type="hidden" name="life_goals_have_ids[]" value=""><input type="text" name="life_goals_have[]" class="wiz-input" style="border:none; background:transparent; padding:0; flex: 1; min-width: 200px;" placeholder="Ex: Un matelas de sécurité financière de 6 mois">
+                                        <input type="hidden" name="life_goals_have_ids[]" value=""><input type="text" name="life_goals_have[]" class="wiz-input" style="border:none; background:transparent; padding:0; flex: 1; min-width: 200px;" placeholder="Ex. : Un matelas de sécurité financière de 6 mois">
                                         <div style="display: flex; align-items: center; gap: 0.5rem; background: #ffffff; border: 1px solid rgba(46, 107, 83, 0.12); border-radius: 0.5rem; padding: 0.25rem 0.5rem; margin-left: auto;">
                                             <span style="font-size: 0.75rem; color: var(--fg-muted);">Échéance :</span>
                                             <input type="date" name="life_goals_have_deadlines[]" class="wiz-input" style="border:none; background:transparent; padding:0; font-size: 0.8rem; width: 125px; color: var(--fg-light); outline: none;">
@@ -856,7 +856,7 @@
                                     {% endfor %}
                                 {% else %}
                                     <div class="dynamic-row" style="flex-wrap: wrap;">
-                                        <input type="hidden" name="life_goals_give_ids[]" value=""><input type="text" name="life_goals_give[]" class="wiz-input" style="border:none; background:transparent; padding:0; flex: 1; min-width: 200px;" placeholder="Ex: Mentorer 2 jeunes entrepreneurs bénévolement">
+                                        <input type="hidden" name="life_goals_give_ids[]" value=""><input type="text" name="life_goals_give[]" class="wiz-input" style="border:none; background:transparent; padding:0; flex: 1; min-width: 200px;" placeholder="Ex. : Mentorer 2 jeunes entrepreneurs bénévolement">
                                         <div style="display: flex; align-items: center; gap: 0.5rem; background: #ffffff; border: 1px solid rgba(46, 107, 83, 0.12); border-radius: 0.5rem; padding: 0.25rem 0.5rem; margin-left: auto;">
                                             <span style="font-size: 0.75rem; color: var(--fg-muted);">Échéance :</span>
                                             <input type="date" name="life_goals_give_deadlines[]" class="wiz-input" style="border:none; background:transparent; padding:0; font-size: 0.8rem; width: 125px; color: var(--fg-light); outline: none;">
@@ -933,7 +933,7 @@
                                 <div class="growth-goal-block" style="padding: 1.25rem; background: var(--bg); border: 1px solid rgba(46, 107, 83, 0.08); border-radius: 1.25rem; display: flex; flex-direction: column; gap: 0.75rem; position: relative;">
                                     <div style="display: flex; flex-direction: column; gap: 0.25rem;">
                                         <label style="font-size: 0.7rem; font-weight: 700; color: var(--fg-light); text-transform: uppercase;">Nom de la compétence</label>
-                                        <input type="text" name="growth_competence_title[0]" class="wiz-input" placeholder="Ex: Apprendre à pitcher une idée" required>
+                                        <input type="text" name="growth_competence_title[0]" class="wiz-input" placeholder="Ex. : Prendre la parole en public" required>
                                     </div>
 
                                     <div style="display: flex; flex-direction: column; gap: 0.25rem;">
@@ -1015,7 +1015,7 @@
                                 <div class="growth-goal-block" style="padding: 1.25rem; background: var(--bg); border: 1px solid rgba(46, 107, 83, 0.08); border-radius: 1.25rem; display: flex; flex-direction: column; gap: 0.75rem; position: relative;">
                                     <div style="display: flex; flex-direction: column; gap: 0.25rem;">
                                         <label style="font-size: 0.7rem; font-weight: 700; color: var(--fg-light); text-transform: uppercase;">Nom de la connaissance</label>
-                                        <input type="text" name="growth_connaissance_title[0]" class="wiz-input" placeholder="Ex: Finance d'entreprise" required>
+                                        <input type="text" name="growth_connaissance_title[0]" class="wiz-input" placeholder="Ex. : Les bases de la gestion d'un budget" required>
                                     </div>
 
                                     <div style="display: flex; flex-direction: column; gap: 0.25rem;">
@@ -1111,7 +1111,7 @@
                                 <div class="growth-goal-block" style="padding: 1.25rem; background: var(--bg); border: 1px solid rgba(46, 107, 83, 0.08); border-radius: 1.25rem; display: flex; flex-direction: column; gap: 0.75rem; position: relative;">
                                     <div style="display: flex; flex-direction: column; gap: 0.25rem;">
                                         <label style="font-size: 0.7rem; font-weight: 700; color: var(--fg-light); text-transform: uppercase;">Trait à forger</label>
-                                        <input type="text" name="growth_character_title[0]" class="wiz-input" placeholder="Ex: Patience sous pression" required>
+                                        <input type="text" name="growth_character_title[0]" class="wiz-input" placeholder="Ex. : Patience sous pression" required>
                                     </div>
                                     <div style="display: flex; flex-direction: column; gap: 0.25rem;">
                                         <label style="font-size: 0.7rem; font-weight: 700; color: var(--fg-light); text-transform: uppercase;">Statut d'acquisition</label>
@@ -1152,7 +1152,7 @@
                         <h2 style="font-family: var(--font-serif); font-size: 1.75rem; font-weight: 500;">Relation & Réseau</h2>
                     </div>
                     <p style="color: var(--fg-muted); font-size: 0.95rem; margin-bottom: 1.75rem; line-height: 1.6;">
-                        Quels profils d'individus devez-vous intégrer à votre entourage (mentors, pairs, soutiens) pour catalyser votre réussite ?
+                        Quelles personnes devez-vous avoir autour de vous (mentors, pairs, soutiens) pour grandir et tenir dans la durée ?
                     </p>
                     {{ book_panel('wizard.10') }}
                     {% include 'methode/_figure.html.twig' with {name: 'fig_reseaux', alt: 'Les cinq réseaux : orientation, croissance, soutien, responsabilité, environnement', caption: 'les cinq réseaux', collapsed: true, max: '560px'} only %}
@@ -1181,9 +1181,9 @@
                                             <label style="font-size: 0.7rem; font-weight: 700; color: var(--fg-light); text-transform: uppercase;">Catégorie de réseau</label>
                                             <select name="growth_relation_type[{{ loop.index0 }}]" class="wiz-input" style="height: 42px; padding: 0.5rem 1rem;">
                                                 <option value="orientation" {% if goal.type == 'orientation' %}selected{% endif %}>Réseau d'orientation (Mentors, conseillers)</option>
-                                                <option value="croissance" {% if goal.type == 'croissance' %}selected{% endif %}>Réseau de croissance (Pairs, masterminds)</option>
+                                                <option value="croissance" {% if goal.type == 'croissance' %}selected{% endif %}>Réseau de croissance (pairs, groupes de croissance)</option>
                                                 <option value="soutien" {% if goal.type == 'soutien' %}selected{% endif %}>Réseau de soutien (Amis proches, famille)</option>
-                                                <option value="responsabilite" {% if goal.type == 'responsabilite' %}selected{% endif %}>Réseau de responsabilité (Binômes d'imputabilité)</option>
+                                                <option value="responsabilite" {% if goal.type == 'responsabilite' %}selected{% endif %}>Réseau de responsabilité (Partenaires de Redevabilité)</option>
                                                 <option value="environnement" {% if goal.type == 'environnement' %}selected{% endif %}>Réseau d'environnement (Écosystème, bureau)</option>
                                             </select>
                                         </div>
@@ -1217,15 +1217,15 @@
                                 <div class="growth-goal-block" style="padding: 1.25rem; background: var(--bg); border: 1px solid rgba(46, 107, 83, 0.08); border-radius: 1.25rem; display: flex; flex-direction: column; gap: 0.75rem; position: relative;">
                                     <div style="display: flex; flex-direction: column; gap: 0.25rem;">
                                         <label style="font-size: 0.7rem; font-weight: 700; color: var(--fg-light); text-transform: uppercase;">Profil visé</label>
-                                        <input type="text" name="growth_relation_title[0]" class="wiz-input" placeholder="Ex: Un mentor expert en levée de fonds" required>
+                                        <input type="text" name="growth_relation_title[0]" class="wiz-input" placeholder="Ex. : Un aîné dans la foi qui me conseille" required>
                                     </div>
                                     <div style="display: flex; flex-direction: column; gap: 0.25rem;">
                                         <label style="font-size: 0.7rem; font-weight: 700; color: var(--fg-light); text-transform: uppercase;">Catégorie de réseau</label>
                                         <select name="growth_relation_type[0]" class="wiz-input" style="height: 42px; padding: 0.5rem 1rem;">
                                             <option value="orientation" selected>Réseau d'orientation (Mentors, conseillers)</option>
-                                            <option value="croissance">Réseau de croissance (Pairs, masterminds)</option>
+                                            <option value="croissance">Réseau de croissance (pairs, groupes de croissance)</option>
                                             <option value="soutien">Réseau de soutien (Amis proches, famille)</option>
-                                            <option value="responsabilite">Réseau de responsabilité (Binômes d'imputabilité)</option>
+                                            <option value="responsabilite">Réseau de responsabilité (Partenaires de Redevabilité)</option>
                                             <option value="environnement">Réseau d'environnement (Écosystème, bureau)</option>
                                         </select>
                                     </div>
@@ -1268,7 +1268,7 @@
                         <h2 style="font-family: var(--font-serif); font-size: 1.75rem; font-weight: 500;">Héritage & Impact</h2>
                     </div>
                     <p style="color: var(--fg-muted); font-size: 0.95rem; margin-bottom: 1.75rem; line-height: 1.6;">
-                        Héritage & Transmission : quel impact durable souhaitez-vous laisser ? Que désirez-vous transmettre (savoirs, fonds, fondation, valeurs) ? Ces projets sont par défaut orientés pour soutenir vos objectifs de type <strong>GIVE</strong>.
+                        Héritage & Transmission : quel impact durable souhaitez-vous laisser ? Que désirez-vous transmettre (savoirs, fonds, fondation, valeurs) ? Ces projets sont par défaut orientés pour soutenir vos objectifs <strong>Donner</strong>.
                     </p>
                     {{ book_panel('wizard.11') }}
                     {% include 'methode/_figure.html.twig' with {name: 'fig_heritage', alt: 'L\'héritage : valeurs, œuvres, personnes', caption: 'l\'héritage', collapsed: true, max: '560px'} only %}
@@ -1303,7 +1303,7 @@
                                         {% endif %}
                                         <div style="display: flex; flex-direction: column; gap: 0.25rem;">
                                             <label style="font-size: 0.7rem; font-weight: 700; color: var(--fg-light); text-transform: uppercase;">Nom du projet de transmission</label>
-                                            <input type="text" name="legacy_title[{{ loop.index0 }}]" class="wiz-input" value="{{ lg.title }}" placeholder="Ex: Financer une bourse d'études annuelle" required><input type="hidden" name="legacy_id[{{ loop.index0 }}]" value="{{ lg.id }}">
+                                            <input type="text" name="legacy_title[{{ loop.index0 }}]" class="wiz-input" value="{{ lg.title }}" placeholder="Ex. : Financer une bourse d'études annuelle" required><input type="hidden" name="legacy_id[{{ loop.index0 }}]" value="{{ lg.id }}">
                                         </div>
                                         <div style="display: flex; flex-direction: column; gap: 0.25rem;">
                                             <label style="font-size: 0.7rem; font-weight: 700; color: var(--fg-light); text-transform: uppercase;">Statut d'acquisition / Mobilisation</label>
@@ -1335,7 +1335,7 @@
                                 <div class="legacy-goal-block" style="padding: 1.25rem; background: var(--bg); border: 1px solid rgba(46, 107, 83, 0.08); border-radius: 1.25rem; display: flex; flex-direction: column; gap: 0.75rem; position: relative;">
                                     <div style="display: flex; flex-direction: column; gap: 0.25rem;">
                                         <label style="font-size: 0.7rem; font-weight: 700; color: var(--fg-light); text-transform: uppercase;">Nom du projet de transmission</label>
-                                        <input type="text" name="legacy_title[0]" class="wiz-input" placeholder="Ex: Financer une bourse d'études annuelle" required>
+                                        <input type="text" name="legacy_title[0]" class="wiz-input" placeholder="Ex. : Financer une bourse d'études annuelle" required>
                                     </div>
                                     <div style="display: flex; flex-direction: column; gap: 0.25rem;">
                                         <label style="font-size: 0.7rem; font-weight: 700; color: var(--fg-light); text-transform: uppercase;">Statut d'acquisition / Mobilisation</label>
@@ -1438,7 +1438,7 @@
                         <div style="padding: 1rem 1.25rem; background: rgba(236, 72, 153, 0.05); border: 1px dashed rgba(236, 72, 153, 0.3); border-radius: 1rem; margin-bottom: 1.75rem; display: flex; align-items: flex-start; gap: 0.75rem;">
                             <i data-lucide="help-circle" style="width: 20px; height: 20px; color: var(--couple); flex-shrink: 0; margin-top: 0.1rem;"></i>
                             <div style="font-size: 0.88rem; color: var(--fg-light); line-height: 1.5;">
-                                <strong style="color: var(--couple);">Audit d'hygiène non détecté.</strong> Vous pouvez <a href="{{ path('app_personality_take', { type: 'HYGIENE' }) }}" style="color: var(--couple); text-decoration: underline; font-weight: 600;">passer le test d'Hygiène de vie</a> pour pré-remplir automatiquement ces domaines selon vos forces et faiblesses actuelles.
+                                <strong style="color: var(--couple);">Vous n'avez pas encore fait l'audit Hygiène de vie.</strong> Vous pouvez <a href="{{ path('app_personality_take', { type: 'HYGIENE' }) }}" style="color: var(--couple); text-decoration: underline; font-weight: 600;">passer le test d'Hygiène de vie</a> pour pré-remplir automatiquement ces domaines selon vos forces et faiblesses actuelles.
                             </div>
                         </div>
                     {% endif %}
@@ -1463,7 +1463,7 @@
                                         {% endif %}
                                         <div style="display: flex; flex-direction: column; gap: 0.25rem;">
                                             <label style="font-size: 0.7rem; font-weight: 700; color: var(--fg-light); text-transform: uppercase;">Nom du domaine d'hygiène</label>
-                                            <input type="text" name="hygiene_name[{{ loop.index0 }}]" class="wiz-input" value="{{ hd.name }}" placeholder="Ex: Sommeil (Rituel de coucher à 22h30 max)" required><input type="hidden" name="hygiene_id[{{ loop.index0 }}]" value="{{ hd.id }}">
+                                            <input type="text" name="hygiene_name[{{ loop.index0 }}]" class="wiz-input" value="{{ hd.name }}" placeholder="Ex. : Sommeil (Rituel de coucher à 22h30 max)" required><input type="hidden" name="hygiene_id[{{ loop.index0 }}]" value="{{ hd.id }}">
                                         </div>
                                         <div style="display: flex; flex-direction: column; gap: 0.25rem;">
                                             <label style="font-size: 0.7rem; font-weight: 700; color: var(--fg-light); text-transform: uppercase;">Statut d'acquisition / Mobilisation</label>
@@ -1495,7 +1495,7 @@
                                 <div class="hygiene-domain-block" style="padding: 1.25rem; background: var(--bg); border: 1px solid rgba(46, 107, 83, 0.08); border-radius: 1.25rem; display: flex; flex-direction: column; gap: 0.75rem; position: relative;">
                                     <div style="display: flex; flex-direction: column; gap: 0.25rem;">
                                         <label style="font-size: 0.7rem; font-weight: 700; color: var(--fg-light); text-transform: uppercase;">Nom du domaine d'hygiène</label>
-                                        <input type="text" name="hygiene_name[0]" class="wiz-input" placeholder="Ex: Sommeil (Rituel de coucher à 22h30 max)" required>
+                                        <input type="text" name="hygiene_name[0]" class="wiz-input" placeholder="Ex. : Sommeil (Rituel de coucher à 22h30 max)" required>
                                     </div>
                                     <div style="display: flex; flex-direction: column; gap: 0.25rem;">
                                         <label style="font-size: 0.7rem; font-weight: 700; color: var(--fg-light); text-transform: uppercase;">Statut d'acquisition / Mobilisation</label>
@@ -1621,7 +1621,7 @@
         const container = document.getElementById('values-real-container');
         const html = `
             <div class="dynamic-row">
-                <input type="hidden" name="values_real_ids[]" value=""><input type="text" name="values_real[]" class="wiz-input" style="border:none; background:transparent; padding:0;" placeholder="Ex: Excellence" required>
+                <input type="hidden" name="values_real_ids[]" value=""><input type="text" name="values_real[]" class="wiz-input" style="border:none; background:transparent; padding:0;" placeholder="Ex. : Excellence" required>
                 ${createDeleteButton()}
             </div>
         `;
@@ -1632,7 +1632,7 @@
         const container = document.getElementById('values-declared-container');
         const html = `
             <div class="dynamic-row">
-                <input type="hidden" name="values_declared_ids[]" value=""><input type="text" name="values_declared[]" class="wiz-input" style="border:none; background:transparent; padding:0;" placeholder="Ex: Impact" required>
+                <input type="hidden" name="values_declared_ids[]" value=""><input type="text" name="values_declared[]" class="wiz-input" style="border:none; background:transparent; padding:0;" placeholder="Ex. : Impact" required>
                 ${createDeleteButton()}
             </div>
         `;
@@ -1643,7 +1643,7 @@
         const container = document.getElementById('values-counter-container');
         const html = `
             <div class="dynamic-row">
-                <input type="hidden" name="values_counter_ids[]" value=""><input type="text" name="values_counter[]" class="wiz-input" style="border:none; background:transparent; padding:0;" placeholder="Ex: Validation Externe" required>
+                <input type="hidden" name="values_counter_ids[]" value=""><input type="text" name="values_counter[]" class="wiz-input" style="border:none; background:transparent; padding:0;" placeholder="Ex. : Validation Externe" required>
                 ${createDeleteButton()}
             </div>
         `;
@@ -1654,7 +1654,7 @@
         const container = document.getElementById('convictions-deep-container');
         const html = `
             <div class="dynamic-row">
-                <input type="hidden" name="convictions_deep_ids[]" value=""><input type="text" name="convictions_deep[]" class="wiz-input" style="border:none; background:transparent; padding:0;" placeholder="Ex: L'intégrité personnelle est la base de toute influence durable" required>
+                <input type="hidden" name="convictions_deep_ids[]" value=""><input type="text" name="convictions_deep[]" class="wiz-input" style="border:none; background:transparent; padding:0;" placeholder="Ex. : L'intégrité personnelle est la base de toute influence durable" required>
                 ${createDeleteButton()}
             </div>
         `;
@@ -1665,7 +1665,7 @@
         const container = document.getElementById('convictions-medium-container');
         const html = `
             <div class="dynamic-row">
-                <input type="hidden" name="convictions_medium_ids[]" value=""><input type="text" name="convictions_medium[]" class="wiz-input" style="border:none; background:transparent; padding:0;" placeholder="Ex: La discipline quotidienne produit des résultats exponentiels" required>
+                <input type="hidden" name="convictions_medium_ids[]" value=""><input type="text" name="convictions_medium[]" class="wiz-input" style="border:none; background:transparent; padding:0;" placeholder="Ex. : La discipline quotidienne produit des résultats exponentiels" required>
                 ${createDeleteButton()}
             </div>
         `;
@@ -1676,7 +1676,7 @@
         const container = document.getElementById('convictions-light-container');
         const html = `
             <div class="dynamic-row">
-                <input type="hidden" name="convictions_light_ids[]" value=""><input type="text" name="convictions_light[]" class="wiz-input" style="border:none; background:transparent; padding:0;" placeholder="Ex: Le travail à distance asynchrone est plus productif" required>
+                <input type="hidden" name="convictions_light_ids[]" value=""><input type="text" name="convictions_light[]" class="wiz-input" style="border:none; background:transparent; padding:0;" placeholder="Ex. : Le travail à distance asynchrone est plus productif" required>
                 ${createDeleteButton()}
             </div>
         `;
@@ -1687,7 +1687,7 @@
         const container = document.getElementById('limiting-beliefs-container');
         const html = `
             <div class="dynamic-row">
-                <input type="hidden" name="limiting_beliefs_ids[]" value=""><input type="text" name="limiting_beliefs[]" class="wiz-input" style="border:none; background:transparent; padding:0;" placeholder="Ex: Je ne suis pas créatif" required>
+                <input type="hidden" name="limiting_beliefs_ids[]" value=""><input type="text" name="limiting_beliefs[]" class="wiz-input" style="border:none; background:transparent; padding:0;" placeholder="Ex. : Je ne suis pas créatif" required>
                 ${createDeleteButton()}
             </div>
         `;
@@ -1698,7 +1698,7 @@
         const container = document.getElementById('passions-container');
         const html = `
             <div class="dynamic-row">
-                <input type="hidden" name="passions_ids[]" value=""><input type="text" name="passions[]" class="wiz-input" style="border:none; background:transparent; padding:0;" placeholder="Ex: La cuisine bistronomique" required>
+                <input type="hidden" name="passions_ids[]" value=""><input type="text" name="passions[]" class="wiz-input" style="border:none; background:transparent; padding:0;" placeholder="Ex. : La cuisine bistronomique" required>
                 ${createDeleteButton()}
             </div>
         `;
@@ -1755,7 +1755,7 @@
         const container = document.getElementById('talents-container');
         const html = `
             <div class="dynamic-row">
-                <input type="hidden" name="talents_ids[]" value=""><input type="text" name="talents[]" class="wiz-input" style="border:none; background:transparent; padding:0;" placeholder="Ex: Capacité d'adaptation ultra-rapide" required>
+                <input type="hidden" name="talents_ids[]" value=""><input type="text" name="talents[]" class="wiz-input" style="border:none; background:transparent; padding:0;" placeholder="Ex. : Capacité d'adaptation ultra-rapide" required>
                 ${createDeleteButton()}
             </div>
         `;
@@ -1765,10 +1765,10 @@
     function addLifeGoal(category) {
         const container = document.getElementById(`life-goals-${category}-container`);
         const placeholderText = {
-            be: 'Ex: Un leader inspirant',
-            do: 'Ex: Ouvrir un restaurant',
-            have: 'Ex: Une maison en bord de mer',
-            give: 'Ex: Publier des guides de formation'
+            be: 'Ex. : Un père patient et présent',
+            do: 'Ex. : Ouvrir un atelier de couture dans mon quartier',
+            have: 'Ex. : Une maison pour accueillir ma famille',
+            give: 'Ex. : Financer chaque année la scolarité d\'un enfant'
         }[category] || '';
 
         const html = `
@@ -1791,7 +1791,7 @@
 
     var allLifeGoals = [ // var (et non const) : Turbo rejoue ce script à chaque visite
         {% for lg in allLifeGoals %}
-            { id: {{ lg.id }}, title: "{{ lg.title|escape('js') }}", category: "{{ lg.category|escape('js') }}" },
+            { id: {{ lg.id }}, title: "{{ lg.title|escape('js') }}", category: "{{ lg.category|escape('js') }}", label: "{{ lg.category|categorie_objectif|escape('js') }}" },
         {% endfor %}
     ];
 
@@ -1801,7 +1801,7 @@
         }
         let html = `<div class="checkbox-list-container" style="display: flex; flex-direction: column; gap: 0.5rem; margin-top: 0.25rem; background: #ffffff; border: 1px solid rgba(46, 107, 83, 0.12); border-radius: 0.75rem; padding: 0.75rem; max-height: 180px; overflow-y: auto;">`;
         allLifeGoals.forEach(lg => {
-            const catLabel = lg.category.toUpperCase();
+            const catLabel = lg.label || lg.category;
             html += `
                 <label style="display: flex; align-items: flex-start; gap: 0.5rem; font-size: 0.85rem; color: var(--fg-light); cursor: pointer; padding: 0.25rem 0; margin-bottom: 0;">
                     <input type="checkbox" name="growth_${axis}_goals[${index}][]" value="${lg.id}" style="margin-top: 0.2rem; cursor: pointer;">
@@ -1845,10 +1845,10 @@
         if (!container) return;
         const index = container.querySelectorAll('.growth-goal-block').length;
         const placeHolderMap = {
-            competence: { title: 'Nom de la compétence' },
-            connaissance: { title: 'Nom de la connaissance' },
-            character: { title: 'Trait à forger' },
-            relation: { title: 'Profil visé' }
+            competence: { title: 'Nom de la compétence', example: 'Ex. : Prendre la parole en public' },
+            connaissance: { title: 'Nom de la connaissance', example: 'Ex. : Les bases de la gestion d\'un budget' },
+            character: { title: 'Trait à forger', example: 'Ex. : Patience sous pression' },
+            relation: { title: 'Profil visé', example: 'Ex. : Un aîné dans la foi qui me conseille' }
         }[axis];
 
         const typeSelectHtml = axis !== 'relation' ? '' : `
@@ -1856,9 +1856,9 @@
                 <label style="font-size: 0.7rem; font-weight: 700; color: var(--fg-light); text-transform: uppercase;">Catégorie de réseau</label>
                 <select name="growth_${axis}_type[${index}]" class="wiz-input" style="height: 42px; padding: 0.5rem 1rem;">
                     <option value="orientation" selected>Réseau d'orientation (Mentors, conseillers)</option>
-                    <option value="croissance">Réseau de croissance (Pairs, masterminds)</option>
+                    <option value="croissance">Réseau de croissance (pairs, groupes de croissance)</option>
                     <option value="soutien">Réseau de soutien (Amis proches, famille)</option>
-                    <option value="responsabilite">Réseau de responsabilité (Binômes d'imputabilité)</option>
+                    <option value="responsabilite">Réseau de responsabilité (Partenaires de Redevabilité)</option>
                     <option value="environnement">Réseau d'environnement (Écosystème, bureau)</option>
                 </select>
             </div>
@@ -1873,7 +1873,7 @@
                 </button>
                 <div style="display: flex; flex-direction: column; gap: 0.25rem;">
                     <label style="font-size: 0.7rem; font-weight: 700; color: var(--fg-light); text-transform: uppercase;">${placeHolderMap.title}</label>
-                    <input type="text" name="growth_${axis}_title[${index}]" class="wiz-input" placeholder="Ex: ..." required>
+                    <input type="text" name="growth_${axis}_title[${index}]" class="wiz-input" placeholder="${placeHolderMap.example}" required>
                 </div>
                 ${typeSelectHtml}
                 <div style="display: flex; flex-direction: column; gap: 0.25rem;">
@@ -1930,7 +1930,7 @@
                 checkboxesHtml += `
                     <label style="display: flex; align-items: flex-start; gap: 0.5rem; font-size: 0.85rem; color: var(--fg-light); cursor: pointer; padding: 0.25rem 0; margin-bottom: 0;">
                         <input type="checkbox" name="legacy_goals[${index}][]" value="${lg.id}" style="margin-top: 0.2rem; cursor: pointer;">
-                        <span>[${ksEscape(lg.category.toUpperCase())}] ${ksEscape(lg.title)}</span>
+                        <span>[${ksEscape(lg.label || lg.category)}] ${ksEscape(lg.title)}</span>
                     </label>
                 `;
             });
@@ -1944,7 +1944,7 @@
                 </button>
                 <div style="display: flex; flex-direction: column; gap: 0.25rem;">
                     <label style="font-size: 0.7rem; font-weight: 700; color: var(--fg-light); text-transform: uppercase;">Nom du projet de transmission</label>
-                    <input type="text" name="legacy_title[${index}]" class="wiz-input" placeholder="Ex: Financer une bourse d'études annuelle" required>
+                    <input type="text" name="legacy_title[${index}]" class="wiz-input" placeholder="Ex. : Financer une bourse d'études annuelle" required>
                 </div>
                 <div style="display: flex; flex-direction: column; gap: 0.25rem;">
                     <label style="font-size: 0.7rem; font-weight: 700; color: var(--fg-light); text-transform: uppercase;">Statut d'acquisition / Mobilisation</label>
@@ -2001,7 +2001,7 @@
                 checkboxesHtml += `
                     <label style="display: flex; align-items: flex-start; gap: 0.5rem; font-size: 0.85rem; color: var(--fg-light); cursor: pointer; padding: 0.25rem 0; margin-bottom: 0;">
                         <input type="checkbox" name="hygiene_goals[${index}][]" value="${lg.id}" style="margin-top: 0.2rem; cursor: pointer;">
-                        <span>[${ksEscape(lg.category.toUpperCase())}] ${ksEscape(lg.title)}</span>
+                        <span>[${ksEscape(lg.label || lg.category)}] ${ksEscape(lg.title)}</span>
                     </label>
                 `;
             });
@@ -2015,7 +2015,7 @@
                 </button>
                 <div style="display: flex; flex-direction: column; gap: 0.25rem;">
                     <label style="font-size: 0.7rem; font-weight: 700; color: var(--fg-light); text-transform: uppercase;">Nom du domaine d'hygiène</label>
-                    <input type="text" name="hygiene_name[${index}]" class="wiz-input" placeholder="Ex: Sommeil (Rituel de coucher à 22h30 max)" required>
+                    <input type="text" name="hygiene_name[${index}]" class="wiz-input" placeholder="Ex. : Sommeil (Rituel de coucher à 22h30 max)" required>
                 </div>
                 <div style="display: flex; flex-direction: column; gap: 0.25rem;">
                     <label style="font-size: 0.7rem; font-weight: 700; color: var(--fg-light); text-transform: uppercase;">Statut d'acquisition / Mobilisation</label>

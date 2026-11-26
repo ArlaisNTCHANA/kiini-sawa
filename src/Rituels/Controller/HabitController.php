@@ -48,6 +48,7 @@ class HabitController extends AbstractController
                     'id' => $gg->getId(),
                     'title' => $gg->getTitle(),
                     'axis' => $gg->getAxis()->value,
+                    'axisLabel' => ['CHARACTER' => 'Caractère', 'RELATION' => 'Relation', 'COMPETENCE' => 'Compétence'][$gg->getAxis()->value] ?? $gg->getAxis()->value,
                 ];
             }
         }
