@@ -166,7 +166,7 @@ final class MobileCommunityController extends AbstractController
             $receiver,
             NotificationType::CONNECTION_REQUEST,
             'Nouvelle demande de partenariat',
-            sprintf('%s souhaite devenir votre partenaire de redevabilité.', $user->getDisplayName()),
+            sprintf('%s souhaite devenir votre Partenaire de Redevabilité.', $user->getDisplayName()),
             '/social'
         );
 

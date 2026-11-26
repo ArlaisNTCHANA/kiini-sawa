@@ -72,9 +72,8 @@ class AccountabilityTest extends WebTestCase
 
         $this->client->loginUser($owner);
         $this->createCommitment(['target' => 'HABIT:'.$habit->getId(), 'why' => 'Rester enraciné', 'connectionId' => 0, 'partnerName' => 'Samuel', 'partnerEmail' => $partnerEmail, 'consent' => '1']);
-        $this->assertResponseRedirects('/social/redevabilite');
-
         $c = $this->em()->getRepository(AccountabilityCommitment::class)->findOneBy(['owner' => $owner->getId()]);
+        $this->assertResponseRedirects('/social#engagement-'.$c->getId());
         $this->assertSame('Prier 10 minutes le matin', $c->getTargetLabel());
         $this->assertTrue($c->isPending());
         $invitation = $this->emailsTo($partnerEmail);
@@ -128,7 +127,7 @@ class AccountabilityTest extends WebTestCase
 
         // Chiffres et historique visibles
         $this->client->loginUser($this->findUser((string) $owner->getEmail()));
-        $this->client->request('GET', '/social/redevabilite');
+        $this->client->request('GET', '/social');
         $this->assertSelectorTextContains('#engagement-'.$c->getId(), '100 %');
         $this->assertSelectorTextContains('#engagement-'.$c->getId(), 'Je l\'ai appelé(e)');
     }
@@ -173,7 +172,7 @@ class AccountabilityTest extends WebTestCase
         $this->assertSame($friend->getEmail(), $c->getPartnerEmail());
 
         $this->client->request('GET', '/social/redevabilite/nouveau');
-        $this->assertResponseRedirects('/social/redevabilite');
+        $this->assertResponseRedirects('/social#partenaires');
         $this->createCommitment(['target' => '', 'freeLabel' => 'Autre', 'connectionId' => $connection->getId(), 'consent' => '1']);
         $this->assertCount(1, $this->em()->getRepository(AccountabilityCommitment::class)->findBy(['owner' => $owner->getId()]));
 
@@ -181,8 +180,8 @@ class AccountabilityTest extends WebTestCase
         $this->em()->find(AccountabilityCommitment::class, $c->getId())->accept();
         $this->em()->flush();
         $this->client->loginUser($friend);
-        $this->client->request('GET', '/social/redevabilite');
-        $this->assertSelectorTextContains('main', 'Je suis partenaire de redevabilité');
+        $this->client->request('GET', '/social');
+        $this->assertSelectorTextContains('main', 'Je suis Partenaire de Redevabilité de');
         $this->assertSelectorTextContains('main', 'Épargner 10 %');
     }
 
@@ -302,7 +301,7 @@ class AccountabilityTest extends WebTestCase
 
         $this->client->loginUser($this->findUser((string) $c->getOwner()->getEmail()));
         $this->client->request('GET', '/bilan/revue-hebdomadaire');
-        $this->assertSelectorTextContains('#redevabilite', 'Ma redevabilité cette semaine');
+        $this->assertSelectorTextContains('#redevabilite', 'Mes engagements cette semaine');
         $this->assertSelectorTextContains('#redevabilite', '1 alerte');
         $this->assertSelectorTextContains('#redevabilite', 'Je l\'ai appelé(e)');
         $this->assertSelectorTextContains('#redevabilite', 'On a parlé ce soir');

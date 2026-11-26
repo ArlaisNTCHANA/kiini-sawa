@@ -14,6 +14,10 @@ use App\Notification\Enum\NotificationType;
 use App\PlanDeCroissance\Enum\GrowthAxis;
 use App\Social\Enum\ShareScope;
 use App\Social\Form\AddConnectionType;
+use App\Social\Service\AccountabilityService;
+use App\Social\Service\PartnerDirectory;
+use App\Abonnement\Exception\ProRequiredException;
+use App\Social\Entity\AccountabilityNudge;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -26,7 +30,7 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 class SocialController extends AbstractController
 {
     #[Route('/social', name: 'app_social', methods: ['GET'])]
-    public function index(Request $request, EntityManagerInterface $em): Response
+    public function index(Request $request, EntityManagerInterface $em, AccountabilityService $accountability, PartnerDirectory $directory): Response
     {
         /** @var User $user */
         $user = $this->getUser();
@@ -52,6 +56,7 @@ class SocialController extends AbstractController
                     'id' => $c->getId(),
                     'partnerId' => $c->getRequester()->getId(),
                     'partnerEmail' => $c->getRequester()->getEmail(),
+                    'partnerName' => $c->getRequester()->getDisplayName(),
                     'createdAt' => $c->getCreatedAt()->format('Y-m-d H:i'),
                 ];
             } elseif ($c->getStatus() === 'ACCEPTED') {
@@ -65,6 +70,7 @@ class SocialController extends AbstractController
                     'id' => $c->getId(),
                     'partnerId' => $c->getReceiver()->getId(),
                     'partnerEmail' => $c->getReceiver()->getEmail(),
+                    'partnerName' => $c->getReceiver()->getDisplayName(),
                     'createdAt' => $c->getCreatedAt()->format('Y-m-d H:i'),
                 ];
             } elseif ($c->getStatus() === 'ACCEPTED') {
@@ -106,8 +112,20 @@ class SocialController extends AbstractController
             ];
         }
 
+        $commitments = $accountability->commitmentsOf($user);
+        $stats = $nextAllowed = [];
+        foreach ($commitments as $c) {
+            $stats[$c->getId()] = $accountability->stats($c);
+            $nextAllowed[$c->getId()] = $accountability->nextNudgeAllowedAt($c);
+        }
+
         return $this->render('social/index.html.twig', [
             'form' => $form->createView(),
+            'people' => $directory->people($activePartners, $commitments),
+            'stats' => $stats,
+            'nextAllowed' => $nextAllowed,
+            'asPartner' => $accountability->commitmentsAsPartner($user),
+            'canCreate' => $accountability->canCreate($user),
             'pendingReceived' => $pendingReceived,
             'pendingSent' => $pendingSent,
             'activePartners' => $activePartners,
@@ -117,58 +135,81 @@ class SocialController extends AbstractController
     }
 
     #[Route('/api/social/connection/add', name: 'api_social_connection_add', methods: ['POST'])]
-    public function addConnection(Request $request, EntityManagerInterface $em, Notifier $notifier, Entitlements $entitlements): JsonResponse
+    public function addConnection(Request $request, PartnerDirectory $directory): JsonResponse
     {
         /** @var User $user */
         $user = $this->getUser();
-        
         $data = json_decode($request->getContent(), true);
-        $email = mb_strtolower(trim((string) ($data['email'] ?? '')));
+        $error = $directory->requestConnection($user, (string) ($data['email'] ?? ''));
 
-        $activeConnections = \count(array_filter(array_merge($user->getConnections()->toArray(), $user->getConnectedTo()->toArray()), fn ($c) => 'REJECTED' !== $c->getStatus()));
-        $entitlements->requireBelowLimit($user, 'connections', $activeConnections, 'Limite de partenaires de l\'offre gratuite atteinte : passez à PRO pour en inviter d\'autres.');
+        return null === $error ? new JsonResponse(['success' => true]) : new JsonResponse(['success' => false, 'error' => $error], Response::HTTP_BAD_REQUEST);
+    }
 
-        if (!$email) {
-            return new JsonResponse(['success' => false, 'error' => 'L\'adresse email est manquante.'], Response::HTTP_BAD_REQUEST);
+    /**
+     * Point 6 : une seule invitation. Prénom et e-mail, puis ce que la personne fera : vous interpeller sur un objectif
+     * ou un rituel (par e-mail, même sans compte) et/ou voir vos plans dans KIINI SAWA (si elle a un compte).
+     */
+    #[Route('/social/inviter', name: 'app_partner_invite', methods: ['GET', 'POST'])]
+    public function invite(Request $request, PartnerDirectory $directory): Response
+    {
+        /** @var User $user */
+        $user = $this->getUser();
+        $data = ['name' => '', 'email' => '', 'engagement' => true, 'share' => true];
+        $errors = [];
+        if ($request->isMethod('POST')) {
+            if (!$this->isCsrfTokenValid('partner_invite', $request->request->getString('_csrf_token'))) {
+                throw $this->createAccessDeniedException('La page a expiré. Merci de réessayer.');
+            }
+            $data = [
+                'name' => mb_substr(trim($request->request->getString('name')), 0, 120),
+                'email' => mb_strtolower(trim($request->request->getString('email'))),
+                'engagement' => $request->request->getBoolean('engagement'),
+                'share' => $request->request->getBoolean('share'),
+            ];
+            if ('' === $data['name']) {
+                $errors[] = 'Indiquez son prénom.';
+            }
+            if (!filter_var($data['email'], \FILTER_VALIDATE_EMAIL) || mb_strlen($data['email']) > 180) {
+                $errors[] = 'Indiquez une adresse e-mail valide.';
+            } elseif ($data['email'] === mb_strtolower((string) $user->getEmail())) {
+                $errors[] = 'Choisissez une autre personne que vous-même.';
+            }
+            if (!$data['engagement'] && !$data['share']) {
+                $errors[] = 'Choisissez au moins une des deux façons de vous accompagner.';
+            }
+            if ([] === $errors) {
+                if ($data['share']) {
+                    try {
+                        $error = $directory->requestConnection($user, $data['email']);
+                    } catch (ProRequiredException $e) {
+                        // Limite de l'offre gratuite : l'engagement reste possible, le partage non
+                        $error = $e->getMessage();
+                        if ($data['engagement']) {
+                            $this->addFlash('info', $error);
+                        }
+                    }
+                    if (null !== $error && !$data['engagement']) {
+                        $errors[] = $error;
+                    }
+                }
+                if ([] === $errors) {
+                    if ($data['engagement']) {
+                        // L'adresse passe par la session, jamais par l'adresse de la page
+                        $request->getSession()->set('partner_invite', ['partnerName' => $data['name'], 'partnerEmail' => $data['email']]);
+                        if ($data['share']) {
+                            $this->addFlash('success', 'Si '.$data['email'].' a un compte KIINI SAWA, une demande de partage lui a été envoyée. Choisissez maintenant sur quoi '.$data['name'].' vous interpellera.');
+                        }
+
+                        return $this->redirectToRoute('app_accountability_new');
+                    }
+                    $this->addFlash('success', 'Si '.$data['email'].' a un compte KIINI SAWA, une demande de partage lui a été envoyée. Elle apparaîtra ici dès qu\'elle sera acceptée.');
+
+                    return $this->redirectToRoute('app_social');
+                }
+            }
         }
 
-        if ($email === $user->getEmail()) {
-            return new JsonResponse(['success' => false, 'error' => 'Vous ne pouvez pas vous connecter avec vous-même.'], Response::HTTP_BAD_REQUEST);
-        }
-
-        $receiver = $em->getRepository(User::class)->findOneBy(['email' => $email]);
-        if (!$receiver) {
-            // Même réponse qu'en cas de succès : on ne révèle pas si un compte existe pour cet email
-            return new JsonResponse(['success' => true]);
-        }
-
-        // Check if connection already exists
-        $connRepo = $em->getRepository(Connection::class);
-        $existing = $connRepo->findOneBy(['requester' => $user, 'receiver' => $receiver]);
-        if (!$existing) {
-            $existing = $connRepo->findOneBy(['requester' => $receiver, 'receiver' => $user]);
-        }
-
-        if ($existing) {
-            return new JsonResponse(['success' => false, 'error' => 'Une demande de connexion existe déjà avec cet utilisateur.'], Response::HTTP_BAD_REQUEST);
-        }
-
-        // Create connection
-        $connection = new Connection();
-        $connection->setRequester($user);
-        $connection->setReceiver($receiver);
-        $connection->setStatus('PENDING');
-        $connection->setType('FRIEND');
-        $connection->setShareScope(ShareScope::TITLES_ONLY);
-
-        $em->persist($connection);
-
-        $em->flush();
-
-        $notifier->notify($receiver, NotificationType::CONNECTION_REQUEST, 'Nouvelle demande de partenariat',
-            sprintf('%s souhaite devenir votre partenaire de redevabilité.', $user->getDisplayName()), '/social');
-
-        return new JsonResponse(['success' => true]);
+        return $this->render('social/invite.html.twig', ['data' => $data, 'errors' => $errors], new Response('', [] === $errors ? 200 : 422));
     }
 
     #[Route('/api/social/connection/{id}/respond', name: 'api_social_connection_respond', methods: ['POST'])]
@@ -391,6 +432,7 @@ class SocialController extends AbstractController
             'connectionId' => $c->getId(),
             'partnerId' => $partner->getId(),
             'partnerEmail' => $partner->getEmail(),
+            'partnerName' => $partner->getDisplayName(),
             'myShare' => $myShare,
             'partnerShare' => $partnerShare,
         ];

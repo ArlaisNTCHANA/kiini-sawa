@@ -320,7 +320,7 @@ final class InsightEngine
 
         return $this->insight('pressure', 'risk', 'Votre signature sous pression', $text,
             [['DISC', 'Signes : '.lcfirst(rtrim($disc['combo']['signs'], '.')).'.'], ['Ennéagramme', 'Sous pression, vers le type '.$stress['n'].' ('.$stress['name'].') ; signal d\'alerte : '.lcfirst(rtrim($enn['x']['signs'], '.')).'.']],
-            ['disc', 'enneagramme'], 56, 'Quels sont les trois premiers signes qui me disent que je glisse ?', 'Écrire vos trois signes d\'alerte et les confier à un partenaire de redevabilité', 'HYGIENE');
+            ['disc', 'enneagramme'], 56, 'Quels sont les trois premiers signes qui me disent que je glisse ?', 'Écrire vos trois signes d\'alerte et les confier à un Partenaire de Redevabilité', 'HYGIENE');
     }
 
     /** Où grandir, d'après l'ennéagramme et le DISC. */

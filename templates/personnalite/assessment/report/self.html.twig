@@ -121,7 +121,7 @@
         {% endfor %}
     </table>
     <table class="dr-grid" style="margin-top: 12px;"><tr>
-        {% for step in [['Choisir', 'Une action par priorité, pas plus.'], ['Ancrer', 'L\'ajouter à vos rituels dans KIINI SAWA pour la suivre chaque jour.'], ['Partager', 'En parler à votre partenaire de redevabilité.'], ['Mesurer', 'Refaire cette évaluation dans trois mois.']] %}
+        {% for step in [['Choisir', 'Une action par priorité, pas plus.'], ['Ancrer', 'L\'ajouter à vos rituels dans KIINI SAWA pour la suivre chaque jour.'], ['Partager', 'En parler à votre Partenaire de Redevabilité.'], ['Mesurer', 'Refaire cette évaluation dans trois mois.']] %}
             <td><div class="dr-tile" style="text-align: center; min-height: 120px;"><div style="font-size: {{ pdf ? '18pt' : '1.7rem' }}; font-weight: bold; color: {{ pc }}; line-height: 1;">{{ loop.index }}</div><div style="font-weight: bold; margin: 6px 0 2px;">{{ step[0] }}</div><p class="dr-small" style="margin: 0; color: #334155;">{{ step[1] }}</p></div></td>
         {% endfor %}
     </tr></table>

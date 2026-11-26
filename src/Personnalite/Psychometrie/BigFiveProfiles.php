@@ -39,7 +39,7 @@ final class BigFiveProfiles
             'mid' => ['label' => 'Fiable et souple', 'strengths' => ['Fiable sur l\'essentiel', 'Spontanéité', 'Adaptabilité'], 'watch' => 'Structurer davantage vos priorités importantes.',
                 'daily' => 'Vous êtes fiable sur l\'essentiel tout en restant souple : quelques rituels vous aideront à concrétiser vos priorités.', 'spirit' => 'Un rythme spirituel simple et régulier vous aidera à tenir dans la durée.', 'grow' => 'Choisir un rituel quotidien et le tenir 21 jours.'],
             'low' => ['label' => 'Spontané et flexible', 'strengths' => ['Flexibilité', 'Spontanéité', 'Créativité dans l\'imprévu'], 'watch' => 'S\'appuyer sur des rituels simples pour concrétiser.',
-                'daily' => 'Vous préférez la spontanéité au plan : des rituels très simples et un partenaire de redevabilité vous aideront beaucoup.', 'spirit' => 'Vous vivez votre foi avec spontanéité. Un petit rituel quotidien (un verset, une prière) vous donnera de la constance.', 'grow' => 'Planifier chaque soir trois priorités pour le lendemain.'],
+                'daily' => 'Vous préférez la spontanéité au plan : des rituels très simples et un Partenaire de Redevabilité vous aideront beaucoup.', 'spirit' => 'Vous vivez votre foi avec spontanéité. Un petit rituel quotidien (un verset, une prière) vous donnera de la constance.', 'grow' => 'Planifier chaque soir trois priorités pour le lendemain.'],
         ],
         'N' => ['color' => '#E11D48', 'light' => '#FFE4E6', 'dark' => '#881337',
             'high' => ['label' => 'Très sensible', 'strengths' => ['Grande sensibilité', 'Attention aux risques', 'Empathie pour ceux qui souffrent'], 'watch' => 'Prendre soin de votre repos et de votre paix intérieure.',

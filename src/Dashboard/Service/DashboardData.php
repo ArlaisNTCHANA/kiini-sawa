@@ -6,7 +6,6 @@ use App\Compte\Entity\User;
 use App\Dashboard\Repository\QuoteRepository;
 use App\Personnalite\Entity\Assessment;
 use App\Personnalite\Psychometrie\Instruments;
-use App\Social\Entity\Connection;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use App\Rituels\Entity\Habit;
@@ -26,6 +25,7 @@ final class DashboardData
         private readonly UrlGeneratorInterface $urls,
         private readonly \App\Abonnement\Service\Entitlements $entitlements,
         private readonly \App\Academie\Service\AcademyCatalog $academy,
+        private readonly \App\Social\Service\PartnerDirectory $partners,
     ) {
     }
 
@@ -81,8 +81,8 @@ final class DashboardData
             $step('habit', 'Choisir un premier rituel', 'Une petite action régulière qui nourrit votre objectif.', 'app_user_habits', [], [] !== $habits),
             $step('test', 'Découvrir votre personnalité', sprintf('Le test « %s » : %d minutes pour mieux vous connaître.', Instruments::CATALOG[$firstTest]['name'], Instruments::CATALOG[$firstTest]['minutes']), 'app_assessment_take', ['slug' => $firstTest],
                 $this->em->getRepository(Assessment::class)->count(['user' => $user]) > 0),
-            $step('partner', 'Inviter un Partenaire de Redevabilité', 'Quelqu\'un qui vous encourage et vous aide à tenir.', 'app_social', [],
-                $this->em->getRepository(Connection::class)->count(['requester' => $user]) + $this->em->getRepository(Connection::class)->count(['receiver' => $user]) > 0),
+            $step('partner', 'Inviter un Partenaire de Redevabilité', 'Quelqu\'un qui vous encourage et vous aide à tenir.', 'app_partner_invite', [],
+                $this->partners->hasAny($user)),
         ];
 
         foreach ($steps as $s) {

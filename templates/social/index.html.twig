@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Mes partenaires{% endblock %}
+{% block title %}Mes Partenaires de Redevabilité{% endblock %}
 
 {% block body %}
 <style>
@@ -144,7 +144,24 @@
         align-items: center;
         justify-content: center;
     }
+    /* Point 6 : une fiche par Partenaire de Redevabilité, avec ce qu'on lui montre et ses engagements */
+    .pr-person { display: grid; gap: 1rem; }
+    .pr-person__top { display: flex; justify-content: space-between; gap: 1rem; align-items: flex-start; flex-wrap: wrap; }
+    .pr-person__name { font-family: var(--font-serif); font-size: 1.25rem; font-weight: 600; color: var(--fg); }
+    .pr-part { border-top: 1px solid var(--border); padding-top: .9rem; }
+    .pr-part__title { font-size: .78rem; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; color: var(--fg-muted); margin-bottom: .6rem; }
+    .ac-card { padding: .9rem 0; }
+    .ac-card + .ac-card { border-top: 1px dashed var(--border); }
+    .ac-top { display: flex; justify-content: space-between; gap: 1rem; align-items: flex-start; flex-wrap: wrap; }
+    .ac-label { font-family: var(--font-serif); font-size: 1.1rem; font-weight: 600; }
+    .ac-mini { font-size: .84rem; color: var(--fg-muted); }
+    .ac-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: .6rem; margin: 1rem 0; }
+    .ac-stat { background: var(--bg-alt); border-radius: var(--r-md); padding: .7rem .8rem; }
+    .ac-stat strong { display: block; font-size: 1.3rem; font-family: var(--font-serif); }
+    .ac-hist { border-top: 1px solid var(--bg-alt); padding: .55rem 0; font-size: .88rem; }
+    .ac-actions { display: flex; gap: .5rem; flex-wrap: wrap; margin-top: .75rem; }
 </style>
+{% set token = csrf_token('accountability') %}
 
 <div class="social-wrap"
      x-data="socialData()"
@@ -152,34 +169,30 @@
 
     <!-- Header -->
     <header class="ks-header">
-        <h1 class="ks-header__title">Mes partenaires</h1>
-        <p class="ks-header__lead">Les personnes qui vous encouragent et vous aident à tenir vos engagements. Vous choisissez ce que vous partagez avec chacune.</p>
+        <h1 class="ks-header__title">{{ t('partenaires.titre', 'Mes Partenaires de Redevabilité') }}</h1>
+        <p class="ks-header__lead">{{ t('partenaires.intro', 'Les personnes qui vous encouragent et vous aident à tenir. Chacune peut voir les plans que vous choisissez de lui montrer (si elle est sur KIINI SAWA) et vous interpeller sur un objectif ou un rituel (par e-mail, même sans compte).') }}</p>
+        <a class="ks-btn ks-btn--primary" href="{{ path('app_partner_invite') }}" style="margin-top: 1rem;"><i data-lucide="user-plus" class="ks-ico" aria-hidden="true"></i> {{ t('partenaires.inviter.bouton', 'Inviter un Partenaire de Redevabilité') }}</a>
     </header>
-
-    <a href="{{ path('app_accountability') }}" class="ks-card ks-card--link ks-card--accent" style="display: flex; gap: .8rem; align-items: center; margin-bottom: 2rem;">
-        <i data-lucide="shield-check" class="ks-ico" aria-hidden="true" style="width: 22px; height: 22px; color: var(--primary);"></i>
-        <span><strong>Ma redevabilité</strong><br><span style="font-size: .88rem; color: var(--fg-muted);">Demandez à une personne de confiance de vous interpeller sur un objectif ou un rituel, même si elle n'est pas sur KIINI SAWA.</span></span>
-    </a>
 
     <!-- Tabs Navigation -->
     <nav class="ks-scroll-row" style="margin-bottom: 2.5rem;">
+        <button @click="activeTab = 'PARTNERS'"
+                class="social-tab"
+                :class="activeTab === 'PARTNERS' ? 'active' : ''">
+            <i data-lucide="users" class="w-4 h-4"></i>
+            <span>Partenaires de Redevabilité</span>
+        </button>
         <button @click="activeTab = 'ACTIVITY'"
                 class="social-tab"
                 :class="activeTab === 'ACTIVITY' ? 'active' : ''">
             <i data-lucide="bell" class="w-4 h-4"></i>
             <span>Activité</span>
         </button>
-        <button @click="activeTab = 'PARTNERS'"
-                class="social-tab"
-                :class="activeTab === 'PARTNERS' ? 'active' : ''">
-            <i data-lucide="users" class="w-4 h-4"></i>
-            <span>Partenaires</span>
-        </button>
         <button @click="activeTab = 'EXPLORE'"
                 class="social-tab"
                 :class="activeTab === 'EXPLORE' ? 'active' : ''">
             <i data-lucide="search" class="w-4 h-4"></i>
-            <span>Exploration</span>
+            <span>Consulter leurs plans</span>
         </button>
         {# Onglet « Défis » masqué tant que la fonctionnalité n'existe pas (impasse, voir docs/plan-v1.md §3.4).
            Le contenu de l'onglet est conservé plus bas pour sa réactivation. #}
@@ -234,7 +247,7 @@
                 
                 <div class="space-y-4">
                     <template x-if="comments.length === 0">
-                        <p class="ks-alert ks-alert--info">Aucun commentaire pour l'instant. Invitez un partenaire dans l'onglet « Partenaires » pour être encouragé.</p>
+                        <p class="ks-alert ks-alert--info">Aucun commentaire pour l'instant. Invitez un Partenaire de Redevabilité pour être encouragé(e).</p>
                     </template>
                     
                     <template x-for="comment in comments" :key="comment.id">
@@ -257,42 +270,22 @@
         <!-- ──────────────── PARTNERS TAB ──────────────── -->
         <div x-show="activeTab === 'PARTNERS'" style="display: flex; flex-direction: column; gap: 1.5rem;">
 
-            <!-- Invitation Form -->
-            <div class="social-section">
-                <h2 class="social-heading">
-                    <span class="social-heading-icon" style="background: rgba(61, 122, 95,0.06); color: var(--primary);"><i data-lucide="user-plus" class="w-5 h-5"></i></span>
-                    Ajouter un partenaire de confiance
-                </h2>
-                <p style="color: var(--fg-muted); font-size: 0.85rem; margin-bottom: 1.25rem;">Entrez l'adresse email d'un utilisateur Kiini Sawa pour l'inviter dans votre réseau.</p>
-                
-                <form @submit.prevent="sendInvitation" style="display: flex; gap: 0.75rem;">
-                    <input type="email" x-model="inviteEmail" required placeholder="partenaire@exemple.com"
-                           class="social-input" style="flex: 1;" />
-                    <button type="submit" class="social-btn">
-                        <span>Inviter</span>
-                        <i data-lucide="send" class="w-3.5 h-3.5"></i>
-                    </button>
-                </form>
-                <p x-show="inviteError" class="text-rose-600 text-xs mt-2" x-text="inviteError"></p>
-                <p x-show="inviteSuccess" class="text-emerald-600 text-xs mt-2">Si cette adresse correspond à un compte KIINI SAWA, l'invitation lui a été envoyée.</p>
-            </div>
-
             <!-- Pending Invitations -->
-            <div style="display: grid; grid-template-columns: 1fr; gap: 1.25rem;" class="md:!grid-cols-2">
+            <div x-show="pendingReceived.length || pendingSent.length" style="display: grid; grid-template-columns: 1fr; gap: 1.25rem;" class="md:!grid-cols-2">
                 <!-- Received requests -->
                 <div class="social-section">
                     <h3 style="font-size: 0.9rem; font-weight: 700; color: var(--fg); margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;">
                         <i data-lucide="inbox" class="w-4 h-4" style="color: var(--fg-muted);"></i>
-                        Invitations reçues
+                        Demandes de partage reçues
                     </h3>
                     <div class="space-y-3">
                         <template x-if="pendingReceived.length === 0">
-                            <p class="text-slate-400 text-xs italic">Aucune invitation reçue.</p>
+                            <p class="text-slate-400 text-xs italic">Aucune demande reçue.</p>
                         </template>
                         <template x-for="req in pendingReceived" :key="req.id">
                             <div class="social-card-inner" style="display: flex; justify-content: space-between; align-items: center; gap: 0.75rem;">
                                 <div style="min-width: 0;">
-                                    <p style="font-size: 0.85rem; font-weight: 700; color: var(--fg-light); overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" x-text="req.partnerEmail"></p>
+                                    <p style="font-size: 0.85rem; font-weight: 700; color: var(--fg-light); overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" x-text="req.partnerName + ' · ' + req.partnerEmail"></p>
                                     <p class="social-label" x-text="req.createdAt"></p>
                                 </div>
                                 <div class="flex gap-1.5">
@@ -314,16 +307,16 @@
                 <div class="social-section">
                     <h3 style="font-size: 0.9rem; font-weight: 700; color: var(--fg); margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;">
                         <i data-lucide="navigation" class="w-4 h-4" style="color: var(--fg-muted);"></i>
-                        Invitations envoyées
+                        Demandes de partage envoyées
                     </h3>
                     <div class="space-y-3">
                         <template x-if="pendingSent.length === 0">
-                            <p class="text-slate-400 text-xs italic">Aucune invitation envoyée.</p>
+                            <p class="text-slate-400 text-xs italic">Aucune demande en attente.</p>
                         </template>
                         <template x-for="req in pendingSent" :key="req.id">
                             <div class="social-card-inner" style="display: flex; justify-content: space-between; align-items: center;">
                                 <div style="min-width: 0;">
-                                    <p style="font-size: 0.85rem; font-weight: 700; color: var(--fg-light); overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" x-text="req.partnerEmail"></p>
+                                    <p style="font-size: 0.85rem; font-weight: 700; color: var(--fg-light); overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" x-text="req.partnerName + ' · ' + req.partnerEmail"></p>
                                     <p class="social-label" x-text="'En attente depuis le ' + req.createdAt"></p>
                                 </div>
                                 <span class="social-label" style="color: var(--warning);">En attente</span>
@@ -333,37 +326,73 @@
                 </div>
             </div>
 
-            <!-- Active Partners List -->
-            <div class="social-section">
-                <h2 class="social-heading">
-                    <span class="social-heading-icon" style="background: rgba(94, 148, 121,0.08); color: #2E6B53;"><i data-lucide="users" class="w-5 h-5"></i></span>
-                    Partenaires actifs
-                </h2>
+            <!-- Partenaires de Redevabilité : une fiche par personne -->
+            <div id="partenaires" style="display: flex; flex-direction: column; gap: 1.25rem;">
+                {% for person in people %}
+                    <section class="social-section pr-person" id="partenaire-{{ person.key }}">
+                        <div class="pr-person__top">
+                            <div>
+                                <p class="pr-person__name">{{ person.name }}</p>
+                                <span class="ks-badge{{ person.member ? '' : ' ks-badge--muted' }}">{{ person.member ? 'Membre de KIINI SAWA' : 'Par e-mail' }}</span>
+                            </div>
+                            {% if canCreate %}
+                                <a class="ks-btn ks-btn--secondary ks-btn--sm" href="{{ person.connection ? path('app_accountability_new', {partenaire: person.connection.connectionId}) : path('app_accountability_new', {pour: person.commitments|first.id}) }}">Lui confier un engagement</a>
+                            {% endif %}
+                        </div>
 
-                <div class="space-y-4">
-                    <template x-if="activePartners.length === 0">
-                        <p class="text-slate-400 text-xs italic py-2">Aucun partenaire actif. Invitez un ami ci-dessus pour commencer.</p>
-                    </template>
-                    
-                    <template x-for="p in activePartners" :key="p.connectionId">
-                        <div class="social-card-inner" style="display: flex; justify-content: space-between; align-items: center; gap: 1rem;">
-                            <div style="display: flex; flex-direction: column; gap: 0.5rem;">
-                                <h3 style="font-size: 0.9rem; font-weight: 700; color: var(--fg);" x-text="p.partnerEmail"></h3>
-                                <div style="display: flex; flex-wrap: wrap; gap: 0.5rem;">
-                                    <span class="social-label" style="padding: 0.2rem 0.6rem; border-radius: 0.5rem; background: var(--primary-glow); color: var(--primary);"
-                                          x-show="p.myShare.lifePlan || p.myShare.growthPlan">Je partage mes plans</span>
-                                    <span class="social-label" style="padding: 0.2rem 0.6rem; border-radius: 0.5rem; background: rgba(94, 148, 121,0.06); color: #2E6B53;"
-                                          x-show="p.partnerShare.lifePlan || p.partnerShare.growthPlan">Partage ses plans avec moi</span>
+                        {% if person.connection %}
+                            {% set cid = person.connection.connectionId %}
+                            <div class="pr-part">
+                                <p class="pr-part__title">Ce que je lui montre</p>
+                                <div style="display: flex; flex-wrap: wrap; gap: .5rem; align-items: center; justify-content: space-between;">
+                                    <div style="display: flex; flex-wrap: wrap; gap: .5rem;" x-data="{ get p() { return activePartners.find(x => x.connectionId === {{ cid }}) || {myShare: {}, partnerShare: {}} } }">
+                                        <span class="social-label" style="padding: 0.2rem 0.6rem; border-radius: 0.5rem; background: var(--primary-glow); color: var(--primary);" x-show="p.myShare.lifePlan || p.myShare.growthPlan">Je partage mes plans</span>
+                                        <span class="social-label" style="padding: 0.2rem 0.6rem; border-radius: 0.5rem; background: var(--bg-alt);" x-show="!(p.myShare.lifePlan || p.myShare.growthPlan)">Je ne partage pas encore mes plans</span>
+                                        <span class="social-label" style="padding: 0.2rem 0.6rem; border-radius: 0.5rem; background: var(--primary-glow); color: var(--primary);" x-show="p.partnerShare.lifePlan || p.partnerShare.growthPlan">Partage ses plans avec moi</span>
+                                    </div>
+                                    <button type="button" @click="openPermissionsModal(activePartners.find(x => x.connectionId === {{ cid }}))" class="social-btn-secondary" style="display: flex; align-items: center; gap: 0.4rem;">
+                                        <i data-lucide="settings" class="w-4 h-4"></i>
+                                        <span>Choisir ce que je partage</span>
+                                    </button>
                                 </div>
                             </div>
-                            <button @click="openPermissionsModal(p)" class="social-btn-secondary" style="display: flex; align-items: center; gap: 0.4rem;">
-                                <i data-lucide="settings" class="w-4 h-4"></i>
-                                <span>Partage</span>
-                            </button>
+                        {% endif %}
+
+                        <div class="pr-part">
+                            <p class="pr-part__title">Ce sur quoi {{ person.name }} m'interpelle</p>
+                            {% for c in person.commitments %}
+                                {% include 'social/_commitment.html.twig' with {c: c} %}
+                            {% else %}
+                                <p class="ac-mini">Aucun engagement pour l'instant. Confiez-lui un objectif ou un rituel : si vous décrochez, {{ person.name }} sera prévenu(e) et pourra vous relever.</p>
+                            {% endfor %}
                         </div>
-                    </template>
-                </div>
+                    </section>
+                {% else %}
+                    <div class="ks-card ks-empty">
+                        <p class="ks-empty__title">Pas encore de Partenaire de Redevabilité</p>
+                        <p class="ks-empty__text">« Deux valent mieux qu'un : si l'un tombe, l'autre le relève » (Ecclésiaste 4:9-10). Invitez une personne de confiance : elle n'a pas besoin d'être sur KIINI SAWA.</p>
+                    </div>
+                {% endfor %}
+
+                {% if not canCreate %}
+                    <p class="ac-mini">L'offre gratuite comprend un engagement à la fois. <a href="{{ path('app_subscription') }}" style="color: var(--primary); font-weight: 700;">Passer à PRO</a> pour en confier d'autres.</p>
+                {% endif %}
             </div>
+
+            {% if asPartner is not empty %}
+                <div class="social-section">
+                    <h2 class="social-heading">
+                        <span class="social-heading-icon" style="background: var(--primary-glow); color: var(--primary);"><i data-lucide="shield-check" class="w-5 h-5"></i></span>
+                        Je suis Partenaire de Redevabilité de…
+                    </h2>
+                    {% for c in asPartner %}
+                        <div class="social-card-inner" style="margin-bottom: .75rem;">
+                            <p><strong>{{ c.owner.displayName }}</strong> compte sur vous pour « {{ c.targetLabel }} ».</p>
+                            <p class="ac-mini">Vous recevez ses demandes par e-mail. <a href="{{ path('app_accountability_partner', {token: c.partnerToken}) }}" style="color: var(--primary);">Gérer mon rôle</a></p>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
 
         </div>
 
@@ -560,7 +589,7 @@
 function socialData() {
     return {
         // State
-        activeTab: 'ACTIVITY',
+        activeTab: 'PARTNERS',
         inviteEmail: '',
         inviteSuccess: false,
         inviteError: null,

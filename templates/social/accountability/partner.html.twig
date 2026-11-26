@@ -11,7 +11,7 @@
     {% include 'shared/_page_header.html.twig' with {
         eyebrow: 'Partenaire de redevabilité', icon: 'shield-check',
         title: owner ~ ' compte sur vous',
-        lead: owner ~ ' vous a choisi(e) comme partenaire de redevabilité sur KIINI SAWA.'
+        lead: owner ~ ' vous a choisi(e) comme Partenaire de Redevabilité sur KIINI SAWA.'
     } %}
 
     <section class="ks-card" style="margin-bottom: 1.25rem;">
@@ -35,7 +35,7 @@
             </div>
         </section>
     {% elseif c.open %}
-        <p class="ks-alert ks-alert--success" style="margin-bottom: 1rem;">Vous êtes le partenaire de redevabilité de {{ owner }}. Merci ! Vous recevrez ses demandes par e-mail.</p>
+        <p class="ks-alert ks-alert--success" style="margin-bottom: 1rem;">Vous êtes le Partenaire de Redevabilité de {{ owner }}. Merci ! Vous recevrez ses demandes par e-mail.</p>
         <form method="post" onsubmit="return confirm('Vous ne recevrez plus de messages pour cet engagement. Confirmer ?')">
             <input type="hidden" name="_csrf_token" value="{{ token }}"><input type="hidden" name="action" value="stop">
             <button class="ks-btn ks-btn--ghost ks-btn--sm" type="submit">Ne plus recevoir ces messages</button>

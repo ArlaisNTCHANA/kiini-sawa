@@ -9,6 +9,40 @@ teste (`php bin/phpunit`), commit, déploie (`bin/ops/envoyer-hostinger.sh`), v�
 journal `var/log/prod-AAAA-MM-JJ.log` sans erreur) ; **le fondateur fait lui-même `git push`** (refusé à l'IA).
 Ne jamais afficher ni demander de mot de passe ; ne pas publier son nom (mentions légales en attente).
 
+## 26/11/2026 — Une seule rubrique « Mes Partenaires de Redevabilité » (chantier 6)
+
+- **Décision du fondateur (« Oui, fusionne »)** : « Partenaires » (réseau de membres, `/social`) et « Ma redevabilité »
+  (engagements par e-mail, `/social/redevabilite`) ne font plus qu'une rubrique. Un Partenaire de Redevabilité est une
+  personne, inscrite ou non ; sa fiche a deux volets : « Ce que je lui montre » (partage entre membres, `Connection`)
+  et « Ce sur quoi … m'interpelle » (engagements, `AccountabilityCommitment`). Rien n'est supprimé, aucune donnée
+  déplacée, pas de migration.
+- **Fait** :
+  - `Social\Service\PartnerDirectory` : `people()` regroupe partages et engagements par personne (clé `u<id>` pour un
+    membre, `e<email>` sinon) ; `requestConnection()` (logique sortie de `SocialController::addConnection`, toujours
+    utilisée par l'API) ; `hasAny()` pour le premier pas.
+  - `/social` : titre « Mes Partenaires de Redevabilité », bouton unique « Inviter un Partenaire de Redevabilité »,
+    onglet des fiches ouvert par défaut (puis Activité, Consulter leurs plans), demandes de partage en attente, « Je suis
+    Partenaire de Redevabilité de… ». Carte d'engagement : `templates/social/_commitment.html.twig` (ancienne page
+    `accountability/index.html.twig` retirée).
+  - Invitation unique `/social/inviter` (`app_partner_invite`) : prénom, e-mail, et deux cases (« m'interpeller sur un
+    objectif ou un rituel », « voir mes plans dans KIINI SAWA »). Le partage ne révèle jamais si un compte existe.
+    L'engagement continue sur `/social/redevabilite/nouveau`, prérempli par la session (jamais d'e-mail dans l'adresse).
+    Depuis une fiche : « Lui confier un engagement » (`?partenaire=<partage>` ou `?pour=<engagement>`).
+  - `/social/redevabilite` renvoie vers `/social#partenaires` (liens des e-mails et notifications) ; les actions sur un
+    engagement reviennent sur `/social#engagement-<id>`.
+  - Menu Ensemble : une seule entrée « Partenaires de Redevabilité ». Premier pas « Inviter un Partenaire de
+    Redevabilité » → `/social/inviter`, coché par un partage **ou** un engagement.
+  - « Partenaire de Redevabilité » écrit en entier et en capitales partout (sauf `BoussoleContent` : texte comparé au
+    moteur JavaScript d'origine par `BoussoleParityTest`, à changer des deux côtés si le fondateur le veut).
+  - Lexique (`docs/lexique.md`) mis à jour.
+- **Bogue trouvé en production et corrigé** : le formulaire d'engagement (« Voir ce qui sera envoyé ») ne faisait
+  rien, Turbo refusant une réponse de formulaire qui n'est pas une redirection. Personne ne pouvait créer d'engagement
+  depuis le site. Correctif : `data-turbo="false"` sur ce formulaire. **Piège général** : tout formulaire POST qui
+  répond par une page (200) doit porter `data-turbo="false"`.
+- **Tests** : `tests/Social/PartnersPageTest.php` (7) ; `AccountabilityTest` adapté. Vu à l'écran en local (bureau et
+  375 px) : invitation → engagement prérempli → aperçu → fiche « Samuel · Par e-mail ».
+- **Reste** : l'application mobile garde son écran « Ma redevabilité » (dépôt `kiini-mobile`) ; à aligner.
+
 ## 26/11/2026 — Premiers pas = parcours guidé ; une seule prochaine étape (chantier 4)
 
 - **Question du fondateur** : « si on met les parcours à l'accueil, plus besoin des assistants ? Les premiers pas

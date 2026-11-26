@@ -1,0 +1,52 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Inviter un Partenaire de Redevabilité{% endblock %}
+
+{% block body %}
+<style>
+    .pi-choice { display: flex; gap: .7rem; align-items: flex-start; padding: .9rem 1rem; border: 1px solid var(--border); border-radius: var(--r-md); cursor: pointer; }
+    .pi-choice input { accent-color: var(--primary); margin-top: .25rem; flex: none; }
+    .pi-choice strong { display: block; }
+    .pi-choice span { font-size: .86rem; color: var(--fg-muted); }
+</style>
+<div class="ks-page ks-page--narrow">
+    {% include 'shared/_page_header.html.twig' with {
+        back: {url: path('app_social'), label: 'Mes Partenaires de Redevabilité'},
+        eyebrow: 'Ensemble', icon: 'user-plus',
+        title: t('partenaires.inviter.titre', 'Inviter un Partenaire de Redevabilité'),
+        lead: t('partenaires.inviter.intro', 'Quelqu\'un de confiance, qui vous veut du bien : un ami, un mentor, un responsable d\'Église. Il n\'a pas besoin d\'être sur KIINI SAWA.')
+    } %}
+
+    {% for e in errors %}
+        <p class="ks-alert ks-alert--danger" role="alert" style="margin-bottom: .75rem;">{{ e }}</p>
+    {% endfor %}
+
+    <form method="post" action="{{ path('app_partner_invite') }}" class="ks-card" style="display: grid; gap: 1.25rem;">
+        <input type="hidden" name="_csrf_token" value="{{ csrf_token('partner_invite') }}">
+
+        <div class="ks-field">
+            <label class="ks-label">1. Qui ?</label>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: .5rem;">
+                <input class="ks-input" name="name" maxlength="120" required value="{{ data.name }}" placeholder="Son prénom" aria-label="Son prénom">
+                <input class="ks-input" type="email" name="email" maxlength="180" required value="{{ data.email }}" placeholder="Son adresse e-mail" aria-label="Son adresse e-mail">
+            </div>
+        </div>
+
+        <div class="ks-field" style="display: grid; gap: .6rem;">
+            <p class="ks-label">2. Comment vous accompagnera-t-il ou elle ?</p>
+            <label class="pi-choice">
+                <input type="checkbox" name="engagement" value="1" {{ data.engagement ? 'checked' }}>
+                <span><strong>{{ t('partenaires.inviter.engagement', 'M\'interpeller sur un objectif ou un rituel') }}</strong>
+                {{ t('partenaires.inviter.engagement_aide', 'Par e-mail, même sans compte KIINI SAWA. À l\'étape suivante, vous choisissez l\'objectif ou le rituel et vous voyez exactement ce qui sera envoyé.') }}</span>
+            </label>
+            <label class="pi-choice">
+                <input type="checkbox" name="share" value="1" {{ data.share ? 'checked' }}>
+                <span><strong>{{ t('partenaires.inviter.partage', 'Voir mes plans dans KIINI SAWA') }}</strong>
+                {{ t('partenaires.inviter.partage_aide', 'Si cette personne a un compte, elle reçoit une demande dans l\'application. Vous choisissez ensuite ce que vous lui montrez.') }}</span>
+            </label>
+        </div>
+
+        <div><button class="ks-btn ks-btn--primary" type="submit">Continuer</button></div>
+    </form>
+</div>
+{% endblock %}

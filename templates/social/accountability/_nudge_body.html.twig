@@ -2,9 +2,9 @@
 <p>Bonjour {{ partnerName }},</p>
 {% if fact is defined and fact %}
 <p><strong>{{ fact }}</strong></p>
-<p>{{ owner }} vous a choisi(e) comme partenaire de redevabilité et a demandé que vous soyez prévenu(e) dans ce cas. Ce n'est pas un reproche : parfois, on n'a plus la force de demander de l'aide. Un appel, un message ou une prière peut tout changer. Son engagement :</p>
+<p>{{ owner }} vous a choisi(e) comme Partenaire de Redevabilité et a demandé que vous soyez prévenu(e) dans ce cas. Ce n'est pas un reproche : parfois, on n'a plus la force de demander de l'aide. Un appel, un message ou une prière peut tout changer. Son engagement :</p>
 {% else %}
-<p><strong>{{ owner }}</strong> vous a choisi(e) comme partenaire de redevabilité et vous demande aujourd'hui de l'interpeller sur :</p>
+<p><strong>{{ owner }}</strong> vous a choisi(e) comme Partenaire de Redevabilité et vous demande aujourd'hui de l'interpeller sur :</p>
 {% endif %}
 <p style="background:#EEF3EF;border-left:4px solid #2E6B53;padding:12px 16px;border-radius:8px;font-weight:bold;">{{ label }}</p>
 {% if message %}<p><em>Son mot pour vous :</em> « {{ message }} »</p>{% endif %}

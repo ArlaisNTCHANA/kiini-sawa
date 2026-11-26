@@ -189,7 +189,7 @@ final class ReminderService
             }
             $sent += (int) $this->notifier->notify($user, NotificationType::PARTNER_INACTIVE,
                 $partner->getDisplayName().' a besoin d\'un encouragement',
-                $partner->getDisplayName().' ne s\'est pas connecté(e) depuis une semaine. Un petit message peut tout changer : c\'est le rôle d\'un partenaire de redevabilité.',
+                $partner->getDisplayName().' ne s\'est pas connecté(e) depuis une semaine. Un petit message peut tout changer : c\'est le rôle d\'un Partenaire de Redevabilité.',
                 '/social', 'partenaire '.$partner->getId().' '.$today->format('o-\WW'));
         }
 

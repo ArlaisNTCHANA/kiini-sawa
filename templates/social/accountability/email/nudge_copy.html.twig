@@ -5,7 +5,7 @@
   <p>Comme vous l'aviez choisi, <strong>{{ c.partnerName }}</strong> a été prévenu(e), car ce signal s'est déclenché : « {{ nudge.fact }} »</p>
   <p>Personne ne vous juge : c'est vous qui avez demandé ce filet de sécurité. Voici la copie du message.</p>
   {% else %}
-  <p>Comme convenu, voici la copie du message envoyé à <strong>{{ c.partnerName }}</strong>, votre partenaire de redevabilité. Un message vous avertira dès sa réponse.</p>
+  <p>Comme convenu, voici la copie du message envoyé à <strong>{{ c.partnerName }}</strong>, votre Partenaire de Redevabilité. Un message vous avertira dès sa réponse.</p>
   {% endif %}
   <div style="border:1px dashed #C9D2C8;border-radius:12px;padding:16px;margin:20px 0;">
     {% include 'social/accountability/_nudge_body.html.twig' with {owner: owner, partnerName: c.partnerName, label: c.targetLabel, why: c.why, message: nudge.ownerMessage, actions: actions, respondUrl: null, fact: nudge.fact} %}

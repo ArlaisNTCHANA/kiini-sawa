@@ -164,7 +164,7 @@ final class AccountabilityService
         $this->em->persist($commitment);
         $this->em->flush();
 
-        $this->mail($commitment->getPartnerEmail(), $owner->getDisplayName().' vous demande d\'être son partenaire de redevabilité', 'social/accountability/email/invitation.html.twig', [
+        $this->mail($commitment->getPartnerEmail(), $owner->getDisplayName().' vous demande d\'être son Partenaire de Redevabilité', 'social/accountability/email/invitation.html.twig', [
             'c' => $commitment,
             'owner' => $owner->getDisplayName(),
             'url' => $this->urls->generate('app_accountability_partner', ['token' => $commitment->getPartnerToken()], UrlGeneratorInterface::ABSOLUTE_URL),
@@ -190,7 +190,7 @@ final class AccountabilityService
         }
         $c->accept();
         $this->em->flush();
-        $this->notifier->notify($c->getOwner(), NotificationType::ACCOUNTABILITY, $c->getPartnerName().' a accepté d\'être votre partenaire de redevabilité',
+        $this->notifier->notify($c->getOwner(), NotificationType::ACCOUNTABILITY, $c->getPartnerName().' a accepté d\'être votre Partenaire de Redevabilité',
             'Pour « '.$c->getTargetLabel().' ». Vous pouvez maintenant lui demander de vous interpeller.', '/social/redevabilite', 'accountability-accepted-'.$c->getId());
     }
 

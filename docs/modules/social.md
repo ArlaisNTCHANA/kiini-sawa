@@ -54,7 +54,10 @@ Réseau de redevabilité : connexions, partage, commentaires, liens partagés.
 Une personne demande à un partenaire de confiance (avec ou sans compte KIINI SAWA) de l'interpeller sur un objectif du
 Plan de Vie, un rituel ou un engagement libre.
 
-- **Pages** : `/social/redevabilite` (Ma redevabilité : engagements, chiffres, historique, « Je suis partenaire »),
+- **Depuis le 26/11/2026 (chantier 6)** : une seule rubrique, `/social` « Mes Partenaires de Redevabilité », une fiche
+  par personne (`PartnerDirectory::people`) avec partage et engagements ; invitation unique `/social/inviter`.
+  `/social/redevabilite` renvoie vers `/social#partenaires`.
+- **Pages** : engagements affichés dans les fiches de `/social` (chiffres, historique, « Je suis Partenaire de Redevabilité de… »),
   `/social/redevabilite/nouveau` → `/apercu` (aperçu exact des e-mails et case « J'ai compris ») → `/creer`.
   Pages publiques du partenaire, ouvertes par lien personnel (jeton de 48 caractères, déclarées publiques dans
   `security.yaml` et `SecurityGuardsTest`) : `/redevabilite/{jeton}` (accepter, refuser, ne plus recevoir) et

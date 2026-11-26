@@ -26,20 +26,14 @@ class AccountabilityController extends AbstractController
 
     // ── La personne ────────────────────────────────────────────
 
+    /**
+     * Point 6 (26/11/2026) : les engagements s'affichent dans « Mes Partenaires de Redevabilité » (/social), regroupés par
+     * personne. L'ancienne adresse reste valide (liens des e-mails et des notifications) et y renvoie.
+     */
     #[Route('/social/redevabilite', name: 'app_accountability', methods: ['GET'])]
     public function index(): Response
     {
-        $user = $this->user();
-        $commitments = $this->service->commitmentsOf($user);
-
-        return $this->render('social/accountability/index.html.twig', [
-            'commitments' => $commitments,
-            'stats' => array_combine(array_map(fn ($c) => $c->getId(), $commitments), array_map(fn ($c) => $this->service->stats($c), $commitments)) ?: [],
-            'nextAllowed' => array_combine(array_map(fn ($c) => $c->getId(), $commitments), array_map(fn ($c) => $this->service->nextNudgeAllowedAt($c), $commitments)) ?: [],
-            'asPartner' => $this->service->commitmentsAsPartner($user),
-            'canCreate' => $this->service->canCreate($user),
-            'actions' => AccountabilityNudge::ACTIONS,
-        ]);
+        return $this->redirectToRoute('app_social', ['_fragment' => 'partenaires']);
     }
 
     #[Route('/social/redevabilite/nouveau', name: 'app_accountability_new', methods: ['GET'])]
@@ -49,7 +43,7 @@ class AccountabilityController extends AbstractController
         if (!$this->service->canCreate($user)) {
             $this->addFlash('error', 'L\'offre gratuite comprend un engagement de redevabilité. Passez à PRO pour en ouvrir d\'autres, ou arrêtez celui en cours.');
 
-            return $this->redirectToRoute('app_accountability');
+            return $this->redirectToRoute('app_social', ['_fragment' => 'partenaires']);
         }
 
         $targets = $this->service->targetsFor($user);
@@ -60,10 +54,30 @@ class AccountabilityController extends AbstractController
             && \in_array((int) $m[2], array_column($targets['HABIT' === $m[1] ? 'habits' : 'goals'], 'id'), true)) {
             $data['target'] = $m[0];
         }
+        // Le partenaire est déjà choisi : depuis l'invitation unique (prénom et e-mail gardés en session), depuis la
+        // fiche d'un membre (?partenaire=<partage>) ou d'une personne qui suit déjà un engagement (?pour=<engagement>)
+        $partners = $this->service->partnersOf($user);
+        $invite = $request->getSession()->remove('partner_invite');
+        if (\is_array($invite)) {
+            $data += ['connectionId' => 0, 'partnerName' => (string) ($invite['partnerName'] ?? ''), 'partnerEmail' => (string) ($invite['partnerEmail'] ?? '')];
+            foreach ($partners as $p) {
+                if (mb_strtolower($p['email']) === $data['partnerEmail']) {
+                    $data['connectionId'] = $p['id'];
+                }
+            }
+        } elseif (\in_array($request->query->getInt('partenaire'), array_column($partners, 'id'), true)) {
+            $data['connectionId'] = $request->query->getInt('partenaire');
+        } elseif ($request->query->getInt('pour') > 0) {
+            foreach ($this->service->commitmentsOf($user) as $c) {
+                if ($c->getId() === $request->query->getInt('pour')) {
+                    $data += ['connectionId' => 0, 'partnerName' => $c->getPartnerName(), 'partnerEmail' => $c->getPartnerEmail()];
+                }
+            }
+        }
 
         return $this->render('social/accountability/new.html.twig', [
             'targets' => $targets,
-            'partners' => $this->service->partnersOf($user),
+            'partners' => $partners,
             'data' => $data,
         ]);
     }
@@ -132,7 +146,7 @@ class AccountabilityController extends AbstractController
             return $this->redirectToRoute('app_accountability_new');
         }
 
-        return $this->redirectToRoute('app_accountability');
+        return $this->redirectToRoute('app_social', ['_fragment' => 'engagement-'.$c->getId()]);
     }
 
     #[Route('/social/redevabilite/{id}/interpeller', name: 'app_accountability_nudge', requirements: ['id' => '\d+'], methods: ['POST'])]
@@ -146,7 +160,7 @@ class AccountabilityController extends AbstractController
             $this->addFlash('error', $e->getMessage());
         }
 
-        return $this->redirectToRoute('app_accountability', ['_fragment' => 'engagement-'.$commitment->getId()]);
+        return $this->redirectToRoute('app_social', ['_fragment' => 'engagement-'.$commitment->getId()]);
     }
 
     #[Route('/social/redevabilite/{id}/{action}', name: 'app_accountability_manage', requirements: ['id' => '\d+', 'action' => 'pause|resume|stop'], methods: ['POST'])]
@@ -159,7 +173,7 @@ class AccountabilityController extends AbstractController
             throw $this->createNotFoundException();
         }
 
-        return $this->redirectToRoute('app_accountability', ['_fragment' => 'engagement-'.$commitment->getId()]);
+        return $this->redirectToRoute('app_social', ['_fragment' => 'engagement-'.$commitment->getId()]);
     }
 
     // ── Le partenaire (lien personnel, sans compte) ────────────

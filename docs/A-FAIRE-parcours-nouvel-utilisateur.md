@@ -106,6 +106,7 @@ Ne proposer le parcours de 90 jours que si les plans ne sont pas encore écrits.
 Ajouter les termes interdits à `tests/Shared/LexiconTest.php` pour qu'ils ne reviennent pas.
 
 ### 6. Partenaire de Redevabilité : un seul vocabulaire, deux espaces clarifiés (gênant)
+**Fait le 26/11/2026** : les deux espaces sont fusionnés en « Mes Partenaires de Redevabilité » (voir `docs/SUIVI-IA.md`).
 **Symptôme** : « Mes partenaires » (réseau d'utilisateurs inscrits) et « Ma redevabilité » (personne extérieure) se
 confondent. Les noms varient : « partenaire de confiance », « Partenaires », « partenaire de redevabilité ». « Kiini
 Sawa » avec une casse différente.

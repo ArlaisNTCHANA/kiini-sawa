@@ -41,8 +41,7 @@ final class NavigationExtension extends AbstractExtension
             ['Mes rythmes', 'app_rhythms', 'repeat', 'Jour, semaine, mois, saison, année : ce qui est fait ou en retard'],
         ]],
         'together' => ['label' => 'Ensemble', 'icon' => 'users', 'match' => ['/social', '/couple', '/defis', '/organisation', '/parrainage'], 'items' => [
-            ['Partenaires', 'app_social', 'users', 'Redevabilité et partages'],
-            ['Ma redevabilité', 'app_accountability', 'shield-check', 'Être interpellé(e) par une personne de confiance'],
+            ['Partenaires de Redevabilité', 'app_social', 'users', 'Les personnes qui vous encouragent et vous interpellent'],
             ['Notre couple', 'app_couple', 'heart', 'Vision et projets à deux'],
             ['Défis', 'app_challenges', 'trophy', 'Avancer ensemble sur 21 jours'],
             ['Mon organisation', 'app_organisation_index', 'building-2', 'Église, association…'],

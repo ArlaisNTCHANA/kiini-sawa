@@ -63,7 +63,7 @@ class NotificationPreference
     #[ORM\Column]
     private int $weeklyReviewDay = 0;
 
-    /** Prévenir quand un partenaire de redevabilité est inactif depuis une semaine. */
+    /** Prévenir quand un Partenaire de Redevabilité est inactif depuis une semaine. */
     #[ORM\Column(options: ['default' => true])]
     private bool $notifyPartnerInactive = true;
 

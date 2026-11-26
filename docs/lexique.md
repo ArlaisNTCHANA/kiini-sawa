@@ -8,7 +8,7 @@ méthode) restent ceux du livre.
 | Petites actions régulières | **Rituels** | Habitudes (sauf citation du livre) |
 | Calendrier, tâches, jalons | **Agenda** | Organisation, Calendrier, Planner |
 | Espace Église / association / entreprise | **Mon organisation** | — |
-| Personnes qui vous accompagnent | **Partenaires** (de redevabilité) | Réseau |
+| Personnes qui vous accompagnent (membres ou non) | **Partenaire de Redevabilité**, toujours en entier et avec ces capitales (décision du fondateur) ; la rubrique : **Mes Partenaires de Redevabilité** | Réseau, Partenaires seul, partenaire de confiance, Ma redevabilité |
 | Questionnaires | **Mes tests** | Mes découvertes, Découverte de soi, Architecture intérieure |
 | Les plans autres que le Plan de Vie (Croissance, Développement personnel, Hygiène de vie, Intendance, Transmission) | **Vos plans** ; la page qui les réunit : **Mes plans** (adresse `/mes-plans`) | Mes stratégies, plans stratégiques (décision du fondateur, 17/11/2026 : un plan *contient* des stratégies, il n'en est pas une) |
 | Moyens d'atteindre un objectif, dans un plan et sur la carte | **Stratégies** (sens du livre, chapitre 10) | — |
