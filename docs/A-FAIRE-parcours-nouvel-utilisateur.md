@@ -119,6 +119,7 @@ réconcilier avec la règle du fondateur, **lui demander**).
 écrit en entier dans les titres ; « KIINI SAWA » en capitales.
 
 ### 7. Relier ce que l'utilisateur fait à ses plans (détail utile)
+**Fait le 26/11/2026** : rituel relié à un objectif de n'importe quel plan (Hygiène comprise) dès sa création ; bouton « Ajouter à mon Plan de Vie (dons et talents) » dans le rapport Dons spirituels ; priorités d'Intendance dans le score de cohérence et la revue de la semaine (Transmission y était déjà) ; Boussole 360 dans « Mes tests » et compteur de Mon profil clarifié.
 - Un rituel créé est « GÉNÉRAL » : proposer dès la création de le relier à un objectif ou à un plan, ou au moins
   indiquer l'onglet « Enracinement » (`templates/rituels/index.html.twig`). Les domaines d'Hygiène sont absents de
   la liste des liens possibles.

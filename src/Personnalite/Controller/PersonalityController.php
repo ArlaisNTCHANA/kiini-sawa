@@ -107,6 +107,8 @@ class PersonalityController extends AbstractController
             'groups'      => \App\Personnalite\Psychometrie\Instruments::GROUPS,
             'levels'      => \App\Personnalite\Psychometrie\Instruments::LEVELS,
             'assessments' => $assessments,
+            // Point 7 (26/11/2026) : la Boussole 360 figure aussi dans « Mes tests » et compte dans la progression
+            'boussole' => $this->em->getRepository(\App\Boussole\Entity\BoussoleResult::class)->findOneBy(['user' => $user], ['id' => 'DESC']),
         ]);
     }
 

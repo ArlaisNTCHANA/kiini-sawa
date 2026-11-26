@@ -6,7 +6,7 @@
 <div style="max-width: var(--page-standard); margin: 0 auto; padding: 2rem 1.25rem 8rem; line-height: 1.6;">
     <a href="{{ path('app_personality_index') }}" style="font-size: .8rem; font-weight: 700; color: var(--fg-muted); text-transform: uppercase; letter-spacing: .05em; text-decoration: none;">← Mes tests</a>
     <h1 style="font-family: var(--font-serif); color: var(--primary); font-size: 2rem; margin: .4rem 0 .25rem;">Mon profil KIINI SAWA</h1>
-    <p style="color: var(--fg-muted); margin-bottom: 1.25rem;">La synthèse de vos tests · {{ count }} test{{ count > 1 ? 's' }} sur 5</p>
+    <p style="color: var(--fg-muted); margin-bottom: 1.25rem;">La synthèse de vos tests · {{ count }} des 5 tests qui la nourrissent</p>
     {# Dernière Boussole 360 (module Boussole) #}
     <a href="{{ path(boussole ? 'app_boussole_history' : 'app_public_boussole') }}" class="ks-card ks-card--flat ks-card--link" data-boussole-card style="display: flex; justify-content: space-between; align-items: center; gap: 1rem; padding: 1rem 1.15rem; margin-bottom: 1.25rem; text-decoration: none;">
         <span>
