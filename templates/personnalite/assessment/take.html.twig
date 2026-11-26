@@ -19,7 +19,13 @@
     .as-btn { padding: .85rem 1.5rem; border-radius: var(--r-md); border: none; background: {{ def.color }}; color: #fff; font: inherit; font-weight: 700; cursor: pointer; }
     .as-btn:disabled { opacity: .4; cursor: not-allowed; }
     .as-btn.sec { background: var(--bg-alt); color: var(--fg); }
-    @media (max-width: 480px) { .as-scale label { font-size: .64rem; } }
+    /* Point 9 (26/11/2026) : sur téléphone, des réponses assez grandes pour le doigt (une par ligne), et le bouton final
+       au-dessus de la barre du bas */
+    @media (max-width: 560px) {
+        .as-scale { grid-template-columns: 1fr; gap: .4rem; }
+        .as-scale label { font-size: .9rem; padding: .75rem .9rem; min-height: 44px; text-align: left; display: flex; align-items: center; }
+        .as-wrap { padding-bottom: calc(6.5rem + env(safe-area-inset-bottom)); }
+    }
     .as-disc { display: grid; grid-template-columns: 1fr 4.5rem 4.5rem; align-items: center; gap: .35rem .5rem; }
     .as-disc .h { font-size: .7rem; font-weight: 700; color: var(--fg-muted); text-transform: uppercase; letter-spacing: .04em; text-align: center; }
     .as-disc .w { font-weight: 600; color: var(--fg); }

@@ -26,8 +26,8 @@ class PersonalityController extends AbstractController
     private const REMOVED = ['INTELLIGENCES', 'TALENT'];
 
     private const TESTS = [
-        'EQUILIBRE'     => ['name' => 'Équilibre de Vie', 'subtitle' => 'Roue de la vie', 'description' => 'Mesurez vos 8 domaines de vie et identifiez les zones à rééquilibrer.', 'color' => '#3b82f6', 'bg' => '#eff6ff', 'icon' => 'activity', 'questions' => 8, 'level' => 'Auto-évaluation'],
-        'HYGIENE'       => ['name' => 'Hygiène de Vie', 'subtitle' => '6 Axes Vitaux', 'description' => 'Audit en 6 axes (physique, mental, relationnel, spirituel, ressources, environnement).', 'color' => '#ec4899', 'bg' => '#fdf2f8', 'icon' => 'heart', 'questions' => 30, 'level' => 'Auto-évaluation'],
+        'EQUILIBRE'     => ['name' => 'Équilibre de Vie', 'subtitle' => 'Roue de la vie', 'description' => 'Mesurez vos 8 domaines de vie et identifiez les zones à rééquilibrer.', 'color' => '#2E6B53', 'bg' => '#EEF3EF', 'icon' => 'activity', 'questions' => 8, 'level' => 'Auto-évaluation'],
+        'HYGIENE'       => ['name' => 'Hygiène de Vie', 'subtitle' => '6 Axes Vitaux', 'description' => 'Audit en 6 axes (physique, mental, relationnel, spirituel, ressources, environnement).', 'color' => '#5D7368', 'bg' => '#EEF3EF', 'icon' => 'heart', 'questions' => 30, 'level' => 'Auto-évaluation'],
     ];
 
     public function __construct(

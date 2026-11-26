@@ -506,8 +506,10 @@
        MODALS
      ══════════════════════════════════════════════════════ #}
     
-    {# 1. Task Create/Edit Dialog #}
-    <div class="fixed inset-0 bg-slate-900/40 backdrop-blur-md flex items-center justify-center p-4 z-50"
+    <div x-show="notice" x-cloak x-transition.opacity role="status" style="position: fixed; left: 50%; transform: translateX(-50%); bottom: calc(5.5rem + env(safe-area-inset-bottom)); z-index: 60; background: var(--primary-dark); color: #fff; padding: .7rem 1.1rem; border-radius: 999px; font-size: .9rem; box-shadow: var(--card-shadow); max-width: calc(100vw - 2rem);" x-text="notice"></div>
+
+    {# 1. Task Create/Edit Dialog — point 9 (26/11/2026) : sur téléphone, marges et bouton toujours visibles #}
+    <div class="fixed inset-0 bg-slate-900/40 backdrop-blur-md flex items-center justify-center z-50" style="padding: max(.75rem, env(safe-area-inset-top)) .75rem max(.75rem, env(safe-area-inset-bottom));"
          x-show="taskModalOpen" x-cloak
          x-transition:enter="transition ease-out duration-300"
          x-transition:enter-start="opacity-0 scale-95"
@@ -517,18 +519,18 @@
          x-transition:leave-end="opacity-0 scale-95"
          @click.self="taskModalOpen = false">
          
-         <div class="bg-white rounded-3xl border border-slate-200 shadow-2xl max-w-md w-full overflow-hidden">
-              <header class="p-6 border-b border-slate-100 flex justify-between items-center bg-slate-50/50">
+         <div class="bg-white rounded-3xl border border-slate-200 shadow-2xl max-w-md w-full overflow-hidden" style="display: flex; flex-direction: column; max-height: calc(100dvh - 1.5rem);">
+              <header class="p-6 border-b border-slate-100 flex justify-between items-center bg-slate-50/50" style="flex: none; padding: 1rem 1.25rem;">
                   <h3 class="text-lg font-serif font-bold text-slate-800 flex items-center gap-2">
                       <i data-lucide="check-square" class="w-5 h-5 text-teal-700"></i>
-                      <span x-text="isEditMode ? 'Modifier la tâche' : 'Nouvelle Tâche'"></span>
+                      <span x-text="isEditMode ? 'Modifier la tâche' : 'Nouvelle tâche'"></span>
                   </h3>
                   <button class="text-slate-400 hover:text-slate-650 transition-colors cursor-pointer border-0 bg-transparent" @click="taskModalOpen = false">
                       <i data-lucide="x" class="w-5 h-5"></i>
                   </button>
               </header>
               
-              <div class="p-6 space-y-4 max-h-[65vh] overflow-y-auto ks-scroll">
+              <div class="p-6 space-y-4 overflow-y-auto ks-scroll" style="flex: 1 1 auto; min-height: 0; padding: 1rem 1.25rem;">
                   <!-- Info Banner (Difference between Ritual and Task) -->
                   <div class="p-3.5 bg-blue-50/60 border border-blue-100 rounded-2xl flex gap-3 text-xs text-blue-700 leading-relaxed shadow-sm">
                       <i data-lucide="info" class="w-4 h-4 shrink-0 mt-0.5 text-blue-500"></i>
@@ -624,7 +626,7 @@
               </div>
               
               <!-- Footer Actions -->
-              <footer class="p-6 border-t border-slate-100 bg-slate-50/50 flex justify-between items-center">
+              <footer class="p-6 border-t border-slate-100 bg-slate-50/50 flex justify-between items-center" style="flex: none; flex-wrap: wrap; gap: .5rem; padding: .85rem 1.25rem;">
                   <div>
                       <button class="text-red-650 hover:text-red-800 text-sm font-semibold flex items-center gap-1.5 cursor-pointer border-0 bg-transparent"
                               x-show="isEditMode" @click="deleteTask()">
@@ -732,6 +734,9 @@ function plannerData() {
             challenge: true
         },
         
+        // Point 9 : confirmation après l'enregistrement d'une tâche (surtout quand elle tombe un autre jour)
+        notice: '',
+
         // Modals
         taskModalOpen: false,
         eventModalOpen: false,
@@ -1123,6 +1128,9 @@ function plannerData() {
                 if (data.success) {
                     this.taskModalOpen = false;
                     this.fetchEvents();
+                    const day = new Date(this.modalTask.date + 'T12:00:00').toLocaleDateString('fr-FR', { weekday: 'long', day: 'numeric', month: 'long' });
+                    this.notice = (this.isEditMode ? 'Tâche mise à jour' : 'Tâche enregistrée') + ' pour le ' + day + '.';
+                    setTimeout(() => { this.notice = ''; }, 5000);
                 } else {
                     alert(data.error || "Une erreur est survenue.");
                 }
