@@ -9,6 +9,23 @@ teste (`php bin/phpunit`), commit, déploie (`bin/ops/envoyer-hostinger.sh`), v�
 journal `var/log/prod-AAAA-MM-JJ.log` sans erreur) ; **le fondateur fait lui-même `git push`** (refusé à l'IA).
 Ne jamais afficher ni demander de mot de passe ; ne pas publier son nom (mentions légales en attente).
 
+## 26/11/2026 — Premiers pas = parcours guidé ; une seule prochaine étape (chantier 4)
+
+- **Question du fondateur** : « si on met les parcours à l'accueil, plus besoin des assistants ? Les premiers pas
+  seraient les parcours ? » **Décision (« Oui, fais-le »)** : on garde les assistants (mode libre : seul endroit pour
+  tout remplir et corriger : valeurs déclarées, contre-valeurs, croyances limitantes, échéances, stratégies, liens
+  entre plans ; charte : non-régression), mais ils ne sont plus la porte d'entrée.
+- **Fait** (seulement quand le parcours de plan « VIE » est publié ; sinon rien ne change) :
+  `DashboardData::nextSteps` remplace « Poser vos fondations » et « Écrire votre vision » par « Poser votre Plan de Vie,
+  séance après séance » (station et séance suivante, « Commencer » / « Reprendre » ; fait quand le parcours est fini
+  ou que raison d'être et vision sont écrites) ; chaque premier pas a une clé (`data-first-step`) ; « Inviter un
+  Partenaire de Redevabilité » en entier. `NextStep` (règle 0 bis) : le premier pas non fait est « Ma prochaine étape »,
+  et « Ensuite » montre les premiers pas suivants : plus de doublon entre les deux cartes. Carte « Bravo » : bouton
+  « Choisir mon parcours guidé » aussi dans ce cas.
+- **Tests** : `PlanRubricsTest` (15) ; 623 tests verts. Vu à l'écran en local (375 px) : les deux cartes concordent.
+- **Reste** : le premier pas « Partenaire de Redevabilité » mène encore à `/social` (réseau) et se coche avec une mise
+  en relation : à revoir avec le chantier 6 (deux espaces à clarifier, décision du fondateur). **Non déployé.**
+
 ## 26/11/2026 — Assistants des plans lisibles sur téléphone (chantier 1)
 
 - **Demande du fondateur** : « commence par le point 1 » (`docs/A-FAIRE-parcours-nouvel-utilisateur.md`).

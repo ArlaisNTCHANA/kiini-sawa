@@ -195,7 +195,13 @@ final class PlanRubricsTest extends WebTestCase
         $this->em()->flush();
 
         $client->request('GET', '/dashboard');
-        $this->assertSelectorExists('[data-next-step="plan-journey-start"]');
+        // Premiers pas : le parcours remplace « fondations » et « vision », et c'est « la » prochaine étape (26/11/2026)
+        $this->assertSelectorExists('[data-next-step="first-step"]');
+        $this->assertSelectorTextContains('[data-next-step="first-step"]', 'Poser votre Plan de Vie, séance après séance');
+        $this->assertSelectorExists('[data-next-step="first-step"] a[href="/academie/'.$course->getSlug().'/lecon-1"]');
+        $this->assertSelectorExists('[data-first-step="journey"]');
+        $this->assertSelectorNotExists('[data-first-step="foundations"]');
+        $this->assertSelectorNotExists('[data-first-step="vision"]');
         $this->assertSelectorNotExists('[data-next-step="foundation"]');
 
         $client->request('GET', '/academie/par-ou-commencer');
@@ -212,10 +218,11 @@ final class PlanRubricsTest extends WebTestCase
             'mode' => 'sans',
         ]);
         $client->request('GET', '/dashboard');
-        $this->assertSelectorExists('[data-next-step="plan-journey"]');
-        $this->assertSelectorTextContains('[data-next-step="plan-journey"]', 'Vos dons');
-        $this->assertSelectorTextContains('[data-next-step="plan-journey"]', 'station 2 sur 2');
-        $this->assertSelectorTextNotContains('[data-next-step="plan-journey"]', 'Commencer mon parcours', 'Pas d\'invitation au parcours de 90 jours en même temps.');
+        $this->assertSelectorTextContains('[data-next-step="first-step"]', 'Station 2 sur 2 : « Vos dons »');
+        $this->assertSelectorTextContains('[data-next-step="first-step"]', 'Reprendre');
+        $this->assertSelectorTextNotContains('[data-next-step="first-step"]', 'Commencer mon parcours', 'Pas d\'invitation au parcours de 90 jours en même temps.');
+        $this->assertSelectorTextContains('[data-first-step="journey"]', 'Reprendre');
+        $this->assertSelectorTextContains('[data-next-step="first-step"] .next-step__then', 'Choisir un premier rituel', '« Ensuite » : les premiers pas suivants.');
     }
 
     public function testDailyEmailAnnouncesTheSessionWithWhatWasPosedAndItsVerse(): void
@@ -392,5 +399,23 @@ final class PlanRubricsTest extends WebTestCase
         $this->assertSelectorTextContains('#semaine-3 [data-guided-session]', 'Votre But');
         $this->assertCount(2, $client->getCrawler()->filter('#semaine-4 [data-guided-session]'), 'Semaine 4 : convictions et valeurs.');
         $this->assertSelectorNotExists('#semaine-1 [data-guided-session]');
+    }
+
+    public function testOnceThePlanJourneyIsDoneTheNextFirstStepLeadsAndResumeStillWorksAfterwards(): void
+    {
+        $client = static::createClient();
+        $user = $this->createUser();
+        $user->setIsOnboardingCompleted(true);
+        $this->em()->flush();
+        $client->loginUser($user);
+        $course = $this->makeCourse('VIE', true, true, [['Vos passions', 'VIE', 'list_passions']]);
+        $course->setKind(Course::KIND_PLAN);
+        $this->em()->flush();
+
+        $this->finish($client, $course, ['items' => ['Chanter']]);
+        $client->request('GET', '/dashboard');
+        $this->assertSelectorExists('[data-first-step="journey"]');
+        $this->assertSelectorTextContains('[data-next-step="first-step"]', 'Choisir un premier rituel', 'Parcours fini : le premier pas suivant passe devant.');
+        $this->assertSelectorTextContains('[data-next-step="first-step"]', '2 sur 4');
     }
 }

@@ -19,6 +19,8 @@ use Doctrine\ORM\EntityManagerInterface;
  * semaine), avancer dans le parcours de 90 jours, puis faire progresser le plan le moins avancé.
  *
  * Règles, dans l'ordre (la première qui s'applique devient « la » prochaine étape ; les suivantes alimentent « ensuite ») :
+ *  0 bis. quand le parcours « Mon Plan de Vie » est publié et que « Vos premiers pas » ne sont pas finis : le premier
+ *     pas non fait est « la » prochaine étape (plus de doublon entre les deux cartes, décision du 26/11/2026) ;
  *  0. parcours guidés (26/11/2026) : reprendre son parcours de plan en cours ; ou, tant qu'aucun n'a été choisi et que le
  *     Plan de Vie n'est pas complet, « Par où commencer ? » (remplace alors la règle 1) ;
  *  1. fondations : le Plan de Vie n'est pas encore commencé ;
@@ -39,6 +41,7 @@ final class NextStep
         private readonly WeeklyReviewRepository $weeklyReviews,
         private readonly WeeklyReviewService $weekly,
         private readonly \App\Academie\Service\AcademyCatalog $academy,
+        private readonly DashboardData $dashboard,
     ) {
     }
 
@@ -61,9 +64,25 @@ final class NextStep
         $plans = $this->progress->forUser($user);
         $locked = $this->entitlements->lockedPlans($user);
 
-        // 0. Parcours guidés : reprendre, ou choisir par où commencer
+        // 0 bis. Premiers pas : tant qu'ils ne sont pas finis, le premier non fait passe devant (parcours de plan publié)
         $chooser = false;
-        if (null !== $current = $this->academy->currentPlanJourney($user)) {
+        $firstSteps = $this->dashboard->nextSteps($user, $user->getHabits()->toArray());
+        $firstUndone = array_values(array_filter($firstSteps, fn (array $s) => !$s['done']))[0] ?? null;
+        if (null !== $firstUndone && 'journey' === $firstSteps[0]['key']) {
+            $position = array_search($firstUndone, $firstSteps, true) + 1;
+            $out[] = $this->item('first-step', 'footprints', 'Vos premiers pas · '.$position.' sur '.\count($firstSteps), $firstUndone['label'], $firstUndone['hint'],
+                $firstUndone['cta'], $firstUndone['route'], $firstUndone['params']);
+            $chooser = true; // les fondations passent par le parcours : pas de règle 1 en plus
+            // « Ensuite » : les premiers pas suivants, pas d'autres écrans qui leur feraient concurrence
+            foreach (\array_slice(array_values(array_filter($firstSteps, fn (array $s) => !$s['done'])), 1) as $s) {
+                $out[] = $this->item('first-step-next', 'footprints', 'Vos premiers pas', $s['label'], $s['hint'], $s['cta'], $s['route'], $s['params']);
+            }
+        }
+
+        // 0. Parcours guidés : reprendre, ou choisir par où commencer
+        if ($chooser) {
+            // la séance à reprendre est déjà le premier pas, ou les premiers pas passent avant
+        } elseif (null !== $current = $this->academy->currentPlanJourney($user)) {
             $course = $current->getCourse();
             $progress = $current->progress();
             if (null !== $lesson = $current->nextLesson()) {
@@ -100,7 +119,7 @@ final class NextStep
             if (!$journey->isWeekDone($n)) {
                 $out[] = $this->item('journey', 'route', 'Mon parcours de 90 jours · semaine '.$n.' sur 13', Journey::PLAN[$n]['produce'], 'Lire, écrire dans vos plans, puis marquer la semaine comme terminée.', 'Voir ma semaine', 'app_journey', [], 'semaine-'.$n);
             }
-        } elseif (!$journey && null === $current) { // pas d'invitation concurrente pendant un parcours de plan
+        } elseif (!$journey && null === ($current ?? null) && !$chooser) { // pas d'invitation concurrente pendant un parcours de plan
             $out[] = $this->item('journey-start', 'route', 'Le parcours de 90 jours', 'Commencer mon parcours', 'Treize semaines, environ trois heures par semaine, pour écrire vos six plans chapitre après chapitre.', 'Découvrir le parcours', 'app_journey');
         }
 

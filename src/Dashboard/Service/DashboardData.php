@@ -25,6 +25,7 @@ final class DashboardData
         private readonly EntityManagerInterface $em,
         private readonly UrlGeneratorInterface $urls,
         private readonly \App\Abonnement\Service\Entitlements $entitlements,
+        private readonly \App\Academie\Service\AcademyCatalog $academy,
     ) {
     }
 
@@ -34,23 +35,54 @@ final class DashboardData
      *
      * @param Habit[] $habits
      *
-     * @return list<array{label: string, hint: string, url: string, done: bool}>
+     * Parcours guidés (décision du fondateur du 26/11/2026) : quand le parcours « Mon Plan de Vie » est publié, il
+     * remplace « Poser vos fondations » et « Écrire votre vision » (un seul premier pas, avec sa station). Les
+     * assistants restent le mode libre, pour compléter et corriger.
+     *
+     * @return list<array{key: string, label: string, hint: string, url: string, route: string, params: array, done: bool, cta: string}>
      */
     public function nextSteps(User $user, array $habits): array
     {
         $plan = $user->getPlanDeVie();
+        $foundations = null !== $plan?->getPurpose()?->getStatement();
+        $vision = '' !== trim((string) $plan?->getVision()?->getContent());
         $firstTest = $this->entitlements->canTakeTest($user, 'profil-complet') ? 'profil-complet' : $this->entitlements->firstFreeTest();
-        $steps = [
-            ['label' => 'Poser vos fondations', 'hint' => 'Raison d\'être, valeurs et premier objectif.', 'url' => $this->urls->generate('app_plan_de_vie'),
-                'done' => null !== $plan?->getPurpose()?->getStatement()],
-            ['label' => 'Écrire votre vision', 'hint' => 'À quoi ressemblera votre vie quand elle sera alignée ? L\'assistant vous guide.', 'url' => $this->urls->generate('app_plan_wizard'),
-                'done' => '' !== trim((string) $plan?->getVision()?->getContent())],
-            ['label' => 'Choisir un premier rituel', 'hint' => 'Une petite action régulière qui nourrit votre objectif.', 'url' => $this->urls->generate('app_user_habits'),
-                'done' => [] !== $habits],
-            ['label' => 'Découvrir votre personnalité', 'hint' => sprintf('Le test « %s » : %d minutes pour mieux vous connaître.', Instruments::CATALOG[$firstTest]['name'], Instruments::CATALOG[$firstTest]['minutes']), 'url' => $this->urls->generate('app_assessment_take', ['slug' => $firstTest]),
-                'done' => $this->em->getRepository(Assessment::class)->count(['user' => $user]) > 0],
-            ['label' => 'Inviter un partenaire de redevabilité', 'hint' => 'Quelqu\'un qui vous encourage et vous aide à tenir.', 'url' => $this->urls->generate('app_social'),
-                'done' => $this->em->getRepository(Connection::class)->count(['requester' => $user]) + $this->em->getRepository(Connection::class)->count(['receiver' => $user]) > 0],
+        $step = fn (string $key, string $label, string $hint, string $route, array $params, bool $done, string $cta = 'Commencer') => [
+            'key' => $key, 'label' => $label, 'hint' => $hint, 'url' => $this->urls->generate($route, $params), 'route' => $route, 'params' => $params, 'done' => $done, 'cta' => $cta,
+        ];
+
+        $journey = null;
+        foreach ($this->academy->planJourneys() as $course) {
+            if ('VIE' === $course->getPrimaryPlan()) {
+                $journey = $course;
+                break;
+            }
+        }
+        if (null !== $journey) {
+            $enrollment = $this->academy->enrollment($user, $journey);
+            $lessons = $journey->getLessons(true);
+            $next = $enrollment?->nextLesson() ?? ($lessons[0] ?? null);
+            $progress = $enrollment?->progress() ?? ['done' => 0, 'total' => \count($lessons)];
+            $started = null !== $enrollment && $progress['done'] > 0;
+            $first = [$step('journey', 'Poser votre Plan de Vie, séance après séance',
+                $started && null !== $next
+                    ? sprintf('Station %d sur %d : « %s », %d min.', $progress['done'] + 1, $progress['total'], $next->getTitle(), $next->getDurationMinutes())
+                    : sprintf('%d courtes séances, une par jour : votre But de Dieu, vos valeurs, votre vision et vos objectifs, écrits directement dans votre plan.', $progress['total']),
+                null !== $next ? 'app_academie_lesson' : 'app_academie_course',
+                null !== $next ? ['slug' => $journey->getSlug(), 'lessonSlug' => $next->getSlug()] : ['slug' => $journey->getSlug()],
+                (bool) $enrollment?->isCompleted() || ($foundations && $vision), $started ? 'Reprendre' : 'Commencer')];
+        } else {
+            $first = [
+                $step('foundations', 'Poser vos fondations', 'Raison d\'être, valeurs et premier objectif.', 'app_plan_de_vie', [], $foundations),
+                $step('vision', 'Écrire votre vision', 'À quoi ressemblera votre vie quand elle sera alignée ? L\'assistant vous guide.', 'app_plan_wizard', [], $vision),
+            ];
+        }
+        $steps = [...$first,
+            $step('habit', 'Choisir un premier rituel', 'Une petite action régulière qui nourrit votre objectif.', 'app_user_habits', [], [] !== $habits),
+            $step('test', 'Découvrir votre personnalité', sprintf('Le test « %s » : %d minutes pour mieux vous connaître.', Instruments::CATALOG[$firstTest]['name'], Instruments::CATALOG[$firstTest]['minutes']), 'app_assessment_take', ['slug' => $firstTest],
+                $this->em->getRepository(Assessment::class)->count(['user' => $user]) > 0),
+            $step('partner', 'Inviter un Partenaire de Redevabilité', 'Quelqu\'un qui vous encourage et vous aide à tenir.', 'app_social', [],
+                $this->em->getRepository(Connection::class)->count(['requester' => $user]) + $this->em->getRepository(Connection::class)->count(['receiver' => $user]) > 0),
         ];
 
         foreach ($steps as $s) {

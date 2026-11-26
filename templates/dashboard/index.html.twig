@@ -160,7 +160,7 @@
         <p class="welcome-card__text">{{ t('accueil.bravo.texte', 'C\'est le cœur de votre Plan de Vie. Prenez le temps de le relire : la suite, vos plans et vos rituels, en découle.') }}</p>
         <div class="welcome-card__actions">
             {# Parcours guidés (26/11/2026) : à la fin de l'accueil, proposer de remplir ses plans par un parcours #}
-            {% if nextStep|default(null) and nextStep.kind == 'plan-journey-start' %}
+            {% if nextStep|default(null) and nextStep.kind in ['plan-journey-start', 'first-step'] %}
             <a href="{{ path('app_academie_start') }}" class="ks-btn ks-btn--primary">{{ t('accueil.bravo.parcours', 'Choisir mon parcours guidé') }}</a>
             <a href="{{ path('app_plan_de_vie') }}" class="welcome-card__link">{{ t('accueil.bravo.action', 'Voir mon Plan de Vie') }}</a>
             {% else %}
@@ -392,14 +392,14 @@
             <ol style="list-style: none; padding: 0; margin: 0; display: grid; gap: .5rem;">
                 {% for step in nextSteps %}
                     {% set isNext = step == nextStep %}
-                    <li>
+                    <li data-first-step="{{ step.key|default('') }}">
                         <a href="{{ step.url }}" style="display: flex; align-items: center; gap: .85rem; padding: .7rem .9rem; border-radius: var(--r-md); text-decoration: none; {{ isNext ? 'background: var(--primary-soft); border: 1px solid #C8D6CD;' : 'border: 1px solid transparent;' }}">
                             <span style="flex-shrink: 0; width: 26px; height: 26px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: .8rem; font-weight: 700; {{ step.done ? 'background: var(--primary); color: #fff;' : 'border: 2px solid var(--border-strong); color: var(--fg-muted);' }}">{{ step.done ? '✓' : loop.index }}</span>
                             <span style="flex: 1;">
                                 <span style="display: block; font-weight: 600; color: {{ step.done ? 'var(--fg-muted)' : 'var(--fg)' }}; {{ step.done ? 'text-decoration: line-through;' : '' }}">{{ step.label }}</span>
                                 {% if isNext %}<span style="display: block; font-size: .85rem; color: var(--fg-light);">{{ step.hint }}</span>{% endif %}
                             </span>
-                            {% if isNext %}<span class="dash-step-cta" style="flex-shrink: 0; font-size: .85rem; font-weight: 700; color: var(--primary);">Commencer →</span>{% endif %}
+                            {% if isNext %}<span class="dash-step-cta" style="flex-shrink: 0; font-size: .85rem; font-weight: 700; color: var(--primary);">{{ step.cta|default('Commencer') }} →</span>{% endif %}
                         </a>
                     </li>
                 {% endfor %}

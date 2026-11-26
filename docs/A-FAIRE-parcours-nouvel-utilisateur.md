@@ -82,7 +82,7 @@ Vie » mène à Aujourd'hui.
 **Piste** : après la dernière étape, rediriger vers la page du plan avec l'analyse ouverte et un message de
 félicitations (le score, les 2 ou 3 pistes principales). Faire pointer le bouton de l'accueil vers `/plan-de-vie`.
 
-### 4. Une seule prochaine étape sur Aujourd'hui (gênant)
+### 4. Une seule prochaine étape sur Aujourd'hui (gênant) — **fait le 26/11/2026 quand le parcours « Mon Plan de Vie » est publié** (voir `docs/SUIVI-IA.md`)
 **Symptôme** : « Ma prochaine étape : bilan du jour », « Vos premiers pas : 2. Écrire votre vision » et « Ensuite :
 commencer mon parcours » se font concurrence. Une fois les 6 plans écrits, on propose encore « le parcours de 90
 jours pour écrire vos six plans ».
