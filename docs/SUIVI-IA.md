@@ -9,6 +9,22 @@ teste (`php bin/phpunit`), commit, déploie (`bin/ops/envoyer-hostinger.sh`), v�
 journal `var/log/prod-AAAA-MM-JJ.log` sans erreur) ; **le fondateur fait lui-même `git push`** (refusé à l'IA).
 Ne jamais afficher ni demander de mot de passe ; ne pas publier son nom (mentions légales en attente).
 
+## 26/11/2026 — Intendance sans rechargement ; séances guidées dans l'appli (« Tout ce qui reste »)
+
+- **Plan d'Intendance** : ajouter, enregistrer, retirer un élément, marquer une action faite se font en arrière-plan
+  (script de `templates/plan_d_intendance/index.html.twig`, conteneur `[data-stewardship-page]`) : la page renvoyée
+  remplace le contenu, l'écran reste à sa place, l'élément ajouté vient à l'écran, ouvert. Sans script ou en cas
+  d'erreur : envoi normal, comme avant. **Pièges** : un champ nommé « action » masque `form.action`
+  (`getAttribute('action')`) ; défilement fixé dans `requestAnimationFrame`, sans animation.
+- **Bogues trouvés en production et corrigés** : enregistrer un élément d'Intendance avec « Aucun objectif précis »
+  renvoyait une erreur 400 (`InputBag::getInt('')` lève une exception) ; même cas pour « Aucun accompagnateur » d'une
+  organisation et les places. Les messages `warning` ne s'affichaient nulle part : ajoutés à `_flashes.html.twig`
+  (qui a maintenant un conteneur `#ks-flashes` toujours présent).
+- **Appli mobile (`mobile-v1`)** : les séances des parcours de plan (`pratique.type = seance`) s'affichent et
+  s'enregistrent : texte (+ horizon), lignes d'une rubrique, lignes par groupe (`src/academie/seance.ts`,
+  `SeanceRubrique.tsx`) ; ce qui est déjà dans le plan s'affiche sans pouvoir être retiré. API : `rubrique.exemple`.
+  Vérifié : `tsc`, 53 tests vitest. **Non vu dans le simulateur** : l'accès au simulateur attend l'accord du fondateur.
+
 ## 26/11/2026 — Points 3, 5, 7, 8 et 9 du parcours nouvel utilisateur (« Attaque tout »)
 
 - **Point 5, anglais et jargon** : catégories Être/Faire/Avoir/Donner dans les blocs ajoutés de l'assistant (libellé
