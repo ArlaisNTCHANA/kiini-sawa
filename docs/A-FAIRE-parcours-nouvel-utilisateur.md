@@ -44,8 +44,8 @@ n'aide pas et l'on ne voit pas le chemin. Réponse proposée : remplir les plans
 courts, un par plan, plus le parcours de 90 jours qui les enchaîne). Chaque séance suit cinq temps : comprendre,
 méditer, réfléchir, écrire dans le plan, célébrer. Une **ligne de métro** montre où l'on en est, et des rendez-vous
 par e-mail aident à continuer.
-**Document** : `docs/PROPOSITION-parcours-guides.md`. **À faire valider par le fondateur** (questions du § 9) avant tout
-code ; lot 1 = parcours Plan de Vie. Plusieurs chantiers ci-dessous (1, 3, 4, 8) en seront en partie résolus :
+**Document** : `docs/PROPOSITION-parcours-guides.md`. **Validé par le fondateur le 26/11/2026** (décisions au § 9 du document) ;
+prochaine étape : lot 1 = parcours Plan de Vie, dans l'Académie, proposé à la fin de l'accueil. Plusieurs chantiers ci-dessous (1, 3, 4, 8) en seront en partie résolus :
 les traiter en cohérence avec ce projet.
 
 ## À faire, par ordre d'importance

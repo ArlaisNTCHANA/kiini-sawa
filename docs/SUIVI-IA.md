@@ -14,7 +14,7 @@ Ne jamais afficher ni demander de mot de passe ; ne pas publier son nom (mention
 - **Ressenti du fondateur** après avoir essayé : découragé, enchaînement qui n'aide pas, aucune vue d'ensemble du
   remplissage. **Proposition** : `docs/PROPOSITION-parcours-guides.md` (6 parcours de plan + parcours de 90 jours ;
   séance en 5 temps ; ligne de métro ; rendez-vous par e-mail ; réutilise l'Académie, `Journey` et
-  `LifePlanWizardSaver`). **Non validée** : 6 questions au fondateur (§ 9). Ajoutée en « Priorité 0 » de
+  `LifePlanWizardSaver`). **Validée le 26/11/2026** : proposés à la fin de l'accueil, contenu repris du livre, méditation en simple invitation, une séance par jour par défaut, dans l'Académie (« parcours de plan ») avec raccourci « Par où commencer ? » sur Aujourd'hui, premier jet écrit par l'IA (§ 9). Prochaine étape : lot 1. Ajoutée en « Priorité 0 » de
   `docs/A-FAIRE-parcours-nouvel-utilisateur.md`.
 
 ## 26/11/2026 — Passation : feuille de route des corrections du parcours « nouvel utilisateur »

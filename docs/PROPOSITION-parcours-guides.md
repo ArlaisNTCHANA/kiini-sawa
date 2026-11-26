@@ -1,6 +1,7 @@
 # Proposition : les parcours guidés (remplir ses plans en étant accompagné)
 
-**Statut** : proposition du 26/11/2026, **à valider par le fondateur avant tout code**.
+**Statut** : proposition du 26/11/2026, **validée par le fondateur le 26/11/2026** (décisions au § 9, elles priment sur
+le reste du document). Prochaine étape : lot 1 (parcours Plan de Vie).
 Origine : le parcours « nouvel utilisateur » du 25/11 (`docs/parcours-nouvel-utilisateur-2026-11-25.md`) et le ressenti
 du fondateur, qui a essayé de remplir ses plans et s'est vite découragé.
 
@@ -141,16 +142,22 @@ lui-même.
 Chaque lot : tests automatiques, vérification à l'écran **en format téléphone**, puis un vrai essai par le fondateur
 avant de passer au suivant.
 
-## 9. Questions au fondateur (à trancher avant le lot 1)
+## 9. Décisions du fondateur (26/11/2026)
 
-1. **Où proposer les parcours ?** Proposition : à la fin de l'accueil (« Voulez-vous être guidé pour écrire votre Plan
-   de Vie ? Une séance de 10 minutes par jour ») et sur le résultat de la Boussole (le parcours du plan prioritaire).
-2. **Les séances : extraits du livre mot pour mot, ou résumés validés par vous ?**
-3. **Le temps de méditation** : simple invitation, ou minuteur facultatif (2, 5 ou 10 minutes) ?
-4. **Rythme par défaut** : « une séance par jour » ou « à mon rythme » ?
-5. **Faut-il garder l'Académie actuelle à part** (parcours thématiques comme « Choix et engagement ») et créer un
-   espace « Mes parcours » pour les parcours de plan, ou tout réunir sous l'Académie ?
-6. **Qui écrit les ~30 séances ?** L'IA propose un premier jet à partir du livre, vous corrigez dans le studio ?
+| # | Question | Décision |
+|---|---|---|
+| 1 | Où proposer les parcours ? | **Au nouvel utilisateur, pour initialiser ses plans** : à la fin de l'accueil, on lui propose plusieurs options sous forme de parcours (parcours Plan de Vie, parcours d'un autre plan, parcours complet de 90 jours, ou « je remplis seul » en mode libre). |
+| 2 | Contenu des séances | **On reprend le livre** (extraits fidèles du texte de l'auteur, `../livre-et-ressources/sources/livre/manuscrit.md` via `content/livre/`). Ne pas réécrire le fond. |
+| 3 | Temps de méditation | **Une invitation** (verset, prière proposée, bouton « J'ai pris ce temps »), sans minuteur. |
+| 4 | Rythme | **Par défaut : une séance par jour** (e-mail ou notification). La personne peut passer « à mon rythme » à tout moment. |
+| 5 | Où vivent les parcours ? | **Dans l'Académie**, rangés à part comme « parcours de plan ». **Raccourci depuis Aujourd'hui** : une carte « Par où commencer ? » (tant qu'aucun parcours n'est choisi), puis « Ma prochaine étape : reprendre mon parcours ». |
+| 6 | Qui écrit les séances ? | **L'IA** écrit le premier jet à partir du livre, dans le studio de l'Académie (brouillon) ; le fondateur relit et publie. |
+
+Conséquences pour le lot 1 :
+- Ajouter à `Course` une notion de **parcours de plan** (par exemple un type `PLAN` à côté des parcours thématiques), affichée
+  dans une section dédiée de `/academie` et proposée dans l'accueil (`templates/compte/onboarding.html.twig`, dernière étape).
+- Rythme quotidien coché par défaut à l'inscription à un parcours de plan (`CourseEnrollment::paceMode` = `DAILY`).
+- Séances créées en **brouillon** dans le studio ; rien n'est publié sans le fondateur.
 
 ## 10. Comment on saura que c'est réussi
 
