@@ -67,7 +67,7 @@ final class DashboardData
             $first = [$step('journey', 'Poser votre Plan de Vie, séance après séance',
                 $started && null !== $next
                     ? sprintf('Station %d sur %d : « %s », %d min.', $progress['done'] + 1, $progress['total'], $next->getTitle(), $next->getDurationMinutes())
-                    : sprintf('%d courtes séances, une par jour : votre But de Dieu, vos valeurs, votre vision et vos objectifs, écrits directement dans votre plan.', $progress['total']),
+                    : sprintf('%d courtes séances, une par jour : le But de Dieu pour ma vie, vos valeurs, votre vision et vos objectifs, écrits directement dans votre plan.', $progress['total']),
                 null !== $next ? 'app_academie_lesson' : 'app_academie_course',
                 null !== $next ? ['slug' => $journey->getSlug(), 'lessonSlug' => $next->getSlug()] : ['slug' => $journey->getSlug()],
                 (bool) $enrollment?->isCompleted() || ($foundations && $vision), $started ? 'Reprendre' : 'Commencer')];

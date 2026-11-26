@@ -43,7 +43,7 @@
         {% if lifeGoals[cat]|length %}
             <table>
                 {% for g in lifeGoals[cat] %}
-                    <tr><td>{{ g.title }}</td><td style="width: 28mm;" class="muted">{{ g.deadline ? g.deadline|format_date(pattern: 'MMM y', locale: 'fr') : '—' }}</td><td style="width: 14mm;" class="muted">{{ g.progress }} %</td></tr>
+                    <tr><td>{{ g.title }}<div class="muted" style="font-size: 8pt;">{{ g.priority == 'HIGH' ? 'Haute priorité' : (g.priority == 'MEDIUM' ? 'Moyenne priorité' : 'Basse priorité') }}{% if g.metric %} · Mesure : {{ g.metric }}{% endif %}</div>{% for ms in g.milestones %}<div style="font-size: 8pt;">{{ ms.completed ? '[x]' : '[ ]' }} {{ ms.title }}{% if ms.dueDate %} <span class="muted">({{ ms.dueDate|date('d/m/Y') }})</span>{% endif %}</div>{% endfor %}</td><td style="width: 28mm;" class="muted">{{ g.deadline ? g.deadline|format_date(pattern: 'MMM y', locale: 'fr') : '—' }}</td><td style="width: 14mm;" class="muted">{{ g.progress }} %</td></tr>
                 {% endfor %}
             </table>
         {% else %}<p class="empty">Aucun.</p>{% endif %}

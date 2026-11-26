@@ -9,6 +9,20 @@ teste (`php bin/phpunit`), commit, déploie (`bin/ops/envoyer-hostinger.sh`), v�
 journal `var/log/prod-AAAA-MM-JJ.log` sans erreur) ; **le fondateur fait lui-même `git push`** (refusé à l'IA).
 Ne jamais afficher ni demander de mot de passe ; ne pas publier son nom (mentions légales en attente).
 
+## 26/11/2026 — « Le But de Dieu pour ma vie » ; impression complète du Plan de Vie
+
+- **Formulation** (demande du fondateur) : jamais « Votre But de Dieu » dans l'application, mais « le But de Dieu pour
+  ma vie » : `DashboardData` (accueil) et le parcours `content/academie/parcours-plan-de-vie.yaml` (titre de la 1re
+  séance, présentation, consigne). Le texte du livre (« ton But de Dieu ») n'est pas touché.
+  En production, le parcours est déjà chargé en brouillon : pour reprendre le nouveau fichier, le fondateur lance
+  (s'il n'a pas retouché ce brouillon dans le studio) `app:academie:import content/academie/parcours-plan-de-vie.yaml --remplacer`,
+  ou corrige les trois endroits dans Admin › Académie.
+- **Impression du Plan de Vie** (« je ne vois pas tous les détails ») : sur `visualize.html.twig`, l'en-tête et le pied
+  en `position: fixed` recouvraient le haut et le bas de chaque page à partir de la 2e (titres et objectifs cachés),
+  et le message « Plan de Vie envoyé avec succès » s'imprimait sur chaque page. Retirés à l'impression ; les titres de
+  rubrique restent avec leur contenu. Les objectifs imprimés et le PDF téléchargeable donnent maintenant priorité,
+  mesure, progression et jalons, comme la page. Test : `tests/PlanDeVie/PlanPrintViewTest.php`.
+
 ## 26/11/2026 — Parcours des tests jamais essayés (DISC, Type, Profil complet, Ennéagramme, Hygiène, PDF)
 
 Passés en local avec le compte de test, résultats et PDF lus page par page. Corrigé :

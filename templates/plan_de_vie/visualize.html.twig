@@ -60,8 +60,6 @@
                 color: #000;
                 -webkit-print-color-adjust: exact;
                 print-color-adjust: exact;
-                padding-top: 40px;
-                padding-bottom: 40px;
             }
             .container {
                 margin: 0;
@@ -77,36 +75,19 @@
                 margin: 1.5cm;
                 size: landscape;
             }
-            h1, h2, h3, h4 {
+            h1, h2, h3, h4, .section-header {
                 break-after: avoid;
+                page-break-after: avoid;
             }
             .no-break {
                 page-break-inside: avoid;
                 break-inside: avoid;
             }
-            .print-only {
-                display: flex !important;
-                position: fixed;
-                top: 0; left: 0; right: 0;
-                justify-content: space-between;
-                align-items: center;
-                border-bottom: 2px solid #2E6B53;
-                padding-bottom: 8px;
-                font-size: 0.8rem;
-                color: #66706A;
-                z-index: 100;
-            }
-            .print-footer {
-                display: flex !important;
-                position: fixed;
-                bottom: 0; left: 0; right: 0;
-                justify-content: center;
-                align-items: center;
-                border-top: 1px solid #E1E6DF;
-                padding-top: 8px;
-                font-size: 0.75rem;
-                color: #9AA39C;
-                z-index: 100;
+            /* En-tête et pied « fixes » retirés (26/11/2026) : en position fixe, ils recouvraient le haut et le bas de
+               chaque page à partir de la 2e et cachaient une partie du plan. L'en-tête du document porte déjà le nom
+               et la date. */
+            .print-only, .print-footer, .toast-notify {
+                display: none !important;
             }
         }
 
@@ -632,10 +613,20 @@
                                 {% for goal in lifeGoals[cat] %}
                                     <li style="margin-bottom: 8px;">
                                         <strong>{{ goal.title }}</strong>
-                                        {% if goal.deadline %}
-                                            <span style="display: block; font-size: 0.78rem; color: #66706A; margin-top: 2px;">
-                                                <i data-lucide="calendar" class="ks-ico" aria-hidden="true"></i> Échéance : {{ goal.deadline|date('d/m/Y') }}
-                                            </span>
+                                        {# Détails comme sur la page du plan (26/11/2026) : priorité, mesure, progression, jalons #}
+                                        <span style="display: block; font-size: 0.78rem; color: #66706A; margin-top: 2px;">
+                                            {% if goal.deadline %}<i data-lucide="calendar" class="ks-ico" aria-hidden="true"></i> Échéance : {{ goal.deadline|date('d/m/Y') }} · {% endif %}
+                                            {{ goal.priority == 'HIGH' ? 'Haute priorité' : (goal.priority == 'MEDIUM' ? 'Moyenne priorité' : 'Basse priorité') }} · Progression : {{ goal.progress }} %
+                                        </span>
+                                        {% if goal.metric %}
+                                            <span style="display: block; font-size: 0.78rem; color: #66706A;">Mesure : {{ goal.metric }}</span>
+                                        {% endif %}
+                                        {% if goal.milestones|length > 0 %}
+                                            <ul style="list-style: none; padding-left: 0; margin: 4px 0 0; font-size: 0.8rem; line-height: 1.5;" data-print-milestones>
+                                                {% for ms in goal.milestones %}
+                                                    <li>{{ ms.completed ? '☑' : '☐' }} {{ ms.title }}{% if ms.dueDate %} <span style="color: #9AA39C;">({{ ms.dueDate|date('d/m/Y') }})</span>{% endif %}</li>
+                                                {% endfor %}
+                                            </ul>
                                         {% endif %}
                                     </li>
                                 {% endfor %}

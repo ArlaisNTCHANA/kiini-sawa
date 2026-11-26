@@ -20,12 +20,12 @@ cover_word: Fondations
 description: |
   Huit séances courtes pour écrire votre Plan de Vie sans vous perdre dans un long formulaire. Chacune suit le même chemin : comprendre un enseignement tiré du livre KIINI, prendre un temps avec Dieu, réfléchir à quelques questions, puis écrire directement dans votre plan.
 
-  Vous voyez toujours où vous en êtes : votre But de Dieu, vos convictions, vos valeurs, vos passions, vos dons, votre personnalité, votre vision et vos objectifs. Ce que vous écrivez s'ajoute à votre plan ; rien de ce qui y est déjà n'est effacé.
+  Vous voyez toujours où vous en êtes : le But de Dieu pour ma vie, vos convictions, vos valeurs, vos passions, vos dons, votre personnalité, votre vision et vos objectifs. Ce que vous écrivez s'ajoute à votre plan ; rien de ce qui y est déjà n'est effacé.
 
 modules:
   - title: Qui je suis
     lessons:
-      - title: Votre But de Dieu
+      - title: Le But de Dieu pour ma vie
         duration: 12
         content: |
           Bienvenue dans votre parcours. Aujourd'hui, une seule question, la plus importante de votre Plan de Vie : pour quoi avez-vous été créé ? Voici ce qu'en dit le livre KIINI, au chapitre 4.
@@ -81,7 +81,7 @@ modules:
         practice:
           target: VIE
           action: write_purpose
-          prompt: "Écrivez votre But de Dieu avec la formule du livre : « Je suis créé pour… afin d'apporter… chez… »."
+          prompt: "Écrivez le But de Dieu pour ma vie avec la formule du livre : « Je suis créé pour… afin d'apporter… chez… »."
 
       - title: Vos convictions
         duration: 10
