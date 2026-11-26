@@ -9,6 +9,43 @@ teste (`php bin/phpunit`), commit, déploie (`bin/ops/envoyer-hostinger.sh`), v�
 journal `var/log/prod-AAAA-MM-JJ.log` sans erreur) ; **le fondateur fait lui-même `git push`** (refusé à l'IA).
 Ne jamais afficher ni demander de mot de passe ; ne pas publier son nom (mentions légales en attente).
 
+## 26/11/2026 — Points 3, 5, 7, 8 et 9 du parcours nouvel utilisateur (« Attaque tout »)
+
+- **Point 5, anglais et jargon** : catégories Être/Faire/Avoir/Donner dans les blocs ajoutés de l'assistant (libellé
+  envoyé dans `allLifeGoals`), fréquences des rituels (`HabitFrequency::label()`, formulaire, cartes, page des plans),
+  axes de croissance (`axisLabel`), « page Rituels » dans l'agenda, exemples concrets et chrétiens (fini pitcher,
+  masterminds, levée de fonds, consultant), « Binômes d'imputabilité » → Partenaires de Redevabilité, audit Hygiène,
+  « Ex. : » partout, majuscule aux lignes des schémas du livre (affichage seulement, texte du livre intact).
+  Garde-fou : `LexiconTest::testTemplatesDoNotShowEnglishOrJargon`.
+- **Point 3, fin du Plan de Vie** : l'assistant complet mène à `/plan-de-vie?onglet=analysis` avec la carte « Bravo »
+  (flash `plan_bravo` : score de cohérence et 3 premières pistes). Bouton de l'accueil : « Enregistrer mes fondations ».
+- **Point 7, relier aux plans** : rituel relié à un objectif de n'importe quel plan, Hygiène comprise (`link` =
+  `GOAL|GROWTH|SKILL|HYGIENE|LEGACY:id`, un seul lien, contrôle d'appartenance) ; après création, l'enracinement s'ouvre
+  (`?relier=`). Rapport Dons spirituels : « Ajouter à mon Plan de Vie (dons et talents) » (`TestAction` cible `talent`).
+  Priorités d'Intendance reliées à un objectif = objectif soutenu (score) ; elles passent en revue de la semaine
+  (`WeeklyReviewService::PLANS['INTENDANCE']`, l'appli mobile lit les plans sans liste fixe). Boussole 360 dans
+  « Mes tests » (compte dans la progression) ; « Mon profil » dit « N des 5 tests qui la nourrissent ».
+- **Point 8, livre** : « Lire le chapitre » passe `?retour=` (adresse du site seulement, testé contre les redirections
+  ouvertes) ; fin de chapitre : « Revenir à mon plan et écrire » (ferme l'onglet s'il a été ouvert par le lien).
+  Encart de la page Plan de Vie : chapitre 2 « Le Plan et la Providence » au lieu de « Comment lire ».
+- **Point 9, détails** : « e-mail » partout ; prénom non redemandé à l'accueil (départ à l'étape 2) ; valeurs
+  suggérées surlignées ; bandeaux de confirmation qui se ferment seuls (7 s) et bouton × ; pas de « 0/0 rituels » ; pas
+  de raison d'être en double avec la carte « Bravo » ; Journal : type Prière (`ReflectionType::PRAYER`, aussi dans
+  `QuickDay::JOURNAL_TYPES` donc dans l'appli), humeur affichée sur la note, humeurs en français ; agenda : fenêtre de
+  tâche tenue dans l'écran, bouton Enregistrer réparé (son padding était annulé), confirmation « Tâche enregistrée pour
+  le … » ; tests : réponses une par ligne et assez grandes sur téléphone, bouton final au-dessus de la barre du bas ;
+  Équilibre de Vie et Hygiène de Vie dans la palette ; question 5 d'Équilibre qui nomme Dieu (migration
+  `Version20261126150000`, et le profil Spiritualité) ; Abonnement : « Passer à PRO » et lien vers
+  contact@kiinisawa.com tant que le paiement n'est pas ouvert ; Académie : « Ce que vous écrivez ici sera enregistré
+  dans votre … » et « Bravo, c'est juste ! » ; barre du bas nommée pour les lecteurs d'écran ; Boussole : plus de
+  surlignage collé au toucher, progression comptée sur les réponses, bouton « Voir mon résultat » amené à l'écran ;
+  vitrine : l'offre Duo rappelle l'autre devise, le fuseau horaire ne force plus les francs CFA si la langue donne un
+  pays ; Intendance : priorités en cartes sur téléphone.
+- **Pas fait** : rechargement de la page Intendance à chaque ajout ; « blocs en retard » d'Aujourd'hui (non reproduit) ;
+  « un seul type surligné » du Journal (à préciser avec le fondateur).
+- **À valider par le fondateur** : la nouvelle question 5 d'Équilibre de Vie ; le chapitre 2 pour l'encart du Plan de
+  Vie ; les nouveaux exemples de l'assistant.
+
 ## 26/11/2026 — Une seule rubrique « Mes Partenaires de Redevabilité » (chantier 6)
 
 - **Décision du fondateur (« Oui, fusionne »)** : « Partenaires » (réseau de membres, `/social`) et « Ma redevabilité »

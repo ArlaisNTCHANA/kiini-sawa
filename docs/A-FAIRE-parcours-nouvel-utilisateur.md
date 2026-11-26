@@ -140,6 +140,10 @@ réconcilier avec la règle du fondateur, **lui demander**).
   Pointer vers le chapitre du But de Dieu (`but-de-dieu`) ou un chapitre d'introduction au Plan de Vie, avec l'accord du fondateur.
 
 ### 9. Détails visuels et textes (liste à traiter en lot)
+**Traité le 26/11/2026** (voir `docs/SUIVI-IA.md`), sauf : rechargement de la page Intendance à chaque ajout (demande un
+enregistrement sans rechargement, plus gros chantier), « blocs qui apparaissent avec retard » sur Aujourd'hui (non
+reproduit), « un seul type surligné à l'ouverture » du Journal (à préciser), vue Jour de l'agenda (plus de débordement
+constaté à 375 px).
 - Vitrine : devise par défaut FCFA même en Europe ; offre Duo placée avant le sélecteur de devise.
 - Boussole : le bouton touché reste surligné à la question suivante ; « 100 % » affiché avant la dernière réponse ;
   « Voir mon résultat » sous la ligne de flottaison.
