@@ -79,7 +79,8 @@ class AccessControlTest extends WebTestCase
         $form = $client->request('GET', '/mes-plans/rituels')->filter('form[name="habit"]')->form();
         $form['habit[title]'] = 'Le troisième';
         $client->submit($form);
-        $this->assertResponseRedirects('/mes-plans/rituels');
+        // Point 7 : l'enracinement du nouveau rituel s'ouvre (?relier=<id>)
+        $this->assertStringStartsWith('/mes-plans/rituels?relier=', (string) $client->getResponse()->headers->get('Location'));
         $this->assertSame(3, $this->em()->getRepository(Habit::class)->count(['user' => $user->getId()]));
     }
 
