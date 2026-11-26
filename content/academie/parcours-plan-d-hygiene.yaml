@@ -1,0 +1,109 @@
+# Parcours de plan « Mon Plan d'Hygiène de vie » (parcours guidés, lot 3, 26/11/2026). PREMIER JET écrit par l'IA, à
+# relire et publier par le fondateur. Extraits du livre mot pour mot (chapitre 17), prières à relire.
+# Chargé en brouillon par : php bin/console app:academie:import content/academie/parcours-plan-d-hygiene.yaml
+
+slug: mon-plan-d-hygiene-de-vie
+title: Mon Plan d'Hygiène de vie
+subtitle: Prendre soin de l'instrument de votre appel
+place: HYGIENE
+kind: PLAN
+access: PRO
+cover_word: Instrument
+description: |
+  Deux séances courtes pour écrire votre Plan d'Hygiène de vie : les domaines à soigner, puis votre rythme de repos. Chacune suit le même chemin : comprendre un enseignement tiré du livre KIINI, prendre un temps avec Dieu, réfléchir, puis écrire.
+
+  Ce que vous écrivez s'ajoute à votre plan ; rien de ce qui y est déjà n'est effacé.
+
+modules:
+  - title: Ce qui me soutient
+    lessons:
+      - title: L'état de votre instrument
+        duration: 12
+        content: |
+          Aujourd'hui, ce qui porte tout le reste : votre corps, votre âme et votre esprit. Voici ce qu'en dit le livre KIINI, au chapitre 17.
+
+          ## Comprendre
+
+          Tu peux avoir la plus belle vision du monde, les objectifs les plus précis, le réseau le plus solide, et tout voir s'effondrer parce que tu as négligé l'instrument avec lequel tu joues la partition de ta vie : ton corps, ton âme et ton esprit.
+
+          Après la victoire spectaculaire du mont Carmel, le prophète Élie s'effondre dans le désert. Épuisé, découragé, il demande la mort, puis s'endort sous un genêt (1 Rois 19:4-5).
+
+          Dieu prend soin du corps de son prophète avant de reprendre la conversation spirituelle. Le sommeil et la nourriture faisaient partie de sa réponse.
+
+          :::retenir
+          **Prendre soin de toi n'est pas égoïste. On ne peut pas verser d'un récipient vide.**
+          :::
+
+          | Domaine | Exemple de pratique | Comment je la mesure |
+          | --- | --- | --- |
+          | Sommeil | Me coucher avant 23 h en semaine | Nombre de soirs par semaine |
+          | Mouvement | Marcher 30 minutes, 5 jours par semaine | Minutes par semaine |
+          | Alimentation | Boire de l'eau à chaque repas, limiter le sucre | Jours respectés |
+          | Émotions | Noter chaque soir ce que je ressens et pourquoi | Bilan du jour rempli |
+          | Spiritualité | 20 minutes de prière et de lecture chaque matin | Jours réalisés |
+          | Repos | Un jour par semaine sans travail ni écran professionnel | Semaines respectées |
+          | Écrans | Pas de téléphone pendant la première heure du jour | Jours respectés |
+
+          ## Méditer
+
+          :::mediter
+          > « Bien-aimé, je souhaite que tu prospères à tous égards et sois en bonne santé, comme prospère l'état de ton âme. » 3 Jean 2
+
+          Présentez à Dieu votre fatigue, et laissez-le prendre soin de vous.
+          :::
+
+          ## Réfléchir
+
+          :::avous Le Sanctuaire : l'état de ton instrument (chapitre 17)
+          1. Note de 1 à 10 l'état actuel de ton corps, de ton âme et de ton esprit.
+          2. Quelle est ta principale source de stress en ce moment ?
+          3. Choisis trois domaines et une pratique mesurable pour chacun, pour les 30 prochains jours.
+          :::
+        practice:
+          target: HYGIENE
+          action: list_hygiene_domains
+          prompt: Écrivez les domaines de votre hygiène que vous voulez soigner, un par ligne.
+
+      - title: Votre rythme de repos
+        duration: 10
+        content: |
+          Dernière station : le repos, et le bilan du soir. Voici ce qu'en dit le livre KIINI, toujours au chapitre 17.
+
+          ## Comprendre
+
+          **Le sabbat** : Dieu lui-même a posé un rythme de repos. Il n'est pas dépassé.
+
+          Une pratique simple change beaucoup de choses : le **bilan du jour**. Chaque soir, en deux minutes, tu notes :
+
+          1. **Mon intention** du jour : l'ai-je tenue ?
+          2. **Mon énergie**, de 1 à 5.
+          3. **Mon humeur**, de 1 à 5.
+          4. **Mon niveau de stress**, de 1 à 5.
+          5. **Un sujet de gratitude.**
+
+          Au bout de quelques semaines, des tendances apparaissent. Tu découvres ce qui te vide et ce qui te recharge. Ce n'est plus une impression, c'est une observation.
+
+          :::retenir
+          **Ton corps est le véhicule de ton appel. Prends-en soin.**
+          :::
+
+          ## Méditer
+
+          :::mediter
+          « Lève-toi, mange, car le chemin est trop long pour toi » (1 Rois 19:7).
+
+          Prenez deux minutes de silence, sans rien demander d'autre que le repos.
+          :::
+
+          ## Réfléchir
+
+          :::avous Le Sanctuaire (chapitre 17)
+          1. Quand t'es-tu vraiment reposé pour la dernière fois, sans culpabilité ?
+          2. Si un ange te disait aujourd'hui « lève-toi, mange, car le chemin est trop long pour toi », à quoi penserais-tu ?
+          :::
+
+          Notez votre rythme de repos : quotidien, hebdomadaire, annuel. Ce soir, faites votre premier bilan du jour.
+        practice:
+          target: JOURNAL
+          action: add_note
+          prompt: Notez votre rythme de repos (chaque jour, chaque semaine, chaque année) et ce que vous changez dès cette semaine.

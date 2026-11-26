@@ -26,22 +26,30 @@ final class PracticeCatalog
         'CROISSANCE' => ['label' => 'Plan de Croissance', 'button' => 'Enregistrer dans mon Plan de Croissance', 'actions' => [
             'add_growth_goal' => ['label' => 'Ajouter un objectif de croissance', 'entity' => 'GrowthGoal'],
             'add_principle' => ['label' => 'Ajouter un principe', 'entity' => 'Principle'],
+            'list_character_goals' => ['label' => 'Séance : poser ses chantiers de caractère', 'entity' => null],
+            'list_relation_goals' => ['label' => 'Séance : poser ses objectifs de relation et de réseau', 'entity' => null],
         ]],
         'DEVELOPPEMENT' => ['label' => 'Plan de Développement personnel', 'button' => 'Enregistrer dans mon Plan de Développement personnel', 'actions' => [
             // Sur le site, le Plan de Développement personnel range compétences et connaissances parmi les objectifs du
             // Plan de Croissance (axe Compétence) : c'est là que l'exercice écrit, pour que la personne le voie.
             'add_skill_goal' => ['label' => 'Ajouter une compétence à développer', 'entity' => 'GrowthGoal'],
             'add_learning_resource' => ['label' => 'Ajouter une connaissance à acquérir', 'entity' => 'GrowthGoal'],
+            'list_skills' => ['label' => 'Séance : nommer les compétences à développer', 'entity' => null],
+            'list_knowledge' => ['label' => 'Séance : nommer les connaissances à acquérir', 'entity' => null],
         ]],
         'HYGIENE' => ['label' => 'Plan d\'Hygiène de vie', 'button' => 'Enregistrer dans mon Plan d\'Hygiène de vie', 'actions' => [
             'add_hygiene_domain' => ['label' => 'Ajouter un domaine à soigner', 'entity' => 'HygieneDomain'],
+            'list_hygiene_domains' => ['label' => 'Séance : nommer les domaines de son hygiène à soigner', 'entity' => null],
         ]],
         'INTENDANCE' => ['label' => 'Plan d\'Intendance', 'button' => 'Enregistrer dans mon Plan d\'Intendance', 'actions' => [
             'add_stewardship_item' => ['label' => 'Ajouter un élément à gérer', 'entity' => 'StewardshipItem'],
+            'list_stewardship' => ['label' => 'Séance : faire l\'inventaire de ce qui est confié', 'entity' => null],
         ]],
         'TRANSMISSION' => ['label' => 'Plan de Transmission', 'button' => 'Enregistrer dans mon Plan de Transmission', 'actions' => [
             'add_legacy_goal' => ['label' => 'Ajouter un legs', 'entity' => 'LegacyGoal'],
             'add_transmission_action' => ['label' => 'Ajouter une action de transmission', 'entity' => 'TransmissionAction'],
+            'write_eternity' => ['label' => 'Séance : écrire sa phrase d\'éternité', 'entity' => null],
+            'list_legacy_goals' => ['label' => 'Séance : poser ce que l\'on veut transmettre', 'entity' => null],
         ]],
         'RITUEL' => ['label' => 'Rituels', 'button' => 'Ajouter à mes Rituels', 'actions' => [
             'add_habit' => ['label' => 'Ajouter un rituel', 'entity' => 'Habit'],

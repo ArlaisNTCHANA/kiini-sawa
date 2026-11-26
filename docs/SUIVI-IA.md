@@ -9,6 +9,19 @@ teste (`php bin/phpunit`), commit, déploie (`bin/ops/envoyer-hostinger.sh`), v�
 journal `var/log/prod-AAAA-MM-JJ.log` sans erreur) ; **le fondateur fait lui-même `git push`** (refusé à l'IA).
 Ne jamais afficher ni demander de mot de passe ; ne pas publier son nom (mentions légales en attente).
 
+## 26/11/2026 — Parcours guidés, lot 3 : les cinq autres parcours de plan
+
+- **Demande du fondateur** : « Oui, lot 3 ».
+- **Fait** (détail : `docs/modules/academie.md`, « Parcours de plan ») : `PlanRubrics` couvre les 6 plans (8 nouvelles
+  séances-rubriques) ; 5 parcours en premier jet (`content/academie/parcours-plan-*.yaml`, 11 séances, PRO).
+- **Pièges** : l'assistant efface aussi les **liens** vers les objectifs du Plan de Vie et la **liste sœur** d'une même
+  étape (compétences/connaissances, phrase d'éternité/déplacement de trésor) : tout est renvoyé. Les tests le vérifient.
+- **Tests** : `PlanRubricsTest` (13 tests) ; 619 tests verts. Vu à l'écran en local (375 px, compte de test passé en
+  essai PRO dans la base locale) : « Par où commencer ? » montre les 6 parcours dans l'ordre du livre ; séance
+  d'inventaire de l'Intendance enregistrée et visible dans le plan ; boutons longs repliés dans la carte.
+- **Reste** : chargement en production puis relecture et publication par le fondateur ; lot 4 (parcours de 90 jours) ;
+  « un seul message par jour toutes sources confondues ».
+
 ## 26/11/2026 — Parcours guidés, lot 2 : rendez-vous, brouillon, Boussole
 
 - **Demande du fondateur** : « Tu peux attaquer ? » (après le chargement en brouillon de « Mon Plan de Vie » en

@@ -44,10 +44,10 @@
                         <legend class="ks-label">{{ g.label }}</legend>
                         {% if g.items is not empty %}<ul class="academie-seance-deja">{% for item in g.items %}<li>{{ item.text }}</li>{% endfor %}</ul>{% endif %}
                         {% set draft_goals = draft.goals[cat] ?? [] %}
-                        {% for i in 1..max(2, draft_goals|length) %}<input class="ks-input academie-seance-ligne" name="goals[{{ cat }}][]" maxlength="255" aria-label="{{ g.label }} ({{ i }})" value="{{ draft_goals[i - 1] ?? '' }}">{% endfor %}
+                        {% for i in 1..max(practice.action == 'list_stewardship' ? 1 : 2, draft_goals|length) %}<input class="ks-input academie-seance-ligne" name="goals[{{ cat }}][]" maxlength="255" aria-label="{{ g.label }} ({{ i }})" value="{{ draft_goals[i - 1] ?? '' }}">{% endfor %}
                     </fieldset>
                 {% endfor %}
-                <p class="ks-small" style="margin-top: .4rem;">{{ r.example }}. {{ t('academie.seance.objectifs_aide', 'Les échéances se posent ensuite dans votre Plan de Vie.') }}</p>
+                <p class="ks-small" style="margin-top: .4rem;">{{ r.example }}.{% if practice.action == 'list_life_goals' %} {{ t('academie.seance.objectifs_aide', 'Les échéances se posent ensuite dans votre Plan de Vie.') }}{% else %} {{ t('academie.seance.groupes_aide', 'Remplissez seulement les domaines qui vous parlent aujourd\'hui.') }}{% endif %}</p>
             {% endif %}
             {% set button = academie_bouton(practice.target) %}
             {% set can_save = not practice.blocker %}

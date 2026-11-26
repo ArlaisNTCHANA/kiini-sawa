@@ -1,0 +1,102 @@
+# Parcours de plan « Mon Plan d'Intendance » (parcours guidés, lot 3, 26/11/2026). PREMIER JET écrit par l'IA, à
+# relire et publier par le fondateur. Extraits du livre mot pour mot (chapitre 18), prières à relire.
+# Chargé en brouillon par : php bin/console app:academie:import content/academie/parcours-plan-d-intendance.yaml
+
+slug: mon-plan-d-intendance
+title: Mon Plan d'Intendance
+subtitle: Gérer ce qui vous est confié
+place: INTENDANCE
+kind: PLAN
+access: PRO
+cover_word: Confié
+description: |
+  Deux séances courtes pour écrire votre Plan d'Intendance : l'inventaire de ce qui vous est confié, puis le cycle de l'intendant. Chacune suit le même chemin : comprendre un enseignement tiré du livre KIINI, prendre un temps avec Dieu, réfléchir, puis écrire.
+
+  Ce que vous écrivez s'ajoute à votre plan ; rien de ce qui y est déjà n'est effacé.
+
+modules:
+  - title: Ce que je gère
+    lessons:
+      - title: L'inventaire de ce qui vous est confié
+        duration: 12
+        content: |
+          Votre Plan de Vie a mis en lumière ce que Dieu a déposé en vous. Aujourd'hui, une question plus simple et plus exigeante. Voici ce qu'en dit le livre KIINI, au chapitre 18.
+
+          ## Comprendre
+
+          Un don identifié qui n'est jamais exercé ressemble à un outil neuf rangé dans sa boîte. Il a de la valeur, mais il ne sert à rien ni à personne.
+
+          | Le propriétaire se demande | L'intendant se demande |
+          | --- | --- |
+          | Qu'est-ce que je possède ? | Qu'est-ce qui m'est confié ? |
+          | Comment en profiter ? | À quoi cela doit-il servir ? |
+          | Comment le protéger des autres ? | Comment le faire fructifier pour d'autres ? |
+          | De quoi ai-je encore besoin ? | Est-ce que je gère bien ce que j'ai déjà ? |
+
+          Le propriétaire vit dans l'inquiétude de perdre. L'intendant vit dans la paix de servir. Ce qu'il gère ne définit pas sa valeur ; la manière dont il le gère dit sa fidélité.
+
+          :::retenir
+          **Rien de ce que tu as ne t'appartient vraiment. Tout t'est confié.**
+          :::
+
+          Au-delà de tes dons, sept domaines de ta vie relèvent de ta gestion. Certains te paraîtront évidents, d'autres moins.
+
+          Ces sept domaines sont les finances et les biens, le temps, le foyer et les enfants, les ressources intellectuelles, l'influence et la position, les responsabilités confiées, les opportunités et les accès. Vous les retrouvez ci-dessous, un par ligne.
+
+          ## Méditer
+
+          :::mediter
+          > « A l'Éternel la terre et ce qu'elle renferme, le monde et ceux qui l'habitent ! » Psaume 24:1
+
+          Remettez à Dieu ce que vous tenez entre vos mains, et remerciez-le pour ce qu'il vous a confié.
+          :::
+
+          ## Réfléchir
+
+          :::avous Le cycle de l'intendant : l'inventaire (chapitre 18)
+          « Connais bien chacune de tes brebis, donne tes soins à tes troupeaux » (Proverbes 27:23). On ne gère pas ce qu'on n'a pas compté. Tu pars de ce que ton Plan de Vie a mis en lumière, puis tu parcours les sept domaines.
+          :::
+
+          Remplissez seulement les domaines qui vous parlent aujourd'hui : un élément suffit pour commencer.
+        practice:
+          target: INTENDANCE
+          action: list_stewardship
+          prompt: Faites l'inventaire de ce qui vous est confié, domaine par domaine.
+
+      - title: Fructifier, dormir ou fuir
+        duration: 10
+        content: |
+          Vous avez fait l'inventaire. Aujourd'hui, le regard honnête et la décision. Voici ce qu'en dit le livre KIINI, toujours au chapitre 18.
+
+          ## Comprendre
+
+          Gérer ne se fait pas une fois pour toutes. C'est un cycle, que tu reprendras à chaque saison :
+
+          1. **L'inventaire : ce qui m'est confié.**
+          2. **L'état : comment je le gère aujourd'hui.** Pour chaque élément, un verdict honnête parmi trois : il **fructifie**, il **dort** ou il **fuit**.
+          3. **La décision : ce que j'en fais.** Trois verbes : **affecter** (le mettre au service de ton But et de tes objectifs), **protéger** (le mettre à l'abri de ce qui le menace), **libérer** (lâcher ce qui coûte plus qu'il ne sert, ou le confier à quelqu'un d'autre).
+          4. **Le compte rendu : je fais le point.** À intervalles réguliers, tu reviens sur tes décisions et tu en mesures le fruit. Tes revues, présentées au chapitre 23, sont faites pour cela.
+
+          :::retenir
+          **Dieu ne te demandera pas compte de ce que tu n'as pas reçu. Il te demandera ce que tu as fait de ce que tu as reçu.**
+          :::
+
+          ## Méditer
+
+          :::mediter
+          > « Son maître lui dit : C'est bien, bon et fidèle serviteur ; tu as été fidèle en peu de chose, je te confierai beaucoup ; entre dans la joie de ton maître. » Matthieu 25:21
+
+          Demandez à Dieu de vous rendre fidèle dans le peu.
+          :::
+
+          ## Réfléchir
+
+          :::avous
+          Parmi ce que vous avez inventorié, qu'est-ce qui fructifie, qu'est-ce qui dort, qu'est-ce qui fuit ? Pour l'élément qui compte le plus, quelle décision prenez-vous : affecter, protéger ou libérer ?
+          :::
+
+          Notez votre décision dans votre Journal. Dans votre Plan d'Intendance, donnez ensuite à chaque élément son état, sa décision et son action des 30 prochains jours.
+        practice:
+          target: JOURNAL
+          action: add_note
+          prompt: Notez l'élément qui compte le plus, son état (il fructifie, il dort ou il fuit) et votre décision.

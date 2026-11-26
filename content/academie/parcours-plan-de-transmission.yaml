@@ -1,0 +1,105 @@
+# Parcours de plan « Mon Plan de Transmission » (parcours guidés, lot 3, 26/11/2026). PREMIER JET écrit par l'IA, à
+# relire et publier par le fondateur. Extraits du livre mot pour mot (chapitres 19 et 20), prières à relire.
+# Chargé en brouillon par : php bin/console app:academie:import content/academie/parcours-plan-de-transmission.yaml
+
+slug: mon-plan-de-transmission
+title: Mon Plan de Transmission
+subtitle: Ce qui portera du fruit après vous
+place: TRANSMISSION
+kind: PLAN
+access: PRO
+cover_word: Héritage
+description: |
+  Deux séances courtes pour écrire votre Plan de Transmission : votre phrase d'éternité, puis ce que vous voulez transmettre. Chacune suit le même chemin : comprendre un enseignement tiré du livre KIINI, prendre un temps avec Dieu, réfléchir, puis écrire directement dans votre plan.
+
+  Ce que vous écrivez s'ajoute à votre plan ; rien de ce qui y est déjà n'est effacé.
+
+modules:
+  - title: Ce que je laisse
+    lessons:
+      - title: Votre phrase d'éternité
+        duration: 12
+        content: |
+          Avant de parler de ce que vous laisserez, le livre KIINI propose de changer de regard. Voici ce qu'il en dit, au chapitre 19.
+
+          ## Comprendre
+
+          :::retenir
+          **Ce que je fais aujourd'hui prend son véritable poids à la lumière de l'éternité.**
+          :::
+
+          Imagine une corde très longue. Elle traverse la pièce où tu te trouves, et continue bien au-delà de ce que tu peux voir. Sur les tout premiers centimètres, il y a une petite marque rouge. Ces quelques centimètres représentent ta vie présente. Le reste de la corde, c'est l'éternité.
+
+          Pose-toi alors la question : pourquoi consacrer autant d'énergie aux premiers centimètres, et si peu à ce qui vient après ?
+
+          | Ce qui est temporaire | Ce qui a une valeur éternelle |
+          | --- | --- |
+          | Les biens et le confort | La relation avec Dieu |
+          | Le statut et les titres | L'obéissance et le caractère |
+          | La réputation humaine | L'amour et le service |
+          | La réussite centrée sur soi | Les personnes et la vérité transmise |
+
+          ## Méditer
+
+          :::mediter
+          > « Il fait toute chose bonne en son temps ; même il a mis dans leur cœur la pensée de l'éternité, bien que l'homme ne puisse pas saisir l'œuvre que Dieu fait, du commencement jusqu'à la fin. » Ecclésiaste 3:11
+
+          Demandez à Dieu de vous montrer ce qui demeurera.
+          :::
+
+          ## Réfléchir
+
+          :::avous Le Sanctuaire : le regard de l'éternité (chapitre 19)
+          1. Si quelqu'un observait ton agenda, tes dépenses et tes préoccupations du dernier mois, que conclurait-il sur ton trésor ?
+          2. Qu'est-ce qui aura encore de la valeur quand ta vie sera terminée ? Écris trois choses.
+          3. Quelle chose essentielle repousses-tu depuis trop longtemps : une réconciliation, une parole, un engagement ?
+          :::
+
+          Écrivez votre phrase d'éternité : ce que vous voulez qui demeure quand vous ne serez plus là.
+        practice:
+          target: TRANSMISSION
+          action: write_eternity
+          prompt: Écrivez votre phrase d'éternité, ce que vous voulez qui demeure quand vous ne serez plus là.
+
+      - title: Votre héritage
+        duration: 12
+        content: |
+          Dernière station : ce qui continuera de porter du fruit après vous. Voici ce qu'en dit le livre KIINI, au chapitre 20.
+
+          ## Comprendre
+
+          Un jour, tu ne seras plus là. Cette réalité pose la question qui donne son sens à tout ce livre : **qu'est-ce qui continuera de porter du fruit après toi ?**
+
+          | Dimension | Ce que c'est | La question |
+          | --- | --- | --- |
+          | **L'héritage des valeurs** | Ce que tes enfants, tes disciples, tes équipes auront appris de toi sur la manière de vivre | Qu'ont-ils vu dans ma façon de traiter les autres, de croire, de persévérer ? |
+          | **L'héritage des œuvres** | Les réalisations concrètes qui subsistent : un livre, une organisation, un programme, une maison | Qu'est-ce que je bâtis qui servira encore après moi ? |
+          | **L'héritage des personnes** | Ceux que tu as formés, encouragés, envoyés | Qui porte déjà mon influence dans des lieux que je n'atteindrai jamais ? |
+
+          La transmission ne commence pas à la retraite. Elle commence maintenant, à ta mesure. Tu n'as pas besoin d'être un expert pour transmettre : il suffit d'avoir un pas d'avance sur quelqu'un.
+
+          :::retenir
+          **La vraie mesure d'une vie n'est pas ce que tu as accumulé. C'est ce que tu as semé dans la vie des autres.**
+          :::
+
+          ## Méditer
+
+          :::mediter
+          > « Ce que tu as entendu de moi en présence de beaucoup de témoins, confie-le à des hommes fidèles, qui soient capables de l'enseigner aussi à d'autres. » 2 Timothée 2:2
+
+          Remerciez Dieu pour ceux qui ont semé dans votre vie, et pensez à ceux en qui vous voulez semer.
+          :::
+
+          ## Réfléchir
+
+          :::avous Le Sanctuaire : ton héritage (chapitre 20)
+          1. Quelles valeurs veux-tu que tes proches retiennent de toi ?
+          2. Quelle œuvre veux-tu bâtir qui servira après toi ?
+          3. Quels sont tes « Timothée » aujourd'hui ? Si tu n'en as pas, qui pourrait le devenir ?
+          :::
+
+          Écrivez vos objectifs de legs : un pour les valeurs, un pour les œuvres, un pour les personnes.
+        practice:
+          target: TRANSMISSION
+          action: list_legacy_goals
+          prompt: Écrivez ce que vous voulez transmettre, un objectif de legs par ligne.

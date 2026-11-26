@@ -1,0 +1,151 @@
+# Parcours de plan « Mon Plan de Croissance » (parcours guidés, lot 3, 26/11/2026). PREMIER JET écrit par l'IA, à
+# relire et publier par le fondateur. Mêmes règles que parcours-plan-de-vie.yaml : extraits du livre mot pour mot
+# (chapitres 13 à 15), rien de la vie privée de l'auteur, prières d'une ligne à relire.
+# Chargé en brouillon par : php bin/console app:academie:import content/academie/parcours-plan-de-croissance.yaml
+
+slug: mon-plan-de-croissance
+title: Mon Plan de Croissance
+subtitle: Devenir la personne capable de porter son appel
+place: CROISSANCE
+kind: PLAN
+access: PRO
+cover_word: Croissance
+description: |
+  Trois séances courtes pour écrire votre Plan de Croissance : votre « radar Samson », vos chantiers de caractère, puis votre réseau. Chacune suit le même chemin : comprendre un enseignement tiré du livre KIINI, prendre un temps avec Dieu, réfléchir, puis écrire directement dans votre plan.
+
+  Ce que vous écrivez s'ajoute à votre plan ; rien de ce qui y est déjà n'est effacé.
+
+modules:
+  - title: Qui je deviens
+    lessons:
+      - title: Votre radar Samson
+        duration: 10
+        content: |
+          Votre Plan de Vie dit qui vous êtes et où vous allez. Le Plan de Croissance pose la question suivante. Voici ce qu'en dit le livre KIINI, au chapitre 13.
+
+          ## Comprendre
+
+          Tu as terminé ton Plan de Vie. Tu as une boussole (ton but), une carte (ta vision), des outils (tes dons) et un itinéraire (tes objectifs). Mais il reste une question décisive : es-tu devenu la personne capable de porter tout cela ?
+
+          Samson ne manquait ni de but, ni de don. Il avait tout.
+
+          Samson n'a pas échoué par manque de puissance. Il a échoué par manque d'intentionnalité. Sa force était immense ; son caractère n'était pas assez solide pour la porter.
+
+          :::retenir
+          **La puissance sans intentionnalité mène à la captivité.**
+          :::
+
+          Beaucoup pensent que la croissance vient avec le temps et l'expérience. C'est une illusion. Le temps passe pour tout le monde ; tout le monde ne grandit pas. Certains ont vingt ans d'expérience ; d'autres ont répété vingt fois la même année.
+
+          **Tes principes de croissance** sont tes règles personnelles, celles qui gouvernent ta manière d'apprendre et de progresser. Par exemple :
+
+          - « Je ne termine jamais une journée sans avoir appris une chose nouvelle. »
+          - « Le retour difficile est mon meilleur engrais. »
+          - « Je lis avant de faire défiler mon téléphone. »
+
+          ## Méditer
+
+          :::mediter
+          > « Car l'enfant sera consacré à Dieu dès le ventre de sa mère, et ce sera lui qui commencera à délivrer Israël de la main des Philistins. » Juges 13:5
+
+          Remerciez Dieu pour la force qu'il vous a donnée, et demandez-lui un caractère à sa hauteur.
+          :::
+
+          ## Réfléchir
+
+          :::avous Le Sanctuaire : ton radar Samson (chapitre 13)
+          1. Quelle est cette capacité en toi qui impressionne les autres, ta « force de Samson » ?
+          2. Ton caractère est-il assez solide pour porter le poids de ton but ? Où sont les fissures ?
+          3. Quel est ton « objet brillant », la distraction qui t'éloigne de ta mission ?
+          4. Écris trois principes de croissance pour les 90 prochains jours.
+          :::
+        practice:
+          target: CROISSANCE
+          action: add_principle
+          prompt: Écrivez votre premier principe de croissance pour les 90 prochains jours.
+
+      - title: Vos chantiers de caractère
+        duration: 12
+        content: |
+          Aujourd'hui, la fondation invisible : votre caractère. Voici ce qu'en dit le livre KIINI, au chapitre 14.
+
+          ## Comprendre
+
+          Le caractère, c'est qui tu es quand personne ne regarde. C'est la cohérence entre ce que tu professes et ce que tu pratiques. C'est la capacité à tenir tes engagements quand c'est difficile, à dire la vérité quand c'est coûteux, à rester debout quand tout invite à se coucher.
+
+          | Direction | Ce que c'est | Exemples |
+          | --- | --- | --- |
+          | **Développer** | Des traits que tu veux voir naître et croître | Persévérance, intégrité, humilité, gratitude, ponctualité |
+          | **Affermir** | Des traits déjà présents, mais fragiles sous pression | La confiance ancrée dans ton identité en Christ, la capacité à décider, la résilience, le discernement |
+          | **Abandonner** | Des traits qui te freinent activement | La procrastination, l'indécision chronique, la victimisation, la comparaison, le besoin d'approbation |
+
+          Un conseil : ne travaille pas dix traits à la fois. Choisis-en un par direction pour cette saison. Le caractère se bâtit comme un muscle, par la répétition, pas par la résolution.
+
+          :::retenir
+          **Garde la bonté de la colombe. Ajoute-lui la prudence du serpent. Et demande à la sagesse d'être ta conseillère.**
+          :::
+
+          ## Méditer
+
+          :::mediter
+          > « Garde ton cœur plus que toute autre chose, car de lui viennent les sources de la vie. » Proverbes 4:23
+
+          Demandez à l'Esprit de faire grandir en vous son fruit, là où vous en avez le plus besoin.
+          :::
+
+          ## Réfléchir
+
+          :::avous Le Sanctuaire : ton chantier de caractère (chapitre 14)
+          1. Quel trait de caractère veux-tu **développer** cette saison ? Pourquoi celui-là ?
+          2. Quel trait déjà présent veux-tu **affermir** ? Dans quelle situation cède-t-il sous la pression ?
+          3. Quel trait veux-tu **abandonner** ? Que te coûte-t-il aujourd'hui ?
+          :::
+
+          Écrivez un chantier par ligne. La direction (développer, affermir, abandonner) et l'action quotidienne se précisent ensuite dans votre Plan de Croissance.
+        practice:
+          target: CROISSANCE
+          action: list_character_goals
+          prompt: Écrivez vos chantiers de caractère pour cette saison, un par ligne.
+
+      - title: Votre réseau
+        duration: 10
+        content: |
+          Dernière station : avec qui grandissez-vous ? Voici ce qu'en dit le livre KIINI, au chapitre 15.
+
+          ## Comprendre
+
+          Il existe un mythe tenace dans notre culture de la performance : celui de l'homme qui s'est fait tout seul. Ce mythe est inspirant, parce qu'il valorise la responsabilité personnelle. Il est aussi dangereux, parce qu'il cache une vérité fondamentale : personne n'a jamais accompli quelque chose de grand seul.
+
+          | Réseau | Qui | Son rôle |
+          | --- | --- | --- |
+          | **Réseau d'orientation** | Mentors, guides, ceux qui ont marché avant toi | Te montrer la route, t'aider à discerner |
+          | **Réseau de croissance** | Pairs, compagnons de route | Te stimuler, apprendre ensemble |
+          | **Réseau de soutien** | Amis proches, famille, conjoint | Te porter dans l'épreuve, te consoler |
+          | **Réseau de responsabilité** | Ceux à qui tu rends des comptes | Te confronter avec amour, te garder fidèle |
+          | **Réseau d'environnement** | Ta communauté, ton église, ton cercle social | Façonner ton climat quotidien |
+
+          :::retenir
+          **Personne n'accomplit quelque chose de grand seul. Choisis tes compagnons de route comme tu choisirais ta destination.**
+          :::
+
+          ## Méditer
+
+          :::mediter
+          > « Deux valent mieux qu'un, parce qu'ils retirent un bon salaire de leur travail. Car, s'ils tombent, l'un relève son compagnon ; mais malheur à celui qui est seul et qui tombe, sans avoir un second pour le relever ! » Ecclésiaste 4:9-10
+
+          Remerciez Dieu pour les personnes qu'il a placées sur votre route.
+          :::
+
+          ## Réfléchir
+
+          :::avous Le Sanctuaire : la cartographie de ton réseau (chapitre 15)
+          1. Pour chacun des cinq réseaux, écris le nom d'une à trois personnes. Lequel est vide ?
+          2. Qui, dans ta vie, peut te dire « ce que tu fais n'est pas bien » ? Lui en donnes-tu la permission ?
+          3. Qui pourrait devenir ton mentor ? Quelle première démarche peux-tu faire ce mois-ci ?
+          :::
+
+          Écrivez vos objectifs de relation : le réseau à renforcer, une relation à ajuster, une démarche à faire.
+        practice:
+          target: CROISSANCE
+          action: list_relation_goals
+          prompt: Écrivez vos objectifs de relation et de réseau pour cette saison, un par ligne.

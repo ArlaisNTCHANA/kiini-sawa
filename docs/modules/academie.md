@@ -321,6 +321,16 @@ rattaché à l'un des 6 plans. Choisi dans le studio (« Genre de parcours ») o
   « Commencer la séance ») ; **brouillon** d'une séance enregistré pendant la frappe (`POST …/brouillon`, colonne
   `academy_enrollment.drafts`, migration `Version20261126081226`), repris à l'ouverture même sur un autre appareil,
   effacé à la fin de la séance, jamais écrit dans le plan ; le résultat de la Boussole propose le parcours de plan publié.
+- **Lot 3 (26/11/2026)** : séances pour les cinq autres plans (`PlanRubrics::RUBRICS`, clé `plan`) :
+  `list_character_goals`, `list_relation_goals` (Croissance), `list_skills`, `list_knowledge` (Développement : la même
+  étape 8 enregistre les deux listes, la liste sœur est toujours renvoyée), `list_hygiene_domains`, `list_stewardship`
+  (Intendance : pas d'étape d'assistant, éléments créés directement, une ligne par domaine), `write_eternity` (le
+  déplacement de trésor, enregistré par la même étape, est renvoyé tel quel), `list_legacy_goals`. Pour les blocs de
+  l'assistant (genre « indexed »), les éléments existants sont renvoyés avec leur identifiant **et leurs objectifs du
+  Plan de Vie soutenus** (sinon l'assistant retire ces liens) ; stratégie et statut ne sont pas envoyés, donc gardés.
+  Contenus (premiers jets, PRO) : `content/academie/parcours-plan-de-croissance.yaml` (3 séances),
+  `…-de-developpement.yaml`, `…-d-hygiene.yaml`, `…-d-intendance.yaml`, `…-de-transmission.yaml` (2 séances chacun),
+  extraits des chapitres 13 à 20 vérifiés mot pour mot.
 - Tests : `tests/Academie/PlanRubricsTest.php`.
 
 ## Reste à faire

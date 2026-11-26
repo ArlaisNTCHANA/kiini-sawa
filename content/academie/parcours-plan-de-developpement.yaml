@@ -1,0 +1,92 @@
+# Parcours de plan « Mon Plan de Développement personnel » (parcours guidés, lot 3, 26/11/2026). PREMIER JET écrit
+# par l'IA, à relire et publier par le fondateur. Extraits du livre mot pour mot (chapitre 16), prières à relire.
+# Chargé en brouillon par : php bin/console app:academie:import content/academie/parcours-plan-de-developpement.yaml
+
+slug: mon-plan-de-developpement
+title: Mon Plan de Développement personnel
+subtitle: Équiper votre but de ses outils
+place: DEVELOPPEMENT
+kind: PLAN
+access: PRO
+cover_word: Outils
+description: |
+  Deux séances courtes pour écrire votre Plan de Développement personnel : les compétences à développer, puis les connaissances à acquérir. Chacune suit le même chemin : comprendre un enseignement tiré du livre KIINI, prendre un temps avec Dieu, réfléchir, puis écrire directement dans votre plan.
+
+  Ce que vous écrivez s'ajoute à votre plan ; rien de ce qui y est déjà n'est effacé.
+
+modules:
+  - title: Ce que je développe
+    lessons:
+      - title: Vos compétences
+        duration: 12
+        content: |
+          Vous avez un but, une vision et un caractère en chantier. Il vous faut maintenant des outils. Voici ce qu'en dit le livre KIINI, au chapitre 16.
+
+          ## Comprendre
+
+          Il y a une distinction importante. Tes dons et talents sont ce que Dieu a déposé en toi. Tes compétences sont ce que tu construis sur cette fondation. L'un est une grâce reçue ; l'autre est une responsabilité assumée.
+
+          Un don sans compétence reste brut. Un don travaillé devient un instrument de précision.
+
+          Pour chaque compétence, la méthode KIINI propose trois stratégies :
+
+          - **Consolider** une base existante mais fragile. Par exemple : tu parles anglais, mais tu n'oses pas en réunion.
+          - **Bâtir** une compétence nouvelle dont ta vision a besoin. Par exemple : apprendre la gestion de projet pour lancer ton initiative.
+          - **Faire levier** sur une expertise déjà forte, pour multiplier ton impact. Par exemple : transformer ton savoir-faire en formation pour les autres.
+
+          Trois compétences par an, travaillées sérieusement, valent mieux que quinze effleurées.
+
+          :::retenir
+          **Les dons sont reçus. Les compétences se construisent. L'excellence naît quand les deux se rencontrent.**
+          :::
+
+          ## Méditer
+
+          :::mediter
+          > « Si tu vois un homme habile dans son ouvrage, il se tient auprès des rois ; il ne se tient pas auprès des gens obscurs. » Proverbes 22:29
+
+          Offrez à Dieu votre travail, et demandez-lui la sagesse de choisir ce que vous apprendrez.
+          :::
+
+          ## Réfléchir
+
+          :::avous Le Sanctuaire : ton inventaire de compétences (chapitre 16)
+          1. Relis ta vision et tes objectifs. Quelles trois compétences te manquent le plus pour les atteindre ?
+          2. Pour chacune, choisis une stratégie : consolider, bâtir ou faire levier.
+          3. Quelle est la prochaine étape de ta vie professionnelle ? Qu'est-ce qui te sépare d'elle ?
+          :::
+        practice:
+          target: DEVELOPPEMENT
+          action: list_skills
+          prompt: Écrivez les compétences que vous voulez développer cette année, une par ligne.
+
+      - title: Vos connaissances
+        duration: 10
+        content: |
+          Une compétence se bâtit avec des moyens concrets. Aujourd'hui, ce que vous voulez apprendre. Voici ce qu'en dit le livre KIINI, toujours au chapitre 16.
+
+          ## Comprendre
+
+          Une compétence se bâtit avec des moyens concrets. Pour chacune, choisis tes ressources : un livre, une formation, un mentor, une pratique, un projet pilote. Rappelle-toi les trois familles du chapitre 13 : l'immersion (recevoir un savoir), l'imitation (apprendre d'un modèle), l'implication (apprendre en faisant). La plus négligée est souvent la troisième. On n'apprend pas à nager en lisant un livre sur la natation.
+
+          Daniel et ses compagnons, eux, ont étudié trois ans la langue et les sciences de Babylone, et le roi les trouva « dix fois supérieurs » à tous les savants de son royaume (Daniel 1:20). Leur fidélité à Dieu n'excluait pas l'excellence intellectuelle.
+
+          ## Méditer
+
+          :::mediter
+          > « Je l'ai rempli de l'Esprit de Dieu, de sagesse, d'intelligence, et de savoir pour toutes sortes d'ouvrages. » Exode 31:3
+
+          Demandez à Dieu un esprit qui apprend, et la persévérance pour aller au bout.
+          :::
+
+          ## Réfléchir
+
+          :::avous Le Sanctuaire (chapitre 16)
+          Pour chacune, choisis une ressource d'immersion, une d'imitation et une d'implication.
+          :::
+
+          Écrivez les connaissances que vous voulez acquérir. Les ressources et les dates se posent ensuite dans votre Plan de Développement personnel.
+        practice:
+          target: DEVELOPPEMENT
+          action: list_knowledge
+          prompt: Écrivez les connaissances que vous voulez acquérir cette année, une par ligne.

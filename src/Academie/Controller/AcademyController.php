@@ -216,7 +216,7 @@ final class AcademyController extends AbstractController
         $text = fn (string $key, int $max) => mb_substr(trim($p->getString($key)), 0, $max);
         $lines = fn (mixed $raw) => array_slice(array_map(fn ($l) => mb_substr(trim(\is_string($l) ? $l : ''), 0, 255), \is_array($raw) ? array_values($raw) : []), 0, \App\Academie\Service\PlanRubrics::MAX_NEW);
         $goals = [];
-        foreach (array_keys(\App\Academie\Service\PlanRubrics::GOAL_CATEGORIES) as $cat) {
+        foreach (array_keys(\App\Academie\Service\PlanRubrics::GOAL_CATEGORIES + \App\PlanDIntendance\Service\Stewardship::DOMAINS) as $cat) {
             $goals[$cat] = $lines($p->all('goals')[$cat] ?? []);
         }
         $draft = array_filter([

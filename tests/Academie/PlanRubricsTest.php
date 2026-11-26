@@ -280,4 +280,96 @@ final class PlanRubricsTest extends WebTestCase
         $this->assertSelectorTextContains('.next-list', 'Laissez-vous guider');
         $this->assertSelectorTextContains('.next-list', $course->getTitle());
     }
+
+    /** Séance d'un parcours de plan rattaché à un autre plan que le Plan de Vie. */
+    private function sessionOf(string $plan, string $action): Course
+    {
+        $course = $this->makeCourse($plan, false, true, [['Séance', $plan, $action]]);
+        $course->setKind(Course::KIND_PLAN);
+        $this->em()->flush();
+
+        return $course;
+    }
+
+    public function testGrowthSessionsKeepLinksStrategiesAndSiblingLists(): void
+    {
+        $client = static::createClient();
+        $user = $this->createUser(pro: true);
+        $vie = new PlanDeVie();
+        $user->setPlanDeVie($vie);
+        $this->em()->persist($vie);
+        $goal = (new LifeGoal())->setPlanDeVie($vie)->setTitle('Servir les jeunes')->setCategory('GIVE')->setProgress(0);
+        $this->em()->persist($goal);
+        $growth = (new \App\PlanDeCroissance\Entity\PlanDeCroissance())->setUser($user);
+        $user->setPlanDeCroissance($growth);
+        $this->em()->persist($growth);
+        $patience = (new \App\PlanDeCroissance\Entity\GrowthGoal())->setPlanDeCroissance($growth)->setAxis(\App\PlanDeCroissance\Enum\GrowthAxis::CHARACTER)
+            ->setTitle('Patience')->setProgress(30)->setStrategy('Respirer avant de répondre')->setSubtype('consolidate')->addSupportedLifeGoal($goal);
+        $budget = (new \App\PlanDeCroissance\Entity\GrowthGoal())->setPlanDeCroissance($growth)->setAxis(\App\PlanDeCroissance\Enum\GrowthAxis::COMPETENCE)
+            ->setType('CONNAISSANCE')->setTitle('Gérer un budget')->setProgress(0);
+        $this->em()->persist($patience);
+        $this->em()->persist($budget);
+        $this->em()->flush();
+        [$patienceId, $budgetId] = [$patience->getId(), $budget->getId()];
+        $client->loginUser($user = $this->reload($user));
+
+        $course = $this->sessionOf('CROISSANCE', 'list_character_goals');
+        $client->request('GET', '/academie/'.$course->getSlug().'/lecon-1');
+        $this->assertSelectorTextContains('#pratique .academie-seance-deja', 'Patience');
+        $this->finish($client, $course, ['items' => ['Humilité']]);
+        $this->finish($client, $this->sessionOf('DEVELOPPEMENT', 'list_skills'), ['items' => ['Parler en public']]);
+
+        $goals = $this->reload($user)->getPlanDeCroissance()->getGrowthGoals()->toArray();
+        $titles = array_map(fn ($g) => $g->getTitle(), $goals);
+        sort($titles);
+        $this->assertSame(['Gérer un budget', 'Humilité', 'Parler en public', 'Patience'], $titles);
+        $kept = $this->em()->find(\App\PlanDeCroissance\Entity\GrowthGoal::class, $patienceId);
+        $this->assertSame('Respirer avant de répondre', $kept->getStrategy());
+        $this->assertSame('consolidate', $kept->getSubtype());
+        $this->assertSame(['Servir les jeunes'], array_map(fn ($g) => $g->getTitle(), $kept->getSupportedLifeGoals()->toArray()), 'Le lien vers l\'objectif du Plan de Vie est gardé.');
+        $this->assertNotNull($this->em()->find(\App\PlanDeCroissance\Entity\GrowthGoal::class, $budgetId), 'La connaissance déjà posée reste quand on ajoute une compétence.');
+    }
+
+    public function testHygieneStewardshipAndTransmissionSessions(): void
+    {
+        $client = static::createClient();
+        $user = $this->createUser(pro: true);
+        $transmission = (new \App\PlanDeTransmission\Entity\PlanDeTransmission())->setUser($user)->setTreasureShift('Moins de vêtements, plus de dons');
+        $user->setPlanDeTransmission($transmission);
+        $this->em()->persist($transmission);
+        $this->em()->persist((new \App\PlanDIntendance\Entity\StewardshipItem())->setUser($user)->setOrigin('TEMPS')->setLabel('Mes soirées'));
+        $this->em()->flush();
+        $client->loginUser($user = $this->reload($user));
+
+        $this->finish($client, $this->sessionOf('HYGIENE', 'list_hygiene_domains'), ['items' => ['Le sommeil']]);
+        $this->finish($client, $this->sessionOf('INTENDANCE', 'list_stewardship'), ['goals' => ['FINANCES' => ['Mon épargne'], 'TEMPS' => ['mes soirées', 'Mes matins']]]);
+        $this->finish($client, $this->sessionOf('TRANSMISSION', 'write_eternity'), ['text' => 'J\'ai aimé Dieu et servi les jeunes.']);
+        $this->finish($client, $this->sessionOf('TRANSMISSION', 'list_legacy_goals'), ['items' => ['L\'amour de la Parole']]);
+
+        $user = $this->reload($user);
+        $this->assertSame(['Le sommeil'], array_map(fn ($d) => $d->getName(), $user->getPlanDHygiene()->getHygieneDomains()->toArray()));
+        $items = static::getContainer()->get(\App\PlanDIntendance\Repository\StewardshipItemRepository::class)->findBy(['user' => $user]);
+        $labels = array_map(fn ($i) => $i->getOrigin().':'.$i->getLabel(), $items);
+        sort($labels);
+        $this->assertSame(['FINANCES:Mon épargne', 'TEMPS:Mes matins', 'TEMPS:Mes soirées'], $labels);
+        $this->assertSame('J\'ai aimé Dieu et servi les jeunes.', $user->getPlanDeTransmission()->getEternityPhrase());
+        $this->assertSame('Moins de vêtements, plus de dons', $user->getPlanDeTransmission()->getTreasureShift(), 'Le déplacement de trésor reste.');
+        $this->assertSame(['L\'amour de la Parole'], array_map(fn ($l) => $l->getTitle(), $user->getPlanDeTransmission()->getLegacyGoals()->toArray()));
+    }
+
+    public function testProPlanSessionsAreClosedToFreeMembers(): void
+    {
+        $client = static::createClient();
+        $user = $this->createUser();
+        $client->loginUser($user);
+        $course = $this->sessionOf('HYGIENE', 'list_hygiene_domains');
+        $course->setAccessLevel(Course::ACCESS_FREE);
+        $this->em()->flush();
+
+        $client->request('GET', '/academie/'.$course->getSlug().'/lecon-1');
+        $this->assertSelectorTextContains('#pratique', 'KIINI SAWA PRO');
+        $this->assertSelectorNotExists('#pratique button[value="plan"]');
+        $this->finish($client, $course, ['items' => ['Le sommeil']]);
+        $this->assertNull($this->reload($user)->getPlanDHygiene()?->getHygieneDomains()->count() ?: null);
+    }
 }
