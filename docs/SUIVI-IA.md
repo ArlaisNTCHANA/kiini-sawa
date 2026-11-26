@@ -25,6 +25,7 @@ Ne jamais afficher ni demander de mot de passe ; ne pas publier son nom (mention
 
 ## 26/11/2026 — Parcours des tests jamais essayés (DISC, Type, Profil complet, Ennéagramme, Hygiène, PDF)
 
+- **Déployé le 26/11/2026** (accord du fondateur) : pages contrôlées, aucune erreur au journal du serveur.
 Passés en local avec le compte de test, résultats et PDF lus page par page. Corrigé :
 - **PDF du Plan de Vie** : la rubrique « Profil » affichait le résultat brut des tests (`{"D":34,…}`, et pour l'Hygiène
   un long bloc qui débordait de la page). `PlanDataProvider` donne maintenant un résumé lisible (les trois dimensions
