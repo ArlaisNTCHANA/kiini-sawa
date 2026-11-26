@@ -128,9 +128,11 @@
     </section>
 
     <section class="ab-card" id="payer">
-        <h2>Payer</h2>
+        {# Point 9 (26/11/2026) : pas de titre « Payer » tant que le paiement n'est pas ouvert, et une adresse où écrire #}
+        <h2>{{ methods is empty ? 'Passer à PRO' : 'Payer' }}</h2>
         {% if methods is empty %}
-            <p style="color: var(--fg-light);">Le paiement n'est pas encore ouvert. Écrivez-nous pour passer à PRO : nous vous indiquerons comment régler.</p>
+            <p style="color: var(--fg-light);">{{ t('abonnement.ferme.texte', 'Le paiement en ligne n\'est pas encore ouvert. Écrivez-nous pour passer à PRO : nous vous indiquerons comment régler.') }}</p>
+            <p style="margin-top: .75rem;"><a class="ab-btn" style="display: inline-block; text-decoration: none;" href="mailto:contact@kiinisawa.com?subject={{ 'Passer à KIINI SAWA PRO'|url_encode }}">{{ t('abonnement.ferme.bouton', 'Écrire à contact@kiinisawa.com') }}</a></p>
             {% if is_granted('ROLE_ADMIN') %}
                 <p style="margin-top: .5rem; font-size: .85rem; color: var(--danger);">Administrateur : renseignez vos coordonnées de virement et/ou de Mobile Money dans <a href="{{ path('admin_config') }}">Configuration</a> pour ouvrir le paiement.</p>
             {% endif %}

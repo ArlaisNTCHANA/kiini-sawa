@@ -65,7 +65,8 @@
         @media (min-width: 640px) {
             .likert button { flex-direction: column; justify-content: center; text-align: center; padding: .9rem .45rem; min-height: 82px; }
         }
-        .likert button:hover { border-color: var(--primary); background: var(--primary-soft); }
+        /* Point 9 (26/11/2026) : sur un écran tactile, le survol « collait » au bouton touché à la question suivante */
+        @media (hover: hover) { .likert button:hover { border-color: var(--primary); background: var(--primary-soft); } }
         .likert button.on { background: var(--primary); border-color: var(--primary); color: #fff; }
         .likert .num { font-family: var(--serif); font-size: 1.1rem; font-weight: 700; opacity: .7; }
         .likert button.on .num { opacity: 1; }
@@ -153,9 +154,9 @@
         <section id="quiz-view" class="card">
             <div class="progress-row">
                 <span id="step-label">Question 1 sur 24</span>
-                <span id="step-pct">4 %</span>
+                <span id="step-pct">0 %</span>
             </div>
-            <div class="bar"><div id="bar-fill" class="bar-fill" style="width: 4.2%;"></div></div>
+            <div class="bar"><div id="bar-fill" class="bar-fill" style="width: 0%;"></div></div>
 
             <p id="q-text" class="q-text"></p>
 
@@ -266,7 +267,8 @@
 
             function renderQuestion() {
                 const item = B.ITEMS[idx];
-                const pct = Math.round(((idx + 1) / B.ITEMS.length) * 100);
+                // Point 9 : la progression compte les réponses données (plus de « 100 % » avant la dernière réponse)
+                const pct = Math.round((answers.filter(function (a) { return a !== null; }).length / B.ITEMS.length) * 100);
                 stepLabel.textContent = 'Question ' + (idx + 1) + ' sur ' + B.ITEMS.length;
                 stepPct.textContent = pct + ' %';
                 barFill.style.width = pct + '%';
@@ -289,6 +291,11 @@
                             idx++;
                         }
                         renderQuestion();
+                        // Dernière question répondue : le bouton « Voir mon résultat » vient à l'écran
+                        if (idx === B.ITEMS.length - 1 && answers[idx] !== null) {
+                            btnNext.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                            btnNext.focus({ preventScroll: true });
+                        }
                     });
                     likertEl.appendChild(btn);
                 });

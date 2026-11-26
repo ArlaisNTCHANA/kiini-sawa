@@ -510,8 +510,9 @@
         {% for item in nav_mobile_bar() %}
         {% set href = path(item[1]) %}
         {% set active = cp == href or cp starts with href ~ '/' or (item[3] == 'plans' and activeSection == 'plans') %}
-        <a href="{{ href }}" class="pill-item {% if active %}active{% endif %}">
-            <i data-lucide="{{ item[2] }}" style="width:20px;height:20px;stroke-width:{% if active %}2.5{% else %}2{% endif %};"></i>
+        {# Point 9 (26/11/2026) : nom et état lus par les lecteurs d'écran ; l'icône est décorative #}
+        <a href="{{ href }}" class="pill-item {% if active %}active{% endif %}" aria-label="{{ item[0] }}" {% if active %}aria-current="page"{% endif %}>
+            <i data-lucide="{{ item[2] }}" aria-hidden="true" style="width:20px;height:20px;stroke-width:{% if active %}2.5{% else %}2{% endif %};"></i>
             <span class="pill-label">{{ item[0] }}</span>
         </a>
         {% endfor %}
@@ -519,7 +520,7 @@
         {# Menu complet : les six rubriques, puis le compte #}
         <div style="flex:1;" x-data="{ o: false }" @keydown.escape.window="o = false">
             <button @click="o = true" class="pill-item" :class="o ? 'active' : ''" style="width:100%;" aria-label="Menu">
-                <i data-lucide="layout-grid" style="width:20px;height:20px;"></i>
+                <i data-lucide="layout-grid" aria-hidden="true" style="width:20px;height:20px;"></i>
                 <span class="pill-label">Menu</span>
             </button>
             <template x-teleport="body">

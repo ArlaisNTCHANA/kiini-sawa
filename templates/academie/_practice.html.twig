@@ -54,7 +54,9 @@
         {% elseif practice.fixed %}
             {% set form = practice.form %}
             <p style="margin-bottom: .8rem;">{{ lesson.practicePrompt|nl2br }}</p>
-            <p class="ks-small" style="margin-bottom: .8rem;">{{ t('academie.pratique.cible', 'Votre réponse peut aller dans : {cible}.', 'text', {cible: academie_exercice(practice.target, practice.action)}) }}</p>
+            {# Point 9 (26/11/2026) : une phrase, pas une étiquette technique (« Journal : … ») #}
+            {% set lieu = practice.target == 'RITUEL' ? 'vos rituels' : 'votre ' ~ (academie_exercice(practice.target, practice.action)|split(' : ')|first) %}
+            <p class="ks-small" style="margin-bottom: .8rem;">{{ t('academie.pratique.lieu', 'Ce que vous écrivez ici sera enregistré dans {lieu}.', 'text', {lieu: lieu}) }}</p>
             {% if practice.blocker %}
                 <div class="ks-alert ks-alert--info" style="margin-bottom: .8rem;">{{ practice.blocker }}{% if 'PRO' in practice.blocker %} <a href="{{ path('app_subscription') }}">{{ t('academie.pratique.decouvrir_pro', 'Découvrir KIINI SAWA PRO') }}</a>{% endif %}</div>
             {% else %}

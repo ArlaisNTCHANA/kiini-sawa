@@ -29,6 +29,8 @@
                     <button type="button" class="ks-btn ks-btn--secondary ks-btn--sm" x-show="!done" :disabled="picked.length === 0" @click="done = true">{{ t('academie.questions.valider', 'Valider ma réponse') }}</button>
                     <button type="button" class="ks-btn ks-btn--ghost ks-btn--sm" x-show="done" x-cloak @click="done = false; picked = []"><i data-lucide="rotate-ccw"></i> {{ t('academie.questions.recommencer', 'Recommencer') }}</button>
                 </div>
+                {# Point 9 (26/11/2026) : un mot d'encouragement quand la réponse est juste #}
+                <p class="academie-bravo" x-show="done && picked.length === {{ right|length }} && picked.every(id => {{ right|map(r => r ~ '')|json_safe|e('html_attr') }}.includes(id))" x-cloak role="status" style="margin-top: .8rem; font-weight: 700; color: var(--primary);">{{ t('academie.questions.bravo', 'Bravo, c\'est juste !') }}</p>
                 <div class="academie-explain" x-show="done" x-cloak>
                     <p><strong>{{ q.multiple ? t('academie.questions.bonnes', 'Les bonnes réponses') : t('academie.questions.bonne', 'La bonne réponse') }} :</strong> {{ q.options|filter(o => o.id in right)|map(o => o.label)|join(' ; ') }}</p>
                     <p style="margin-top: .4rem;">{{ q.explanation|nl2br }}</p>
