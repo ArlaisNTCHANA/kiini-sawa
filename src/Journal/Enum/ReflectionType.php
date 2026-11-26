@@ -10,4 +10,6 @@ enum ReflectionType: string
     case INSIGHT = 'INSIGHT';
     case RESOLUTION = 'RESOLUTION';
     case TEMOIGNAGE = 'TEMOIGNAGE';
+    // Point 9 (26/11/2026) : un sujet de prière, un exaucement
+    case PRAYER = 'PRAYER';
 }

@@ -25,7 +25,7 @@ final class QuickDay
     public const MAX_OPERATIONS = 100;
     public const MAX_AGE_DAYS = 7;
 
-    public const JOURNAL_TYPES = ['REFLECTION' => 'Pensée', 'IDEA' => 'Idée', 'RESOLUTION' => 'Résolution', 'MILESTONE' => 'Victoire', 'TEMOIGNAGE' => 'Témoignage', 'INSIGHT' => 'Déclic'];
+    public const JOURNAL_TYPES = ['REFLECTION' => 'Pensée', 'IDEA' => 'Idée', 'RESOLUTION' => 'Résolution', 'MILESTONE' => 'Victoire', 'TEMOIGNAGE' => 'Témoignage', 'INSIGHT' => 'Déclic', 'PRAYER' => 'Prière'];
 
     public function __construct(
         private readonly EntityManagerInterface $em,

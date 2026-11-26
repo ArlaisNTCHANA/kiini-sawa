@@ -60,6 +60,7 @@
     .type-pill.active-resolution { background: #5E8463 !important; color: white !important; box-shadow: 0 4px 14px rgba(94, 148, 121, 0.3) !important; border-color: #5E8463 !important; }
     .type-pill.active-milestone { background: #B3402A !important; color: white !important; box-shadow: 0 4px 14px rgba(244, 63, 94, 0.3) !important; border-color: #B3402A !important; }
     .type-pill.active-temoignage { background: #3D7A5F !important; color: white !important; box-shadow: 0 4px 14px rgba(6, 182, 212, 0.3) !important; border-color: #3D7A5F !important; }
+    .type-pill.active-prayer { background: #7A5A2E !important; color: white !important; border-color: #7A5A2E !important; }
     .type-pill.active-insight { background: var(--primary-light) !important; color: white !important; box-shadow: 0 4px 14px rgba(61, 122, 95, 0.3) !important; border-color: var(--primary-light) !important; }
 
     /* Textarea Focus glow */
@@ -263,13 +264,14 @@
                 { value: 'MILESTONE',  label: 'Victoire',   icon: 'trophy' },
                 { value: 'TEMOIGNAGE', label: 'Témoignage', icon: 'quote' },
                 { value: 'INSIGHT',    label: 'Déclic',     icon: 'eye' },
+                { value: 'PRAYER',     label: 'Prière',     icon: 'hand-heart' },
             ] %}
             <div class="ks-scroll-row" style="padding: 1.25rem 1.25rem 0.25rem;">
                 {% for t in captureTypes %}
                 <button @click="capture.type = '{{ t.value }}'"
                         class="type-pill"
                         :class="capture.type === '{{ t.value }}' ? 'active-{{ t.value|lower }}' : ''"
-                        style="--t-color: {% if t.value == 'IDEA' %}#C8962E{% elseif t.value == 'REFLECTION' %}var(--success){% elseif t.value == 'RESOLUTION' %}#5E8463{% elseif t.value == 'MILESTONE' %}#B3402A{% elseif t.value == 'TEMOIGNAGE' %}#3D7A5F{% else %}var(--primary-light){% endif %};">
+                        style="--t-color: {% if t.value == 'IDEA' %}#C8962E{% elseif t.value == 'REFLECTION' %}var(--success){% elseif t.value == 'RESOLUTION' %}#5E8463{% elseif t.value == 'MILESTONE' %}#B3402A{% elseif t.value == 'TEMOIGNAGE' %}#3D7A5F{% elseif t.value == 'PRAYER' %}#7A5A2E{% else %}var(--primary-light){% endif %};">
                     <i data-lucide="{{ t.icon }}" style="width: 13px; height: 13px;"></i>
                     <span>{{ t.label }}</span>
                 </button>
@@ -338,7 +340,7 @@
                                 style="width: 2.25rem; height: 2.25rem; border-radius: 0.75rem; font-size: 1.25rem;
                                        display: flex; align-items: center; justify-content: center; cursor: pointer;
                                        border: none; background: transparent;"
-                                title="{{ m.value }}">
+                                title="{{ {HAPPY: 'Joyeux', ENERGIZED: 'Plein d\'énergie', NEUTRAL: 'Neutre', TIRED: 'Fatigué', SAD: 'Triste'}[m.value] }}" aria-label="Humeur : {{ {HAPPY: 'joyeux', ENERGIZED: 'plein d\'énergie', NEUTRAL: 'neutre', TIRED: 'fatigué', SAD: 'triste'}[m.value] }}">
                             {{ m.icon|raw }}
                         </button>
                         {% endfor %}
@@ -387,6 +389,9 @@
                     </button>
                     <button @click="filterType('IDEA')" class="type-pill" :class="activeTypeFilter === 'IDEA' ? 'active-idea' : ''" style="padding: 0.35rem 0.85rem; font-size: 0.65rem;">
                         Idées
+                    </button>
+                    <button @click="filterType('PRAYER')" class="type-pill" :class="activeTypeFilter === 'PRAYER' ? 'active-prayer' : ''" style="padding: 0.35rem 0.85rem; font-size: 0.65rem;">
+                        Prières
                     </button>
                     <button @click="filterType('MILESTONE')" class="type-pill" :class="activeTypeFilter === 'MILESTONE' ? 'active-milestone' : ''" style="padding: 0.35rem 0.85rem; font-size: 0.65rem;">
                         Victoires
@@ -470,6 +475,10 @@
                                 <p style="font-family: var(--font-serif); font-size: 1.05rem; line-height: 1.7; color: var(--fg-light); white-space: pre-wrap; margin: 0;" x-text="entry.content"></p>
 
                                 {# Energy progress bar #}
+                                {# Point 9 : l'humeur notée s'affiche sur la note #}
+                                <template x-if="entry.mood">
+                                    <p style="margin: .5rem 0 0; font-size: .75rem; font-weight: 700; color: var(--fg-muted);" x-text="'Humeur : ' + ({HAPPY: 'joyeux', ENERGIZED: 'plein d’énergie', NEUTRAL: 'neutre', TIRED: 'fatigué', SAD: 'triste'}[entry.mood] || '')"></p>
+                                </template>
                                 <template x-if="entry.energy !== null">
                                     <div style="display: flex; align-items: center; gap: 0.5rem; margin-top: 0.5rem; border-top: 1px solid rgba(0,0,0,0.03); padding-top: 0.75rem;">
                                         <div style="display: flex; align-items: center; gap: 0.25rem; font-size: 0.7rem; font-weight: 700; color: var(--fg-muted); text-transform: uppercase;">
@@ -620,7 +629,8 @@
                     RESOLUTION: 'Quelle promesse vous faites-vous aujourd\'hui ?',
                     MILESTONE: 'Quelle belle victoire voulez-vous célébrer ?',
                     TEMOIGNAGE: 'Partagez un moment marquant...',
-                    INSIGHT: 'Une prise de conscience, une révélation...'
+                    INSIGHT: 'Une prise de conscience, une révélation...',
+                    PRAYER: 'Un sujet de prière, un exaucement, une parole reçue...'
                 };
                 return placeholders[this.capture.type] || 'Quoi de neuf dans votre esprit ?';
             },
@@ -660,7 +670,8 @@
                     RESOLUTION: 'target',
                     MILESTONE: 'trophy',
                     INSIGHT: 'zap',
-                    TEMOIGNAGE: 'quote'
+                    TEMOIGNAGE: 'quote',
+                    PRAYER: 'hand-heart'
                 };
                 return iconMap[type] || 'brain';
             },
@@ -672,7 +683,8 @@
                     RESOLUTION: 'Résolution',
                     MILESTONE: 'Victoire',
                     INSIGHT: 'Déclic',
-                    TEMOIGNAGE: 'Témoignage'
+                    TEMOIGNAGE: 'Témoignage',
+                    PRAYER: 'Prière'
                 };
                 return labelMap[type] || 'Pensée';
             },
