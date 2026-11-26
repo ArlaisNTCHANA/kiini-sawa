@@ -30,6 +30,23 @@
         </div>
     {% endif %}
 
+    {% if lines|default([])|length %}
+        <section class="ks-card journey-lines" aria-labelledby="lignes-title" data-journey-lines>
+            <h2 class="journey-lines__title" id="lignes-title">Vos six lignes</h2>
+            <p class="journey-lines__lead">Chaque plan a son parcours guidé, séance après séance. Les semaines ci-dessous vous indiquent quelles séances faire, et quand.</p>
+            <ul class="journey-lines__list">
+                {% for line in lines %}
+                    {% set look = academie_apparence(line.plan) %}
+                    <li class="journey-line" style="--c: {{ look.color }};">
+                        <a href="{{ path('app_academie_course', {slug: line.course.slug}) }}" class="journey-line__name"><i data-lucide="{{ look.icon }}"></i> {{ line.label }}</a>
+                        <span class="journey-line__dots" aria-hidden="true">{% for i in 1..max(line.total, 1) %}<span class="{{ i <= line.done ? 'is-done' }}"></span>{% endfor %}</span>
+                        <span class="journey-line__count">{{ line.done }}/{{ line.total }}</span>
+                    </li>
+                {% endfor %}
+            </ul>
+        </section>
+    {% endif %}
+
     <ol class="journey-weeks">
         {% for n, week in weeks %}
             {% set isDone = progress and progress.weekDone(n) %}
@@ -47,7 +64,14 @@
                     <ul class="journey-list">
                         {% for c in week.books %}<li><a href="{{ path('app_methode_chapter', {slug: c.slug}) }}">{{ c.title }}</a> <span>· {{ c.minutes }} min</span></li>{% endfor %}
                     </ul>
-                    <p class="journey-label">Écrire dans mes plans</p>
+                    {% set guided = sessions[n] ?? [] %}
+                    {% if guided|length %}
+                        <p class="journey-label">Séances guidées</p>
+                        <div class="journey-actions">
+                            {% for g in guided %}<a class="ks-btn {{ g.done ? 'ks-btn--ghost' : 'ks-btn--primary' }} ks-btn--sm" href="{{ path('app_academie_lesson', {slug: g.course.slug, lessonSlug: g.lesson.slug}) }}" data-guided-session>{% if g.done %}<i data-lucide="check"></i> {% endif %}{{ g.lesson.title }}</a>{% endfor %}
+                        </div>
+                    {% endif %}
+                    <p class="journey-label">{{ guided|length ? 'Ou écrire seul dans mes plans' : 'Écrire dans mes plans' }}</p>
                     <div class="journey-actions">
                         {% for a in week.actions %}<a class="ks-btn ks-btn--secondary ks-btn--sm" href="{{ path(a[1], a[2] ?? {}) }}">{{ a[0] }}</a>{% endfor %}
                     </div>
@@ -66,6 +90,20 @@
 </div>
 <style>
     .journey-start p { margin: 0 0 1rem; color: var(--fg-muted); }
+    .journey-lines { margin-top: 1rem; }
+    .journey-lines__title { font-family: var(--font-serif); font-size: 1.2rem; margin: 0 0 .3rem; }
+    .journey-lines__lead { color: var(--fg-muted); font-size: .9rem; margin: 0 0 .8rem; }
+    .journey-lines__list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: .55rem; }
+    .journey-line { display: grid; grid-template-columns: minmax(0, 11rem) 1fr auto; align-items: center; gap: .7rem; min-width: 0; }
+    .journey-line__name { display: flex; align-items: center; gap: .35rem; font-weight: 700; font-size: .85rem; color: var(--fg); text-decoration: none; min-width: 0; }
+    .journey-line__name svg { width: 15px; height: 15px; flex: none; color: var(--c); }
+    .journey-line__dots { display: flex; align-items: center; gap: 0; min-width: 0; }
+    .journey-line__dots span { flex: 1; height: 4px; background: var(--border); position: relative; }
+    .journey-line__dots span::after { content: ''; position: absolute; right: -5px; top: -4px; width: 12px; height: 12px; border-radius: 50%; background: var(--card-bg); border: 2px solid var(--border); }
+    .journey-line__dots span.is-done { background: var(--c); }
+    .journey-line__dots span.is-done::after { background: var(--c); border-color: var(--c); }
+    .journey-line__count { font-size: .8rem; color: var(--fg-muted); font-variant-numeric: tabular-nums; }
+    @media (max-width: 560px) { .journey-line { grid-template-columns: 1fr auto; } .journey-line__dots { grid-column: 1 / -1; order: 3; } }
     .journey-status__line { font-size: 1.1rem; margin: .2rem 0 .6rem; }
     .journey-bar { height: 8px; background: var(--bg-alt); border-radius: 999px; overflow: hidden; }
     .journey-bar span { display: block; height: 100%; background: var(--primary); }

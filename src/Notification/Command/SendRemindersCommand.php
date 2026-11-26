@@ -28,6 +28,7 @@ class SendRemindersCommand extends Command
         private readonly \App\Feedback\Service\FeedbackService $feedback,
         private readonly \App\Notification\Service\BirthdayGreeter $birthdays,
         private readonly \App\Notification\Service\TipSender $tips,
+        private readonly \App\Notification\Service\Notifier $notifier,
     )
     {
         parent::__construct();
@@ -48,12 +49,16 @@ class SendRemindersCommand extends Command
             return Command::INVALID;
         }
 
+        // Académie d'abord : le jour d'une séance (ou d'une leçon), c'est le seul e-mail de rappel ; les autres rappels
+        // de ces membres restent dans l'application (Notifier::HELD_ON_SESSION_DAYS, parcours guidés, 26/11/2026)
+        $academy = $this->academy->sendAll($date);
+        $this->notifier->holdRemindersForSessionDay($this->academy->recipients());
+
         $sent = $this->reminders->sendAll($date);
         // Redevabilité : alertes automatiques au partenaire (avec copie à la personne) et reprises à 72 heures
         $accountability = $this->accountability->runDailyChecks($date);
         $sent['redevabilité (alertes)'] = $accountability['alertes'];
-        // Académie : leçon du jour selon le rythme choisi, pause automatique après 3 e-mails sans avancer
-        $academy = $this->academy->sendAll($date);
+        // Académie (envoyée plus haut) : leçon du jour selon le rythme choisi, pause automatique après 3 e-mails sans avancer
         $sent['académie (leçons)'] = $academy['lecons'];
         $sent['académie (pauses)'] = $academy['pauses'];
         // Feedback nourricier : lien arrivé à son terme, rappel s'il manque des réponses après quelques jours

@@ -331,6 +331,15 @@ rattaché à l'un des 6 plans. Choisi dans le studio (« Genre de parcours ») o
   Contenus (premiers jets, PRO) : `content/academie/parcours-plan-de-croissance.yaml` (3 séances),
   `…-de-developpement.yaml`, `…-d-hygiene.yaml`, `…-d-intendance.yaml`, `…-de-transmission.yaml` (2 séances chacun),
   extraits des chapitres 13 à 20 vérifiés mot pour mot.
+- **Lot 4 (26/11/2026)** : le parcours de 90 jours (`/parcours`) montre « Vos six lignes » (une ligne de métro par
+  parcours de plan publié, progression du membre) et, dans chaque semaine, les « Séances guidées » qui écrivent dans les
+  mêmes rubriques que les écrans de la semaine (`PlanJourneyMap`, rapprochement par plan et étape de l'assistant ;
+  Intendance par la page du plan). Les boutons de l'assistant restent (« Ou écrire seul dans mes plans »).
+- **Un seul message par jour** : `app:reminders:send` envoie d'abord l'Académie ; les membres qui ont reçu l'e-mail
+  d'une leçon ou d'une séance ne reçoivent pas par e-mail, ce jour-là, les rappels de `Notifier::HELD_ON_SESSION_DAYS`
+  (astuces, rituels, revues, défis, échéances, Partenaire de Redevabilité inactif) ; ces rappels restent dans
+  l'application et sur le téléphone. Paiements, fin d'essai, redevabilité, retours des proches, anniversaire passent.
+  Test : `tests/Notification/SessionDayEmailTest.php`.
 - Tests : `tests/Academie/PlanRubricsTest.php`.
 
 ## Reste à faire

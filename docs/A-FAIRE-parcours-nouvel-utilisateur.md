@@ -45,7 +45,7 @@ courts, un par plan, plus le parcours de 90 jours qui les enchaîne). Chaque sé
 méditer, réfléchir, écrire dans le plan, célébrer. Une **ligne de métro** montre où l'on en est, et des rendez-vous
 par e-mail aident à continuer.
 **Document** : `docs/PROPOSITION-parcours-guides.md`. **Validé par le fondateur le 26/11/2026** (décisions au § 9 du document) ;
-**lot 1 construit le 26/11/2026** (non déployé, parcours « Mon Plan de Vie » en attente de relecture : voir `docs/SUIVI-IA.md`) ; lot 2 construit le 26/11/2026 (e-mail « séance », brouillon, proposition après la Boussole) ; lot 3 construit le 26/11/2026 (cinq autres parcours de plan, à relire) ; prochaine étape : lot 4 (parcours de 90 jours). Plusieurs chantiers ci-dessous (1, 3, 4, 8) en seront en partie résolus :
+**lot 1 construit le 26/11/2026** (non déployé, parcours « Mon Plan de Vie » en attente de relecture : voir `docs/SUIVI-IA.md`) ; lot 2 construit le 26/11/2026 (e-mail « séance », brouillon, proposition après la Boussole) ; lot 3 construit le 26/11/2026 (cinq autres parcours de plan, à relire) ; lot 4 construit le 26/11/2026 (parcours de 90 jours relié aux séances, « un seul message par jour ») : les 4 lots de la proposition sont faits ; reste la relecture et la publication par le fondateur. Plusieurs chantiers ci-dessous (1, 3, 4, 8) en seront en partie résolus :
 les traiter en cohérence avec ce projet.
 
 ## À faire, par ordre d'importance

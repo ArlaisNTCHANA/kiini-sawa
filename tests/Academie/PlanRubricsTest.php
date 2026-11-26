@@ -372,4 +372,25 @@ final class PlanRubricsTest extends WebTestCase
         $this->finish($client, $course, ['items' => ['Le sommeil']]);
         $this->assertNull($this->reload($user)->getPlanDHygiene()?->getHygieneDomains()->count() ?: null);
     }
+
+    public function testNinetyDayJourneyShowsTheSixLinesAndTheGuidedSessionsOfEachWeek(): void
+    {
+        $client = static::createClient();
+        $user = $this->createUser();
+        $client->loginUser($user);
+        $client->request('GET', '/parcours');
+        $this->assertResponseIsSuccessful();
+        $this->assertSelectorNotExists('[data-journey-lines]', 'Rien tant qu\'aucun parcours de plan n\'est publié.');
+
+        $course = $this->makeCourse('VIE', true, true, [['Votre But', 'VIE', 'write_purpose'], ['Vos convictions', 'VIE', 'list_convictions'], ['Vos valeurs', 'VIE', 'list_values']]);
+        $course->setKind(Course::KIND_PLAN);
+        $this->em()->flush();
+
+        $client->request('GET', '/parcours');
+        $this->assertSelectorTextContains('[data-journey-lines]', 'Plan de Vie');
+        $this->assertSelectorTextContains('[data-journey-lines]', '0/3');
+        $this->assertSelectorTextContains('#semaine-3 [data-guided-session]', 'Votre But');
+        $this->assertCount(2, $client->getCrawler()->filter('#semaine-4 [data-guided-session]'), 'Semaine 4 : convictions et valeurs.');
+        $this->assertSelectorNotExists('#semaine-1 [data-guided-session]');
+    }
 }

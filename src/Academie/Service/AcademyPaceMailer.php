@@ -30,6 +30,15 @@ final class AcademyPaceMailer
     ) {
     }
 
+    /** @var int[] membres qui ont reçu l'e-mail d'une leçon ou d'une séance pendant cette tournée */
+    private array $recipients = [];
+
+    /** @return int[] */
+    public function recipients(): array
+    {
+        return array_values(array_unique($this->recipients));
+    }
+
     /** @return array{lecons: int, pauses: int} */
     public function sendAll(\DateTimeImmutable $today): array
     {
@@ -93,6 +102,7 @@ final class AcademyPaceMailer
                 ['template' => 'academie/email/lecon.html.twig', 'context' => ['course' => $course, 'lesson' => $lesson, 'progress' => $enrollment->progress(), 'pace' => $enrollment->getPaceMode()]]);
         }
         if ($ok) {
+            $this->recipients[] = (int) $user->getId();
             $enrollment->recordEmail($today);
             $this->em->flush();
         }

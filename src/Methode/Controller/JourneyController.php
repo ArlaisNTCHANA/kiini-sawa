@@ -23,7 +23,7 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 class JourneyController extends AbstractController
 {
     #[Route('', name: '', methods: ['GET', 'POST'])]
-    public function index(Request $request, JourneyProgressRepository $repo, EntityManagerInterface $em, BookLibrary $book): Response
+    public function index(Request $request, JourneyProgressRepository $repo, EntityManagerInterface $em, BookLibrary $book, \App\Academie\Service\PlanJourneyMap $map): Response
     {
         /** @var User $user */
         $user = $this->getUser();
@@ -66,6 +66,9 @@ class JourneyController extends AbstractController
             'progress' => $progress,
             'weeks' => $weeks,
             'current' => $progress?->currentWeek(),
+            // Parcours guidés, lot 4 : les six lignes et les séances guidées de chaque semaine
+            'lines' => $map->lines($user),
+            'sessions' => $map->sessionsByWeek($user),
         ]);
     }
 }

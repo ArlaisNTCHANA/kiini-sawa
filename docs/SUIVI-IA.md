@@ -9,6 +9,21 @@ teste (`php bin/phpunit`), commit, déploie (`bin/ops/envoyer-hostinger.sh`), v�
 journal `var/log/prod-AAAA-MM-JJ.log` sans erreur) ; **le fondateur fait lui-même `git push`** (refusé à l'IA).
 Ne jamais afficher ni demander de mot de passe ; ne pas publier son nom (mentions légales en attente).
 
+## 26/11/2026 — Parcours guidés, lot 4 et « un seul message par jour »
+
+- **Demande du fondateur** : « suite ? » (après le chargement des 5 parcours en brouillon en production).
+- **Fait** (détail : `docs/modules/academie.md`, « Parcours de plan ») : `PlanJourneyMap` ; page du parcours de 90 jours
+  avec « Vos six lignes » et « Séances guidées » par semaine (`JourneyController`, `templates/methode/journey.html.twig`) ;
+  `Notifier::holdRemindersForSessionDay` appelé par `app:reminders:send` après l'envoi de l'Académie (désormais en
+  premier).
+- **Tests** : `PlanRubricsTest` (14), `SessionDayEmailTest` ; 621 tests verts. Vu à l'écran en local (375 px, onglet
+  séparé : le fondateur utilisait le navigateur intégré) : six lignes aux couleurs des plans, pas de défilement
+  horizontal.
+- **Piège** : dans les tests, les e-mails du `Notifier` se comptent avec `getMailerMessages()` dans un `WebTestCase`
+  (`assertEmailCount` ne les voit pas).
+- **Reste** : relecture et publication des 6 parcours par le fondateur ; écrans mobiles des séances (API prête,
+  `type: seance`).
+
 ## 26/11/2026 — Parcours guidés, lot 3 : les cinq autres parcours de plan
 
 - **Demande du fondateur** : « Oui, lot 3 ».

@@ -27,6 +27,24 @@ final class Notifier
         NotificationType::PARTNER_INACTIVE,
     ];
 
+    /**
+     * Rappels qui cèdent leur e-mail au rendez-vous de l'Académie du jour (« un seul message par jour », parcours
+     * guidés, 26/11/2026). Les messages importants (paiement, fin d'essai, redevabilité, retours des proches,
+     * anniversaire) ne sont jamais retenus ; la notification dans l'application et sur le téléphone reste.
+     */
+    public const HELD_ON_SESSION_DAYS = [
+        NotificationType::TIP,
+        NotificationType::HABIT_REMINDER,
+        NotificationType::WEEKLY_REVIEW_REMINDER,
+        NotificationType::MONTHLY_REVIEW_REMINDER,
+        NotificationType::CHALLENGE_DAY,
+        NotificationType::PARTNER_INACTIVE,
+        NotificationType::GOAL_DEADLINE,
+    ];
+
+    /** @var array<int, true> membres qui ont reçu aujourd'hui l'e-mail d'une séance ou d'une leçon */
+    private array $sessionDay = [];
+
     public function __construct(
         private readonly EntityManagerInterface $em,
         private readonly NotificationRepository $notifications,
@@ -71,6 +89,10 @@ final class Notifier
                 $byEmail = false;
             }
         }
+        // Le jour d'une séance, elle est le seul e-mail de rappel : les autres restent dans l'application
+        if ($byEmail && isset($this->sessionDay[(int) $user->getId()]) && \in_array($type, self::HELD_ON_SESSION_DAYS, true)) {
+            $byEmail = false;
+        }
         $byPush = $type->isPushable() && $this->push->hasDevice($user);
         if (!$inApp && !$byEmail && !$byPush) {
             return false;
@@ -90,6 +112,19 @@ final class Notifier
         }
 
         return true;
+    }
+
+    /**
+     * Pour la tournée du jour (app:reminders:send) : ces membres ont reçu l'e-mail de leur séance, leurs autres
+     * rappels ne partent pas par e-mail.
+     *
+     * @param int[] $userIds
+     */
+    public function holdRemindersForSessionDay(array $userIds): void
+    {
+        foreach ($userIds as $id) {
+            $this->sessionDay[(int) $id] = true;
+        }
     }
 
     public function preferences(User $user): NotificationPreference
