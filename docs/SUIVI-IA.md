@@ -11,6 +11,7 @@ Ne jamais afficher ni demander de mot de passe ; ne pas publier son nom (mention
 
 ## 26/11/2026 — « Le But de Dieu pour ma vie » ; impression complète du Plan de Vie
 
+- **Déployé le 26/11/2026** (accord du fondateur) : pages contrôlées, aucune erreur au journal du serveur. Le parcours en brouillon reste à recharger ou corriger par le fondateur (voir ci-dessous).
 - **Formulation** (demande du fondateur) : jamais « Votre But de Dieu » dans l'application, mais « le But de Dieu pour
   ma vie » : `DashboardData` (accueil) et le parcours `content/academie/parcours-plan-de-vie.yaml` (titre de la 1re
   séance, présentation, consigne). Le texte du livre (« ton But de Dieu ») n'est pas touché.
