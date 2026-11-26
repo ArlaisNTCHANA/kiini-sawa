@@ -9,6 +9,11 @@ teste (`php bin/phpunit`), commit, déploie (`bin/ops/envoyer-hostinger.sh`), v�
 journal `var/log/prod-AAAA-MM-JJ.log` sans erreur) ; **le fondateur fait lui-même `git push`** (refusé à l'IA).
 Ne jamais afficher ni demander de mot de passe ; ne pas publier son nom (mentions légales en attente).
 
+## 26/11/2026 — Passation : feuille de route des corrections du parcours « nouvel utilisateur »
+
+- **À lire en premier par l'IA suivante** : `docs/A-FAIRE-parcours-nouvel-utilisateur.md` (déjà fait, reste à vérifier,
+  9 chantiers classés avec fichiers, pistes et tests), puis le rapport `docs/parcours-nouvel-utilisateur-2026-11-25.md`.
+
 ## 26/11/2026 — Correction des deux bugs graves du parcours « nouvel utilisateur »
 
 - **Plan de Transmission en erreur 500** (journal prod : `UniqueConstraintViolationException … UNIQ_DD2DC8E9A76ED395`) :

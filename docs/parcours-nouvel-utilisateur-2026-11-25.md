@@ -4,6 +4,8 @@ Test fait **à l'écran, comme un humain**, sur le vrai site en production, en f
 
 À sa demande, j'ai ensuite joué un **utilisateur très assidu** : une vie fictive mais crédible a été remplie partout (infirmier en cardiologie à Lyon, originaire de Douala, marié, deux enfants, qui veut fonder une association de prévention santé). Prénom du compte : « Testeur ».
 
+**Suite** : les deux bugs graves sont corrigés et en ligne depuis le 26/11/2026. La feuille de route des autres corrections, pour l'IA qui prend la suite, est dans [`A-FAIRE-parcours-nouvel-utilisateur.md`](A-FAIRE-parcours-nouvel-utilisateur.md).
+
 Captures : dossier [`parcours-nouvel-utilisateur-2026-11-25/`](parcours-nouvel-utilisateur-2026-11-25/).
 
 ---
