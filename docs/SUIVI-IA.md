@@ -21,6 +21,8 @@ Ne jamais afficher ni demander de mot de passe ; ne pas publier son nom (mention
   horizontal.
 - **Piège** : dans les tests, les e-mails du `Notifier` se comptent avec `getMailerMessages()` dans un `WebTestCase`
   (`assertEmailCount` ne les voit pas).
+- **Déployé le 26/11/2026** (pas de migration) : accueil, Boussole et connexion en 200, `/parcours` et `/academie`
+  redirigent vers la connexion (302), page inconnue en 404, aucune erreur au journal, `app:reminders:send` se charge.
 - **Reste** : relecture et publication des 6 parcours par le fondateur ; écrans mobiles des séances (API prête,
   `type: seance`).
 
