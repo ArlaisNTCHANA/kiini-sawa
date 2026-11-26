@@ -26,6 +26,7 @@ final class BoussoleController extends AbstractController
         private readonly BoussoleRecorder $recorder,
         private readonly BoussoleResultRepository $results,
         private readonly \App\Shared\Security\RateLimits $limits,
+        private readonly \App\Abonnement\Service\Entitlements $entitlements,
     ) {
     }
 
@@ -37,6 +38,12 @@ final class BoussoleController extends AbstractController
         return $this->render('shared/boussole.html.twig', [
             'connecte' => $user instanceof User,
             'derniere' => $user instanceof User ? $this->results->latestFor($user) : null,
+            // Ce que l'offre gratuite donne vraiment (réglages de l'administration), pour ne rien promettre de plus
+            'essaiJours' => max(0, $this->entitlements->config()->getTrialDurationDays()),
+            'testsGratuits' => array_values(array_map(
+                fn (string $slug) => \App\Personnalite\Psychometrie\Instruments::CATALOG[$slug]['name'] ?? $slug,
+                $this->entitlements->freeTests(),
+            )),
         ]);
     }
 

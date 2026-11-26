@@ -330,10 +330,11 @@
 </div>
 
 <script>
-let currentIndex = 0;
-const total = {{ questions|length }};
-const answered = new Set();
-const color = '{{ testMeta.color }}';
+// var (et non const/let) : Turbo rejoue ce script quand on passe d'un test à l'autre.
+var currentIndex = 0;
+var total = {{ questions|length }};
+var answered = new Set();
+var color = '{{ testMeta.color }}';
 
 function selectAnswer(label) {
     // Deselect siblings

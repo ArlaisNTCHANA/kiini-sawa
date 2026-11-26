@@ -9,6 +9,27 @@ teste (`php bin/phpunit`), commit, déploie (`bin/ops/envoyer-hostinger.sh`), v�
 journal `var/log/prod-AAAA-MM-JJ.log` sans erreur) ; **le fondateur fait lui-même `git push`** (refusé à l'IA).
 Ne jamais afficher ni demander de mot de passe ; ne pas publier son nom (mentions légales en attente).
 
+## 26/11/2026 — Remises en ordre avant les parcours guidés (étape 1)
+
+- **Erreur JavaScript entre deux pages sans rechargement (Turbo)** : « Identifier 'allLifeGoals' has already been
+  declared ». Cause : un `const`/`let` au premier niveau d'un `<script>` en ligne, rejoué par Turbo dans la même
+  fenêtre. Même défaut trouvé dans `personnalite/test.html.twig` (`currentIndex`, `total`… : passer d'un test à
+  l'autre cassait les boutons) et dans deux pages d'administration des tests (`csrfTokens`). Remplacés par `var`.
+  Garde-fou : `tests/Shared/InlineScriptTurboTest.php` refuse tout `const`/`let` au premier niveau d'un script en ligne
+  (utiliser `var`, `window.x` ou une fonction anonyme `(() => { … })()`).
+- **Promesses du gratuit sur le résultat de la Boussole** (« 6 plans dans votre espace gratuit », « vos 5 tests
+  approfondis ») : le texte suit désormais l'offre réelle (`BoussoleController` passe `essaiJours` et `testsGratuits`
+  depuis `Entitlements`) : Plan de Vie gratuit, essai PRO de N jours à l'inscription (si réglé), tests gratuits nommés.
+  Textes modifiables : `boussole.suite.priorite`, `boussole.suite.essai`, `boussole.suite.loin_titre`,
+  `boussole.suite.tests_gratuits`, `boussole.suite.tests_pro`. Test : `BoussoleWebTest::testResultPromisesOnlyTheRealFreeOffer`.
+  **Texte à faire valider par le fondateur.**
+- **Passations Équilibre/Hygiène fausses** : le défaut existait depuis le 15/11 (avant la mise en ligne) : toutes les
+  passations de ces deux tests enregistrées avant le déploiement du 26/11 sont à 0. Le comptage en production n'a pas
+  pu être fait par l'IA (accès à la base refusé) : commande à lancer par le fondateur, voir le message de fin de
+  chantier. Rien n'est supprimé.
+- **Non déployé** (attend le retour du fondateur, comme la vérification à l'écran avec le compte « Testeur »).
+  606 tests verts.
+
 ## 26/11/2026 — Proposition : remplir ses plans par parcours guidés
 
 - **Ressenti du fondateur** après avoir essayé : découragé, enchaînement qui n'aide pas, aucune vue d'ensemble du

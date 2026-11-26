@@ -189,4 +189,28 @@ final class BoussoleWebTest extends WebTestCase
         $client->request('GET', '/boussole');
         $this->assertStringContainsString('X-CSRF-Token', (string) $client->getResponse()->getContent());
     }
+
+    /** Le résultat ne promet que ce que l'offre gratuite donne vraiment (parcours « nouvel utilisateur » du 25/11). */
+    public function testResultPromisesOnlyTheRealFreeOffer(): void
+    {
+        $client = static::createClient();
+        $config = static::getContainer()->get(\App\Abonnement\Service\Entitlements::class)->config();
+        $before = [$config->getTrialDurationDays(), $config->getFreeTests()];
+        $config->setTrialDurationDays(14)->setFreeTests(['disc']);
+        $this->em()->flush();
+
+        try {
+            $html = (string) $client->request('GET', '/boussole')->html();
+            $this->assertResponseIsSuccessful();
+            $this->assertStringNotContainsString('dans votre espace gratuit', $html);
+            $this->assertStringNotContainsString('5 tests approfondis', $html);
+            $this->assertStringContainsString('posez gratuitement votre Plan de Vie', $html);
+            $this->assertStringContainsString('pendant 14 jours avec KIINI SAWA PRO', $html);
+            $name = \App\Personnalite\Psychometrie\Instruments::CATALOG['disc']['name'];
+            $this->assertStringContainsString('dont '.$name.' gratuitement', $html);
+        } finally {
+            $config->setTrialDurationDays($before[0])->setFreeTests($before[1]);
+            $this->em()->flush();
+        }
+    }
 }

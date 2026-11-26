@@ -210,7 +210,7 @@
         }
 
         // Object containing edit tokens for each question to be accessible by JS
-        const csrfTokens = {
+        var csrfTokens = {
             {% for q in questions %}
                 "{{ q.id }}": "{{ csrf_token('edit_question_' ~ q.id) }}",
             {% endfor %}

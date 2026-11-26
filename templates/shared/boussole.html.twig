@@ -216,8 +216,9 @@
                 <div class="next-box">
                     <h4>Et maintenant ? Passez du constat à l'action</h4>
                     <ul class="next-list">
-                        <li><strong>Agissez sur votre priorité (<span id="res-next-prio">votre plan prioritaire</span>)</strong> : posez vos premiers rituels et bâtissez vos 6 plans dans votre espace gratuit.</li>
-                        <li><strong>Allez plus loin gratuitement</strong> : cette Boussole dure 3 minutes ; votre compte vous ouvre vos 5 tests approfondis (personnalité, fonctionnement, DISC, ennéagramme, dons spirituels).</li>
+                        {# Ne promettre que ce que l'offre gratuite donne vraiment (Entitlements) : Plan de Vie gratuit, essai PRO, tests gratuits #}
+                        <li><strong>Agissez sur votre priorité (<span id="res-next-prio">votre plan prioritaire</span>)</strong> : {{ t('boussole.suite.priorite', 'posez gratuitement votre Plan de Vie, le socle des 6 plans.') }}{% if essaiJours > 0 and not connecte %} {{ t('boussole.suite.essai', 'En créant votre compte, vous essayez aussi les 6 plans pendant {jours} jours avec KIINI SAWA PRO.', 'text', {jours: essaiJours}) }}{% endif %}</li>
+                        <li><strong>{{ t('boussole.suite.loin_titre', 'Allez plus loin') }}</strong> : {% if testsGratuits is not empty %}{{ t('boussole.suite.tests_gratuits', 'cette Boussole dure 3 minutes ; votre compte vous ouvre aussi des tests approfondis, dont {tests} gratuitement.', 'text', {tests: testsGratuits|join(', ', ' et ')}) }}{% else %}{{ t('boussole.suite.tests_pro', 'cette Boussole dure 3 minutes ; KIINI SAWA PRO vous ouvre des tests approfondis (personnalité, DISC, ennéagramme, dons spirituels…).') }}{% endif %}</li>
                         {% if connecte %}
                         <li><strong>Suivez votre évolution</strong> : chaque passation est enregistrée dans votre compte. Refaites la Boussole dans quelques semaines pour mesurer le chemin parcouru.</li>
                         {% else %}

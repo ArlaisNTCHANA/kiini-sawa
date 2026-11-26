@@ -259,7 +259,7 @@
             openModal('edit-modal');
         }
 
-        const csrfTokens = {
+        var csrfTokens = {
             {% for p in profiles %}
                 "{{ p.id }}": "{{ csrf_token('edit_profile_' ~ p.id) }}",
             {% endfor %}

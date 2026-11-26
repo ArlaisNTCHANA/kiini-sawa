@@ -1774,7 +1774,7 @@
         return String(value ?? '').replace(/[&<>"'`]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;', '`': '&#96;' }[c]));
     }
 
-    const allLifeGoals = [
+    var allLifeGoals = [ // var (et non const) : Turbo rejoue ce script à chaque visite
         {% for lg in allLifeGoals %}
             { id: {{ lg.id }}, title: "{{ lg.title|escape('js') }}", category: "{{ lg.category|escape('js') }}" },
         {% endfor %}
