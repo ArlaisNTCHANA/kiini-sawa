@@ -148,7 +148,7 @@ class OrganisationController extends AbstractController
                 $this->addFlash('success', $member->getUser()->getDisplayName().' est maintenant '.mb_strtolower($member->getRoleLabel()).'.');
             }
         } elseif ('mentor' === $action) {
-            $mentorId = $request->request->getInt('mentor');
+            $mentorId = (int) $request->request->getString('mentor'); // « Aucun accompagnateur » envoie une valeur vide
             $mentor = $mentorId ? $this->memberOf($org, $mentorId) : null;
             if ($mentor && 'MEMBER' === $mentor->getRole()) {
                 $mentor->setRole('MENTOR');
@@ -264,7 +264,7 @@ class OrganisationController extends AbstractController
             return $this->redirectToRoute('app_organisation_index', ['org' => $org->getId()]);
         }
         try {
-            $o = $this->orgs->declareOrder($org, $this->user(), $request->request->getInt('seats'), $request->request->getString('currency'), $request->request->getString('method'), $reference);
+            $o = $this->orgs->declareOrder($org, $this->user(), (int) $request->request->getString('seats'), $request->request->getString('currency'), $request->request->getString('method'), $reference);
             $this->addFlash('success', sprintf('Commande de %d places enregistrée (%s). Elle sera vérifiée sous 24 à 48 h ouvrées.', $o->getSeats(), SubscriptionManager::formatAmount($o->getAmount(), $o->getCurrency())));
         } catch (\InvalidArgumentException) {
             $this->addFlash('error', 'Pack, devise ou moyen de paiement invalide.');

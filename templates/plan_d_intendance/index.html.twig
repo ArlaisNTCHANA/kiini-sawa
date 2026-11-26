@@ -74,7 +74,7 @@
 {% block title %}Plan d'Intendance{% endblock %}
 
 {% block body %}
-<div class="ks-page">
+<div class="ks-page" data-stewardship-page>
     {% include 'shared/_page_header.html.twig' with {
         back: {url: path('app_plans'), label: 'Mes plans'},
         eyebrow: 'Plan d\'Intendance', icon: 'hand-coins',
@@ -216,6 +216,60 @@
         const target = location.hash ? document.getElementById(location.hash.slice(1)) : null;
         if (target) { setTimeout(() => target.scrollIntoView({block: 'center'}), 50); }
     });
+
+    // Point 9 (26/11/2026) : ajouter, enregistrer, retirer sans recharger toute la page. Le formulaire est envoyé en
+    // arrière-plan, la page renvoyée par le serveur remplace le contenu, et l'écran reste là où il était. Sans script
+    // (ou en cas d'erreur), le formulaire part normalement, comme avant.
+    (function () {
+        if (window.__ksStewardshipAjax) { return; }
+        window.__ksStewardshipAjax = true;
+        document.addEventListener('submit', function (event) {
+            var form = event.target;
+            var page = document.querySelector('[data-stewardship-page]');
+            // getAttribute : un champ nommé « action » masque form.action
+            if (!page || !page.contains(form) || (form.getAttribute('method') || '').toLowerCase() !== 'post' || event.defaultPrevented) { return; }
+            event.preventDefault();
+            var details = form.closest('details[id]');
+            var anchorId = details ? details.id : null;
+            var anchor = anchorId ? document.getElementById(anchorId) : form;
+            var before = anchor.getBoundingClientRect().top;
+            var openIds = Array.prototype.map.call(page.querySelectorAll('details[open][id]'), function (d) { return d.id; });
+            var knownIds = Array.prototype.map.call(page.querySelectorAll('details[id]'), function (d) { return d.id; });
+            var focusedName = document.activeElement && form.contains(document.activeElement) && form.classList.contains('stw-add') ? form.querySelector('[name="origin"]').value : null;
+            var button = event.submitter || form.querySelector('[type="submit"]');
+            if (button) { button.disabled = true; }
+            fetch(form.getAttribute('action'), { method: 'POST', body: new FormData(form), credentials: 'same-origin', headers: { 'X-Requested-With': 'fetch' } })
+                .then(function (response) { if (!response.ok) { throw new Error(String(response.status)); } return response.text(); })
+                .then(function (html) {
+                    var doc = new DOMParser().parseFromString(html, 'text/html');
+                    var fresh = doc.querySelector('[data-stewardship-page]');
+                    if (!fresh) { throw new Error('page'); }
+                    page.innerHTML = fresh.innerHTML;
+                    var flashes = document.getElementById('ks-flashes');
+                    var freshFlashes = doc.getElementById('ks-flashes');
+                    if (flashes && freshFlashes) { flashes.innerHTML = freshFlashes.innerHTML; }
+                    openIds.forEach(function (id) { var d = document.getElementById(id); if (d) { d.open = true; } });
+                    var again = anchorId ? document.getElementById(anchorId) : null;
+                    var added = Array.prototype.filter.call(page.querySelectorAll('details[id]'), function (d) { return knownIds.indexOf(d.id) < 0; })[0];
+                    // Position fixée après la mise en page (et sans défilement animé, qui fausserait le calcul)
+                    requestAnimationFrame(function () {
+                        if (added) {
+                            // Nouvel élément : il vient à l'écran, ouvert, pour lui donner tout de suite son état et sa décision
+                            added.open = true;
+                            window.scrollTo({ top: added.getBoundingClientRect().top + window.scrollY - 90, behavior: 'instant' });
+                        } else if (again) {
+                            window.scrollTo({ top: again.getBoundingClientRect().top + window.scrollY - before, behavior: 'instant' });
+                        }
+                    });
+                    if (focusedName) {
+                        var input = page.querySelector('.stw-add input[name="origin"][value="' + focusedName + '"]');
+                        if (input) { input.form.querySelector('[name="label"]').focus({ preventScroll: true }); }
+                    }
+                    if (window.lucide) { window.lucide.createIcons(); }
+                })
+                .catch(function () { form.submit(); });
+        });
+    })();
 </script>
 <style>
     .stw-verse { font-family: var(--font-serif); font-style: italic; font-size: 1.1rem; color: var(--fg); border-left: 3px solid var(--accent); padding: .25rem 0 .25rem 1rem; margin: 0 0 1.25rem; max-width: 760px; }

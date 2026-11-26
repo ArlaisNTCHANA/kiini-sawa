@@ -1,10 +1,13 @@
 {# Messages de confirmation ou d'erreur après une action (addFlash dans les contrôleurs) #}
-{% set ksFlashes = app.flashes(['success', 'info', 'error', 'dev']) %}
+{# « warning » (avertissement) n'était pas affiché : ajouté le 26/11/2026. Conteneur #ks-flashes toujours présent, pour les
+   pages qui enregistrent sans recharger (Plan d'Intendance) #}
+{% set ksFlashes = app.flashes(['success', 'info', 'warning', 'error', 'dev']) %}
+<div id="ks-flashes">
 {% if ksFlashes|filter(m => m|length > 0)|length > 0 %}
 <div style="max-width: 960px; margin: 1rem auto 0; padding: 0 1rem; display: flex; flex-direction: column; gap: .5rem;">
     {% for type, messages in ksFlashes %}
         {% for message in messages %}
-            {% set c = {success: ['#ECFDF5', '#A7F3D0', '#065F46'], info: ['#EEF3EF', '#C8D6CD', '#1F4D3A'], dev: ['#EEF3EF', '#C8D6CD', '#1F4D3A'], error: ['#FEF2F2', '#FECACA', '#991B1B']}[type] %}
+            {% set c = {success: ['#ECFDF5', '#A7F3D0', '#065F46'], info: ['#EEF3EF', '#C8D6CD', '#1F4D3A'], warning: ['#FBF4E6', '#E9D3A6', '#7A5A1F'], dev: ['#EEF3EF', '#C8D6CD', '#1F4D3A'], error: ['#FEF2F2', '#FECACA', '#991B1B']}[type] %}
             {# Point 9 (26/11/2026) : les confirmations disparaissent seules ; chaque message peut être fermé #}
             <div role="{{ type == 'error' ? 'alert' : 'status' }}" x-data="{ show: true }" x-show="show" x-transition.opacity
                  {% if type in ['success', 'info'] %}x-init="setTimeout(() => show = false, 7000)"{% endif %}
@@ -16,3 +19,4 @@
     {% endfor %}
 </div>
 {% endif %}
+</div>

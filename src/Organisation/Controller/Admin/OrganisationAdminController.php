@@ -81,7 +81,7 @@ class OrganisationAdminController extends AbstractController
 
     private function applyLicense(Organisation $org, Request $request): void
     {
-        $org->setSeats($request->request->getInt('seats'));
+        $org->setSeats((int) $request->request->getString('seats'));
         $until = \DateTimeImmutable::createFromFormat('!Y-m-d', $request->request->getString('validUntil'));
         $org->setSeatsValidUntil($until ?: null);
     }

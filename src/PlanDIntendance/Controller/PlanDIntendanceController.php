@@ -106,7 +106,8 @@ class PlanDIntendanceController extends AbstractPlanController
             $item->setActionText($form->getString('action'));
         }
         if ($form->has('life_goal')) {
-            $goalId = $form->getInt('life_goal');
+            // « Aucun objectif précis » envoie une valeur vide : getInt() la refusait (erreur 400, corrigé le 26/11/2026)
+            $goalId = (int) $form->getString('life_goal');
             $goal = null;
             foreach ($this->user()->getPlanDeVie()?->getLifeGoals() ?? [] as $g) {
                 if ($g->getId() === $goalId) {
