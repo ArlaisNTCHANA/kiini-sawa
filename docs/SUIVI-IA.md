@@ -11,6 +11,8 @@ Ne jamais afficher ni demander de mot de passe ; ne pas publier son nom (mention
 
 ## 27/11/2026 — Relecture des e-mails « comme un destinataire » ; la Bible et le livre KIINI
 
+- **Déployé le 27/11/2026** (accord du fondateur) : Reply-To actif sur le serveur, page d'accueil sans « livre KIINI SAWA », aucune erreur au journal. Commande des parcours à lancer par le fondateur.
+
 Demande du fondateur : lire tous les e-mails comme quelqu'un qui ne connaît pas KIINI SAWA. Méthode : un écouteur
 temporaire (jamais committé, supprimé) a rendu chaque e-mail envoyé pendant la suite de tests (51 e-mails différents).
 Attention : les rappels « vides » vus pendant la relecture (« Dans 3 jours », « Prenez 15 minutes ») étaient des
