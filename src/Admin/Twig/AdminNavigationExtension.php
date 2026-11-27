@@ -53,6 +53,7 @@ final class AdminNavigationExtension extends AbstractExtension
         ]],
         'settings' => ['label' => 'Réglages', 'items' => [
             ['Réglages de l\'application', 'admin_config', 'settings', ['admin_config']],
+            ['Aperçu des e-mails', 'admin_emails', 'mails', ['admin_emails']],
             ['Documentation technique', 'admin_doc', 'book-open', ['admin_doc']],
         ]],
     ];

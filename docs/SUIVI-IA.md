@@ -9,6 +9,17 @@ teste (`php bin/phpunit`), commit, déploie (`bin/ops/envoyer-hostinger.sh`), v�
 journal `var/log/prod-AAAA-MM-JJ.log` sans erreur) ; **le fondateur fait lui-même `git push`** (refusé à l'IA).
 Ne jamais afficher ni demander de mot de passe ; ne pas publier son nom (mentions légales en attente).
 
+## 27/11/2026 — Aperçu des e-mails (administration)
+
+Demande du fondateur (manque n° 5). Admin › Réglages › Aperçu des e-mails (`/admin/emails/{clé}`,
+`Notification/Service/EmailCatalog`, `EmailPreviewAdminController`). Les 34 e-mails de l'application, rangés par
+famille (compte, deux premières semaines, rappels, Académie, paiements, proches, défis et annonces) : quand il part,
+son objet réel, et l'e-mail lui-même (vrai gabarit, données d'exemple « Esther », « Samuel »). « M'envoyer cet
+e-mail » : à l'administrateur seulement, objet préfixé « [Essai] ».
+- `EmailPreviewTest` rend chaque e-mail et **refuse un gabarit d'e-mail absent du catalogue** : en ajoutant un e-mail
+  à l'application, l'ajouter à `EmailCatalog`.
+- Non couvert : l'e-mail « Votre plan » (il réutilise les pages des plans, pas un gabarit d'e-mail).
+
 ## 27/11/2026 — La Boussole 360 dans les chiffres (administration)
 
 - **Déployé le 27/11/2026** (accord du fondateur) : migration passée (table `boussole_daily`), pages contrôlées, aucune erreur au journal. Le compteur des visiteurs démarre ce jour.

@@ -1,0 +1,48 @@
+{% extends 'admin/layout.html.twig' %}
+
+{% block title %}Aperçu des e-mails{% endblock %}
+{% block page_title %}Aperçu des e-mails{% endblock %}
+{% block page_lead %}Chaque e-mail que KIINI SAWA envoie, tel qu'un membre le reçoit, avec des données d'exemple. Rien ne part vers un membre depuis cette page.{% endblock %}
+
+{% block content %}
+<div class="em-layout">
+    <nav class="ks-card em-list" aria-label="Les e-mails">
+        {% for g, glabel in groups %}
+            <p class="em-group">{{ glabel }}</p>
+            <ul>
+                {% for k, e in all|filter(e => e.group == g) %}
+                    <li><a href="{{ path('admin_emails', {key: k}) }}" {{ k == key ? 'aria-current="page" class="is-current"' }}>{{ e.label }}</a></li>
+                {% endfor %}
+            </ul>
+        {% endfor %}
+    </nav>
+    <section class="ks-card em-view">
+        <p class="ks-eyebrow" style="margin: 0;">{{ groups[email.group] }}</p>
+        <h2 class="ks-card__title" style="margin-top: .2rem;">{{ email.label }}</h2>
+        <dl class="em-meta">
+            <dt>Envoyé</dt><dd>{{ email.when }}</dd>
+            <dt>Objet</dt><dd><strong>{{ email.subject }}</strong></dd>
+            <dt>De</dt><dd>KIINI SAWA &lt;noreply@kiinisawa.com&gt; · les réponses arrivent sur contact@kiinisawa.com</dd>
+        </dl>
+        <form method="post" action="{{ path('admin_emails_test', {key: key}) }}" style="margin: .6rem 0 1rem;">
+            <input type="hidden" name="_csrf_token" value="{{ csrf_token('admin_emails') }}">
+            <button type="submit" class="ks-btn ks-btn--secondary ks-btn--sm"><i data-lucide="mail-check"></i> M'envoyer cet e-mail</button>
+        </form>
+        <iframe class="em-frame" title="Aperçu : {{ email.label }}" srcdoc="{{ html|e('html_attr') }}" sandbox></iframe>
+    </section>
+</div>
+<style>
+    .em-layout { display: grid; gap: 1rem; align-items: start; }
+    @media (min-width: 1000px) { .em-layout { grid-template-columns: 280px 1fr; } }
+    .em-list { padding: .9rem 1rem; }
+    .em-list ul { list-style: none; padding: 0; margin: 0 0 .6rem; display: grid; gap: .1rem; }
+    .em-list a { display: block; padding: .35rem .55rem; border-radius: 8px; color: var(--fg); text-decoration: none; font-size: .9rem; }
+    .em-list a:hover { background: var(--bg-alt); }
+    .em-list a.is-current { background: var(--primary-soft); color: var(--primary-dark); font-weight: 600; }
+    .em-group { font-size: .72rem; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; color: var(--fg-muted); margin: .6rem 0 .3rem; }
+    .em-meta { display: grid; grid-template-columns: auto 1fr; gap: .3rem 1rem; font-size: .9rem; margin: .6rem 0 0; }
+    .em-meta dt { color: var(--fg-muted); }
+    .em-meta dd { margin: 0; }
+    .em-frame { width: 100%; height: 720px; border: 1px solid var(--border); border-radius: var(--r-md); background: var(--bg-alt); }
+</style>
+{% endblock %}
