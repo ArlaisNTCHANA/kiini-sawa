@@ -1,0 +1,10 @@
+# Règle « la Bible et le livre KIINI » (décision du fondateur, 27/11/2026, docs/lexique.md) : le livre propose, il ne
+# « dit » pas comme une autorité. Phrases d'introduction des parcours seulement ; le texte du livre cité ne change pas.
+# En production : php bin/console app:academie:remplacer-phrase tous --fichier=content/academie/reformulations-livre.yaml --lecons --enregistrer
+pairs:
+  - ["comprendre un enseignement tiré du livre KIINI", "découvrir ce que propose le livre KIINI, à l'origine de la méthode"]
+  - ["Voici ce qu'en dit le livre KIINI", "Voici ce que propose le livre KIINI"]
+  - ["Voici ce qu'il en dit, au chapitre", "Voici ce qu'il propose, au chapitre"]
+  - ["le livre le dit aussi", "le livre KIINI le rappelle"]
+  - [":::exemple Joseph, dans le livre", ":::exemple Joseph, un exemple du livre KIINI"]
+  - ["la formule du livre", "la formule de la méthode KIINI"]

@@ -75,7 +75,7 @@ final class ReminderService
         foreach ($this->em->getRepository(\App\Personnalite\Entity\TestAction::class)->dueForFollowUp($user, $today) as $action) {
             $ok = $this->notifier->notify($user, NotificationType::GOAL_DEADLINE,
                 'Il y a un mois, vous avez choisi une action',
-                sprintf('« %s » (%s). Où en êtes-vous ? Prenez cinq minutes pour faire le point, puis repassez le test pour mesurer le chemin parcouru.', $action->getText(), $action->getSource()),
+                sprintf('« %s » (test %s). Où en êtes-vous ? Prenez cinq minutes pour faire le point, puis repassez le test pour mesurer le chemin parcouru.', $action->getText(), $action->getSource()),
                 '/mes-tests/', 'test-action-'.$action->getId());
             $action->markReminded();
             $sent += (int) $ok;
@@ -218,10 +218,10 @@ final class ReminderService
 
         return $isTrial
             ? $this->notifier->notify($user, NotificationType::TRIAL_ENDING, 'Votre essai PRO se termine dans 3 jours',
-                'Le '.$end->format('d/m/Y').', vos plans de Croissance, Développement personnel, Hygiène de vie, Intendance et Transmission passeront en lecture limitée. Gardez tout en choisissant une formule PRO, à partir de quelques centimes par jour.',
+                'Le '.$end->format('d/m/Y').', vos plans de Croissance, Développement personnel, Hygiène de vie, Intendance et Transmission passeront en lecture limitée. Gardez tout en choisissant une formule PRO, à partir de quelques centimes par jour. Rien ne vous sera prélevé automatiquement : sans choix de votre part, vous gardez simplement l\'accès gratuit.',
                 '/abonnement', 'essai '.$end->format('Y-m-d'))
             : $this->notifier->notify($user, NotificationType::SUBSCRIPTION_ENDING, 'Votre abonnement PRO se termine dans 7 jours',
-                'Votre accès PRO se termine le '.$end->format('d/m/Y').'. Pour continuer sans interruption, renouvelez dès maintenant : les jours restants sont conservés.',
+                'Votre accès PRO se termine le '.$end->format('d/m/Y').'. Pour continuer sans interruption, renouvelez dès maintenant depuis votre espace abonnement (virement, Mobile Money ou espèces) : les jours restants sont conservés.',
                 '/abonnement', 'fin '.$end->format('Y-m-d'));
     }
 

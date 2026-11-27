@@ -63,12 +63,42 @@ class AcademyReplacePhraseTest extends KernelTestCase
         $lesson = $course->getLessons()[0];
         $this->assertSame('Le But de Dieu pour ma vie', $lesson->getTitle());
         $this->assertStringContainsString('Vous voyez toujours où vous en êtes : le But de Dieu pour ma vie,', (string) $course->getDescription());
-        $this->assertStringStartsWith('Écrivez le But de Dieu pour ma vie avec la formule du livre', (string) $lesson->getPracticePrompt());
+        $this->assertStringStartsWith('Écrivez le But de Dieu pour ma vie avec la formule de la méthode KIINI', (string) $lesson->getPracticePrompt());
         $this->assertSame($lessonSlug, $lesson->getSlug(), 'L\'adresse de la séance ne change pas');
         $this->assertSame($content, $lesson->getContentMarkdown(), 'Le texte de la leçon n\'est pas touché');
         $this->assertTrue($course->isPublished());
 
         $this->em()->remove($course);
+        $this->em()->flush();
+    }
+
+    /** Règle « la Bible et le livre KIINI » (27/11/2026) : une liste de remplacements, tous les parcours, texte des leçons compris. */
+    public function testListOfRewritesReachesLessonTextOnlyWithTheOption(): void
+    {
+        self::bootKernel();
+        $data = Yaml::parseFile(__DIR__.'/../../content/academie/parcours-plan-de-vie.yaml');
+        $slug = 'reformulations-'.uniqid();
+        $data['slug'] = $slug;
+        $data['modules'][0]['lessons'][0]['content'] = "Voici ce qu'en dit le livre KIINI, au chapitre 4.\n\nSi rien de clair ne vient, le livre le dit aussi : patience.";
+        $course = ImportCourseCommand::build($data)->publish();
+        $this->em()->persist($course);
+        $this->em()->flush();
+        $id = $course->getId();
+        $this->em()->clear();
+        $file = __DIR__.'/../../content/academie/reformulations-livre.yaml';
+
+        $this->runPhrase(['parcours' => 'tous', '--fichier' => $file, '--enregistrer' => true]);
+        $this->em()->clear();
+        $this->assertStringContainsString("ce qu'en dit le livre KIINI", $this->em()->find(Course::class, $id)->getLessons()[0]->getContentMarkdown(), 'Sans --lecons, le texte des leçons ne change pas');
+
+        $tester = $this->runPhrase(['parcours' => 'tous', '--fichier' => $file, '--lecons' => true, '--enregistrer' => true]);
+        $this->assertSame(0, $tester->getStatusCode());
+        $this->em()->clear();
+        $text = $this->em()->find(Course::class, $id)->getLessons()[0]->getContentMarkdown();
+        $this->assertStringContainsString('Voici ce que propose le livre KIINI, au chapitre 4.', $text);
+        $this->assertStringContainsString('le livre KIINI le rappelle', $text);
+
+        $this->em()->remove($this->em()->find(Course::class, $id));
         $this->em()->flush();
     }
 

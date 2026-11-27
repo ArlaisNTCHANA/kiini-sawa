@@ -43,8 +43,12 @@ final class NotificationMailer
                 ->to($user->getEmail())
                 ->subject($title)
                 ->htmlTemplate($template ?? 'notification/email/notification.html.twig')
-                ->context(['name' => $user->getDisplayName(), 'title' => $title, 'message' => $message, 'actionUrl' => $action, 'unsubscribeUrl' => $unsubscribe] + $context);
-            $email->getHeaders()->addTextHeader('List-Unsubscribe', '<'.$unsubscribe.'>');
+                ->context(['name' => $user->getDisplayName(), 'title' => $title, 'message' => $message, 'actionUrl' => $action, 'unsubscribeUrl' => $unsubscribe,
+                    // Message de paiement : on ne se désabonne pas d'un reçu (relecture des e-mails, 27/11/2026)
+                    'transactional' => \in_array($type, [NotificationType::PAYMENT_VALIDATED, NotificationType::PAYMENT_REJECTED], true)] + $context);
+            if (!\in_array($type, [NotificationType::PAYMENT_VALIDATED, NotificationType::PAYMENT_REJECTED], true)) {
+                $email->getHeaders()->addTextHeader('List-Unsubscribe', '<'.$unsubscribe.'>');
+            }
             $this->mailer->send($email);
         } catch (\Throwable $e) {
             $this->logger->error('Échec de l\'envoi d\'un e-mail de notification', ['type' => $type->value, 'exception' => $e]);

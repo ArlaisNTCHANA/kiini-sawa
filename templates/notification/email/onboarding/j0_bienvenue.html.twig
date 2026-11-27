@@ -2,14 +2,14 @@
 {% block body %}
   <p style="font-size:17px;font-weight:bold;color:#2E6B53;margin:18px 0 8px;">Bienvenue dans KIINI SAWA</p>
   <p>Vous venez de faire un pas que beaucoup repoussent toute leur vie : prendre le temps de bâtir votre vie sur ce qui compte vraiment.</p>
-  <p>La méthode est simple et va de l'<strong>Être</strong> vers le <strong>Faire</strong> :</p>
+  <p>La méthode est simple : on part de <strong>qui vous êtes</strong> pour aller vers <strong>ce que vous faites</strong>.</p>
   <ol style="padding-left:20px;margin:0 0 12px;">
     <li><strong>Vos fondations</strong> : votre raison d'être, vos valeurs, un premier objectif (3 minutes).</li>
-    <li><strong>Votre Plan de Vie</strong> : votre vision, vos objectifs Être, Faire, Avoir, Donner.</li>
+    <li><strong>Votre Plan de Vie</strong> : votre vision, et vos objectifs pour qui devenir, quoi faire, quoi bâtir et quoi donner.</li>
     <li><strong>Votre quotidien</strong> : des rituels, un journal et une revue chaque semaine.</li>
   </ol>
   <p>{% if onboarded %}Vos fondations sont posées, bravo. Sur votre accueil, la carte « Vos premiers pas » vous montre la prochaine étape.{% else %}Commencez par vos fondations : trois minutes suffisent.{% endif %}</p>
-  {% if trialEnd %}<p>Votre <strong>essai PRO est offert jusqu'au {{ trialEnd|date('d/m/Y') }}</strong> : profitez-en pour découvrir aussi vos plans de Croissance, Développement personnel, Hygiène de vie, Intendance et Transmission.</p>{% endif %}
+  {% if trialEnd %}<p>Votre <strong>essai PRO est offert jusqu'au {{ trialEnd|date('d/m/Y') }}</strong> : profitez-en pour découvrir aussi vos plans de Croissance, Développement personnel, Hygiène de vie, Intendance et Transmission. Sans carte bancaire : rien ne vous sera prélevé, et à la fin de l'essai vous gardez l'accès gratuit.</p>{% endif %}
 {% endblock %}
 {% block cta %}{{ onboarded ? 'Voir ma prochaine étape' : 'Poser mes fondations' }}{% endblock %}
 {% block verse %}« Je suis persuadé que celui qui a commencé en vous cette bonne œuvre la rendra parfaite. » Philippiens 1:6{% endblock %}

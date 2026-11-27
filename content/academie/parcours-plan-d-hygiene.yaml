@@ -10,7 +10,7 @@ kind: PLAN
 access: PRO
 cover_word: Instrument
 description: |
-  Deux séances courtes pour écrire votre Plan d'Hygiène de vie : les domaines à soigner, puis votre rythme de repos. Chacune suit le même chemin : comprendre un enseignement tiré du livre KIINI, prendre un temps avec Dieu, réfléchir, puis écrire.
+  Deux séances courtes pour écrire votre Plan d'Hygiène de vie : les domaines à soigner, puis votre rythme de repos. Chacune suit le même chemin : découvrir ce que propose le livre KIINI, à l'origine de la méthode, prendre un temps avec Dieu, réfléchir, puis écrire.
 
   Ce que vous écrivez s'ajoute à votre plan ; rien de ce qui y est déjà n'est effacé.
 
@@ -20,7 +20,7 @@ modules:
       - title: L'état de votre instrument
         duration: 12
         content: |
-          Aujourd'hui, ce qui porte tout le reste : votre corps, votre âme et votre esprit. Voici ce qu'en dit le livre KIINI, au chapitre 17.
+          Aujourd'hui, ce qui porte tout le reste : votre corps, votre âme et votre esprit. Voici ce que propose le livre KIINI, au chapitre 17.
 
           ## Comprendre
 
@@ -67,7 +67,7 @@ modules:
       - title: Votre rythme de repos
         duration: 10
         content: |
-          Dernière station : le repos, et le bilan du soir. Voici ce qu'en dit le livre KIINI, toujours au chapitre 17.
+          Dernière station : le repos, et le bilan du soir. Voici ce que propose le livre KIINI, toujours au chapitre 17.
 
           ## Comprendre
 

@@ -11,6 +11,7 @@
         <tr>
             <td align="center">
                 <div style="max-width: 800px; background: white; border-radius: 12px; padding: 30px; border: 1px solid #E1E6DF; text-align: left; color: #1B1B1B; box-shadow: 0 4px 12px rgba(0,0,0,0.05);">
+{% include 'plan_de_vie/_email_intro.html.twig' with {planLabel: 'Plan de Développement personnel'} %}
 {% else %}
 <!DOCTYPE html>
 <html lang="fr">
@@ -279,7 +280,7 @@
         <div class="statement-box">
             « {% if planDeVie and planDeVie.purpose and planDeVie.purpose.statement %}{{ planDeVie.purpose.statement }}{% else %}{{ defaultPurposeStatement }}{% endif %} »
         </div>
-        <div style="font-size: 0.72rem; font-weight: 800; color: #66706A; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 8px;">Ce que je vais ACCOMPLIR (Mon Intention)</div>
+        <div style="font-size: 0.72rem; font-weight: 800; color: #66706A; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 8px;">Mon intention : ce que je veux accomplir</div>
         <div style="padding: 20px; background: #F7F8F5; border: 1px solid #E1E6DF; border-radius: 12px; line-height: 1.6; font-size: 1.05rem; color: #1e3a8a; margin-bottom: 25px;">
             {{ planDeVie.vision.content|default('Aucune vision de vie définie.') }}
         </div>
@@ -293,7 +294,7 @@
             {# Section Compétences #}
             <div class="no-break" style="background: white; border-radius: 12px; border: 1px solid #D5E5DB; padding: 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.02);">
                 <h3 style="font-size: 1.1rem; font-weight: 700; color: #2E6B53; margin: 0 0 15px 0; border-bottom: 1px dashed #D5E5DB; padding-bottom: 8px;">
-                    <i data-lucide="wrench" class="ks-ico" aria-hidden="true"></i> Compétences Pratiques (Skills)
+                    <i data-lucide="wrench" class="ks-ico" aria-hidden="true"></i> Compétences pratiques
                 </h3>
                 <div style="display: flex; flex-direction: column; gap: 15px;">
                     {% for item in competences.COMPETENCE %}
@@ -322,7 +323,7 @@
             {# Section Connaissances #}
             <div class="no-break" style="background: white; border-radius: 12px; border: 1px solid #D5E5DB; padding: 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.02);">
                 <h3 style="font-size: 1.1rem; font-weight: 700; color: #2E6B53; margin: 0 0 15px 0; border-bottom: 1px dashed #D5E5DB; padding-bottom: 8px;">
-                    <i data-lucide="library" class="ks-ico" aria-hidden="true"></i> Connaissances Théoriques (Knowledges)
+                    <i data-lucide="library" class="ks-ico" aria-hidden="true"></i> Connaissances
                 </h3>
                 <div style="display: flex; flex-direction: column; gap: 15px;">
                     {% for item in competences.CONNAISSANCE %}

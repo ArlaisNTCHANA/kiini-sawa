@@ -9,6 +9,35 @@ teste (`php bin/phpunit`), commit, déploie (`bin/ops/envoyer-hostinger.sh`), v�
 journal `var/log/prod-AAAA-MM-JJ.log` sans erreur) ; **le fondateur fait lui-même `git push`** (refusé à l'IA).
 Ne jamais afficher ni demander de mot de passe ; ne pas publier son nom (mentions légales en attente).
 
+## 27/11/2026 — Relecture des e-mails « comme un destinataire » ; la Bible et le livre KIINI
+
+Demande du fondateur : lire tous les e-mails comme quelqu'un qui ne connaît pas KIINI SAWA. Méthode : un écouteur
+temporaire (jamais committé, supprimé) a rendu chaque e-mail envoyé pendant la suite de tests (51 e-mails différents).
+Attention : les rappels « vides » vus pendant la relecture (« Dans 3 jours », « Prenez 15 minutes ») étaient des
+données de test ; les vrais textes de `ReminderService` sont complets.
+- **Livre** (décision du fondateur) : le livre KIINI propose, il ne « dit » pas comme une autorité ; on le nomme
+  (« le livre KIINI »). Règle dans `docs/lexique.md` et `LexiconTest` (écrans et parcours). « Éclairé par la Parole »
+  refusé par le fondateur (on ne peut pas l'affirmer). E-mails, écrans, vitrine (« livre KIINI SAWA » → « livre KIINI »)
+  et phrases d'introduction des 6 parcours de plan (`content/academie/reformulations-livre.yaml`). Le texte du livre
+  cité ne change pas.
+- **E-mails** : réponses vers contact@ (`Reply-To` dans `config/packages/mailer.yaml`) ; pieds de page qui disent la
+  vraie raison du message (rappel activé, paiement, anniversaire, invitation) ; pas de désabonnement sur un message de
+  paiement ; invitations couple, organisation et Partenaire de Redevabilité : ce qu'est KIINI SAWA, gratuit ou non, ce
+  que l'autre voit, libre de refuser ; plus de « (e) » ni de « lui/elle » (libellés : Appel passé, Message envoyé, Nous
+  nous sommes vus, J'ai prié) ; copie au membre sans boutons morts ; sujet de la copie avec « Partenaire de
+  Redevabilité » en entier ; bienvenue (PRO expliqué, rien prélevé) ; jour 3 (bouton « Passer le test DISC », plus de
+  faux témoignage) ; jour 9 (Intendance ajoutée) ; « station » → « séance » ; « (test DISC) » ; fin d'essai et fin
+  d'abonnement plus claires ; e-mail « Votre plan » : un bonjour, plus de mots anglais ni de « Axe non configuré ».
+- **Reste** : le Plan d'Intendance n'a pas de version e-mail dédiée (sa page part telle quelle) ; se désabonner de
+  « Revue de couple mise à jour » coupe aussi le rappel de revue du mois ; identité et adresse de l'éditeur dans les
+  e-mails après la création de la structure juridique.
+- **En production**, après déploiement, le fondateur lance pour les parcours déjà chargés :
+  `app:academie:remplacer-phrase tous --fichier=content/academie/reformulations-livre.yaml --lecons` (aperçu), puis
+  avec `--enregistrer`.
+- **Piège connu** : `DosProtectionTest::testRemindersAreProcessedInBatchesWithoutSkippingAnyone` manque de mémoire
+  (données de débogage de Doctrine), même sans ces changements : la base de test grossit à chaque passage. À traiter
+  (vider la base de test, ou désactiver le profileur Doctrine dans ce test).
+
 ## 27/11/2026 — Accueil connecté réorganisé (Note rapide retirée)
 
 - **Déployé le 27/11/2026** (accord du fondateur) : pages contrôlées, aucune erreur au journal du serveur.

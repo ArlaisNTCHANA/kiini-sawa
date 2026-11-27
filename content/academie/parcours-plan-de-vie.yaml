@@ -18,7 +18,7 @@ kind: PLAN
 access: FREE
 cover_word: Fondations
 description: |
-  Huit séances courtes pour écrire votre Plan de Vie sans vous perdre dans un long formulaire. Chacune suit le même chemin : comprendre un enseignement tiré du livre KIINI, prendre un temps avec Dieu, réfléchir à quelques questions, puis écrire directement dans votre plan.
+  Huit séances courtes pour écrire votre Plan de Vie sans vous perdre dans un long formulaire. Chacune suit le même chemin : découvrir ce que propose le livre KIINI, à l'origine de la méthode, prendre un temps avec Dieu, réfléchir à quelques questions, puis écrire directement dans votre plan.
 
   Vous voyez toujours où vous en êtes : le But de Dieu pour ma vie, vos convictions, vos valeurs, vos passions, vos dons, votre personnalité, votre vision et vos objectifs. Ce que vous écrivez s'ajoute à votre plan ; rien de ce qui y est déjà n'est effacé.
 
@@ -28,7 +28,7 @@ modules:
       - title: Le But de Dieu pour ma vie
         duration: 12
         content: |
-          Bienvenue dans votre parcours. Aujourd'hui, une seule question, la plus importante de votre Plan de Vie : pour quoi avez-vous été créé ? Voici ce qu'en dit le livre KIINI, au chapitre 4.
+          Bienvenue dans votre parcours. Aujourd'hui, une seule question, la plus importante de votre Plan de Vie : pour quoi avez-vous été créé ? Voici ce que propose le livre KIINI, au chapitre 4.
 
           ## Comprendre
 
@@ -54,7 +54,7 @@ modules:
           - L'**impact** est le changement que tu produis.
           - La **cible**, ce sont les personnes que tu sers naturellement.
 
-          :::exemple Joseph, dans le livre
+          :::exemple Joseph, un exemple du livre KIINI
           Je suis créé pour **administrer** les ressources et optimiser les systèmes afin d'apporter **la préservation de la vie** et l'abondance chez **ceux que je sers**.
           :::
 
@@ -77,16 +77,16 @@ modules:
           4. Quel changement observe-t-on chez les autres après ton passage ?
           :::
 
-          Si rien de clair ne vient, le livre le dit aussi : ce n'est ni un retard, ni un échec. La clarté vient en marchant. Écrivez une première version : vous pourrez la reprendre à tout moment.
+          Si rien de clair ne vient, le livre KIINI le rappelle : ce n'est ni un retard, ni un échec. La clarté vient en marchant. Écrivez une première version : vous pourrez la reprendre à tout moment.
         practice:
           target: VIE
           action: write_purpose
-          prompt: "Écrivez le But de Dieu pour ma vie avec la formule du livre : « Je suis créé pour… afin d'apporter… chez… »."
+          prompt: "Écrivez le But de Dieu pour ma vie avec la formule de la méthode KIINI : « Je suis créé pour… afin d'apporter… chez… »."
 
       - title: Vos convictions
         duration: 10
         content: |
-          Votre but est posé, même en brouillon. Aujourd'hui, nous regardons ce qui le tient droit : vos convictions. Voici ce qu'en dit le livre KIINI, au chapitre 5.
+          Votre but est posé, même en brouillon. Aujourd'hui, nous regardons ce qui le tient droit : vos convictions. Voici ce que propose le livre KIINI, au chapitre 5.
 
           ## Comprendre
 
@@ -167,7 +167,7 @@ modules:
       - title: Vos passions
         duration: 10
         content: |
-          Aujourd'hui, ce qui allume votre feu intérieur. Voici ce qu'en dit le livre KIINI, au chapitre 6.
+          Aujourd'hui, ce qui allume votre feu intérieur. Voici ce que propose le livre KIINI, au chapitre 6.
 
           ## Comprendre
 
@@ -205,7 +205,7 @@ modules:
       - title: Vos dons et talents
         duration: 10
         content: |
-          Aujourd'hui, les outils que Dieu a déposés en vous. Voici ce qu'en dit le livre KIINI, au chapitre 7.
+          Aujourd'hui, les outils que Dieu a déposés en vous. Voici ce que propose le livre KIINI, au chapitre 7.
 
           ## Comprendre
 
@@ -245,7 +245,7 @@ modules:
       - title: Votre personnalité
         duration: 10
         content: |
-          Aujourd'hui, l'instrument par lequel votre but s'exprime : votre personnalité. Voici ce qu'en dit le livre KIINI, au chapitre 8.
+          Aujourd'hui, l'instrument par lequel votre but s'exprime : votre personnalité. Voici ce que propose le livre KIINI, au chapitre 8.
 
           ## Comprendre
 
@@ -288,7 +288,7 @@ modules:
       - title: Votre vision
         duration: 15
         content: |
-          Vous savez mieux qui vous êtes. Aujourd'hui, nous regardons où vous allez : votre vision. Voici ce qu'en dit le livre KIINI, au chapitre 9.
+          Vous savez mieux qui vous êtes. Aujourd'hui, nous regardons où vous allez : votre vision. Voici ce que propose le livre KIINI, au chapitre 9.
 
           ## Comprendre
 
@@ -336,7 +336,7 @@ modules:
       - title: Vos objectifs
         duration: 15
         content: |
-          Dernière station : transformer votre vision en itinéraire. Voici ce qu'en dit le livre KIINI, au chapitre 10.
+          Dernière station : transformer votre vision en itinéraire. Voici ce que propose le livre KIINI, au chapitre 10.
 
           ## Comprendre
 

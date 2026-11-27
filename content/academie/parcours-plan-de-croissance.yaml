@@ -11,7 +11,7 @@ kind: PLAN
 access: PRO
 cover_word: Croissance
 description: |
-  Trois séances courtes pour écrire votre Plan de Croissance : votre « radar Samson », vos chantiers de caractère, puis votre réseau. Chacune suit le même chemin : comprendre un enseignement tiré du livre KIINI, prendre un temps avec Dieu, réfléchir, puis écrire directement dans votre plan.
+  Trois séances courtes pour écrire votre Plan de Croissance : votre « radar Samson », vos chantiers de caractère, puis votre réseau. Chacune suit le même chemin : découvrir ce que propose le livre KIINI, à l'origine de la méthode, prendre un temps avec Dieu, réfléchir, puis écrire directement dans votre plan.
 
   Ce que vous écrivez s'ajoute à votre plan ; rien de ce qui y est déjà n'est effacé.
 
@@ -21,7 +21,7 @@ modules:
       - title: Votre radar Samson
         duration: 10
         content: |
-          Votre Plan de Vie dit qui vous êtes et où vous allez. Le Plan de Croissance pose la question suivante. Voici ce qu'en dit le livre KIINI, au chapitre 13.
+          Votre Plan de Vie dit qui vous êtes et où vous allez. Le Plan de Croissance pose la question suivante. Voici ce que propose le livre KIINI, au chapitre 13.
 
           ## Comprendre
 
@@ -67,7 +67,7 @@ modules:
       - title: Vos chantiers de caractère
         duration: 12
         content: |
-          Aujourd'hui, la fondation invisible : votre caractère. Voici ce qu'en dit le livre KIINI, au chapitre 14.
+          Aujourd'hui, la fondation invisible : votre caractère. Voici ce que propose le livre KIINI, au chapitre 14.
 
           ## Comprendre
 
@@ -110,7 +110,7 @@ modules:
       - title: Votre réseau
         duration: 10
         content: |
-          Dernière station : avec qui grandissez-vous ? Voici ce qu'en dit le livre KIINI, au chapitre 15.
+          Dernière station : avec qui grandissez-vous ? Voici ce que propose le livre KIINI, au chapitre 15.
 
           ## Comprendre
 

@@ -2,18 +2,23 @@
 <p>Bonjour {{ partnerName }},</p>
 {% if fact is defined and fact %}
 <p><strong>{{ fact }}</strong></p>
-<p>{{ owner }} vous a choisi(e) comme Partenaire de Redevabilité et a demandé que vous soyez prévenu(e) dans ce cas. Ce n'est pas un reproche : parfois, on n'a plus la force de demander de l'aide. Un appel, un message ou une prière peut tout changer. Son engagement :</p>
+<p>{{ owner }} a fait de vous son Partenaire de Redevabilité et a demandé qu'un message vous parvienne dans ce cas. Ce n'est pas un reproche : parfois, on n'a plus la force de demander de l'aide. Un appel, un message ou une prière peut tout changer. Son engagement :</p>
 {% else %}
-<p><strong>{{ owner }}</strong> vous a choisi(e) comme Partenaire de Redevabilité et vous demande aujourd'hui de l'interpeller sur :</p>
+<p><strong>{{ owner }}</strong> a fait de vous son Partenaire de Redevabilité et vous demande aujourd'hui de l'interpeller sur :</p>
 {% endif %}
 <p style="background:#EEF3EF;border-left:4px solid #2E6B53;padding:12px 16px;border-radius:8px;font-weight:bold;">{{ label }}</p>
 {% if message %}<p><em>Son mot pour vous :</em> « {{ message }} »</p>{% endif %}
 {% if why %}<p style="font-size:14px;color:#475569;"><em>Pourquoi c'est important pour {{ owner }} :</em> « {{ why }} »</p>{% endif %}
 <p>Une question simple pour l'encourager : <strong>« Où en es-tu, et comment puis-je t'aider cette semaine ? »</strong></p>
+{% if respondUrl is defined and respondUrl %}
 <p>Après lui avoir parlé, dites-nous ce que vous avez fait :</p>
 <p style="margin:20px 0;">
 {% for code, label in actions %}
-  <a href="{{ respondUrl is defined and respondUrl ? respondUrl ~ '?action=' ~ code : '#' }}" style="display:inline-block;margin:4px 4px 4px 0;padding:10px 16px;border-radius:10px;border:1.5px solid #2E6B53;color:#2E6B53;text-decoration:none;font-weight:bold;font-size:14px;">{{ label }}</a>
+  <a href="{{ respondUrl ~ '?action=' ~ code }}" style="display:inline-block;margin:4px 4px 4px 0;padding:10px 16px;border-radius:10px;border:1.5px solid #2E6B53;color:#2E6B53;text-decoration:none;font-weight:bold;font-size:14px;">{{ label }}</a>
 {% endfor %}
 </p>
+{% else %}
+{# Copie envoyée au membre : pas de boutons (ils ne serviraient à rien ici), seulement ce que son Partenaire de Redevabilité pourra indiquer #}
+<p>Après vous avoir parlé, {{ partnerName }} pourra indiquer en un clic ce qui a été fait : un appel, un message, une rencontre ou une prière.</p>
+{% endif %}
 <p style="font-size:13px;color:#64748b;">{{ owner }} reçoit une copie de ce message : vous n'agissez pas dans son dos.</p>

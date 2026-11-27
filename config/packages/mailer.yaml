@@ -1,3 +1,6 @@
 framework:
     mailer:
         dsn: '%env(MAILER_DSN)%'
+        # Répondre à un e-mail arrive dans la boîte de contact (l'adresse d'envoi est noreply@), relecture du 27/11/2026
+        headers:
+            Reply-To: 'KIINI SAWA <contact@kiinisawa.com>'

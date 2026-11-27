@@ -92,6 +92,9 @@ sans HTML brut, proposés en un clic dans l'éditeur de leçon (panneau « Rendr
   dans les titres de ses modules et séances et ses consignes d'écriture. Jamais dans le texte des leçons (il cite le
   livre), jamais dans les adresses : progression, notes et exercices des membres intacts. Sans `--enregistrer` : aperçu
   seulement. Test : `tests/Academie/AcademyReplacePhraseTest.php`.
+  Depuis le 27/11/2026 : `tous` à la place de l'adresse (tous les parcours), `--fichier=…yaml` (liste `pairs`), et
+  `--lecons` pour chercher aussi dans le texte des leçons (phrases exactes qui *présentent* le livre seulement).
+  Exemple : `content/academie/reformulations-livre.yaml` (règle « la Bible et le livre KIINI », `docs/lexique.md`).
 
 ## Atelier de schémas (24/11/2026)
 

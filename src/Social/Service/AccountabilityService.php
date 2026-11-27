@@ -281,7 +281,7 @@ final class AccountabilityService
         ];
         $subject = null !== $fact ? $owner->getDisplayName().' a peut-être besoin de vous' : $owner->getDisplayName().' compte sur vous';
         $this->mail($c->getPartnerEmail(), $subject, 'social/accountability/email/nudge.html.twig', $context);
-        $this->mail((string) $owner->getEmail(), 'Copie : votre partenaire '.$c->getPartnerName().' a été prévenu(e)', 'social/accountability/email/nudge_copy.html.twig', $context + [
+        $this->mail((string) $owner->getEmail(), 'Copie du message envoyé à '.$c->getPartnerName().', votre Partenaire de Redevabilité', 'social/accountability/email/nudge_copy.html.twig', $context + [
             'manageUrl' => $this->urls->generate('app_accountability', [], UrlGeneratorInterface::ABSOLUTE_URL),
         ]);
 

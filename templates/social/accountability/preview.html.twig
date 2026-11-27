@@ -27,9 +27,9 @@
             {% if targetType == 'GOAL' and data.alertGoalDays > 0 %}{% set alerts = alerts|merge(['votre objectif n\'avance pas pendant ' ~ data.alertGoalDays ~ ' jours']) %}{% endif %}
             {% if data.alertInactiveDays > 0 %}{% set alerts = alerts|merge(['vous ne vous connectez plus à KIINI SAWA pendant ' ~ data.alertInactiveDays ~ ' jours']) %}{% endif %}
             {% if alerts is not empty %}
-                <li><strong>Sans que vous ayez à le demander</strong>, {{ partnerName }} sera prévenu(e) si {{ alerts|join(', ou si ') }}.</li>
+                <li><strong>Sans que vous ayez à le demander</strong>, {{ partnerName }} recevra un message si {{ alerts|join(', ou si ') }}.</li>
             {% else %}
-                <li>Aucune alerte automatique : {{ partnerName }} ne sera prévenu(e) que si vous le demandez.</li>
+                <li>Aucune alerte automatique : {{ partnerName }} ne recevra un message que si vous le demandez.</li>
             {% endif %}
             <li>Vous pourrez aussi, à tout moment, lui demander un coup de main. <strong>Au plus un message tous les {{ minDays }} jours</strong>, et <strong>vous recevrez une copie</strong> de chacun.</li>
             <li>{{ partnerName }} indiquera en un clic ce qui a été fait (appel, message, rencontre, prière). Vous serez prévenu(e) et vous le verrez dans « Mes Partenaires de Redevabilité ».</li>

@@ -10,7 +10,7 @@ kind: PLAN
 access: PRO
 cover_word: Héritage
 description: |
-  Deux séances courtes pour écrire votre Plan de Transmission : votre phrase d'éternité, puis ce que vous voulez transmettre. Chacune suit le même chemin : comprendre un enseignement tiré du livre KIINI, prendre un temps avec Dieu, réfléchir, puis écrire directement dans votre plan.
+  Deux séances courtes pour écrire votre Plan de Transmission : votre phrase d'éternité, puis ce que vous voulez transmettre. Chacune suit le même chemin : découvrir ce que propose le livre KIINI, à l'origine de la méthode, prendre un temps avec Dieu, réfléchir, puis écrire directement dans votre plan.
 
   Ce que vous écrivez s'ajoute à votre plan ; rien de ce qui y est déjà n'est effacé.
 
@@ -20,7 +20,7 @@ modules:
       - title: Votre phrase d'éternité
         duration: 12
         content: |
-          Avant de parler de ce que vous laisserez, le livre KIINI propose de changer de regard. Voici ce qu'il en dit, au chapitre 19.
+          Avant de parler de ce que vous laisserez, le livre KIINI propose de changer de regard. Voici ce qu'il propose, au chapitre 19.
 
           ## Comprendre
 
@@ -64,7 +64,7 @@ modules:
       - title: Votre héritage
         duration: 12
         content: |
-          Dernière station : ce qui continuera de porter du fruit après vous. Voici ce qu'en dit le livre KIINI, au chapitre 20.
+          Dernière station : ce qui continuera de porter du fruit après vous. Voici ce que propose le livre KIINI, au chapitre 20.
 
           ## Comprendre
 

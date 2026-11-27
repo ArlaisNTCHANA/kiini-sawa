@@ -2,7 +2,7 @@
 {% block content %}
   <p>Bonjour {{ owner }},</p>
   {% if nudge.fact %}
-  <p>Comme vous l'aviez choisi, <strong>{{ c.partnerName }}</strong> a été prévenu(e), car ce signal s'est déclenché : « {{ nudge.fact }} »</p>
+  <p>Comme vous l'aviez choisi, un message a été envoyé à <strong>{{ c.partnerName }}</strong>, votre Partenaire de Redevabilité, car ce signal s'est déclenché : « {{ nudge.fact }} »</p>
   <p>Personne ne vous juge : c'est vous qui avez demandé ce filet de sécurité. Voici la copie du message.</p>
   {% else %}
   <p>Comme convenu, voici la copie du message envoyé à <strong>{{ c.partnerName }}</strong>, votre Partenaire de Redevabilité. Un message vous avertira dès sa réponse.</p>
@@ -12,4 +12,4 @@
   </div>
   <p style="text-align:center;"><a href="{{ manageUrl }}" style="color:#2E6B53;font-weight:bold;">Voir mes engagements de redevabilité</a></p>
 {% endblock %}
-{% block footer %}Vous recevez cette copie parce que vous avez demandé à votre partenaire de vous interpeller.{% endblock %}
+{% block footer %}Vous recevez cette copie parce que vous avez demandé à votre Partenaire de Redevabilité de vous interpeller.{% endblock %}

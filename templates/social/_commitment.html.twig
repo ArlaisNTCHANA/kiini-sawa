@@ -26,7 +26,7 @@
     {% if c.alertInactiveDays %}{% set rules = rules|merge(['pas de connexion ' ~ c.alertInactiveDays ~ ' jours']) %}{% endif %}
     {% if c.open %}
         <p class="ac-mini" style="margin-bottom: .75rem;"><i data-lucide="bell-ring" class="ks-ico" aria-hidden="true"></i>
-            {{ rules is not empty ? c.partnerName ~ ' est prévenu(e) automatiquement si : ' ~ rules|join(', ') ~ '.' : 'Pas d\'alerte automatique : seulement vos demandes.' }}</p>
+            {{ rules is not empty ? c.partnerName ~ ' reçoit automatiquement un message si : ' ~ rules|join(', ') ~ '.' : 'Pas d\'alerte automatique : seulement vos demandes.' }}</p>
     {% endif %}
     {% if c.active %}
         {% if nextAllowed[c.id] %}

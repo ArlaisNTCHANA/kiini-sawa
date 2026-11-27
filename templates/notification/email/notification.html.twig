@@ -6,5 +6,8 @@
   {% if actionUrl %}
     <p style="text-align:center;margin:28px 0;"><a href="{{ actionUrl }}" style="background:#2E6B53;color:#ffffff;text-decoration:none;padding:14px 28px;border-radius:10px;font-weight:bold;display:inline-block;">Ouvrir KIINI SAWA</a></p>
   {% endif %}
-  <p style="font-size: 12px; color: #66706A; margin-top: 28px;">Vous ne souhaitez plus recevoir ce type de rappel ? <a href="{{ unsubscribeUrl }}" style="color:#66706A;">Se désabonner en un clic</a>. Vos autres préférences se règlent dans votre profil.</p>
+  {% if not transactional|default(false) %}
+  <p style="font-size: 12px; color: #66706A; margin-top: 28px;">Vous ne souhaitez plus recevoir ce type de message ? <a href="{{ unsubscribeUrl }}" style="color:#66706A;">Se désabonner en un clic</a>. Vos autres préférences se règlent dans votre profil.</p>
+  {% endif %}
 {% endblock %}
+{% block footer %}{% if transactional|default(false) %}Vous recevez ce message parce que vous avez déclaré un paiement sur votre compte KIINI SAWA. Une question ? Répondez simplement à cet e-mail.{% else %}Vous recevez ce message parce que vous avez un compte KIINI SAWA et que ce type de message est activé dans votre profil.{% endif %}{% endblock %}

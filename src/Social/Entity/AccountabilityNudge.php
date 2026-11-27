@@ -28,10 +28,10 @@ class AccountabilityNudge
 
     /** Actions que le partenaire peut indiquer. */
     public const ACTIONS = [
-        'CALLED' => 'Je l\'ai appelé(e)',
-        'WROTE' => 'Je lui ai écrit',
+        'CALLED' => 'Appel passé',
+        'WROTE' => 'Message envoyé',
         'MET' => 'Nous nous sommes vus',
-        'PRAYED' => 'J\'ai prié pour lui/elle',
+        'PRAYED' => 'J\'ai prié',
     ];
 
     #[ORM\Id]

@@ -129,7 +129,7 @@ class AccountabilityTest extends WebTestCase
         $this->client->loginUser($this->findUser((string) $owner->getEmail()));
         $this->client->request('GET', '/social');
         $this->assertSelectorTextContains('#engagement-'.$c->getId(), '100 %');
-        $this->assertSelectorTextContains('#engagement-'.$c->getId(), 'Je l\'ai appelé(e)');
+        $this->assertSelectorTextContains('#engagement-'.$c->getId(), 'Appel passé');
     }
 
     public function testPartnerCanStopAndDeclineAndNobodyElseCanActOnACommitment(): void
@@ -303,7 +303,7 @@ class AccountabilityTest extends WebTestCase
         $this->client->request('GET', '/bilan/revue-hebdomadaire');
         $this->assertSelectorTextContains('#redevabilite', 'Mes engagements cette semaine');
         $this->assertSelectorTextContains('#redevabilite', '1 alerte');
-        $this->assertSelectorTextContains('#redevabilite', 'Je l\'ai appelé(e)');
+        $this->assertSelectorTextContains('#redevabilite', 'Appel passé');
         $this->assertSelectorTextContains('#redevabilite', 'On a parlé ce soir');
 
         // Sans engagement : pas d'encart

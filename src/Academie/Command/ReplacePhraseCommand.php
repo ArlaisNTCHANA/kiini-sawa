@@ -20,6 +20,10 @@ use Symfony\Component\Console\Style\SymfonyStyle;
  *
  * Sans --enregistrer, la commande montre seulement ce qui changerait. La recherche respecte les majuscules.
  * Né le 27/11/2026 : « Votre But de Dieu » → « Le But de Dieu pour ma vie » dans « Mon Plan de Vie », déjà publié.
+ *
+ * Plusieurs remplacements d'un coup : `--fichier` (YAML `pairs: [[ancien, nouveau], …]`), et `tous` à la place de
+ * l'adresse pour traiter tous les parcours. `--lecons` étend la recherche au texte des leçons : seulement pour des
+ * phrases exactes qui *présentent* le livre (règle « la Bible et le livre KIINI »), jamais pour réécrire le livre cité.
  */
 #[AsCommand(name: 'app:academie:remplacer-phrase', description: 'Remplace une phrase dans les titres, la présentation et les consignes d\'un parcours (même publié)')]
 class ReplacePhraseCommand extends Command
@@ -33,35 +37,62 @@ class ReplacePhraseCommand extends Command
 
     protected function configure(): void
     {
-        $this->addArgument('parcours', InputArgument::REQUIRED, 'Adresse du parcours (ex. mon-plan-de-vie)')
-            ->addArgument('ancien', InputArgument::REQUIRED, 'Phrase à remplacer (majuscules comprises)')
-            ->addArgument('nouveau', InputArgument::REQUIRED, 'Nouvelle phrase')
+        $this->addArgument('parcours', InputArgument::REQUIRED, 'Adresse du parcours (ex. mon-plan-de-vie), ou « tous »')
+            ->addArgument('ancien', InputArgument::OPTIONAL, 'Phrase à remplacer (majuscules comprises)')
+            ->addArgument('nouveau', InputArgument::OPTIONAL, 'Nouvelle phrase')
+            ->addOption('fichier', null, InputOption::VALUE_REQUIRED, 'Fichier YAML de remplacements (pairs: [[ancien, nouveau], …])')
+            ->addOption('lecons', null, InputOption::VALUE_NONE, 'Cherche aussi dans le texte des leçons (phrases exactes seulement)')
             ->addOption('enregistrer', null, InputOption::VALUE_NONE, 'Enregistre les changements (sinon : aperçu seulement)');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $io = new SymfonyStyle($input, $output);
-        $old = (string) $input->getArgument('ancien');
-        $new = (string) $input->getArgument('nouveau');
-        if ('' === trim($old) || $old === $new) {
-            $io->error('Indiquez une phrase à remplacer, différente de la nouvelle.');
+        $pairs = [];
+        if (null !== $input->getOption('fichier')) {
+            $file = (string) $input->getOption('fichier');
+            $data = is_file($file) ? \Symfony\Component\Yaml\Yaml::parseFile($file) : null;
+            foreach (\is_array($data) ? ($data['pairs'] ?? []) : [] as $pair) {
+                if (\is_array($pair) && 2 === \count($pair)) {
+                    $pairs[] = [(string) $pair[0], (string) $pair[1]];
+                }
+            }
+            if ([] === $pairs) {
+                $io->error('Fichier introuvable ou sans remplacement (pairs).');
 
-            return Command::FAILURE;
+                return Command::FAILURE;
+            }
+        } else {
+            $pairs[] = [(string) $input->getArgument('ancien'), (string) $input->getArgument('nouveau')];
         }
-        $course = $this->courses->findOneBy(['slug' => (string) $input->getArgument('parcours')]);
-        if (!$course instanceof Course) {
+        foreach ($pairs as [$old, $new]) {
+            if ('' === trim($old) || $old === $new) {
+                $io->error('Indiquez une phrase à remplacer, différente de la nouvelle.');
+
+                return Command::FAILURE;
+            }
+        }
+        $slug = (string) $input->getArgument('parcours');
+        $courses = 'tous' === $slug ? $this->courses->findBy([], ['sortOrder' => 'ASC']) : array_filter([$this->courses->findOneBy(['slug' => $slug])]);
+        if ([] === $courses) {
             $io->error('Aucun parcours ne porte cette adresse.');
 
             return Command::FAILURE;
         }
+        $withLessons = (bool) $input->getOption('lecons');
 
         $changes = [];
-        $plan = function (string $where, ?string $value, callable $set, int $max = 0) use ($old, $new, &$changes): void {
-            if (null === $value || !str_contains($value, $old)) {
+        $plan = function (string $where, ?string $value, callable $set, int $max = 0) use ($pairs, &$changes): void {
+            if (null === $value) {
                 return;
             }
-            $changed = str_replace($old, $new, $value);
+            $changed = $value;
+            foreach ($pairs as [$old, $new]) {
+                $changed = str_replace($old, $new, $changed);
+            }
+            if ($changed === $value) {
+                return;
+            }
             if ($max > 0 && mb_strlen($changed) > $max) {
                 throw new \LengthException($where.' dépasserait '.$max.' caractères.');
             }
@@ -69,14 +100,20 @@ class ReplacePhraseCommand extends Command
         };
 
         try {
-            $plan('Titre du parcours', $course->getTitle(), fn (string $v) => $course->setTitle($v), 160);
-            $plan('Sous-titre du parcours', $course->getSubtitle(), fn (string $v) => $course->setSubtitle($v));
-            $plan('Présentation du parcours', $course->getDescription(), fn (string $v) => $course->setDescription($v));
-            foreach ($course->getModules() as $module) {
-                $plan('Titre du module « '.$module->getTitle().' »', $module->getTitle(), fn (string $v) => $module->setTitle($v));
-                foreach ($module->getLessons() as $lesson) {
-                    $plan('Titre de la séance « '.$lesson->getTitle().' »', $lesson->getTitle(), fn (string $v) => $lesson->setTitle($v), 160);
-                    $plan('Consigne d\'écriture de « '.$lesson->getTitle().' »', $lesson->getPracticePrompt(), fn (string $v) => $lesson->setPracticePrompt($v));
+            foreach ($courses as $course) {
+                $c = '« '.$course->getTitle().' » : ';
+                $plan($c.'titre du parcours', $course->getTitle(), fn (string $v) => $course->setTitle($v), 160);
+                $plan($c.'sous-titre', $course->getSubtitle(), fn (string $v) => $course->setSubtitle($v));
+                $plan($c.'présentation', $course->getDescription(), fn (string $v) => $course->setDescription($v));
+                foreach ($course->getModules() as $module) {
+                    $plan($c.'titre du module « '.$module->getTitle().' »', $module->getTitle(), fn (string $v) => $module->setTitle($v));
+                    foreach ($module->getLessons() as $lesson) {
+                        $plan($c.'titre de la séance « '.$lesson->getTitle().' »', $lesson->getTitle(), fn (string $v) => $lesson->setTitle($v), 160);
+                        $plan($c.'consigne d\'écriture de « '.$lesson->getTitle().' »', $lesson->getPracticePrompt(), fn (string $v) => $lesson->setPracticePrompt($v));
+                        if ($withLessons) {
+                            $plan($c.'texte de la leçon « '.$lesson->getTitle().' »', $lesson->getContentMarkdown(), fn (string $v) => $lesson->setContentMarkdown($v));
+                        }
+                    }
                 }
             }
         } catch (\LengthException $e) {
@@ -86,13 +123,21 @@ class ReplacePhraseCommand extends Command
         }
 
         if ([] === $changes) {
-            $io->success('La phrase « '.$old.' » n\'apparaît dans aucun titre, présentation ou consigne de « '.$course->getTitle().' ». Rien à changer.');
+            $io->success('Aucune de ces phrases n\'apparaît'.($withLessons ? '' : ' dans les titres, présentations ou consignes').'. Rien à changer.');
 
             return Command::SUCCESS;
         }
         foreach ($changes as [$where, $before, $after]) {
             $io->section($where);
-            $io->text(['Avant : '.$before, 'Après : '.$after]);
+            if (mb_strlen($before) > 400) {
+                foreach ($pairs as [$old, $new]) {
+                    if (str_contains($before, $old)) {
+                        $io->text(['Avant : … '.$old.' …', 'Après : … '.$new.' …']);
+                    }
+                }
+            } else {
+                $io->text(['Avant : '.$before, 'Après : '.$after]);
+            }
         }
         if (!$input->getOption('enregistrer')) {
             $io->note(\count($changes).' changement(s) possible(s), rien n\'est enregistré. Relancez avec --enregistrer pour les appliquer.');

@@ -22,6 +22,20 @@ méthode) restent ceux du livre.
 | Accroche sous le logo | **Plan de Vie** | Espace de croissance |
 | Le mot « Sanctuaire » | Deux sens acceptés (décision du fondateur, 23/11/2026) : **Le Sanctuaire**, exercice écrit de chaque chapitre du livre ; **le Sanctuaire du Couple** (ses pièces : L'Autel, Le Jardin des défis, L'Atelier, Le Salon), espace commun des conjoints. Toujours préciser « du Couple » pour le second | — |
 
+## La Bible et le livre KIINI (décision du fondateur, 27/11/2026)
+
+Un lecteur chrétien ne doit jamais avoir l'impression que le livre est une seconde autorité à côté de l'Écriture.
+
+- **La Bible est la Parole** : on la cite avec sa référence (« Jean 17:4 »), et c'est elle qui « dit ».
+- **Le livre est un guide** : il « propose », « invite », « raconte », « résume », « rappelle ». Il ne « dit » pas et
+  n'« enseigne » pas comme une autorité ; il ne « voit » rien à la place du lecteur.
+- **Son nom** : à la première mention d'un texte (e-mail, parcours, page), *KIINI, Bâtis la vie pour laquelle tu as été
+  créé*, « le livre à l'origine de la méthode » ; ensuite **le livre KIINI**. Jamais « le livre » seul pour quelqu'un qui
+  ne le connaît pas, jamais « le livre KIINI SAWA ».
+- On parle de **la méthode KIINI** pour ce qui en découle (séances, formule, schémas).
+- Le texte du livre lui-même (citations mot pour mot) ne change pas : seules les phrases qui le présentent suivent ces
+  règles.
+
 ## Les 6 plans de la méthode (référence : le livre, 17/11/2026)
 
 Source : le livre de l'auteur (`livre-et-ressources/sources/livre/manuscrit.md`, « Comment lire ce livre »). Le Plan

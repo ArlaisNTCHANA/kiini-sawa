@@ -10,7 +10,7 @@ kind: PLAN
 access: PRO
 cover_word: Confié
 description: |
-  Deux séances courtes pour écrire votre Plan d'Intendance : l'inventaire de ce qui vous est confié, puis le cycle de l'intendant. Chacune suit le même chemin : comprendre un enseignement tiré du livre KIINI, prendre un temps avec Dieu, réfléchir, puis écrire.
+  Deux séances courtes pour écrire votre Plan d'Intendance : l'inventaire de ce qui vous est confié, puis le cycle de l'intendant. Chacune suit le même chemin : découvrir ce que propose le livre KIINI, à l'origine de la méthode, prendre un temps avec Dieu, réfléchir, puis écrire.
 
   Ce que vous écrivez s'ajoute à votre plan ; rien de ce qui y est déjà n'est effacé.
 
@@ -20,7 +20,7 @@ modules:
       - title: L'inventaire de ce qui vous est confié
         duration: 12
         content: |
-          Votre Plan de Vie a mis en lumière ce que Dieu a déposé en vous. Aujourd'hui, une question plus simple et plus exigeante. Voici ce qu'en dit le livre KIINI, au chapitre 18.
+          Votre Plan de Vie a mis en lumière ce que Dieu a déposé en vous. Aujourd'hui, une question plus simple et plus exigeante. Voici ce que propose le livre KIINI, au chapitre 18.
 
           ## Comprendre
 
@@ -66,7 +66,7 @@ modules:
       - title: Fructifier, dormir ou fuir
         duration: 10
         content: |
-          Vous avez fait l'inventaire. Aujourd'hui, le regard honnête et la décision. Voici ce qu'en dit le livre KIINI, toujours au chapitre 18.
+          Vous avez fait l'inventaire. Aujourd'hui, le regard honnête et la décision. Voici ce que propose le livre KIINI, toujours au chapitre 18.
 
           ## Comprendre
 

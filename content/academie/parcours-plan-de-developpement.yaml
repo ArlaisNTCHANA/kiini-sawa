@@ -10,7 +10,7 @@ kind: PLAN
 access: PRO
 cover_word: Outils
 description: |
-  Deux séances courtes pour écrire votre Plan de Développement personnel : les compétences à développer, puis les connaissances à acquérir. Chacune suit le même chemin : comprendre un enseignement tiré du livre KIINI, prendre un temps avec Dieu, réfléchir, puis écrire directement dans votre plan.
+  Deux séances courtes pour écrire votre Plan de Développement personnel : les compétences à développer, puis les connaissances à acquérir. Chacune suit le même chemin : découvrir ce que propose le livre KIINI, à l'origine de la méthode, prendre un temps avec Dieu, réfléchir, puis écrire directement dans votre plan.
 
   Ce que vous écrivez s'ajoute à votre plan ; rien de ce qui y est déjà n'est effacé.
 
@@ -20,7 +20,7 @@ modules:
       - title: Vos compétences
         duration: 12
         content: |
-          Vous avez un but, une vision et un caractère en chantier. Il vous faut maintenant des outils. Voici ce qu'en dit le livre KIINI, au chapitre 16.
+          Vous avez un but, une vision et un caractère en chantier. Il vous faut maintenant des outils. Voici ce que propose le livre KIINI, au chapitre 16.
 
           ## Comprendre
 
@@ -63,7 +63,7 @@ modules:
       - title: Vos connaissances
         duration: 10
         content: |
-          Une compétence se bâtit avec des moyens concrets. Aujourd'hui, ce que vous voulez apprendre. Voici ce qu'en dit le livre KIINI, toujours au chapitre 16.
+          Une compétence se bâtit avec des moyens concrets. Aujourd'hui, ce que vous voulez apprendre. Voici ce que propose le livre KIINI, toujours au chapitre 16.
 
           ## Comprendre
 

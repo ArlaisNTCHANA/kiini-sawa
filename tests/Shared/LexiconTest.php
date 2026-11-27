@@ -24,7 +24,9 @@ class LexiconTest extends WebTestCase
     {
         $banned = ['masterminds', "Binômes d'imputabilité", 'catalyser', 'pitcher', 'levée de fonds', 'Habit-Rituels',
             'non détecté', 'BE, DO, HAVE, GIVE', 'type <strong>GIVE', 'category.toUpperCase()', 'placeholder="Ex: ',
-            '{{ habit.frequency.value }}', '{{ h.frequency.value }}'];
+            '{{ habit.frequency.value }}', '{{ h.frequency.value }}',
+            // La Bible et le livre KIINI (27/11/2026) : le livre propose, il ne « dit » pas comme une autorité
+            "ce qu'en dit le livre", 'le livre le dit', 'livre KIINI SAWA', 'tiré du livre', 'livre KIINI y voit'];
         $root = static::getContainer()->getParameter('kernel.project_dir').'/templates';
         $offenders = [];
         foreach (new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($root, \FilesystemIterator::SKIP_DOTS)) as $file) {
@@ -93,5 +95,20 @@ class LexiconTest extends WebTestCase
             }
         }
         $this->assertSame([], $offenders, '« Sanctuaire » doit désigner l\'exercice du livre ou le « Sanctuaire du Couple »');
+    }
+
+    /** La Bible et le livre KIINI (docs/lexique.md, 27/11/2026) : dans les parcours aussi, le livre propose, il ne « dit » pas. */
+    public function testCoursesPresentTheBookAsAGuide(): void
+    {
+        $root = static::getContainer()->getParameter('kernel.project_dir').'/content/academie';
+        foreach (glob($root.'/*.yaml') ?: [] as $file) {
+            if (str_starts_with(basename($file), 'reformulations-')) {
+                continue;
+            }
+            $text = (string) file_get_contents($file);
+            foreach (["ce qu'en dit le livre", 'le livre le dit', 'livre KIINI SAWA', 'tiré du livre', 'formule du livre'] as $phrase) {
+                $this->assertStringNotContainsString($phrase, $text, basename($file));
+            }
+        }
     }
 }

@@ -242,7 +242,7 @@ final class PlanRubricsTest extends WebTestCase
         $this->assertSame('lecons', $mailer->sendFor($enrollment, new \DateTimeImmutable('2026-11-23')));
         $email = $this->getMailerMessage();
         $this->assertEmailHeaderSame($email, 'Subject', 'Aujourd\'hui : votre vision');
-        $this->assertEmailHtmlBodyContains($email, 'station 2 sur 2');
+        $this->assertEmailHtmlBodyContains($email, 'séance 2 sur 2');
         $this->assertEmailHtmlBodyContains($email, 'Chanter, Enseigner');
         $this->assertEmailHtmlBodyContains($email, 'Habacuc 2:2');
         $this->assertEmailHtmlBodyContains($email, 'Commencer la séance');

@@ -11,6 +11,7 @@
         <tr>
             <td align="center">
                 <div style="max-width: 800px; background: white; border-radius: 12px; padding: 30px; border: 1px solid #E1E6DF; text-align: left; color: #1B1B1B; box-shadow: 0 4px 12px rgba(0,0,0,0.05);">
+{% include 'plan_de_vie/_email_intro.html.twig' with {planLabel: 'Plan de Transmission'} %}
 {% else %}
 <!DOCTYPE html>
 <html lang="fr">
@@ -279,7 +280,7 @@
         <div class="statement-box">
             « {% if planDeVie and planDeVie.purpose and planDeVie.purpose.statement %}{{ planDeVie.purpose.statement }}{% else %}{{ defaultPurposeStatement }}{% endif %} »
         </div>
-        <div style="font-size: 0.72rem; font-weight: 800; color: #66706A; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 8px;">Ce que je vais LÉGUER (Mon Intention)</div>
+        <div style="font-size: 0.72rem; font-weight: 800; color: #66706A; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 8px;">Mon intention : ce que je veux léguer</div>
         <div style="padding: 20px; background: #fffdfa; border: 1px solid #fbcfe8; border-radius: 12px; line-height: 1.6; font-size: 1.05rem; color: #7A5713; margin-bottom: 25px;">
             {{ planDeVie.vision.content|default('Aucune vision de vie définie.') }}
         </div>
@@ -292,7 +293,7 @@
         <div style="display: flex; flex-direction: column; gap: 20px;">
             <div class="no-break" style="background: white; border-radius: 12px; border: 1px solid #fbcfe8; padding: 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.02);">
                 <h3 style="font-size: 1.1rem; font-weight: 700; color: #A87A1F; margin: 0 0 15px 0; border-bottom: 1px dashed #fbcfe8; padding-bottom: 8px;">
-                    Projets de legs & Transmission (Legacy)
+                    Projets de legs et de transmission
                 </h3>
                 <div style="display: flex; flex-direction: column; gap: 15px;">
                     {% for item in legacyGoals %}
