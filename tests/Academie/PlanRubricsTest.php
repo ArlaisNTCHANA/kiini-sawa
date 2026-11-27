@@ -222,7 +222,8 @@ final class PlanRubricsTest extends WebTestCase
         $this->assertSelectorTextContains('[data-next-step="first-step"]', 'Reprendre');
         $this->assertSelectorTextNotContains('[data-next-step="first-step"]', 'Commencer mon parcours', 'Pas d\'invitation au parcours de 90 jours en même temps.');
         $this->assertSelectorTextContains('[data-first-step="journey"]', 'Reprendre');
-        $this->assertSelectorTextContains('[data-next-step="first-step"] .next-step__then', 'Choisir un premier rituel', '« Ensuite » : les premiers pas suivants.');
+        // Les premiers pas suivants sont listés dans la carte même (27/11/2026 : plus de doublon avec « Vos premiers pas »)
+        $this->assertSelectorTextContains('[data-next-step="first-step"] .next-step__first', 'Choisir un premier rituel');
     }
 
     public function testDailyEmailAnnouncesTheSessionWithWhatWasPosedAndItsVerse(): void

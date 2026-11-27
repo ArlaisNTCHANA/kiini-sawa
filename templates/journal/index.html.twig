@@ -280,7 +280,7 @@
 
             {# Textarea Input #}
             <div style="padding: 0.75rem 1.25rem; position: relative;">
-                <textarea x-model="capture.content" :placeholder="capturePlaceholder()" rows="3" class="capture-textarea"></textarea>
+                <textarea id="ecrire" x-model="capture.content" :placeholder="capturePlaceholder()" rows="3" class="capture-textarea" aria-label="Écrire une note dans le Journal" x-init="if (location.hash === '#ecrire') $nextTick(() => { $el.focus(); $el.scrollIntoView({ block: 'center' }); })"></textarea>
                 <button @click="capture.showExtras = !capture.showExtras"
                         style="position: absolute; top: 1.5rem; right: 2rem; width: 2.25rem; height: 2.25rem;
                                border-radius: 0.75rem; cursor: pointer; transition: all 0.25s var(--ease); border: none;

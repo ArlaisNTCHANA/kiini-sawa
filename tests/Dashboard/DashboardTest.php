@@ -70,4 +70,38 @@ class DashboardTest extends WebTestCase
         $this->assertSelectorTextContains('main', 'Vos premiers pas');
         $this->assertSelectorTextContains('main', 'Écrire votre vision');
     }
+
+    /**
+     * Accueil réorganisé (27/11/2026, accord du fondateur) : plus de Note rapide (un lien ouvre l'écriture dans le Journal),
+     * un seul bloc pour la prochaine étape et les premiers pas, rien de vide dans le bandeau, la date de naissance en bas.
+     */
+    public function testHomeIsFocusedOnTheDay(): void
+    {
+        $client = static::createClient();
+        $user = $this->createUser();
+        $user->setIsOnboardingCompleted(true);
+        $this->em()->flush();
+        $client->loginUser($user);
+        $crawler = $client->request('GET', '/dashboard');
+        $html = (string) $client->getResponse()->getContent();
+
+        $this->assertStringNotContainsString('Note rapide', $html);
+        $this->assertStringNotContainsString('/api/journal/entries/create', $html);
+        $this->assertSelectorExists('.dash-hero a[href="/journal#ecrire"]');
+        $this->assertStringNotContainsString('Aucun rituel aujourd', $html, 'Pas de tiret seul quand aucun rituel n\'est prévu');
+        $this->assertCount(1, $crawler->filter('main')->reduce(fn ($n) => str_contains($n->text(), 'Vos premiers pas')));
+        $this->assertLessThanOrEqual(1, substr_count($crawler->filter('main')->text(), 'Vos premiers pas'), 'Premiers pas affichés une seule fois');
+        // Ordre : prochaine étape, puis rituels, puis la boussole ; la date de naissance tout en bas
+        $positions = array_map(fn (string $needle) => strpos($html, $needle), ['data-next-step', 'Vos Rituels', 'Ma raison d\'être']);
+        $this->assertSame($positions, array_values(array_filter($positions)), 'Blocs présents');
+        $sorted = $positions;
+        sort($sorted);
+        $this->assertSame($sorted, $positions);
+        if (str_contains($html, 'data-birth-date-prompt')) {
+            $this->assertGreaterThan(strpos($html, 'Ma raison d\'être'), strpos($html, 'data-birth-date-prompt'));
+        }
+
+        $client->request('GET', '/journal');
+        $this->assertSelectorExists('textarea#ecrire');
+    }
 }

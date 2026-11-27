@@ -9,6 +9,22 @@ teste (`php bin/phpunit`), commit, déploie (`bin/ops/envoyer-hostinger.sh`), v�
 journal `var/log/prod-AAAA-MM-JJ.log` sans erreur) ; **le fondateur fait lui-même `git push`** (refusé à l'IA).
 Ne jamais afficher ni demander de mot de passe ; ne pas publier son nom (mentions légales en attente).
 
+## 27/11/2026 — Accueil connecté réorganisé (Note rapide retirée)
+
+Demande du fondateur : « est-ce nécessaire de mettre les notes ? », puis, à titre exceptionnel, accord pour **retirer
+la Note rapide** de l'accueil (`templates/dashboard/index.html.twig`) et faire le reste.
+- **Note rapide retirée de l'accueil** (exception à la charte, accord explicite) : elle doublait le Journal. Un lien
+  « Noter une pensée » (texte `accueil.noter`) dans la carte du jour ouvre `/journal#ecrire` : la zone d'écriture du
+  Journal prend le curseur. Rien n'est perdu : l'écriture du Journal et l'API `/api/journal/entries/create` restent.
+- **Carte du jour plus compacte** : guillemets français autour du verset, plus de pastille décorative vide, plus de
+  tiret seul quand aucun rituel n'est prévu (les chiffres n'apparaissent que s'il y a des rituels ou une série).
+- **Un seul bloc** « Ma prochaine étape » : les premiers pas (barre, liste, essai PRO) sont dans la même carte (plus de
+  doublon) ; le bloc « Vos premiers pas » seul ne s'affiche que s'il n'y a pas de prochaine étape.
+- **Ordre** : bonjour, prochaine étape, défis, rituels, raison d'être et échéances, parcours de 90 jours, date de
+  naissance (bandeau en bas). Espacements resserrés sur ordinateur.
+- Tests : `DashboardTest::testHomeIsFocusedOnTheDay`, `PlanRubricsTest` adapté. Vérifié en local sur ordinateur et
+  téléphone.
+
 ## 27/11/2026 — Parcours vitrine « Sous pression » (les cinq pressions et dire non)
 
 Idée et tableau du fondateur : « Apprendre à dire non » et déconstruire les cinq « drivers » (Taibi Kahler, analyse
