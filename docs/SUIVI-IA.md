@@ -9,6 +9,21 @@ teste (`php bin/phpunit`), commit, déploie (`bin/ops/envoyer-hostinger.sh`), v�
 journal `var/log/prod-AAAA-MM-JJ.log` sans erreur) ; **le fondateur fait lui-même `git push`** (refusé à l'IA).
 Ne jamais afficher ni demander de mot de passe ; ne pas publier son nom (mentions légales en attente).
 
+## 27/11/2026 — Fiche d'un membre dans l'administration
+
+Demande du fondateur (premier manque de la liste). `/admin/utilisateurs/{id}` (`UserAdminController::show`,
+`Compte/Service/MemberFile`, `templates/compte/admin/user.html.twig`), ouverte en cliquant sur un nom dans Membres.
+- **Compte** : inscription, dernière visite, adresse vérifiée ou non, accueil terminé, provenance (SignupOrigin).
+- **Offre** : gratuit / essai / PRO et date, « Offrir PRO » (revient sur la fiche), organisation(s) et couple.
+- **Paiements** : les 20 derniers, avec reçu ou motif de refus.
+- **Ce qu'il construit** : **compteurs et dates seulement** (6 plans commencés ou non, rituels et dernière coche, nombre
+  de notes, tests passés et date sans résultat, Boussole, parcours de l'Académie et avancement, Partenaires de
+  Redevabilité). Jamais le texte du journal, des plans ni les résultats de tests (test dédié).
+- **Assistance** (pas pour un administrateur) : renvoyer le code de vérification (une minute entre deux) ; corriger
+  l'adresse (libre, redevient « à vérifier », code envoyé à la nouvelle) ; supprimer le compte à la demande du membre
+  (adresse recopiée pour confirmer, `AccountDeleter` + e-mail de confirmation). Correction et suppression sont écrites
+  au journal du serveur (qui, quand). Test : `tests/Admin/MemberFileTest.php`.
+
 ## 27/11/2026 — Menu de l'administration réorganisé
 
 Demande du fondateur : « optimise les menus de l'administration, et dis-moi ce qui manque ».
