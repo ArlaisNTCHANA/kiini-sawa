@@ -11,6 +11,8 @@ Ne jamais afficher ni demander de mot de passe ; ne pas publier son nom (mention
 
 ## 27/11/2026 — Accueil connecté réorganisé (Note rapide retirée)
 
+- **Déployé le 27/11/2026** (accord du fondateur) : pages contrôlées, aucune erreur au journal du serveur.
+
 Demande du fondateur : « est-ce nécessaire de mettre les notes ? », puis, à titre exceptionnel, accord pour **retirer
 la Note rapide** de l'accueil (`templates/dashboard/index.html.twig`) et faire le reste.
 - **Note rapide retirée de l'accueil** (exception à la charte, accord explicite) : elle doublait le Journal. Un lien
