@@ -9,6 +9,21 @@ teste (`php bin/phpunit`), commit, déploie (`bin/ops/envoyer-hostinger.sh`), v�
 journal `var/log/prod-AAAA-MM-JJ.log` sans erreur) ; **le fondateur fait lui-même `git push`** (refusé à l'IA).
 Ne jamais afficher ni demander de mot de passe ; ne pas publier son nom (mentions légales en attente).
 
+## 27/11/2026 — Parcours vitrine « Sous pression » (les cinq pressions et dire non)
+
+Idée et tableau du fondateur : « Apprendre à dire non » et déconstruire les cinq « drivers » (Taibi Kahler, analyse
+transactionnelle, 1974 ; citée comme source, jamais « PCM », marque déposée). Demandes : Plan de Croissance et Plan
+d'Hygiène, contenu « eyes opener », parcours vitrine soigné, visuels, histoires bibliques racontées sans présumer.
+- `content/academie/sous-pression.yaml` : 8 séances (2 modules), noms français (« Sois parfait », « Fais plaisir »,
+  « Dépêche-toi », « Sois fort », « Fais des efforts » ; l'anglais une seule fois, séance 1), place CROISSANCE + plans
+  [HYGIENE], accès PRO (à confirmer : parcours vitrine), 16 questions, exercices reliés (Journal, Croissance, Rituel,
+  Hygiène), un temps « Méditer » par séance, 10 schémas d'atelier fournis dans le fichier + `chronos-kairos` et
+  `oscillation`. Histoires racontées en entier : baptême de Jésus, talents, Saül, Pilate, Sara et Agar, Lazare, Moïse et
+  Jéthro, Élie, Gethsémané, la tour inachevée, Néhémie, Capharnaüm (Marc 1), Daniel. Versets Louis Segond 1910.
+- Import : `diagrams:` et illustrations locales (voir `docs/modules/academie.md`). Chargé en brouillon en local et relu
+  dans l'aperçu ; **pas encore chargé en production**.
+- Illustrations peintes : en attente de l'accord du fondateur (génération par l'outil d'images connecté, ~0,02 $ l'une).
+
 ## 27/11/2026 — Studio : écrire « comme dans Word » ; exporter un parcours (PDF, Word, fichier)
 
 - **Déployé le 27/11/2026** (accord du fondateur) : PhpWord installé sur le serveur (création d'un .docx vérifiée, WebP lu par GD), route d'export et script de l'éditeur en ligne, aucune erreur au journal.

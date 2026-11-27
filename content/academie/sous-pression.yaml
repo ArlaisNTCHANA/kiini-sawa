@@ -1,0 +1,737 @@
+# Parcours vitrine de l'Académie : les cinq pressions intérieures (d'après les « drivers » de Taibi Kahler, analyse
+# transactionnelle) et la liberté de dire non. Idée et tableau du fondateur (27/11/2026) ; premier jet à relire.
+# Chargé en brouillon par : php bin/console app:academie:import content/academie/sous-pression.yaml
+# Ensuite, tout se relit et se modifie dans le studio (Admin › Académie) ; ce fichier ne sert qu'au premier chargement.
+# Les schémas ci-dessous sont créés dans l'atelier au chargement (jamais écrasés ensuite) ; versets : Louis Segond 1910.
+
+slug: sous-pression
+title: Sous pression
+subtitle: Ce qui me pousse quand tout s'accélère, et la liberté de dire non
+place: CROISSANCE
+plans: [HYGIENE]
+kind: THEME
+access: PRO
+cover_word: Liberté
+description: |
+  Sous pression, nous ne choisissons plus vraiment : une petite voix intérieure prend les commandes. « Sois parfait. » « Fais plaisir. » « Dépêche-toi. » « Sois fort. » « Fais des efforts. » Ces cinq voix nous ont souvent aidés à grandir. Mais, laissées seules au volant, elles épuisent le corps, abîment nos relations et nous éloignent de ce que Dieu nous a confié.
+
+  En huit séances courtes, vous allez reconnaître vos deux voix les plus fortes, comprendre d'où elles viennent, découvrir la force cachée derrière chacune, et recevoir la parole qui libère. Puis vous apprendrez ce qui découle naturellement de cette liberté : dire non, sans culpabilité et sans dureté, pour que votre oui ait enfin du poids.
+
+diagrams:
+  - code: pressions-cinq-voix
+    title: Les cinq voix de la pression
+    model: cards
+    note: "Chaque voix est une force devenue tyran. Sa permission ne l'efface pas : elle la remet à sa place."
+    items:
+      - { icon: target, tone: froid, title: Sois parfait, text: "Je vérifie encore, je repousse, je n'arrive pas à déléguer.", detail: "Permission : suffisamment bien, c'est bien." }
+      - { icon: heart, tone: alerte, title: Fais plaisir, text: "Je n'ose pas dire non, j'adoucis tout ce que je pense.", detail: "Permission : je peux exprimer mon désaccord." }
+      - { icon: timer, tone: or, title: Dépêche-toi, text: "Je me précipite, je coupe la parole, je décide trop vite.", detail: "Permission : je peux prendre mon temps." }
+      - { icon: shield, tone: neutre, title: Sois fort, text: "Je cache mes difficultés, je ne demande jamais d'aide.", detail: "Permission : je peux dire ce que je vis et demander de l'aide." }
+      - { icon: mountain, tone: vivant, title: Fais des efforts, text: "Je m'épuise à essayer, je commence plus que je ne termine.", detail: "Permission : je peux réussir simplement et aller au bout." }
+  - code: pressions-voix-et-identite
+    title: "Deux façons de vivre"
+    model: compare
+    items:
+      - { icon: cog, tone: froid, title: "Sous la pression", text: "Je fais pour être aimé\nMa valeur dépend du résultat\nUn échec dit qui je suis\nJe ne me repose jamais vraiment", detail: "« Je suis OK si… »" }
+      - { icon: sprout, tone: vivant, title: "Dans la grâce", text: "Je suis aimé, alors je fais\nMa valeur est donnée d'avance\nUn échec est une étape\nLe repos fait partie du travail", detail: "« Tu es mon enfant bien-aimé. »" }
+  - code: pressions-perfection-excellence
+    title: Perfectionnisme ou excellence ?
+    model: compare
+    items:
+      - { icon: target, tone: froid, title: "Le perfectionnisme", text: "Vise zéro défaut\nNaît de la peur d'être jugé\nRetarde, cache, recommence\nNe voit que ce qui manque", detail: "Il enterre le talent." }
+      - { icon: sparkles, tone: or, title: "L'excellence", text: "Vise le meilleur possible, ici et maintenant\nNaît de l'amour du travail bien fait\nLivre, apprend, améliore\nVoit aussi ce qui est réussi", detail: "Il fait fructifier le talent." }
+  - code: pressions-plaire-servir
+    title: "Plaire aux gens ou les aimer ?"
+    model: rows
+    items:
+      - { icon: x, title: "Je dis oui pour éviter un conflit", text: "Je retarde le conflit, il reviendra plus fort", detail: "La paix achetée coûte toujours plus cher." }
+      - { icon: x, title: "J'adoucis ce que je pense", text: "L'autre décide sans la vérité", detail: "Me taire, c'est le priver d'une information." }
+      - { icon: x, title: "Je rends service à contrecœur", text: "Le service devient une dette", detail: "Un jour, la rancune sort." }
+      - { icon: check, title: "Je dis vrai, avec douceur", text: "La relation grandit", detail: "« Professer la vérité dans la charité » (Éphésiens 4:15)." }
+  - code: pressions-pause
+    title: La pause de trente secondes
+    model: steps
+    items:
+      - { title: "Je m'arrête", text: "Avant de répondre, d'envoyer ou de décider : une vraie pause." }
+      - { title: "Je respire trois fois, lentement", text: "Le corps sort de l'urgence ; l'esprit peut de nouveau choisir." }
+      - { title: "Je me demande : qu'est-ce qui presse vraiment ?", text: "Souvent, rien. Parfois, une seule chose." }
+      - { title: "J'agis, ou je reporte à un moment choisi", text: "« Je vous réponds demain matin » est une réponse." }
+  - code: pressions-force-qui-demande
+    title: Deux visages de la force
+    model: compare
+    items:
+      - { icon: shield, tone: froid, title: "La force qui cache", text: "« Ça va, ne t'inquiète pas »\nPorte tout, seule\nTient… jusqu'à l'effondrement\nIsole ceux qu'elle veut protéger", detail: "Moïse qui juge seul du matin au soir" }
+      - { icon: handshake, tone: vivant, title: "La force qui demande", text: "« J'ai besoin de toi »\nPartage le fardeau\nDure, parce qu'elle se repose\nRelie et fait grandir les autres", detail: "Moïse qui confie le peuple à des responsables" }
+  - code: pressions-tour-inachevee
+    title: Ce qui fait vraiment avancer
+    model: compare
+    items:
+      - { icon: mountain, tone: alerte, title: "Fais des efforts", text: "Beaucoup de chantiers ouverts\nL'effort comme preuve de valeur\nToujours « en train d'essayer »\nLa fatigue, sans la récolte", detail: "La tour commencée, jamais finie" }
+      - { icon: flag, tone: vivant, title: "Aller au bout", text: "Peu de chantiers, choisis\nLe fruit comme mesure\nUne chose terminée, puis la suivante\nLa joie de l'œuvre achevée", detail: "« J'ai achevé l'œuvre que tu m'as donnée » (Jean 17:4)" }
+  - code: dire-non-peurs
+    title: "Ce que je crains quand je dis non, et ce qui est vrai"
+    model: rows
+    items:
+      - { icon: users, title: "On ne m'aimera plus", text: "Les relations vraies survivent à un non", detail: "Celles qui n'y survivent pas reposaient sur votre utilité." }
+      - { icon: triangle-alert, title: "Je vais créer un conflit", text: "Un non clair évite des années de malentendus", detail: "Le oui forcé crée un conflit intérieur, en vous." }
+      - { icon: heart, title: "Je suis égoïste", text: "Protéger ce que Dieu vous a confié est de la fidélité", detail: "Jésus lui-même a dit non à des foules." }
+      - { icon: key, title: "Personne ne le fera à ma place", text: "Peut-être que quelqu'un attend sa chance", detail: "Votre oui l'empêche parfois de grandir." }
+  - code: dire-non-methode
+    title: Dire non avec grâce, en cinq temps
+    model: steps
+    items:
+      - { title: "Prendre le temps", text: "« Laissez-moi regarder et je vous réponds demain. » Vous sortez de la pression du moment." }
+      - { title: "Revenir à mon cap", text: "Cette demande sert-elle ce que Dieu m'a confié en ce moment ? Ou l'en éloigne-t-elle ?" }
+      - { title: "Dire non clairement, avec chaleur", text: "« Merci d'avoir pensé à moi. Cette fois, ce sera non. » Une phrase, pas un procès." }
+      - { title: "Proposer autre chose, si c'est juste", text: "Une autre date, une autre personne, une plus petite part. Seulement si vous le voulez vraiment." }
+      - { title: "Tenir, sans trop me justifier", text: "Plus vous vous justifiez, plus l'autre négocie. Un non expliqué en une phrase suffit." }
+  - code: pressions-carte-de-poche
+    title: Ma carte de poche
+    model: rows
+    note: "Recopiez les deux lignes qui vous concernent, et gardez-les sur vous cette semaine."
+    items:
+      - { icon: target, title: "J'entends « Sois parfait »", text: "Suffisamment bien, c'est bien", detail: "« Ma grâce te suffit » (2 Corinthiens 12:9)" }
+      - { icon: heart, title: "J'entends « Fais plaisir »", text: "Je peux dire mon désaccord", detail: "« Est-ce que je cherche à plaire aux hommes ? » (Galates 1:10)" }
+      - { icon: timer, title: "J'entends « Dépêche-toi »", text: "Je peux prendre mon temps", detail: "« Arrêtez, et sachez que je suis Dieu » (Psaume 46:11)" }
+      - { icon: shield, title: "J'entends « Sois fort »", text: "Je peux demander de l'aide", detail: "« Portez les fardeaux les uns des autres » (Galates 6:2)" }
+      - { icon: mountain, title: "J'entends « Fais des efforts »", text: "Je peux aller au bout, simplement", detail: "« J'ai achevé l'œuvre » (Jean 17:4)" }
+
+modules:
+  - title: Ce qui me pousse sous pression
+    lessons:
+      - title: Les cinq voix qui prennent le volant
+        duration: 10
+        content: |
+          Pensez à votre dernière journée vraiment difficile. Une échéance, un conflit, un enfant malade, une réunion qui déborde. Vous souvenez-vous de ce qui se passait **en vous** ? Peut-être avez-vous tout revérifié trois fois. Peut-être avez-vous dit oui à une demande de trop. Peut-être avez-vous accéléré, coupé la parole, serré les dents sans rien dire à personne.
+
+          Ce jour-là, ce n'était pas tout à fait vous qui décidiez. C'était une **voix intérieure**, rapide, ancienne, convaincante. Elle ne parle presque pas quand tout va bien. Mais dès que la pression monte, elle prend le volant.
+
+          ## Cinq voix, toujours les mêmes
+
+          Dans les années 1970, un psychologue américain, **Taibi Kahler**, étudie de nombreux enregistrements d'entretiens. Il remarque que, sous pression, chacun de nous obéit à un petit nombre d'ordres intérieurs, toujours les mêmes, reçus dans l'enfance. Il en compte cinq, qu'il appelle des « drivers » : ce qui nous *conduit*.
+
+          [[schema:pressions-cinq-voix]]
+
+          En anglais, on les appelle *Be perfect*, *Please others*, *Hurry up*, *Be strong* et *Try hard*. Dans ce parcours, nous les appellerons simplement : **Sois parfait**, **Fais plaisir**, **Dépêche-toi**, **Sois fort** et **Fais des efforts**.
+
+          ## D'où viennent-elles ?
+
+          Un enfant veut, plus que tout, être aimé et accepté. Alors il écoute ce qui lui vaut un sourire. « Range ta chambre correctement. » « Sois gentil avec ta tante. » « Allez, on est en retard ! » « Un grand garçon ne pleure pas. » « Tu peux mieux faire. » Rien de mauvais dans ces phrases. Mais l'enfant en tire, sans le savoir, une conclusion terrible :
+
+          > « Je ne vaux quelque chose **que si** je suis parfait, que si je fais plaisir, que si je vais vite, que si je suis fort, que si je fais des efforts. »
+
+          Voilà le cœur du problème. Ce ne sont pas les qualités qui posent problème : la rigueur, la gentillesse, la rapidité, l'endurance, la persévérance sont de vraies forces. Le problème, c'est le **« que si »**. La qualité est devenue une condition pour avoir le droit d'exister.
+
+          :::exemple Avant même le premier miracle
+          L'Évangile de Matthieu raconte le baptême de Jésus, au bord du Jourdain. Jésus a environ trente ans. Il n'a encore guéri personne, prêché aucun sermon, accompli aucun miracle. Et pourtant, une voix venue du ciel déclare : « Celui-ci est mon Fils bien-aimé, en qui j'ai mis toute mon affection » (Matthieu 3:17). L'amour du Père vient **avant** l'œuvre, pas après. C'est exactement l'inverse de ce que nos voix intérieures nous ont appris.
+          :::
+
+          [[schema:pressions-voix-et-identite]]
+
+          ## Repérer vos deux voix les plus fortes
+
+          Nous avons tous les cinq voix en nous, à des degrés différents. Mais, chez la plupart des gens, une ou deux dominent nettement. Les connaître, c'est déjà reprendre le volant : une voix que l'on reconnaît perd la moitié de son pouvoir.
+
+          :::avous Petit repérage, en toute honnêteté
+          Lisez ces phrases. Notez celles où vous vous dites : « C'est tout moi. »
+
+          **Sois parfait** : « Je relis encore une fois avant d'envoyer. » « Si je délègue, ce sera moins bien fait. » « Je n'ose pas montrer un travail pas fini. »
+
+          **Fais plaisir** : « Je dis oui, puis je le regrette. » « Je m'excuse souvent, même quand ce n'est pas ma faute. » « Je sens tout de suite si quelqu'un est mécontent de moi. »
+
+          **Dépêche-toi** : « Je finis les phrases des autres. » « Je fais plusieurs choses à la fois. » « Attendre m'agace profondément. »
+
+          **Sois fort** : « Je dis que ça va, même quand ça ne va pas. » « Demander de l'aide, c'est déranger. » « Je préfère me débrouiller seul. »
+
+          **Fais des efforts** : « J'ai beaucoup de projets commencés. » « Si c'est facile, ça ne compte pas vraiment. » « Je dis souvent : je vais essayer. »
+
+          Si vous vous reconnaissez dans deux ou trois phrases d'une même voix, c'est probablement l'une des vôtres.
+          :::
+
+          :::retenir
+          Sous pression, une voix ancienne prend le volant. Elle vous a aidé à grandir, mais elle vous fait croire que votre valeur dépend de votre performance. Or l'amour de Dieu vient avant l'œuvre, pas après.
+          :::
+
+          ## Méditer
+
+          :::mediter
+          > « Celui-ci est mon Fils bien-aimé, en qui j'ai mis toute mon affection. » Matthieu 3:17
+
+          Lisez ce verset en mettant votre prénom à la place de « Fils ». Laissez-le vous dire ce que vous valez avant d'avoir fait quoi que ce soit aujourd'hui.
+          :::
+
+          Dans les cinq séances suivantes, nous prendrons chaque voix l'une après l'autre : comment la reconnaître, la force qu'elle cache, et la parole qui la remet à sa place.
+        questions:
+          - question: "Selon cette séance, qu'est-ce qui rend une voix intérieure comme « Sois parfait » dangereuse ?"
+            answers:
+              - "La rigueur est une mauvaise qualité"
+              - "Le « que si » : la qualité devient une condition pour avoir de la valeur"
+              - "Elle ne parle que dans l'enfance"
+            correct: [1]
+            explanation: "La rigueur, la gentillesse ou l'endurance sont de vraies forces. Le piège est de croire que l'on ne vaut quelque chose que si on les montre."
+          - question: "Que nous apprend le baptême de Jésus sur notre valeur ?"
+            answers:
+              - "Le Père déclare son amour avant toute œuvre de Jésus"
+              - "L'amour de Dieu se mérite par les miracles"
+              - "Il faut attendre trente ans pour être aimé de Dieu"
+            correct: [0]
+            explanation: "« Celui-ci est mon Fils bien-aimé » est prononcé avant le premier miracle : l'amour vient avant l'œuvre."
+        practice:
+          target: JOURNAL
+          action: add_note
+          prompt: |
+            Quelles sont vos deux voix les plus fortes ? Pour chacune, notez une situation récente où elle a pris le volant, et ce qu'elle vous a coûté (fatigue, relation, temps, paix).
+
+      - title: "« Sois parfait » : suffisamment bien, c'est bien"
+        duration: 9
+        content: |
+          Claire prépare une présentation pour lundi. Le travail est prêt depuis jeudi. Pourtant, vendredi soir, elle change encore les couleurs. Samedi, elle réécrit l'introduction. Dimanche, elle se couche à une heure du matin, persuadée que « ce n'est pas encore ça ». Lundi, la présentation se passe très bien. Personne n'a remarqué les changements du week-end. Mais Claire, elle, est épuisée, et elle a manqué le repas d'anniversaire de sa sœur.
+
+          ## Comment la reconnaître
+
+          La voix « Sois parfait » ne crie pas. Elle murmure : *encore une petite vérification*. Elle vous fait :
+
+          - relire, refaire, peaufiner bien au-delà de ce qui est utile ;
+          - repousser le moment de rendre, de lancer, de publier ;
+          - garder pour vous ce que d'autres pourraient faire (« ce sera plus vite fait, et mieux fait ») ;
+          - voir d'abord ce qui manque, rarement ce qui est réussi, chez vous comme chez les autres.
+
+          Derrière, il y a presque toujours une peur : **la peur d'être jugé**. Tant que ce n'est pas fini, personne ne peut le critiquer.
+
+          :::exemple Le serviteur qui a enterré son talent
+          Jésus raconte un jour cette histoire (Matthieu 25). Un homme part en voyage. Avant de partir, il confie à ses serviteurs des « talents », c'est-à-dire de très grosses sommes d'argent : cinq au premier, deux au deuxième, un au troisième. Les deux premiers font travailler l'argent et le doublent. Le troisième creuse un trou et cache le sien dans la terre. Au retour du maître, il explique : « Seigneur, je savais que tu es un homme dur, qui moissonnes où tu n'as pas semé, et qui amasses où tu n'as pas vanné ; **j'ai eu peur**, et je suis allé cacher ton talent dans la terre » (Matthieu 25:24-25).
+
+          Ce serviteur n'était pas paresseux. Il avait peur de mal faire. Et sa peur de mal faire l'a conduit à ne **rien** faire. C'est exactement le piège du perfectionnisme : par peur d'un résultat imparfait, on enterre ce que Dieu nous a confié.
+          :::
+
+          [[schema:pressions-perfection-excellence]]
+
+          ## La force cachée
+
+          Il ne s'agit pas de devenir négligent. Derrière « Sois parfait », il y a un vrai don : le souci du détail, la rigueur, le respect du travail bien fait. Le monde a besoin de gens qui vérifient les ponts et relisent les contrats. La Bible elle-même nous invite : « Tout ce que vous faites, faites-le de bon cœur, comme pour le Seigneur » (Colossiens 3:23).
+
+          La différence est dans le moteur. L'excellence est mue par l'**amour** : du travail, des personnes, de Dieu. Le perfectionnisme est mû par la **peur**. L'excellence sait s'arrêter. Le perfectionnisme, jamais.
+
+          :::attention Le vent et les nuages
+          « Celui qui observe le vent ne sèmera point, et celui qui regarde les nuages ne moissonnera point » (Ecclésiaste 11:4). Le cultivateur qui attend les conditions parfaites ne sème jamais. Le moment parfait n'existe pas : il y a seulement le moment juste.
+          :::
+
+          ## La permission
+
+          La parole qui libère « Sois parfait », c'est celle que Dieu a dite à l'apôtre Paul, alors qu'il le suppliait de lui enlever une faiblesse : « **Ma grâce te suffit**, car ma puissance s'accomplit dans la faiblesse » (2 Corinthiens 12:9). Ce qui *suffit*, ce n'est pas votre perfection. C'est sa grâce.
+
+          Concrètement, la permission s'écrit ainsi : **« Suffisamment bien, c'est bien. »** Avant de commencer une tâche, demandez-vous : qu'est-ce qui serait *suffisamment bien* ici ? Fixez-le. Quand vous l'atteignez, arrêtez-vous, et remerciez.
+
+          :::retenir
+          Le perfectionnisme n'est pas un excès de qualité : c'est une peur habillée en exigence. Il enterre le talent. L'excellence, elle, sait s'arrêter, parce que la grâce suffit.
+          :::
+
+          ## Méditer
+
+          :::mediter
+          > « Ma grâce te suffit, car ma puissance s'accomplit dans la faiblesse. » 2 Corinthiens 12:9
+
+          Pensez à une tâche que vous repoussez parce qu'elle « n'est pas encore parfaite ». Remettez-la à Dieu, telle qu'elle est.
+          :::
+
+          ## Réfléchir
+
+          :::avous Trois questions
+          1. Qu'est-ce que je suis en train « d'enterrer » en ce moment, par peur que ce ne soit pas assez bien ?
+          2. Qu'est-ce que je pourrais confier à quelqu'un d'autre, en acceptant que ce soit fait autrement ?
+          3. Pour ma prochaine tâche importante, à quoi ressemblerait « suffisamment bien » ?
+          :::
+        questions:
+          - question: "Pourquoi le troisième serviteur a-t-il enterré son talent ?"
+            answers:
+              - "Par paresse"
+              - "Parce qu'il avait peur de mal faire"
+              - "Parce que le maître le lui avait demandé"
+            correct: [1]
+            explanation: "« J'ai eu peur, et je suis allé cacher ton talent dans la terre. » La peur de l'échec a produit l'inaction."
+          - question: "Quelle est la différence entre perfectionnisme et excellence ?"
+            answers:
+              - "Il n'y en a pas, c'est une question de mots"
+              - "L'excellence vise plus haut que le perfectionnisme"
+              - "Le perfectionnisme naît de la peur, l'excellence naît de l'amour et sait s'arrêter"
+            correct: [2]
+            explanation: "Le moteur change tout : la peur d'être jugé ne s'arrête jamais, l'amour du travail bien fait sait dire « c'est bien »."
+        practice:
+          target: CROISSANCE
+          action: add_principle
+          prompt: |
+            Écrivez votre propre principe contre « Sois parfait ». Par exemple : « Avant de commencer, je fixe ce qui sera suffisamment bien ; quand je l'atteins, je rends. »
+
+      - title: "« Fais plaisir » : je peux dire mon désaccord"
+        duration: 9
+        content: |
+          Samuel est apprécié de tous. Au travail, c'est lui qu'on appelle pour un service de dernière minute. À l'église, il est dans trois équipes. En famille, il ne refuse jamais rien. Un dimanche soir, sa femme lui demande doucement : « Et nous, quand est-ce qu'on passe en premier ? » Samuel ne sait pas quoi répondre. Il a tant donné à tout le monde qu'il ne reste presque rien pour ceux qu'il aime le plus.
+
+          ## Comment la reconnaître
+
+          La voix « Fais plaisir » est la plus aimable de toutes. C'est aussi la plus difficile à repérer, parce qu'elle ressemble à de la gentillesse. Elle vous fait :
+
+          - dire oui, puis le regretter ;
+          - adoucir ce que vous pensez jusqu'à ce qu'il n'en reste rien ;
+          - vous excuser sans raison ;
+          - guetter sans cesse l'humeur des autres, et vous sentir responsable de leur bonheur.
+
+          Derrière, il y a une peur : **la peur d'être rejeté**. Si je dis non, on ne m'aimera plus.
+
+          :::exemple Un roi qui avait peur du peuple
+          Saül est le premier roi d'Israël. Dieu lui confie une mission précise, par l'intermédiaire du prophète Samuel. Saül ne l'accomplit qu'à moitié : il laisse ses soldats garder le meilleur du butin, contre l'ordre reçu. Quand Samuel vient lui demander des comptes, Saül finit par avouer la vraie raison : « J'ai péché, car j'ai transgressé l'ordre de l'Éternel, et je n'ai pas obéi à tes paroles ; **je craignais le peuple, et j'ai écouté sa voix** » (1 Samuel 15:24). Ce jour-là, Saül perd son royaume. Il n'était pas méchant : il voulait plaire.
+
+          Mille ans plus tard, un autre homme de pouvoir fait le même choix. Le gouverneur romain Pilate sait que Jésus est innocent. Il le dit même plusieurs fois. Mais la foule crie, et l'Évangile note : « Pilate, **voulant satisfaire la foule**, leur relâcha Barabbas ; et, après avoir fait battre de verges Jésus, il le livra pour être crucifié » (Marc 15:15). Vouloir plaire peut conduire à trahir ce que l'on sait être juste.
+          :::
+
+          [[schema:pressions-plaire-servir]]
+
+          ## La force cachée
+
+          Derrière « Fais plaisir », il y a un vrai don : l'attention aux autres, la sensibilité, le désir d'harmonie. Ce sont des qualités précieuses dans une famille, une équipe, une Église. Le problème n'est pas d'aimer faire plaisir. C'est d'en avoir **besoin** pour se sentir en sécurité.
+
+          Il y a une différence entre **plaire** aux gens et les **aimer**. Plaire, c'est leur donner ce qu'ils veulent sur le moment, pour être accepté. Aimer, c'est chercher leur bien, même quand cela passe par un désaccord. Jésus a profondément aimé, et il a souvent déplu.
+
+          :::attention Le piège
+          « La crainte des hommes tend un piège, mais celui qui se confie en l'Éternel est protégé » (Proverbes 29:25). Celui qui a besoin de l'approbation de tous finit par n'appartenir à personne, pas même à lui-même.
+          :::
+
+          ## La permission
+
+          L'apôtre Paul a posé la question franchement : « Est-ce la faveur des hommes que je désire, ou celle de Dieu ? Est-ce que je cherche à plaire aux hommes ? Si je plaisais encore aux hommes, je ne serais pas serviteur de Christ » (Galates 1:10).
+
+          La permission s'écrit ainsi : **« Je peux exprimer mon désaccord, et je peux aussi me faire plaisir. »** Vous avez le droit d'avoir un avis, un besoin, une limite. L'exprimer avec douceur n'est pas un manque d'amour : c'est une forme de vérité offerte à l'autre.
+
+          :::retenir
+          Plaire aux gens n'est pas la même chose que les aimer. Celui qui ne dit jamais non finit par dire non à ceux qu'il aime le plus, sans même le décider.
+          :::
+
+          ## Méditer
+
+          :::mediter
+          > « Est-ce que je cherche à plaire aux hommes ? Si je plaisais encore aux hommes, je ne serais pas serviteur de Christ. » Galates 1:10
+
+          Demandez à Dieu de vous montrer de qui vous cherchez le plus l'approbation en ce moment. Remettez-lui cette personne.
+          :::
+
+          ## Réfléchir
+
+          :::avous Trois questions
+          1. À qui ai-je dit oui récemment alors que je pensais non ? Qu'est-ce que je craignais ?
+          2. Quelle conversation est-ce que je repousse pour ne pas déplaire ?
+          3. Qui, autour de moi, paie le prix de tous mes oui aux autres ?
+          :::
+        questions:
+          - question: "Pour quelle raison Saül a-t-il désobéi à l'ordre reçu ?"
+            answers:
+              - "Il n'avait pas compris l'ordre"
+              - "Il craignait le peuple et a écouté sa voix"
+              - "Il voulait garder le butin pour lui seul"
+            correct: [1]
+            explanation: "« Je craignais le peuple, et j'ai écouté sa voix » (1 Samuel 15:24) : vouloir plaire l'a détourné de sa mission."
+          - question: "Quelle est la différence entre plaire aux gens et les aimer ?"
+            answers:
+              - "Aimer, c'est chercher leur bien, même au prix d'un désaccord"
+              - "Il n'y a aucune différence"
+              - "Aimer, c'est toujours leur donner ce qu'ils demandent"
+            correct: [0]
+            explanation: "Plaire cherche l'approbation immédiate ; aimer cherche le bien de l'autre, ce qui passe parfois par un non."
+        practice:
+          target: CROISSANCE
+          action: add_growth_goal
+          prompt: |
+            Choisissez une conversation que vous repoussez pour ne pas déplaire. Fixez-vous l'objectif de l'avoir, avec douceur et clarté, et donnez-vous une date.
+
+      - title: "« Dépêche-toi » : je peux prendre mon temps"
+        duration: 9
+        content: |
+          Vous connaissez peut-être cette sensation : vous lisez un message, vous répondez avant de l'avoir fini. En réunion, vous terminez la phrase de votre collègue. En voiture, chaque feu rouge est une offense personnelle. Le soir, vous êtes fatigué, mais vous ne savez pas vraiment ce que vous avez accompli. Tout est allé vite. Rien n'a vraiment été vécu.
+
+          ## Comment la reconnaître
+
+          La voix « Dépêche-toi » vous fait :
+
+          - vous précipiter, et devoir souvent recommencer ;
+          - interrompre, conclure à la place des autres ;
+          - décider trop vite, puis regretter ;
+          - remplir le moindre temps libre, et ne jamais vous asseoir vraiment.
+
+          Derrière, il y a une peur : **la peur de manquer**, de rater sa chance, d'être en retard sur la vie. Comme si, en ralentissant, tout allait s'écrouler.
+
+          :::exemple Quand Sara a voulu aider Dieu
+          Dieu a promis un fils à Abraham et à sa femme Sara. Mais les années passent, ils vieillissent, et rien ne vient. Alors Sara perd patience et propose une solution rapide, courante à l'époque : « Voici, l'Éternel m'a rendue stérile ; viens, je te prie, vers ma servante, peut-être aurai-je par elle des enfants » (Genèse 16:2). Abraham accepte. Sa servante, Agar, a un fils, Ismaël. Mais la solution rapide crée des blessures dans toute la famille : jalousie, mépris, Agar chassée dans le désert. Et le fils promis, Isaac, naîtra quand même, au moment choisi par Dieu, quatorze ans plus tard.
+
+          La précipitation n'avait pas accéléré la promesse. Elle avait seulement ajouté de la douleur.
+          :::
+
+          ## Jésus n'était jamais pressé
+
+          C'est l'un des traits les plus frappants des Évangiles. Jésus a eu la mission la plus urgente de l'histoire, en à peine trois ans. Et pourtant, on ne le voit jamais courir.
+
+          Quand on vient lui dire que son ami Lazare est mourant, l'Évangile de Jean écrit cette phrase étonnante : « Or, Jésus aimait Marthe, et sa sœur, et Lazare. Lorsqu'il eut appris que Lazare était malade, il resta deux jours encore dans le lieu où il était » (Jean 11:5-6). Il aimait, **donc** il a attendu le bon moment. Et ce qu'il a accompli en arrivant (relever Lazare après quatre jours dans le tombeau) dépassait tout ce qu'une arrivée rapide aurait permis.
+
+          Le même Jésus, après une soirée où toute la ville se pressait à sa porte, se lève avant l'aube : « Vers le matin, pendant qu'il faisait encore très sombre, il se leva, et sortit pour aller dans un lieu désert, où il pria » (Marc 1:35). La journée la plus chargée commençait par un temps vide.
+
+          [[schema:chronos-kairos]]
+
+          ## La force cachée
+
+          Derrière « Dépêche-toi », il y a un vrai don : l'énergie, la réactivité, la capacité à faire avancer les choses. Dans une crise, c'est précieux. Le problème, c'est quand tout devient une crise.
+
+          [[schema:pressions-pause]]
+
+          ## La permission
+
+          « Celui qui la prendra pour appui n'aura point hâte de fuir », dit le prophète Ésaïe à propos de la pierre que Dieu pose en fondement (Ésaïe 28:16). Celui qui est appuyé sur Dieu n'a pas besoin de courir.
+
+          La permission s'écrit ainsi : **« Je peux prendre mon temps. »** Le temps n'est pas votre ennemi. Il est le lieu où Dieu agit.
+
+          :::retenir
+          La précipitation donne l'impression d'avancer, mais elle n'accélère pas les promesses de Dieu : elle ajoute seulement de la fatigue et des erreurs. Jésus, chargé de la plus grande mission, n'était jamais pressé.
+          :::
+
+          ## Méditer
+
+          :::mediter
+          > « Arrêtez, et sachez que je suis Dieu. » Psaume 46:11
+
+          Restez une minute entière sans rien faire. Si l'impatience monte, remarquez-la, sans la juger. Puis rendez à Dieu la course de votre journée.
+          :::
+
+          ## Réfléchir
+
+          :::avous Trois questions
+          1. Quelle décision ai-je prise trop vite récemment ? Qu'est-ce que cela m'a coûté ?
+          2. Dans quel domaine est-ce que j'essaie « d'aider Dieu » à aller plus vite ?
+          3. Quel moment de ma journée pourrait devenir mon « lieu désert », comme Jésus avant l'aube ?
+          :::
+        questions:
+          - question: "Qu'a produit la solution rapide proposée par Sara ?"
+            answers:
+              - "Elle a accéléré la naissance du fils promis"
+              - "Elle a ajouté des blessures, et la promesse est arrivée au moment de Dieu"
+              - "Elle a été approuvée par Dieu comme la meilleure solution"
+            correct: [1]
+            explanation: "Ismaël est né, mais avec jalousie et rejet dans la famille ; Isaac, le fils promis, est né quatorze ans plus tard, au moment choisi par Dieu."
+          - question: "Que fait Jésus quand il apprend que son ami Lazare est malade ?"
+            answers:
+              - "Il part immédiatement"
+              - "Il envoie ses disciples à sa place"
+              - "Il reste encore deux jours là où il est"
+            correct: [2]
+            explanation: "« Il resta deux jours encore » (Jean 11:6). Il aimait Lazare, et il a pourtant attendu le moment juste."
+        practice:
+          target: RITUEL
+          action: add_habit
+          prompt: |
+            Créez votre rituel de pause. Par exemple : « Chaque matin, cinq minutes de silence avant de regarder mon téléphone », ou « Avant chaque décision importante, je me donne une nuit ».
+
+      - title: "« Sois fort » : je peux demander de l'aide"
+        duration: 10
+        content: |
+          Aminata tient tout. Le travail, les enfants, sa mère malade, le groupe de prière qu'elle anime. Quand on lui demande comment elle va, elle répond toujours avec un sourire : « Ça va, Dieu est fidèle. » Un matin, en préparant le petit-déjeuner, elle se met à pleurer sans pouvoir s'arrêter. Elle n'est pas faible. Elle est simplement allée, seule, beaucoup trop loin.
+
+          ## Comment la reconnaître
+
+          La voix « Sois fort » vous fait :
+
+          - répondre « ça va » quand ça ne va pas ;
+          - cacher votre fatigue, votre tristesse, vos doutes ;
+          - vivre l'aide demandée comme une défaite, ou un dérangement ;
+          - tenir debout jusqu'à ce que le corps décide à votre place.
+
+          Derrière, il y a une peur : **la peur d'être vu faible**, et donc d'être moins respecté, moins utile, moins aimé.
+
+          :::exemple Moïse et le conseil de son beau-père
+          Après la sortie d'Égypte, Moïse conduit tout un peuple dans le désert. Un jour, son beau-père Jéthro vient lui rendre visite. Il observe une journée entière : Moïse est assis du matin au soir, seul, à régler tous les différends du peuple, qui fait la queue devant lui. Jéthro lui dit alors, avec une franchise rare : « Ce que tu fais n'est pas bien. Tu t'épuiseras toi-même, et tu épuiseras ce peuple qui est avec toi ; car la chose est au-dessus de tes forces, tu ne pourras pas y suffire seul » (Exode 18:17-18).
+
+          Puis il propose une solution : choisir des hommes de confiance, et leur confier les affaires courantes. Moïse écoute. Et ce jour-là, en acceptant de l'aide, il devient un meilleur chef, pas un chef plus faible.
+          :::
+
+          [[schema:pressions-force-qui-demande]]
+
+          ## Quand le plus fort s'effondre
+
+          Le prophète Élie est l'un des hommes les plus courageux de la Bible. Il vient de tenir tête, seul, à 450 prophètes et à un roi. Puis la reine Jézabel le menace de mort. Et le héros s'effondre. Il s'enfuit dans le désert, s'assied sous un arbuste et dit : « C'est assez ! Maintenant, Éternel, prends mon âme » (1 Rois 19:4).
+
+          Regardez la réponse de Dieu. Pas de reproche. Pas de sermon. Élie s'endort, et un ange le réveille : « Lève-toi, mange. » Il y a un pain cuit et une cruche d'eau. Élie mange, se rendort. L'ange revient : « Lève-toi, mange, car le chemin est trop long pour toi » (1 Rois 19:5-7). Dieu commence par le **sommeil** et la **nourriture**. Il soigne le corps avant de parler au cœur.
+
+          [[schema:oscillation]]
+
+          ## Même Jésus a demandé du soutien
+
+          La nuit avant sa mort, dans le jardin de Gethsémané, Jésus prend avec lui ses trois amis les plus proches, et il leur dit : « Mon âme est triste jusqu'à la mort ; restez ici, et veillez avec moi » (Matthieu 26:38). Le Fils de Dieu n'a pas caché sa détresse. Il l'a dite, et il a demandé une présence. Si lui l'a fait, qui sommes-nous pour croire que nous devons tout porter seuls ?
+
+          ## La force cachée
+
+          Derrière « Sois fort », il y a un vrai don : l'endurance, la fiabilité, le calme dans la tempête. On peut compter sur vous. Mais une force qui ne se repose jamais n'est pas une force : c'est une usure qui attend son heure.
+
+          ## La permission
+
+          « Portez les fardeaux les uns des autres, et vous accomplirez ainsi la loi de Christ » (Galates 6:2). Pour que les fardeaux se portent à plusieurs, il faut que quelqu'un accepte de montrer le sien.
+
+          La permission s'écrit ainsi : **« Je peux dire ce que je vis, et demander de l'aide. »** C'est exactement le rôle d'un Partenaire de Redevabilité : une personne à qui vous avez le droit de dire « ça ne va pas ».
+
+          :::retenir
+          La force qui cache finit par s'effondrer ; la force qui demande dure. Dieu soigne d'abord le corps d'Élie, et Jésus lui-même a demandé à ses amis de veiller avec lui.
+          :::
+
+          ## Méditer
+
+          :::mediter
+          > « Venez à moi, vous tous qui êtes fatigués et chargés, et je vous donnerai du repos. » Matthieu 11:28
+
+          Dites à Dieu, sans vous retenir, ce qui est trop lourd en ce moment. Puis demandez-lui à qui d'autre vous pourriez le dire.
+          :::
+
+          ## Réfléchir
+
+          :::avous Trois questions
+          1. Quand ai-je dit « ça va » pour la dernière fois alors que ce n'était pas vrai ?
+          2. Quel fardeau est-ce que je porte seul alors que quelqu'un pourrait le partager ?
+          3. Mon corps m'envoie-t-il des signaux (sommeil, appétit, tensions) que je refuse d'écouter ?
+          :::
+        questions:
+          - question: "Que conseille Jéthro à Moïse ?"
+            answers:
+              - "De tout faire lui-même, mais plus vite"
+              - "De confier une partie de la charge à des hommes de confiance"
+              - "D'abandonner sa mission"
+            correct: [1]
+            explanation: "« Tu ne pourras pas y suffire seul » (Exode 18:18). En partageant la charge, Moïse est devenu un meilleur chef."
+          - question: "Que fait Dieu en premier pour Élie épuisé ?"
+            answers:
+              - "Il le reprend sévèrement pour son manque de foi"
+              - "Il lui confie aussitôt une nouvelle mission"
+              - "Il le laisse dormir et lui donne à manger"
+            correct: [2]
+            explanation: "« Lève-toi, mange, car le chemin est trop long pour toi. » Dieu soigne le corps avant de parler au cœur."
+        practice:
+          target: HYGIENE
+          action: add_hygiene_domain
+          prompt: |
+            Nommez le domaine de votre vie où vous portez trop, seul (le sommeil, la charge mentale, la santé, la famille…). Notez ce que vous allez changer, et à qui vous allez demander de l'aide.
+
+      - title: "« Fais des efforts » : je peux aller au bout"
+        duration: 9
+        content: |
+          Regardez votre liste de projets. Une formation commencée. Un livre à moitié lu. Un programme sportif repris trois fois. Une idée d'entreprise. Un plan de lecture de la Bible bloqué en février. Vous n'êtes pas paresseux, au contraire : vous vous donnez énormément de mal. Mais vous avez parfois l'impression de **courir beaucoup, et d'arriver peu**.
+
+          ## Comment la reconnaître
+
+          La voix « Fais des efforts » vous fait :
+
+          - commencer beaucoup plus de choses que vous n'en terminez ;
+          - croire que ce qui est facile ne compte pas vraiment ;
+          - dire souvent « je vais essayer » plutôt que « je vais le faire » ;
+          - vous sentir plus à l'aise dans la lutte que dans la réussite.
+
+          Derrière, il y a une conviction : **c'est l'effort qui prouve ma valeur**, pas le résultat. Alors, sans le savoir, on évite de finir, car finir, c'est être jugé sur le résultat.
+
+          :::exemple La tour inachevée
+          Jésus utilise un jour une image que tout le monde comprend. « Lequel de vous, s'il veut bâtir une tour, ne s'assied d'abord pour calculer la dépense et voir s'il a de quoi la terminer, de peur qu'après avoir posé les fondements, il ne puisse l'achever, et que tous ceux qui le verront ne se mettent à le railler, en disant : Cet homme a commencé à bâtir, et il n'a pu achever ? » (Luc 14:28-30). Avant de commencer, s'asseoir et choisir. Pas tout commencer : choisir ce que l'on pourra finir.
+          :::
+
+          :::exemple Néhémie : cinquante-deux jours
+          Vers l'an 445 avant Jésus-Christ, Jérusalem est en ruines depuis plus d'un siècle. Ses murailles sont effondrées, la ville est sans défense. Néhémie, un Juif qui travaille au service du roi de Perse, obtient la permission de rentrer pour reconstruire. Il organise le peuple, famille par famille, chacun devant sa maison. Des ennemis tentent plusieurs fois de le distraire en l'invitant à des rencontres. Néhémie répond : « J'ai un grand ouvrage à exécuter, et je ne puis descendre ; le travail serait interrompu pendant que je le quitterais pour aller vers vous » (Néhémie 6:3). Résultat : « La muraille fut achevée le vingt-cinquième jour du mois d'Élul, en cinquante-deux jours » (Néhémie 6:15). Un seul grand ouvrage, mené jusqu'au bout.
+          :::
+
+          [[schema:pressions-tour-inachevee]]
+
+          ## La force cachée
+
+          Derrière « Fais des efforts », il y a un vrai don : la persévérance, le courage d'essayer, l'énergie de commencer. Ce sont ceux qui osent commencer qui changent le monde. Mais le monde ne change que par ce qui est **achevé**.
+
+          ## La permission
+
+          À la fin de sa vie, Jésus prie son Père et dit : « Je t'ai glorifié sur la terre, **j'ai achevé l'œuvre que tu m'as donnée à faire** » (Jean 17:4). Pas toutes les œuvres possibles : l'œuvre **donnée**. Il a laissé des malades non guéris et des villes non visitées. Mais il a achevé ce qui lui revenait.
+
+          La permission s'écrit ainsi : **« Je peux réussir simplement, et aller au bout. »** Le facile n'est pas suspect. Ce qui est fini a plus de valeur que dix choses commencées.
+
+          :::retenir
+          Ce n'est pas l'effort qui porte du fruit, c'est l'œuvre achevée. Choisissez peu, et allez au bout.
+          :::
+
+          ## Méditer
+
+          :::mediter
+          > « J'ai achevé l'œuvre que tu m'as donnée à faire. » Jean 17:4
+
+          Demandez à Dieu : parmi tout ce que j'ai commencé, quelle est l'œuvre que tu m'as **donnée** pour cette saison ?
+          :::
+
+          ## Réfléchir
+
+          :::avous Trois questions
+          1. Faites la liste de vos projets en cours. Combien y en a-t-il ?
+          2. Lequel est vraiment « donné » pour cette saison ? Lequel pouvez-vous fermer, ou mettre en attente, sans culpabilité ?
+          3. Qu'est-ce qui serait différent dans trois mois si vous terminiez **une seule** chose ?
+          :::
+        questions:
+          - question: "Que conseille Jésus avant de bâtir une tour ?"
+            answers:
+              - "S'asseoir d'abord et calculer si l'on pourra la terminer"
+              - "Commencer vite, on verra bien ensuite"
+              - "Bâtir plusieurs tours en même temps"
+            correct: [0]
+            explanation: "La tour commencée et jamais finie fait rire les passants. Choisir ce que l'on peut finir est une sagesse (Luc 14:28-30)."
+          - question: "Comment Néhémie répond-il à ceux qui veulent le distraire ?"
+            answers:
+              - "Il accepte toutes les invitations pour garder de bonnes relations"
+              - "« J'ai un grand ouvrage à exécuter, et je ne puis descendre »"
+              - "Il arrête le chantier pour négocier"
+            correct: [1]
+            explanation: "Néhémie protège son unique grand ouvrage ; la muraille est achevée en cinquante-deux jours."
+        practice:
+          target: CROISSANCE
+          action: add_growth_goal
+          prompt: |
+            Choisissez un seul projet commencé à mener jusqu'au bout. Écrivez-le comme un objectif, avec une date de fin réaliste, et décidez ce que vous mettez en attente en attendant.
+
+  - title: La liberté de dire non
+    lessons:
+      - title: Pourquoi dire non est si difficile
+        duration: 9
+        content: |
+          Voici une vérité simple, et pourtant libératrice : **chaque oui contient un non caché**.
+
+          Vous avez 168 heures par semaine, ni plus ni moins. Quand vous dites oui à une réunion du soir, vous dites non à une soirée avec vos enfants. Quand vous dites oui à un projet de plus, vous dites non à votre sommeil, à votre prière, ou à un projet déjà commencé. La question n'est donc jamais « oui ou non ? ». La question est : **à quoi est-ce que je dis non, quand je dis oui ?**
+
+          Celui qui ne sait pas dire non ne vit pas sans dire non. Il dit non **sans le choisir** : à sa santé, à sa famille, à ce que Dieu lui a confié.
+
+          ## Ce qui nous retient
+
+          Si dire non était facile, ce parcours serait inutile. Les cinq voix des séances précédentes sont toutes là, derrière nos oui forcés : « Fais plaisir » a peur de décevoir, « Sois fort » croit qu'il peut tout porter, « Sois parfait » pense que personne ne le fera aussi bien, « Dépêche-toi » répond avant d'avoir réfléchi, « Fais des efforts » ne veut pas paraître paresseux.
+
+          [[schema:dire-non-peurs]]
+
+          :::exemple Le jour où Jésus a dit non à toute une ville
+          L'Évangile de Marc raconte une journée à Capharnaüm, une petite ville au bord du lac de Galilée. Le soir venu, « toute la ville était rassemblée devant sa porte ». Jésus guérit des malades jusque tard dans la nuit. Le lendemain, avant l'aube, il part prier seul. Ses disciples le cherchent partout et, quand ils le trouvent, lui disent, presque sur un ton de reproche : « Tous te cherchent. »
+
+          Imaginez la pression. Toute une ville l'attend, avec des malades. Et Jésus répond : « **Allons ailleurs**, dans les bourgades voisines, afin que j'y prêche aussi ; car c'est pour cela que je suis sorti » (Marc 1:36-38).
+
+          Jésus a dit non à une demande légitime, urgente, pleine de besoins réels. Pourquoi ? Parce qu'il savait **pour quoi il était venu**. Son non n'était pas un manque d'amour. C'était de la fidélité à sa mission.
+          :::
+
+          ## Le non qui protège le oui
+
+          Un oui n'a de valeur que si vous auriez pu dire non. Quand vous dites oui à tout, votre oui ne veut plus rien dire, même pour vous. Quand vous savez dire non, votre oui devient un vrai cadeau : choisi, entier, joyeux.
+
+          Dans votre Plan de Vie, vous avez écrit « le But de Dieu pour ma vie », vos valeurs, votre vision. Ce ne sont pas des textes décoratifs. Ce sont vos **critères de choix**. Tout ce qui sert cette direction mérite d'être examiné. Ce qui l'éloigne peut recevoir un non, sans culpabilité.
+
+          :::retenir
+          Chaque oui contient un non caché. Celui qui ne choisit pas ses non les subit, et ce sont souvent les personnes et les choses les plus précieuses qui en paient le prix. Jésus a su dire non, parce qu'il savait pour quoi il était venu.
+          :::
+
+          ## Méditer
+
+          :::mediter
+          > « Allons ailleurs, dans les bourgades voisines, afin que j'y prêche aussi ; car c'est pour cela que je suis sorti. » Marc 1:38
+
+          Demandez à Dieu de vous rappeler « pour quoi » vous êtes là, dans cette saison. Puis regardez votre agenda de la semaine à cette lumière.
+          :::
+
+          ## Réfléchir
+
+          :::avous Trois questions
+          1. Quel oui récent contenait un non caché que je n'avais pas vu ? À quoi, ou à qui, ai-je dit non ?
+          2. Parmi les peurs de cette séance, laquelle me retient le plus ?
+          3. Quelle est, en une phrase, la chose « pour laquelle je suis sorti » dans cette saison de ma vie ?
+          :::
+        questions:
+          - question: "Que signifie « chaque oui contient un non caché » ?"
+            answers:
+              - "Qu'il ne faut jamais dire oui"
+              - "Qu'en disant oui à une chose, on dit non à une autre, souvent sans le voir"
+              - "Que les gens qui disent oui mentent"
+            correct: [1]
+            explanation: "Le temps et l'énergie sont limités : chaque oui prend la place d'autre chose. Mieux vaut choisir ses non que les subir."
+          - question: "Pourquoi Jésus refuse-t-il de rester à Capharnaüm alors que tous le cherchent ?"
+            answers:
+              - "Parce qu'il était fatigué des foules"
+              - "Parce que les habitants l'avaient mal reçu"
+              - "Parce qu'il savait pour quoi il était venu : prêcher aussi ailleurs"
+            correct: [2]
+            explanation: "« C'est pour cela que je suis sorti » (Marc 1:38). Son non était de la fidélité à sa mission, pas un manque d'amour."
+        practice:
+          target: HYGIENE
+          action: add_hygiene_domain
+          prompt: |
+            Nommez le domaine qui paie le prix de vos oui en trop (votre sommeil, votre famille, votre vie de prière, votre santé…). Écrivez ce que vous voulez désormais protéger, et comment.
+
+      - title: Dire non avec grâce et fermeté
+        duration: 10
+        content: |
+          Savoir qu'il faut dire non ne suffit pas. Il faut encore **savoir comment**. Beaucoup oscillent entre deux extrêmes : le oui forcé, et le non brutal qui claque la porte, souvent après avoir trop accumulé. Il existe un troisième chemin : le non **clair et chaleureux**.
+
+          :::exemple Daniel : un non respectueux, avec une proposition
+          Vers 600 avant Jésus-Christ, le roi de Babylone, Nabuchodonosor, emmène de jeunes Juifs en exil pour les former à son service. Parmi eux, un adolescent nommé Daniel. Le roi ordonne de leur servir chaque jour les mets et le vin de sa propre table. Mais pour Daniel, manger ces aliments, sans doute offerts aux idoles, serait trahir sa fidélité à Dieu.
+
+          Daniel aurait pu se taire et obéir, ou se révolter. Il choisit une autre voie. La Bible écrit : « Daniel résolut de ne pas se souiller par les mets du roi et par le vin dont le roi buvait, et **il pria** le chef des eunuques de ne pas l'obliger à se souiller » (Daniel 1:8). Il demande, il ne crie pas. Et comme le responsable a peur des conséquences, Daniel propose une solution : « Éprouve tes serviteurs pendant dix jours, et qu'on nous donne des légumes à manger et de l'eau à boire » (Daniel 1:12). Au bout de dix jours, Daniel et ses amis ont meilleure mine que tous les autres. Le non de Daniel a été entendu, parce qu'il était **ferme sur le fond, et doux dans la forme**.
+          :::
+
+          [[schema:dire-non-methode]]
+
+          ## Des phrases pour commencer
+
+          Les premiers non sont les plus difficiles. Ces phrases peuvent vous aider, à condition de les dire avec vos propres mots :
+
+          - **Pour gagner du temps** : « Je regarde mon agenda et je vous réponds demain. »
+          - **Pour un non simple** : « Merci d'avoir pensé à moi. Cette fois, ce sera non. »
+          - **Pour un non avec une raison** : « En ce moment, je me suis engagé à protéger mes soirées en famille. Je ne peux pas. »
+          - **Pour un non avec une autre proposition** : « Je ne peux pas animer la réunion, mais je peux préparer les documents. »
+          - **Pour un non qui revient** : « Je comprends que ce soit important pour vous. Ma réponse reste non. »
+
+          :::attention Ce qui affaiblit un non
+          Les longues justifications (plus vous expliquez, plus l'autre négocie), les excuses répétées (« désolé, vraiment désolé… »), les « peut-être » qui veulent dire non, et le non accordé puis retiré au premier soupir. Jésus le disait simplement : « Que votre parole soit oui, oui, non, non » (Matthieu 5:37).
+          :::
+
+          ## Et si l'autre est déçu ?
+
+          Il le sera peut-être. C'est normal, et ce n'est pas votre responsabilité de l'empêcher. Votre responsabilité, c'est d'être **vrai** et **bon**. Sa déception lui appartient. Dans la plupart des cas, elle passe vite, et le respect grandit. Les personnes qui disent non avec clarté sont souvent celles dont on recherche le plus le oui.
+
+          ## Votre carte de poche
+
+          Les cinq voix ne disparaîtront pas en huit séances. Elles reviendront, surtout quand la pression montera. Mais vous savez maintenant les reconnaître, et vous connaissez la parole qui les remet à leur place.
+
+          [[schema:pressions-carte-de-poche]]
+
+          :::retenir
+          Un non respectueux est ferme sur le fond et doux dans la forme. Une phrase suffit. Votre non protège votre oui, et votre oui, enfin libre, devient un cadeau.
+          :::
+
+          ## Méditer
+
+          :::mediter
+          > « Que votre parole soit oui, oui, non, non. » Matthieu 5:37
+
+          Remerciez Dieu pour la liberté de dire oui et de dire non. Demandez-lui le courage pour le premier non de cette semaine.
+          :::
+
+          ## Réfléchir
+
+          :::avous Pour cette semaine
+          1. Quelle demande, déjà reçue ou attendue, mérite un non cette semaine ?
+          2. Quelle phrase allez-vous utiliser ? Écrivez-la mot pour mot.
+          3. À quoi, ou à qui, ce non va-t-il permettre de dire un vrai oui ?
+          :::
+        questions:
+          - question: "Comment Daniel refuse-t-il les mets du roi ?"
+            answers:
+              - "Il se révolte publiquement contre le roi"
+              - "Il demande respectueusement et propose un essai de dix jours"
+              - "Il mange en cachette ce qu'il veut"
+            correct: [1]
+            explanation: "Daniel est ferme sur le fond et doux dans la forme : il « prie » le responsable et propose une alternative (Daniel 1:8-12)."
+          - question: "Qu'est-ce qui affaiblit le plus un non ?"
+            answers:
+              - "Une phrase claire et chaleureuse"
+              - "Proposer une autre solution quand c'est juste"
+              - "Les longues justifications et les excuses répétées"
+            correct: [2]
+            explanation: "Plus on se justifie, plus l'autre négocie. « Que votre parole soit oui, oui, non, non » (Matthieu 5:37)."
+        practice:
+          target: CROISSANCE
+          action: add_principle
+          prompt: |
+            Écrivez votre principe pour dire non. Par exemple : « Avant de dire oui, je me demande à quoi je dis non. Je réponds en une phrase, avec douceur, et je tiens ma réponse. »

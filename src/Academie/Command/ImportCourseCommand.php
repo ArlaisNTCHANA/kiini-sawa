@@ -35,6 +35,7 @@ class ImportCourseCommand extends Command
         private readonly EntityManagerInterface $em,
         private readonly CourseRepository $courses,
         private readonly \App\Academie\Service\AcademyImages $images,
+        private readonly \App\Academie\Repository\LessonDiagramRepository $diagramRepository,
     ) {
         parent::__construct();
     }
@@ -61,6 +62,8 @@ class ImportCourseCommand extends Command
             $data = \is_array($data) ? $data : [];
             $course = self::build($data);
             $coverFile = self::coverFile($data, \dirname($path));
+            $diagrams = self::diagrams($data);
+            $illustrations = self::illustrationFiles($course, \dirname($path));
         } catch (\Throwable $e) {
             $io->error($e->getMessage());
 
@@ -69,6 +72,7 @@ class ImportCourseCommand extends Command
         $lessons = $course->getLessons();
         $summary = sprintf('« %s » : %d modules, %d leçons, %d questions, environ %d minutes.', $course->getTitle(), \count($course->getModules()),
             \count($lessons), array_sum(array_map(fn (Lesson $l) => \count($l->getQuestions()), $lessons)), $course->getEstimatedMinutes());
+        $summary .= ([] !== $diagrams ? ' '.\count($diagrams).' schéma(s).' : '').([] !== $illustrations ? ' '.\count($illustrations).' illustration(s).' : '');
         if ($input->getOption('verifier')) {
             $io->success('Fichier valable. '.$summary);
 
@@ -95,9 +99,31 @@ class ImportCourseCommand extends Command
             $this->em->remove($existing);
             $this->em->flush();
         }
+        // Schémas fournis avec le parcours : créés dans l'atelier s'ils n'existent pas ; jamais écrasés (le fondateur a pu
+        // les retoucher)
+        foreach ($diagrams as $code => $diagram) {
+            if (isset(\App\Academie\Service\LessonRenderer::DIAGRAMS[$code]) || null !== $this->diagramRepository->findOneBy(['code' => $code])) {
+                $io->note('Schéma « '.$code.' » déjà présent dans l\'atelier : gardé tel quel.');
+                continue;
+            }
+            $this->em->persist((new \App\Academie\Entity\LessonDiagram())->setCode($code)->setTitle($diagram['title'])->setModel($diagram['model'])->setData($diagram['data']));
+        }
         $course->setSortOrder(\count($this->courses->findAll()) + 1);
         $this->em->persist($course);
         $this->em->flush();
+        // Illustrations fournies avec le parcours (fichiers à côté du YAML) : enregistrées comme si elles avaient été
+        // envoyées dans le studio, puis leur adresse remplace le chemin du fichier dans le texte
+        if ([] !== $illustrations) {
+            $map = [];
+            foreach ($illustrations as $relative => $file) {
+                $map['('.$relative.')'] = '('.\App\Academie\Service\AcademyImages::publicPath((int) $course->getId(), $this->images->store((int) $course->getId(), new UploadedFile($file, basename($file), null, null, true))).')';
+            }
+            foreach ($course->getLessons() as $lesson) {
+                $lesson->setContentMarkdown(strtr($lesson->getContentMarkdown(), $map));
+            }
+            $course->setDescription(null !== $course->getDescription() ? strtr($course->getDescription(), $map) : null);
+            $this->em->flush();
+        }
         if (null !== $coverFile) {
             try {
                 $course->setCoverImage($this->images->store((int) $course->getId(), new UploadedFile($coverFile, basename($coverFile), null, null, true)));
@@ -195,6 +221,59 @@ class ImportCourseCommand extends Command
         }
 
         return $file;
+    }
+
+    /**
+     * Schémas de l'atelier fournis avec le parcours (`diagrams:`), vérifiés comme dans l'atelier (DiagramModels).
+     *
+     * @return array<string, array{title: string, model: string, data: array<string, mixed>}> code => schéma
+     */
+    public static function diagrams(array $d): array
+    {
+        $out = [];
+        foreach ($d['diagrams'] ?? [] as $raw) {
+            $code = (string) ($raw['code'] ?? '');
+            $title = trim((string) ($raw['title'] ?? ''));
+            if (!preg_match('/^[a-z0-9-]{1,80}$/', $code) || '' === $title) {
+                throw new \InvalidArgumentException('Schéma (diagrams) : chaque schéma a un code (minuscules, chiffres, tirets) et un titre.');
+            }
+            try {
+                $data = \App\Academie\Service\DiagramModels::normalize((string) ($raw['model'] ?? ''), $raw);
+            } catch (\InvalidArgumentException $e) {
+                throw new \InvalidArgumentException('Schéma « '.$code.' » : '.$e->getMessage());
+            }
+            $out[$code] = ['title' => mb_substr($title, 0, 120), 'model' => (string) $raw['model'], 'data' => $data];
+        }
+
+        return $out;
+    }
+
+    /**
+     * Illustrations placées dans le texte par un chemin de fichier local, à côté du YAML : `![description](illustrations/x.png)`.
+     * Vérifiées comme la vignette (JPEG, PNG ou WebP, 10 Mo au plus, jamais une adresse internet).
+     *
+     * @return array<string, string> chemin écrit dans le texte => fichier sur le disque
+     */
+    public static function illustrationFiles(Course $course, string $dir): array
+    {
+        $text = (string) $course->getDescription();
+        foreach ($course->getLessons() as $lesson) {
+            $text .= "\n".$lesson->getContentMarkdown();
+        }
+        preg_match_all('/!\[[^\]]*\]\(([^)\s]+)\)/', $text, $m);
+        $files = [];
+        foreach (array_unique($m[1]) as $relative) {
+            if (str_starts_with($relative, '/academie/images/')) {
+                continue; // déjà une image du studio
+            }
+            try {
+                $files[$relative] = (string) self::coverFile(['cover' => $relative], $dir);
+            } catch (\InvalidArgumentException $e) {
+                throw new \InvalidArgumentException('Illustration « '.$relative.' » : '.str_replace('Vignette (cover) ', '', $e->getMessage()));
+            }
+        }
+
+        return $files;
     }
 
     /** Construit le parcours (non enregistré) à partir du fichier, en refusant toute valeur que le studio refuserait. */

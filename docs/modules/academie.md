@@ -176,6 +176,12 @@ sert qu'au premier chargement (les modifications du studio ne reviennent pas dan
 Premier parcours chargé ainsi : `content/academie/de-la-productivite-a-la-fecondite.yaml`, tiré de la présentation
 « Maximiser sa productivité » du fondateur (diapositives et notes d'orateur), rattaché au Plan d'Hygiène de vie, PRO.
 
+- **Schémas et illustrations fournis avec le fichier** (27/11/2026) : `diagrams:` (liste `{code, title, model, label?,
+  note?, items}` aux modèles de l'atelier, vérifiés par `DiagramModels::normalize`) crée les schémas dans l'atelier au
+  chargement, **jamais écrasés** s'ils existent déjà. Une image écrite dans le texte avec un chemin local
+  (`![description](illustrations/x.png)`, fichier à côté du YAML, JPEG/PNG/WebP, 10 Mo) est enregistrée comme dans le
+  studio et son adresse remplace le chemin. `--verifier` contrôle les deux. Test : `tests/Academie/SousPressionCourseTest.php`.
+
 ## Sécurité
 
 - Texte : Markdown rendu côté serveur par `LessonMarkdown` (Parsedown en mode sûr : HTML brut échappé, liens
