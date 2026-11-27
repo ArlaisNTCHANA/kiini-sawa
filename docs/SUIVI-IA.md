@@ -11,6 +11,8 @@ Ne jamais afficher ni demander de mot de passe ; ne pas publier son nom (mention
 
 ## 27/11/2026 — La Boussole 360 dans les chiffres (administration)
 
+- **Déployé le 27/11/2026** (accord du fondateur) : migration passée (table `boussole_daily`), pages contrôlées, aucune erreur au journal. Le compteur des visiteurs démarre ce jour.
+
 Demande du fondateur (manque n° 4). Admin › Les chiffres › La Boussole 360 (`/admin/boussole`, `Boussole/Service/BoussoleStats`,
 `Boussole/Controller/Admin/BoussoleStatsAdminController`), périodes 7 jours, 30 jours, 3 mois, 12 mois.
 - **Visiteurs** : jusqu'ici, une passation sans compte n'était comptée nulle part (elle n'est enregistrée que si la
