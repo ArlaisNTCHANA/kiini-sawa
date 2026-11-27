@@ -11,6 +11,8 @@ Ne jamais afficher ni demander de mot de passe ; ne pas publier son nom (mention
 
 ## 27/11/2026 — Studio : écrire « comme dans Word » ; exporter un parcours (PDF, Word, fichier)
 
+- **Déployé le 27/11/2026** (accord du fondateur) : PhpWord installé sur le serveur (création d'un .docx vérifiée, WebP lu par GD), route d'export et script de l'éditeur en ligne, aucune erreur au journal.
+
 Demandes du fondateur : « plus de * pour gras ou tiret » dans le Studio (garder l'aperçu), et exporter un cours en
 plusieurs formats. Détail : `docs/modules/academie.md` (« Écrire comme dans Word », « Exporter un parcours »).
 - **Éditeur** : `assets/js/ks-rich-text.js` + `templates/academie/admin/lesson.html.twig` (blocs paragraphe, liste,
