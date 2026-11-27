@@ -19,6 +19,13 @@ Ne jamais afficher ni demander de mot de passe ; ne pas publier son nom (mention
   porte déjà cette adresse »). `--textes` ne convient pas non plus (il ne touche que le texte des leçons, et le titre
   renommé change l'adresse de la leçon). Reste à corriger à la main dans Admin › Académie : présentation du parcours,
   titre de la 1re séance (« Votre But de Dieu » → « Le But de Dieu pour ma vie »), consigne d'écriture de cette séance.
+- **Commande de correction** (27/11/2026, demande du fondateur) : `app:academie:remplacer-phrase` remplace une phrase
+  exacte dans les titres, la présentation et les consignes d'un parcours même publié (jamais le texte des leçons ni les
+  adresses ; aperçu sans `--enregistrer`). Pour « Mon Plan de Vie », deux passages : « Votre But de Dieu » puis
+  « votre But de Dieu ». Doc : `docs/modules/academie.md`. **À déployer** avant de la lancer en production.
+- **Règle de dessin** : les cases ☑/☐ ajoutées aux jalons imprimés (`visualize.html.twig`) étaient refusées par
+  `DesignRulesTest` (pas d'émoji) ; remplacées par des icônes Lucide `check-square` / `square`. Ce test échouait donc
+  déjà dans la version déployée le 26/11 (sans effet pour les membres, les cases s'affichaient).
 - **Impression du Plan de Vie** (« je ne vois pas tous les détails ») : sur `visualize.html.twig`, l'en-tête et le pied
   en `position: fixed` recouvraient le haut et le bas de chaque page à partir de la 2e (titres et objectifs cachés),
   et le message « Plan de Vie envoyé avec succès » s'imprimait sur chaque page. Retirés à l'impression ; les titres de

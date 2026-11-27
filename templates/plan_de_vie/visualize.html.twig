@@ -624,7 +624,7 @@
                                         {% if goal.milestones|length > 0 %}
                                             <ul style="list-style: none; padding-left: 0; margin: 4px 0 0; font-size: 0.8rem; line-height: 1.5;" data-print-milestones>
                                                 {% for ms in goal.milestones %}
-                                                    <li>{{ ms.completed ? '☑' : '☐' }} {{ ms.title }}{% if ms.dueDate %} <span style="color: #9AA39C;">({{ ms.dueDate|date('d/m/Y') }})</span>{% endif %}</li>
+                                                    <li><i data-lucide="{{ ms.completed ? 'check-square' : 'square' }}" class="ks-ico" style="width: 0.9em; height: 0.9em; vertical-align: -0.1em;" aria-hidden="true"></i> <span class="sr-only">{{ ms.completed ? 'Fait :' : 'À faire :' }}</span> {{ ms.title }}{% if ms.dueDate %} <span style="color: #9AA39C;">({{ ms.dueDate|date('d/m/Y') }})</span>{% endif %}</li>
                                                 {% endfor %}
                                             </ul>
                                         {% endif %}

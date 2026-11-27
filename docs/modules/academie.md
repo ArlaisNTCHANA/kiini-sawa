@@ -87,6 +87,11 @@ sans HTML brut, proposés en un clic dans l'éditeur de leçon (panneau « Rendr
 - `app:academie:import --textes` met à jour **seulement le texte des leçons** d'un parcours déjà chargé, même publié
   (leçons retrouvées par leur adresse : mêmes identifiants, progression et notes des membres intactes). Refusé si une
   leçon manque ou a été modifiée dans le studio après le chargement.
+- `app:academie:remplacer-phrase <parcours> "<ancien>" "<nouveau>" [--enregistrer]` (27/11/2026) remplace une
+  phrase exacte (majuscules comprises) dans le titre, le sous-titre et la présentation d'un parcours, **même publié**, et
+  dans les titres de ses modules et séances et ses consignes d'écriture. Jamais dans le texte des leçons (il cite le
+  livre), jamais dans les adresses : progression, notes et exercices des membres intacts. Sans `--enregistrer` : aperçu
+  seulement. Test : `tests/Academie/AcademyReplacePhraseTest.php`.
 
 ## Atelier de schémas (24/11/2026)
 
