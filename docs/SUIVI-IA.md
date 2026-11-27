@@ -11,6 +11,8 @@ Ne jamais afficher ni demander de mot de passe ; ne pas publier son nom (mention
 
 ## 27/11/2026 — Suivi de l'Académie (administration)
 
+- **Déployé le 27/11/2026** (accord du fondateur) : pages contrôlées, aucune erreur au journal du serveur.
+
 Demande du fondateur (troisième manque de la liste). Admin › Les chiffres › Suivi de l'Académie (`/admin/academie/suivi`,
 `Academie/Service/AcademyStats`, `AcademyStatsAdminController`) et bouton « Suivi » sur chaque parcours du studio.
 - Vue d'ensemble : par parcours, inscrits, actifs sur 7 jours, allés au bout (et %), rythmes par e-mail en cours ou en
