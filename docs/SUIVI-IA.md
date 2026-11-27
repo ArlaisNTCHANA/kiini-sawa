@@ -23,7 +23,7 @@ Ne jamais afficher ni demander de mot de passe ; ne pas publier son nom (mention
   exacte dans les titres, la présentation et les consignes d'un parcours même publié (jamais le texte des leçons ni les
   adresses ; aperçu sans `--enregistrer`). Pour « Mon Plan de Vie », deux passages : « Votre But de Dieu » puis
   « votre But de Dieu ». Doc : `docs/modules/academie.md`. **Déployée le 27/11/2026** (accord du fondateur) : commande présente
-  sur le serveur, pages contrôlées, aucune erreur au journal. Reste au fondateur à la lancer (deux passages).
+  sur le serveur, pages contrôlées, aucune erreur au journal. Lancée par le fondateur le 27/11/2026 : titre, présentation et consigne corrigés en production.
 - **Règle de dessin** : les cases ☑/☐ ajoutées aux jalons imprimés (`visualize.html.twig`) étaient refusées par
   `DesignRulesTest` (pas d'émoji) ; remplacées par des icônes Lucide `check-square` / `square`. Ce test échouait donc
   déjà dans la version déployée le 26/11 (sans effet pour les membres, les cases s'affichaient).
