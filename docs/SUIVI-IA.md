@@ -22,7 +22,11 @@ d'Hygiène, contenu « eyes opener », parcours vitrine soigné, visuels, histoi
   Jéthro, Élie, Gethsémané, la tour inachevée, Néhémie, Capharnaüm (Marc 1), Daniel. Versets Louis Segond 1910.
 - Import : `diagrams:` et illustrations locales (voir `docs/modules/academie.md`). Chargé en brouillon en local et relu
   dans l'aperçu ; **pas encore chargé en production**.
-- Illustrations peintes : en attente de l'accord du fondateur (génération par l'outil d'images connecté, ~0,02 $ l'une).
+- Illustrations peintes (accord du fondateur) : générées avec l'outil d'images connecté (offre gratuite), fichiers dans
+  `content/academie/sous-pression/` (vignette « porte ouverte », séance 1 « cinq rubans », séance 2 « talent enterré »).
+  L'offre gratuite s'est arrêtée à 3 images par jour : **6 restent à faire** (séances 3 à 8 : cadeaux empilés, prière à
+  l'aube, Élie sous le genêt, muraille achevée, carrefour, table de Daniel), consignes de dessin dans la conversation
+  du 27/11/2026 (même style : gouache, vert sauvage, crème, lumière dorée, silhouettes sans visage, 16:9).
 
 ## 27/11/2026 — Studio : écrire « comme dans Word » ; exporter un parcours (PDF, Word, fichier)
 

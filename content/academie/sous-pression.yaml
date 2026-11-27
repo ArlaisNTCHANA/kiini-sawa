@@ -12,6 +12,7 @@ plans: [HYGIENE]
 kind: THEME
 access: PRO
 cover_word: Liberté
+cover: sous-pression/couverture.jpg
 description: |
   Sous pression, nous ne choisissons plus vraiment : une petite voix intérieure prend les commandes. « Sois parfait. » « Fais plaisir. » « Dépêche-toi. » « Sois fort. » « Fais des efforts. » Ces cinq voix nous ont souvent aidés à grandir. Mais, laissées seules au volant, elles épuisent le corps, abîment nos relations et nous éloignent de ce que Dieu nous a confié.
 
@@ -102,6 +103,8 @@ modules:
       - title: Les cinq voix qui prennent le volant
         duration: 10
         content: |
+          ![Une personne assise sur une colline, entourée de cinq rubans de couleur portés par le vent](sous-pression/cinq-voix.jpg)
+
           Pensez à votre dernière journée vraiment difficile. Une échéance, un conflit, un enfant malade, une réunion qui déborde. Vous souvenez-vous de ce qui se passait **en vous** ? Peut-être avez-vous tout revérifié trois fois. Peut-être avez-vous dit oui à une demande de trop. Peut-être avez-vous accéléré, coupé la parole, serré les dents sans rien dire à personne.
 
           Ce jour-là, ce n'était pas tout à fait vous qui décidiez. C'était une **voix intérieure**, rapide, ancienne, convaincante. Elle ne parle presque pas quand tout va bien. Mais dès que la pression monte, elle prend le volant.
@@ -203,6 +206,8 @@ modules:
 
           Ce serviteur n'était pas paresseux. Il avait peur de mal faire. Et sa peur de mal faire l'a conduit à ne **rien** faire. C'est exactement le piège du perfectionnisme : par peur d'un résultat imparfait, on enterre ce que Dieu nous a confié.
           :::
+
+          ![Une pièce d'or cachée sous la terre, à côté d'une jeune pousse qui monte vers le soleil](sous-pression/talent-enterre.jpg)
 
           [[schema:pressions-perfection-excellence]]
 
