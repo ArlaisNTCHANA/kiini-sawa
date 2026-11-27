@@ -234,7 +234,18 @@ class ImportCourseCommand extends Command
                 $lesson = (new Lesson())->setTitle(mb_substr(trim((string) ($lessonData['title'] ?? '')), 0, 160))
                     ->setContentMarkdown(trim((string) ($lessonData['content'] ?? '')))
                     ->setDurationMinutes(max(1, (int) ($lessonData['duration'] ?? 5)))->setVisible(true);
-                if ('' === $lesson->getTitle() || '' === $lesson->getContentMarkdown()) {
+                // Fichier exporté du studio (CourseExporter) : vidéo et leçon masquée reviennent aussi
+                if (isset($lessonData['video']) && '' !== trim((string) $lessonData['video'])) {
+                    $video = \App\Academie\Service\VideoEmbed::parse((string) $lessonData['video']);
+                    if (null === $video) {
+                        throw new \InvalidArgumentException('Lien de vidéo non reconnu dans '.$where.' (YouTube ou Vimeo).');
+                    }
+                    $lesson->setVideo($video[0], $video[1]);
+                }
+                if (!empty($lessonData['hidden'])) {
+                    $lesson->setVisible(false);
+                }
+                if ('' === $lesson->getTitle() || ('' === $lesson->getContentMarkdown() && !$lesson->hasVideo())) {
                     throw new \InvalidArgumentException('Leçon sans titre ou sans texte : '.$where);
                 }
                 $module->addLesson($lesson);

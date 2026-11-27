@@ -5,7 +5,16 @@
 {% block stylesheets %}{% include 'academie/_styles.html.twig' %}{% include 'academie/admin/_styles.html.twig' %}{% endblock %}
 {% block page_title %}{{ name }}{% endblock %}
 {% block crumbs %}<span aria-hidden="true">›</span><span aria-current="page">{{ name }}</span>{% endblock %}
-{% block page_actions %}{% if course %}<a href="{{ path('admin_academie_preview', {id: course.id}) }}" class="ks-btn ks-btn--secondary"><i data-lucide="eye"></i> Prévisualiser comme un apprenant</a>{% endif %}{% endblock %}
+{% block page_actions %}{% if course %}<a href="{{ path('admin_academie_preview', {id: course.id}) }}" class="ks-btn ks-btn--secondary"><i data-lucide="eye"></i> Prévisualiser comme un apprenant</a>
+    <div class="ac-export" x-data="{ open: false }" @click.outside="open = false" @keydown.escape="open = false">
+        <button type="button" class="ks-btn ks-btn--ghost" @click="open = !open" :aria-expanded="open.toString()" aria-haspopup="true"><i data-lucide="download"></i> Exporter</button>
+        <div class="ac-export__menu" x-show="open" x-cloak role="menu">
+            <a role="menuitem" href="{{ path('admin_academie_export', {id: course.id, format: 'pdf'}) }}" @click="open = false"><i data-lucide="file-text"></i><span><strong>PDF</strong><small>Le parcours mis en page, à imprimer ou envoyer</small></span></a>
+            <a role="menuitem" href="{{ path('admin_academie_export', {id: course.id, format: 'docx'}) }}" @click="open = false"><i data-lucide="file-pen-line"></i><span><strong>Word</strong><small>À retravailler ou faire relire</small></span></a>
+            <a role="menuitem" href="{{ path('admin_academie_export', {id: course.id, format: 'yaml'}) }}" @click="open = false"><i data-lucide="archive"></i><span><strong>Fichier de parcours</strong><small>Sauvegarde complète, à recharger dans le studio</small></span></a>
+        </div>
+    </div>
+{% endif %}{% endblock %}
 {% block content %}
 <div class="ks-stack" style="max-width: 880px;">
     {% for e in errors %}<div class="ks-alert ks-alert--danger" role="alert">{{ e }}</div>{% endfor %}

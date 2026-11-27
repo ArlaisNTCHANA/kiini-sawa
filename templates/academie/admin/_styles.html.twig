@@ -104,6 +104,29 @@
     .ac-bloc__tools button { border: 1px solid var(--border); background: var(--bg-alt); border-radius: 6px; min-width: 2rem; height: 2rem; display: inline-flex; align-items: center; justify-content: center; cursor: pointer; color: var(--fg); font: inherit; }
     .ac-bloc__tools button:hover { border-color: var(--primary); }
     .ac-bloc__tools svg { width: 15px; height: 15px; }
+    .ac-bloc__tools button[aria-label]:focus-visible { outline: 2px solid var(--primary); outline-offset: 1px; }
+    .ac-bloc__tools .ac-bloc__sep { width: 1px; background: var(--border); margin: .2rem .15rem; }
+    /* Écriture « comme dans Word » (ks-rich-text.js) : la mise en forme se voit, aucun symbole */
+    .ks-rich { min-height: 4.2rem; line-height: 1.6; white-space: pre-wrap; overflow-wrap: anywhere; cursor: text; }
+    .ks-rich:focus { outline: none; }
+    .ks-rich:empty::before { content: attr(data-placeholder); color: var(--fg-muted); }
+    .ks-rich p { margin: 0 0 .6rem; }
+    .ks-rich p:last-child { margin-bottom: 0; }
+    .ks-rich ul, .ks-rich ol { margin: .2rem 0 .6rem; padding-left: 1.4rem; }
+    .ks-rich ul { list-style: disc; }
+    .ks-rich ol { list-style: decimal; }
+    .ks-rich li { margin: .15rem 0; }
+    .ks-rich blockquote { margin: .2rem 0 .6rem; padding-left: .8rem; border-left: 3px solid var(--primary-light); color: var(--fg-muted); font-style: italic; }
+    .ks-rich a { color: var(--primary); text-decoration: underline; }
+    .ks-rich strong, .ks-rich b { font-weight: 700; }
+    .ks-rich--quote { font-style: italic; }
+    .ac-export { position: relative; display: inline-block; }
+    .ac-export__menu { position: absolute; right: 0; top: calc(100% + .35rem); z-index: 30; min-width: 18rem; background: var(--card-bg); border: 1px solid var(--border); border-radius: var(--r-md); box-shadow: var(--card-shadow); padding: .35rem; display: grid; }
+    .ac-export__menu a { display: flex; gap: .65rem; align-items: flex-start; padding: .55rem .65rem; border-radius: 8px; color: var(--fg); text-decoration: none; }
+    .ac-export__menu a:hover, .ac-export__menu a:focus-visible { background: var(--bg-alt); }
+    .ac-export__menu svg { width: 18px; height: 18px; color: var(--primary); margin-top: .1rem; flex: none; }
+    .ac-export__menu span { display: grid; gap: .1rem; }
+    .ac-export__menu small { color: var(--fg-muted); font-size: .8rem; }
     .ac-bloc__row { display: grid; gap: .5rem; }
     @media (min-width: 640px) { .ac-bloc__row { grid-template-columns: 200px 1fr; } }
     .ac-bloc__check { display: flex; gap: .5rem; align-items: center; font-size: .9rem; }

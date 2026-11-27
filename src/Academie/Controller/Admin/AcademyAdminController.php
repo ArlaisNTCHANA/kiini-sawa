@@ -10,10 +10,12 @@ use App\Academie\Repository\CourseRepository;
 use App\Academie\Service\AcademyImages;
 use App\Academie\Service\AcademyPlaces;
 use App\Academie\Service\AcademyStudio;
+use App\Academie\Service\CourseExporter;
 use App\Academie\Service\PracticeCatalog;
 use App\Academie\Service\VideoEmbed;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\HeaderUtils;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -109,6 +111,21 @@ class AcademyAdminController extends AbstractController
             'problems' => $course ? AcademyStudio::publishProblems($course) : [],
             'canDelete' => $course && AcademyStudio::canDelete($course),
             'images' => $course ? $images->list($course->getId()) : [],
+        ]);
+    }
+
+    /** Export du parcours : PDF, Word ou fichier de parcours rechargeable (CourseExporter). Lecture seule. */
+    #[Route('/{id}/exporter/{format}', name: '_export', requirements: ['id' => '\d+', 'format' => 'pdf|docx|yaml'], methods: ['GET'])]
+    public function export(CourseExporter $exporter, int $id, string $format): Response
+    {
+        $course = $this->find(Course::class, $id);
+        set_time_limit(120);
+
+        return new Response($exporter->export($course, $format), 200, [
+            'Content-Type' => $exporter->contentType($format),
+            'Content-Disposition' => HeaderUtils::makeDisposition(HeaderUtils::DISPOSITION_ATTACHMENT, $exporter->filename($course, $format), 'parcours.'.$format),
+            'X-Robots-Tag' => 'noindex',
+            'Cache-Control' => 'private, no-store',
         ]);
     }
 

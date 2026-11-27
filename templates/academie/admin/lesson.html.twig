@@ -32,14 +32,21 @@
         </section>
 
         {% set editorInit = editor|merge({token: token, previewUrl: path('admin_academie_markdown'), convertUrl: path('admin_academie_blocks'), uploadUrl: path('admin_academie_image_upload', {id: course.id}), diagramsUrl: path('admin_academie_diagrams_json')}) %}
+        <script src="{{ asset('js/ks-rich-text.js') }}"></script>
         <script>
         document.addEventListener('alpine:init', () => {
             const empty = { paragraphe: { text: '' }, titre: { level: 2, text: '' }, liste: { ordered: false, items: '' }, citation: { text: '' },
                 encadre: { kind: 'retenir', title: '', text: '' }, schema: { code: '' }, image: { src: '', alt: '' }, avance: { text: '' } };
+            // Façon d'écrire de chaque bloc « comme dans Word » ; un bloc à la mise en forme particulière reste en texte (_raw)
+            const RICH = { paragraphe: ['text', 'inline'], citation: ['text', 'inline'], encadre: ['text', 'doc'], liste: ['items', 'list'] };
+            const prep = (b, id) => { const r = RICH[b.type]; return { ...b, _id: id, _raw: !!r && !window.KsRich.canEdit(b[r[0]], r[1], document, b.ordered) }; };
             Alpine.data('lessonEditor', (init) => { let timer = null; let uid = 0; return {
-                mode: 'blocs', blocks: init.blocks.map((b) => ({ ...b, _id: ++uid })), html: '', menuAt: null, dragFrom: null, busy: false, phone: false, uploading: false, uploadError: '', reloadingDiagrams: false,
+                mode: 'blocs', blocks: init.blocks.map((b) => prep(b, ++uid)), html: '', menuAt: null, dragFrom: null, busy: false, phone: false, uploading: false, uploadError: '', reloadingDiagrams: false,
                 callouts: init.callouts, diagrams: init.diagrams, images: init.images,
-                json() { return JSON.stringify(this.blocks.map(({ _id, ...b }) => b)); },
+                json() { return JSON.stringify(this.blocks.map((b) => Object.fromEntries(Object.entries(b).filter(([k]) => !k.startsWith('_'))))); },
+                rich(el, b) { const r = RICH[b.type]; el._rich = window.KsRich.mount(el, b[r[0]], r[1], (v) => { b[r[0]] = v; window.__ksLessonDirty = true; }, b.ordered); },
+                fmt(ev, command) { const el = ev.target.closest('.ac-bloc').querySelector('.ks-rich'); if (el) window.KsRich.format(el, command); },
+                reorder(ev, b) { const el = ev.target.closest('.ac-bloc').querySelector('.ks-rich'); if (el && el._rich) el._rich.refresh(b.ordered); },
                 estMinutes() {
                     const txt = this.blocks.map((b) => [b.text, b.items, b.title].filter(Boolean).join(' ')).join(' ').trim();
                     const words = txt ? txt.split(/\s+/).length : 0;
@@ -68,15 +75,15 @@
                 },
                 async refresh() { if (this.mode !== 'blocs') return; try { this.html = await (await this.post(init.previewUrl, 'blocks', this.json())).text(); } catch (e) { this.html = '<p>Aperçu indisponible : rechargez la page.</p>'; } this.icons(); },
                 icons() { this.$nextTick(() => window.lucide && window.lucide.createIcons()); },
-                add(type, at) { const i = at ?? this.blocks.length; this.blocks.splice(i, 0, { type, ...JSON.parse(JSON.stringify(empty[type])), _id: ++uid }); this.menuAt = null; window.__ksLessonDirty = true; this.icons(); this.$nextTick(() => { const el = document.querySelector('[data-bloc="' + i + '"] textarea, [data-bloc="' + i + '"] input'); el && el.focus(); }); },
+                add(type, at) { const i = at ?? this.blocks.length; this.blocks.splice(i, 0, prep({ type, ...JSON.parse(JSON.stringify(empty[type])) }, ++uid)); this.menuAt = null; window.__ksLessonDirty = true; this.icons(); this.$nextTick(() => setTimeout(() => { const el = document.querySelector('[data-bloc="' + i + '"] .ks-rich, [data-bloc="' + i + '"] textarea, [data-bloc="' + i + '"] input'); el && el.focus(); }, 0)); },
                 remove(i) { if (confirm('Retirer ce bloc ?')) { this.blocks.splice(i, 1); window.__ksLessonDirty = true; this.icons(); } },
                 move(i, d) { const j = i + d; if (j < 0 || j >= this.blocks.length) return; const b = this.blocks.splice(i, 1)[0]; this.blocks.splice(j, 0, b); window.__ksLessonDirty = true; this.icons(); },
                 drop(i) { if (this.dragFrom === null || this.dragFrom === i) { this.dragFrom = null; return; } const b = this.blocks.splice(this.dragFrom, 1)[0]; this.blocks.splice(i, 0, b); this.dragFrom = null; window.__ksLessonDirty = true; this.icons(); },
                 wrap(ev, before, after) { const t = ev.target.closest('.ac-bloc').querySelector('textarea'); const a = t.selectionStart, z = t.selectionEnd; const sel = t.value.slice(a, z) || 'texte'; t.setRangeText(before + sel + after, a, z, 'select'); t.dispatchEvent(new Event('input')); t.focus(); },
                 link(ev) { const url = prompt('Adresse du lien (https://… ou /methode/…)'); if (url) this.wrap(ev, '[', '](' + url + ')'); },
                 async toTexte() { this.busy = true; try { const r = await this.post(init.convertUrl, 'blocks', this.json()); document.getElementById('content').value = (await r.json()).content; this.mode = 'texte'; } catch (e) { alert('Passage au mode avancé impossible : rechargez la page.'); } this.busy = false; this.icons(); },
-                async toBlocs() { this.busy = true; try { const r = await this.post(init.convertUrl, 'content', document.getElementById('content').value); this.blocks = (await r.json()).blocks.map((b) => ({ ...b, _id: ++uid })); this.mode = 'blocs'; } catch (e) { alert('Passage aux blocs impossible : rechargez la page.'); } this.busy = false; this.icons(); },
-                label(type) { return { paragraphe: 'Paragraphe', titre: 'Titre', liste: 'Liste', citation: 'Citation', encadre: 'Encadré', schema: 'Schéma', image: 'Image', avance: 'Texte avancé' }[type]; },
+                async toBlocs() { this.busy = true; try { const r = await this.post(init.convertUrl, 'content', document.getElementById('content').value); this.blocks = (await r.json()).blocks.map((b) => prep(b, ++uid)); this.mode = 'blocs'; } catch (e) { alert('Passage aux blocs impossible : rechargez la page.'); } this.busy = false; this.icons(); },
+                label(type) { return { paragraphe: 'Paragraphe', titre: 'Titre', liste: 'Liste', citation: 'Citation', encadre: 'Encadré', schema: 'Schéma', image: 'Image', avance: 'Texte avancé (tableau…)' }[type]; },
                 icon(type) { return { paragraphe: 'pilcrow', titre: 'heading', liste: 'list', citation: 'quote', encadre: 'square-dashed', schema: 'shapes', image: 'image', avance: 'code' }[type]; },
             }; });
         });
@@ -109,8 +116,19 @@
                                     </div>
                                 </div>
 
-                                <template x-if="b.type === 'paragraphe'">
+                                <template x-if="b.type === 'paragraphe' && !b._raw">
                                     <div class="ks-stack">
+                                        <div class="ac-bloc__tools" role="toolbar" aria-label="Mise en forme">
+                                            <button type="button" @mousedown.prevent @click="fmt($event, 'bold')" title="Gras (Ctrl+B)" aria-label="Gras"><strong>G</strong></button>
+                                            <button type="button" @mousedown.prevent @click="fmt($event, 'italic')" title="Italique (Ctrl+I)" aria-label="Italique"><em>I</em></button>
+                                            <button type="button" @mousedown.prevent @click="fmt($event, 'link')" title="Lien : sélectionnez des mots, puis cliquez (recliquez pour retirer le lien)" aria-label="Lien"><i data-lucide="link"></i></button>
+                                        </div>
+                                        <div class="ks-input ks-rich" contenteditable="true" role="textbox" aria-multiline="true" aria-label="Paragraphe" data-placeholder="Écrivez votre paragraphe…" x-init="rich($el, b)"></div>
+                                    </div>
+                                </template>
+                                <template x-if="b.type === 'paragraphe' && b._raw">
+                                    <div class="ks-stack">
+                                        <p class="ks-help">Ce paragraphe contient une mise en forme particulière : il reste modifiable ici en texte, pour ne rien perdre.</p>
                                         <div class="ac-bloc__tools">
                                             <button type="button" @click="wrap($event, '**', '**')" title="Gras"><strong>G</strong></button>
                                             <button type="button" @click="wrap($event, '*', '*')" title="Italique"><em>I</em></button>
@@ -125,14 +143,39 @@
                                         <input class="ks-input" x-model="b.text" maxlength="160" aria-label="Titre" placeholder="Le titre de cette partie">
                                     </div>
                                 </template>
-                                <template x-if="b.type === 'liste'">
+                                <template x-if="b.type === 'liste' && !b._raw">
+                                    <div class="ks-stack">
+                                        <div class="ac-bloc__row" style="grid-template-columns: auto 1fr; align-items: center;">
+                                            <div class="ac-bloc__tools" role="toolbar" aria-label="Mise en forme">
+                                            <button type="button" @mousedown.prevent @click="fmt($event, 'bold')" title="Gras (Ctrl+B)" aria-label="Gras"><strong>G</strong></button>
+                                            <button type="button" @mousedown.prevent @click="fmt($event, 'italic')" title="Italique (Ctrl+I)" aria-label="Italique"><em>I</em></button>
+                                            <button type="button" @mousedown.prevent @click="fmt($event, 'link')" title="Lien : sélectionnez des mots, puis cliquez (recliquez pour retirer le lien)" aria-label="Lien"><i data-lucide="link"></i></button>
+                                            </div>
+                                            <label class="ac-bloc__check"><input type="checkbox" x-model="b.ordered" @change="reorder($event, b)"> Liste numérotée (1, 2, 3…)</label>
+                                        </div>
+                                        <div class="ks-input ks-rich" contenteditable="true" role="textbox" aria-multiline="true" aria-label="Points de la liste" x-init="rich($el, b)"></div>
+                                        <p class="ks-help">Entrée pour un nouveau point. Coller plusieurs lignes en fait plusieurs points.</p>
+                                    </div>
+                                </template>
+                                <template x-if="b.type === 'liste' && b._raw">
                                     <div class="ks-stack">
                                         <label class="ac-bloc__check"><input type="checkbox" x-model="b.ordered"> Liste numérotée (1, 2, 3…)</label>
                                         <textarea class="ks-input" rows="4" x-model="b.items" aria-label="Points de la liste" placeholder="Un point par ligne"></textarea>
                                         <p class="ks-help">Un point par ligne. **gras** et *italique* sont acceptés.</p>
                                     </div>
                                 </template>
-                                <template x-if="b.type === 'citation'">
+                                <template x-if="b.type === 'citation' && !b._raw">
+                                    <div class="ks-stack">
+                                        <div class="ac-bloc__tools" role="toolbar" aria-label="Mise en forme">
+                                            <button type="button" @mousedown.prevent @click="fmt($event, 'bold')" title="Gras (Ctrl+B)" aria-label="Gras"><strong>G</strong></button>
+                                            <button type="button" @mousedown.prevent @click="fmt($event, 'italic')" title="Italique (Ctrl+I)" aria-label="Italique"><em>I</em></button>
+                                            <button type="button" @mousedown.prevent @click="fmt($event, 'link')" title="Lien : sélectionnez des mots, puis cliquez (recliquez pour retirer le lien)" aria-label="Lien"><i data-lucide="link"></i></button>
+                                        </div>
+                                        <div class="ks-input ks-rich ks-rich--quote" contenteditable="true" role="textbox" aria-multiline="true" aria-label="Citation" data-placeholder="« La citation », puis à la ligne : sa source (livre, verset)" x-init="rich($el, b)"></div>
+                                        <p class="ks-help">Mettez la source (livre, verset) sur la dernière ligne : Entrée pour aller à la ligne.</p>
+                                    </div>
+                                </template>
+                                <template x-if="b.type === 'citation' && b._raw">
                                     <div class="ks-stack">
                                         <textarea class="ks-input" rows="3" x-model="b.text" aria-label="Citation" placeholder="« La citation »&#10;La Méthode, chapitre 11"></textarea>
                                         <p class="ks-help">Une ligne par ligne affichée : mettez la source (livre, verset) sur la dernière.</p>
@@ -146,7 +189,26 @@
                                             </select>
                                             <input class="ks-input" x-model="b.title" maxlength="80" aria-label="Titre de l'encadré" placeholder="Titre (facultatif)">
                                         </div>
-                                        <textarea class="ks-input" rows="3" x-model="b.text" aria-label="Texte de l'encadré"></textarea>
+                                        <template x-if="!b._raw">
+                                            <div class="ks-stack">
+                                                <div class="ac-bloc__tools" role="toolbar" aria-label="Mise en forme">
+                                                    <button type="button" @mousedown.prevent @click="fmt($event, 'bold')" title="Gras (Ctrl+B)" aria-label="Gras"><strong>G</strong></button>
+                                                    <button type="button" @mousedown.prevent @click="fmt($event, 'italic')" title="Italique (Ctrl+I)" aria-label="Italique"><em>I</em></button>
+                                                    <button type="button" @mousedown.prevent @click="fmt($event, 'link')" title="Lien : sélectionnez des mots, puis cliquez (recliquez pour retirer le lien)" aria-label="Lien"><i data-lucide="link"></i></button>
+                                                    <span class="ac-bloc__sep" aria-hidden="true"></span>
+                                                    <button type="button" @mousedown.prevent @click="fmt($event, 'insertUnorderedList')" title="Liste à puces" aria-label="Liste à puces"><i data-lucide="list"></i></button>
+                                                    <button type="button" @mousedown.prevent @click="fmt($event, 'insertOrderedList')" title="Liste numérotée" aria-label="Liste numérotée"><i data-lucide="list-ordered"></i></button>
+                                                    <button type="button" @mousedown.prevent @click="fmt($event, 'quote')" title="Verset ou citation (recliquez pour revenir au texte)" aria-label="Citation"><i data-lucide="quote"></i></button>
+                                                </div>
+                                                <div class="ks-input ks-rich" contenteditable="true" role="textbox" aria-multiline="true" aria-label="Texte de l'encadré" data-placeholder="Le texte de l'encadré…" x-init="rich($el, b)"></div>
+                                            </div>
+                                        </template>
+                                        <template x-if="b._raw">
+                                            <div class="ks-stack">
+                                                <p class="ks-help">Cet encadré contient une mise en forme particulière : il reste modifiable ici en texte, pour ne rien perdre.</p>
+                                                <textarea class="ks-input" rows="3" x-model="b.text" aria-label="Texte de l'encadré"></textarea>
+                                            </div>
+                                        </template>
                                     </div>
                                 </template>
                                 <template x-if="b.type === 'schema'">

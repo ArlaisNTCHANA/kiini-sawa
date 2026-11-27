@@ -1,0 +1,94 @@
+{# Export PDF d'un parcours depuis le studio (CourseExporter). Texte des leçons déjà rendu et sûr (LessonMarkdown). #}
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<title>{{ course.title }}</title>
+<style>
+    @page { margin: 22mm 18mm 20mm; }
+    body { font-family: 'DejaVu Sans', sans-serif; font-size: 10.5pt; color: #1e293b; line-height: 1.55; }
+    .footer { position: fixed; bottom: -12mm; left: 0; right: 0; font-size: 7.5pt; color: #94a3b8; border-top: 0.5pt solid #e2e8f0; padding-top: 2mm; }
+    .cover { border-bottom: 2pt solid #2E6B53; padding-bottom: 6mm; margin-bottom: 6mm; }
+    .brand { color: #2E6B53; font-size: 9pt; font-weight: bold; letter-spacing: 2pt; }
+    h1 { font-family: 'Playfair Display', 'DejaVu Serif', serif; color: #2E6B53; font-size: 24pt; margin: 2mm 0 1mm; }
+    .subtitle { color: #64748b; font-size: 12pt; font-style: italic; }
+    .summary { margin: 4mm 0 0; padding: 0; list-style: none; }
+    .summary li { margin: 0 0 1mm; }
+    .module { page-break-before: always; }
+    .module-title { font-family: 'Playfair Display', 'DejaVu Serif', serif; color: #2E6B53; font-size: 17pt; margin: 0 0 4mm; border-bottom: 0.5pt solid #DCE7DF; padding-bottom: 1.5mm; }
+    .lesson { margin: 0 0 8mm; }
+    .lesson-title { font-size: 13.5pt; color: #0f172a; margin: 5mm 0 0.5mm; page-break-after: avoid; }
+    .meta { color: #64748b; font-size: 8.5pt; margin-bottom: 2.5mm; }
+    .lesson h2 { font-size: 12pt; color: #2E6B53; margin: 4mm 0 1.5mm; page-break-after: avoid; }
+    .lesson h3 { font-size: 11pt; margin: 3mm 0 1mm; page-break-after: avoid; }
+    .lesson p { margin: 0 0 2.5mm; }
+    .lesson ul, .lesson ol { margin: 0 0 2.5mm; padding-left: 6mm; }
+    .lesson li { margin-bottom: 1mm; }
+    .lesson a { color: #2E6B53; }
+    .lesson blockquote { margin: 0 0 3mm; padding: 2mm 4mm; border-left: 2.5pt solid #2E6B53; background: #F4F7F5; font-style: italic; color: #334155; }
+    .lesson blockquote p { margin: 0; }
+    .lesson table { width: 100%; border-collapse: collapse; margin: 1mm 0 3mm; font-size: 9pt; }
+    .lesson td, .lesson th { border: 0.4pt solid #cbd5e1; padding: 1.5mm 2mm; vertical-align: top; text-align: left; }
+    .lesson th { background: #f1f5f9; }
+    .lesson img { max-width: 100%; margin: 1mm 0 3mm; }
+    .academie-encadre { border: 0.6pt solid #2E6B53; background: #EEF3EF; border-radius: 3pt; padding: 3mm 4mm; margin: 0 0 3.5mm; page-break-inside: avoid; }
+    .academie-encadre--attention { border-color: #B45309; background: #FEF6E7; }
+    .academie-encadre__titre { font-weight: bold; color: #2E6B53; margin: 0 0 1.5mm; }
+    .academie-encadre--attention .academie-encadre__titre { color: #B45309; }
+    .academie-encadre i, .academie-mediter-fait { display: none; }
+    .export-schema { color: #64748b; }
+    .box { border: 0.6pt dashed #2E6B53; border-radius: 3pt; padding: 3mm 4mm; margin: 2mm 0 3mm; page-break-inside: avoid; }
+    .box-title { font-weight: bold; color: #2E6B53; margin: 0 0 1mm; }
+    .quiz { margin: 2mm 0 3mm; page-break-inside: avoid; }
+    .quiz-q { font-weight: bold; margin: 2mm 0 0.5mm; }
+    .quiz-a { margin: 0 0 0.3mm 5mm; }
+    .ok { color: #2E6B53; font-weight: bold; }
+    .muted { color: #64748b; }
+</style>
+</head>
+<body>
+    <div class="footer">{{ course.title }} · parcours de l'Académie KIINI SAWA · exporté le {{ 'now'|format_date(pattern: 'd MMMM y', locale: 'fr') }}</div>
+    <div class="cover">
+        <div class="brand">KIINI SAWA · L'ACADÉMIE</div>
+        <h1>{{ course.title }}</h1>
+        {% if course.subtitle %}<div class="subtitle">{{ course.subtitle }}</div>{% endif %}
+    </div>
+    {% if course.description %}<div class="lesson">{{ course.description|lecon_markdown }}</div>{% endif %}
+    <ol class="summary">
+        {% for module in course.modules %}
+            <li><strong>{{ module.title }}</strong> : {{ module.lessons|map(l => l.title)|join(' · ') }}</li>
+        {% endfor %}
+    </ol>
+
+    {% for module in course.modules %}
+        <div class="module">
+            <h2 class="module-title">Module {{ loop.index }} · {{ module.title }}</h2>
+            {% for lesson in module.lessons %}
+                <div class="lesson">
+                    <h3 class="lesson-title">{{ lesson.title }}</h3>
+                    <div class="meta">{{ lesson.durationMinutes }} min{% if not lesson.visible %} · leçon masquée aux membres{% endif %}{% if video[lesson.id] %} · vidéo : <a href="{{ video[lesson.id] }}">{{ video[lesson.id] }}</a>{% endif %}</div>
+                    {{ html[lesson.id]|raw }}
+                    {% if lesson.hasPractice %}
+                        <div class="box">
+                            <p class="box-title">Exercice · {{ practice[lesson.id] }}</p>
+                            {% if lesson.practicePrompt %}<p style="margin: 0;">{{ lesson.practicePrompt }}</p>{% endif %}
+                        </div>
+                    {% endif %}
+                    {% if lesson.questions|length > 0 %}
+                        <div class="quiz">
+                            <p class="box-title">Questions</p>
+                            {% for q in lesson.questions %}
+                                <p class="quiz-q">{{ loop.index }}. {{ q.question }}</p>
+                                {% for o in q.options %}
+                                    <p class="quiz-a">{% if q.isCorrect(o.id) %}<span class="ok">✓ {{ o.label }}</span> <span class="muted">(bonne réponse)</span>{% else %}○ {{ o.label }}{% endif %}</p>
+                                {% endfor %}
+                                {% if q.explanation %}<p class="quiz-a muted"><em>{{ q.explanation }}</em></p>{% endif %}
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+            {% endfor %}
+        </div>
+    {% endfor %}
+</body>
+</html>

@@ -70,6 +70,9 @@ class AcademyBlockEditorTest extends WebTestCase
         $crawler = $client->request('GET', '/admin/academie/lecon/'.$lesson->getId());
         $this->assertResponseIsSuccessful();
         $this->assertSelectorExists('[x-data^="lessonEditor"]');
+        // Écriture « comme dans Word » (27/11/2026) : zones de saisie mises en forme, sans symboles, et leur script
+        $this->assertSelectorExists('script[src*="ks-rich-text"]');
+        $this->assertGreaterThanOrEqual(4, $crawler->filter('template')->reduce(fn ($t) => str_contains($t->html(), 'contenteditable="true"'))->count());
         $token = (string) $crawler->filter('form input[name="_csrf_token"]')->first()->attr('value');
 
         // Conversion pour passer d'un mode à l'autre

@@ -127,6 +127,41 @@ Glisser-déposer par la poignée ou flèches, « + » entre deux blocs, aperçu 
   l'aperçu `apercu-texte` accepte aussi des blocs.
 - « Texte (avancé) » : l'ancien champ texte, avec son panneau d'insertion, toujours disponible.
 
+## Écrire « comme dans Word » (27/11/2026)
+
+Demande du fondateur : plus d'astérisques ni de tirets dans le studio. Les blocs **paragraphe, liste, citation et
+encadré** s'écrivent maintenant dans une zone mise en forme (`contenteditable`) : le gras se voit en gras, l'italique en
+italique, les liens et les puces s'affichent, avec des boutons (G, I, lien ; pour l'encadré aussi puces, numéros et
+citation) et Ctrl+B / Ctrl+I. Coller depuis Word, un e-mail ou une page web garde gras, italique, liens et listes, et
+rien d'autre (couleurs, polices et scripts retirés). L'aperçu en direct reste à droite.
+
+- `assets/js/ks-rich-text.js` (`window.KsRich`) traduit dans les deux sens entre la zone et le **même Markdown
+  qu'avant** : rien ne change pour les pages des membres, l'API mobile, l'import de fichiers ni `LessonBlocks`. Trois
+  façons d'écrire : `inline` (paragraphe, citation : Entrée = retour à la ligne), `list`, `doc` (encadré : paragraphes,
+  listes, citations). Les caractères qui feraient une mise en forme (`*`, `_`, `[`, une ligne commençant par `-`, `1.`,
+  `#`, `>`) sont échappés : ce que l'auteur tape s'affiche tel quel.
+- **Rien ne se perd** : `KsRich.canEdit` refuse la zone mise en forme si le texte ne revient pas identique (ou au moins
+  au même affichage) ; le bloc reste alors en texte, avec une phrase d'explication (`b._raw`). Vérifié le 27/11/2026 sur
+  les 341 blocs des 48 leçons livrées dans `content/academie/` : tous passent en zone mise en forme, texte enregistré
+  inchangé, rendu `LessonMarkdown` identique (vérification faite hors dépôt avec jsdom).
+- Le bloc « Texte avancé (tableau…) » et le mode « Texte (avancé) » restent (charte : aucune fonction retirée). Un
+  tableau s'écrit encore avec ses marques.
+
+## Exporter un parcours (27/11/2026)
+
+Bouton **Exporter** sur la page d'un parcours dans le studio (`GET /admin/academie/{id}/exporter/{pdf|docx|yaml}`,
+administrateurs seulement, lecture seule) ; `App\Academie\Service\CourseExporter`.
+
+- **PDF** (Dompdf, `templates/academie/admin/export/course.pdf.twig`) et **Word** (PhpWord, ajouté le 27/11/2026) :
+  présentation, sommaire, chaque module et leçon comme les membres la lisent (encadrés, citations, tableaux, images du
+  parcours converties de WebP en PNG), exercice relié au plan, questions avec bonnes réponses et explications, lien de
+  la vidéo, mention « leçon masquée ». Un schéma n'est pas dessiné : son nom est indiqué.
+- **Fichier de parcours** (`.yaml`) : même format que `content/academie/`, rechargeable par `app:academie:import`
+  (changer `slug` pour une copie). L'import lit maintenant aussi `video:` (lien YouTube ou Vimeo) et `hidden: true`, et
+  accepte une leçon avec vidéo sans texte. Les images restent celles du parcours d'origine (adresses
+  `/academie/images/<id>/…`) ; la vignette n'est pas dans le fichier.
+- Tests : `tests/Academie/CourseExportTest.php` (rechargement sans perte, trois formats, refus aux membres).
+
 ## Charger un parcours écrit dans un fichier (24/11/2026)
 
 `php bin/console app:academie:import content/academie/<parcours>.yaml` (`src/Academie/Command/ImportCourseCommand.php`)

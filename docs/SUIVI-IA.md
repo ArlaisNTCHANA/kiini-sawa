@@ -9,6 +9,24 @@ teste (`php bin/phpunit`), commit, déploie (`bin/ops/envoyer-hostinger.sh`), v�
 journal `var/log/prod-AAAA-MM-JJ.log` sans erreur) ; **le fondateur fait lui-même `git push`** (refusé à l'IA).
 Ne jamais afficher ni demander de mot de passe ; ne pas publier son nom (mentions légales en attente).
 
+## 27/11/2026 — Studio : écrire « comme dans Word » ; exporter un parcours (PDF, Word, fichier)
+
+Demandes du fondateur : « plus de * pour gras ou tiret » dans le Studio (garder l'aperçu), et exporter un cours en
+plusieurs formats. Détail : `docs/modules/academie.md` (« Écrire comme dans Word », « Exporter un parcours »).
+- **Éditeur** : `assets/js/ks-rich-text.js` + `templates/academie/admin/lesson.html.twig` (blocs paragraphe, liste,
+  citation, encadré en zone mise en forme ; coller depuis Word nettoyé). Même Markdown enregistré qu'avant. Un bloc à la
+  mise en forme particulière reste en texte (rien ne se perd). Essayé dans le navigateur (saisie, gras, liste, liste
+  numérotée, coller depuis Word) sur une copie de la page ; vérifié hors dépôt sur les 341 blocs livrés.
+- **Export** : `CourseExporter`, route `admin_academie_export`, menu « Exporter » (`course.html.twig`). PDF et Word
+  relus page par page sur trois parcours locaux (images, encadrés, questions, exercices). Nouvelle dépendance
+  **phpoffice/phpword** (ext zip, xml, gd présentes sur le serveur). L'import lit `video:` et `hidden:`.
+- **Livre** : pas d'éditeur dans l'application (voulu) ; le fondateur demande ses changements, l'IA modifie le
+  manuscrit (`livre-et-ressources/sources/livre/manuscrit.md`), lance `app:livre:sync` et déploie avec accord.
+- Pièges : PhpWord ignore le style `width` des images (attributs `width`/`height` posés) et les largeurs en % des
+  tableaux selon les lecteurs (encadrés en 480pt). `Settings::setOutputEscapingEnabled(true)` : PhpWord échappe le texte.
+- Reste possible : tableaux sans symboles (éditeur de tableau), présentation du parcours et consignes aussi en zone mise
+  en forme, import d'un fichier de parcours depuis le studio (aujourd'hui en ligne de commande).
+
 ## 26/11/2026 — « Le But de Dieu pour ma vie » ; impression complète du Plan de Vie
 
 - **Déployé le 26/11/2026** (accord du fondateur) : pages contrôlées, aucune erreur au journal du serveur. Le parcours, déjà publié, reste à corriger par le fondateur dans le studio (voir ci-dessous).
