@@ -1,0 +1,71 @@
+{% extends 'admin/layout.html.twig' %}
+
+{% block title %}{{ course.title }} · Suivi de l'Académie{% endblock %}
+{% block page_title %}{{ course.title }}{% endblock %}
+{% block page_lead %}{{ stats.enrolled }} inscrit{{ stats.enrolled > 1 ? 's' }}. Séance par séance : combien l'ont faite, combien ont écrit dans leur plan, et où l'on s'arrête.{% endblock %}
+
+{% block content %}
+<div class="ks-stack">
+    <p class="ks-toolbar">
+        <a href="{{ path('admin_academy_stats') }}" class="ks-btn ks-btn--ghost ks-btn--sm"><i data-lucide="arrow-left"></i> Tous les parcours</a>
+        <a href="{{ path('admin_academie_course', {id: course.id}) }}" class="ks-btn ks-btn--ghost ks-btn--sm"><i data-lucide="pencil"></i> Ouvrir dans le studio</a>
+    </p>
+
+    {% if stats.worst is not null %}
+        {% set w = stats.lessons[stats.worst] %}
+        <section class="ks-card ks-card--accent">
+            <h2 class="ks-card__title"><i data-lucide="triangle-alert"></i> Là où l'on s'arrête le plus</h2>
+            <p>Avant la séance <strong>{{ stats.worst + 1 }} « {{ w.lesson.title }} »</strong> : {{ w.drop }} personne{{ w.drop > 1 ? 's' }} de moins que la séance précédente. C'est la première à relire : longueur, clarté de la consigne, intérêt de l'exercice.</p>
+            {% if stats.enrolled < 10 %}<p class="ks-small">Avec moins de dix inscrits, c'est une piste plutôt qu'une conclusion.</p>{% endif %}
+        </section>
+    {% endif %}
+
+    <section class="ks-card">
+        <h2 class="ks-card__title"><i data-lucide="list-ordered"></i> Séance par séance</h2>
+        {% if stats.enrolled == 0 %}
+            <p class="ks-muted">Personne n'a encore commencé ce parcours.</p>
+        {% else %}
+        <ol class="st-list">
+            {% for row in stats.lessons %}
+                <li class="{{ stats.worst == loop.index0 ? 'is-worst' }}">
+                    <div class="st-head">
+                        <span class="st-num">{{ loop.index }}</span>
+                        <a href="{{ path('admin_academie_lesson', {id: row.lesson.id}) }}">{{ row.lesson.title }}</a>
+                        <span class="st-figure"><strong>{{ row.done }}</strong> · {{ row.share }} %</span>
+                    </div>
+                    <span class="st-bar" aria-hidden="true"><span style="width: {{ row.share }}%;"></span></span>
+                    <span class="ks-small">{% if row.lesson.hasPractice %}{{ row.wrote }} ont écrit dans leur plan{% else %}pas d'exercice{% endif %}{% if loop.index0 > 0 and row.drop > 0 %} · {{ row.drop }} de moins qu'à la séance précédente{% endif %}</span>
+                </li>
+            {% endfor %}
+        </ol>
+        {% endif %}
+    </section>
+
+    <section class="ks-card">
+        <h2 class="ks-card__title"><i data-lucide="calendar"></i> Nouveaux inscrits, semaine par semaine</h2>
+        {% set top = max(1, max(stats.starts|map(s => s.n))) %}
+        <div class="st-weeks" role="img" aria-label="Nouveaux inscrits des huit dernières semaines : {{ stats.starts|map(s => s.label ~ ' ' ~ s.n)|join(', ') }}">
+            {% for s in stats.starts %}
+                <div class="st-week"><span class="st-week__n">{{ s.n }}</span><span class="st-week__bar" style="height: {{ (s.n / top * 100)|round }}%;"></span><span class="st-week__label">{{ s.label }}</span></div>
+            {% endfor %}
+        </div>
+    </section>
+</div>
+<style>
+    .st-list { list-style: none; padding: 0; margin: 0; display: grid; gap: .9rem; }
+    .st-list li { display: grid; gap: .3rem; }
+    .st-list li.is-worst { padding: .6rem .7rem; margin: 0 -.7rem; border-radius: var(--r-md); background: var(--warning-soft); }
+    .st-head { display: flex; align-items: center; gap: .6rem; }
+    .st-head a { flex: 1; min-width: 0; color: var(--fg); font-weight: 600; text-decoration: none; }
+    .st-num { flex: none; width: 24px; height: 24px; border-radius: 50%; background: var(--primary-soft); color: var(--primary-dark); display: inline-flex; align-items: center; justify-content: center; font-size: .78rem; font-weight: 700; }
+    .st-figure { flex: none; font-size: .88rem; color: var(--fg-muted); }
+    .st-figure strong { color: var(--fg); }
+    .st-bar { display: block; height: 8px; background: var(--border); border-radius: 99px; overflow: hidden; }
+    .st-bar span { display: block; height: 8px; background: var(--primary); border-radius: 99px; }
+    .st-weeks { display: grid; grid-template-columns: repeat(8, 1fr); gap: .5rem; align-items: end; height: 160px; padding-top: 1rem; }
+    .st-week { display: flex; flex-direction: column; align-items: center; justify-content: flex-end; height: 100%; gap: .25rem; }
+    .st-week__bar { width: 70%; min-height: 3px; background: var(--primary-light); border-radius: 6px 6px 0 0; }
+    .st-week__n { font-size: .8rem; font-weight: 700; color: var(--fg); }
+    .st-week__label { font-size: .72rem; color: var(--fg-muted); }
+</style>
+{% endblock %}

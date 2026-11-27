@@ -1,0 +1,30 @@
+{% extends 'admin/layout.html.twig' %}
+
+{% block title %}Suivi de l'Académie{% endblock %}
+{% block page_title %}Suivi de l'Académie{% endblock %}
+{% block page_lead %}Qui commence chaque parcours, qui avance, qui va au bout. Des totaux seulement, jamais un nom : c'est pour améliorer les parcours. Ouvrez un parcours pour voir à quelle séance on s'arrête.{% endblock %}
+
+{% block content %}
+<section class="ks-card">
+    <div class="ks-table-wrap">
+        <table class="ks-table ks-table--cards">
+            <thead><tr><th>Parcours</th><th>Inscrits</th><th>Actifs (7 jours)</th><th>Allés au bout</th><th>Rythme par e-mail</th></tr></thead>
+            <tbody>
+            {% for r in rows %}
+                <tr>
+                    <td><a href="{{ path('admin_academy_stats_course', {id: r.course.id}) }}"><strong>{{ r.course.title }}</strong></a>
+                        {% if not r.course.published %}<br><span class="ks-badge ks-badge--muted">brouillon</span>{% endif %}</td>
+                    <td data-label="Inscrits">{{ r.enrolled }}</td>
+                    <td data-label="Actifs (7 jours)">{{ r.active }}</td>
+                    <td data-label="Allés au bout">{{ r.completed }}{% if r.rate is not null %} <span class="ks-small">({{ r.rate }} %)</span>{% endif %}</td>
+                    <td data-label="Rythme par e-mail">{{ r.paced }} en cours{% if r.paused %} · <span class="ks-small">{{ r.paused }} en pause</span>{% endif %}</td>
+                </tr>
+            {% else %}
+                <tr><td colspan="5" class="is-empty">Aucun parcours pour l'instant.</td></tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <p class="ks-help" style="margin-top: .8rem;">« En pause » : après trois e-mails sans avancer, le rythme s'arrête tout seul pour ne pas encombrer la boîte du membre.</p>
+</section>
+{% endblock %}

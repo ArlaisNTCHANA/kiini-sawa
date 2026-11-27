@@ -48,6 +48,7 @@ final class AdminNavigationExtension extends AbstractExtension
             ['D\'où viennent les inscrits', 'admin_origins', 'radar', ['admin_origins']],
             ['Du visiteur au membre', 'admin_funnel', 'filter', ['admin_funnel']],
             ['Qui revient', 'admin_retention', 'repeat', ['admin_retention']],
+            ['Suivi de l\'Académie', 'admin_academy_stats', 'chart-no-axes-column', ['admin_academy_stats']],
         ]],
         'settings' => ['label' => 'Réglages', 'items' => [
             ['Réglages de l\'application', 'admin_config', 'settings', ['admin_config']],

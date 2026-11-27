@@ -9,6 +9,17 @@ teste (`php bin/phpunit`), commit, déploie (`bin/ops/envoyer-hostinger.sh`), v�
 journal `var/log/prod-AAAA-MM-JJ.log` sans erreur) ; **le fondateur fait lui-même `git push`** (refusé à l'IA).
 Ne jamais afficher ni demander de mot de passe ; ne pas publier son nom (mentions légales en attente).
 
+## 27/11/2026 — Suivi de l'Académie (administration)
+
+Demande du fondateur (troisième manque de la liste). Admin › Les chiffres › Suivi de l'Académie (`/admin/academie/suivi`,
+`Academie/Service/AcademyStats`, `AcademyStatsAdminController`) et bouton « Suivi » sur chaque parcours du studio.
+- Vue d'ensemble : par parcours, inscrits, actifs sur 7 jours, allés au bout (et %), rythmes par e-mail en cours ou en
+  pause.
+- Un parcours : séance par séance, combien l'ont faite (barre et %), combien ont écrit dans leur plan, la perte depuis
+  la séance précédente ; « Là où l'on s'arrête le plus » (plus forte perte, avec une réserve sous dix inscrits) ;
+  nouveaux inscrits des 8 dernières semaines.
+- **Totaux seulement, jamais un nom ni une réponse** (test dédié). Test : `tests/Admin/AcademyStatsTest.php`.
+
 ## 27/11/2026 — Admin › Écrire aux membres (annonces)
 
 - **Déployé le 27/11/2026** (accord du fondateur) : migration passée (1 migration, 3 requêtes), commande de reprise présente, tâche planifiée mise à jour, aucune erreur au journal.
