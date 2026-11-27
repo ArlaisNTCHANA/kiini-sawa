@@ -11,6 +11,8 @@ Ne jamais afficher ni demander de mot de passe ; ne pas publier son nom (mention
 
 ## 27/11/2026 — Fiche d'un membre dans l'administration
 
+- **Déployé le 27/11/2026** (accord du fondateur) : pages contrôlées, aucune erreur au journal du serveur.
+
 Demande du fondateur (premier manque de la liste). `/admin/utilisateurs/{id}` (`UserAdminController::show`,
 `Compte/Service/MemberFile`, `templates/compte/admin/user.html.twig`), ouverte en cliquant sur un nom dans Membres.
 - **Compte** : inscription, dernière visite, adresse vérifiée ou non, accueil terminé, provenance (SignupOrigin).
@@ -25,6 +27,8 @@ Demande du fondateur (premier manque de la liste). `/admin/utilisateurs/{id}` (`
   au journal du serveur (qui, quand). Test : `tests/Admin/MemberFileTest.php`.
 
 ## 27/11/2026 — Menu de l'administration réorganisé
+
+- **Déployé le 27/11/2026** (accord du fondateur) : pages contrôlées, aucune erreur au journal du serveur.
 
 Demande du fondateur : « optimise les menus de l'administration, et dis-moi ce qui manque ».
 - `AdminNavigationExtension::GROUPS` : Accueil ; **À traiter** (Paiements, Avis reçus, avec leurs compteurs) ; Les
