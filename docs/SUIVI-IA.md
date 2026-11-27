@@ -11,13 +11,14 @@ Ne jamais afficher ni demander de mot de passe ; ne pas publier son nom (mention
 
 ## 26/11/2026 — « Le But de Dieu pour ma vie » ; impression complète du Plan de Vie
 
-- **Déployé le 26/11/2026** (accord du fondateur) : pages contrôlées, aucune erreur au journal du serveur. Le parcours en brouillon reste à recharger ou corriger par le fondateur (voir ci-dessous).
+- **Déployé le 26/11/2026** (accord du fondateur) : pages contrôlées, aucune erreur au journal du serveur. Le parcours, déjà publié, reste à corriger par le fondateur dans le studio (voir ci-dessous).
 - **Formulation** (demande du fondateur) : jamais « Votre But de Dieu » dans l'application, mais « le But de Dieu pour
   ma vie » : `DashboardData` (accueil) et le parcours `content/academie/parcours-plan-de-vie.yaml` (titre de la 1re
   séance, présentation, consigne). Le texte du livre (« ton But de Dieu ») n'est pas touché.
-  En production, le parcours est déjà chargé en brouillon : pour reprendre le nouveau fichier, le fondateur lance
-  (s'il n'a pas retouché ce brouillon dans le studio) `app:academie:import content/academie/parcours-plan-de-vie.yaml --remplacer`,
-  ou corrige les trois endroits dans Admin › Académie.
+  En production, le parcours est en fait **déjà publié** (`--remplacer` refusé le 27/11/2026 : « Un parcours publié
+  porte déjà cette adresse »). `--textes` ne convient pas non plus (il ne touche que le texte des leçons, et le titre
+  renommé change l'adresse de la leçon). Reste à corriger à la main dans Admin › Académie : présentation du parcours,
+  titre de la 1re séance (« Votre But de Dieu » → « Le But de Dieu pour ma vie »), consigne d'écriture de cette séance.
 - **Impression du Plan de Vie** (« je ne vois pas tous les détails ») : sur `visualize.html.twig`, l'en-tête et le pied
   en `position: fixed` recouvraient le haut et le bas de chaque page à partir de la 2e (titres et objectifs cachés),
   et le message « Plan de Vie envoyé avec succès » s'imprimait sur chaque page. Retirés à l'impression ; les titres de
