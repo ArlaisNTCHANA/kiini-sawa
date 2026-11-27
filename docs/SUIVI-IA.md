@@ -11,6 +11,8 @@ Ne jamais afficher ni demander de mot de passe ; ne pas publier son nom (mention
 
 ## 27/11/2026 — Admin › Écrire aux membres (annonces)
 
+- **Déployé le 27/11/2026** (accord du fondateur) : migration passée (1 migration, 3 requêtes), commande de reprise présente, tâche planifiée mise à jour, aucune erreur au journal.
+
 Demande du fondateur (deuxième manque de la liste). `/admin/messages` (`Notification/Controller/Admin/AnnouncementAdminController`,
 `Notification/Service/AnnouncementSender`, entité `Announcement`, migration `Version20261127215716`).
 - Rédiger (titre, message en texte simple, bouton facultatif vers une page « /… » ou « https:// »), choisir le public
