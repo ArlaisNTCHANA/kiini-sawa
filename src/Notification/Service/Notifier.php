@@ -55,7 +55,7 @@ final class Notifier
 
     /**
      * @param string|null          $key          identifiant du rappel (ex. « 2026-W46 ») : rien n'est envoyé s'il existe déjà
-     * @param array{template?: string, context?: array<string, mixed>} $email gabarit d'e-mail particulier (sinon le gabarit commun)
+     * @param array{template?: string, context?: array<string, mixed>, send?: bool} $email gabarit d'e-mail particulier (sinon le gabarit commun)
      *
      * @return bool true si l'utilisateur a été prévenu
      */
@@ -79,6 +79,10 @@ final class Notifier
                 $inApp = false;
                 $byEmail = true;
             }
+            // Annonce de l'équipe : dans l'application, et par e-mail si l'administrateur l'a choisi (ci-dessous)
+            if (NotificationType::ANNOUNCEMENT === $type) {
+                $byEmail = true;
+            }
             // Anniversaire : un e-mail une fois par an (le fondateur l'a voulu), coupé seulement par son interrupteur
             if (NotificationType::BIRTHDAY === $type) {
                 $byEmail = true;
@@ -88,6 +92,10 @@ final class Notifier
                 $inApp = false;
                 $byEmail = false;
             }
+        }
+        // L'appelant peut demander une notification sans e-mail (annonce « dans l'application seulement »)
+        if (false === ($email['send'] ?? true)) {
+            $byEmail = false;
         }
         // Le jour d'une séance, elle est le seul e-mail de rappel : les autres restent dans l'application
         if ($byEmail && isset($this->sessionDay[(int) $user->getId()]) && \in_array($type, self::HELD_ON_SESSION_DAYS, true)) {
@@ -157,6 +165,7 @@ final class Notifier
             NotificationType::DAILY_RITUALS => $p->isNotifyHabitReminder(),
             NotificationType::BIRTHDAY => $p->isNotifyBirthday(),
             NotificationType::TIP => $p->isNotifyTips(),
+            NotificationType::ANNOUNCEMENT => $p->isNotifyAnnouncements(),
             default => true,
         };
     }

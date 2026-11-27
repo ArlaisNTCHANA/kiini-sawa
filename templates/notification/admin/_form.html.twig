@@ -1,0 +1,46 @@
+{# Formulaire d'une annonce (création et modification d'un brouillon). Variables : a (ou null), action, audiences, organisations, submit. #}
+<form method="post" action="{{ action }}" class="ks-stack an-form">
+    <input type="hidden" name="_csrf_token" value="{{ csrf_token('admin_announcement') }}">
+    <div>
+        <label class="ks-label" for="an-title">Titre</label>
+        <input id="an-title" class="ks-input" name="title" required maxlength="160" value="{{ a ? a.title }}" placeholder="Nouveau parcours : « Sous pression »">
+        <p class="ks-help">C'est aussi l'objet de l'e-mail.</p>
+    </div>
+    <div>
+        <label class="ks-label" for="an-message">Message</label>
+        <textarea id="an-message" class="ks-input" name="message" rows="8" required maxlength="5000" placeholder="Écrivez simplement, comme à un ami. Laissez une ligne vide entre deux paragraphes.">{{ a ? a.message }}</textarea>
+    </div>
+    <div class="an-row">
+        <div>
+            <label class="ks-label" for="an-url">Lien du bouton (facultatif)</label>
+            <input id="an-url" class="ks-input" name="actionUrl" maxlength="255" value="{{ a ? a.actionUrl }}" placeholder="/academie/sous-pression">
+            <p class="ks-help">Une page du site (commence par /) ou une adresse https://.</p>
+        </div>
+        <div>
+            <label class="ks-label" for="an-label">Texte du bouton</label>
+            <input id="an-label" class="ks-input" name="actionLabel" maxlength="60" value="{{ a ? a.actionLabel }}" placeholder="Découvrir le parcours">
+        </div>
+    </div>
+    <div class="an-row" x-data="{ audience: '{{ a ? a.audience : 'ALL' }}' }">
+        <div>
+            <label class="ks-label" for="an-audience">À qui ?</label>
+            <select id="an-audience" class="ks-input" name="audience" x-model="audience">
+                {% for code, label in audiences %}<option value="{{ code }}" {{ (a ? a.audience : 'ALL') == code ? 'selected' }}>{{ label }}</option>{% endfor %}
+            </select>
+            <p class="ks-help">Jamais aux administrateurs, ni aux comptes dont l'adresse n'est pas vérifiée.</p>
+        </div>
+        <div x-show="audience === 'ORGANISATION'" x-cloak>
+            <label class="ks-label" for="an-org">Organisation</label>
+            <select id="an-org" class="ks-input" name="organisation">
+                {% for o in organisations %}<option value="{{ o.id }}" {{ a and a.organisationId == o.id ? 'selected' }}>{{ o.name }}</option>{% else %}<option value="">Aucune organisation</option>{% endfor %}
+            </select>
+        </div>
+    </div>
+    <label class="an-check"><input type="checkbox" name="withEmail" value="1" {{ not a or a.withEmail ? 'checked' }}> Envoyer aussi par e-mail <span class="ks-small">(sinon : seulement dans l'application et sur le téléphone)</span></label>
+    <div><button type="submit" class="ks-btn {{ submitClass|default('ks-btn--primary') }}">{{ submit }}</button></div>
+</form>
+<style>
+    .an-row { display: grid; gap: .8rem; }
+    @media (min-width: 720px) { .an-row { grid-template-columns: 1fr 1fr; } }
+    .an-check { display: flex; gap: .55rem; align-items: center; flex-wrap: wrap; }
+</style>

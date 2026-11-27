@@ -131,6 +131,9 @@ class MobileNotificationController extends AbstractController
         if (isset($data['notifyTips']) && \is_bool($data['notifyTips'])) {
             $prefs->setNotifyTips($data['notifyTips']);
         }
+        if (isset($data['notifyAnnouncements']) && \is_bool($data['notifyAnnouncements'])) {
+            $prefs->setNotifyAnnouncements($data['notifyAnnouncements']);
+        }
         if (isset($data['notifyPartnerInactive']) && \is_bool($data['notifyPartnerInactive'])) {
             $prefs->setNotifyPartnerInactive($data['notifyPartnerInactive']);
         }
@@ -271,6 +274,7 @@ class MobileNotificationController extends AbstractController
             'notifyPartnerInactive' => $p->isNotifyPartnerInactive(),
             'notifyBirthday' => $p->isNotifyBirthday(),
             'notifyTips' => $p->isNotifyTips(),
+            'notifyAnnouncements' => $p->isNotifyAnnouncements(),
             'preferredTime' => $p->getPreferredTime(),
         ];
     }

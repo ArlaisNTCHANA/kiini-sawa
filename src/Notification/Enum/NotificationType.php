@@ -41,6 +41,8 @@ enum NotificationType: string
     case BIRTHDAY = 'BIRTHDAY';
     // « Saviez-vous que… » : une fonction pas encore utilisée, par e-mail, au plus toutes les deux semaines (désactivable)
     case TIP = 'TIP';
+    // Annonce écrite par l'administrateur à tous les membres ou à un groupe (Admin › Écrire aux membres), désactivable
+    case ANNOUNCEMENT = 'ANNOUNCEMENT';
 
     /** Icône Lucide affichée dans le centre de notifications. */
     public function icon(): string
@@ -64,6 +66,7 @@ enum NotificationType: string
             self::ACADEMY_LESSON => 'graduation-cap',
             self::BIRTHDAY => 'cake',
             self::TIP => 'lightbulb',
+            self::ANNOUNCEMENT => 'megaphone',
         };
     }
 
@@ -72,7 +75,7 @@ enum NotificationType: string
     {
         return \in_array($this, [self::WEEKLY_REVIEW_REMINDER, self::MONTHLY_REVIEW_REMINDER, self::HABIT_REMINDER, self::GOAL_DEADLINE,
             self::CHALLENGE_DAY, self::DAILY_RITUALS, self::REFERRAL_REWARD, self::FEEDBACK_RECEIVED, self::CONNECTION_REQUEST,
-            self::CONNECTION_ACCEPTED, self::TRIAL_ENDING, self::SUBSCRIPTION_ENDING, self::PAYMENT_VALIDATED, self::COUPLE_SANCTUARY, self::ACCOUNTABILITY, self::BIRTHDAY], true);
+            self::CONNECTION_ACCEPTED, self::TRIAL_ENDING, self::SUBSCRIPTION_ENDING, self::PAYMENT_VALIDATED, self::COUPLE_SANCTUARY, self::ACCOUNTABILITY, self::BIRTHDAY, self::ANNOUNCEMENT], true);
     }
 
     /** Messages de service (paiement, fin d'essai) : envoyés quelles que soient les préférences. */

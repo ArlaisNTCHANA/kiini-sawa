@@ -9,6 +9,21 @@ teste (`php bin/phpunit`), commit, déploie (`bin/ops/envoyer-hostinger.sh`), v�
 journal `var/log/prod-AAAA-MM-JJ.log` sans erreur) ; **le fondateur fait lui-même `git push`** (refusé à l'IA).
 Ne jamais afficher ni demander de mot de passe ; ne pas publier son nom (mentions légales en attente).
 
+## 27/11/2026 — Admin › Écrire aux membres (annonces)
+
+Demande du fondateur (deuxième manque de la liste). `/admin/messages` (`Notification/Controller/Admin/AnnouncementAdminController`,
+`Notification/Service/AnnouncementSender`, entité `Announcement`, migration `Version20261127215716`).
+- Rédiger (titre, message en texte simple, bouton facultatif vers une page « /… » ou « https:// »), choisir le public
+  (tous, gratuits, essai, PRO, absents depuis 30 jours, membres d'une organisation), avec ou sans e-mail ; relire
+  (aperçu « dans l'application » et e-mail réel), s'envoyer un essai (à l'administrateur seulement), envoyer.
+- Jamais aux administrateurs ni aux adresses non vérifiées ; nouveau type `ANNOUNCEMENT` et préférence
+  `notifyAnnouncements` (profil, API mobile, désabonnement en un clic) : coupée = rien, ni e-mail ni notification.
+- Envoi par lots de 25 (hébergement mutualisé) : la page enchaîne les lots ; `app:annonces:envoyer` (ajoutée à
+  `bin/ops/cron-rappels.sh`) termine un envoi interrompu ; la clé « annonce-<id> » empêche tout doublon. Candidats
+  filtrés en base (l'aperçu parcourait sinon tous les comptes un par un). Une annonce partie ne se modifie plus.
+- Piège : la colonne de reprise s'appelle `last_user_id` (« cursor » est réservé dans MariaDB).
+- Test : `tests/Admin/AnnouncementTest.php`.
+
 ## 27/11/2026 — Fiche d'un membre dans l'administration
 
 - **Déployé le 27/11/2026** (accord du fondateur) : pages contrôlées, aucune erreur au journal du serveur.

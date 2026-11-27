@@ -68,6 +68,7 @@ class ProfileController extends AbstractController
         'notifyChallenge' => 'setNotifyChallenge',
         'notifyBirthday' => 'setNotifyBirthday',
         'notifyTips' => 'setNotifyTips',
+        'notifyAnnouncements' => 'setNotifyAnnouncements',
     ];
 
     #[Route('', name: '', methods: ['GET'])]

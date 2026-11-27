@@ -79,6 +79,10 @@ class NotificationPreference
     #[ORM\Column(options: ['default' => true])]
     private bool $notifyTips = true;
 
+    /** Annonces écrites par l'équipe KIINI SAWA (Admin › Écrire aux membres). */
+    #[ORM\Column(options: ['default' => true])]
+    private bool $notifyAnnouncements = true;
+
     #[ORM\Column(length: 50)]
     private string $digestFrequency = 'WEEKLY';
 
@@ -303,6 +307,18 @@ class NotificationPreference
     public function setNotifyBirthday(bool $notifyBirthday): static
     {
         $this->notifyBirthday = $notifyBirthday;
+
+        return $this;
+    }
+
+    public function isNotifyAnnouncements(): bool
+    {
+        return $this->notifyAnnouncements;
+    }
+
+    public function setNotifyAnnouncements(bool $notifyAnnouncements): static
+    {
+        $this->notifyAnnouncements = $notifyAnnouncements;
 
         return $this;
     }

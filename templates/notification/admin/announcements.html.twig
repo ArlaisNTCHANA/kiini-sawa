@@ -1,0 +1,39 @@
+{% extends 'admin/layout.html.twig' %}
+
+{% block title %}Écrire aux membres{% endblock %}
+{% block page_title %}Écrire aux membres{% endblock %}
+{% block page_lead %}Une annonce à tous les membres ou à un groupe : dans l'application, sur le téléphone et, si vous le voulez, par e-mail. Vous la relisez et vous vous l'envoyez en essai avant qu'elle parte.{% endblock %}
+
+{% block content %}
+<div class="ks-stack">
+    <section class="ks-card">
+        <h2 class="ks-card__title"><i data-lucide="pen-line"></i> Nouvelle annonce</h2>
+        {% include 'notification/admin/_form.html.twig' with {a: null, action: path('admin_announcements_new'), submit: 'Relire avant d\'envoyer'} %}
+    </section>
+
+    <section class="ks-card">
+        <h2 class="ks-card__title"><i data-lucide="history"></i> Annonces</h2>
+        <div class="ks-table-wrap">
+            <table class="ks-table ks-table--cards">
+                <thead><tr><th>Annonce</th><th>Public</th><th>État</th><th>Membres prévenus</th></tr></thead>
+                <tbody>
+                {% for an in announcements %}
+                    <tr>
+                        <td><a href="{{ path('admin_announcements_show', {id: an.id}) }}"><strong>{{ an.title }}</strong></a><br><span class="ks-small">créée le {{ an.createdAt|date('d/m/Y') }}{{ an.withEmail ? ' · avec e-mail' : ' · application seulement' }}</span></td>
+                        <td data-label="Public">{{ an.audienceLabel }}</td>
+                        <td data-label="État">
+                            {% if an.draft %}<span class="ks-badge ks-badge--muted">brouillon</span>
+                            {% elseif an.sending %}<span class="ks-badge ks-badge--warning">envoi en cours</span>
+                            {% else %}<span class="ks-badge ks-badge--success">envoyée le {{ an.sentAt|date('d/m/Y') }}</span>{% endif %}
+                        </td>
+                        <td data-label="Membres prévenus">{{ an.draft ? '—' : an.reached }}</td>
+                    </tr>
+                {% else %}
+                    <tr><td colspan="4" class="is-empty">Aucune annonce pour l'instant.</td></tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </section>
+</div>
+{% endblock %}

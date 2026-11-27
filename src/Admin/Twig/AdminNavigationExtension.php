@@ -30,6 +30,7 @@ final class AdminNavigationExtension extends AbstractExtension
         'members' => ['label' => 'Les membres', 'items' => [
             ['Membres', 'admin_users', 'users', ['admin_users']],
             ['Organisations', 'admin_organisations', 'building-2', ['admin_organisations']],
+            ['Écrire aux membres', 'admin_announcements', 'megaphone', ['admin_announcements']],
         ]],
         'content' => ['label' => 'Les contenus', 'items' => [
             ['L\'Académie', 'admin_academie', 'graduation-cap', ['admin_academie_new', 'admin_academie_course', 'admin_academie_status', 'admin_academie_cover', 'admin_academie_image', 'admin_academie_module', 'admin_academie_lesson', 'admin_academie_markdown', 'admin_academie_blocks', 'admin_academie_question', 'admin_academie_preview', 'admin_academie_export', '=admin_academie']],
