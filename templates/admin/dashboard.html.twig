@@ -80,7 +80,7 @@
             <div class="dash-plans" style="margin: .75rem 0 1rem;">
                 {% for i, label in plansChartData.labels %}
                     <div class="dash-plan">
-                        <span class="dash-plan__dot" style="background: {{ ['var(--plan-vie)', 'var(--plan-croissance)', 'var(--plan-developpement)', 'var(--plan-hygiene)', 'var(--plan-transmission)'][i] }};"></span>
+                        <span class="dash-plan__dot" style="background: {{ ['var(--plan-vie)', 'var(--plan-croissance)', 'var(--plan-developpement)', 'var(--plan-hygiene)', 'var(--plan-intendance)', 'var(--plan-transmission)'][i] }};"></span>
                         <span><span class="dash-plan__name">{{ label }}</span><span class="dash-plan__count">{{ plansChartData.data[i] }}</span></span>
                     </div>
                 {% endfor %}

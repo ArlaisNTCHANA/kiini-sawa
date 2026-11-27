@@ -9,6 +9,20 @@ teste (`php bin/phpunit`), commit, déploie (`bin/ops/envoyer-hostinger.sh`), v�
 journal `var/log/prod-AAAA-MM-JJ.log` sans erreur) ; **le fondateur fait lui-même `git push`** (refusé à l'IA).
 Ne jamais afficher ni demander de mot de passe ; ne pas publier son nom (mentions légales en attente).
 
+## 27/11/2026 — Menu de l'administration réorganisé
+
+Demande du fondateur : « optimise les menus de l'administration, et dis-moi ce qui manque ».
+- `AdminNavigationExtension::GROUPS` : Accueil ; **À traiter** (Paiements, Avis reçus, avec leurs compteurs) ; Les
+  membres (Membres, Organisations) ; Les contenus (L'Académie, **Atelier de schémas** désormais au menu, Textes du site,
+  Citations du jour, Défis collectifs) ; **Les tests** (Questions et profils, Textes des tests, Qualité des tests) ; Les
+  chiffres ; Réglages. Un préfixe « =nom » vaut pour ce nom exact (l'Académie et son atelier partagent un début de nom) ;
+  `AdminNavigationTest` le comprend.
+- Tableau de bord : le **Plan d'Intendance** manquait dans « Plans commencés » (compté par membre ayant au moins un
+  élément, puisqu'il n'a pas d'entité « plan »).
+- Ce qui manque (proposé au fondateur, rien de fait) : fiche d'un membre, message à tous les membres, suivi de
+  l'Académie, Boussole 360 dans les chiffres, aperçu des e-mails, contrôle avant ouverture et tâches planifiées, gestion
+  des administrateurs et journal de leurs actions, export pour la comptabilité.
+
 ## 27/11/2026 — Relecture des e-mails « comme un destinataire » ; la Bible et le livre KIINI
 
 - **Déployé le 27/11/2026** (accord du fondateur) : Reply-To actif sur le serveur, page d'accueil sans « livre KIINI SAWA », aucune erreur au journal. Commande des parcours lancée par le fondateur le 27/11/2026 : 25 changements enregistrés en production.

@@ -12,6 +12,7 @@ use App\PlanDeDeveloppement\Repository\PlanDeDeveloppementPersonnelRepository;
 use App\PlanDeTransmission\Repository\PlanDeTransmissionRepository;
 use App\PlanDeVie\Repository\PlanDeVieRepository;
 use App\PlanDHygiene\Repository\PlanDHygieneRepository;
+use App\PlanDIntendance\Repository\StewardshipItemRepository;
 use App\Personnalite\Repository\ProfileTestRepository;
 use App\Journal\Repository\ReflectionNoteRepository;
 use App\Compte\Repository\UserRepository;
@@ -35,6 +36,7 @@ class DashboardController extends AbstractController
         PlanDeDeveloppementPersonnelRepository $planPDPRepo,
         PlanDHygieneRepository $planHygieneRepo,
         PlanDeTransmissionRepository $planTransmissionRepo,
+        StewardshipItemRepository $stewardshipRepo,
         HabitRepository $habitRepo,
         HabitLogRepository $habitLogRepo,
         GrowthGoalRepository $growthGoalRepo,
@@ -59,6 +61,8 @@ class DashboardController extends AbstractController
             'croissance' => $planCroissanceRepo->count(),
             'pdp' => $planPDPRepo->count(),
             'hygiene' => $planHygieneRepo->count(),
+            // Le Plan d'Intendance n'a pas d'entité « plan » : un membre l'a commencé dès son premier élément (27/11/2026)
+            'intendance' => (int) $stewardshipRepo->createQueryBuilder('i')->select('COUNT(DISTINCT IDENTITY(i.user))')->getQuery()->getSingleScalarResult(),
             'transmission' => $planTransmissionRepo->count(),
         ];
         $totalPlans = array_sum($plansData);
@@ -80,10 +84,10 @@ class DashboardController extends AbstractController
 
         // --- Chart data: Plans distribution ---
         $plansChartData = [
-            'labels' => ['Plan de Vie', 'Plan de Croissance', 'Plan de Développement personnel', 'Plan d\'Hygiène de vie', 'Plan de Transmission'],
+            'labels' => ['Plan de Vie', 'Plan de Croissance', 'Plan de Développement personnel', 'Plan d\'Hygiène de vie', 'Plan d\'Intendance', 'Plan de Transmission'],
             'data' => array_values($plansData),
             // Graphique (JavaScript) : les variables CSS n'y fonctionnent pas ; couleurs des plans de docs/design.md
-            'colors' => ['#C8962E', '#1F4D3A', '#2E6B53', '#5D7368', '#A87A1F'],
+            'colors' => ['#C8962E', '#1F4D3A', '#2E6B53', '#5D7368', '#5E8463', '#A87A1F'],
         ];
 
         // --- Chart data: Activity (habit logs per month, last 6 months) ---

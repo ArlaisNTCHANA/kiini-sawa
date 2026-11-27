@@ -57,7 +57,7 @@ class AdminNavigationTest extends WebTestCase
             if (!str_starts_with($route->getPath(), '/admin') || !\in_array('GET', $route->getMethods() ?: ['GET'], true)) {
                 continue;
             }
-            $covered = array_filter($inMenu, fn ($p) => $name === $p || str_starts_with($name, $p.'_'));
+            $covered = array_filter($inMenu, fn ($p) => str_starts_with($p, '=') ? $name === substr($p, 1) : ($name === $p || str_starts_with($name, $p.'_')));
             if (!$covered) {
                 $missing[] = $name;
             }

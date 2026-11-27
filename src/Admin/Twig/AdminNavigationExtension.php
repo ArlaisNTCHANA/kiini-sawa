@@ -9,34 +9,44 @@ use Twig\TwigFunction;
 
 /**
  * Menu de l'administration, défini une seule fois (ordinateur et téléphone), regroupé par usage.
- * Chaque page : [libellé, route, icône, préfixes de route qui la rendent active, compteur « à traiter » éventuel].
+ * Chaque page : [libellé, route, icône, préfixes de route qui la rendent active (« =nom » : ce nom exact), compteur « à traiter » éventuel].
  * Ajouter une page d'administration : l'inscrire ici ; tests/Admin/AdminNavigationTest.php vérifie que chaque entrée s'ouvre.
  */
 final class AdminNavigationExtension extends AbstractExtension
 {
+    /**
+     * Réorganisé le 27/11/2026 (demande du fondateur) : d'abord ce qui attend une décision chaque jour, puis les
+     * personnes, ce que l'on écrit, les tests, les chiffres, enfin les réglages. L'atelier de schémas, caché dans le
+     * studio de l'Académie, a son entrée ; « Qualité des tests » rejoint les autres pages des tests.
+     */
     public const GROUPS = [
         'home' => ['label' => 'Accueil', 'items' => [
             ['Tableau de bord', 'admin_dashboard', 'layout-dashboard', ['admin_dashboard']],
         ]],
-        'members' => ['label' => 'Les membres', 'items' => [
-            ['Membres', 'admin_users', 'users', ['admin_users']],
+        'todo' => ['label' => 'À traiter', 'items' => [
             ['Paiements', 'admin_payments', 'wallet', ['admin_payments', 'admin_seat_order'], 'payments'],
-            ['Organisations', 'admin_organisations', 'building-2', ['admin_organisations']],
             ['Avis reçus', 'admin_app_feedback', 'message-square-heart', ['admin_app_feedback'], 'feedback'],
         ]],
+        'members' => ['label' => 'Les membres', 'items' => [
+            ['Membres', 'admin_users', 'users', ['admin_users']],
+            ['Organisations', 'admin_organisations', 'building-2', ['admin_organisations']],
+        ]],
         'content' => ['label' => 'Les contenus', 'items' => [
-            ['L\'Académie', 'admin_academie', 'graduation-cap', ['admin_academie']],
+            ['L\'Académie', 'admin_academie', 'graduation-cap', ['admin_academie_new', 'admin_academie_course', 'admin_academie_status', 'admin_academie_cover', 'admin_academie_image', 'admin_academie_module', 'admin_academie_lesson', 'admin_academie_markdown', 'admin_academie_blocks', 'admin_academie_question', 'admin_academie_preview', 'admin_academie_export', '=admin_academie']],
+            ['Atelier de schémas', 'admin_academie_diagrams', 'shapes', ['admin_academie_diagrams', 'admin_academie_diagram']],
             ['Textes du site', 'admin_site_texts', 'file-pen-line', ['admin_site_texts', 'admin_site_text'], 'drafts'],
-            ['Citations', 'admin_quotes', 'quote', ['admin_quotes']],
+            ['Citations du jour', 'admin_quotes', 'quote', ['admin_quotes']],
             ['Défis collectifs', 'admin_challenges', 'trophy', ['admin_challenges']],
-            ['Tests : questions et profils', 'admin_personality_dashboard', 'brain', ['admin_personality']],
+        ]],
+        'tests' => ['label' => 'Les tests', 'items' => [
+            ['Questions et profils', 'admin_personality_dashboard', 'brain', ['admin_personality']],
             ['Textes des tests', 'admin_content_index', 'pencil-line', ['admin_content']],
+            ['Qualité des tests', 'admin_psychometrics', 'gauge', ['admin_psychometrics']],
         ]],
         'figures' => ['label' => 'Les chiffres', 'items' => [
             ['D\'où viennent les inscrits', 'admin_origins', 'radar', ['admin_origins']],
             ['Du visiteur au membre', 'admin_funnel', 'filter', ['admin_funnel']],
             ['Qui revient', 'admin_retention', 'repeat', ['admin_retention']],
-            ['Qualité des tests', 'admin_psychometrics', 'gauge', ['admin_psychometrics']],
         ]],
         'settings' => ['label' => 'Réglages', 'items' => [
             ['Réglages de l\'application', 'admin_config', 'settings', ['admin_config']],
@@ -130,9 +140,16 @@ final class AdminNavigationExtension extends AbstractExtension
         ];
     }
 
+    /** Un préfixe commençant par « = » ne vaut que pour ce nom exact (l'Académie et son atelier partagent un début de nom). */
     private function matches(string $route, array $prefixes): bool
     {
         foreach ($prefixes as $p) {
+            if (str_starts_with($p, '=')) {
+                if ($route === substr($p, 1)) {
+                    return true;
+                }
+                continue;
+            }
             if ($route === $p || str_starts_with($route, $p.'_')) {
                 return true;
             }
