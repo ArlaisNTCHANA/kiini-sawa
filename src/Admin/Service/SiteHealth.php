@@ -101,6 +101,24 @@ final class SiteHealth
         return $out;
     }
 
+    /**
+     * Version légère pour le compteur du menu (chaque page d'administration) : seulement la sauvegarde et la tournée des
+     * rappels, sans requête ni lecture du journal.
+     */
+    public function problemCount(): int
+    {
+        $n = 0;
+        if ('prod' === $this->env) {
+            $backups = glob(\dirname($this->dir).'/sauvegardes/kiini-sawa-2*.sql.gz') ?: [];
+            $latest = [] === $backups ? 0 : max(array_map('filemtime', $backups));
+            $n += (int) ($latest < time() - 36 * 3600);
+        }
+        $lastRun = $this->cacheApp->getItem('reminders_last_run')->get();
+        $n += (int) (!\is_int($lastRun) || $lastRun < time() - 36 * 3600);
+
+        return $n;
+    }
+
     /** Le pire état : ok, warning ou problem. */
     public function overall(array $checks): string
     {

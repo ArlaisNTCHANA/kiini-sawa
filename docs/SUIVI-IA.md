@@ -11,6 +11,8 @@ Ne jamais afficher ni demander de mot de passe ; ne pas publier son nom (mention
 
 ## 27/11/2026 — Santé du site (administration)
 
+- **PAS DÉPLOYÉ.** La suite complète s'arrête par manque de mémoire (« Premature end of PHP process ») sur des tests différents d'un passage à l'autre (NavigationTest, SecurityGuardsTest) ; chacun passe seul. Probable : base de test devenue énorme (4 000+ comptes) et données de débogage Doctrine. Compteur du menu déjà allégé (`problemCount`). À faire avant de déployer : vider la base de test ou monter la mémoire, relancer toute la suite.
+
 Demande du fondateur (manque n° 6). Admin › Réglages › Santé du site (`/admin/sante`, `Admin/Service/SiteHealth`,
 `Admin/Controller/HealthController`).
 - **Au jour le jour** : dernière sauvegarde (`~/sauvegardes`, à côté du dossier du site : date, taille, nombre gardé ;

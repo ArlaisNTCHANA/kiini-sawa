@@ -143,7 +143,7 @@ final class AdminNavigationExtension extends AbstractExtension
             'feedback' => $one("SELECT COUNT(*) FROM app_feedback WHERE status = 'PENDING'"),
             'drafts' => $one('SELECT COUNT(*) FROM site_text WHERE draft IS NOT NULL'),
             // Santé du site : sauvegarde ou rappels arrêtés, erreurs, disque plein (SiteHealth)
-            'health' => \count(array_filter($this->health->checks(), fn (array $c) => 'problem' === $c['state'])),
+            'health' => $this->health->problemCount(),
         ];
     }
 
