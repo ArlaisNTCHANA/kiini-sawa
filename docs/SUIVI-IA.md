@@ -11,6 +11,8 @@ Ne jamais afficher ni demander de mot de passe ; ne pas publier son nom (mention
 
 ## 27/11/2026 — Aperçu des e-mails (administration)
 
+- **Déployé le 27/11/2026** (accord du fondateur) : pages contrôlées, aucune erreur au journal du serveur.
+
 Demande du fondateur (manque n° 5). Admin › Réglages › Aperçu des e-mails (`/admin/emails/{clé}`,
 `Notification/Service/EmailCatalog`, `EmailPreviewAdminController`). Les 34 e-mails de l'application, rangés par
 famille (compte, deux premières semaines, rappels, Académie, paiements, proches, défis et annonces) : quand il part,
