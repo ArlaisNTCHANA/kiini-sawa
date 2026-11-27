@@ -1,0 +1,66 @@
+{% extends 'admin/layout.html.twig' %}
+
+{% block title %}Santé du site{% endblock %}
+{% block page_title %}Santé du site{% endblock %}
+{% block page_lead %}Ce qui peut s'arrêter sans bruit : la sauvegarde de la nuit, la tournée des rappels, les erreurs, la place sur le disque. Puis le contrôle avant ouverture.{% endblock %}
+
+{% set icons = {ok: 'circle-check', warning: 'circle-alert', problem: 'circle-x'} %}
+{% block content %}
+<div class="ks-stack">
+    <section class="ks-card hs-summary hs-{{ overall }}">
+        <i data-lucide="{{ icons[overall] }}" aria-hidden="true"></i>
+        <div>
+            <strong>{{ overall == 'ok' ? 'Tout va bien.' : (overall == 'warning' ? 'À surveiller.' : 'Un point demande votre attention.') }}</strong>
+            <span>{{ overall == 'ok' ? 'La sauvegarde et les rappels ont tourné, et le site ne signale pas d\'erreur.' : 'Voyez ci-dessous ce qui ne va pas et que faire.' }}</span>
+        </div>
+    </section>
+
+    <section class="ks-card">
+        <h2 class="ks-card__title"><i data-lucide="heart-pulse"></i> Au jour le jour</h2>
+        <ul class="hs-list">
+            {% for c in checks %}
+                <li class="hs-{{ c.state }}">
+                    <i data-lucide="{{ icons[c.state] }}" aria-hidden="true"></i>
+                    <div>
+                        <strong>{{ c.label }}</strong> <span class="sr-only">({{ c.state == 'ok' ? 'bon' : (c.state == 'warning' ? 'à surveiller' : 'problème') }})</span>
+                        <span class="hs-value">{{ c.value }}</span>
+                        {% if c.state != 'ok' and c.advice %}<p class="hs-advice">{{ c.advice }}</p>{% endif %}
+                    </div>
+                </li>
+            {% endfor %}
+        </ul>
+    </section>
+
+    <section class="ks-card">
+        <h2 class="ks-card__title"><i data-lucide="list-checks"></i> Contrôle avant ouverture</h2>
+        <p class="ks-help">Ce qu'il faut en place pour ouvrir largement le site. Un point « recommandé » n'empêche rien.</p>
+        <ul class="hs-list">
+            {% for c in launch %}
+                {% set state = c.ok ? 'ok' : (c.blocking ? 'problem' : 'warning') %}
+                <li class="hs-{{ state }}">
+                    <i data-lucide="{{ icons[state] }}" aria-hidden="true"></i>
+                    <div>
+                        <strong>{{ c.label }}</strong>{% if not c.ok and not c.blocking %} <span class="ks-badge ks-badge--muted">recommandé</span>{% endif %}
+                        {% if not c.ok %}<p class="hs-advice">{{ c.advice }}</p>{% endif %}
+                    </div>
+                </li>
+            {% endfor %}
+        </ul>
+    </section>
+</div>
+<style>
+    .hs-summary { display: flex; gap: .9rem; align-items: center; }
+    .hs-summary > svg { width: 30px; height: 30px; flex: none; }
+    .hs-summary div { display: grid; gap: .15rem; }
+    .hs-summary span { color: var(--fg-muted); font-size: .92rem; }
+    .hs-list { list-style: none; padding: 0; margin: .4rem 0 0; display: grid; gap: .1rem; }
+    .hs-list li { display: flex; gap: .7rem; align-items: flex-start; padding: .6rem 0; border-top: 1px solid var(--bg-alt); }
+    .hs-list li:first-child { border-top: none; }
+    .hs-list li > svg { width: 19px; height: 19px; flex: none; margin-top: .1rem; }
+    .hs-value { display: block; color: var(--fg-muted); font-size: .9rem; }
+    .hs-advice { margin: .3rem 0 0; font-size: .88rem; color: var(--fg); background: var(--bg-alt); border-radius: var(--r-md); padding: .45rem .65rem; }
+    .hs-ok > svg { color: var(--success); }
+    .hs-warning > svg { color: var(--warning); }
+    .hs-problem > svg { color: var(--danger); }
+</style>
+{% endblock %}

@@ -45,4 +45,6 @@ chmod -R a+rX public/assets
 run bin/console doctrine:migrations:migrate --no-interaction --allow-no-migration
 run bin/console cache:clear
 run bin/console cache:warmup
+# Date de la mise à jour, affichée dans Admin › Réglages › Santé du site
+date '+%d/%m/%Y à %Hh%M' > var/derniere-mise-a-jour.txt
 echo "Mise à jour terminée."

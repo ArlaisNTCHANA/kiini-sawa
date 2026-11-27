@@ -53,6 +53,7 @@ final class AdminNavigationExtension extends AbstractExtension
         ]],
         'settings' => ['label' => 'Réglages', 'items' => [
             ['Réglages de l\'application', 'admin_config', 'settings', ['admin_config']],
+            ['Santé du site', 'admin_health', 'heart-pulse', ['admin_health'], 'health'],
             ['Aperçu des e-mails', 'admin_emails', 'mails', ['admin_emails']],
             ['Documentation technique', 'admin_doc', 'book-open', ['admin_doc']],
         ]],
@@ -65,7 +66,7 @@ final class AdminNavigationExtension extends AbstractExtension
 
     private ?array $counts = null;
 
-    public function __construct(private readonly RequestStack $requests, private readonly Connection $db)
+    public function __construct(private readonly RequestStack $requests, private readonly Connection $db, private readonly \App\Admin\Service\SiteHealth $health)
     {
     }
 
@@ -141,6 +142,8 @@ final class AdminNavigationExtension extends AbstractExtension
             'payments' => $transactions + $orders,
             'feedback' => $one("SELECT COUNT(*) FROM app_feedback WHERE status = 'PENDING'"),
             'drafts' => $one('SELECT COUNT(*) FROM site_text WHERE draft IS NOT NULL'),
+            // Santé du site : sauvegarde ou rappels arrêtés, erreurs, disque plein (SiteHealth)
+            'health' => \count(array_filter($this->health->checks(), fn (array $c) => 'problem' === $c['state'])),
         ];
     }
 

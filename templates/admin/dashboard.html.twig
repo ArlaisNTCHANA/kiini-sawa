@@ -28,6 +28,7 @@
             {n: todo.transactions, icon: 'wallet', one: 'paiement à vérifier', many: 'paiements à vérifier', hint: 'Vérifiez la réception, puis validez : PRO s\'active et le reçu part.', url: path('admin_payments')},
             {n: todo.orders, icon: 'building-2', one: 'commande de places à vérifier', many: 'commandes de places à vérifier', hint: 'Organisations qui attendent leurs places.', url: path('admin_payments') ~ '#commandes'},
             {n: todo.feedback, icon: 'message-square-heart', one: 'avis à lire', many: 'avis à lire', hint: 'Les messages envoyés depuis l\'application.', url: path('admin_app_feedback')},
+            {n: todo.health, icon: 'heart-pulse', one: 'point de santé du site à vérifier', many: 'points de santé du site à vérifier', hint: 'Sauvegarde, rappels automatiques, erreurs ou place sur le disque.', url: path('admin_health')},
             {n: todo.drafts, icon: 'file-pen-line', one: 'texte du site en brouillon', many: 'textes du site en brouillon', hint: 'Pas encore en ligne : relisez-les puis publiez-les.', url: path('admin_site_texts', {etat: 'draft'})},
         ] %}
         {% set open = tasks|filter(t => t.n > 0) %}

@@ -9,6 +9,20 @@ teste (`php bin/phpunit`), commit, déploie (`bin/ops/envoyer-hostinger.sh`), v�
 journal `var/log/prod-AAAA-MM-JJ.log` sans erreur) ; **le fondateur fait lui-même `git push`** (refusé à l'IA).
 Ne jamais afficher ni demander de mot de passe ; ne pas publier son nom (mentions légales en attente).
 
+## 27/11/2026 — Santé du site (administration)
+
+Demande du fondateur (manque n° 6). Admin › Réglages › Santé du site (`/admin/sante`, `Admin/Service/SiteHealth`,
+`Admin/Controller/HealthController`).
+- **Au jour le jour** : dernière sauvegarde (`~/sauvegardes`, à côté du dossier du site : date, taille, nombre gardé ;
+  problème après 36 h), dernière tournée des rappels (cache `reminders_last_run` ; problème après 36 h), erreurs du
+  journal d'hier et d'aujourd'hui, place libre sur le disque, date de la dernière mise à jour (écrite par
+  `bin/ops/mise-a-jour.sh` dans `var/derniere-mise-a-jour.txt`), annonces en cours d'envoi, paiements en attente depuis
+  plus de 48 h. Chaque point : bon, à surveiller ou problème, avec ce qu'il faut faire.
+- **Contrôle avant ouverture** : les contrôles de `app:launch:check`, sortis dans `Admin/Service/LaunchChecker` (la
+  commande l'utilise toujours).
+- Un point « problème » s'affiche dans le menu (compteur) et dans « À traiter » du tableau de bord.
+- Test : `tests/Admin/SiteHealthTest.php`.
+
 ## 27/11/2026 — Aperçu des e-mails (administration)
 
 - **Déployé le 27/11/2026** (accord du fondateur) : pages contrôlées, aucune erreur au journal du serveur.
