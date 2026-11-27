@@ -1,0 +1,69 @@
+{% extends 'admin/layout.html.twig' %}
+
+{% block title %}La Boussole 360{% endblock %}
+{% block page_title %}La Boussole 360{% endblock %}
+{% block page_lead %}Combien la passent, combien de visiteurs la gardent en créant un compte, et ce que disent les passations. Des totaux seulement, jamais les réponses d'une personne.{% endblock %}
+
+{% block content %}
+<div class="ks-stack">
+    <nav class="ks-toolbar" aria-label="Période">
+        {% for d, label in {7: '7 jours', 30: '30 jours', 90: '3 mois', 365: '12 mois'} %}
+            <a href="{{ path('admin_boussole_stats', {jours: d}) }}" class="ks-btn ks-btn--sm {{ r.days == d ? 'ks-btn--secondary' : 'ks-btn--ghost' }}" {{ r.days == d ? 'aria-current="page"' }}>{{ label }}</a>
+        {% endfor %}
+    </nav>
+
+    <section class="ks-card">
+        <h2 class="ks-card__title"><i data-lucide="compass"></i> Les visiteurs</h2>
+        <div class="bs-figures">
+            <div><strong>{{ r.visitors }}</strong><span>passations sans compte</span></div>
+            <div><strong>{{ r.newMembers }}</strong><span>gardées en créant un compte{% if r.conversion is not null %} ({{ r.conversion }} %){% endif %}</span></div>
+            <div><strong>{{ r.returning }}</strong><span>gardées en se connectant</span></div>
+        </div>
+        <p class="ks-help">{% if r.countingSince %}Compté depuis le {{ r.countingSince|date('d/m/Y') }}.{% else %}Le compteur des visiteurs démarre avec cette page : les chiffres apparaîtront avec les prochaines passations.{% endif %} Un visiteur garde sa Boussole quand il s'inscrit ou se connecte juste après l'avoir passée.</p>
+    </section>
+
+    <section class="ks-card">
+        <h2 class="ks-card__title"><i data-lucide="users"></i> Les membres</h2>
+        <div class="bs-figures">
+            <div><strong>{{ r.passes }}</strong><span>passations sur la période{% if r.mobile %}, dont {{ r.mobile }} sur téléphone{% endif %}</span></div>
+            <div><strong>{{ r.members }}</strong><span>membres l'ont passée sur la période</span></div>
+            <div><strong>{{ r.allMembers }}</strong><span>membres l'ont passée au moins une fois</span></div>
+            <div><strong>{{ r.repeat }}</strong><span>l'ont repassée (au moins deux fois)</span></div>
+        </div>
+    </section>
+
+    <section class="ks-card">
+        <h2 class="ks-card__title"><i data-lucide="chart-no-axes-column"></i> Ce que disent les passations</h2>
+        {% if r.sample == 0 %}
+            <p class="ks-muted">Aucune passation sur la période.</p>
+        {% else %}
+            <p>Sur {{ r.sample }} membre{{ r.sample > 1 ? 's' }} de la période (la passation la plus récente de chacun), le score de cohérence moyen est de <strong>{{ r.coherence }} %</strong>.</p>
+            <div class="ks-table-wrap">
+                <table class="ks-table ks-table--cards">
+                    <thead><tr><th>Plan</th><th>Score moyen</th><th>Le plus fort pour</th><th>À soigner en priorité pour</th></tr></thead>
+                    <tbody>
+                    {% set topPriority = max(r.plans|map(p => p.priority)) %}
+                    {% for p in r.plans %}
+                        <tr>
+                            <td><strong>{{ p.label }}</strong></td>
+                            <td data-label="Score moyen" style="white-space: nowrap;"><span class="bs-bar" aria-hidden="true"><span style="width: {{ p.average }}%;"></span></span> {{ p.average }} %</td>
+                            <td data-label="Le plus fort pour">{{ p.strongest }} membre{{ p.strongest > 1 ? 's' }}</td>
+                            <td data-label="À soigner en priorité pour">{{ p.priority }} membre{{ p.priority > 1 ? 's' }}{% if p.priority == topPriority and p.priority > 0 %} <span class="ks-badge ks-badge--warning">le plus souvent</span>{% endif %}</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            <p class="ks-help">Le plan « à soigner » le plus fréquent dit quel parcours de l'Académie proposer en premier, ou lequel écrire.</p>
+        {% endif %}
+    </section>
+</div>
+<style>
+    .bs-figures { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: .6rem; margin: .6rem 0; }
+    .bs-figures div { background: var(--bg-alt); border-radius: var(--r-md); padding: .8rem .9rem; display: grid; gap: .15rem; }
+    .bs-figures strong { font-family: var(--font-serif); font-size: 1.6rem; color: var(--fg); }
+    .bs-figures span { font-size: .84rem; color: var(--fg-muted); }
+    .bs-bar { display: inline-block; vertical-align: middle; width: 90px; height: 7px; background: var(--border); border-radius: 99px; overflow: hidden; margin-right: .4rem; }
+    .bs-bar span { display: block; height: 7px; background: var(--primary); }
+</style>
+{% endblock %}

@@ -50,6 +50,7 @@ final class BoussoleRecorder
     public function keepPending(SessionInterface $session, array $answers): void
     {
         $session->set(self::PENDING_KEY, $answers);
+        $this->count('visitors');
     }
 
     public function hasPending(SessionInterface $session): bool
@@ -66,7 +67,24 @@ final class BoussoleRecorder
         $answers = BoussoleEngine::normalizeAnswers($session->get(self::PENDING_KEY));
         $session->remove(self::PENDING_KEY);
 
-        return null === $answers ? null : $this->record($user, $answers, BoussoleResult::SOURCE_WEB);
+        if (null === $answers) {
+            return null;
+        }
+        $created = $user->getCreatedAt();
+        $this->count(null !== $created && $created > new \DateTimeImmutable('-1 day') ? 'new_members' : 'returning_members');
+
+        return $this->record($user, $answers, BoussoleResult::SOURCE_WEB);
+    }
+
+    /** Compteur anonyme du jour (BoussoleDaily) ; jamais bloquant pour le visiteur. */
+    private function count(string $column): void
+    {
+        try {
+            $this->em->getConnection()->executeStatement(
+                'INSERT INTO boussole_daily (day, visitors, new_members, returning_members) VALUES (CURRENT_DATE, 0, 0, 0) ON DUPLICATE KEY UPDATE day = day');
+            $this->em->getConnection()->executeStatement('UPDATE boussole_daily SET '.$column.' = '.$column.' + 1 WHERE day = CURRENT_DATE');
+        } catch (\Throwable) {
+        }
     }
 
     /**

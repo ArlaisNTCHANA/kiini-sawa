@@ -49,6 +49,7 @@ final class AdminNavigationExtension extends AbstractExtension
             ['Du visiteur au membre', 'admin_funnel', 'filter', ['admin_funnel']],
             ['Qui revient', 'admin_retention', 'repeat', ['admin_retention']],
             ['Suivi de l\'Académie', 'admin_academy_stats', 'chart-no-axes-column', ['admin_academy_stats']],
+            ['La Boussole 360', 'admin_boussole_stats', 'compass', ['admin_boussole_stats']],
         ]],
         'settings' => ['label' => 'Réglages', 'items' => [
             ['Réglages de l\'application', 'admin_config', 'settings', ['admin_config']],

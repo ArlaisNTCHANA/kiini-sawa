@@ -9,6 +9,20 @@ teste (`php bin/phpunit`), commit, déploie (`bin/ops/envoyer-hostinger.sh`), v�
 journal `var/log/prod-AAAA-MM-JJ.log` sans erreur) ; **le fondateur fait lui-même `git push`** (refusé à l'IA).
 Ne jamais afficher ni demander de mot de passe ; ne pas publier son nom (mentions légales en attente).
 
+## 27/11/2026 — La Boussole 360 dans les chiffres (administration)
+
+Demande du fondateur (manque n° 4). Admin › Les chiffres › La Boussole 360 (`/admin/boussole`, `Boussole/Service/BoussoleStats`,
+`Boussole/Controller/Admin/BoussoleStatsAdminController`), périodes 7 jours, 30 jours, 3 mois, 12 mois.
+- **Visiteurs** : jusqu'ici, une passation sans compte n'était comptée nulle part (elle n'est enregistrée que si la
+  personne s'inscrit ou se connecte). Nouveau compteur anonyme par jour `boussole_daily` (migration
+  `Version20261127221312`) : passations de visiteurs (`keepPending`), gardées en créant un compte (compte de moins de
+  24 h) ou en se connectant (`flushPending`). Ni IP, ni cookie, ni donnée personnelle. Colonne `returning_members`
+  (« returning » est un mot clé de MariaDB). Les chiffres démarrent au déploiement.
+- **Membres** : passations, membres qui l'ont passée, repassée, part sur téléphone.
+- **Ce que disent les passations** (la plus récente de chaque membre) : cohérence moyenne, score moyen par plan, plan
+  le plus fort, plan à soigner le plus fréquent (pour choisir quel parcours proposer ou écrire).
+- Totaux seulement. Test : `tests/Admin/BoussoleStatsTest.php`.
+
 ## 27/11/2026 — Suivi de l'Académie (administration)
 
 - **Déployé le 27/11/2026** (accord du fondateur) : pages contrôlées, aucune erreur au journal du serveur.
