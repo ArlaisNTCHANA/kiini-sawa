@@ -54,14 +54,19 @@ final class AdminActionRecorder
             return; // action refusée ou incomplète : rien à garder
         }
         $route = (string) $request->attributes->get('_route');
+        $this->write($user, $route, (string) end($success), $this->target($route, $request->attributes->get('_route_params', [])));
+    }
 
+    /** Écrit une ligne au journal ; aussi pour une action sans redirection (un téléchargement, par exemple). */
+    public function write(User $user, string $route, string $message, ?string $target = null): void
+    {
         try {
             $this->db->insert('admin_action', [
                 'actor_id' => $user->getId(),
                 'actor_email' => mb_substr((string) $user->getEmail(), 0, 180),
                 'route' => mb_substr($route, 0, 80),
-                'message' => mb_substr((string) end($success), 0, 255),
-                'target' => $this->target($route, $request->attributes->get('_route_params', [])),
+                'message' => mb_substr($message, 0, 255),
+                'target' => null !== $target ? mb_substr($target, 0, 180) : null,
                 'created_at' => (new \DateTimeImmutable())->format('Y-m-d H:i:s'),
             ]);
         } catch (\Throwable) {

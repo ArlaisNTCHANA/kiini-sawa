@@ -1,0 +1,38 @@
+{% extends 'admin/layout.html.twig' %}
+
+{% block title %}Exports pour la comptabilité{% endblock %}
+{% block page_title %}Exports pour la comptabilité{% endblock %}
+{% block page_lead %}Des tableaux à ouvrir dans Excel, LibreOffice ou Google Sheets, à remettre à votre comptable. Chaque téléchargement est noté au journal des actions.{% endblock %}
+
+{% set months = ['janvier', 'février', 'mars', 'avril', 'mai', 'juin', 'juillet', 'août', 'septembre', 'octobre', 'novembre', 'décembre'] %}
+{% block content %}
+{% set token = csrf_token('admin_exports') %}
+<div class="ks-stack">
+    {% for kind, label in kinds|filter((l, k) => k != 'membres') %}
+        <section class="ks-card">
+            <h2 class="ks-card__title"><i data-lucide="{{ kind == 'paiements' ? 'wallet' : 'building-2' }}"></i> {{ label }}</h2>
+            <p class="ks-help">{{ kind == 'paiements' ? 'Date, numéro de reçu, membre, formule, montant et devise, moyen de paiement, référence, décision (validé, refusé, à vérifier) et motif.' : 'Date, numéro de reçu, organisation, nombre de places, montant et devise, moyen de paiement, référence et décision.' }}</p>
+            <form method="post" action="{{ path('admin_exports_download', {kind: kind}) }}" class="ks-toolbar" data-turbo="false">
+                <input type="hidden" name="_csrf_token" value="{{ token }}">
+                <label class="sr-only" for="ex-y-{{ kind }}">Année</label>
+                <select id="ex-y-{{ kind }}" name="annee" class="ks-input" style="max-width: 120px;">{% for y in years %}<option value="{{ y }}">{{ y }}</option>{% endfor %}</select>
+                <label class="sr-only" for="ex-m-{{ kind }}">Mois</label>
+                <select id="ex-m-{{ kind }}" name="mois" class="ks-input" style="max-width: 190px;">
+                    <option value="0">Toute l'année</option>
+                    {% for m in months %}<option value="{{ loop.index }}">{{ m|capitalize }}</option>{% endfor %}
+                </select>
+                <button type="submit" class="ks-btn ks-btn--secondary ks-btn--sm"><i data-lucide="download"></i> Télécharger</button>
+            </form>
+        </section>
+    {% endfor %}
+
+    <section class="ks-card">
+        <h2 class="ks-card__title"><i data-lucide="users"></i> Liste des membres</h2>
+        <p class="ks-help">Nom, e-mail, date d'inscription, offre (gratuit, essai, PRO et jusqu'à quand), organisation, dernière visite. Rien de leurs plans ni de leur journal. Ce sont des données personnelles : gardez le fichier en lieu sûr et supprimez-le quand il ne sert plus.</p>
+        <form method="post" action="{{ path('admin_exports_download', {kind: 'membres'}) }}" data-turbo="false">
+            <input type="hidden" name="_csrf_token" value="{{ token }}">
+            <button type="submit" class="ks-btn ks-btn--secondary ks-btn--sm"><i data-lucide="download"></i> Télécharger la liste</button>
+        </form>
+    </section>
+</div>
+{% endblock %}

@@ -50,6 +50,7 @@ final class AdminNavigationExtension extends AbstractExtension
             ['Qui revient', 'admin_retention', 'repeat', ['admin_retention']],
             ['Suivi de l\'Académie', 'admin_academy_stats', 'chart-no-axes-column', ['admin_academy_stats']],
             ['La Boussole 360', 'admin_boussole_stats', 'compass', ['admin_boussole_stats']],
+            ['Exports pour la comptabilité', 'admin_exports', 'file-spreadsheet', ['admin_exports']],
         ]],
         'settings' => ['label' => 'Réglages', 'items' => [
             ['Réglages de l\'application', 'admin_config', 'settings', ['admin_config']],

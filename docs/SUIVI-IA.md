@@ -9,6 +9,21 @@ teste (`php bin/phpunit`), commit, déploie (`bin/ops/envoyer-hostinger.sh`), v�
 journal `var/log/prod-AAAA-MM-JJ.log` sans erreur) ; **le fondateur fait lui-même `git push`** (refusé à l'IA).
 Ne jamais afficher ni demander de mot de passe ; ne pas publier son nom (mentions légales en attente).
 
+## 28/11/2026 — Exports pour la comptabilité (administration)
+
+Demande du fondateur (dernier manque de la liste). Admin › Les chiffres › Exports pour la comptabilité (`/admin/exports`,
+`Abonnement/Service/AccountingExport`, `Abonnement/Controller/Admin/AccountingExportController`).
+- **Paiements des membres** et **commandes de places** par année ou par mois ; **liste des membres** (coordonnées,
+  offre, organisation, dernière visite ; jamais le contenu de leurs plans ; sans les administrateurs).
+- CSV pour Excel en français : point-virgule, marque UTF-8 (accents), montants à virgule ; une cellule qui
+  commencerait par = + - @ est neutralisée (pas de formule involontaire). Un PRO offert apparaît « Offert », 0 €.
+- Téléchargements en POST (jeton) et **notés au journal des actions** (`AdminActionRecorder::write`, nouvelle méthode
+  publique pour les actions sans redirection).
+- Test : `tests/Admin/AccountingExportTest.php`.
+
+**Les 8 manques de l'administration relevés le 27/11/2026 sont faits** (fiche membre, écrire aux membres, suivi de
+l'Académie, Boussole dans les chiffres, aperçu des e-mails, santé du site, administrateurs et journal, exports).
+
 ## 28/11/2026 — Administrateurs et journal des actions (administration)
 
 - **Déployé le 28/11/2026** (accord du fondateur) : migration passée (table `admin_action`), pages contrôlées, aucune erreur au journal. Le fondateur doit relire la liste des administrateurs en ligne.
