@@ -53,7 +53,7 @@ final class SiteHealth
         }
 
         // Tournée des rappels (app:reminders:send, chaque jour)
-        $lastRun = $this->cacheApp->getItem('reminders_last_run')->get();
+        $lastRun = $this->lastRemindersRun();
         $add('Rappels et e-mails du jour', \is_int($lastRun) && $lastRun > $now->getTimestamp() - 36 * 3600 ? 'ok' : 'problem',
             \is_int($lastRun) ? 'dernière tournée '.date('d/m/Y à H\hi', $lastRun).' ('.$ago($lastRun).')' : 'jamais lancée',
             'Sans elle : ni rappels, ni séances de l\'Académie, ni e-mails d\'accueil. Vérifier la tâche « cron-rappels.sh » dans hPanel.');
@@ -113,10 +113,26 @@ final class SiteHealth
             $latest = [] === $backups ? 0 : max(array_map('filemtime', $backups));
             $n += (int) ($latest < time() - 36 * 3600);
         }
-        $lastRun = $this->cacheApp->getItem('reminders_last_run')->get();
+        $lastRun = $this->lastRemindersRun();
         $n += (int) (!\is_int($lastRun) || $lastRun < time() - 36 * 3600);
 
         return $n;
+    }
+
+
+    /**
+     * Dernière tournée des rappels : la trace en cache, ou à défaut la date du journal de la tâche planifiée
+     * (var/log/rappels.log). Le cache est vidé à chaque mise à jour du site : sans ce repli, la page affichait une fausse
+     * alerte juste après un déploiement.
+     */
+    public function lastRemindersRun(): ?int
+    {
+        $cached = $this->cacheApp->getItem('reminders_last_run')->get();
+        $log = $this->dir.'/var/log/rappels.log';
+        $fromLog = is_file($log) ? (int) filemtime($log) : null;
+        $best = max(\is_int($cached) ? $cached : 0, $fromLog ?? 0);
+
+        return $best > 0 ? $best : null;
     }
 
     /** Le pire état : ok, warning ou problem. */

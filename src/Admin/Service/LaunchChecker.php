@@ -70,7 +70,10 @@ final class LaunchChecker
         $check('Mode d\'envoi des e-mails (MESSENGER_TRANSPORT_DSN)', '' !== $transport, 'sync:// sur un hébergement mutualisé, ou doctrine://default avec le worker : php bin/console messenger:consume async', false);
 
         // Tâches planifiées
-        $lastRun = $this->cacheApp->getItem('reminders_last_run')->get();
+        $cached = $this->cacheApp->getItem('reminders_last_run')->get();
+        $log = $this->dir.'/var/log/rappels.log';
+        // Le cache est vidé à chaque mise à jour : la date du journal de la tâche planifiée sert de repli
+        $lastRun = max(\is_int($cached) ? $cached : 0, is_file($log) ? (int) filemtime($log) : 0) ?: null;
         $check('Rappels quotidiens (tâche planifiée)', \is_int($lastRun) && $lastRun > time() - 36 * 3600, 'Planifier chaque jour : php bin/console app:reminders:send (voir docs/mise-en-ligne.md).', false);
 
         // Fichiers compilés
