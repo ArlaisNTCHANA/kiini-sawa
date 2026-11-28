@@ -11,7 +11,10 @@ Ne jamais afficher ni demander de mot de passe ; ne pas publier son nom (mention
 
 ## 27/11/2026 — Santé du site (administration)
 
-- **PAS DÉPLOYÉ.** La suite complète s'arrête par manque de mémoire (« Premature end of PHP process ») sur des tests différents d'un passage à l'autre (NavigationTest, SecurityGuardsTest) ; chacun passe seul. Probable : base de test devenue énorme (4 000+ comptes) et données de débogage Doctrine. Compteur du menu déjà allégé (`problemCount`). À faire avant de déployer : vider la base de test ou monter la mémoire, relancer toute la suite.
+- Suite complète revalidée le 28/11/2026 : la base de test avait grossi (4 000+ comptes) et faisait manquer de mémoire
+  la suite (et `DosProtectionTest` depuis des jours). Base recréée (étapes complétées dans `AGENTS.md`, dont
+  `app:seed-data` que plusieurs tests attendent) : **666 tests au vert d'un seul passage**, sans exclusion.
+  `AdminNavigationTest` compte aussi l'alerte de santé.
 
 Demande du fondateur (manque n° 6). Admin › Réglages › Santé du site (`/admin/sante`, `Admin/Service/SiteHealth`,
 `Admin/Controller/HealthController`).

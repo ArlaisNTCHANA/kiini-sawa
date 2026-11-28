@@ -89,8 +89,12 @@ de vérification s'affiche dans un bandeau « [dev] ».
 php bin/console doctrine:database:create --env=test
 php bin/console doctrine:migrations:migrate -n --env=test
 php bin/console app:create-user admin@kiinisawa.com "mot-de-passe-de-test" --admin --env=test
+php bin/console app:seed-data admin@kiinisawa.com --env=test -n   # données d'exemple attendues par plusieurs tests
 php bin/phpunit
 ```
+
+La base de test grossit à chaque passage (comptes créés par les tests) : si la suite s'arrête par manque de mémoire,
+la recréer avec les commandes ci-dessus (27/11/2026).
 
 Migrations : une migration de départ (`Version20261116060104`) puis des migrations incrémentales. Toujours vérifier
 `php bin/console doctrine:schema:validate` après une modification d'entité.

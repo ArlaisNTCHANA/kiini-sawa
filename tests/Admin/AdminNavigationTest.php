@@ -71,7 +71,7 @@ class AdminNavigationTest extends WebTestCase
         $crawler = $client->request('GET', '/admin');
         $this->assertResponseIsSuccessful();
         $todo = static::getContainer()->get(AdminNavigationExtension::class)->counts();
-        if (0 === $todo['transactions'] + $todo['orders'] + $todo['feedback'] + $todo['drafts']) {
+        if (0 === $todo['transactions'] + $todo['orders'] + $todo['feedback'] + $todo['drafts'] + $todo['health']) {
             $this->assertSelectorTextContains('.ks-todo', 'Tout est à jour');
         } else {
             $this->assertGreaterThan(0, $crawler->filter('a.ks-todo__item')->count());
