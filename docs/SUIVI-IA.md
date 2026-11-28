@@ -11,6 +11,8 @@ Ne jamais afficher ni demander de mot de passe ; ne pas publier son nom (mention
 
 ## 28/11/2026 — Administrateurs et journal des actions (administration)
 
+- **Déployé le 28/11/2026** (accord du fondateur) : migration passée (table `admin_action`), pages contrôlées, aucune erreur au journal. Le fondateur doit relire la liste des administrateurs en ligne.
+
 Demande du fondateur (manque n° 7). Admin › Réglages › Administrateurs et journal (`/admin/administrateurs`,
 `Admin/Controller/AdministratorsController`, entité `AdminAction`, migration `Version20261128064442`).
 - **Administrateurs** : liste (dernière visite) ; donner l'accès à un compte existant à l'adresse vérifiée (case de
