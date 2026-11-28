@@ -2053,3 +2053,16 @@ feedback nourricier, notifications push, tableau de rétention.
 - Fait : libellés d'aide à jour dans `LaunchChecker` (Admin › Réglages › Réglages de l'application › Paiements manuels ; la liste des passages légaux ne cite plus l'hébergeur, déjà renseigné). Ancien chemin « Admin › Configuration » corrigé dans les commentaires.
 - Non fait, volontairement : les 14 « [À COMPLÉTER] » (raison sociale, capital, SIREN, siège, TVA, directeur de la publication, médiateur, mentions des reçus). Ils dépendent de la structure juridique : ne pas les inventer.
 - Reste au fondateur : coordonnées de paiement, structure juridique puis pages légales (Admin › Textes du site) et reçus (`templates/{abonnement,organisation}/receipt.html.twig`), quota Brevo, copie des sauvegardes hors serveur, liste des administrateurs, publication de « Sous pression », `git push`.
+
+## 28/11/2026 — « Sous pression » : 3 illustrations de plus ; `--textes` gère les illustrations
+
+- Générées (outil d'images connecté, offre gratuite, 3 par jour) : séance 3 « cadeaux empilés »
+  (`cadeaux-empiles.jpg`), séance 4 « prière à l'aube » (`priere-aube.jpg`, rendu un peu plus détaillé que les autres),
+  séance 5 « Élie sous le genêt » (`elie-genet.jpg`). **Restent 3** : séances 6 à 8 (muraille achevée, carrefour, table
+  de Daniel), mêmes consignes de dessin (voir l'entrée du 27/11/2026).
+- Correction : `app:academie:import --textes` laissait le chemin du fichier dans le texte (image cassée). Il enregistre
+  maintenant les illustrations nouvelles, reprend celles déjà en ligne (même description, sans doublon), et écrit sans
+  changer la date de modification des leçons : un deuxième passage n'est plus pris pour une retouche dans le studio.
+  Test : `SousPressionCourseTest`.
+- En production, après déploiement : `php bin/console app:academie:import content/academie/sous-pression.yaml --textes`
+  (à lancer par le fondateur).

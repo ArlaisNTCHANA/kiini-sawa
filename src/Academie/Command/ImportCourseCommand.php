@@ -81,7 +81,7 @@ class ImportCourseCommand extends Command
 
         $existing = $this->courses->findOneBy(['slug' => $course->getSlug()]);
         if ($input->getOption('textes')) {
-            return $this->updateTexts($io, $course, $existing);
+            return $this->updateTexts($io, $course, $existing, $illustrations);
         }
         if ($existing) {
             if (!$input->getOption('remplacer') || !AcademyStudio::canDelete($existing)) {
@@ -142,7 +142,17 @@ class ImportCourseCommand extends Command
      * progression, notes et exercices des membres intacts. Refusé si une leçon manque ou a été retouchée dans le studio
      * après le chargement : on ne perd jamais un travail fait à la main.
      */
-    private function updateTexts(SymfonyStyle $io, Course $fromFile, ?Course $existing): int
+    /**
+     * --textes : met à jour le texte des leçons d'un parcours déjà chargé. Les illustrations du fichier (chemins locaux)
+     * sont enregistrées comme au chargement ; celles déjà en ligne (même description) sont reprises telles quelles, sans
+     * doublon (28/11/2026 : sans cela, le texte gardait le chemin du fichier et l'image ne s'affichait pas).
+     *
+     * Écrit sans toucher à la date de modification des leçons : seule une retouche dans le studio bloque une mise à
+     * jour suivante.
+     *
+     * @param array<string, string> $illustrations chemin écrit dans le texte => fichier sur le disque
+     */
+    private function updateTexts(SymfonyStyle $io, Course $fromFile, ?Course $existing, array $illustrations = []): int
     {
         if (null === $existing) {
             $io->error('Aucun parcours ne porte cette adresse : chargez-le d\'abord (sans --textes).');
@@ -150,11 +160,15 @@ class ImportCourseCommand extends Command
             return Command::FAILURE;
         }
         $bySlug = [];
+        $online = []; // description de l'image => adresse déjà en ligne
         foreach ($existing->getLessons() as $lesson) {
             $bySlug[$lesson->getSlug()] = $lesson;
+            preg_match_all('/!\[([^\]]*)\]\((\/academie\/images\/[^)\s]+)\)/', $lesson->getContentMarkdown(), $m, \PREG_SET_ORDER);
+            foreach ($m as [, $alt, $url]) {
+                $online[$alt] = $url;
+            }
         }
         $limit = $existing->getCreatedAt()->modify('+2 minutes');
-        $changes = [];
         foreach ($fromFile->getLessons() as $new) {
             $current = $bySlug[$new->getSlug()] ?? null;
             if (null === $current) {
@@ -167,15 +181,36 @@ class ImportCourseCommand extends Command
 
                 return Command::FAILURE;
             }
-            if ($current->getContentMarkdown() !== $new->getContentMarkdown()) {
-                $changes[] = [$current, $new->getContentMarkdown()];
+        }
+        // Illustrations : reprise de l'image en ligne de même description, sinon enregistrement
+        $map = [];
+        $added = 0;
+        foreach ($illustrations as $relative => $file) {
+            $alt = null;
+            foreach ($fromFile->getLessons() as $new) {
+                if (preg_match('/!\[([^\]]*)\]\('.preg_quote($relative, '/').'\)/', $new->getContentMarkdown(), $m)) {
+                    $alt = $m[1];
+                    break;
+                }
+            }
+            if (null !== $alt && isset($online[$alt])) {
+                $map['('.$relative.')'] = '('.$online[$alt].')';
+                continue;
+            }
+            $map['('.$relative.')'] = '('.\App\Academie\Service\AcademyImages::publicPath((int) $existing->getId(), $this->images->store((int) $existing->getId(), new UploadedFile($file, basename($file), null, null, true))).')';
+            ++$added;
+        }
+        $changes = 0;
+        foreach ($fromFile->getLessons() as $new) {
+            $current = $bySlug[$new->getSlug()];
+            $text = strtr($new->getContentMarkdown(), $map);
+            if ($current->getContentMarkdown() !== $text) {
+                $this->em->getConnection()->update('academy_lesson', ['content_markdown' => $text], ['id' => $current->getId()]);
+                ++$changes;
             }
         }
-        foreach ($changes as [$lesson, $text]) {
-            $lesson->setContentMarkdown($text);
-        }
-        $this->em->flush();
-        $io->success(\count($changes).' leçon(s) mise(s) à jour. Progression, notes et exercices des membres sont intacts.');
+        $this->em->clear();
+        $io->success($changes.' leçon(s) mise(s) à jour'.($added > 0 ? ', '.$added.' illustration(s) ajoutée(s)' : '').'. Progression, notes et exercices des membres sont intacts.');
 
         return Command::SUCCESS;
     }

@@ -96,6 +96,26 @@ class SousPressionCourseTest extends KernelTestCase
             $this->em()->clear();
             $this->assertSame('Retouché dans l\'atelier', $this->em()->getRepository(LessonDiagram::class)->findOneBy(['code' => $code])->getTitle());
 
+            // --textes : une illustration ajoutée au fichier est enregistrée, celle déjà en ligne est reprise sans
+            // doublon, et une deuxième mise à jour n'est pas prise pour une retouche dans le studio (28/11/2026)
+            $this->em()->clear();
+            $course = $this->em()->getRepository(Course::class)->findOneBy(['slug' => $slug]);
+            preg_match('#\(/academie/images/[^)]+\)#', $course->getLessons()[0]->getContentMarkdown(), $m);
+            $first = $m[0];
+            imagepng($img, $dir.'/illustrations/table.png');
+            file_put_contents($dir.'/parcours.yaml', str_replace('[[schema:', '![Une table simple](illustrations/table.png)\n\n[[schema:', (string) file_get_contents($dir.'/parcours.yaml')));
+            $this->assertSame(0, $tester->execute(['fichier' => $dir.'/parcours.yaml', '--textes' => true]), $tester->getDisplay());
+            $this->assertStringContainsString('1 illustration(s) ajoutée(s)', preg_replace('/\s+/', ' ', $tester->getDisplay()));
+            $this->em()->clear();
+            $content = $this->em()->getRepository(Course::class)->findOneBy(['slug' => $slug])->getLessons()[0]->getContentMarkdown();
+            $this->assertStringContainsString($first, $content, 'Image déjà en ligne reprise telle quelle');
+            $this->assertMatchesRegularExpression('#!\[Une table simple\]\(/academie/images/\d+/[a-f0-9]{16}\.webp\)#', $content);
+            $this->assertStringNotContainsString('illustrations/', $content, 'Plus aucun chemin de fichier dans le texte');
+            $this->assertCount(2, static::getContainer()->get(AcademyImages::class)->list((int) $course->getId()));
+            $this->assertSame(0, $tester->execute(['fichier' => $dir.'/parcours.yaml', '--textes' => true]), 'Deuxième passage accepté');
+            $this->assertStringContainsString('0 leçon(s)', $tester->getDisplay());
+            $this->assertCount(2, static::getContainer()->get(AcademyImages::class)->list((int) $course->getId()), 'Pas de doublon');
+
             // Une illustration absente ou une adresse internet est refusée
             file_put_contents($dir.'/mauvais.yaml', str_replace('illustrations/porte.png', 'https://exemple.org/x.png', (string) file_get_contents($dir.'/parcours.yaml')));
             $this->assertSame(1, $tester->execute(['fichier' => $dir.'/mauvais.yaml', '--verifier' => true]));
