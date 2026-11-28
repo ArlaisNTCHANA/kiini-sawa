@@ -1,0 +1,72 @@
+{% extends 'admin/layout.html.twig' %}
+
+{% block title %}Administrateurs et journal{% endblock %}
+{% block page_title %}Administrateurs et journal{% endblock %}
+{% block page_lead %}Qui peut administrer KIINI SAWA, et ce que chacun a fait : paiements validés, PRO offerts, annonces, comptes supprimés… Chaque action réussie est notée d'elle-même.{% endblock %}
+
+{% block content %}
+{% set token = csrf_token('admin_admins') %}
+<div class="ks-stack">
+    <section class="ks-card">
+        <h2 class="ks-card__title"><i data-lucide="shield-check"></i> Les administrateurs ({{ admins|length }})</h2>
+        <div class="ks-table-wrap">
+            <table class="ks-table ks-table--cards">
+                <thead><tr><th>Administrateur</th><th>Dernière visite</th><th></th></tr></thead>
+                <tbody>
+                {% for a in admins %}
+                    <tr>
+                        <td><strong>{{ a.displayName }}</strong>{% if a == app.user %} <span class="ks-badge ks-badge--muted">vous</span>{% endif %}<br><span class="ks-small">{{ a.email }}</span></td>
+                        <td data-label="Dernière visite">{{ a.lastActiveAt ? a.lastActiveAt|date('d/m/Y à H\\hi') : '—' }}</td>
+                        <td>
+                            {% if a != app.user and admins|length > 1 %}
+                                <form method="post" action="{{ path('admin_admins_remove', {id: a.id}) }}" onsubmit="return confirm('Retirer l\'accès administrateur de {{ a.email|e('js') }} ? Son compte de membre reste intact.');">
+                                    <input type="hidden" name="_csrf_token" value="{{ token }}">
+                                    <button type="submit" class="ks-btn ks-btn--danger ks-btn--sm">Retirer l'accès</button>
+                                </form>
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <form method="post" action="{{ path('admin_admins_add') }}" class="ad-add">
+            <input type="hidden" name="_csrf_token" value="{{ token }}">
+            <label class="ks-label" for="ad-email">Ajouter un administrateur</label>
+            <p class="ks-help">La personne doit déjà avoir un compte KIINI SAWA avec une adresse vérifiée. Elle se connectera ensuite avec un code reçu par e-mail à chaque fois (connexion en deux étapes).</p>
+            <div class="ks-toolbar">
+                <input id="ad-email" type="email" name="email" class="ks-input" required placeholder="adresse@exemple.com" style="max-width: 320px;">
+                <button type="submit" class="ks-btn ks-btn--secondary ks-btn--sm"><i data-lucide="user-plus"></i> Donner l'accès</button>
+            </div>
+            <label class="ad-check"><input type="checkbox" name="confirm" value="1" required> Je comprends qu'un administrateur voit les membres, les paiements et tous les réglages.</label>
+        </form>
+    </section>
+
+    <section class="ks-card">
+        <h2 class="ks-card__title"><i data-lucide="scroll-text"></i> Journal des actions</h2>
+        <p class="ks-help">Les 150 dernières actions réussies dans l'administration. Rien d'autre que ce message n'est gardé.</p>
+        <div class="ks-table-wrap">
+            <table class="ks-table ks-table--cards">
+                <thead><tr><th>Quand</th><th>Qui</th><th>Action</th><th>Concerne</th></tr></thead>
+                <tbody>
+                {% for x in actions %}
+                    <tr>
+                        <td data-label="Quand" style="white-space: nowrap;">{{ x.createdAt|date('d/m/Y H\\hi') }}</td>
+                        <td data-label="Qui">{{ x.actor ? x.actor.displayName : x.actorEmail }}</td>
+                        <td data-label="Action">{{ x.message }}</td>
+                        <td data-label="Concerne">{{ x.target|default('—') }}</td>
+                    </tr>
+                {% else %}
+                    <tr><td colspan="4" class="is-empty">Aucune action notée pour l'instant : le journal démarre avec cette page.</td></tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </section>
+</div>
+<style>
+    .ad-add { margin-top: 1.2rem; padding-top: 1rem; border-top: 1px solid var(--border); }
+    .ad-check { display: flex; gap: .5rem; align-items: flex-start; margin-top: .6rem; font-size: .9rem; }
+</style>
+{% endblock %}

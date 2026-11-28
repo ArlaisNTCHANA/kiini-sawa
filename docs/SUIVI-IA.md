@@ -9,6 +9,19 @@ teste (`php bin/phpunit`), commit, déploie (`bin/ops/envoyer-hostinger.sh`), v�
 journal `var/log/prod-AAAA-MM-JJ.log` sans erreur) ; **le fondateur fait lui-même `git push`** (refusé à l'IA).
 Ne jamais afficher ni demander de mot de passe ; ne pas publier son nom (mentions légales en attente).
 
+## 28/11/2026 — Administrateurs et journal des actions (administration)
+
+Demande du fondateur (manque n° 7). Admin › Réglages › Administrateurs et journal (`/admin/administrateurs`,
+`Admin/Controller/AdministratorsController`, entité `AdminAction`, migration `Version20261128064442`).
+- **Administrateurs** : liste (dernière visite) ; donner l'accès à un compte existant à l'adresse vérifiée (case de
+  confirmation) ; retirer l'accès (jamais soi-même, toujours au moins un administrateur ; le compte de membre reste).
+- **Journal** : `Admin/EventSubscriber/AdminActionRecorder` note **toute action réussie** dans /admin (POST suivi d'une
+  redirection avec un message de réussite) : qui, quand, le message lu (« Paiement validé : PRO activé… ») et ce qui
+  était concerné (adresse du membre, paiement n°…, organisation, annonce). Seuls les messages ajoutés par l'action
+  comptent (un message d'une action précédente pas encore affiché ne fait pas noter une action refusée). Rien d'autre
+  du formulaire n'est gardé ; une nouvelle page d'administration est tracée d'elle-même. 150 dernières actions affichées.
+- Test : `tests/Admin/AdministratorsTest.php`.
+
 ## 27/11/2026 — Santé du site (administration)
 
 - **Déployé le 28/11/2026** (accord du fondateur) : pages contrôlées, aucune erreur au journal. Correction le même jour : la trace de la tournée des rappels (cache) est vidée à chaque mise à jour ; la date de `var/log/rappels.log` sert de repli (sinon fausse alerte après chaque déploiement).

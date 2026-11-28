@@ -55,6 +55,7 @@ final class AdminNavigationExtension extends AbstractExtension
             ['Réglages de l\'application', 'admin_config', 'settings', ['admin_config']],
             ['Santé du site', 'admin_health', 'heart-pulse', ['admin_health'], 'health'],
             ['Aperçu des e-mails', 'admin_emails', 'mails', ['admin_emails']],
+            ['Administrateurs et journal', 'admin_admins', 'shield-check', ['admin_admins']],
             ['Documentation technique', 'admin_doc', 'book-open', ['admin_doc']],
         ]],
     ];
