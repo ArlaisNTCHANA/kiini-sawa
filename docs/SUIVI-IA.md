@@ -11,6 +11,8 @@ Ne jamais afficher ni demander de mot de passe ; ne pas publier son nom (mention
 
 ## 27/11/2026 — Santé du site (administration)
 
+- **Déployé le 28/11/2026** (accord du fondateur) : pages contrôlées, aucune erreur au journal. Correction le même jour : la trace de la tournée des rappels (cache) est vidée à chaque mise à jour ; la date de `var/log/rappels.log` sert de repli (sinon fausse alerte après chaque déploiement).
+
 - Suite complète revalidée le 28/11/2026 : la base de test avait grossi (4 000+ comptes) et faisait manquer de mémoire
   la suite (et `DosProtectionTest` depuis des jours). Base recréée (étapes complétées dans `AGENTS.md`, dont
   `app:seed-data` que plusieurs tests attendent) : **666 tests au vert d'un seul passage**, sans exclusion.
