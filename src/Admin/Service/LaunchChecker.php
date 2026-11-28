@@ -57,7 +57,7 @@ final class LaunchChecker
             $check('Compte administrateur', [] !== $admins, 'Lancer : php bin/console app:install --admin-email=vous@domaine.com');
             $check('Citations et questionnaires de départ', (int) $this->db->fetchOne('SELECT COUNT(*) FROM quote') > 0 && (int) $this->db->fetchOne('SELECT COUNT(*) FROM personality_question') > 0, 'Lancer : php bin/console app:install');
             $config = $this->entitlements->config();
-            $check('Coordonnées de paiement (virement ou Mobile Money)', (bool) ($config->getBankTransferInstructions() || $config->getMobileMoneyInstructions()), 'Admin › Configuration : renseigner les coordonnées, sinon le paiement reste masqué.');
+            $check('Coordonnées de paiement (virement ou Mobile Money)', (bool) ($config->getBankTransferInstructions() || $config->getMobileMoneyInstructions()), 'Admin › Réglages › Réglages de l\'application › Paiements manuels : renseigner les coordonnées (virement, Mobile Money), sinon le paiement reste masqué.');
         }
 
         // Emails
@@ -88,7 +88,7 @@ final class LaunchChecker
         foreach ([$this->dir.'/templates/abonnement/receipt.html.twig', $this->dir.'/templates/organisation/receipt.html.twig'] as $f) {
             $todo += substr_count((string) file_get_contents($f), '[À COMPLÉTER');
         }
-        $check('Pages légales et reçus complétés', 0 === $todo, sprintf('%d passage(s) « [À COMPLÉTER] » : raison sociale, adresse, SIREN, hébergeur, médiateur, TVA (Admin › Textes du site › Pages légales, et reçus). À faire relire par un juriste.', $todo));
+        $check('Pages légales et reçus complétés', 0 === $todo, sprintf('%d passage(s) « [À COMPLÉTER] » : raison sociale, adresse, SIREN, TVA, directeur de la publication, médiateur (Admin › Textes du site › Pages légales ; les reçus, par l\'IA ou le développeur). À faire relire par un juriste.', $todo));
 
 
         return $rows;

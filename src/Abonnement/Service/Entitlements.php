@@ -158,7 +158,7 @@ final class Entitlements
 
     // ── Tests de personnalité : quelques-uns gratuits, les autres en PRO ─────────
 
-    /** @return list<string> identifiants des tests gratuits (réglés dans Admin › Configuration) */
+    /** @return list<string> identifiants des tests gratuits (réglés dans Admin › Réglages › Réglages de l'application) */
     public function freeTests(): array
     {
         return $this->config()->getFreeTests();

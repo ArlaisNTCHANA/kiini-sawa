@@ -10,7 +10,7 @@ use App\Tests\Compte\AccountTestTrait;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 /**
- * Offre gratuite : deux tests complets (DISC, Dons spirituels par défaut, réglable dans Admin › Configuration) ; les autres, les PDF des
+ * Offre gratuite : deux tests complets (DISC, Dons spirituels par défaut, réglable dans Admin › Réglages › Réglages de l'application) ; les autres, les PDF des
  * rapports et les lectures croisées sont réservés à PRO. Les résultats déjà obtenus restent toujours consultables.
  */
 class FreeTestsTest extends WebTestCase

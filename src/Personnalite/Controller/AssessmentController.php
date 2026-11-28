@@ -31,7 +31,7 @@ class AssessmentController extends AbstractController
         if (!Instruments::exists($slug)) {
             throw $this->createNotFoundException();
         }
-        // Quelques tests sont gratuits, les autres réservés à PRO (Admin › Configuration) ; les résultats déjà obtenus restent consultables
+        // Quelques tests sont gratuits, les autres réservés à PRO (Admin › Réglages › Réglages de l'application) ; les résultats déjà obtenus restent consultables
         $this->container->get('entitlements')->requireTest($this->user(), $slug);
         if ($request->isMethod('POST')) {
             if (!$this->isCsrfTokenValid('assessment_'.$slug, $request->request->getString('_csrf_token'))) {

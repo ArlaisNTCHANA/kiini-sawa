@@ -31,7 +31,7 @@ use Doctrine\ORM\EntityManagerInterface;
  * - membre gratuit : au plus un message sur trois présente une fonction PRO (et le dit clairement).
  *
  * Désactivable par le membre (préférence « Saviez-vous que… », lien en bas de chaque e-mail) ; chaque message
- * s'active ou se désactive dans Admin › Configuration.
+ * s'active ou se désactive dans Admin › Réglages › Réglages de l'application.
  */
 final class TipSender
 {

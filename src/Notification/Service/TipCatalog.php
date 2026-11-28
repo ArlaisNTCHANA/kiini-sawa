@@ -10,7 +10,7 @@ use App\Contenu\Service\SiteTexts;
  * avec un seul bouton (envoi : TipSender). L'ordre suit la méthode : faire le point, se connaître, demander le regard
  * des autres, avancer accompagné, puis les outils pour aller plus loin.
  *
- * Textes modifiables dans Admin › Textes du site ; chaque message s'active ou se désactive dans Admin › Configuration.
+ * Textes modifiables dans Admin › Textes du site ; chaque message s'active ou se désactive dans Admin › Réglages › Réglages de l'application.
  */
 final class TipCatalog implements EditableTextProvider
 {
