@@ -11,6 +11,8 @@ Ne jamais afficher ni demander de mot de passe ; ne pas publier son nom (mention
 
 ## 28/11/2026 — Exports pour la comptabilité (administration)
 
+- **Déployé le 28/11/2026** (accord du fondateur) : pages contrôlées, aucune erreur au journal du serveur.
+
 Demande du fondateur (dernier manque de la liste). Admin › Les chiffres › Exports pour la comptabilité (`/admin/exports`,
 `Abonnement/Service/AccountingExport`, `Abonnement/Controller/Admin/AccountingExportController`).
 - **Paiements des membres** et **commandes de places** par année ou par mois ; **liste des membres** (coordonnées,
