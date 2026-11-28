@@ -2046,3 +2046,10 @@ feedback nourricier, notifications push, tableau de rétention.
 - Suivi de la fidélité de tous les tests (Admin › Fidélité des tests couvre l'IPIP) ; normes dès 200 profils.
 - Relectures humaines : théologien (figures bibliques), psychologue (textes), juriste (mentions) — côté fondateur.
 - Structure juridique (15 « [À COMPLÉTER] »), coordonnées de paiement, site vitrine — côté fondateur.
+
+## 28/11/2026 — Avant l'ouverture officielle (« tout faire maintenant »)
+
+- `app:launch:check` en production : 2 points bloquants, qui dépendent tous les deux du fondateur.
+- Fait : libellés d'aide à jour dans `LaunchChecker` (Admin › Réglages › Réglages de l'application › Paiements manuels ; la liste des passages légaux ne cite plus l'hébergeur, déjà renseigné). Ancien chemin « Admin › Configuration » corrigé dans les commentaires.
+- Non fait, volontairement : les 14 « [À COMPLÉTER] » (raison sociale, capital, SIREN, siège, TVA, directeur de la publication, médiateur, mentions des reçus). Ils dépendent de la structure juridique : ne pas les inventer.
+- Reste au fondateur : coordonnées de paiement, structure juridique puis pages légales (Admin › Textes du site) et reçus (`templates/{abonnement,organisation}/receipt.html.twig`), quota Brevo, copie des sauvegardes hors serveur, liste des administrateurs, publication de « Sous pression », `git push`.
